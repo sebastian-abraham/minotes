@@ -1,0 +1,1022 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MODULE 4 · Web Programming</title>
+<style>
+:root{
+  --bg:#fbfaf8; --panel:#ffffff; --ink:#232120; --muted:#5f5a53; --line:#e6e1da;
+  --accent:#7a4fd0; --accent-soft:#f1ecfb; --code-bg:#f5f2ee; --code-ink:#2b2a28;
+  --warn-bg:#fff8e6; --warn-line:#f0d9a0;
+  --sans:"Inter","Segoe UI",system-ui,-apple-system,"Noto Sans",sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,"SF Mono",Menlo,Consolas,"Fira Code",monospace;
+}
+html[data-theme="dark"]{
+  --bg:#141317; --panel:#1b1a20; --ink:#e8e4de; --muted:#a8a199; --line:#2f2c36;
+  --accent:#b79cf5; --accent-soft:#241f33; --code-bg:#22202a; --code-ink:#e8e4de;
+  --warn-bg:#2a2417; --warn-line:#4a3d22;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0; background:var(--bg); color:var(--ink); font-family:var(--sans);
+  font-size:16.5px; line-height:1.72; -webkit-font-smoothing:antialiased;
+}
+#progress{position:fixed;top:0;left:0;height:3px;width:0;background:var(--accent);z-index:50;transition:width .1s linear}
+
+.wrap{display:flex;align-items:flex-start;min-height:100vh}
+.sidebar{
+  position:sticky;top:0;height:100vh;width:300px;flex:0 0 300px;overflow-y:auto;
+  padding:26px 20px 60px;border-right:1px solid var(--line);background:var(--panel);
+}
+.sidebar h1{font-size:15px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);
+  margin:0 0 4px;font-weight:600}
+.sidebar .sub{font-size:12.5px;color:var(--muted);margin:0 0 18px}
+.sidebar nav{font-size:14px}
+.sidebar .toc>ul{padding-left:0}
+.sidebar ul{list-style:none;margin:0;padding-left:12px}
+.sidebar ul ul{border-left:1px solid var(--line);margin-left:4px;padding-left:10px}
+.sidebar li{margin:3px 0}
+.sidebar a{color:var(--ink);text-decoration:none;display:block;padding:3px 8px;border-radius:8px;
+  line-height:1.35;transition:background .12s,color .12s}
+.sidebar a:hover{background:var(--accent-soft);color:var(--accent)}
+.sidebar a.active{background:var(--accent-soft);color:var(--accent);font-weight:600}
+.sidebar .home{display:inline-flex;align-items:center;gap:6px;margin-bottom:16px;font-size:13.5px;
+  color:var(--muted);text-decoration:none;border:1px solid var(--line);padding:5px 10px;border-radius:999px}
+.sidebar .home:hover{color:var(--accent);border-color:var(--accent)}
+
+main{flex:1;min-width:0;padding:46px 56px 120px;max-width:980px;margin:0 auto}
+.doc-head{border-bottom:1px solid var(--line);padding-bottom:18px;margin-bottom:34px}
+.doc-head .kicker{font-size:12.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);
+  font-weight:700;margin-bottom:8px}
+.doc-head .meta{font-size:13.5px;color:var(--muted)}
+
+h1,h2,h3,h4{line-height:1.25;font-weight:700;letter-spacing:-.01em}
+h1{font-size:2.05rem;margin:.2em 0 .5em}
+h2{font-size:1.55rem;margin:2.4em 0 .7em;padding-bottom:.35em;border-bottom:1px solid var(--line)}
+h3{font-size:1.2rem;margin:1.9em 0 .55em}
+h4{font-size:1.03rem;margin:1.5em 0 .45em;color:var(--muted)}
+h2 .anchor,h3 .anchor{opacity:0;margin-left:.35em;font-size:.8em;color:var(--muted);text-decoration:none}
+h2:hover .anchor,h3:hover .anchor{opacity:1}
+p{margin:.75em 0}
+a{color:var(--accent);text-underline-offset:2px}
+strong{font-weight:650}
+hr{border:0;border-top:1px solid var(--line);margin:2.6em 0}
+ul,ol{margin:.7em 0;padding-left:1.4em}
+li{margin:.3em 0}
+li>ul,li>ol{margin:.25em 0}
+blockquote{
+  margin:1.3em 0;padding:12px 18px;background:var(--warn-bg);border-left:3px solid var(--warn-line);
+  border-radius:0 10px 10px 0;color:var(--ink)
+}
+blockquote p{margin:.3em 0}
+
+code{font-family:var(--mono);font-size:.87em;background:var(--code-bg);color:var(--code-ink);
+  padding:.15em .38em;border-radius:6px;border:1px solid var(--line);
+  box-decoration-break:clone;-webkit-box-decoration-break:clone;overflow-wrap:anywhere}
+pre{position:relative;background:var(--code-bg);border:1px solid var(--line);border-radius:12px;
+  padding:16px 18px;overflow-x:auto;margin:1.1em 0}
+pre code{background:none;border:0;padding:0;font-size:13.6px;line-height:1.62;white-space:pre}
+.copy{position:absolute;top:8px;right:8px;font:600 11px/1 var(--sans);color:var(--muted);
+  background:var(--panel);border:1px solid var(--line);border-radius:7px;padding:5px 8px;cursor:pointer;
+  opacity:0;transition:opacity .15s}
+pre:hover .copy{opacity:1}
+.copy:hover{color:var(--accent);border-color:var(--accent)}
+
+.table-scroll{overflow-x:auto;margin:1.3em 0;border:1px solid var(--line);border-radius:12px;background:var(--panel)}
+table{border-collapse:collapse;width:100%;font-size:14.6px}
+th,td{padding:9px 13px;text-align:left;vertical-align:top;border-bottom:1px solid var(--line)}
+th{background:var(--accent-soft);font-weight:650;font-size:13px;letter-spacing:.02em;
+  position:sticky;top:0;backdrop-filter:blur(4px)}
+tr:last-child td{border-bottom:0}
+tbody tr:nth-child(even){background:color-mix(in srgb,var(--panel) 60%,var(--bg))}
+tbody tr:hover{background:var(--accent-soft)}
+
+.tools{position:fixed;right:22px;bottom:22px;display:flex;flex-direction:column;gap:8px;z-index:40}
+.tools button{width:42px;height:42px;border-radius:12px;border:1px solid var(--line);background:var(--panel);
+  color:var(--ink);cursor:pointer;font-size:16px;box-shadow:0 4px 14px rgba(0,0,0,.10)}
+.tools button:hover{color:var(--accent);border-color:var(--accent)}
+@media (max-width:1000px){
+  .wrap{display:block}
+  .sidebar{position:static;width:auto;height:auto;border-right:0;border-bottom:1px solid var(--line)}
+  .sidebar nav{max-height:40vh;overflow:auto}
+  main{padding:28px 20px 100px}
+}
+@media print{
+  .sidebar,.tools,#progress,.copy{display:none!important}
+  body{background:#fff;color:#000;font-size:11pt}
+  main{padding:0;max-width:none}
+  h2{break-after:avoid} pre,table,blockquote{break-inside:avoid}
+  a{color:#000;text-decoration:none}
+}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+<div class="wrap">
+  <aside class="sidebar">
+    <a class="home" href="index.html">← Web Programming</a>
+    <h1>Notes · M4</h1>
+    <p class="sub">Lecture notes, 859 lines</p>
+    <nav class="toc"><div class="toc">
+<ul>
+<li><a href="#php-mysql">PHP MySQL</a></li>
+<li><a href="#6-hours-of-content-delivery">6 Hours of Content Delivery</a></li>
+<li><a href="#why-state-management-cookies-vs-sessions">Why State Management? Cookies vs. Sessions</a><ul>
+<li><a href="#1">1</a></li>
+<li><a href="#2">2</a></li>
+<li><a href="#3">3</a></li>
+<li><a href="#4">4</a></li>
+</ul>
+</li>
+<li><a href="#working-with-cookies">Working with Cookies</a></li>
+<li><a href="#working-with-sessions">Working with Sessions</a></li>
+<li><a href="#cookies-vs-sessions-quick-reference">Cookies vs. Sessions Quick Reference</a><ul>
+<li><a href="#cookies">Cookies</a></li>
+<li><a href="#sessions">Sessions</a></li>
+</ul>
+</li>
+<li><a href="#why-pair-php-with-mysql">Why Pair PHP with MySQL?</a><ul>
+<li><a href="#1_1">1</a></li>
+<li><a href="#2_1">2</a></li>
+<li><a href="#3_1">3</a></li>
+<li><a href="#4_1">4</a></li>
+</ul>
+</li>
+<li><a href="#connecting-to-mysql-with-php">Connecting to MySQL with PHP</a></li>
+<li><a href="#object-oriented-connection-style">Object-Oriented Connection Style</a></li>
+<li><a href="#connection-best-practices">Connection Best Practices</a><ul>
+<li><a href="#1_2">1</a></li>
+<li><a href="#2_2">2</a></li>
+<li><a href="#3_2">3</a></li>
+<li><a href="#4_2">4</a></li>
+</ul>
+</li>
+<li><a href="#running-a-query-mysqli_query">Running a Query: mysqli_query()</a></li>
+<li><a href="#fetching-results-mysqli_fetch_assoc">Fetching Results: mysqli_fetch_assoc()</a></li>
+<li><a href="#other-ways-to-fetch-a-row">Other Ways to Fetch a Row</a></li>
+<li><a href="#from-query-to-output-the-full-cycle">From Query to Output: The Full Cycle</a></li>
+<li><a href="#create-table-defining-structure">CREATE TABLE - Defining Structure</a></li>
+<li><a href="#insert-adding-new-rows">INSERT - Adding New Rows</a></li>
+<li><a href="#delete-removing-rows">DELETE - Removing Rows</a></li>
+<li><a href="#create-insert-delete-quick-reference">CREATE / INSERT / DELETE - Quick Reference</a></li>
+<li><a href="#select-basic-filtered-queries">SELECT - Basic &amp; Filtered Queries</a></li>
+<li><a href="#select-sorting-limiting-results">SELECT - Sorting &amp; Limiting Results</a></li>
+<li><a href="#update-modifying-existing-rows">UPDATE - Modifying Existing Rows</a></li>
+<li><a href="#safe-select-update-delete-practices">Safe SELECT / UPDATE / DELETE Practices</a><ul>
+<li><a href="#1_3">1</a></li>
+<li><a href="#2_3">2</a></li>
+<li><a href="#3_3">3</a></li>
+<li><a href="#4_3">4</a></li>
+</ul>
+</li>
+<li><a href="#what-makes-content-dynamic">What Makes Content 'Dynamic'?</a><ul>
+<li><a href="#1_4">1</a></li>
+<li><a href="#2_4">2</a></li>
+<li><a href="#3_4">3</a></li>
+<li><a href="#4_4">4</a></li>
+</ul>
+</li>
+<li><a href="#looping-database-rows-into-html">Looping Database Rows into HTML</a></li>
+<li><a href="#a-complete-dynamic-page">A Complete Dynamic Page</a></li>
+<li><a href="#looking-ahead-to-module-v">Looking Ahead to Module V</a><ul>
+<li><a href="#1_5">1</a></li>
+<li><a href="#2_5">2</a></li>
+<li><a href="#3_5">3</a></li>
+<li><a href="#4_5">4</a></li>
+</ul>
+</li>
+<li><a href="#key-takeaways">Key Takeaways</a></li>
+</ul>
+</div>
+</nav>
+  </aside>
+  <main>
+    <div class="doc-head">
+      <div class="kicker">20CST461 · Web Programming</div>
+      <div class="meta">Lecture notes, 859 lines · rendered from module4.md</div>
+    </div>
+    <p><em>[Image Description: A dark circular icon containing a white three-tiered cylinder database symbol set against a dark navy blue background.]</em></p>
+<h1 id="module-4">MODULE 4</h1>
+<h3 id="php-mysql">PHP  MySQL<a class="anchor" href="#php-mysql">#</a></h3>
+<h3 id="6-hours-of-content-delivery">6 Hours of Content Delivery<a class="anchor" href="#6-hours-of-content-delivery">#</a></h3>
+<ul>
+<li>
+<p>Cookies &amp; sessions - 1 Hr</p>
+</li>
+<li>
+<p>PHP-MySQL integration &amp; connecting - 1 Hr</p>
+</li>
+<li>
+<p>Working with MySQL data - 1 Hr</p>
+</li>
+<li>
+<p>CREATE, INSERT &amp; DELETE operations - 1 Hr</p>
+</li>
+<li>
+<p>SELECT &amp; UPDATE operations - 1 Hr</p>
+</li>
+<li>
+<p>Building dynamic content - 1 Hr</p>
+</li>
+</ul>
+<p><strong>Web Programming Saintgits College of Engineering</strong></p>
+<p><strong>MODULE IV 1 HR TOPIC</strong></p>
+<p><strong>20CST461</strong></p>
+<h2 id="why-state-management-cookies-vs-sessions">Why State Management? Cookies vs. Sessions<a class="anchor" href="#why-state-management-cookies-vs-sessions">#</a></h2>
+<h3 id="1">1<a class="anchor" href="#1">#</a></h3>
+<p><strong>HTTP is stateless</strong></p>
+<p>Each request a browser makes to a server is independent the server has no memory of previous requests by default. Without help, a server can't tell if two requests came from the same visitor.</p>
+<h3 id="2">2<a class="anchor" href="#2">#</a></h3>
+<p><strong>Cookies - stored on the client</strong></p>
+<p>Small pieces of data the server asks the browser to store, then sends back automatically on every subsequent request to that domain.</p>
+<h3 id="3">3<a class="anchor" href="#3">#</a></h3>
+<p><strong>Sessions - stored on the server</strong></p>
+<p>Data is kept on the server itself; the browser only holds a small session ID (usually via a cookie) that links back to it.</p>
+<h3 id="4">4<a class="anchor" href="#4">#</a></h3>
+<p><strong>Why both exist</strong></p>
+<p>Cookies are simple but limited in size and visible to the client; sessions can hold much more data securely, but need the server to manage that storage.</p>
+<p><strong>Web Programming | Saintgits College of Engineering</strong></p>
+<p><strong>2</strong></p>
+<p><em>[Image Description: Small database cylinder logo graphic in the top-left area and PHP logo in the lower-right area.]</em></p>
+<p><strong>MODULE IV 1 HR TOPIC</strong></p>
+<p><strong>20CST461</strong></p>
+<h2 id="working-with-cookies">Working with Cookies<a class="anchor" href="#working-with-cookies">#</a></h2>
+<p>PHP's <code>setcookie()</code> must be called before any HTML output cookies are sent as HTTP headers.</p>
+<ul>
+<li>
+<p><code>setcookie(&quot;name&quot;, &quot;value&quot;, time()+3600)</code> sets a cookie for 1 hour</p>
+</li>
+<li>
+<p>Read with <code>$_COOKIE[&quot;name&quot;]</code></p>
+</li>
+<li>
+<p>To delete a cookie, set it again with an expiry time in the past</p>
+</li>
+<li>
+<p>Cookies are visible to and editable by the user never store sensitive data in one</p>
+</li>
+</ul>
+<p><pre><code class="language-php">&lt;?php
+// Set a cookie for 1 hour
+setcookie(&quot;username&quot;, &quot;Anu&quot;, time() + 3600);
+
+// Read it on a later request
+if (isset($_COOKIE[&quot;username&quot;])) {
+    echo &quot;Welcome back, &quot; . $_COOKIE[&quot;username&quot;];
+}
+
+// Delete a cookie
+setcookie(&quot;username&quot;, &quot;&quot;, time() - 3600);
+?&gt;
+</code></pre></p>
+<p><strong>Web Programming | Saintgits College of Engineering</strong></p>
+<p><strong>PHP</strong></p>
+<p><strong>3</strong></p>
+<p><em>[Image Description: Small database cylinder logo graphic in the top-left area and PHP logo in the lower-right area.]</em></p>
+<p><strong>MODULE IV 1 HR TOPIC</strong></p>
+<p><strong>20CST461</strong></p>
+<h2 id="working-with-sessions">Working with Sessions<a class="anchor" href="#working-with-sessions">#</a></h2>
+<p><code>session_start()</code> must run before any session data is read or written typically the very first line of a script.</p>
+<ul>
+<li>
+<p><code>session_start()</code> - begins or resumes a session, linked via a session ID cookie</p>
+</li>
+<li>
+<p><code>$_SESSION[&quot;key&quot;] = value;</code> store data on the server for this visitor</p>
+</li>
+<li>
+<p>Data persists across multiple page loads until the session ends</p>
+</li>
+<li>
+<p><code>session_destroy()</code> ends the session and clears its server-side data</p>
+</li>
+</ul>
+<p><pre><code class="language-php">&lt;?php
+session_start();
+$_SESSION[&quot;user_id&quot;] = 101;
+$_SESSION[&quot;role&quot;] = &quot;student&quot;;
+echo $_SESSION[&quot;user_id&quot;];
+
+// On logout:
+session_destroy();
+?&gt;
+</code></pre></p>
+<p><strong>Web Programming | Saintgits College of Engineering</strong></p>
+<p><strong>PHP</strong></p>
+<p><strong>4</strong></p>
+<p><strong>MODULE IV 1 HR TOPIC</strong></p>
+<p><strong>20CST461</strong></p>
+<h2 id="cookies-vs-sessions-quick-reference">Cookies vs. Sessions Quick Reference<a class="anchor" href="#cookies-vs-sessions-quick-reference">#</a></h2>
+<h3 id="cookies">Cookies<a class="anchor" href="#cookies">#</a></h3>
+<ul>
+<li>
+<p>Stored in the browser, sent with every matching request</p>
+</li>
+<li>
+<p>Limited to about 4KB per cookie</p>
+</li>
+<li>
+<p>Visible and editable by the user not for sensitive data</p>
+</li>
+<li>
+<p>Can persist for days/months (set by expiry time)</p>
+</li>
+<li>
+<p>Good for: remembering preferences, 'remember me' tokens</p>
+</li>
+</ul>
+<h3 id="sessions">Sessions<a class="anchor" href="#sessions">#</a></h3>
+<ul>
+<li>
+<p>Stored on the server; browser only holds a session ID</p>
+</li>
+<li>
+<p>Can hold much larger / more sensitive data safely</p>
+</li>
+<li>
+<p>Cleared when the browser closes, by default (unless configured otherwise)</p>
+</li>
+<li>
+<p>Requires <code>session_start()</code> on every page that uses it</p>
+</li>
+<li>
+<p>Good for: login state, shopping carts, multi-step forms</p>
+</li>
+</ul>
+<p><strong>Web Programming | Saintgits College of Engineering</strong></p>
+<p><strong>5</strong></p>
+<p><strong>MODULE IV 1 HR TOPIC</strong></p>
+<p><strong>20CST461</strong></p>
+<h2 id="why-pair-php-with-mysql">Why Pair PHP with MySQL?<a class="anchor" href="#why-pair-php-with-mysql">#</a></h2>
+<h3 id="1_1">1<a class="anchor" href="#1_1">#</a></h3>
+<p><strong>The problem with plain PHP</strong></p>
+<p>Everything covered in Module III variables, sessions, form data disappears the moment the script finishes running. There's no permanent storage.</p>
+<h3 id="2_1">2<a class="anchor" href="#2_1">#</a></h3>
+<p><strong>What a database adds</strong></p>
+<p>MySQL is a relational database: data is organised into tables (rows and columns), and it persists indefinitely on disk, available to every future request.</p>
+<h3 id="3_1">3<a class="anchor" href="#3_1">#</a></h3>
+<p><strong>Why MySQL specifically</strong></p>
+<p>Free, open-source, the default pairing with PHP on most hosting platforms (including Hostinger-style shared hosting), and the 'M' in the classic LAMP stack (Linux, Apache, MySQL, PHP).</p>
+<h3 id="4_1">4<a class="anchor" href="#4_1">#</a></h3>
+<p><strong>The bridge: mysqli / PDO</strong></p>
+<p>PHP doesn't talk to MySQL directly it uses an extension. MySQLi (MySQL Improved) is the classic choice for this course; PDO is a more modern, database-agnostic alternative.</p>
+<p><strong>Web Programming | Saintgits College of Engineering</strong></p>
+<p><strong>6</strong></p>
+<p><em>[Image Description: Small database cylinder logo graphic in the top-left area and PHP logo in the lower-right area.]</em></p>
+<p><strong>MODULE IV 1 HR TOPIC</strong></p>
+<p><strong>20CST461</strong></p>
+<h2 id="connecting-to-mysql-with-php">Connecting to MySQL with PHP<a class="anchor" href="#connecting-to-mysql-with-php">#</a></h2>
+<p><code>mysqli_connect()</code> opens the link between a PHP script and a MySQL server this is the very first step any database-driven page needs.</p>
+<ul>
+<li>
+<p><code>mysqli_connect(host, user, password, database)</code> returns a connection handle</p>
+</li>
+<li>
+<p>Always check the connection for failure before continuing</p>
+</li>
+<li>
+<p>"localhost" is the typical host value for same-server hosting</p>
+</li>
+<li>
+<p><code>mysqli_close($conn)</code> releases the connection when done (optional PHP also closes it automatically at script end)</p>
+</li>
+</ul>
+<p><pre><code class="language-php">&lt;?php
+$conn = mysqli_connect(
+    &quot;localhost&quot;, &quot;root&quot;, &quot;password&quot;, &quot;college_db&quot;
+);
+
+if (!$conn) {
+    die(&quot;Connection failed: &quot; . mysqli_connect_error());
+}
+
+echo &quot;Connected successfully&quot;;
+?&gt;
+</code></pre></p>
+<p><strong>Web Programming | Saintgits College of Engineering</strong></p>
+<p><strong>PHP</strong></p>
+<p><strong>7</strong></p>
+<p><em>[Image Description: Small database cylinder logo graphic in the top-left area and PHP logo in the lower-right area.]</em></p>
+<p><strong>MODULE IV 1 HR TOPIC</strong></p>
+<p><strong>20CST461</strong></p>
+<h2 id="object-oriented-connection-style">Object-Oriented Connection Style<a class="anchor" href="#object-oriented-connection-style">#</a></h2>
+<p>mysqli also offers an object-oriented interface, doing the same job with a slightly different syntax common in real-world Laravel-adjacent code.</p>
+<ul>
+<li>
+<p><code>new mysqli(host, user, password, database)</code> creates a connection object</p>
+</li>
+<li>
+<p><code>$conn-&gt;connect_error</code> checks for a failed connection</p>
+</li>
+<li>
+<p><code>$conn-&gt;query(&quot;...&quot;)</code> runs a query (object method instead of a standalone function)</p>
+</li>
+<li>
+<p><code>$conn-&gt;close()</code> closes the connection</p>
+</li>
+</ul>
+<p><pre><code class="language-php">&lt;?php
+$conn = new mysqli(
+    &quot;localhost&quot;, &quot;root&quot;, &quot;password&quot;, &quot;college_db&quot;
+);
+
+if ($conn-&gt;connect_error) {
+    die(&quot;Connection failed: &quot; . $conn-&gt;connect_error);
+}
+
+echo &quot;Connected successfully&quot;;
+?&gt;
+</code></pre></p>
+<p><strong>Web Programming | Saintgits College of Engineering</strong></p>
+<p><strong>PHP</strong></p>
+<p><strong>8</strong></p>
+<p><strong>MODULE IV 1 HR TOPIC</strong></p>
+<p><strong>20CST461</strong></p>
+<h2 id="connection-best-practices">Connection Best Practices<a class="anchor" href="#connection-best-practices">#</a></h2>
+<h3 id="1_2">1<a class="anchor" href="#1_2">#</a></h3>
+<p><strong>Never hardcode credentials in shared/public code</strong></p>
+<p>Database passwords belong in a separate config file (excluded from version control), not pasted directly into every script that needs a connection.</p>
+<h3 id="2_2">2<a class="anchor" href="#2_2">#</a></h3>
+<p><strong>Always check for connection failure</strong></p>
+<p>A silently failed connection leads to confusing errors later checking immediately with <code>die()</code> or a proper error handler saves debugging time.</p>
+<h3 id="3_2">3<a class="anchor" href="#3_2">#</a></h3>
+<p><strong>Close connections when done</strong></p>
+<p>Not strictly required (PHP cleans up at script end), but good discipline especially in scripts that open multiple connections or run for a long time.</p>
+<h3 id="4_2">4<a class="anchor" href="#4_2">#</a></h3>
+<p><strong>Looking ahead: prepared statements</strong></p>
+<p>The queries in this module use direct string building for clarity. Production code should use prepared statements (<code>mysqli_prepare</code>) to prevent SQL injection worth knowing even if not the syllabus focus here.</p>
+<p><strong>Web Programming | Saintgits College of Engineering</strong></p>
+<p><strong>9</strong></p>
+<p><em>[Image Description: Small database cylinder logo graphic in the top-left area and PHP logo in the lower-right area.]</em></p>
+<p><strong>MODULE IV 1 HR TOPIC</strong></p>
+<p><strong>20CST461</strong></p>
+<h2 id="running-a-query-mysqli_query">Running a Query: mysqli_query()<a class="anchor" href="#running-a-query-mysqli_query">#</a></h2>
+<p>Once connected, every SQL statement read or write is sent to MySQL the same way: as a string, through <code>mysqli_query()</code>.</p>
+<ul>
+<li>
+<p><code>mysqli_query($conn, $sql)</code> executes a query and returns a result handle (for SELECT) or true/false (for INSERT/UPDATE/DELETE)</p>
+</li>
+<li>
+<p>Always check the return value before assuming the query succeeded</p>
+</li>
+<li>
+<p><code>mysqli_error($conn)</code> reports the database's error message if a query fails</p>
+</li>
+<li>
+<p><code>$sql</code> is just a string - building it carelessly from user input risks SQL injection</p>
+</li>
+</ul>
+<p><pre><code class="language-php">&lt;?php
+$sql = &quot;SELECT name, marks FROM students&quot;;
+$result = mysqli_query($conn, $sql);
+
+if (!$result) {
+    die(&quot;Query failed: &quot; . mysqli_error($conn));
+}
+?&gt;
+</code></pre></p>
+<p><strong>Web Programming | Saintgits College of Engineering</strong></p>
+<p><strong>PHP</strong></p>
+<p><strong>10</strong></p>
+<p><em>[Image Description: Small database cylinder logo graphic in the top-left area and PHP logo in the lower-right area.]</em></p>
+<p><strong>MODULE IV 1 HR TOPIC</strong></p>
+<p><strong>20CST461</strong></p>
+<h2 id="fetching-results-mysqli_fetch_assoc">Fetching Results: mysqli_fetch_assoc()<a class="anchor" href="#fetching-results-mysqli_fetch_assoc">#</a></h2>
+<p>A result handle doesn't contain readable data by itself you must fetch each row, one at a time, usually inside a loop.</p>
+<ul>
+<li>
+<p><code>mysqli_fetch_assoc($result)</code> pulls one row as an associative array: <code>[&quot;col&quot;=&gt;value]</code></p>
+</li>
+<li>
+<p>Calling it again moves to the next row; it returns NULL once rows run out</p>
+</li>
+<li>
+<p><code>while</code> loop is the standard pattern to process every row in a result</p>
+</li>
+<li>
+<p><code>mysqli_num_rows($result)</code> tells you how many rows were returned, without looping</p>
+</li>
+</ul>
+<p><pre><code class="language-php">&lt;?php
+while ($row = mysqli_fetch_assoc($result)) {
+    echo $row[&quot;name&quot;] . &quot; &quot; . $row[&quot;marks&quot;] . &quot;&lt;br&gt;&quot;;
+}
+
+echo &quot;Total rows: &quot; . mysqli_num_rows($result);
+?&gt;
+</code></pre></p>
+<p><strong>Web Programming | Saintgits College of Engineering</strong></p>
+<p><strong>PHP</strong></p>
+<p><strong>11</strong></p>
+<p><strong>MODULE IV 1 HR TOPIC</strong></p>
+<p><strong>20CST461</strong></p>
+<h2 id="other-ways-to-fetch-a-row">Other Ways to Fetch a Row<a class="anchor" href="#other-ways-to-fetch-a-row">#</a></h2>
+<table>
+<thead>
+<tr>
+<th>Function</th>
+<th>Returns</th>
+<th>When to Use</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>mysqli_fetch_assoc()</code></td>
+<td>Associative array</td>
+<td>Access columns by name most common</td>
+</tr>
+<tr>
+<td><code>mysqli_fetch_array()</code></td>
+<td>Both indexed + assoc</td>
+<td>Flexible, but slightly heavier</td>
+</tr>
+<tr>
+<td><code>mysqli_fetch_row()</code></td>
+<td>Indexed array only</td>
+<td>Access columns by position</td>
+</tr>
+<tr>
+<td><code>mysqli_fetch_object()</code></td>
+<td>An object</td>
+<td>Access columns as <code>$row-&gt;name</code></td>
+</tr>
+<tr>
+<td><code>mysqli_num_rows()</code></td>
+<td>Integer</td>
+<td>Count rows without fetching them</td>
+</tr>
+</tbody>
+</table>
+<p>Note: All fetch functions advance an internal pointer once a row is fetched, the next call returns the next row, until none remain.</p>
+<p><strong>Web Programming | Saintgits College of Engineering</strong></p>
+<p><strong>12</strong></p>
+<p><em>[Image Description: A multi-step process diagram illustrating the full cycle from query to browser display. Along the top row are three horizontal boxes: Box 1 (teal blue) labeled "1. Build SQL string", Box 2 (dark navy) labeled "2. mysqli_query()", and Box 3 (teal blue) labeled "3. Result handle returned". Below them on the left sits Box 4 (a wide green rectangle) labeled "4. while + fetch_assoc() loops through rows", positioned beside Box 5 (teal blue) labeled "5. echo HTML for each row". Spanning beneath them across the bottom is a wide dark navy container labeled "Browser displays the finished table".]</em></p>
+<p><strong>MODULE IV 1 HR TOPIC</strong></p>
+<p><strong>20CST461</strong></p>
+<h2 id="from-query-to-output-the-full-cycle">From Query to Output: The Full Cycle<a class="anchor" href="#from-query-to-output-the-full-cycle">#</a></h2>
+<ol>
+<li>
+<p>Build SQL string</p>
+</li>
+<li>
+<p>mysqli_query()</p>
+</li>
+<li>
+<p>Result handle returned</p>
+</li>
+<li>
+<p>while + fetch_assoc() loops through rows</p>
+</li>
+<li>
+<p>echo HTML for each row</p>
+</li>
+</ol>
+<p>Browser displays the finished table</p>
+<p>This five-step pattern - query, fetch, loop, echo - repeats throughout the rest of this module, regardless of what the query actually does.</p>
+<p><strong>Web Programming | Saintgits College of Engineering</strong></p>
+<p><strong>13</strong></p>
+<p><em>[Image Description: Small database cylinder logo graphic in the top-left area and PHP + SQL tag in the lower-right area.]</em></p>
+<p><strong>MODULE IV 1 HR TOPIC</strong></p>
+<p><strong>20CST461</strong></p>
+<h2 id="create-table-defining-structure">CREATE TABLE - Defining Structure<a class="anchor" href="#create-table-defining-structure">#</a></h2>
+<p>Before any data can be stored, a table's structure its columns and their types must be defined.</p>
+<ul>
+<li>
+<p><code>CREATE TABLE name (column type, ...)</code> defines a new table</p>
+</li>
+<li>
+<p><code>AUTO_INCREMENT PRIMARY KEY</code> gives each row a unique, self-numbering id</p>
+</li>
+<li>
+<p>Column types: <code>INT</code>, <code>VARCHAR(n)</code>, <code>TEXT</code>, <code>DATE</code>, <code>DECIMAL</code>, etc.</p>
+</li>
+<li>
+<p>Run once during setup not on every page load</p>
+</li>
+</ul>
+<p><pre><code class="language-php">&lt;?php
+$sql = &quot;CREATE TABLE students (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(50),
+    marks INT,
+    joined DATE
+)&quot;;
+
+mysqli_query($conn, $sql);
+?&gt;
+</code></pre></p>
+<p><strong>Web Programming | Saintgits College of Engineering</strong></p>
+<p><strong>PHP + SQL</strong></p>
+<p><strong>14</strong></p>
+<p><em>[Image Description: Small database cylinder logo graphic in the top-left area and PHP + SQL tag in the lower-right area.]</em></p>
+<p><strong>MODULE IV 1 HR TOPIC</strong></p>
+<p><strong>20CST461</strong></p>
+<h2 id="insert-adding-new-rows">INSERT - Adding New Rows<a class="anchor" href="#insert-adding-new-rows">#</a></h2>
+<p>INSERT writes a new row of data into an existing table.</p>
+<ul>
+<li>
+<p><code>INSERT INTO table (cols) VALUES (vals)</code> - explicit column list is safest</p>
+</li>
+<li>
+<p>String values must be quoted in the SQL; numbers don't need quotes</p>
+</li>
+<li>
+<p><code>mysqli_insert_id($conn)</code> returns the auto-increment id of the row just inserted</p>
+</li>
+<li>
+<p>Building <code>$sql</code> with raw form input directly is unsafe sanitize/escape first (or use prepared statements)</p>
+</li>
+</ul>
+<p><pre><code class="language-php">&lt;?php
+$name = $_POST[&quot;name&quot;];
+$marks = (int)$_POST[&quot;marks&quot;];
+
+$sql = &quot;INSERT INTO students (name, marks)
+        VALUES (&#x27;$name&#x27;, $marks)&quot;;
+
+mysqli_query($conn, $sql);
+echo &quot;New ID: &quot; . mysqli_insert_id($conn);
+?&gt;
+</code></pre></p>
+<p><strong>Web Programming | Saintgits College of Engineering</strong></p>
+<p><strong>PHP + SQL</strong></p>
+<p><strong>15</strong></p>
+<p><em>[Image Description: Small database cylinder logo graphic in the top-left area and PHP + SQL tag in the lower-right area.]</em></p>
+<p><strong>MODULE IV 1 HR TOPIC</strong></p>
+<p><strong>20CST461</strong></p>
+<h2 id="delete-removing-rows">DELETE - Removing Rows<a class="anchor" href="#delete-removing-rows">#</a></h2>
+<p>DELETE permanently removes rows matching a condition there's no 'undo' once it runs.</p>
+<ul>
+<li>
+<p><code>DELETE FROM table WHERE condition</code> removes only matching rows</p>
+</li>
+<li>
+<p>Never omit the <code>WHERE</code> clause unless you intend to clear the entire table</p>
+</li>
+<li>
+<p><code>mysqli_affected_rows($conn)</code> tells you how many rows were actually deleted</p>
+</li>
+<li>
+<p>Good habit: run the equivalent <code>SELECT</code> first to preview what would be deleted</p>
+</li>
+</ul>
+<p><pre><code class="language-php">&lt;?php
+$id = (int)$_POST[&quot;id&quot;];
+
+$sql = &quot;DELETE FROM students WHERE id = $id&quot;;
+mysqli_query($conn, $sql);
+
+echo mysqli_affected_rows($conn) . &quot; row(s) deleted&quot;;
+?&gt;
+</code></pre></p>
+<p><strong>Web Programming | Saintgits College of Engineering</strong></p>
+<p><strong>PHP + SQL</strong></p>
+<p><strong>16</strong></p>
+<p><strong>MODULE IV 1 HR TOPIC</strong></p>
+<p><strong>20CST461</strong></p>
+<h2 id="create-insert-delete-quick-reference">CREATE / INSERT / DELETE - Quick Reference<a class="anchor" href="#create-insert-delete-quick-reference">#</a></h2>
+<table>
+<thead>
+<tr>
+<th>Operation</th>
+<th>Core Syntax</th>
+<th>Risk if Misused</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CREATE</td>
+<td><code>CREATE TABLE t (col type, ...)</code></td>
+<td>Run more than once without <code>DROP</code> first</td>
+</tr>
+<tr>
+<td>INSERT</td>
+<td><code>INSERT INTO t (cols) VALUES (...)</code></td>
+<td>Unescaped input → SQL injection</td>
+</tr>
+<tr>
+<td>DELETE</td>
+<td><code>DELETE FROM t WHERE condition</code></td>
+<td>Missing <code>WHERE</code> → entire table wiped</td>
+</tr>
+</tbody>
+</table>
+<p>Note: All three are 'write' operations none of them return readable data, only success/failure and an affected-row count.</p>
+<p><strong>Web Programming | Saintgits College of Engineering</strong></p>
+<p><strong>17</strong></p>
+<p><em>[Image Description: Small database cylinder logo graphic in the top-left area and PHP + SQL tag in the lower-right area.]</em></p>
+<p><strong>MODULE IV 1 HR TOPIC</strong></p>
+<p><strong>20CST461</strong></p>
+<h2 id="select-basic-filtered-queries">SELECT - Basic &amp; Filtered Queries<a class="anchor" href="#select-basic-filtered-queries">#</a></h2>
+<p>SELECT is the only operation that returns readable data every other query just succeeds or fails.</p>
+<ul>
+<li>
+<p><code>SELECT * FROM table</code> every column, every row</p>
+</li>
+<li>
+<p><code>SELECT col1, col2 FROM table</code> only the columns you need (faster, clearer)</p>
+</li>
+<li>
+<p><code>WHERE condition</code> filters which rows come back</p>
+</li>
+<li>
+<p>Comparison operators in SQL: <code>=</code>, <code>!=</code>, <code>&gt;</code>, <code>&lt;</code>, <code>&gt;=</code>, <code>&lt;=</code>, <code>LIKE</code> (pattern match)</p>
+</li>
+</ul>
+<p><pre><code class="language-php">&lt;?php
+$sql = &quot;SELECT name, marks FROM students
+        WHERE marks &gt;= 75&quot;;
+
+$result = mysqli_query($conn, $sql);
+
+while ($row = mysqli_fetch_assoc($result)) {
+    echo $row[&quot;name&quot;] . &quot;&lt;br&gt;&quot;;
+}
+?&gt;
+</code></pre></p>
+<p><strong>Web Programming | Saintgits College of Engineering</strong></p>
+<p><strong>PHP + SQL</strong></p>
+<p><strong>18</strong></p>
+<p><em>[Image Description: Small database cylinder logo graphic in the top-left area and PHP + SQL tag in the lower-right area.]</em></p>
+<p><strong>MODULE IV 1 HR TOPIC</strong></p>
+<p><strong>20CST461</strong></p>
+<h2 id="select-sorting-limiting-results">SELECT - Sorting &amp; Limiting Results<a class="anchor" href="#select-sorting-limiting-results">#</a></h2>
+<p>ORDER BY and LIMIT refine which rows come back and in what order common in any listing page.</p>
+<ul>
+<li>
+<p><code>ORDER BY column ASC/DESC</code> sorts results (<code>DESC</code> = highest/most recent first)</p>
+</li>
+<li>
+<p><code>LIMIT n</code> caps the number of rows returned</p>
+</li>
+<li>
+<p><code>LIMIT offset, count</code> used for pagination (skip, then take)</p>
+</li>
+<li>
+<p>These clauses can be combined with <code>WHERE</code> in the same query</p>
+</li>
+</ul>
+<p><pre><code class="language-php">&lt;?php
+$sql = &quot;SELECT name, marks FROM students
+        WHERE marks &gt;= 50
+        ORDER BY marks DESC
+        LIMIT 5&quot;;
+
+$result = mysqli_query($conn, $sql);
+?&gt;
+</code></pre></p>
+<p><strong>Web Programming | Saintgits College of Engineering</strong></p>
+<p><strong>PHP + SQL</strong></p>
+<p><strong>19</strong></p>
+<p><em>[Image Description: Small database cylinder logo graphic in the top-left area and PHP + SQL tag in the lower-right area.]</em></p>
+<p><strong>MODULE IV 1 HR TOPIC</strong></p>
+<p><strong>20CST461</strong></p>
+<h2 id="update-modifying-existing-rows">UPDATE - Modifying Existing Rows<a class="anchor" href="#update-modifying-existing-rows">#</a></h2>
+<p>UPDATE changes values in rows that already exist like DELETE, it relies entirely on WHERE to target the right rows.</p>
+<ul>
+<li>
+<p><code>UPDATE table SET col = value WHERE condition</code></p>
+</li>
+<li>
+<p>Multiple columns: <code>SET col1 = val1, col2 = val2</code></p>
+</li>
+<li>
+<p>Without <code>WHERE</code>, every row in the table gets updated almost always a mistake</p>
+</li>
+<li>
+<p><code>mysqli_affected_rows($conn)</code> confirms how many rows actually changed</p>
+</li>
+</ul>
+<p><pre><code class="language-php">&lt;?php
+$id = (int)$_POST[&quot;id&quot;];
+$marks = (int)$_POST[&quot;marks&quot;];
+
+$sql = &quot;UPDATE students
+        SET marks = $marks
+        WHERE id = $id&quot;;
+
+mysqli_query($conn, $sql);
+?&gt;
+</code></pre></p>
+<p><strong>Web Programming | Saintgits College of Engineering</strong></p>
+<p><strong>PHP + SQL</strong></p>
+<p><strong>20</strong></p>
+<p><strong>MODULE IV 1 HR TOPIC</strong></p>
+<p><strong>20CST461</strong></p>
+<h2 id="safe-select-update-delete-practices">Safe SELECT / UPDATE / DELETE Practices<a class="anchor" href="#safe-select-update-delete-practices">#</a></h2>
+<h3 id="1_3">1<a class="anchor" href="#1_3">#</a></h3>
+<p><strong>Test the WHERE clause with SELECT first</strong></p>
+<p>Before running an UPDATE or DELETE, run the equivalent <code>SELECT ... WHERE ...</code> and check the rows it returns if it's the wrong set, the destructive query would have been too.</p>
+<h3 id="2_3">2<a class="anchor" href="#2_3">#</a></h3>
+<p><strong>Cast numeric input explicitly</strong></p>
+<p><code>(int)$_POST[&quot;id&quot;]</code> before dropping it into SQL closes off a whole class of injection via that field, even without full prepared statements.</p>
+<h3 id="3_3">3<a class="anchor" href="#3_3">#</a></h3>
+<p><strong>Prefer prepared statements in real applications</strong></p>
+<p><code>mysqli_prepare()</code> with <code>?</code> placeholders separates SQL structure from data entirely the gold-standard defence against SQL injection, even though this module's examples use direct string-building for simplicity.</p>
+<h3 id="4_3">4<a class="anchor" href="#4_3">#</a></h3>
+<p><strong>Always check mysqli_affected_rows()</strong></p>
+<p>A query can 'succeed' (no error) while affecting zero rows e.g. a WHERE clause that matched nothing. Checking the affected-row count catches that silently wrong outcome.</p>
+<p><strong>Web Programming | Saintgits College of Engineering</strong></p>
+<p><strong>21</strong></p>
+<p><strong>MODULE IV 1 HR TOPIC</strong></p>
+<p><strong>20CST461</strong></p>
+<h2 id="what-makes-content-dynamic">What Makes Content 'Dynamic'?<a class="anchor" href="#what-makes-content-dynamic">#</a></h2>
+<h3 id="1_4">1<a class="anchor" href="#1_4">#</a></h3>
+<p><strong>Static vs. dynamic</strong></p>
+<p>A static page's HTML is fixed and identical for every visitor. A dynamic page's HTML is generated fresh on each request, often by querying a database so the same .php file can show completely different content each time.</p>
+<h3 id="2_4">2<a class="anchor" href="#2_4">#</a></h3>
+<p><strong>Mixing PHP with HTML</strong></p>
+<p>PHP can be embedded directly inside HTML using <code>&lt;?php ... ?&gt;</code> blocks most commonly inside a loop that echoes one row of HTML per database record.</p>
+<h3 id="3_4">3<a class="anchor" href="#3_4">#</a></h3>
+<p><strong>Separating concerns</strong></p>
+<p>Even in a simple script, it helps to mentally separate: data access (the query), business logic (any PHP rules applied), and presentation (the HTML being echoed) a precursor to the MVC pattern Module V's Laravel section formalizes.</p>
+<h3 id="4_4">4<a class="anchor" href="#4_4">#</a></h3>
+<p><strong>Tying it back to Module III</strong></p>
+<p>This is the same form-processing pipeline from Module III, with one new final step: instead of just echoing a response, the validated data is now written to or read from a real, permanent database.</p>
+<p><strong>Web Programming | Saintgits College of Engineering</strong></p>
+<p><strong>22</strong></p>
+<p><em>[Image Description: Small database cylinder logo graphic in the top-left area and PHP logo in the lower-right area.]</em></p>
+<p><strong>MODULE IV 1 HR TOPIC</strong></p>
+<p><strong>20CST461</strong></p>
+<h2 id="looping-database-rows-into-html">Looping Database Rows into HTML<a class="anchor" href="#looping-database-rows-into-html">#</a></h2>
+<p>The most common dynamic-content pattern: query once, then echo one chunk of HTML per row inside the fetch loop.</p>
+<ul>
+<li>
+<p>The <code>&lt;?php ?&gt;</code> block can open mid-HTML and close again, letting PHP and markup interleave naturally</p>
+</li>
+<li>
+<p>Each loop iteration outputs one row of the visible table</p>
+</li>
+<li>
+<p><code>htmlspecialchars()</code> around any user-supplied data prevents it from being interpreted as HTML/JS</p>
+</li>
+<li>
+<p>This pattern works the same whether there are 3 rows or 3,000</p>
+</li>
+</ul>
+<p><pre><code class="language-html">&lt;table&gt;
+&lt;?php while ($row = mysqli_fetch_assoc($result)): ?&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;?php echo htmlspecialchars($row[&quot;name&quot;]); ?&gt;&lt;/td&gt;
+&lt;td&gt;&lt;?php echo $row[&quot;marks&quot;]; ?&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;?php endwhile; ?&gt;
+&lt;/table&gt;
+</code></pre></p>
+<p><strong>Web Programming | Saintgits College of Engineering</strong></p>
+<p><strong>PHP</strong></p>
+<p><strong>23</strong></p>
+<p><em>[Image Description: Small database cylinder logo graphic in the top-left area and PHP logo in the lower-right area.]</em></p>
+<p><strong>MODULE IV 1 HR TOPIC</strong></p>
+<p><strong>20CST461</strong></p>
+<h2 id="a-complete-dynamic-page">A Complete Dynamic Page<a class="anchor" href="#a-complete-dynamic-page">#</a></h2>
+<p>Putting every piece of this module together: connect, query, loop, and render a full, working dynamic page.</p>
+<ul>
+<li>
+<ol>
+<li>Connect to the database</li>
+</ol>
+</li>
+<li>
+<ol start="2">
+<li>Run the query</li>
+</ol>
+</li>
+<li>
+<ol start="3">
+<li>Loop through and echo each row as HTML</li>
+</ol>
+</li>
+<li>
+<p>This exact shape connect, query, loop, render - is the backbone of almost every PHP page that shows database content</p>
+</li>
+</ul>
+<p><pre><code class="language-php">&lt;?php
+$conn = mysqli_connect(&quot;localhost&quot;, &quot;root&quot;, &quot;&quot;, &quot;college_db&quot;);
+$result = mysqli_query($conn, &quot;SELECT name, marks FROM students&quot;);
+?&gt;
+&lt;table border=&quot;1&quot;&gt;
+&lt;tr&gt;&lt;th&gt;Name&lt;/th&gt;&lt;th&gt;Marks&lt;/th&gt;&lt;/tr&gt;
+&lt;?php while ($row = mysqli_fetch_assoc($result)): ?&gt;
+&lt;tr&gt;&lt;td&gt;&lt;?= $row[&quot;name&quot;] ?&gt;&lt;/td&gt;&lt;td&gt;&lt;?= $row[&quot;marks&quot;] ?&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;?php endwhile; ?&gt;
+&lt;/table&gt;
+</code></pre></p>
+<p><strong>Web Programming | Saintgits College of Engineering</strong></p>
+<p><strong>PHP</strong></p>
+<p><strong>24</strong></p>
+<p><strong>MODULE IV 1 HR TOPIC</strong></p>
+<p><strong>20CST461</strong></p>
+<h2 id="looking-ahead-to-module-v">Looking Ahead to Module V<a class="anchor" href="#looking-ahead-to-module-v">#</a></h2>
+<h3 id="1_5">1<a class="anchor" href="#1_5">#</a></h3>
+<p><strong>What this module built</strong></p>
+<p>Every page so far hand-writes the connect → query → loop → render pattern from scratch, every single time functional, but repetitive across a real application with dozens of pages.</p>
+<h3 id="2_5">2<a class="anchor" href="#2_5">#</a></h3>
+<p><strong>JSON a lighter way to exchange this data</strong></p>
+<p>Module V introduces JSON as a standard format for exchanging the same kind of structured data (e.g. that <code>$row</code> array) between a server and other applications, not just rendering it as HTML.</p>
+<h3 id="3_5">3<a class="anchor" href="#3_5">#</a></h3>
+<p><strong>Laravel - structuring this pattern at scale</strong></p>
+<p>Laravel's Eloquent ORM replaces raw <code>mysqli_query()</code> strings with PHP objects and methods; its MVC structure formally separates the data, logic, and presentation concerns this module only handled informally.</p>
+<h3 id="4_5">4<a class="anchor" href="#4_5">#</a></h3>
+<p><strong>The core idea doesn't change</strong></p>
+<p>Whether it's raw mysqli or Laravel's Eloquent, every dynamic page is still fundamentally: get some data, decide what to do with it, then render it exactly the cycle practiced throughout this module.</p>
+<p><strong>Web Programming | Saintgits College of Engineering</strong></p>
+<p><strong>25</strong></p>
+<p><strong>MODULE 4 RECAP</strong></p>
+<p><strong>20CST461</strong></p>
+<h2 id="key-takeaways">Key Takeaways<a class="anchor" href="#key-takeaways">#</a></h2>
+<ul>
+<li>
+<p>Cookies live in the browser; sessions live on the server, linked by a session ID cookie.</p>
+</li>
+<li>
+<p><code>session_start()</code> must run before any <code>$_SESSION</code> read or write.</p>
+</li>
+<li>
+<p><code>mysqli_connect()</code> (or <code>new mysqli()</code>) opens the link between PHP and MySQL.</p>
+</li>
+<li>
+<p><code>mysqli_query()</code> runs any SQL string - SELECT, INSERT, UPDATE, DELETE, CREATE alike.</p>
+</li>
+<li>
+<p><code>mysqli_fetch_assoc()</code> + a while loop is the standard pattern to read result rows.</p>
+</li>
+<li>
+<p>DELETE and UPDATE need a careful WHERE clause test with SELECT first.</p>
+</li>
+<li>
+<p>Dynamic content = HTML generated at request-time from live database data.</p>
+</li>
+<li>
+<p>This connect-query-loop-render pattern is the direct precursor to Laravel's MVC model.</p>
+</li>
+</ul>
+<p><strong>Web Programming | Saintgits College of Engineering</strong></p>
+<p><strong>26</strong></p>
+  </main>
+</div>
+<div class="tools">
+  <button id="theme" title="Toggle light / dark">☾</button>
+  <button id="top" title="Back to top">↑</button>
+</div>
+<script>
+(function(){
+  var root=document.documentElement, key='minotes-theme';
+  var saved=localStorage.getItem(key);
+  var prefers=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';
+  root.setAttribute('data-theme', saved || prefers);
+
+  var btn=document.getElementById('theme');
+  function sync(){ if(btn) btn.textContent = root.getAttribute('data-theme')==='dark' ? '\u2600' : '\u263E'; }
+  sync();
+  if(btn) btn.addEventListener('click',function(){
+    var next = root.getAttribute('data-theme')==='dark' ? 'light' : 'dark';
+    root.setAttribute('data-theme', next); localStorage.setItem(key,next); sync();
+  });
+
+  var bar=document.getElementById('progress');
+  if(bar) addEventListener('scroll',function(){
+    var h=document.documentElement.scrollHeight-innerHeight;
+    bar.style.width=(h>0?(scrollY/h*100):0)+'%';
+  },{passive:true});
+
+  document.querySelectorAll('pre').forEach(function(pre){
+    var b=document.createElement('button');
+    b.className='copy'; b.textContent='copy';
+    b.addEventListener('click',function(){
+      var t=pre.querySelector('code'); var txt=t?t.innerText:pre.innerText;
+      navigator.clipboard.writeText(txt).then(function(){
+        b.textContent='copied'; setTimeout(function(){b.textContent='copy';},1200);
+      });
+    });
+    pre.appendChild(b);
+  });
+
+  document.querySelectorAll('main table').forEach(function(t){
+    if(t.parentElement.classList.contains('table-scroll')) return;
+    var w=document.createElement('div'); w.className='table-scroll';
+    t.parentNode.insertBefore(w,t); w.appendChild(t);
+  });
+
+  var links=[].slice.call(document.querySelectorAll('.sidebar a[href^="#"]'));
+  var map={}; links.forEach(function(a){ map[a.getAttribute('href').slice(1)]=a; });
+  var heads=[].slice.call(document.querySelectorAll('main h2[id], main h3[id]'));
+  if('IntersectionObserver' in window && heads.length){
+    var obs=new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if(!e.isIntersecting) return;
+        links.forEach(function(a){a.classList.remove('active');});
+        var a=map[e.target.id]; if(a){a.classList.add('active');}
+      });
+    },{rootMargin:'-10% 0px -75% 0px'});
+    heads.forEach(function(h){obs.observe(h);});
+  }
+
+  var top=document.getElementById('top');
+  if(top) top.addEventListener('click',function(){ scrollTo({top:0,behavior:'smooth'}); });
+})();
+</script>
+</body>
+</html>

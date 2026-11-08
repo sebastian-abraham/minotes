@@ -1,0 +1,3426 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MODULE 4 — PHP + MySQL · Complete Study Kit · Web Programming</title>
+<style>
+:root{
+  --bg:#fbfaf8; --panel:#ffffff; --ink:#232120; --muted:#5f5a53; --line:#e6e1da;
+  --accent:#7a4fd0; --accent-soft:#f1ecfb; --code-bg:#f5f2ee; --code-ink:#2b2a28;
+  --warn-bg:#fff8e6; --warn-line:#f0d9a0;
+  --sans:"Inter","Segoe UI",system-ui,-apple-system,"Noto Sans",sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,"SF Mono",Menlo,Consolas,"Fira Code",monospace;
+}
+html[data-theme="dark"]{
+  --bg:#141317; --panel:#1b1a20; --ink:#e8e4de; --muted:#a8a199; --line:#2f2c36;
+  --accent:#b79cf5; --accent-soft:#241f33; --code-bg:#22202a; --code-ink:#e8e4de;
+  --warn-bg:#2a2417; --warn-line:#4a3d22;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0; background:var(--bg); color:var(--ink); font-family:var(--sans);
+  font-size:16.5px; line-height:1.72; -webkit-font-smoothing:antialiased;
+}
+#progress{position:fixed;top:0;left:0;height:3px;width:0;background:var(--accent);z-index:50;transition:width .1s linear}
+
+.wrap{display:flex;align-items:flex-start;min-height:100vh}
+.sidebar{
+  position:sticky;top:0;height:100vh;width:300px;flex:0 0 300px;overflow-y:auto;
+  padding:26px 20px 60px;border-right:1px solid var(--line);background:var(--panel);
+}
+.sidebar h1{font-size:15px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);
+  margin:0 0 4px;font-weight:600}
+.sidebar .sub{font-size:12.5px;color:var(--muted);margin:0 0 18px}
+.sidebar nav{font-size:14px}
+.sidebar .toc>ul{padding-left:0}
+.sidebar ul{list-style:none;margin:0;padding-left:12px}
+.sidebar ul ul{border-left:1px solid var(--line);margin-left:4px;padding-left:10px}
+.sidebar li{margin:3px 0}
+.sidebar a{color:var(--ink);text-decoration:none;display:block;padding:3px 8px;border-radius:8px;
+  line-height:1.35;transition:background .12s,color .12s}
+.sidebar a:hover{background:var(--accent-soft);color:var(--accent)}
+.sidebar a.active{background:var(--accent-soft);color:var(--accent);font-weight:600}
+.sidebar .home{display:inline-flex;align-items:center;gap:6px;margin-bottom:16px;font-size:13.5px;
+  color:var(--muted);text-decoration:none;border:1px solid var(--line);padding:5px 10px;border-radius:999px}
+.sidebar .home:hover{color:var(--accent);border-color:var(--accent)}
+
+main{flex:1;min-width:0;padding:46px 56px 120px;max-width:980px;margin:0 auto}
+.doc-head{border-bottom:1px solid var(--line);padding-bottom:18px;margin-bottom:34px}
+.doc-head .kicker{font-size:12.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);
+  font-weight:700;margin-bottom:8px}
+.doc-head .meta{font-size:13.5px;color:var(--muted)}
+
+h1,h2,h3,h4{line-height:1.25;font-weight:700;letter-spacing:-.01em}
+h1{font-size:2.05rem;margin:.2em 0 .5em}
+h2{font-size:1.55rem;margin:2.4em 0 .7em;padding-bottom:.35em;border-bottom:1px solid var(--line)}
+h3{font-size:1.2rem;margin:1.9em 0 .55em}
+h4{font-size:1.03rem;margin:1.5em 0 .45em;color:var(--muted)}
+h2 .anchor,h3 .anchor{opacity:0;margin-left:.35em;font-size:.8em;color:var(--muted);text-decoration:none}
+h2:hover .anchor,h3:hover .anchor{opacity:1}
+p{margin:.75em 0}
+a{color:var(--accent);text-underline-offset:2px}
+strong{font-weight:650}
+hr{border:0;border-top:1px solid var(--line);margin:2.6em 0}
+ul,ol{margin:.7em 0;padding-left:1.4em}
+li{margin:.3em 0}
+li>ul,li>ol{margin:.25em 0}
+blockquote{
+  margin:1.3em 0;padding:12px 18px;background:var(--warn-bg);border-left:3px solid var(--warn-line);
+  border-radius:0 10px 10px 0;color:var(--ink)
+}
+blockquote p{margin:.3em 0}
+
+code{font-family:var(--mono);font-size:.87em;background:var(--code-bg);color:var(--code-ink);
+  padding:.15em .38em;border-radius:6px;border:1px solid var(--line);
+  box-decoration-break:clone;-webkit-box-decoration-break:clone;overflow-wrap:anywhere}
+pre{position:relative;background:var(--code-bg);border:1px solid var(--line);border-radius:12px;
+  padding:16px 18px;overflow-x:auto;margin:1.1em 0}
+pre code{background:none;border:0;padding:0;font-size:13.6px;line-height:1.62;white-space:pre}
+.copy{position:absolute;top:8px;right:8px;font:600 11px/1 var(--sans);color:var(--muted);
+  background:var(--panel);border:1px solid var(--line);border-radius:7px;padding:5px 8px;cursor:pointer;
+  opacity:0;transition:opacity .15s}
+pre:hover .copy{opacity:1}
+.copy:hover{color:var(--accent);border-color:var(--accent)}
+
+.table-scroll{overflow-x:auto;margin:1.3em 0;border:1px solid var(--line);border-radius:12px;background:var(--panel)}
+table{border-collapse:collapse;width:100%;font-size:14.6px}
+th,td{padding:9px 13px;text-align:left;vertical-align:top;border-bottom:1px solid var(--line)}
+th{background:var(--accent-soft);font-weight:650;font-size:13px;letter-spacing:.02em;
+  position:sticky;top:0;backdrop-filter:blur(4px)}
+tr:last-child td{border-bottom:0}
+tbody tr:nth-child(even){background:color-mix(in srgb,var(--panel) 60%,var(--bg))}
+tbody tr:hover{background:var(--accent-soft)}
+
+.tools{position:fixed;right:22px;bottom:22px;display:flex;flex-direction:column;gap:8px;z-index:40}
+.tools button{width:42px;height:42px;border-radius:12px;border:1px solid var(--line);background:var(--panel);
+  color:var(--ink);cursor:pointer;font-size:16px;box-shadow:0 4px 14px rgba(0,0,0,.10)}
+.tools button:hover{color:var(--accent);border-color:var(--accent)}
+@media (max-width:1000px){
+  .wrap{display:block}
+  .sidebar{position:static;width:auto;height:auto;border-right:0;border-bottom:1px solid var(--line)}
+  .sidebar nav{max-height:40vh;overflow:auto}
+  main{padding:28px 20px 100px}
+}
+@media print{
+  .sidebar,.tools,#progress,.copy{display:none!important}
+  body{background:#fff;color:#000;font-size:11pt}
+  main{padding:0;max-width:none}
+  h2{break-after:avoid} pre,table,blockquote{break-inside:avoid}
+  a{color:#000;text-decoration:none}
+}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+<div class="wrap">
+  <aside class="sidebar">
+    <a class="home" href="index.html">← Web Programming</a>
+    <h1>M4 · PHP + MySQL</h1>
+    <p class="sub">Q92–129 · Q229–253</p>
+    <nav class="toc"><div class="toc">
+<ul>
+<li><a href="#0-how-to-use-this-kit">0. How to use this kit</a></li>
+<li><a href="#1-module-map-question-coverage">1. Module map + question coverage</a><ul>
+<li><a href="#the-six-master-themes-every-question-is-one-of-these-wearing-a-hat">The six master themes (every question is one of these, wearing a hat)</a></li>
+</ul>
+</li>
+<li><a href="#2-part-1-deep-dive-from-zero">2. PART 1 — Deep dive, from zero</a><ul>
+<li><a href="#21-why-http-is-stateless-the-problem-everything-else-solves-4l2753">2.1 Why HTTP is stateless — the problem everything else solves (4:L27–53)</a></li>
+<li><a href="#22-cookies-memory-that-lives-in-the-browser-4l6388">2.2 Cookies — memory that lives in the browser (4:L63–88)</a></li>
+<li><a href="#23-sessions-memory-that-lives-on-the-server-4l102124">2.3 Sessions — memory that lives on the server (4:L102–124)</a></li>
+<li><a href="#24-cookies-vs-sessions-the-comparison-table-you-must-be-able-to-write-cold-4l136160">2.4 Cookies vs sessions — the comparison table you must be able to write cold (4:L136–160)</a></li>
+<li><a href="#25-why-pair-php-with-mysql-4l170195">2.5 Why pair PHP with MySQL (4:L170–195)</a></li>
+<li><a href="#26-connecting-162-the-very-first-step-4l206230">2.6 Connecting: <code>mysqli_connect()</code> — the very first step (4:L206–230)</a></li>
+<li><a href="#27-the-same-connection-object-oriented-4l244268">2.7 The same connection, object-oriented (4:L244–268)</a></li>
+<li><a href="#28-connection-error-handling-the-four-best-practices-4l280305">2.8 Connection error handling + the four best practices (4:L280–305)</a></li>
+<li><a href="#29-running-a-query-214-and-the-result-handle-4l316337">2.9 Running a query: <code>mysqli_query()</code> and the result handle (4:L316–337)</a></li>
+<li><a href="#210-reading-rows-233-and-its-siblings-4l351370-4l383393">2.10 Reading rows: <code>mysqli_fetch_assoc()</code> and its siblings (4:L351–370, 4:L383–393)</a></li>
+<li><a href="#211-the-five-step-cycle-closing-discipline-4l399-4l405419">2.11 The five-step cycle + closing discipline (4:L399, 4:L405–419)</a></li>
+<li><a href="#212-create-table-defining-structure-before-storing-anything-4l431453">2.12 CREATE TABLE — defining structure before storing anything (4:L431–453)</a></li>
+<li><a href="#213-insert-adding-a-new-row-4l468490">2.13 INSERT — adding a new row (4:L468–490)</a></li>
+<li><a href="#214-delete-removing-rows-4l505525">2.14 DELETE — removing rows (4:L505–525)</a></li>
+<li><a href="#215-update-changing-existing-values-4l630652">2.15 UPDATE — changing existing values (4:L630–652)</a></li>
+<li><a href="#216-select-the-only-statement-that-gives-data-back-4l558580-4l595615">2.16 SELECT — the only statement that gives data back (4:L558–580, 4:L595–615)</a></li>
+<li><a href="#217-325-the-number-that-proves-a-write-happened-4l513-4l640-4l687689">2.17 <code>affected_rows</code> — the number that proves a write happened (4:L513, 4:L640, 4:L687–689)</a></li>
+<li><a href="#218-sql-injection-and-prepared-statements-4l302304-4l326-4l681683">2.18 SQL injection and prepared statements (4:L302–304, 4:L326, 4:L681–683)</a></li>
+<li><a href="#219-mixing-php-into-html-the-alternative-syntax-4l735755">2.19 Mixing PHP into HTML — the alternative syntax (4:L735–755)</a></li>
+<li><a href="#220-the-complete-dynamic-page-every-piece-in-one-file-4l770792">2.20 The complete dynamic page — every piece in one file (4:L770–792)</a></li>
+<li><a href="#221-what-the-bank-asks-that-your-deck-never-covers-all-standard-not-in-your-deck">2.21 What the bank asks that your deck never covers (all "(standard, not in your deck)")</a></li>
+</ul>
+</li>
+<li><a href="#3-part-2-answer-bank">3. PART 2 — Answer bank</a><ul>
+<li><a href="#31-3-mark-answers-part-a">3.1 3-mark answers (Part A)</a></li>
+<li><a href="#32-14-mark-answers-part-b">3.2 14-mark answers (Part B)</a></li>
+</ul>
+</li>
+<li><a href="#4-part-3-code-you-must-write-by-hand">4. PART 3 — Code you must write by hand</a></li>
+<li><a href="#5-night-before-memorize-sheet">5. 🔴 Night-before memorize sheet</a></li>
+<li><a href="#6-diagram-figure-index">6. 📐 Diagram + figure index</a></li>
+<li><a href="#7-say-this-if-grilled-defence-lines">7. Say-this-if-grilled defence lines</a></li>
+</ul>
+</div>
+</nav>
+  </aside>
+  <main>
+    <div class="doc-head">
+      <div class="kicker">20CST461 · Web Programming</div>
+      <div class="meta">Q92–129 · Q229–253 · rendered from KIT_M4_PHP_MYSQL.md</div>
+    </div>
+    <h1 id="module-4-php-mysql-complete-study-kit">MODULE 4 — PHP + MySQL · Complete Study Kit</h1>
+<blockquote>
+<p>20CST461 Web Technologies · ESE Part A = 3 marks, Part B = 14 marks · 2 Part-A questions and 1 of 2 Part-B questions come from this module</p>
+</blockquote>
+<hr />
+<h2 id="0-how-to-use-this-kit">0. How to use this kit<a class="anchor" href="#0-how-to-use-this-kit">#</a></h2>
+<p>You have never written PHP. That is fine — this module is <strong>one pattern repeated five times</strong>, not 63 separate things.</p>
+<p>Read in this order and stop when the clock says stop:</p>
+<table>
+<thead>
+<tr>
+<th>When</th>
+<th>Read</th>
+<th>Time</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>First pass, learning</td>
+<td>§2 concepts 2.1 → 2.21 in order, typing every snippet</td>
+<td>2 hrs</td>
+</tr>
+<tr>
+<td>Second pass</td>
+<td>§3.1 (all 26 master answers — these are your Part A marks)</td>
+<td>45 min</td>
+</tr>
+<tr>
+<td>Third pass</td>
+<td>§3.2 only the 8 Part-B answers marked ⭐ (highest probability)</td>
+<td>60 min</td>
+</tr>
+<tr>
+<td>Hand practice</td>
+<td>§4 drills D1–D16, on paper, closed book</td>
+<td>90 min</td>
+</tr>
+<tr>
+<td>Night before</td>
+<td>§5 memorize sheet + §7 defence lines</td>
+<td>25 min</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Conventions used in this file</strong></p>
+<ul>
+<li><code>4:L431–453</code> = lines 431–453 of <code>module4.md</code> (your lecture deck). Every one of these was checked against the file; if a claim has no ref, it is either my addition or flagged.</li>
+<li><strong>"(standard, not in your deck)"</strong> = correct PHP that your slides never show. The question bank still asks it (regex, <code>$_PHP_SELF</code>, file upload, <code>SHOW DATABASES</code>). Learn it, but do not claim the slide said it.</li>
+<li>All code is inside fenced blocks, exactly as you would write it on the answer sheet. Copy it verbatim; nothing is escaped or mangled.</li>
+<li>Procedural <code>mysqli_*</code> functions are the default in this kit (that is what the deck teaches). Where the deck also shows the object-oriented style I say so, and §5 gives you both forms of every hot function.</li>
+</ul>
+<p><strong>The one sentence that is the whole module:</strong> <em>connect → build a SQL string → <code>mysqli_query()</code> → loop <code>mysqli_fetch_assoc()</code> → echo HTML.</em></p>
+<hr />
+<h2 id="1-module-map-question-coverage">1. Module map + question coverage<a class="anchor" href="#1-module-map-question-coverage">#</a></h2>
+<p>63 questions: <strong>38 Part A</strong> (Q92–Q129, 3 marks each) and <strong>25 Part B</strong> (Q229–Q253, 14 marks each).</p>
+<p>⚠️ The faculty bank's module headings are wrong: it prints "Module 4: PHP" above Q92–Q129, then "Module 5: PHP and MySQL Database Operations" above Q130 onwards — but Q130–Q153 are JSON/Laravel (real Module 5) while <strong>Q229–Q253 sit under a second "Module 4: PHP" heading and are the descriptive (14-mark) block for this module</strong>. Both blocks are covered here.</p>
+<table>
+<thead>
+<tr>
+<th>Q#</th>
+<th>What it asks (≤8 words)</th>
+<th>Mark shape</th>
+<th>Answered at</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>92</td>
+<td>Steps to establish PHP–MySQL connection</td>
+<td>3 · Part A</td>
+<td>§3.1 A1, §2.6</td>
+</tr>
+<tr>
+<td>93</td>
+<td><code>$_SESSION</code> vs <code>$_COOKIE</code>, when each</td>
+<td>3 · Part A</td>
+<td>§3.1 A2, §2.4</td>
+</tr>
+<tr>
+<td>94</td>
+<td>GET vs POST in form submission</td>
+<td>3 · Part A</td>
+<td>§3.1 A3</td>
+</tr>
+<tr>
+<td>95</td>
+<td>Session: store name, show other page</td>
+<td>3 · Part A</td>
+<td>§3.1 A4, §4 D10</td>
+</tr>
+<tr>
+<td>96</td>
+<td>Insert record, handle errors</td>
+<td>3 · Part A</td>
+<td>§3.1 A6, §4 D4</td>
+</tr>
+<tr>
+<td>97</td>
+<td>Regex email check returning boolean</td>
+<td>3 · Part A</td>
+<td>§3.1 A7, §4 D16</td>
+</tr>
+<tr>
+<td>98</td>
+<td>Update email, with error handling</td>
+<td>3 · Part A</td>
+<td>§3.1 A8, §4 D8</td>
+</tr>
+<tr>
+<td>99</td>
+<td>Prepared statements and why</td>
+<td>3 · Part A</td>
+<td>§3.1 A9, §2.18</td>
+</tr>
+<tr>
+<td>100</td>
+<td>Sessions keep state across pages</td>
+<td>3 · Part A</td>
+<td>§3.1 A5</td>
+</tr>
+<tr>
+<td>101</td>
+<td>Retrieve and display MySQL data</td>
+<td>3 · Part A</td>
+<td>§3.1 A10, §4 D6</td>
+</tr>
+<tr>
+<td>102</td>
+<td>PHP's role vs static HTML</td>
+<td>3 · Part A</td>
+<td>§3.1 A11, §2.20</td>
+</tr>
+<tr>
+<td>103</td>
+<td>Purpose of <code>$_PHP_SELF</code></td>
+<td>3 · Part A</td>
+<td>§3.1 A12</td>
+</tr>
+<tr>
+<td>104</td>
+<td>Fetch data from DB to webpage</td>
+<td>3 · Part A</td>
+<td>§3.1 A10, §4 D6</td>
+</tr>
+<tr>
+<td>105</td>
+<td>Square root program</td>
+<td>3 · Part A</td>
+<td>§3.1 A13, §4 D13</td>
+</tr>
+<tr>
+<td>106</td>
+<td><code>mysql_fetch_array</code> vs <code>_assoc</code></td>
+<td>3 · Part A</td>
+<td>§3.1 A14, §2.10</td>
+</tr>
+<tr>
+<td>107</td>
+<td>List databases on MySQL server</td>
+<td>3 · Part A</td>
+<td>§3.1 A15, §4 D3</td>
+</tr>
+<tr>
+<td>108</td>
+<td>List data in a table</td>
+<td>3 · Part A</td>
+<td>§3.1 A10</td>
+</tr>
+<tr>
+<td>109</td>
+<td>CREATE operations from PHP</td>
+<td>3 · Part A</td>
+<td>§3.1 A16, §4 D3</td>
+</tr>
+<tr>
+<td>110</td>
+<td>Connection steps (duplicate of 92)</td>
+<td>3 · Part A</td>
+<td>§3.1 A1</td>
+</tr>
+<tr>
+<td>111</td>
+<td>Session importance across requests</td>
+<td>3 · Part A</td>
+<td>§3.1 A5</td>
+</tr>
+<tr>
+<td>112</td>
+<td>Insert + connection/query/errors</td>
+<td>3 · Part A</td>
+<td>§3.1 A6, §4 D4</td>
+</tr>
+<tr>
+<td>113</td>
+<td>What is a cookie + two uses</td>
+<td>3 · Part A</td>
+<td>§3.1 A17, §2.2</td>
+</tr>
+<tr>
+<td>114</td>
+<td>Session vs cookie</td>
+<td>3 · Part A</td>
+<td>§3.1 A2</td>
+</tr>
+<tr>
+<td>115</td>
+<td>Statement to start a session</td>
+<td>3 · Part A</td>
+<td>§3.1 A18</td>
+</tr>
+<tr>
+<td>116</td>
+<td>Basic MySQL connection statement</td>
+<td>3 · Part A</td>
+<td>§3.1 A1, §2.6</td>
+</tr>
+<tr>
+<td>117</td>
+<td>Purpose of CREATE TABLE</td>
+<td>3 · Part A</td>
+<td>§3.1 A16, §2.13</td>
+</tr>
+<tr>
+<td>118</td>
+<td>SQL to add a record + syntax</td>
+<td>3 · Part A</td>
+<td>§3.1 A19, §2.14</td>
+</tr>
+<tr>
+<td>119</td>
+<td>Purpose of DELETE</td>
+<td>3 · Part A</td>
+<td>§3.1 A20, §2.15</td>
+</tr>
+<tr>
+<td>120</td>
+<td>Purpose of SELECT</td>
+<td>3 · Part A</td>
+<td>§3.1 A21, §2.16</td>
+</tr>
+<tr>
+<td>121</td>
+<td>SQL to modify existing records</td>
+<td>3 · Part A</td>
+<td>§3.1 A22, §2.15</td>
+</tr>
+<tr>
+<td>122</td>
+<td>What is dynamic content</td>
+<td>3 · Part A</td>
+<td>§3.1 A11</td>
+</tr>
+<tr>
+<td>123</td>
+<td>Three advantages of sessions</td>
+<td>3 · Part A</td>
+<td>§3.1 A5</td>
+</tr>
+<tr>
+<td>124</td>
+<td>Cookie syntax with expiry</td>
+<td>3 · Part A</td>
+<td>§3.1 A17, §5</td>
+</tr>
+<tr>
+<td>125</td>
+<td>Purpose of <code>session_start()</code></td>
+<td>3 · Part A</td>
+<td>§3.1 A18</td>
+</tr>
+<tr>
+<td>126</td>
+<td>Purpose of <code>mysqli_query()</code></td>
+<td>3 · Part A</td>
+<td>§3.1 A23, §2.9</td>
+</tr>
+<tr>
+<td>127</td>
+<td>Why WHERE matters in UPDATE/DELETE</td>
+<td>3 · Part A</td>
+<td>§3.1 A24</td>
+</tr>
+<tr>
+<td>128</td>
+<td>What <code>mysqli_fetch_assoc()</code> is for</td>
+<td>3 · Part A</td>
+<td>§3.1 A25, §2.10</td>
+</tr>
+<tr>
+<td>129</td>
+<td>Two sources of dynamic content</td>
+<td>3 · Part A</td>
+<td>§3.1 A26</td>
+</tr>
+<tr>
+<td>229</td>
+<td>Form app: name + email validation ⭐</td>
+<td>14 · Part B</td>
+<td>§3.2 Q229, §4 D16</td>
+</tr>
+<tr>
+<td>230</td>
+<td>PHP's importance + challenges (10m)</td>
+<td>14 · Part B</td>
+<td>§3.2 Q230</td>
+</tr>
+<tr>
+<td>231</td>
+<td>Dynamic page: date/time + greeting ⭐</td>
+<td>14 · Part B</td>
+<td>§3.2 Q231, §4 D12</td>
+</tr>
+<tr>
+<td>232</td>
+<td>Username/password/email filled + format</td>
+<td>14 · Part B</td>
+<td>§3.2 Q232</td>
+</tr>
+<tr>
+<td>233</td>
+<td>File uploads + recursive factorial</td>
+<td>14 · Part B</td>
+<td>§3.2 Q233, §4 D14–D15</td>
+</tr>
+<tr>
+<td>234</td>
+<td>Connection step-by-step + patients DB ⭐</td>
+<td>14 · Part B</td>
+<td>§3.2 Q234</td>
+</tr>
+<tr>
+<td>235</td>
+<td>Regex: extract emails + validate phone</td>
+<td>14 · Part B</td>
+<td>§3.2 Q235</td>
+</tr>
+<tr>
+<td>236</td>
+<td>Regex: replace substring + extract URLs</td>
+<td>14 · Part B</td>
+<td>§3.2 Q236</td>
+</tr>
+<tr>
+<td>237</td>
+<td>Password validation + phone validation</td>
+<td>14 · Part B</td>
+<td>§3.2 Q237</td>
+</tr>
+<tr>
+<td>238</td>
+<td>Cookies + associative array operations</td>
+<td>14 · Part B</td>
+<td>§3.2 Q238</td>
+</tr>
+<tr>
+<td>239</td>
+<td>Cookies create/access/delete + sessions</td>
+<td>14 · Part B</td>
+<td>§3.2 Q239, §4 D10–D11</td>
+</tr>
+<tr>
+<td>240</td>
+<td>MySQLi connection + error handling + program</td>
+<td>14 · Part B</td>
+<td>§3.2 Q240, §4 D2</td>
+</tr>
+<tr>
+<td>241</td>
+<td>CREATE/INSERT/DELETE + student table ⭐</td>
+<td>14 · Part B</td>
+<td>§3.2 Q241, §4 D3–D4</td>
+</tr>
+<tr>
+<td>242</td>
+<td>Prepared INSERT/DELETE by register no.</td>
+<td>14 · Part B</td>
+<td>§3.2 Q242, §4 D5</td>
+</tr>
+<tr>
+<td>243</td>
+<td>SELECT multi-row → HTML table ⭐</td>
+<td>14 · Part B</td>
+<td>§3.2 Q243, §4 D6</td>
+</tr>
+<tr>
+<td>244</td>
+<td>UPDATE syntax/precautions + update email ⭐</td>
+<td>14 · Part B</td>
+<td>§3.2 Q244, §4 D8</td>
+</tr>
+<tr>
+<td>245</td>
+<td>App architecture + products into HTML list</td>
+<td>14 · Part B</td>
+<td>§3.2 Q245</td>
+</tr>
+<tr>
+<td>246</td>
+<td>Session lifecycle + session ID + login time</td>
+<td>14 · Part B</td>
+<td>§3.2 Q246</td>
+</tr>
+<tr>
+<td>247</td>
+<td>Cookies vs sessions + recommend for login</td>
+<td>14 · Part B</td>
+<td>§3.2 Q247</td>
+</tr>
+<tr>
+<td>248</td>
+<td>Full SQL workflow + INSERT success report</td>
+<td>14 · Part B</td>
+<td>§3.2 Q248</td>
+</tr>
+<tr>
+<td>249</td>
+<td>CREATE TABLE types/constraints + employee</td>
+<td>14 · Part B</td>
+<td>§3.2 Q249</td>
+</tr>
+<tr>
+<td>250</td>
+<td>Careful DELETE + prepared delete by dept</td>
+<td>14 · Part B</td>
+<td>§3.2 Q250</td>
+</tr>
+<tr>
+<td>251</td>
+<td>SELECT result processing + marks &gt; 50</td>
+<td>14 · Part B</td>
+<td>§3.2 Q251</td>
+</tr>
+<tr>
+<td>252</td>
+<td>UPDATE + affected_rows + 10% raise</td>
+<td>14 · Part B</td>
+<td>§3.2 Q252</td>
+</tr>
+<tr>
+<td>253</td>
+<td>Steps for dynamic HTML + students list</td>
+<td>14 · Part B</td>
+<td>§3.2 Q253</td>
+</tr>
+</tbody>
+</table>
+<h3 id="the-six-master-themes-every-question-is-one-of-these-wearing-a-hat">The six master themes (every question is one of these, wearing a hat)<a class="anchor" href="#the-six-master-themes-every-question-is-one-of-these-wearing-a-hat">#</a></h3>
+<ol>
+<li><strong>State management</strong> — HTTP forgets you; cookies (client, 4 KB, editable) and sessions (server, ID cookie) remember you. → Q93, 94, 95, 100, 111, 113, 114, 115, 123, 124, 125, 238, 239, 246, 247.</li>
+<li><strong>Connection</strong> — <code>mysqli_connect()</code> / <code>new mysqli()</code> + failure check + <code>close()</code>. → Q92, 110, 116, 234, 240, 248.</li>
+<li><strong>Fetch loop</strong> — result handle → <code>while ($row = mysqli_fetch_assoc($result))</code> → <code>$row[&quot;col&quot;]</code>. → Q101, 104, 106, 108, 128, 243, 251, 253.</li>
+<li><strong>CRUD from PHP</strong> — CREATE / INSERT / UPDATE / DELETE through <code>mysqli_query()</code>, with <code>affected_rows</code> and <code>insert_id</code>. → Q96, 98, 109, 117–121, 241, 242, 244, 248–252.</li>
+<li><strong>Prepared statements</strong> — <code>?</code> placeholders + <code>bind_param(&quot;ssi&quot;, …)</code>; structure and data never mix. → Q99, 242, 250.</li>
+<li><strong>Dynamic pages</strong> — static HTML vs HTML generated per request; PHP interleaved with markup, <code>&lt;?= ?&gt;</code>, alternative <code>while: endwhile</code>. → Q102, 122, 129, 229, 231, 245, 253.</li>
+</ol>
+<hr />
+<h2 id="2-part-1-deep-dive-from-zero">2. PART 1 — Deep dive, from zero<a class="anchor" href="#2-part-1-deep-dive-from-zero">#</a></h2>
+<h3 id="21-why-http-is-stateless-the-problem-everything-else-solves-4l2753">2.1 Why HTTP is stateless — the problem everything else solves (4:L27–53)<a class="anchor" href="#21-why-http-is-stateless-the-problem-everything-else-solves-4l2753">#</a></h3>
+<p><strong>Story:</strong> a shop assistant with amnesia. Every time you walk up to the counter he greets you as a brand-new customer, because he genuinely cannot remember the last 30 seconds.</p>
+<p><strong>Definition.</strong> HTTP is <em>stateless</em>: each request is a complete, independent message. The server opens nothing, remembers nothing, and by the time your second click arrives it has no idea the first one was also you (4:L31–33). That is a <em>feature</em> for serving 10,000 strangers cheaply, and a <em>bug</em> the moment you need "logged in".</p>
+<p><strong>Why it bites, concretely.</strong> Page 1 checks the password and shows the dashboard. Page 2 is a separate request — it has no idea a password was ever checked. Without a memory mechanism, every page would need the password again.</p>
+<p>The deck names exactly two memory mechanisms (4:L37–51):</p>
+<table>
+<thead>
+<tr>
+<th>Mechanism</th>
+<th>Where the data lives</th>
+<th>Who can read it</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Cookie</td>
+<td>Your browser's storage, sent back on every request to that domain</td>
+<td>You — and any script on your machine (4:L73)</td>
+</tr>
+<tr>
+<td>Session</td>
+<td>The server's disk/temp storage</td>
+<td>Only the server; your browser holds just an ID (4:L45)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Why it matters for marks:</strong> "why state management?" is the opening move of Q93, 100, 111, 113, 247. The 2-mark skeleton is <em>stateless HTTP → need memory → two places to put it → client (cookie) or server (session)</em>.</p>
+<blockquote>
+<p><strong>Say this if grilled:</strong> "HTTP has no memory between requests, so any continuity — login, cart, multi-step form — must be carried by something: a cookie on the client, or a session on the server referenced by a cookie."</p>
+</blockquote>
+<h3 id="22-cookies-memory-that-lives-in-the-browser-4l6388">2.2 Cookies — memory that lives in the browser (4:L63–88)<a class="anchor" href="#22-cookies-memory-that-lives-in-the-browser-4l6388">#</a></h3>
+<p><strong>Story:</strong> a coffee-shop loyalty card the customer carries. The shop writes your stamp on <em>your</em> card; you show it next visit. Lose it, edit it, or forge it — the shop can't tell.</p>
+<p><strong>Definition.</strong> A cookie is a small name/value pair that the server sends in an HTTP <strong>response header</strong> (<code>Set-Cookie</code>) and asks the browser to store and replay automatically on every later request to that domain (4:L39).</p>
+<p><strong>The function</strong> — <code>setcookie(name, value, expiry, path)</code>:</p>
+<p><pre><code class="language-php">&lt;?php
+// 1. SET — expiry is a Unix timestamp, so &quot;now + seconds&quot;
+setcookie(&quot;username&quot;, &quot;Anu&quot;, time() + 3600);      // 1 hour from now
+
+// 2. READ — on any later request, from the superglobal
+if (isset($_COOKIE[&quot;username&quot;])) {
+    echo &quot;Welcome back, &quot; . $_COOKIE[&quot;username&quot;];
+}
+
+// 3. DELETE — set the same name again with an expiry in the past
+setcookie(&quot;username&quot;, &quot;&quot;, time() - 3600);
+?&gt;
+</code></pre></p>
+<p><strong>Decoding the four arguments</strong> (4:L67):</p>
+<table>
+<thead>
+<tr>
+<th>Argument</th>
+<th>What it is</th>
+<th>Value to memorise</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>name</code></td>
+<td>The key you will read back</td>
+<td><code>&quot;username&quot;</code></td>
+</tr>
+<tr>
+<td><code>value</code></td>
+<td>The data (a string; keep it small)</td>
+<td><code>&quot;Anu&quot;</code></td>
+</tr>
+<tr>
+<td><code>expiry</code></td>
+<td>Unix timestamp after which the browser discards it</td>
+<td><code>time() + 3600</code> = 1 hour</td>
+</tr>
+<tr>
+<td><code>path</code></td>
+<td>Which URLs on the site receive it</td>
+<td><code>&quot;/&quot;</code> = whole site</td>
+</tr>
+</tbody>
+</table>
+<p><strong>The three rules that earn marks</strong></p>
+<ol>
+<li><strong><code>setcookie()</code> must run before any HTML output</strong> (4:L65). Cookies travel as HTTP <em>headers</em>, and headers are flushed before the body. One stray space, one <code>echo</code>, one blank line above <code>&lt;?php</code> and you get <em>"headers already sent"</em>. Same rule for <code>session_start()</code> (4:L104).</li>
+<li><strong>To delete, re-set with a past expiry</strong> (4:L71) — set the value to <code>&quot;&quot;</code> and the expiry to <code>time() - 3600</code>. There is no <code>deletecookie()</code>.</li>
+<li><strong>Never store anything secret in a cookie</strong> (4:L73). It sits in a text file the user can open and edit. A cookie saying <code>role=admin</code> is an invitation.</li>
+</ol>
+<p><strong>Limits</strong> — say these numbers: ~<strong>4 KB per cookie</strong> (4:L142), a few dozen cookies per domain, and the whole cookie jar travels with <em>every</em> matching request, so fat cookies slow every page.</p>
+<p><strong>Where cookies are genuinely good</strong> (4:L148): remembering a theme or language preference, a "remember me" token, a non-sensitive last-visited value.</p>
+<p><strong>Why it matters:</strong> Q113, Q124 ask straight for this, Q238/Q239 ask for create/access/delete, and every session answer starts "the browser holds a cookie containing the session ID".</p>
+<blockquote>
+<p><strong>Say this if grilled:</strong> "A cookie is client-side storage written by <code>setcookie()</code> before any output, read back through <code>$_COOKIE</code>, deleted by re-setting it with a past expiry — and it is untrusted user-editable data, capped at about 4 KB."</p>
+</blockquote>
+<h3 id="23-sessions-memory-that-lives-on-the-server-4l102124">2.3 Sessions — memory that lives on the server (4:L102–124)<a class="anchor" href="#23-sessions-memory-that-lives-on-the-server-4l102124">#</a></h3>
+<p><strong>Story:</strong> a cloakroom. You hand over your coat, you get a numbered token. The coat (your data) never leaves the building; you only carry the number.</p>
+<p><strong>Definition.</strong> A session is server-side storage for one visitor, identified by a <strong>session ID</strong> that PHP sends to the browser as a cookie (by default named <code>PHPSESSID</code>) (4:L45, 4:L106).</p>
+<p><strong>The four calls</strong> (4:L106–112):</p>
+<p><pre><code class="language-php">&lt;?php
+session_start();                       // 1. begin or resume — very first line
+$_SESSION[&quot;user_id&quot;] = 101;            // 2. store (server-side)
+$_SESSION[&quot;role&quot;]    = &quot;student&quot;;
+echo $_SESSION[&quot;user_id&quot;];             // 3. read
+
+// 4. on logout
+session_unset();                       //    clear the $_SESSION array
+session_destroy();                     //    delete the server-side session file
+?&gt;
+</code></pre></p>
+<p><strong>What each one actually does</strong></p>
+<table>
+<thead>
+<tr>
+<th>Call</th>
+<th>Effect</th>
+<th>Exam-critical detail</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>session_start()</code></td>
+<td>Reads the incoming <code>PHPSESSID</code> cookie; if none, mints a new ID and creates the session</td>
+<td>Must precede <strong>every</strong> <code>$_SESSION</code> read/write, and must precede output (4:L104)</td>
+</tr>
+<tr>
+<td><code>$_SESSION[&quot;k&quot;] = v</code></td>
+<td>Writes into the server's session store</td>
+<td>Nothing is sent to the client except the ID</td>
+</tr>
+<tr>
+<td><code>unset($_SESSION[&quot;k&quot;])</code></td>
+<td>Removes one key</td>
+<td><code>session_unset()</code> removes all — <em>this is not on your slide, it is standard</em></td>
+</tr>
+<tr>
+<td><code>session_destroy()</code></td>
+<td>Deletes the session file on the server</td>
+<td>It does <strong>not</strong> empty <code>$_SESSION</code> in the current request — call <code>session_unset()</code> first (standard)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Lifecycle in one line each</strong> (this is Q246): browser requests page → <code>session_start()</code> → no ID cookie, so PHP mints an ID and sends <code>Set-Cookie: PHPSESSID=…</code> → the server creates a file keyed by that ID → every later request replays the cookie → <code>session_start()</code> loads that file into <code>$_SESSION</code> → on logout <code>session_unset()</code> + <code>session_destroy()</code>, and the ID becomes worthless.</p>
+<p><strong>Session ID — the whole security model in one object.</strong> It is a long random string. Anyone holding it <em>is</em> you, so: never put it in a URL if you can avoid it, and regenerate it on login with <code>session_regenerate_id(true)</code> so a pre-login ID can't be reused (standard).</p>
+<p><strong>Why it matters:</strong> sessions are the answer to Q95, Q100, Q111, Q123, Q125, Q246, Q247 — and the reason <code>$_SESSION[&quot;user_id&quot;]</code> exists at all.</p>
+<blockquote>
+<p><strong>Say this if grilled:</strong> "A session stores data on the server and gives the browser only a random session ID in a cookie; <code>session_start()</code> loads or creates it, <code>session_destroy()</code> deletes it — so the sensitive data never travels."</p>
+</blockquote>
+<h3 id="24-cookies-vs-sessions-the-comparison-table-you-must-be-able-to-write-cold-4l136160">2.4 Cookies vs sessions — the comparison table you must be able to write cold (4:L136–160)<a class="anchor" href="#24-cookies-vs-sessions-the-comparison-table-you-must-be-able-to-write-cold-4l136160">#</a></h3>
+<p><strong>Story:</strong> a note pinned to your own fridge (cookie) versus a locked filing cabinet at the office with your name on the drawer (session).</p>
+<table>
+<thead>
+<tr>
+<th>Point</th>
+<th>Cookie</th>
+<th>Session</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Storage location</td>
+<td>Browser/client (4:L140)</td>
+<td>Server (4:L152)</td>
+</tr>
+<tr>
+<td>What travels</td>
+<td>The <strong>data itself</strong>, every request</td>
+<td>Only the <strong>session ID</strong></td>
+</tr>
+<tr>
+<td>Size limit</td>
+<td>~4 KB per cookie (4:L142)</td>
+<td>Practically unlimited (server disk)</td>
+</tr>
+<tr>
+<td>Security</td>
+<td>Visible and editable by the user — never sensitive (4:L144)</td>
+<td>Data never leaves the server — safe for credentials/roles (4:L154)</td>
+</tr>
+<tr>
+<td>Lifetime</td>
+<td>Whatever expiry you set — days or months (4:L146)</td>
+<td>Until browser closes by default, or a server timeout (4:L156)</td>
+</tr>
+<tr>
+<td>Setup needed</td>
+<td><code>setcookie()</code> before output</td>
+<td><code>session_start()</code> on <strong>every</strong> page that uses it (4:L158)</td>
+</tr>
+<tr>
+<td>Good for</td>
+<td>Preferences, "remember me" (4:L148)</td>
+<td>Login state, shopping cart, multi-step forms (4:L160)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Exam shortcut:</strong> every row is one of four axes — <em>where it lives, how big, how safe, how long</em>. Q247 explicitly asks for storage/lifetime/security/application, i.e. exactly this table minus two rows.</p>
+<p><strong>Why it matters:</strong> Q93 and Q114 are this table in prose; Q247 is this table plus a recommendation ("sessions, because the credential must not be client-editable").</p>
+<blockquote>
+<p><strong>Say this if grilled:</strong> "Cookies live in the browser and carry data; sessions live on the server and carry only an ID. Cookies are for preferences, sessions are for identity."</p>
+</blockquote>
+<h3 id="25-why-pair-php-with-mysql-4l170195">2.5 Why pair PHP with MySQL (4:L170–195)<a class="anchor" href="#25-why-pair-php-with-mysql-4l170195">#</a></h3>
+<p><strong>Story:</strong> PHP is a brilliant talker with no memory; MySQL is a filing cabinet with no mouth. Together they can hold a conversation that lasts years.</p>
+<p><strong>Four points, in the deck's order</strong></p>
+<ol>
+<li><strong>Plain PHP forgets everything</strong> (4:L176). Variables, sessions, form data all vanish when the script ends. Modules 1–3 gave you no permanent storage.</li>
+<li><strong>A database is persistent and shared</strong> (4:L182). MySQL is <em>relational</em>: data in tables of rows and columns, stored on disk, identical for every future request and every user.</li>
+<li><strong>Why MySQL specifically</strong> (4:L188): free and open-source, the default on almost all shared hosting, and the <strong>M</strong> in <strong>LAMP</strong> (Linux, Apache, MySQL, PHP).</li>
+<li><strong>The bridge is an extension</strong> (4:L194): PHP cannot speak MySQL's wire protocol itself. <strong>MySQLi</strong> (MySQL Improved) is the classic choice for this course; <strong>PDO</strong> is the modern, database-agnostic alternative.</li>
+</ol>
+<p><strong>The one-line architecture</strong> (also Q245, Q253): browser → Apache → PHP engine → MySQL → rows back to PHP → PHP prints HTML → browser. The browser never sees SQL, the schema, or the password.</p>
+<p><strong>Why it matters:</strong> Q230 (PHP's importance) and Q234/Q245 want this framing before any code; Q102/Q122 want "dynamic = generated from live data" which is only possible <em>because</em> of this pairing.</p>
+<blockquote>
+<p><strong>Say this if grilled:</strong> "PHP alone has no persistence, so the database is the memory; MySQLi is the extension that lets PHP send SQL strings and receive rows."</p>
+</blockquote>
+<h3 id="26-connecting-162-the-very-first-step-4l206230">2.6 Connecting: <code>mysqli_connect()</code> — the very first step (4:L206–230)<a class="anchor" href="#26-connecting-162-the-very-first-step-4l206230">#</a></h3>
+<p><strong>Story:</strong> dialling a phone number. Nothing can be said until the call connects, and if it doesn't connect you must <em>know</em> immediately instead of talking into silence.</p>
+<p><strong>Signature (memorise exactly):</strong></p>
+<p><pre><code class="language-text">mysqli_connect(host, username, password, database)   -&gt;  connection handle (object) | false
+</code></pre></p>
+<p><pre><code class="language-php">&lt;?php
+$conn = mysqli_connect(&quot;localhost&quot;, &quot;root&quot;, &quot;password&quot;, &quot;college_db&quot;);
+
+if (!$conn) {
+    die(&quot;Connection failed: &quot; . mysqli_connect_error());
+}
+
+echo &quot;Connected successfully&quot;;
+
+mysqli_close($conn);          // optional: PHP closes it at script end anyway
+?&gt;
+</code></pre></p>
+<p><strong>Argument by argument</strong> (4:L210–216)</p>
+<table>
+<thead>
+<tr>
+<th>Argument</th>
+<th>Meaning</th>
+<th>Typical value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>host</code></td>
+<td>Machine running MySQL</td>
+<td><code>&quot;localhost&quot;</code> when PHP and MySQL share a server (4:L214)</td>
+</tr>
+<tr>
+<td><code>username</code></td>
+<td>MySQL account</td>
+<td><code>&quot;root&quot;</code> on XAMPP/local</td>
+</tr>
+<tr>
+<td><code>password</code></td>
+<td>That account's password</td>
+<td><code>&quot;&quot;</code> on default XAMPP, never <code>&quot;&quot;</code> in production</td>
+</tr>
+<tr>
+<td><code>database</code></td>
+<td>Which database to open</td>
+<td><code>&quot;college_db&quot;</code> — optional; if omitted you must <code>mysqli_select_db()</code> later</td>
+</tr>
+</tbody>
+</table>
+<p><strong>What comes back.</strong> A <strong>connection handle</strong> — a <code>resource</code>/object representing the open link, stored in <code>$conn</code> and passed to <em>every</em> later call. On failure it returns <code>false</code> (procedural style) — which is why <code>if (!$conn)</code> works.</p>
+<p><strong><code>mysqli_close($conn)</code></strong> releases the link (4:L216). The deck notes PHP closes it automatically at script end, so it is <em>discipline</em>, not necessity — but write it in exams, it shows you know the lifecycle.</p>
+<p><strong>Why it matters:</strong> nothing else in this module compiles without a <code>$conn</code>. Q92, Q110, Q116, Q234, Q240, Q248 all start here.</p>
+<blockquote>
+<p><strong>Say this if grilled:</strong> "<code>mysqli_connect()</code> takes host, user, password and database and returns a connection handle or <code>false</code>; every subsequent query passes that handle, and <code>mysqli_close()</code> releases it."</p>
+</blockquote>
+<h3 id="27-the-same-connection-object-oriented-4l244268">2.7 The same connection, object-oriented (4:L244–268)<a class="anchor" href="#27-the-same-connection-object-oriented-4l244268">#</a></h3>
+<p><strong>Story:</strong> same phone call, different handset — buttons instead of a switchboard operator.</p>
+<p><pre><code class="language-php">&lt;?php
+$conn = new mysqli(&quot;localhost&quot;, &quot;root&quot;, &quot;password&quot;, &quot;college_db&quot;);
+
+if ($conn-&gt;connect_error) {
+    die(&quot;Connection failed: &quot; . $conn-&gt;connect_error);
+}
+
+echo &quot;Connected successfully&quot;;
+
+$conn-&gt;close();
+?&gt;
+</code></pre></p>
+<p><strong>Mapping table — know which side each name lives on</strong> (4:L248–254)</p>
+<table>
+<thead>
+<tr>
+<th>Job</th>
+<th>Procedural</th>
+<th>Object-oriented</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Connect</td>
+<td><code>mysqli_connect(...)</code></td>
+<td><code>new mysqli(...)</code></td>
+</tr>
+<tr>
+<td>Connection error</td>
+<td><code>mysqli_connect_error()</code></td>
+<td><code>$conn-&gt;connect_error</code></td>
+</tr>
+<tr>
+<td>Run a query</td>
+<td><code>mysqli_query($conn, $sql)</code></td>
+<td><code>$conn-&gt;query($sql)</code></td>
+</tr>
+<tr>
+<td>Fetch a row</td>
+<td><code>mysqli_fetch_assoc($result)</code></td>
+<td><code>$result-&gt;fetch_assoc()</code></td>
+</tr>
+<tr>
+<td>Rows affected</td>
+<td><code>mysqli_affected_rows($conn)</code></td>
+<td><code>$conn-&gt;affected_rows</code></td>
+</tr>
+<tr>
+<td>Last insert id</td>
+<td><code>mysqli_insert_id($conn)</code></td>
+<td><code>$conn-&gt;insert_id</code></td>
+</tr>
+<tr>
+<td>Error text</td>
+<td><code>mysqli_error($conn)</code></td>
+<td><code>$conn-&gt;error</code></td>
+</tr>
+<tr>
+<td>Close</td>
+<td><code>mysqli_close($conn)</code></td>
+<td><code>$conn-&gt;close()</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Which to write in the exam?</strong> The procedural form — it is what 90% of the deck's examples use, and mixing the two mid-script is the classic way to lose a mark. But <em>know</em> the OO column, because questions say "using MySQLi" and examiners like <code>$conn-&gt;affected_rows</code>.</p>
+<blockquote>
+<p><strong>Say this if grilled:</strong> "MySQLi exposes two APIs over the same engine — functions taking <code>$conn</code> first, or methods on the connection object; they are interchangeable, but never mixed in one script."</p>
+</blockquote>
+<h3 id="28-connection-error-handling-the-four-best-practices-4l280305">2.8 Connection error handling + the four best practices (4:L280–305)<a class="anchor" href="#28-connection-error-handling-the-four-best-practices-4l280305">#</a></h3>
+<p><strong>Story:</strong> a pilot's pre-flight check. Thirty seconds of checking prevents a crash nobody can diagnose later.</p>
+<p><strong>The failure check is not optional.</strong> A failed connection returns <code>false</code>; if you ignore it, every later call receives <code>false</code> where a handle should be and you get a chain of confusing warnings instead of one clear message (4:L290–292).</p>
+<p><pre><code class="language-php">&lt;?php
+$conn = mysqli_connect(&quot;localhost&quot;, &quot;root&quot;, &quot;&quot;, &quot;college_db&quot;);
+
+if (!$conn) {
+    die(&quot;Connection failed: &quot; . mysqli_connect_error());
+}
+?&gt;
+</code></pre></p>
+<ul>
+<li><code>die(&quot;message&quot;)</code> prints the message and <strong>stops the script</strong> — correct here, because there is nothing sensible left to do without a database.</li>
+<li><code>mysqli_connect_error()</code> returns the <em>reason</em> (e.g. <code>Access denied for user &#x27;root&#x27;@&#x27;localhost&#x27;</code>). Printing it while learning is fine; in production you log it and show a generic page, because it leaks server details (standard).</li>
+</ul>
+<p><strong>The four practices</strong> (4:L284–304)</p>
+<ol>
+<li><strong>Never hardcode credentials in shared code</strong> — put them in a separate config file kept out of version control (4:L286).</li>
+<li><strong>Always check for connection failure</strong> (4:L290).</li>
+<li><strong>Close the connection when done</strong> — good discipline in long-running scripts (4:L296).</li>
+<li><strong>Prepared statements are the production path</strong> — the module builds SQL by string concatenation <em>for clarity</em>, but real code uses <code>mysqli_prepare()</code> (4:L302–304).</li>
+</ol>
+<p><strong>One thing your deck does not say but PHP 8 does</strong> (standard): since PHP 8.1, mysqli throws <code>mysqli_sql_exception</code> by default instead of returning <code>false</code>, so <code>if (!$conn)</code> never fires. The exam-safe pattern that works in both worlds is <code>try { … } catch (mysqli_sql_exception $e) { die($e-&gt;getMessage()); }</code>. Write the <code>if (!$conn)</code> form the deck teaches; mention exceptions only if asked "how would you harden this".</p>
+<blockquote>
+<p><strong>Say this if grilled:</strong> "Check the return value immediately with <code>if (!$conn)</code> and <code>mysqli_connect_error()</code>, then <code>die()</code> — a silently failed connection produces misleading errors three function calls later."</p>
+</blockquote>
+<h3 id="29-running-a-query-214-and-the-result-handle-4l316337">2.9 Running a query: <code>mysqli_query()</code> and the result handle (4:L316–337)<a class="anchor" href="#29-running-a-query-214-and-the-result-handle-4l316337">#</a></h3>
+<p><strong>Story:</strong> posting a letter. You hand it to the post office (MySQL). For a <em>question</em> ("SELECT") you get a parcel back; for an <em>instruction</em> ("INSERT") you get only a receipt saying it was accepted.</p>
+<p><strong>Signature:</strong> <code>mysqli_query($conn, $sql)</code> — the deck's own summary: <em>executes a query and returns a result handle (for SELECT) or true/false (for INSERT/UPDATE/DELETE)</em> (4:L320).</p>
+<p><pre><code class="language-php">&lt;?php
+$sql = &quot;SELECT name, marks FROM students&quot;;
+$result = mysqli_query($conn, $sql);
+
+if (!$result) {
+    die(&quot;Query failed: &quot; . mysqli_error($conn));
+}
+?&gt;
+</code></pre></p>
+<p><strong>The two return types — this is the single most examined detail on the slide</strong></p>
+<table>
+<thead>
+<tr>
+<th>Query kind</th>
+<th>Returns on success</th>
+<th>You then do</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>SELECT</code>, <code>SHOW</code>, <code>DESCRIBE</code></td>
+<td>A <strong>result handle</strong> (a <code>mysqli_result</code> object)</td>
+<td><code>mysqli_fetch_assoc($result)</code> in a loop</td>
+</tr>
+<tr>
+<td><code>INSERT</code>, <code>UPDATE</code>, <code>DELETE</code>, <code>CREATE</code></td>
+<td><code>true</code></td>
+<td><code>mysqli_affected_rows($conn)</code> / <code>mysqli_insert_id($conn)</code></td>
+</tr>
+</tbody>
+</table>
+<p>→ Trying to <code>fetch_assoc()</code> a <code>true</code> is the classic fatal error <em>"Call to a member function fetch_assoc() on bool"</em>.</p>
+<p><strong>Error path.</strong> <code>mysqli_error($conn)</code> returns MySQL's own message for the <em>last</em> failed query (4:L324). <code>$sql</code> is just a string — building it from user input is exactly how injection happens (4:L326), see 2.18.</p>
+<p><strong>Why it matters:</strong> Q126 asks its purpose in one line; every CRUD answer in Part B is this function with a different string.</p>
+<blockquote>
+<p><strong>Say this if grilled:</strong> "<code>mysqli_query()</code> sends one SQL statement and returns a result handle for SELECT or a boolean for writes — so you branch on what kind of statement you sent."</p>
+</blockquote>
+<h3 id="210-reading-rows-233-and-its-siblings-4l351370-4l383393">2.10 Reading rows: <code>mysqli_fetch_assoc()</code> and its siblings (4:L351–370, 4:L383–393)<a class="anchor" href="#210-reading-rows-233-and-its-siblings-4l351370-4l383393">#</a></h3>
+<p><strong>Story:</strong> a ticket roll. Each pull gives you the next ticket; when the roll is finished you get nothing — and "nothing" is exactly how you know to stop.</p>
+<p><pre><code class="language-php">&lt;?php
+while ($row = mysqli_fetch_assoc($result)) {
+    echo $row[&quot;name&quot;] . &quot; &quot; . $row[&quot;marks&quot;] . &quot;&lt;br&gt;&quot;;
+}
+
+echo &quot;Total rows: &quot; . mysqli_num_rows($result);
+?&gt;
+</code></pre></p>
+<p><strong>How the loop terminates — say this precisely.</strong> <code>mysqli_fetch_assoc()</code> returns one row as an <strong>associative array</strong> (<code>[&quot;column&quot; =&gt; value]</code>) and advances an internal pointer (4:L355–357). When no rows remain it returns <strong><code>NULL</code></strong>, <code>NULL</code> is falsy, so the <code>while</code> condition fails and the loop ends. That is why <code>while ($row = mysqli_fetch_assoc($result))</code> needs no counter (4:L357, 4:L393).</p>
+<p><strong>The four fetch styles</strong> (4:L385–391) — Q106 is this table:</p>
+<table>
+<thead>
+<tr>
+<th>Function</th>
+<th>Returns</th>
+<th>Column access</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>mysqli_fetch_assoc()</code></td>
+<td>Associative array</td>
+<td><code>$row[&quot;name&quot;]</code></td>
+<td>Most common; readable (4:L387)</td>
+</tr>
+<tr>
+<td><code>mysqli_fetch_array()</code></td>
+<td><strong>Both</strong> numeric and associative keys</td>
+<td><code>$row[&quot;name&quot;]</code> <strong>or</strong> <code>$row[0]</code></td>
+<td>Flexible but heavier — each value stored twice (4:L388)</td>
+</tr>
+<tr>
+<td><code>mysqli_fetch_row()</code></td>
+<td>Indexed array only</td>
+<td><code>$row[0]</code></td>
+<td>Position-based; breaks if column order changes (4:L389)</td>
+</tr>
+<tr>
+<td><code>mysqli_fetch_object()</code></td>
+<td>Object</td>
+<td><code>$row-&gt;name</code></td>
+<td>Nice for OO code (4:L390)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Related counters</strong></p>
+<ul>
+<li><code>mysqli_num_rows($result)</code> → integer count of returned rows, <strong>without</strong> consuming them (4:L361, 4:L391). Use it for "no records found" checks and paging.</li>
+<li><code>mysqli_affected_rows($conn)</code> → rows <em>changed</em> by the last write query — a different thing entirely (2.17).</li>
+<li><code>mysqli_free_result($result)</code> → frees the result memory (standard, optional).</li>
+</ul>
+<p><strong>Why it matters:</strong> Q101, Q104, Q108, Q128, Q243, Q251, Q253 all end in this loop. Half of Part B is "fetch rows and print an HTML table".</p>
+<blockquote>
+<p><strong>Say this if grilled:</strong> "It pulls the next row as an associative array and moves the pointer; it returns <code>NULL</code> at the end, which is what terminates the <code>while</code> loop."</p>
+</blockquote>
+<h3 id="211-the-five-step-cycle-closing-discipline-4l399-4l405419">2.11 The five-step cycle + closing discipline (4:L399, 4:L405–419)<a class="anchor" href="#211-the-five-step-cycle-closing-discipline-4l399-4l405419">#</a></h3>
+<p><strong>Story:</strong> a factory line with five stations. Every product — a student list, a product list, a marks report — goes through the same five stations.</p>
+<p>The deck's own diagram (4:L399) and numbered list (4:L407–417):</p>
+<p><pre><code class="language-text">1. Build SQL string
+2. mysqli_query()
+3. Result handle returned
+4. while + fetch_assoc() loops through rows
+5. echo HTML for each row
+        |
+        v
+Browser displays the finished table
+</code></pre></p>
+<blockquote>
+<p>"This five-step pattern — query, fetch, loop, echo — repeats throughout the rest of this module, regardless of what the query actually does." (4:L419)</p>
+</blockquote>
+<p><strong>Close-out order</strong> for a full page (the tidy version you should write in exams):</p>
+<p><pre><code class="language-php">&lt;?php
+mysqli_free_result($result);   // release the result set
+mysqli_close($conn);           // release the connection
+?&gt;
+</code></pre></p>
+<p><strong>Why it matters:</strong> it is the skeleton of Q243, Q245, Q248, Q251, Q253 and the "architecture" half of Q245. If you can draw five boxes and label them, you have 6–8 of those 14 marks before writing a line of code.</p>
+<blockquote>
+<p><strong>Say this if grilled:</strong> "Build the SQL, run it, get a handle, loop the handle into rows, echo one HTML fragment per row — and the browser only ever sees step 5's output."</p>
+</blockquote>
+<h3 id="212-create-table-defining-structure-before-storing-anything-4l431453">2.12 CREATE TABLE — defining structure before storing anything (4:L431–453)<a class="anchor" href="#212-create-table-defining-structure-before-storing-anything-4l431453">#</a></h3>
+<p><strong>Story:</strong> buying a filing cabinet and labelling the drawers <em>before</em> you have any paper. Once paper is in, changing the drawer labels is painful.</p>
+<p><strong>SQL shape</strong> (4:L435):</p>
+<p><pre><code class="language-sql">CREATE TABLE students (
+    id     INT AUTO_INCREMENT PRIMARY KEY,
+    name   VARCHAR(50),
+    marks  INT,
+    joined DATE
+);
+</code></pre></p>
+<p><strong>The pieces you must be able to name</strong></p>
+<table>
+<thead>
+<tr>
+<th>Piece</th>
+<th>Meaning</th>
+<th>Why it's there</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>CREATE TABLE name ( … )</code></td>
+<td>Defines columns and their types</td>
+<td>A table must exist before any INSERT (4:L435)</td>
+</tr>
+<tr>
+<td><code>INT AUTO_INCREMENT PRIMARY KEY</code></td>
+<td>Unique, self-numbering id</td>
+<td>Every row gets an identity you can target with <code>WHERE id = …</code> (4:L437)</td>
+</tr>
+<tr>
+<td><code>VARCHAR(50)</code></td>
+<td>Variable-length text up to 50 chars</td>
+<td>Names, emails — the workhorse type</td>
+</tr>
+<tr>
+<td><code>TEXT</code></td>
+<td>Long text</td>
+<td>Descriptions, feedback</td>
+</tr>
+<tr>
+<td><code>DATE</code></td>
+<td>Calendar date</td>
+<td><code>joined</code>, <code>admitted</code></td>
+</tr>
+<tr>
+<td><code>DECIMAL(10,2)</code></td>
+<td>Exact decimal, 2 places</td>
+<td>Money — never <code>FLOAT</code> for currency (standard)</td>
+</tr>
+<tr>
+<td><code>NOT NULL</code></td>
+<td>Column cannot be empty</td>
+<td>Enforces data quality at the DB level (standard)</td>
+</tr>
+<tr>
+<td><code>UNIQUE</code></td>
+<td>No duplicate values</td>
+<td>Email, register number (standard)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Run it from PHP</strong> — the deck does this <em>once</em>, at setup (4:L441, 4:L445–452):</p>
+<p><pre><code class="language-php">&lt;?php
+$sql = &quot;CREATE TABLE students (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(50),
+    marks INT,
+    joined DATE
+)&quot;;
+
+if (!mysqli_query($conn, $sql)) {
+    die(&quot;Create failed: &quot; . mysqli_error($conn));
+}
+echo &quot;Table created&quot;;
+?&gt;
+</code></pre></p>
+<p><strong>Two traps</strong>: (a) running it on every page load → <em>"table already exists"</em>; use <code>CREATE TABLE IF NOT EXISTS</code> or run it once from phpMyAdmin (standard). (b) Forgetting the <code>PRIMARY KEY</code> → duplicate rows you cannot address individually.</p>
+<p><strong>Why it matters:</strong> Q117 (purpose), Q109 (CREATE from PHP), Q241, Q249 all need this; Q249 additionally wants column types and constraints explained.</p>
+<blockquote>
+<p><strong>Say this if grilled:</strong> "CREATE TABLE declares the schema — column names, types and constraints — and is run once at setup, because INSERT can only write into a structure that already exists."</p>
+</blockquote>
+<h3 id="213-insert-adding-a-new-row-4l468490">2.13 INSERT — adding a new row (4:L468–490)<a class="anchor" href="#213-insert-adding-a-new-row-4l468490">#</a></h3>
+<p><strong>Story:</strong> filling in one new index card and dropping it in the drawer. The drawer's labels already tell you which field goes where.</p>
+<p><strong>SQL shape</strong> (4:L472): <code>INSERT INTO table (columns) VALUES (values)</code> — the deck insists the <strong>explicit column list is safest</strong>, because it survives later schema changes and cannot silently shift values into the wrong columns.</p>
+<p><pre><code class="language-php">&lt;?php
+$name  = $_POST[&quot;name&quot;];
+$marks = (int)$_POST[&quot;marks&quot;];
+
+$sql = &quot;INSERT INTO students (name, marks)
+        VALUES (&#x27;$name&#x27;, $marks)&quot;;
+
+if (!mysqli_query($conn, $sql)) {
+    die(&quot;Insert failed: &quot; . mysqli_error($conn));
+}
+
+echo &quot;New ID: &quot; . mysqli_insert_id($conn);
+?&gt;
+</code></pre></p>
+<p><strong>Three rules</strong></p>
+<ol>
+<li><strong>Strings get quotes, numbers don't</strong> (4:L474). <code>&#x27;$name&#x27;</code> is quoted in the SQL text; <code>$marks</code> is cast to <code>(int)</code> so it needs none. Forget the quotes around a string and MySQL reads the word as a column name → <code>Unknown column &#x27;Anu&#x27; in &#x27;field list&#x27;</code>.</li>
+<li><strong><code>mysqli_insert_id($conn)</code></strong> returns the <code>AUTO_INCREMENT</code> id MySQL just assigned (4:L476) — the only way to know the new row's key without a second SELECT.</li>
+<li><strong>Building <code>$sql</code> from raw form input is unsafe</strong> (4:L478): that is injection. The deck's own fix is <code>(int)</code> casting for numbers and, properly, prepared statements (2.18).</li>
+</ol>
+<p><strong>Omitting the column list</strong> — <code>INSERT INTO students VALUES (…)</code> — works only if you supply <em>every</em> column in <em>table order</em>, and it breaks the moment a column is added (standard). Never do it in the exam.</p>
+<p><strong>Why it matters:</strong> Q96, Q112, Q118, Q241, Q242, Q248, Q253 — inserting a record <em>with</em> error handling is the single most repeated Part A/B demand in this module.</p>
+<blockquote>
+<p><strong>Say this if grilled:</strong> "INSERT INTO table (columns) VALUES (values), strings quoted, numbers cast to int, checked with <code>if (!mysqli_query(...))</code> and confirmed with <code>mysqli_insert_id()</code>."</p>
+</blockquote>
+<h3 id="214-delete-removing-rows-4l505525">2.14 DELETE — removing rows (4:L505–525)<a class="anchor" href="#214-delete-removing-rows-4l505525">#</a></h3>
+<p><strong>Story:</strong> a shredder, not a waste-paper basket. What goes in does not come back.</p>
+<p><strong>SQL shape</strong> (4:L509): <code>DELETE FROM table WHERE condition</code></p>
+<p><pre><code class="language-php">&lt;?php
+$id = (int)$_POST[&quot;id&quot;];
+
+$sql = &quot;DELETE FROM students WHERE id = $id&quot;;
+
+if (!mysqli_query($conn, $sql)) {
+    die(&quot;Delete failed: &quot; . mysqli_error($conn));
+}
+
+echo mysqli_affected_rows($conn) . &quot; row(s) deleted&quot;;
+?&gt;
+</code></pre></p>
+<p><strong>The four points the slide makes</strong></p>
+<ol>
+<li><code>WHERE</code> limits deletion to matching rows (4:L509).</li>
+<li><strong>Never omit <code>WHERE</code> unless you mean to empty the table</strong> (4:L511) — <code>DELETE FROM students</code> with no clause wipes everything, and there is no undo.</li>
+<li><code>mysqli_affected_rows($conn)</code> tells you how many rows actually went (4:L513).</li>
+<li><strong>Preview with the equivalent SELECT first</strong> (4:L515) — a habit, not syntax.</li>
+</ol>
+<p><strong>The zero-row trap.</strong> A DELETE with a <code>WHERE</code> that matches nothing <em>succeeds</em> (no error) and affects 0 rows. Only <code>affected_rows</code> reveals that nothing happened (4:L687–689). Same for UPDATE.</p>
+<p><strong>Why it matters:</strong> Q119 (purpose), Q242b (delete by register number), Q250 (delete by department, prepared) — and the "safe DELETE" discussion is worth 7 of those 14 marks.</p>
+<blockquote>
+<p><strong>Say this if grilled:</strong> "DELETE FROM table WHERE condition — the WHERE is the whole safety mechanism, affected_rows is the only proof it did what you meant, and a SELECT with the same WHERE is the dry run."</p>
+</blockquote>
+<h3 id="215-update-changing-existing-values-4l630652">2.15 UPDATE — changing existing values (4:L630–652)<a class="anchor" href="#215-update-changing-existing-values-4l630652">#</a></h3>
+<p><strong>Story:</strong> correcting a typo on an existing card, not writing a new one. If you don't say <em>which</em> card, you rewrite the entire drawer.</p>
+<p><strong>SQL shape</strong> (4:L634): <code>UPDATE table SET col = value WHERE condition</code></p>
+<p><pre><code class="language-php">&lt;?php
+$id    = (int)$_POST[&quot;id&quot;];
+$marks = (int)$_POST[&quot;marks&quot;];
+
+$sql = &quot;UPDATE students
+        SET marks = $marks
+        WHERE id = $id&quot;;
+
+if (!mysqli_query($conn, $sql)) {
+    die(&quot;Update failed: &quot; . mysqli_error($conn));
+}
+
+echo mysqli_affected_rows($conn) . &quot; row(s) updated&quot;;
+?&gt;
+</code></pre></p>
+<p><strong>Points to state</strong> (4:L634–640)</p>
+<ul>
+<li>Multiple columns in one statement: <code>SET col1 = val1, col2 = val2</code> (comma-separated, one <code>SET</code>).</li>
+<li><strong>Without <code>WHERE</code>, every row is updated</strong> — "almost always a mistake" (4:L638).</li>
+<li><code>mysqli_affected_rows($conn)</code> confirms how many rows actually changed (4:L640).</li>
+<li>You can compute from the old value: <code>SET salary = salary * 1.10</code> (that is Q252).</li>
+</ul>
+<p><strong>Subtlety worth a mark</strong> (standard): MySQL's <code>affected_rows</code> counts rows whose values <strong>actually changed</strong>. Re-saving the same value returns 0 even though the row matched. <code>mysqli_info($conn)</code> or a <code>SELECT</code> confirms the match count if you need it.</p>
+<p><strong>Why it matters:</strong> Q98, Q121, Q244, Q252 — and Q127 wants exactly the "why WHERE matters" defence.</p>
+<blockquote>
+<p><strong>Say this if grilled:</strong> "UPDATE table SET col = value WHERE condition; no WHERE means every row, and <code>affected_rows</code> is how you prove the right number of rows changed."</p>
+</blockquote>
+<h3 id="216-select-the-only-statement-that-gives-data-back-4l558580-4l595615">2.16 SELECT — the only statement that gives data back (4:L558–580, 4:L595–615)<a class="anchor" href="#216-select-the-only-statement-that-gives-data-back-4l558580-4l595615">#</a></h3>
+<p><strong>Story:</strong> asking a librarian a question — the only interaction where something comes back over the counter.</p>
+<p><strong>Definition.</strong> SELECT <em>returns</em> rows; every other statement only succeeds or fails (4:L560). It is therefore the only statement whose result you loop over.</p>
+<p><strong>The pieces</strong></p>
+<table>
+<thead>
+<tr>
+<th>Clause</th>
+<th>Purpose</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>SELECT *</code></td>
+<td>Every column</td>
+<td><code>SELECT * FROM students</code> (4:L562)</td>
+</tr>
+<tr>
+<td><code>SELECT col1, col2</code></td>
+<td>Only what you need — faster, clearer</td>
+<td><code>SELECT name, marks FROM students</code> (4:L564)</td>
+</tr>
+<tr>
+<td><code>WHERE</code></td>
+<td>Filters <strong>rows</strong></td>
+<td><code>WHERE marks &gt;= 75</code> (4:L566)</td>
+</tr>
+<tr>
+<td><code>ORDER BY col ASC/DESC</code></td>
+<td>Sorts rows</td>
+<td><code>ORDER BY marks DESC</code> (4:L599)</td>
+</tr>
+<tr>
+<td><code>LIMIT n</code></td>
+<td>Caps row count</td>
+<td><code>LIMIT 5</code> (4:L601)</td>
+</tr>
+<tr>
+<td><code>LIMIT offset, count</code></td>
+<td>Skips then takes — pagination</td>
+<td><code>LIMIT 10, 5</code> (4:L603)</td>
+</tr>
+<tr>
+<td><code>LIKE</code></td>
+<td>Pattern match</td>
+<td><code>WHERE name LIKE &#x27;A%&#x27;</code> (4:L568)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Operators</strong> (4:L568): <code>=</code>, <code>!=</code>, <code>&gt;</code>, <code>&lt;</code>, <code>&gt;=</code>, <code>&lt;=</code>, <code>LIKE</code>. <code>LIKE</code> uses <code>%</code> for "any characters": <code>&#x27;A%&#x27;</code> starts with A, <code>&#x27;%a&#x27;</code> ends with a, <code>&#x27;%an%&#x27;</code> contains "an".</p>
+<p><pre><code class="language-php">&lt;?php
+$sql = &quot;SELECT name, marks FROM students
+        WHERE marks &gt;= 50
+        ORDER BY marks DESC
+        LIMIT 5&quot;;
+
+$result = mysqli_query($conn, $sql);
+
+if (!$result) {
+    die(&quot;Query failed: &quot; . mysqli_error($conn));
+}
+
+while ($row = mysqli_fetch_assoc($result)) {
+    echo $row[&quot;name&quot;] . &quot; — &quot; . $row[&quot;marks&quot;] . &quot;&lt;br&gt;&quot;;
+}
+?&gt;
+</code></pre></p>
+<p><strong>Clause order is fixed</strong> — <code>SELECT … FROM … WHERE … ORDER BY … LIMIT …</code>. Swap two and MySQL errors out; this is a free mark in any "write the query" question.</p>
+<p><strong>Why it matters:</strong> Q101, Q104, Q108, Q120, Q243, Q251, Q253. The WHERE variant (<code>marks &gt; 50</code>) is literally Q251.</p>
+<blockquote>
+<p><strong>Say this if grilled:</strong> "SELECT is the read operation — column list, FROM, optional WHERE, ORDER BY, LIMIT — and it is the only query whose return value you fetch in a loop."</p>
+</blockquote>
+<h3 id="217-325-the-number-that-proves-a-write-happened-4l513-4l640-4l687689">2.17 <code>affected_rows</code> — the number that proves a write happened (4:L513, 4:L640, 4:L687–689)<a class="anchor" href="#217-325-the-number-that-proves-a-write-happened-4l513-4l640-4l687689">#</a></h3>
+<p><strong>Story:</strong> a delivery receipt. "Delivered" without a count could mean one parcel or the whole warehouse.</p>
+<p><pre><code class="language-php">&lt;?php
+mysqli_query($conn, $sql);                 // some UPDATE or DELETE
+echo mysqli_affected_rows($conn);          // rows actually touched
+echo $conn-&gt;affected_rows;                 // OO form — same number
+?&gt;
+</code></pre></p>
+<p><strong>Three counts, do not confuse them</strong></p>
+<table>
+<thead>
+<tr>
+<th>Function</th>
+<th>Counts</th>
+<th>Applies to</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>mysqli_affected_rows($conn)</code></td>
+<td>Rows <strong>changed</strong> by the last write</td>
+<td>INSERT / UPDATE / DELETE</td>
+</tr>
+<tr>
+<td><code>mysqli_num_rows($result)</code></td>
+<td>Rows <strong>returned</strong> by a SELECT</td>
+<td>SELECT only</td>
+</tr>
+<tr>
+<td><code>mysqli_insert_id($conn)</code></td>
+<td>The id <strong>generated</strong> by the last INSERT</td>
+<td>INSERT with AUTO_INCREMENT</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Why the slide calls it a habit</strong> (4:L687–689): a query can "succeed" with 0 affected rows — wrong <code>WHERE</code>, no matching id, duplicate value. No error is raised. The count is the only signal.</p>
+<p><strong>Why it matters:</strong> Q252a asks its role in one half; Q244, Q250 want it in code.</p>
+<blockquote>
+<p><strong>Say this if grilled:</strong> "<code>affected_rows</code> is the count of rows the last UPDATE/DELETE/INSERT actually changed — success without a count can still mean zero rows matched."</p>
+</blockquote>
+<h3 id="218-sql-injection-and-prepared-statements-4l302304-4l326-4l681683">2.18 SQL injection and prepared statements (4:L302–304, 4:L326, 4:L681–683)<a class="anchor" href="#218-sql-injection-and-prepared-statements-4l302304-4l326-4l681683">#</a></h3>
+<p><strong>Story:</strong> a form that asks for your name, and someone writes <em>"ignore the question, empty the safe"</em> — and the form obeys, because it pasted the answer into the instruction sheet.</p>
+<p><strong>The vulnerability, concretely.</strong> This code looks harmless:</p>
+<p><pre><code class="language-php">&lt;?php
+$email = $_POST[&quot;email&quot;];
+$sql = &quot;SELECT * FROM users WHERE email = &#x27;$email&#x27;&quot;;
+$result = mysqli_query($conn, $sql);
+?&gt;
+</code></pre></p>
+<p>If the user submits <code>&#x27; OR &#x27;1&#x27;=&#x27;1</code>, the string becomes:</p>
+<p><pre><code class="language-sql">SELECT * FROM users WHERE email = &#x27;&#x27; OR &#x27;1&#x27;=&#x27;1&#x27;
+</code></pre></p>
+<p>…which is true for every row: the whole table leaks. Submit <code>&#x27;; DROP TABLE users; --</code> and the table is gone. The cause is structural: <strong>the data was concatenated into the SQL text, so the database cannot tell data from code</strong> (4:L326).</p>
+<p><strong>The fix — placeholders.</strong> <code>mysqli_prepare()</code> sends the SQL <em>structure</em> first with <code>?</code> where values go; the values are sent separately afterwards (4:L683):</p>
+<p><pre><code class="language-php">&lt;?php
+$email = $_POST[&quot;email&quot;];
+
+$stmt = mysqli_prepare($conn, &quot;SELECT id, name FROM users WHERE email = ?&quot;);
+mysqli_stmt_bind_param($stmt, &quot;s&quot;, $email);
+mysqli_stmt_execute($stmt);
+
+$result = mysqli_stmt_get_result($stmt);
+while ($row = mysqli_fetch_assoc($result)) {
+    echo htmlspecialchars($row[&quot;name&quot;]);
+}
+mysqli_stmt_close($stmt);
+?&gt;
+</code></pre></p>
+<p><strong>The <code>bind_param</code> type string — one letter per <code>?</code>, in order</strong> (standard, the deck only names the function):</p>
+<table>
+<thead>
+<tr>
+<th>Letter</th>
+<th>Type</th>
+<th>Use for</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>s</code></td>
+<td>string</td>
+<td>names, emails, dates, decimals-as-text</td>
+</tr>
+<tr>
+<td><code>i</code></td>
+<td>integer</td>
+<td>ids, marks, counts</td>
+</tr>
+<tr>
+<td><code>d</code></td>
+<td>double/float</td>
+<td>prices, measurements</td>
+</tr>
+<tr>
+<td><code>b</code></td>
+<td>blob</td>
+<td>binary data</td>
+</tr>
+</tbody>
+</table>
+<p>So <code>bind_param(&quot;ssi&quot;, $name, $email, $age)</code> means <em>string, string, int</em> — three placeholders, three variables, same order.</p>
+<p><strong>Why prepared statements actually stop injection</strong> (the sentence that earns the marks): the statement is <strong>parsed and compiled before the values arrive</strong>, so a value can never be reinterpreted as SQL syntax. <code>&#x27; OR &#x27;1&#x27;=&#x27;1</code> is stored as a literal 13-character email, not as a condition. Bonus: the same prepared statement can be executed repeatedly with different values, which is faster for bulk inserts.</p>
+<p><strong>Other defences the deck mentions</strong> (4:L675–677): cast numeric input with <code>(int)</code>, and test the WHERE with a SELECT first (4:L669).</p>
+<p><strong>Why it matters:</strong> Q99 is a Part A certainty, Q242 and Q250 are Part B prepared-statement programs, and any "precautions" half of Q244/Q250 wants this.</p>
+<blockquote>
+<p><strong>Say this if grilled:</strong> "Prepared statements compile the SQL before the data arrives, so user input is only ever a value — concatenation lets it become syntax, which is the entire injection bug."</p>
+</blockquote>
+<h3 id="219-mixing-php-into-html-the-alternative-syntax-4l735755">2.19 Mixing PHP into HTML — the alternative syntax (4:L735–755)<a class="anchor" href="#219-mixing-php-into-html-the-alternative-syntax-4l735755">#</a></h3>
+<p><strong>Story:</strong> a stencil over a wall. The HTML is the wall; PHP lifts the stencil once per database row.</p>
+<p><strong>The pattern</strong> (the deck's own code, 4:L748–755):</p>
+<p><pre><code class="language-php">&lt;table border=&quot;1&quot;&gt;
+&lt;?php while ($row = mysqli_fetch_assoc($result)): ?&gt;
+&lt;tr&gt;
+    &lt;td&gt;&lt;?php echo htmlspecialchars($row[&quot;name&quot;]); ?&gt;&lt;/td&gt;
+    &lt;td&gt;&lt;?php echo $row[&quot;marks&quot;]; ?&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;?php endwhile; ?&gt;
+&lt;/table&gt;
+</code></pre></p>
+<p><strong>Four syntax facts to get right</strong></p>
+<ol>
+<li><strong><code>while (...):</code> with a colon, closed by <code>endwhile;</code></strong> — not <code>{ }</code>. This is PHP's <em>alternative syntax</em>, designed for templates because a <code>}</code> alone in the middle of HTML is unreadable (4:L739). The same exists for <code>if: endif;</code> and <code>foreach: endforeach;</code>.</li>
+<li><strong><code>&lt;?= $expr ?&gt;</code> is shorthand for <code>&lt;?php echo $expr; ?&gt;</code></strong> (4:L790, and 3:L55). Legal and expected in the dynamic-page answer.</li>
+<li><strong>A <code>&lt;?php ?&gt;</code> block may open and close many times inside one file</strong> (4:L739) — that is the whole technique.</li>
+<li><strong><code>htmlspecialchars()</code> around any user-supplied value</strong> (4:L743) turns <code>&lt;</code> into <code>&amp;lt;</code>, so a stored name like <code>&lt;script&gt;alert(1)&lt;/script&gt;</code> prints as text instead of executing. This is XSS defence, and it is a marked point.</li>
+</ol>
+<p><strong>The same loop in non-alternative syntax</strong> — safe to write if you forget the colon form:</p>
+<p><pre><code class="language-php">&lt;?php while ($row = mysqli_fetch_assoc($result)) { ?&gt;
+&lt;tr&gt;&lt;td&gt;&lt;?= htmlspecialchars($row[&quot;name&quot;]) ?&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;?php } ?&gt;
+</code></pre></p>
+<p><strong>Why it matters:</strong> Q229, Q231, Q245, Q253 all end in "display it as HTML"; the colon/endwhile pair is the most commonly lost mark in the module.</p>
+<blockquote>
+<p><strong>Say this if grilled:</strong> "PHP can close and reopen mid-HTML; the alternative <code>while: … endwhile;</code> syntax keeps the markup readable, <code>&lt;?=</code> echoes, and <code>htmlspecialchars()</code> stops stored HTML from executing."</p>
+</blockquote>
+<h3 id="220-the-complete-dynamic-page-every-piece-in-one-file-4l770792">2.20 The complete dynamic page — every piece in one file (4:L770–792)<a class="anchor" href="#220-the-complete-dynamic-page-every-piece-in-one-file-4l770792">#</a></h3>
+<p><strong>Story:</strong> the whole kitchen, one service. Order in, plate out.</p>
+<p><pre><code class="language-php">&lt;?php
+$conn = mysqli_connect(&quot;localhost&quot;, &quot;root&quot;, &quot;&quot;, &quot;college_db&quot;);
+
+if (!$conn) {
+    die(&quot;Connection failed: &quot; . mysqli_connect_error());
+}
+
+$result = mysqli_query($conn, &quot;SELECT name, marks FROM students&quot;);
+
+if (!$result) {
+    die(&quot;Query failed: &quot; . mysqli_error($conn));
+}
+?&gt;
+&lt;table border=&quot;1&quot;&gt;
+&lt;tr&gt;&lt;th&gt;Name&lt;/th&gt;&lt;th&gt;Marks&lt;/th&gt;&lt;/tr&gt;
+&lt;?php while ($row = mysqli_fetch_assoc($result)): ?&gt;
+&lt;tr&gt;
+    &lt;td&gt;&lt;?= htmlspecialchars($row[&quot;name&quot;]) ?&gt;&lt;/td&gt;
+    &lt;td&gt;&lt;?= $row[&quot;marks&quot;] ?&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;?php endwhile; ?&gt;
+&lt;/table&gt;
+&lt;?php
+mysqli_free_result($result);
+mysqli_close($conn);
+?&gt;
+</code></pre></p>
+<p><strong>Annotation, in the deck's own three steps</strong> (4:L774–778): 1. connect, 2. run the query, 3. loop and echo each row as HTML. The deck's claim to quote: <em>"This exact shape — connect, query, loop, render — is the backbone of almost every PHP page that shows database content"</em> (4:L780).</p>
+<p><strong>What "dynamic" means here, precisely</strong> (4:L705): the <code>.php</code> file on disk never changes; the HTML it <em>emits</em> is rebuilt per request from whatever is in the table. Add a row in phpMyAdmin, refresh, and the page changes with no edit to the file. That sentence answers Q102, Q122, Q129 and half of Q253.</p>
+<p><strong>Layering</strong> (4:L717, and Q245): even in one file, keep three concerns visible — <strong>data access</strong> (the query), <strong>business logic</strong> (any PHP rules), <strong>presentation</strong> (the HTML). That separation is the informal precursor to Module V's MVC.</p>
+<p><strong>Why it matters:</strong> this is the highest-probability 14-mark answer in the module and the direct answer to Q253.</p>
+<blockquote>
+<p><strong>Say this if grilled:</strong> "Connect, query, loop, render — the file is static, its output is not, because the row data is read at request time."</p>
+</blockquote>
+<h3 id="221-what-the-bank-asks-that-your-deck-never-covers-all-standard-not-in-your-deck">2.21 What the bank asks that your deck never covers (all "(standard, not in your deck)")<a class="anchor" href="#221-what-the-bank-asks-that-your-deck-never-covers-all-standard-not-in-your-deck">#</a></h3>
+<p>Five question clusters have no slide. Learn them here; do not claim the deck said them.</p>
+<p><strong>(a) <code>$_SERVER[&#x27;PHP_SELF&#x27;]</code> (Q103).</strong> The bank writes <code>$_PHP_SELF</code>, which is a typo — there is no such superglobal. The real value is <code>$_SERVER[&#x27;PHP_SELF&#x27;]</code>: the <em>path of the currently executing script</em>, used as a form's <code>action</code> so the form posts to itself:</p>
+<p><pre><code class="language-php">&lt;form method=&quot;post&quot; action=&quot;&lt;?php echo htmlspecialchars($_SERVER[&#x27;PHP_SELF&#x27;]); ?&gt;&quot;&gt;
+</code></pre></p>
+<p><code>htmlspecialchars()</code> matters here: without it a crafted URL can inject script into the action attribute (XSS).</p>
+<p><strong>(b) Regex (Q97, Q235, Q236, Q237)</strong> — the deck covers this in Module 3, not 4 (3:L568–586, telephone table 3:L597–607):</p>
+<p><pre><code class="language-php">&lt;?php
+if (preg_match(&quot;/^[\w.-]+@[\w.-]+\.[A-Za-z]{2,}$/&quot;, $email)) {
+    echo &quot;Valid email&quot;;
+}
+$clean = preg_replace(&quot;/[0-9]/&quot;, &quot;&quot;, &quot;Room12A&quot;);   // &quot;RoomA&quot;
+?&gt;
+</code></pre></p>
+<ul>
+<li><code>preg_match()</code> returns <code>1</code> on match, <code>0</code> on no match, <code>false</code> on error → always compare with <code>== 1</code> or cast to bool.</li>
+<li><code>preg_match_all()</code> fills an array with <strong>every</strong> match — that is how you extract all emails from a page of text.</li>
+<li>Delimiters <code>/…/</code> are required; <code>^</code> and <code>$</code> anchor start/end; <code>{n}</code> means exactly n times (3:L607).</li>
+</ul>
+<p><strong>(c) File upload (Q233a)</strong> — <code>$_FILES</code>, <code>enctype</code>, <code>move_uploaded_file()</code>; full drill at §4 D15.</p>
+<p><strong>(d) <code>sqrt()</code> / factorial / <code>date()</code> (Q105, Q231, Q233b)</strong> — plain PHP functions, drilled at §4 D12–D14.</p>
+<p><strong>(e) <code>SHOW DATABASES</code> (Q107)</strong> — a SQL statement, not a PHP function:</p>
+<p><pre><code class="language-php">&lt;?php
+$result = mysqli_query($conn, &quot;SHOW DATABASES&quot;);
+while ($row = mysqli_fetch_row($result)) {   // index 0 = database name
+    echo $row[0] . &quot;&lt;br&gt;&quot;;
+}
+?&gt;
+</code></pre></p>
+<p><code>SHOW TABLES</code> is the same idea one level down; <code>DESCRIBE students</code> lists a table's columns.</p>
+<hr />
+<h2 id="3-part-2-answer-bank">3. PART 2 — Answer bank<a class="anchor" href="#3-part-2-answer-bank">#</a></h2>
+<h3 id="31-3-mark-answers-part-a">3.1 3-mark answers (Part A)<a class="anchor" href="#31-3-mark-answers-part-a">#</a></h3>
+<p>Write <strong>3 or 4 numbered/bulleted points</strong>, or one short code block plus two lines. That is the whole shape of a 3-mark answer: three facts, or code + one explanation. Duplicates are merged into <strong>MASTER ANSWERS</strong>; the numbers each one covers are listed.</p>
+<p><strong>A1 — Steps to establish a PHP–MySQL connection · also answers Q110, Q116, Q92</strong></p>
+<ol>
+<li><strong>Connect</strong> — <code>mysqli_connect(host, user, password, database)</code> returns a connection handle or <code>false</code>.</li>
+<li><strong>Check</strong> — <code>if (!$conn) { die(&quot;Connection failed: &quot; . mysqli_connect_error()); }</code> so a failure stops the script with a readable reason.</li>
+<li><strong>Use</strong> — pass <code>$conn</code> as the first argument to <code>mysqli_query()</code> for every statement.</li>
+<li><strong>Close</strong> — <code>mysqli_close($conn)</code> (optional; PHP closes at script end).</li>
+</ol>
+<p><pre><code class="language-php">&lt;?php
+$conn = mysqli_connect(&quot;localhost&quot;, &quot;root&quot;, &quot;&quot;, &quot;college_db&quot;);
+if (!$conn) { die(&quot;Connection failed: &quot; . mysqli_connect_error()); }
+echo &quot;Connected successfully&quot;;
+mysqli_close($conn);
+?&gt;
+</code></pre></p>
+<p><em>OO one-liner variant if the question says "using object-oriented MySQLi":</em> <code>$conn = new mysqli(&quot;localhost&quot;,&quot;root&quot;,&quot;&quot;,&quot;college_db&quot;); if ($conn-&gt;connect_error) die($conn-&gt;connect_error);</code></p>
+<p><strong>A2 — <code>$_SESSION</code> vs <code>$_COOKIE</code> · also answers Q93, Q114</strong></p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th><code>$_SESSION</code></th>
+<th><code>$_COOKIE</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Stored on</td>
+<td>Server</td>
+<td>Client browser</td>
+</tr>
+<tr>
+<td>Browser holds</td>
+<td>Only the session ID</td>
+<td>The data itself</td>
+</tr>
+<tr>
+<td>Size</td>
+<td>Large</td>
+<td>~4 KB</td>
+</tr>
+<tr>
+<td>Security</td>
+<td>Safe for sensitive data</td>
+<td>User-editable — never trust it</td>
+</tr>
+<tr>
+<td>Lifetime</td>
+<td>Until browser closes / timeout</td>
+<td>Until its expiry timestamp</td>
+</tr>
+<tr>
+<td>Needs</td>
+<td><code>session_start()</code> first</td>
+<td><code>setcookie()</code> before output</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Use a session</strong> for login state, a cart, anything secret. <strong>Use a cookie</strong> for a theme preference or "remember me" token.</p>
+<p><strong>A3 — GET vs POST · Q94</strong> <em>(Module 3 material: 3:L619–640)</em></p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>GET</th>
+<th>POST</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Data goes</td>
+<td>In the URL query string</td>
+<td>In the request body</td>
+</tr>
+<tr>
+<td>Visible in address bar</td>
+<td>Yes</td>
+<td>No</td>
+</tr>
+<tr>
+<td>Length limit</td>
+<td>~2000 chars, browser-dependent</td>
+<td>Effectively none</td>
+</tr>
+<tr>
+<td>Bookmark / cache / resend-safe</td>
+<td>Yes</td>
+<td>No</td>
+</tr>
+<tr>
+<td>Should be used for</td>
+<td>Searches, filters, ids</td>
+<td>Passwords, inserts, updates</td>
+</tr>
+<tr>
+<td>PHP reads it with</td>
+<td><code>$_GET[&quot;f&quot;]</code></td>
+<td><code>$_POST[&quot;f&quot;]</code></td>
+</tr>
+</tbody>
+</table>
+<p>One extra mark: forms default to GET, so always write <code>method=&quot;post&quot;</code> explicitly for anything that changes data or carries a password.</p>
+<p><strong>A4 — Session: start, store name, display on another page · Q95</strong></p>
+<p><em>page1.php</em> stores it:</p>
+<p><pre><code class="language-php">&lt;?php
+session_start();
+$_SESSION[&quot;username&quot;] = &quot;Anu&quot;;
+echo &quot;Stored. &lt;a href=&#x27;page2.php&#x27;&gt;Next page&lt;/a&gt;&quot;;
+?&gt;
+</code></pre>
+<em>page2.php</em> reads it — a completely separate request:</p>
+<p><pre><code class="language-php">&lt;?php
+session_start();                                  // must repeat on every page
+echo &quot;Welcome, &quot; . $_SESSION[&quot;username&quot;];
+?&gt;
+</code></pre>
+The link works because the browser replays the <code>PHPSESSID</code> cookie; <code>session_start()</code> on page 2 loads the same server-side data.</p>
+<p><strong>A5 — Sessions keep state across pages; why they matter; advantages · also answers Q100, Q111, Q123</strong></p>
+<ol>
+<li>HTTP is stateless — each request is independent, so a login on page 1 is invisible to page 2 unless something carries it (4:L31–33).</li>
+<li>A session stores that state <strong>on the server</strong> and gives the browser only an ID, so credentials and roles never travel over the wire (4:L45).</li>
+<li>Data persists across page loads until the session ends, which is what makes multi-page workflows (login → dashboard → checkout) possible (4:L110).</li>
+<li><strong>Three advantages to name:</strong> security (data not client-visible), capacity (far more than 4 KB), and continuity (survives navigation across the whole site) (4:L152–160).</li>
+</ol>
+<p><strong>A6 — Insert a record with error handling · also answers Q96, Q112</strong></p>
+<p><pre><code class="language-php">&lt;?php
+$conn = mysqli_connect(&quot;localhost&quot;, &quot;root&quot;, &quot;&quot;, &quot;college_db&quot;);
+if (!$conn) { die(&quot;Connection failed: &quot; . mysqli_connect_error()); }
+
+$name  = $_POST[&quot;name&quot;];
+$marks = (int)$_POST[&quot;marks&quot;];
+
+$sql = &quot;INSERT INTO students (name, marks) VALUES (&#x27;$name&#x27;, $marks)&quot;;
+
+if (mysqli_query($conn, $sql)) {
+    echo &quot;Record inserted. New id = &quot; . mysqli_insert_id($conn);
+} else {
+    echo &quot;Insert failed: &quot; . mysqli_error($conn);
+}
+mysqli_close($conn);
+?&gt;
+</code></pre>
+Points: connection check → <code>(int)</code> cast for the number → quoted string → branch on the boolean return of <code>mysqli_query()</code> → <code>mysqli_error()</code> on failure, <code>mysqli_insert_id()</code> on success.</p>
+<p><strong>A7 — Function that validates an email with regex and returns a boolean · Q97</strong> <em>(regex: 3:L568–586)</em></p>
+<p><pre><code class="language-php">&lt;?php
+function isValidEmail($email) {
+    return (bool) preg_match(&quot;/^[\w.-]+@[\w.-]+\.[A-Za-z]{2,}$/&quot;, $email);
+}
+
+if (isValidEmail(&quot;anu@saintgits.org&quot;)) { echo &quot;Valid&quot;; }
+else { echo &quot;Invalid&quot;; }
+?&gt;
+</code></pre>
+Explain: <code>preg_match()</code> returns <code>1</code>/<code>0</code>, so it is cast to a real boolean; <code>^</code>/<code>$</code> anchor the whole string; <code>[\w.-]+</code> allows letters, digits, underscore, dot, hyphen; <code>\.</code> is a literal dot; <code>{2,}</code> requires at least two letters in the TLD.</p>
+<p><strong>A8 — Update a user's email with error handling · Q98</strong></p>
+<p><pre><code class="language-php">&lt;?php
+$id    = (int)$_POST[&quot;id&quot;];
+$email = $_POST[&quot;email&quot;];
+
+$sql = &quot;UPDATE users SET email = &#x27;$email&#x27; WHERE id = $id&quot;;
+
+if (!mysqli_query($conn, $sql)) {
+    die(&quot;Update failed: &quot; . mysqli_error($conn));
+}
+echo mysqli_affected_rows($conn) . &quot; row(s) updated&quot;;
+?&gt;
+</code></pre>
+Key marks: <code>SET col = value WHERE key = value</code>, the id cast to <code>(int)</code>, the error branch, and <code>affected_rows</code> reported — because a successful query that changed 0 rows means the id did not match.</p>
+<p><strong>A9 — Prepared statements and why · Q99</strong> <em>(4:L302–304, 4:L683)</em></p>
+<ol>
+<li>A prepared statement sends the SQL <strong>template</strong> with <code>?</code> placeholders to MySQL, which parses and compiles it <em>before</em> any data arrives.</li>
+<li>The values are then bound separately: <code>mysqli_stmt_bind_param($stmt, &quot;ssi&quot;, $name, $email, $age)</code> — one type letter per placeholder.</li>
+<li>Injection is impossible because user input is only ever a <strong>value</strong>; it cannot become SQL syntax.</li>
+<li>Bonus: the compiled statement can be executed repeatedly with new values — faster for bulk work.</li>
+</ol>
+<p><pre><code class="language-php">&lt;?php
+$stmt = mysqli_prepare($conn, &quot;INSERT INTO students (name, marks) VALUES (?, ?)&quot;);
+mysqli_stmt_bind_param($stmt, &quot;si&quot;, $name, $marks);   // s = string, i = int
+mysqli_stmt_execute($stmt);
+mysqli_stmt_close($stmt);
+?&gt;
+</code></pre></p>
+<p><strong>A10 — Retrieve and display MySQL data on a page · also answers Q101, Q104, Q108</strong></p>
+<ol>
+<li>Connect, then build a <code>SELECT</code>.</li>
+<li><code>mysqli_query()</code> returns a <strong>result handle</strong> (not data).</li>
+<li><code>while ($row = mysqli_fetch_assoc($result))</code> pulls one row per iteration and stops at <code>NULL</code>.</li>
+<li><code>echo</code> inside the loop emits the HTML.</li>
+</ol>
+<p><pre><code class="language-php">&lt;?php
+$result = mysqli_query($conn, &quot;SELECT name, marks FROM students&quot;);
+if (!$result) { die(&quot;Query failed: &quot; . mysqli_error($conn)); }
+
+echo &quot;&lt;table border=&#x27;1&#x27;&gt;&lt;tr&gt;&lt;th&gt;Name&lt;/th&gt;&lt;th&gt;Marks&lt;/th&gt;&lt;/tr&gt;&quot;;
+while ($row = mysqli_fetch_assoc($result)) {
+    echo &quot;&lt;tr&gt;&lt;td&gt;&quot; . htmlspecialchars($row[&quot;name&quot;]) . &quot;&lt;/td&gt;&lt;td&gt;&quot; . $row[&quot;marks&quot;] . &quot;&lt;/td&gt;&lt;/tr&gt;&quot;;
+}
+echo &quot;&lt;/table&gt;&quot;;
+?&gt;
+</code></pre></p>
+<p><strong>A11 — PHP's role in dynamic content vs static HTML · also answers Q102, Q122</strong></p>
+<ol>
+<li><strong>Static:</strong> the <code>.html</code> file <em>is</em> the response; every visitor gets identical bytes.</li>
+<li><strong>Dynamic:</strong> the server runs a script per request and sends whatever HTML it produced <em>this</em> time — different user, different time, different rows (4:L705).</li>
+<li>PHP is <strong>server-side</strong>: it can read a database, apply logic, and loop; the browser only ever receives the generated HTML, never the source or the SQL.</li>
+<li>Consequence: the same <code>students.php</code> shows 3 rows or 3000 without a single edit to the file (4:L745).</li>
+</ol>
+<p><strong>A12 — Purpose of <code>$_PHP_SELF</code> · Q103</strong></p>
+<ol>
+<li>There is no <code>$_PHP_SELF</code> variable — the real superglobal is <strong><code>$_SERVER[&#x27;PHP_SELF&#x27;]</code></strong>, the path of the currently running script.</li>
+<li>Used as a form's <code>action</code> so the form submits <strong>to itself</strong>, letting the same file both display and process the form.</li>
+<li>Must be escaped with <code>htmlspecialchars()</code> when echoed into HTML, or a crafted URL can inject script into the <code>action</code> attribute.</li>
+</ol>
+<p><pre><code class="language-php">&lt;form method=&quot;post&quot; action=&quot;&lt;?php echo htmlspecialchars($_SERVER[&#x27;PHP_SELF&#x27;]); ?&gt;&quot;&gt;
+</code></pre></p>
+<p><strong>A13 — Square root program · Q105</strong></p>
+<p><pre><code class="language-php">&lt;?php
+$num = 25;
+if ($num &lt; 0) {
+    echo &quot;Square root of a negative number is not real&quot;;
+} else {
+    echo &quot;Square root of $num is &quot; . sqrt($num);
+}
+?&gt;
+</code></pre>
+Output: <code>Square root of 25 is 5</code>. Two marks for <code>sqrt()</code> + <code>echo</code>, one for the negative-input guard (<code>sqrt(-1)</code> yields <code>NAN</code>).</p>
+<p><strong>A14 — <code>mysql_fetch_array()</code> vs <code>mysql_fetch_assoc()</code> · Q106</strong></p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th><code>mysql_fetch_array()</code></th>
+<th><code>mysql_fetch_assoc()</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Keys</td>
+<td>Numeric <strong>and</strong> associative</td>
+<td>Associative only</td>
+</tr>
+<tr>
+<td>Access</td>
+<td><code>$row[0]</code> <strong>or</strong> <code>$row[&quot;name&quot;]</code></td>
+<td><code>$row[&quot;name&quot;]</code></td>
+</tr>
+<tr>
+<td>Memory</td>
+<td>Larger — each value stored twice</td>
+<td>Smaller</td>
+</tr>
+<tr>
+<td>Readability</td>
+<td>Poor (magic numbers)</td>
+<td>Good (column names)</td>
+</tr>
+<tr>
+<td>Default in modern code</td>
+<td>Rare</td>
+<td><code>mysqli_fetch_assoc()</code> — the standard</td>
+</tr>
+</tbody>
+</table>
+<p>Both return one row at a time and <code>NULL</code> when the rows run out; the bank's <code>mysql_</code> prefix is the deprecated PHP 5 API, the current names are <code>mysqli_fetch_*</code>. <code>mysqli_fetch_row()</code> is the indexed-only sibling.</p>
+<p><strong>A15 — List the databases on the MySQL server · Q107</strong> <em>(standard — no slide)</em></p>
+<p><pre><code class="language-php">&lt;?php
+$conn = mysqli_connect(&quot;localhost&quot;, &quot;root&quot;, &quot;&quot;);
+if (!$conn) { die(&quot;Connection failed: &quot; . mysqli_connect_error()); }
+
+$result = mysqli_query($conn, &quot;SHOW DATABASES&quot;);
+while ($row = mysqli_fetch_row($result)) {
+    echo $row[0] . &quot;&lt;br&gt;&quot;;
+}
+mysqli_close($conn);
+?&gt;
+</code></pre>
+<code>SHOW DATABASES</code> returns one column per database, so <code>mysqli_fetch_row()</code> with <code>$row[0]</code> is the natural fetch. <code>SHOW TABLES</code> and <code>DESCRIBE tablename</code> are the same pattern one level down.</p>
+<p><strong>A16 — CREATE operations on a MySQL table from PHP; purpose of CREATE TABLE · also answers Q109, Q117</strong></p>
+<ol>
+<li><code>CREATE TABLE</code> defines a table's <strong>structure</strong> — column names, data types, keys, constraints. No data can be inserted until the structure exists (4:L433).</li>
+<li>It is a <strong>setup-time</strong> statement: run once, not on every page load (4:L441).</li>
+<li>From PHP it is executed like any other statement — a string through <code>mysqli_query()</code> — and returns only <code>true</code>/<code>false</code>, no rows.</li>
+</ol>
+<p><pre><code class="language-php">&lt;?php
+$sql = &quot;CREATE TABLE students (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(50),
+    marks INT,
+    joined DATE
+)&quot;;
+if (mysqli_query($conn, $sql)) { echo &quot;Table created&quot;; }
+else { echo &quot;Error: &quot; . mysqli_error($conn); }
+?&gt;
+</code></pre></p>
+<p><strong>A17 — What is a cookie, its uses, and syntax with expiry · also answers Q113, Q124</strong></p>
+<ol>
+<li>A cookie is a small name/value pair the server asks the browser to store; the browser replays it on every later request to that domain (4:L39).</li>
+<li><strong>Two uses:</strong> remembering user preferences (theme, language) and "remember me" / non-sensitive tracking between visits (4:L148).</li>
+<li>Syntax: <code>setcookie(&quot;username&quot;, &quot;Anu&quot;, time() + 3600, &quot;/&quot;);</code> — name, value, <strong>expiry as a Unix timestamp</strong>, path. <code>time()+3600</code> = one hour (4:L67).</li>
+<li>It must be called <strong>before any output</strong> (headers), and it is user-visible, so never store secrets (4:L65, 4:L73).</li>
+</ol>
+<p><strong>A18 — Purpose of <code>session_start()</code> · also answers Q115, Q125</strong></p>
+<ol>
+<li>It <strong>starts or resumes</strong> a session: it reads the incoming <code>PHPSESSID</code> cookie, and if there is none, generates a new session ID and sends it to the browser (4:L106).</li>
+<li>It loads the server-side session data into the <code>$_SESSION</code> array, so <code>$_SESSION[...]</code> is usable.</li>
+<li>It must be the <strong>first thing</strong> in the script — before any HTML output and before any <code>$_SESSION</code> access (4:L104).</li>
+<li>Statement: <code>session_start();</code> — that exact line, on every page that touches session data.</li>
+</ol>
+<p><strong>A19 — SQL command to add a record, with syntax · Q118</strong></p>
+<p><code>INSERT INTO table_name (col1, col2, col3) VALUES (val1, val2, val3);</code></p>
+<p><pre><code class="language-sql">INSERT INTO students (name, marks, joined) VALUES (&#x27;Anu&#x27;, 88, &#x27;2026-11-08&#x27;);
+</code></pre>
+Points: strings in single quotes, numbers bare; the column list should always be explicit (4:L472); from PHP the string is passed to <code>mysqli_query()</code> and confirmed with <code>mysqli_insert_id()</code> (4:L476, 4:L489).</p>
+<p><strong>A20 — Purpose of DELETE · Q119</strong></p>
+<ol>
+<li>Permanently <strong>removes rows</strong> matching a <code>WHERE</code> condition: <code>DELETE FROM students WHERE id = 5;</code> (4:L509).</li>
+<li>It is irreversible — there is no undo, hence the <code>WHERE</code> discipline (4:L511).</li>
+<li>It returns no rows, only success/failure; <code>mysqli_affected_rows()</code> reports how many were deleted (4:L513).</li>
+<li>Safe practice: run the same condition as a <code>SELECT</code> first to preview the victims (4:L515).</li>
+</ol>
+<p><strong>A21 — Purpose of SELECT · Q120</strong></p>
+<ol>
+<li><strong>Reads</strong> data — the only statement that returns rows rather than a status (4:L560).</li>
+<li>Shape: <code>SELECT columns FROM table WHERE condition ORDER BY col LIMIT n</code> (4:L562–603).</li>
+<li>In PHP the return value is a <strong>result handle</strong> you iterate with <code>mysqli_fetch_assoc()</code> (4:L355).</li>
+<li>It is how dynamic pages get their content: same query, fresh rows per request (4:L705).</li>
+</ol>
+<p><strong>A22 — SQL command to modify existing records · Q121</strong></p>
+<p><code>UPDATE table_name SET column = value WHERE condition;</code></p>
+<p><pre><code class="language-sql">UPDATE students SET marks = 92 WHERE id = 5;
+</code></pre>
+Points: comma-separate multiple assignments (<code>SET marks = 92, name = &#x27;Anu&#x27;</code>); without <code>WHERE</code> <strong>every row</strong> is updated (4:L638); confirm with <code>mysqli_affected_rows()</code> (4:L640).</p>
+<p><strong>A23 — Purpose of <code>mysqli_query()</code> · Q126</strong></p>
+<ol>
+<li>It sends one SQL statement — SELECT, INSERT, UPDATE, DELETE, CREATE alike — to MySQL over an open connection (4:L320, 4:L847).</li>
+<li>Signature: <code>mysqli_query($conn, $sql)</code>.</li>
+<li>Return value differs by statement: a <strong>result handle</strong> for SELECT/SHOW, <code>true</code>/<code>false</code> for writes (4:L320).</li>
+<li>Always check it; on <code>false</code>, <code>mysqli_error($conn)</code> gives the reason (4:L322–324).</li>
+</ol>
+<p><strong>A24 — Why the WHERE clause is important in UPDATE/DELETE · Q127</strong></p>
+<ol>
+<li><code>WHERE</code> selects <strong>which rows</strong> the statement acts on; it is the only thing standing between one row and the whole table (4:L509, 4:L638).</li>
+<li>Without it, <code>UPDATE</code> overwrites every row and <code>DELETE</code> empties the table — both irreversible in effect (4:L511, 4:L638).</li>
+<li>Test the clause first as <code>SELECT … WHERE …</code>; if it returns the wrong rows, the destructive query would have hit them too (4:L669).</li>
+<li>Even a correct-looking <code>WHERE</code> can match nothing — <code>mysqli_affected_rows()</code> (0) is the proof (4:L687–689).</li>
+</ol>
+<p><strong>A25 — What <code>mysqli_fetch_assoc()</code> is for · Q128</strong></p>
+<ol>
+<li>It fetches the <strong>next row</strong> of a result set as an <strong>associative array</strong> keyed by column name — <code>$row[&quot;name&quot;]</code> (4:L355).</li>
+<li>Each call advances an internal pointer; it returns <strong><code>NULL</code></strong> when no rows remain, which terminates <code>while (...)</code> (4:L357).</li>
+<li>Used as <code>while ($row = mysqli_fetch_assoc($result)) { … }</code> to walk every row of a SELECT (4:L359, 4:L365).</li>
+<li>It works only on a result handle from SELECT-type queries — never on the <code>true</code> returned by INSERT/UPDATE/DELETE.</li>
+</ol>
+<p><strong>A26 — Two sources of dynamic content · Q129</strong></p>
+<ol>
+<li><strong>A database</strong> — rows read with <code>SELECT</code> at request time (the module's main source) (4:L705).</li>
+<li><strong>Server-side/environment data</strong> — the current date and time (<code>date()</code>), form input (<code>$_POST</code>), session/cookie values, or file contents (standard; the "time of day greeting" of Q231 is exactly this).</li>
+<li><em>(Third, for safety)</em> results of computation — totals, filtered lists, formatted numbers.</li>
+</ol>
+<h3 id="32-14-mark-answers-part-b">3.2 14-mark answers (Part B)<a class="anchor" href="#32-14-mark-answers-part-b">#</a></h3>
+<p>Each answer has <strong>Structure</strong> (how to split the marks), <strong>Full answer</strong> (code + the prose you write around it) and <strong>Traps</strong>. ⭐ = highest probability.</p>
+<hr />
+<h4 id="q229-form-app-with-name-email-validation">Q229 — Form app with name + email validation ⭐</h4>
+<p><strong>Structure:</strong> 4 — the HTML form; 6 — validation logic (empty check + regex); 3 — personalised welcome on success; 1 — explanation of the request/response steps.</p>
+<p><strong>Full answer</strong></p>
+<p><pre><code class="language-php">&lt;?php
+$name = $email = &quot;&quot;;
+$errors = array();
+
+if ($_SERVER[&quot;REQUEST_METHOD&quot;] == &quot;POST&quot;) {
+    $name  = trim($_POST[&quot;name&quot;]);
+    $email = trim($_POST[&quot;email&quot;]);
+
+    if (empty($name)) {
+        $errors[] = &quot;Name is required&quot;;
+    }
+    if (empty($email)) {
+        $errors[] = &quot;Email is required&quot;;
+    } elseif (!preg_match(&quot;/^[\w.-]+@[\w.-]+\.[A-Za-z]{2,}$/&quot;, $email)) {
+        $errors[] = &quot;Email format is invalid&quot;;
+    }
+
+    if (count($errors) == 0) {
+        echo &quot;&lt;h2&gt;Welcome, &quot; . htmlspecialchars($name) . &quot;!&lt;/h2&gt;&quot;;
+        echo &quot;&lt;p&gt;Your email &quot; . htmlspecialchars($email) . &quot; has been accepted.&lt;/p&gt;&quot;;
+    } else {
+        foreach ($errors as $e) { echo &quot;&lt;p style=&#x27;color:red&#x27;&gt;$e&lt;/p&gt;&quot;; }
+    }
+}
+?&gt;
+&lt;form method=&quot;post&quot; action=&quot;&lt;?php echo htmlspecialchars($_SERVER[&#x27;PHP_SELF&#x27;]); ?&gt;&quot;&gt;
+    Name:  &lt;input type=&quot;text&quot; name=&quot;name&quot;&gt;&lt;br&gt;
+    Email: &lt;input type=&quot;text&quot; name=&quot;email&quot;&gt;&lt;br&gt;
+    &lt;input type=&quot;submit&quot; value=&quot;Submit&quot;&gt;
+&lt;/form&gt;
+</code></pre></p>
+<p><strong>Explanation you write (2–3 sentences each):</strong> the form posts back to the same script (<code>$_SERVER[&#x27;PHP_SELF&#x27;]</code>); <code>$_SERVER[&quot;REQUEST_METHOD&quot;]</code> distinguishes the first display from the submitted request; <code>trim()</code> removes stray spaces; <code>empty()</code> catches missing fields; <code>preg_match()</code> checks the shape; errors accumulate in an array so all are shown at once; on success <code>htmlspecialchars()</code> neutralises anything HTML-like before echoing. <em>Optional 2-mark extension: insert the record with a prepared statement (§4 D5) instead of only echoing.</em></p>
+<p><strong>Traps:</strong> <code>action=&quot;&quot;</code> self-post works but <code>$_PHP_SELF</code> is the "expected" answer; echoing <code>$name</code> raw loses the XSS mark; <code>if (isset($_POST[&quot;name&quot;]))</code> alone is weaker than checking <code>REQUEST_METHOD</code>.</p>
+<hr />
+<h4 id="q230-importance-of-php-in-modern-web-development-challenges-10-marks">Q230 — Importance of PHP in modern web development + challenges (10 marks)</h4>
+<p><strong>Structure:</strong> 5 — why PHP matters; 3 — how it produces dynamic/interactive content; 2 — challenges.</p>
+<p><strong>Full answer — point form (this is a 10-mark essay, not code)</strong></p>
+<p><em>Importance:</em> free and open-source; runs on virtually every shared host and on the LAMP stack (4:L188); huge ecosystem (WordPress, Laravel, Wikipedia); purpose-built for mixing with HTML and talking to MySQL (4:L194); low learning curve for a server-side language; enormous deployment base means cheap hosting and easy hiring.</p>
+<p><em>How it enables dynamic content:</em> the script runs on the <strong>server</strong> per request, so it can read a database (<code>SELECT</code>), apply business rules, and emit HTML built from live data — the same <code>.php</code> file shows different content per user and per moment (4:L705). Interactivity comes from the form pipeline: <code>$_GET</code>/<code>$_POST</code> in → validate → query → respond. Sessions/cookies add memory across requests (4:L31–51).</p>
+<p><em>Challenges:</em> <strong>SQL injection</strong> if input is concatenated instead of bound (4:L326); <strong>XSS</strong> if output is echoed unescaped; performance — PHP re-runs the whole script per request, so heavy queries need caching; security misconfiguration (credentials in code, 4:L286); maintainability — mixing SQL, logic and HTML in one file, which is why frameworks impose MVC (4:L717); the old <code>mysql_*</code> API confusion vs <code>mysqli</code>/PDO; deployment/version drift between PHP 5/7/8.</p>
+<p><strong>Traps:</strong> the question says 10 marks — do not spend it all on "it is free". Challenges must be named with the defence (<code>prepared statements</code>, <code>htmlspecialchars</code>).</p>
+<hr />
+<h4 id="q231-dynamic-page-datetime-greeting-by-time-of-day">Q231 — Dynamic page: date/time + greeting by time of day ⭐</h4>
+<p><strong>Structure:</strong> 3 — <code>date()</code> and timezone; 4 — hour extraction + if/elseif/else; 3 — formatted date display; 2 — how the page is generated per request; 2 — presentation.</p>
+<p><strong>Full answer</strong></p>
+<p><pre><code class="language-php">&lt;?php
+date_default_timezone_set(&quot;Asia/Kolkata&quot;);
+
+$hour = (int) date(&quot;H&quot;);          // 00–23
+
+if ($hour &lt; 12) {
+    $greeting = &quot;Good morning&quot;;
+} elseif ($hour &lt; 17) {
+    $greeting = &quot;Good afternoon&quot;;
+} elseif ($hour &lt; 21) {
+    $greeting = &quot;Good evening&quot;;
+} else {
+    $greeting = &quot;Good night&quot;;
+}
+?&gt;
+&lt;h1&gt;&lt;?= $greeting ?&gt;, visitor!&lt;/h1&gt;
+&lt;p&gt;Today is &lt;?= date(&quot;l, d F Y&quot;) ?&gt; and the time is &lt;?= date(&quot;h:i:s A&quot;) ?&gt;.&lt;/p&gt;
+</code></pre></p>
+<p><strong>Explanation:</strong> <code>date(&quot;H&quot;)</code> returns the 24-hour hour as a two-digit string, cast to <code>int</code> for numeric comparison; the <code>if/elseif</code> chain maps ranges to greetings. Format characters to name: <code>H</code> 24-hour, <code>h</code> 12-hour, <code>i</code> minutes, <code>s</code> seconds, <code>A</code> AM/PM, <code>l</code> weekday name, <code>d</code> day, <code>F</code> month name, <code>Y</code> four-digit year. Because the script runs on each request, the page shows a different greeting in the morning and the evening without the file changing — that <em>is</em> the definition of dynamic content (4:L705).</p>
+<p><strong>Traps:</strong> forgetting <code>date_default_timezone_set()</code> gives a UTC time that looks wrong; comparing the string <code>&quot;09&quot;</code> with <code>&lt; 12</code> works but <code>(int)</code> is cleaner and examiners like it; <code>date(&quot;h&quot;)</code> is 12-hour and breaks the logic — use <code>H</code>.</p>
+<hr />
+<h4 id="q232-usernamepasswordemail-filled-check-email-format">Q232 — Username/password/email filled check + email format</h4>
+<p><strong>Structure:</strong> 4 — form; 4 — <code>empty()</code> checks on all three; 4 — regex email test; 2 — error display / success message.</p>
+<p><strong>Full answer</strong></p>
+<p><pre><code class="language-php">&lt;?php
+$errors = array();
+
+if ($_SERVER[&quot;REQUEST_METHOD&quot;] == &quot;POST&quot;) {
+    $user  = trim($_POST[&quot;username&quot;]);
+    $pass  = trim($_POST[&quot;password&quot;]);
+    $email = trim($_POST[&quot;email&quot;]);
+
+    if (empty($user))  { $errors[] = &quot;Username cannot be empty&quot;; }
+    if (empty($pass))  { $errors[] = &quot;Password cannot be empty&quot;; }
+    if (empty($email)) { $errors[] = &quot;Email cannot be empty&quot;; }
+    elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        $errors[] = &quot;Email is not in a valid format&quot;;
+    }
+
+    if (empty($errors)) {
+        echo &quot;All fields OK. Welcome &quot; . htmlspecialchars($user);
+    } else {
+        foreach ($errors as $e) { echo &quot;&lt;p&gt;$e&lt;/p&gt;&quot;; }
+    }
+}
+?&gt;
+&lt;form method=&quot;post&quot; action=&quot;&quot;&gt;
+  Username: &lt;input type=&quot;text&quot; name=&quot;username&quot;&gt;&lt;br&gt;
+  Password: &lt;input type=&quot;password&quot; name=&quot;password&quot;&gt;&lt;br&gt;
+  Email:    &lt;input type=&quot;text&quot; name=&quot;email&quot;&gt;&lt;br&gt;
+  &lt;input type=&quot;submit&quot;&gt;
+&lt;/form&gt;
+</code></pre></p>
+<p><strong>Explanation:</strong> three <code>empty()</code> tests answer "has the user filled the textboxes"; the email gets a <em>second</em>, shape-level test. Either <code>filter_var($email, FILTER_VALIDATE_EMAIL)</code> (built-in, returns the email or <code>false</code>) or <code>preg_match(&quot;/^[\w.-]+@[\w.-]+\.[A-Za-z]{2,}$/&quot;, $email)</code> is acceptable — name whichever you use.</p>
+<p><strong>Traps:</strong> <code>empty(&quot;0&quot;)</code> is <code>true</code> in PHP — a password of <code>&quot;0&quot;</code> would be rejected, which is a known quirk worth a footnote; validating the password <em>format</em> is not asked here, only presence.</p>
+<hr />
+<h4 id="q233-file-uploads-6-recursive-factorial-8">Q233 — File uploads (6) + recursive factorial (8)</h4>
+<p><strong>Structure:</strong> 6 — upload: form attributes, <code>$_FILES</code> keys, validation, <code>move_uploaded_file()</code>; 8 — factorial: function, base case, recursive call, output.</p>
+<p><strong>Full answer (a) — upload</strong></p>
+<p><pre><code class="language-php">&lt;?php
+if ($_SERVER[&quot;REQUEST_METHOD&quot;] == &quot;POST&quot; &amp;&amp; isset($_FILES[&quot;myfile&quot;])) {
+    $f = $_FILES[&quot;myfile&quot;];
+
+    if ($f[&quot;error&quot;] != 0) {
+        echo &quot;Upload error code: &quot; . $f[&quot;error&quot;];
+    } elseif ($f[&quot;size&quot;] &gt; 2 * 1024 * 1024) {
+        echo &quot;File too large (max 2 MB)&quot;;
+    } else {
+        $target = &quot;uploads/&quot; . basename($f[&quot;name&quot;]);
+        if (move_uploaded_file($f[&quot;tmp_name&quot;], $target)) {
+            echo &quot;Uploaded to &quot; . htmlspecialchars($target);
+        } else {
+            echo &quot;Could not move the file&quot;;
+        }
+    }
+}
+?&gt;
+&lt;form method=&quot;post&quot; enctype=&quot;multipart/form-data&quot;&gt;
+  &lt;input type=&quot;file&quot; name=&quot;myfile&quot;&gt;
+  &lt;input type=&quot;submit&quot; value=&quot;Upload&quot;&gt;
+&lt;/form&gt;
+</code></pre></p>
+<p>Points to write: <code>enctype=&quot;multipart/form-data&quot;</code> is <strong>mandatory</strong> or <code>$_FILES</code> stays empty; <code>$_FILES[&quot;myfile&quot;]</code> is an array with <code>name</code>, <code>type</code>, <code>tmp_name</code>, <code>size</code>, <code>error</code>; the file lands in a temp directory (<code>tmp_name</code>) and must be moved with <code>move_uploaded_file()</code> or it is deleted at script end; <code>error</code> codes — <code>0</code> OK, <code>1</code> exceeds <code>upload_max_filesize</code>, <code>2</code> exceeds <code>MAX_FILE_SIZE</code>, <code>3</code> partial, <code>4</code> no file chosen; <code>basename()</code> blocks path tricks like <code>../../etc/passwd</code>; validate size and extension before moving (standard).</p>
+<p><strong>Full answer (b) — recursive factorial</strong></p>
+<p><pre><code class="language-php">&lt;?php
+function factorial($n) {
+    if ($n &lt;= 1) {
+        return 1;                 // base case
+    }
+    return $n * factorial($n - 1); // recursive case
+}
+echo &quot;Factorial of 5 is &quot; . factorial(5);   // 120
+?&gt;
+</code></pre></p>
+<p>Trace to write out: <code>factorial(5)</code> → <code>5 * factorial(4)</code> → <code>5*4*factorial(3)</code> → … → <code>5*4*3*2*1 = 120</code>. The <strong>base case</strong> <code>$n &lt;= 1</code> stops the recursion; without it you get infinite recursion and a stack/memory error. Iterative alternative: <code>for ($i = 2, $f = 1; $i &lt;= $n; $i++) $f *= $i;</code>.</p>
+<p><strong>Traps:</strong> forgetting <code>enctype</code> is the single most common lost mark; <code>move_uploaded_file</code> needs the destination directory to exist and be writable; factorial must return (not echo) inside the function.</p>
+<hr />
+<h4 id="q234-connection-step-by-step-10-patients-database-4">Q234 — Connection step by step (10) + patients database (4) ⭐</h4>
+<p><strong>Structure:</strong> 10 — five steps with code and the reason for each; 4 — <code>CREATE DATABASE</code> + <code>CREATE TABLE patients</code> with sensible columns.</p>
+<p><strong>Full answer (a) — the five steps</strong></p>
+<ol>
+<li><strong>Locate the server</strong> — host <code>localhost</code>, MySQL user, password (4:L210).</li>
+<li><strong>Connect</strong> — <code>mysqli_connect(host, user, pass, db)</code> returns a handle or <code>false</code>.</li>
+<li><strong>Verify</strong> — <code>if (!$conn) die(&quot;Connection failed: &quot; . mysqli_connect_error());</code> (4:L224–226).</li>
+<li><strong>Run statements</strong> — <code>mysqli_query($conn, $sql)</code> for every query; check each return value and report <code>mysqli_error($conn)</code> on failure (4:L320–324).</li>
+<li><strong>Close</strong> — <code>mysqli_close($conn)</code> when finished (4:L216).</li>
+</ol>
+<p><pre><code class="language-php">&lt;?php
+$conn = mysqli_connect(&quot;localhost&quot;, &quot;root&quot;, &quot;&quot;, &quot;hospital&quot;);
+if (!$conn) {
+    die(&quot;Connection failed: &quot; . mysqli_connect_error());
+}
+echo &quot;Connected successfully&quot;;
+mysqli_close($conn);
+?&gt;
+</code></pre>
+Say also: credentials belong in a config file, not inline (4:L286); the OO form is <code>new mysqli(...)</code> with <code>$conn-&gt;connect_error</code> (4:L258–263).</p>
+<p><strong>Full answer (b) — patients database</strong></p>
+<p><pre><code class="language-sql">CREATE DATABASE hospital;
+
+USE hospital;
+
+CREATE TABLE patients (
+    pid       INT AUTO_INCREMENT PRIMARY KEY,
+    pname     VARCHAR(50) NOT NULL,
+    age       INT,
+    gender    VARCHAR(10),
+    disease   VARCHAR(100),
+    phone     VARCHAR(15),
+    admitted  DATE
+);
+</code></pre></p>
+<p>From PHP: <code>mysqli_query($conn, &quot;CREATE DATABASE hospital&quot;)</code> <strong>without</strong> a database argument in the connect call, then <code>mysqli_select_db($conn, &quot;hospital&quot;)</code> before creating the table (standard).</p>
+<p><strong>Traps:</strong> creating the table before selecting/creating the database; <code>DECIMAL</code> vs <code>INT</code> for anything monetary; forgetting <code>PRIMARY KEY</code>.</p>
+<h4 id="q235-regex-extract-email-addresses-validate-a-phone-number">Q235 — Regex: extract email addresses + validate a phone number</h4>
+<p><strong>Structure:</strong> 7 — email extraction with <code>preg_match_all()</code> and explanation of the pattern; 7 — phone validation with <code>preg_match()</code> and the pattern table.</p>
+<p><strong>Full answer</strong></p>
+<p><pre><code class="language-php">&lt;?php
+// (a) Extract EVERY email address from a block of text
+$text = &quot;Contact anu@saintgits.org or hod@college.edu.in, not 123@invalid&quot;;
+
+$pattern = &quot;/[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}/&quot;;
+
+if (preg_match_all($pattern, $text, $matches)) {
+    echo &quot;Found &quot; . count($matches[0]) . &quot; email(s):&lt;br&gt;&quot;;
+    foreach ($matches[0] as $email) {
+        echo htmlspecialchars($email) . &quot;&lt;br&gt;&quot;;
+    }
+} else {
+    echo &quot;No email addresses found&quot;;
+}
+?&gt;
+</code></pre></p>
+<p><pre><code class="language-php">&lt;?php
+// (b) Validate a 10-digit phone number
+function isValidPhone($phone) {
+    return (bool) preg_match(&quot;/^[0-9]{10}$/&quot;, $phone);
+}
+
+echo isValidPhone(&quot;9876543210&quot;) ? &quot;Valid&quot; : &quot;Invalid&quot;;   // Valid
+echo isValidPhone(&quot;98765abcde&quot;) ? &quot;Valid&quot; : &quot;Invalid&quot;;   // Invalid
+?&gt;
+</code></pre></p>
+<p><strong>Pattern anatomy to write out</strong> (3:L607): <code>[A-Za-z0-9._%+-]+</code> = local part (one or more allowed characters); <code>@</code> literal; <code>[A-Za-z0-9.-]+</code> = domain labels; <code>\.</code> = the literal dot before the TLD — unescaped <code>.</code> means "any character", so it would match <code>a@b,com</code>; <code>[A-Za-z]{2,}</code> = at least two letters. For the phone: <code>^…$</code> anchors prevent matching inside a longer string, <code>[0-9]{10}</code> (or <code>\d{10}</code>) means exactly ten digits — without the anchors <code>&quot;98765432109&quot;</code> would pass. Indian mobiles often use <code>^[6-9][0-9]{9}$</code> (standard). <code>preg_match_all()</code> returns the <strong>count</strong> and puts all matches in <code>$matches[0]</code>; <code>preg_match()</code> stops at the first.</p>
+<p><strong>Traps:</strong> <code>preg_match</code> returns <code>1</code>/<code>0</code>, not <code>true</code>/<code>false</code> — a strict <code>=== true</code> fails; forgetting delimiters <code>/…/</code> is a fatal pattern error; <code>$matches[1]</code> would be the first <em>group</em>, <code>$matches[0]</code> is the whole match.</p>
+<hr />
+<h4 id="q236-regex-replace-a-substring-extract-urls">Q236 — Regex: replace a substring + extract URLs</h4>
+<p><strong>Structure:</strong> 7 — <code>preg_replace()</code> with a literal and a pattern; 7 — URL extraction with <code>preg_match_all()</code>.</p>
+<p><strong>Full answer</strong></p>
+<p><pre><code class="language-php">&lt;?php
+// (a) Replace a substring — plain and case-insensitive
+$text = &quot;Welcome to the world of PHP. The world is big.&quot;;
+
+$new = preg_replace(&quot;/world/i&quot;, &quot;universe&quot;, $text);
+echo $new;
+// Welcome to the universe of PHP. The universe is big.
+
+// Replace with a back-reference: swap &quot;Anu Thomas&quot; -&gt; &quot;Thomas, Anu&quot;
+$name = &quot;Anu Thomas&quot;;
+echo preg_replace(&quot;/(\w+)\s(\w+)/&quot;, &quot;$2, $1&quot;, $name);   // Thomas, Anu
+?&gt;
+</code></pre></p>
+<p><pre><code class="language-php">&lt;?php
+// (b) Extract all URLs from a string
+$html = &#x27;See https://saintgits.org and http://example.com/page?id=5 for details&#x27;;
+
+$pattern = &quot;#https?://[^\s\&quot;&#x27;&lt;&gt;]+#i&quot;;
+
+if (preg_match_all($pattern, $html, $m)) {
+    foreach ($m[0] as $url) {
+        echo &quot;&lt;a href=&#x27;&quot; . htmlspecialchars($url) . &quot;&#x27;&gt;&quot; . htmlspecialchars($url) . &quot;&lt;/a&gt;&lt;br&gt;&quot;;
+    }
+}
+?&gt;
+</code></pre></p>
+<p><strong>Explanation:</strong> <code>preg_replace($pattern, $replacement, $subject)</code> returns a <strong>new string</strong> — it does not modify the original unless you assign it back. The <code>/i</code> modifier makes matching case-insensitive (<code>WORLD</code> also matches). <code>(\w+)</code> captures a group, referenced in the replacement as <code>$1</code>, <code>$2</code>. For URLs, <code>https?</code> matches http/https, <code>[^\s&quot;&#x27;&lt;&gt;]+</code> means "one or more characters that are not whitespace or quotes or angle brackets", and <code>#…#</code> is an alternative delimiter so the <code>/</code> inside URLs needs no escaping.</p>
+<p><strong>Traps:</strong> forgetting to assign the result (<code>preg_replace(...)</code> alone does nothing visible); <code>$1</code> inside a double-quoted PHP string is interpolated by PHP too — safest form is <code>&quot;\${1}&quot;</code> or use single quotes and concatenate; the URL pattern deliberately stops at quotes so it does not swallow HTML attributes.</p>
+<hr />
+<h4 id="q237-password-validation-phone-validation">Q237 — Password validation + phone validation</h4>
+<p><strong>Structure:</strong> 8 — password policy with a lookahead regex, plus points on hashing; 6 — phone validation.</p>
+<p><strong>Full answer</strong></p>
+<p><pre><code class="language-php">&lt;?php
+function isValidPassword($pass) {
+    // min 8 chars, at least one upper, one lower, one digit, one special
+    $pattern = &quot;/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[\W_]).{8,}$/&quot;;
+    return (bool) preg_match($pattern, $pass);
+}
+
+function isValidPhone($phone) {
+    return (bool) preg_match(&quot;/^[6-9][0-9]{9}$/&quot;, $phone);
+}
+
+$pass  = &quot;Anu@2026&quot;;
+$phone = &quot;9876543210&quot;;
+
+echo isValidPassword($pass)  ? &quot;Password OK&quot;  : &quot;Password too weak&quot;;
+echo &quot;&lt;br&gt;&quot;;
+echo isValidPhone($phone)    ? &quot;Phone OK&quot;     : &quot;Invalid phone&quot;;
+?&gt;
+</code></pre></p>
+<p><strong>How the password pattern works — decode it aloud in the exam:</strong> <code>^…$</code> anchors the whole string; <code>(?=.*[a-z])</code> is a <strong>lookahead</strong> — "somewhere ahead there is a lowercase letter", and it consumes nothing; four lookaheads enforce four classes; <code>.{8,}</code> finally requires at least eight characters of any kind. Because lookaheads do not consume, the <code>.</code> keeps scanning from the same point, which is why all conditions can be checked in one pass.</p>
+<p><strong>What to add for the discussion marks:</strong> a regex validates <em>shape</em>, never <em>safety</em>; the password must be stored with <code>password_hash($pass, PASSWORD_DEFAULT)</code> and checked with <code>password_verify()</code>, never in plain text (standard). Phone: <code>^[6-9][0-9]{9}$</code> enforces a valid Indian mobile prefix; <code>^\+91[0-9]{10}$</code> if the country code is required.</p>
+<p><strong>Traps:</strong> <code>[\W_]</code> (non-word or underscore) is the usual way to express "special character" inside a character class; <code>(?=.*\W)</code> misses <code>_</code>; a pattern without <code>^…$</code> accepts <code>&quot;aaaaA1!x&quot;</code> embedded in a longer junk string.</p>
+<hr />
+<h4 id="q238-cookies-6-associative-array-operations-8">Q238 — Cookies (6) + associative array operations (8)</h4>
+<p><strong>Structure:</strong> 3 — significance of cookies; 3 — create and destroy; 8 — four array statements (2 marks each).</p>
+<p><strong>Full answer (a) — cookies</strong></p>
+<p>Significance: HTTP is stateless, so cookies give the client a memory — preferences, "remember me", tracking, and the session ID itself (4:L39, 4:L841).</p>
+<p><pre><code class="language-php">&lt;?php
+// create — before any output, 1 hour, whole site
+setcookie(&quot;user&quot;, &quot;Anu&quot;, time() + 3600, &quot;/&quot;);
+
+// read
+if (isset($_COOKIE[&quot;user&quot;])) {
+    echo &quot;Hello &quot; . htmlspecialchars($_COOKIE[&quot;user&quot;]);
+}
+
+// destroy — same name, past expiry
+setcookie(&quot;user&quot;, &quot;&quot;, time() - 3600, &quot;/&quot;);
+?&gt;
+</code></pre></p>
+<p><strong>Full answer (b) — the four array statements</strong></p>
+<p><pre><code class="language-php">&lt;?php
+// i) declare
+$marks = array(&quot;Ram&quot; =&gt; 40, &quot;Alice&quot; =&gt; 20, &quot;Raj&quot; =&gt; 45, &quot;Mary&quot; =&gt; 35);
+
+// ii) modify
+$marks[&quot;Ram&quot;] = 50;
+
+// iii) sort and print
+asort($marks);                       // by VALUE, keeps keys
+foreach ($marks as $k =&gt; $v) {
+    echo &quot;$k =&gt; $v &lt;br&gt;&quot;;
+}
+// Alice =&gt; 20, Mary =&gt; 35, Raj =&gt; 45, Ram =&gt; 50
+
+// iv) delete the entry &quot;Raj&quot;
+unset($marks[&quot;Raj&quot;]);
+?&gt;
+</code></pre></p>
+<p><strong>Say which sort and why:</strong> <code>asort()</code> sorts by <strong>value</strong> preserving keys (what a marks table wants); <code>ksort()</code> sorts by <strong>key</strong>; <code>arsort()</code>/<code>krsort()</code> are the descending versions; <code>sort()</code> renumbers and destroys the names, so it is wrong here. <code>unset($marks[&quot;Raj&quot;])</code> removes the key <em>and</em> its value.</p>
+<p><strong>Traps:</strong> <code>sort()</code> on an associative array loses the names — a classic 2-mark loss; <code>asort</code> must be assigned? No — it sorts in place (unlike <code>array_sort</code> in some languages); printing with <code>print_r()</code> is acceptable but the <code>foreach</code> form is what "print the sorted key-value pairs" asks for.</p>
+<hr />
+<h4 id="q239-cookies-createdaccesseddeleted-sessions-startstoreaccessdestroy">Q239 — Cookies created/accessed/deleted + sessions start/store/access/destroy</h4>
+<p><strong>Structure:</strong> 7 — cookies with three snippets and the header rule; 7 — sessions with four calls and the ID explanation.</p>
+<p><strong>Full answer (a) — cookies</strong></p>
+<p><pre><code class="language-php">&lt;?php
+setcookie(&quot;theme&quot;, &quot;dark&quot;, time() + 86400, &quot;/&quot;);     // create: 1 day
+echo $_COOKIE[&quot;theme&quot;];                              // access (next request)
+setcookie(&quot;theme&quot;, &quot;&quot;, time() - 3600, &quot;/&quot;);          // delete
+?&gt;
+</code></pre>
+Three facts: <code>setcookie()</code> before any output (4:L65); <code>$_COOKIE</code> is only populated on the <strong>next</strong> request, not the same one; deletion = same name + past expiry (4:L71).</p>
+<p><strong>Full answer (b) — sessions</strong></p>
+<p><pre><code class="language-php">&lt;?php
+session_start();                       // 1. start / resume  (4:L106)
+
+$_SESSION[&quot;user&quot;]  = &quot;Anu&quot;;            // 2. store           (4:L108)
+$_SESSION[&quot;role&quot;]  = &quot;student&quot;;
+
+echo $_SESSION[&quot;user&quot;];                // 3. access
+
+unset($_SESSION[&quot;role&quot;]);              // 4a. remove one key
+session_unset();                       // 4b. remove all
+session_destroy();                     // 4c. destroy the session (4:L112)
+?&gt;
+</code></pre>
+Explain that the browser holds only <code>PHPSESSID</code>, that <code>session_start()</code> must be repeated on every page, and that <code>session_destroy()</code> alone leaves <code>$_SESSION</code> populated until the request ends — hence <code>session_unset()</code> first.</p>
+<p><strong>Traps:</strong> writing <code>$_SESSION</code> before <code>session_start()</code> silently does nothing; calling <code>session_start()</code> twice raises a notice; <code>unset($_SESSION)</code> is wrong — <code>unset()</code> takes a variable, not the whole superglobal (use <code>session_unset()</code>).</p>
+<hr />
+<h4 id="q240-mysqli-connection-procedure-working-connection-program">Q240 — MySQLi connection procedure + working connection program</h4>
+<p><strong>Structure:</strong> 10 — procedure with error handling explained step by step; 4 — complete program with a success message.</p>
+<p><strong>Full answer (a) — procedure</strong></p>
+<ol>
+<li><strong>Have the four credentials</strong> — host, MySQL user, password, database name (4:L210).</li>
+<li><strong>Call the connector</strong> — procedural <code>mysqli_connect(...)</code> or OO <code>new mysqli(...)</code> (4:L258).</li>
+<li><strong>Test the result</strong> — procedural: <code>if (!$conn)</code> + <code>mysqli_connect_error()</code>; OO: <code>if ($conn-&gt;connect_error)</code> (4:L224, 4:L262).</li>
+<li><strong>Fail loudly</strong> — <code>die()</code>/<code>exit()</code> with the reason, because every later call needs a valid handle (4:L292).</li>
+<li><strong>Guard the body</strong> — wrap queries in <code>try/catch (mysqli_sql_exception $e)</code> in PHP 8, where mysqli throws instead of returning <code>false</code> (standard).</li>
+<li><strong>Close</strong> — <code>mysqli_close($conn)</code> / <code>$conn-&gt;close()</code> (4:L216).</li>
+</ol>
+<p><strong>Full answer (b) — both styles, complete</strong></p>
+<p><pre><code class="language-php">&lt;?php
+// procedural
+$conn = mysqli_connect(&quot;localhost&quot;, &quot;root&quot;, &quot;&quot;, &quot;college_db&quot;);
+
+if (!$conn) {
+    die(&quot;Connection failed: &quot; . mysqli_connect_error());
+}
+echo &quot;Connected successfully to college_db&quot;;
+mysqli_close($conn);
+?&gt;
+</code></pre></p>
+<p><pre><code class="language-php">&lt;?php
+// object-oriented — same job
+$conn = new mysqli(&quot;localhost&quot;, &quot;root&quot;, &quot;&quot;, &quot;college_db&quot;);
+
+if ($conn-&gt;connect_error) {
+    die(&quot;Connection failed: &quot; . $conn-&gt;connect_error);
+}
+echo &quot;Connected successfully to college_db&quot;;
+$conn-&gt;close();
+?&gt;
+</code></pre></p>
+<p>Common failure messages worth quoting: <em>Access denied for user</em> (wrong user/password), <em>Unknown database</em> (name typo or not created), <em>Connection refused</em> (MySQL not running / wrong host).</p>
+<p><strong>Traps:</strong> mixing styles (<code>$conn-&gt;query()</code> on a procedural handle is fine, but <code>mysqli_query($conn,…)</code> after <code>new mysqli</code> also works — do not <em>claim</em> they are different objects); suppressing errors with <code>@</code> loses marks.</p>
+<hr />
+<h4 id="q241-createinsertdelete-from-php-student-table-program">Q241 — CREATE/INSERT/DELETE from PHP + student table program ⭐</h4>
+<p><strong>Structure:</strong> 9 — three operations with SQL and PHP each; 5 — program that creates the table and inserts one row.</p>
+<p><strong>Full answer (a) — the three operations</strong></p>
+<p><pre><code class="language-text">CREATE  CREATE TABLE students (id INT AUTO_INCREMENT PRIMARY KEY,
+                               name VARCHAR(50), marks INT);
+        -&gt; writes structure, returns true/false, run once        (4:L435)
+
+INSERT  INSERT INTO students (name, marks) VALUES (&#x27;Anu&#x27;, 88);
+        -&gt; adds one row, true/false, mysqli_insert_id() gives id (4:L472)
+
+DELETE  DELETE FROM students WHERE id = 5;
+        -&gt; removes matching rows, affected_rows reports count    (4:L509)
+</code></pre>
+The deck's one-line summary worth quoting: all three are <strong>write</strong> operations — they return no readable data, only success/failure and an affected-row count (4:L546).</p>
+<p><strong>Full answer (b) — program</strong></p>
+<p><pre><code class="language-php">&lt;?php
+$conn = mysqli_connect(&quot;localhost&quot;, &quot;root&quot;, &quot;&quot;, &quot;college_db&quot;);
+if (!$conn) { die(&quot;Connection failed: &quot; . mysqli_connect_error()); }
+
+$sql = &quot;CREATE TABLE IF NOT EXISTS students (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(50),
+    marks INT
+)&quot;;
+if (!mysqli_query($conn, $sql)) {
+    die(&quot;Create failed: &quot; . mysqli_error($conn));
+}
+echo &quot;Table ready.&lt;br&gt;&quot;;
+
+$sql = &quot;INSERT INTO students (name, marks) VALUES (&#x27;Anu&#x27;, 88)&quot;;
+if (mysqli_query($conn, $sql)) {
+    echo &quot;Inserted with id &quot; . mysqli_insert_id($conn);
+} else {
+    echo &quot;Insert failed: &quot; . mysqli_error($conn);
+}
+mysqli_close($conn);
+?&gt;
+</code></pre></p>
+<p><strong>Traps:</strong> running <code>CREATE TABLE</code> twice without <code>IF NOT EXISTS</code> errors on the second run; forgetting quotes around <code>&#x27;Anu&#x27;</code>; using <code>mysqli_num_rows()</code> on an INSERT (returns nothing useful — it is <code>affected_rows</code>).</p>
+<hr />
+<h4 id="q242-prepared-insertdelete-delete-by-register-number">Q242 — Prepared INSERT/DELETE + delete by register number</h4>
+<p><strong>Structure:</strong> 8 — why and how prepared statements work (<code>prepare</code>/<code>bind_param</code>/<code>execute</code>, type string); 6 — the delete-by-regno program.</p>
+<p><strong>Full answer (a) — how it works</strong></p>
+<p><pre><code class="language-php">&lt;?php
+// step 1: prepare the template once
+$stmt = mysqli_prepare($conn, &quot;INSERT INTO students (name, marks) VALUES (?, ?)&quot;);
+// step 2: bind values — &quot;si&quot; = string, integer, in placeholder order
+mysqli_stmt_bind_param($stmt, &quot;si&quot;, $name, $marks);
+// step 3: execute
+mysqli_stmt_execute($stmt);
+echo &quot;Inserted id: &quot; . mysqli_insert_id($conn);
+mysqli_stmt_close($stmt);
+?&gt;
+</code></pre>
+Why it is safe: the SQL is parsed and compiled <strong>before</strong> the values arrive (4:L683), so a value can never become syntax. <code>bind_param</code> passes variables <strong>by reference</strong>, which is why you pass <code>$name</code>, not <code>&#x27;Anu&#x27;</code>; the first argument has one letter per <code>?</code> (<code>s</code> string, <code>i</code> int, <code>d</code> double, <code>b</code> blob).</p>
+<p><strong>Full answer (b) — delete by register number, prepared</strong></p>
+<p><pre><code class="language-php">&lt;?php
+$conn = mysqli_connect(&quot;localhost&quot;, &quot;root&quot;, &quot;&quot;, &quot;college_db&quot;);
+if (!$conn) { die(&quot;Connection failed: &quot; . mysqli_connect_error()); }
+
+$regno = $_POST[&quot;regno&quot;];
+
+$stmt = mysqli_prepare($conn, &quot;DELETE FROM students WHERE regno = ?&quot;);
+mysqli_stmt_bind_param($stmt, &quot;s&quot;, $regno);
+mysqli_stmt_execute($stmt);
+
+if (mysqli_stmt_affected_rows($stmt) &gt; 0) {
+    echo mysqli_stmt_affected_rows($stmt) . &quot; record deleted&quot;;
+} else {
+    echo &quot;No student with register number &quot; . htmlspecialchars($regno);
+}
+mysqli_stmt_close($stmt);
+mysqli_close($conn);
+?&gt;
+</code></pre></p>
+<p><strong>Traps:</strong> <code>mysqli_stmt_affected_rows($stmt)</code> takes the <strong>statement</strong>, <code>mysqli_affected_rows($conn)</code> takes the <strong>connection</strong> — mixing them is the most common error; forgetting to check <code>affected_rows</code> loses the "no such student" mark.</p>
+<h4 id="q243-select-multi-row-retrieval-all-students-in-an-html-table">Q243 — SELECT multi-row retrieval → all students in an HTML table ⭐</h4>
+<p><strong>Structure:</strong> 6 — what SELECT returns and the fetch-loop steps; 8 — the program with table markup.</p>
+<p><strong>Full answer (a) — the steps</strong></p>
+<ol>
+<li>Build the query string (<code>SELECT regno, name, marks FROM students</code>).</li>
+<li><code>mysqli_query()</code> → returns a <strong>result handle</strong>, not data (4:L320).</li>
+<li>Check it — on <code>false</code>, <code>mysqli_error()</code>.</li>
+<li>Loop <code>while ($row = mysqli_fetch_assoc($result))</code> — one row per iteration, <code>NULL</code> ends it (4:L365).</li>
+<li>Echo one <code>&lt;tr&gt;</code> per iteration; <code>mysqli_num_rows()</code> for the count (4:L361).</li>
+</ol>
+<p><strong>Full answer (b) — program</strong></p>
+<p><pre><code class="language-php">&lt;?php
+$conn = mysqli_connect(&quot;localhost&quot;, &quot;root&quot;, &quot;&quot;, &quot;college_db&quot;);
+if (!$conn) { die(&quot;Connection failed: &quot; . mysqli_connect_error()); }
+
+$result = mysqli_query($conn, &quot;SELECT regno, name, marks FROM students&quot;);
+if (!$result) { die(&quot;Query failed: &quot; . mysqli_error($conn)); }
+
+echo &quot;&lt;table border=&#x27;1&#x27; cellpadding=&#x27;6&#x27;&gt;&quot;;
+echo &quot;&lt;tr&gt;&lt;th&gt;Reg No&lt;/th&gt;&lt;th&gt;Name&lt;/th&gt;&lt;th&gt;Marks&lt;/th&gt;&lt;/tr&gt;&quot;;
+
+while ($row = mysqli_fetch_assoc($result)) {
+    echo &quot;&lt;tr&gt;&quot;;
+    echo &quot;&lt;td&gt;&quot; . htmlspecialchars($row[&quot;regno&quot;]) . &quot;&lt;/td&gt;&quot;;
+    echo &quot;&lt;td&gt;&quot; . htmlspecialchars($row[&quot;name&quot;])  . &quot;&lt;/td&gt;&quot;;
+    echo &quot;&lt;td&gt;&quot; . $row[&quot;marks&quot;] . &quot;&lt;/td&gt;&quot;;
+    echo &quot;&lt;/tr&gt;&quot;;
+}
+echo &quot;&lt;/table&gt;&quot;;
+
+echo &quot;&lt;p&gt;Total students: &quot; . mysqli_num_rows($result) . &quot;&lt;/p&gt;&quot;;
+mysqli_free_result($result);
+mysqli_close($conn);
+?&gt;
+</code></pre></p>
+<p><em>(Alternative-syntax version with <code>while (...):</code> … <code>endwhile;</code> and <code>&lt;?= ?&gt;</code> — see §2.19; either earns full marks.)</em></p>
+<p><strong>Traps:</strong> calling <code>mysqli_num_rows()</code> <em>after</em> the loop still works (the pointer moved, the count did not); fetching inside the <code>&lt;table&gt;</code> before printing <code>&lt;tr&gt;&lt;th&gt;</code> gives a headerless table; forgetting to close the <code>&lt;/table&gt;</code>.</p>
+<hr />
+<h4 id="q244-update-syntaxprecautions-update-email-by-register-number">Q244 — UPDATE syntax/precautions + update email by register number ⭐</h4>
+<p><strong>Structure:</strong> 7 — syntax, multi-column SET, the WHERE rule, <code>affected_rows</code>, precautions; 7 — the program.</p>
+<p><strong>Full answer (a) — syntax and precautions</strong></p>
+<p><pre><code class="language-sql">UPDATE students SET email = &#x27;new@saintgits.org&#x27; WHERE regno = &#x27;20CST461&#x27;;
+</code></pre>
+Precautions to list: (1) <strong>never run UPDATE without WHERE</strong> — every row changes (4:L638); (2) run the same <code>WHERE</code> as a <code>SELECT</code> first to see the target rows (4:L669); (3) cast numeric input <code>(int)</code> and prefer prepared statements for strings (4:L675–683); (4) check <code>mysqli_affected_rows()</code> — 0 means nothing matched, not that it worked (4:L687); (5) validate the new value (email format) before writing; (6) back up / use a transaction for bulk updates (standard).</p>
+<p><strong>Full answer (b) — program</strong></p>
+<p><pre><code class="language-php">&lt;?php
+$conn = mysqli_connect(&quot;localhost&quot;, &quot;root&quot;, &quot;&quot;, &quot;college_db&quot;);
+if (!$conn) { die(&quot;Connection failed: &quot; . mysqli_connect_error()); }
+
+$regno = $_POST[&quot;regno&quot;];
+$email = $_POST[&quot;email&quot;];
+
+if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+    die(&quot;Invalid email format&quot;);
+}
+
+$stmt = mysqli_prepare($conn, &quot;UPDATE students SET email = ? WHERE regno = ?&quot;);
+mysqli_stmt_bind_param($stmt, &quot;ss&quot;, $email, $regno);
+mysqli_stmt_execute($stmt);
+
+$n = mysqli_stmt_affected_rows($stmt);
+if ($n &gt; 0) {
+    echo &quot;$n record updated for &quot; . htmlspecialchars($regno);
+} else {
+    echo &quot;No change — check the register number&quot;;
+}
+mysqli_stmt_close($stmt);
+mysqli_close($conn);
+?&gt;
+</code></pre></p>
+<p><strong>Traps:</strong> two <code>&quot;s&quot;</code> letters because both are strings; binding order must match placeholder order (email first, regno second) — swap them and the email lands in the regno column.</p>
+<hr />
+<h4 id="q245-architecture-of-a-dynamic-php-app-products-into-an-html-list">Q245 — Architecture of a dynamic PHP app + products into an HTML list</h4>
+<p><strong>Structure:</strong> 7 — the layers and the request flow; 7 — the product-listing program.</p>
+<p><strong>Full answer (a) — architecture</strong></p>
+<p><pre><code class="language-text">Browser  --HTTP request--&gt;  Apache/IIS  --&gt;  PHP engine
+                                             |  (1) connect  mysqli_connect
+                                             |  (2) query    mysqli_query
+                                             |  (3) fetch    fetch_assoc loop
+                                             |  (4) render   echo HTML
+                                        MySQL  &lt;-- SQL --&gt;  tables on disk
+Browser  &lt;--plain HTML------  PHP output
+</code></pre>
+Layers to name: <strong>presentation</strong> (HTML/CSS produced by echo), <strong>business logic</strong> (validation, calculations), <strong>data access</strong> (connection + SQL) — the deck's "separating concerns" (4:L717), the informal precursor of MVC. State is carried by cookies/sessions between the stateless requests (4:L31–51).</p>
+<p><strong>Full answer (b) — products as an HTML list</strong></p>
+<p><pre><code class="language-php">&lt;?php
+$conn = mysqli_connect(&quot;localhost&quot;, &quot;root&quot;, &quot;&quot;, &quot;shop_db&quot;);
+if (!$conn) { die(&quot;Connection failed: &quot; . mysqli_connect_error()); }
+
+$result = mysqli_query($conn, &quot;SELECT pname, price FROM products ORDER BY price ASC&quot;);
+if (!$result) { die(&quot;Query failed: &quot; . mysqli_error($conn)); }
+
+echo &quot;&lt;h2&gt;Product Catalogue&lt;/h2&gt;&lt;ul&gt;&quot;;
+while ($row = mysqli_fetch_assoc($result)) {
+    echo &quot;&lt;li&gt;&quot; . htmlspecialchars($row[&quot;pname&quot;])
+       . &quot; — Rs. &quot; . number_format($row[&quot;price&quot;], 2) . &quot;&lt;/li&gt;&quot;;
+}
+echo &quot;&lt;/ul&gt;&quot;;
+mysqli_close($conn);
+?&gt;
+</code></pre></p>
+<p><strong>Why <code>&lt;ul&gt;</code> and not a table:</strong> the container is irrelevant to the pattern — <em>one HTML fragment per row inside the loop</em> is the whole idea (4:L737). <code>number_format()</code> is presentational logic, correctly kept in the render step.</p>
+<p><strong>Traps:</strong> the "architecture" half is where marks are lost — draw the boxes, label the four PHP steps, mention MySQL on disk.</p>
+<hr />
+<h4 id="q246-session-lifecycle-session-id-store-name-login-time">Q246 — Session lifecycle + session ID + store name &amp; login time</h4>
+<p><strong>Structure:</strong> 6 — lifecycle stages; 4 — role of the session ID; 4 — the two-page program.</p>
+<p><strong>Full answer (a) — lifecycle</strong></p>
+<ol>
+<li><strong>Create</strong> — <code>session_start()</code> on the first page; no ID cookie exists, so PHP generates a random ID (e.g. <code>7f3c…</code>) and sends <code>Set-Cookie: PHPSESSID=7f3c…</code> (4:L106).</li>
+<li><strong>Store</strong> — <code>$_SESSION[&quot;name&quot;] = &quot;Anu&quot;</code> writes into a server-side file named after that ID (4:L108).</li>
+<li><strong>Resume</strong> — every later request replays the cookie; <code>session_start()</code> reads it and reloads the file into <code>$_SESSION</code> (4:L110).</li>
+<li><strong>Expire/end</strong> — browser close (default), a server timeout, or explicit <code>session_unset()</code> + <code>session_destroy()</code> (4:L112, 4:L156).</li>
+</ol>
+<p><strong>The ID's role:</strong> it is the <em>only</em> link between the browser and the server-side data. It carries no information itself — no username, no role — just a lookup key. Anyone who steals it inherits the session, which is why it must be random, sent over HTTPS, and regenerated at login (<code>session_regenerate_id(true)</code>, standard).</p>
+<p><strong>Full answer (b) — two pages</strong></p>
+<p><em>login.php</em></p>
+<p><pre><code class="language-php">&lt;?php
+session_start();
+$_SESSION[&quot;username&quot;]  = &quot;Anu&quot;;
+$_SESSION[&quot;login_time&quot;] = date(&quot;d-m-Y h:i:s A&quot;);
+echo &quot;Stored. &lt;a href=&#x27;welcome.php&#x27;&gt;Go to welcome page&lt;/a&gt;&quot;;
+?&gt;
+</code></pre></p>
+<p><em>welcome.php</em></p>
+<p><pre><code class="language-php">&lt;?php
+session_start();
+if (!isset($_SESSION[&quot;username&quot;])) {
+    die(&quot;Please log in first&quot;);
+}
+echo &quot;Welcome &quot; . htmlspecialchars($_SESSION[&quot;username&quot;]) . &quot;&lt;br&gt;&quot;;
+echo &quot;You logged in at &quot; . $_SESSION[&quot;login_time&quot;];
+?&gt;
+</code></pre></p>
+<p><strong>Traps:</strong> missing <code>session_start()</code> on page 2 (the classic zero); no <code>isset</code> guard (an undefined-index warning); forgetting that <code>date()</code> must be evaluated <strong>when storing</strong>, not when displaying.</p>
+<hr />
+<h4 id="q247-cookies-vs-sessions-on-storagelifetimesecurityapplications-recommendation">Q247 — Cookies vs sessions on storage/lifetime/security/applications + recommendation</h4>
+<p><strong>Structure:</strong> 8 — the four-axis comparison table; 6 — the recommendation with justification.</p>
+<p><strong>Full answer (a) — comparison</strong> (4:L136–160)</p>
+<table>
+<thead>
+<tr>
+<th>Axis</th>
+<th>Cookie</th>
+<th>Session</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Storage location</strong></td>
+<td>Client — browser's cookie store, sent with every matching request (4:L140)</td>
+<td>Server — file/DB keyed by session ID; browser holds only the ID (4:L152)</td>
+</tr>
+<tr>
+<td><strong>Lifetime</strong></td>
+<td>Set explicitly by expiry — survives browser restarts (4:L146)</td>
+<td>Until browser closes, or a server-side timeout/idle limit (4:L156)</td>
+</tr>
+<tr>
+<td><strong>Security</strong></td>
+<td>Plain text on the user's machine: readable, editable, forgeable; ~4 KB cap; must never hold secrets (4:L144, L142)</td>
+<td>Data never leaves the server; only a random ID travels; still needs HTTPS to stop ID theft (4:L154)</td>
+</tr>
+<tr>
+<td><strong>Typical applications</strong></td>
+<td>Preferences (theme, language), "remember me" token, non-sensitive tracking (4:L148)</td>
+<td>Login state, shopping cart, multi-step forms, flash messages (4:L160)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Full answer (b) — recommendation</strong></p>
+<p><strong>Sessions, for the logged-in state.</strong> Justification: the login state is a security decision, so it must not be client-editable — a cookie saying <code>loggedin=1</code> can be forged in seconds, while a session ID cannot be invented and the data it points to stays on the server. Sessions also hold the whole user record (id, role, name) rather than a 4 KB-limited string, and they die when the browser closes, which is the behaviour users expect from a login. <strong>Use a cookie only for the non-sensitive half</strong> — a "remember me" token that is a long random value checked against the database, never the identity itself.</p>
+<p><strong>Traps:</strong> "sessions are more secure" is only half a sentence — add <em>because the data is not client-side</em>; a good answer notes that sessions still rely on a cookie (the ID), so the mechanisms are layered, not alternatives.</p>
+<h4 id="q248-complete-sql-workflow-from-php-insert-reporting-success">Q248 — Complete SQL workflow from PHP + INSERT reporting success</h4>
+<p><strong>Structure:</strong> 7 — the workflow, step by step; 7 — the INSERT program with a success/failure report.</p>
+<p><strong>Full answer (a) — the workflow</strong> (this is the deck's five-step cycle, 4:L405–419)</p>
+<ol>
+<li><code>mysqli_connect(...)</code> → handle, else <code>die()</code>.</li>
+<li>Build the SQL <strong>string</strong> (<code>INSERT INTO …</code>, quotes around strings).</li>
+<li><code>mysqli_query($conn, $sql)</code> → for writes, <code>true</code>/<code>false</code>.</li>
+<li>Branch: on <code>true</code> report success (+ <code>mysqli_insert_id()</code>), on <code>false</code> report <code>mysqli_error($conn)</code>.</li>
+<li><code>mysqli_close($conn)</code>.</li>
+</ol>
+<p><strong>Full answer (b) — program</strong></p>
+<p><pre><code class="language-php">&lt;?php
+$conn = mysqli_connect(&quot;localhost&quot;, &quot;root&quot;, &quot;&quot;, &quot;college_db&quot;);
+if (!$conn) { die(&quot;Connection failed: &quot; . mysqli_connect_error()); }
+
+$name  = trim($_POST[&quot;name&quot;]);
+$marks = (int)$_POST[&quot;marks&quot;];
+
+if ($name == &quot;&quot;) {
+    die(&quot;Name is required&quot;);
+}
+
+$stmt = mysqli_prepare($conn, &quot;INSERT INTO students (name, marks) VALUES (?, ?)&quot;);
+mysqli_stmt_bind_param($stmt, &quot;si&quot;, $name, $marks);
+
+if (mysqli_stmt_execute($stmt)) {
+    echo &quot;Success: record inserted with id &quot; . mysqli_insert_id($conn);
+} else {
+    echo &quot;Failure: &quot; . mysqli_error($conn);
+}
+mysqli_stmt_close($stmt);
+mysqli_close($conn);
+?&gt;
+</code></pre></p>
+<p><strong>Say out loud:</strong> <code>mysqli_query()</code>/<code>execute()</code> returning true proves the <em>statement ran</em>, not that the data was sensible — validation happens before the query, and <code>insert_id</code>/<code>affected_rows</code> after it.</p>
+<p><strong>Traps:</strong> reporting success without checking the return value (the "always prints Success" bug); using <code>mysqli_error($conn)</code> after a <em>prepared</em> statement also works, but <code>mysqli_stmt_error($stmt)</code> is the precise form.</p>
+<hr />
+<h4 id="q249-create-table-column-types-constraints-employee-table">Q249 — CREATE TABLE, column types &amp; constraints + employee table</h4>
+<p><strong>Structure:</strong> 7 — types and constraints explained; 7 — the employee table SQL executed from PHP.</p>
+<p><strong>Full answer (a) — types and constraints</strong></p>
+<table>
+<thead>
+<tr>
+<th>Category</th>
+<th>Choice</th>
+<th>Why</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Whole numbers</td>
+<td><code>INT</code></td>
+<td>ids, age, counts</td>
+</tr>
+<tr>
+<td>Short text</td>
+<td><code>VARCHAR(n)</code></td>
+<td>name, department — n is the max length</td>
+</tr>
+<tr>
+<td>Long text</td>
+<td><code>TEXT</code></td>
+<td>remarks, descriptions</td>
+</tr>
+<tr>
+<td>Dates</td>
+<td><code>DATE</code> / <code>DATETIME</code></td>
+<td>admission, joined</td>
+</tr>
+<tr>
+<td>Money</td>
+<td><code>DECIMAL(10,2)</code></td>
+<td>exact — <code>FLOAT</code> rounds and loses paise</td>
+</tr>
+<tr>
+<td>Constraint <code>PRIMARY KEY</code></td>
+<td>unique row identity</td>
+<td>needed for <code>WHERE id = …</code> (4:L437)</td>
+</tr>
+<tr>
+<td><code>AUTO_INCREMENT</code></td>
+<td>MySQL assigns 1,2,3…</td>
+<td>no manual id collisions</td>
+</tr>
+<tr>
+<td><code>NOT NULL</code></td>
+<td>column must have a value</td>
+<td>blocks empty critical fields</td>
+</tr>
+<tr>
+<td><code>UNIQUE</code></td>
+<td>no duplicates</td>
+<td>email, register number</td>
+</tr>
+<tr>
+<td><code>DEFAULT</code></td>
+<td>fallback value</td>
+<td><code>DEFAULT &#x27;General&#x27;</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Full answer (b) — employee table from PHP</strong></p>
+<p><pre><code class="language-php">&lt;?php
+$sql = &quot;CREATE TABLE employees (
+    emp_id     INT AUTO_INCREMENT PRIMARY KEY,
+    name       VARCHAR(50) NOT NULL,
+    department VARCHAR(30) DEFAULT &#x27;General&#x27;,
+    salary     DECIMAL(10,2) NOT NULL
+)&quot;;
+
+if (mysqli_query($conn, $sql)) {
+    echo &quot;employees table created&quot;;
+} else {
+    echo &quot;Error: &quot; . mysqli_error($conn);
+}
+?&gt;
+</code></pre></p>
+<p><strong>Traps:</strong> <code>VARCHAR</code> with no length is a syntax error; storing salary as <code>INT</code> loses the decimal part; <code>PRIMARY KEY</code> and <code>AUTO_INCREMENT</code> on the same column is the normal pattern, not two separate keys.</p>
+<hr />
+<h4 id="q250-careful-delete-prepared-delete-by-department">Q250 — Careful DELETE + prepared delete by department</h4>
+<p><strong>Structure:</strong> 6 — why DELETE is dangerous and the precautions; 8 — the prepared-statement program.</p>
+<p><strong>Full answer (a) — precautions</strong></p>
+<ol>
+<li><code>WHERE</code> is mandatory in intent — without it the table is emptied (4:L511).</li>
+<li><strong>Preview</strong>: run <code>SELECT * FROM employees WHERE department = ?</code> with the same condition first (4:L515, L669).</li>
+<li>Prefer a <strong>prepared statement</strong> so the department value cannot inject (4:L683).</li>
+<li>Check <code>affected_rows</code> — delete count must match what the preview showed (4:L687).</li>
+<li>Prefer a <strong>soft delete</strong> (<code>UPDATE … SET deleted = 1</code>) where recovery matters, and take a backup before bulk deletes (standard).</li>
+<li>Use a transaction (<code>START TRANSACTION</code> / <code>ROLLBACK</code>) when deleting across tables (standard).</li>
+</ol>
+<p><strong>Full answer (b) — program</strong></p>
+<p><pre><code class="language-php">&lt;?php
+$conn = mysqli_connect(&quot;localhost&quot;, &quot;root&quot;, &quot;&quot;, &quot;company_db&quot;);
+if (!$conn) { die(&quot;Connection failed: &quot; . mysqli_connect_error()); }
+
+$dept = $_POST[&quot;department&quot;];
+
+// 1. preview
+$stmt = mysqli_prepare($conn, &quot;SELECT COUNT(*) AS c FROM employees WHERE department = ?&quot;);
+mysqli_stmt_bind_param($stmt, &quot;s&quot;, $dept);
+mysqli_stmt_execute($stmt);
+$row = mysqli_fetch_assoc(mysqli_stmt_get_result($stmt));
+echo &quot;About to delete &quot; . $row[&quot;c&quot;] . &quot; record(s) from &quot; . htmlspecialchars($dept) . &quot;&lt;br&gt;&quot;;
+mysqli_stmt_close($stmt);
+
+// 2. delete
+$stmt = mysqli_prepare($conn, &quot;DELETE FROM employees WHERE department = ?&quot;);
+mysqli_stmt_bind_param($stmt, &quot;s&quot;, $dept);
+mysqli_stmt_execute($stmt);
+
+echo mysqli_stmt_affected_rows($stmt) . &quot; record(s) deleted&quot;;
+mysqli_stmt_close($stmt);
+mysqli_close($conn);
+?&gt;
+</code></pre></p>
+<p><strong>Traps:</strong> the question wants the <em>prepared</em> form, not a concatenated <code>WHERE department = &#x27;$dept&#x27;</code>; <code>mysqli_stmt_get_result()</code> is needed before <code>fetch_assoc()</code> on a prepared SELECT.</p>
+<hr />
+<h4 id="q251-select-result-processing-students-with-marks-50">Q251 — SELECT result processing + students with marks &gt; 50</h4>
+<p><strong>Structure:</strong> 6 — how a result set is processed (handle → pointer → loop → free); 8 — the filtered program.</p>
+<p><strong>Full answer (a) — processing steps</strong></p>
+<p><code>mysqli_query()</code> returns a <code>mysqli_result</code> handle holding the whole set server-side with an internal pointer (4:L353). <code>mysqli_fetch_assoc()</code> returns the current row and advances the pointer; at the end it returns <code>NULL</code>, ending the <code>while</code> (4:L357). <code>mysqli_num_rows()</code> reports the count without fetching (4:L361). <code>mysqli_free_result()</code> releases memory when done.</p>
+<p><strong>Full answer (b) — program</strong></p>
+<p><pre><code class="language-php">&lt;?php
+$conn = mysqli_connect(&quot;localhost&quot;, &quot;root&quot;, &quot;&quot;, &quot;college_db&quot;);
+if (!$conn) { die(&quot;Connection failed: &quot; . mysqli_connect_error()); }
+
+$sql = &quot;SELECT regno, name, marks FROM students WHERE marks &gt; 50 ORDER BY marks DESC&quot;;
+$result = mysqli_query($conn, $sql);
+if (!$result) { die(&quot;Query failed: &quot; . mysqli_error($conn)); }
+
+if (mysqli_num_rows($result) == 0) {
+    echo &quot;No student scored above 50&quot;;
+} else {
+    echo &quot;&lt;table border=&#x27;1&#x27;&gt;&lt;tr&gt;&lt;th&gt;Reg No&lt;/th&gt;&lt;th&gt;Name&lt;/th&gt;&lt;th&gt;Marks&lt;/th&gt;&lt;/tr&gt;&quot;;
+    while ($row = mysqli_fetch_assoc($result)) {
+        echo &quot;&lt;tr&gt;&lt;td&gt;&quot; . htmlspecialchars($row[&quot;regno&quot;]) . &quot;&lt;/td&gt;&quot;;
+        echo &quot;&lt;td&gt;&quot; . htmlspecialchars($row[&quot;name&quot;]) . &quot;&lt;/td&gt;&quot;;
+        echo &quot;&lt;td&gt;&quot; . $row[&quot;marks&quot;] . &quot;&lt;/td&gt;&lt;/tr&gt;&quot;;
+    }
+    echo &quot;&lt;/table&gt;&quot;;
+}
+mysqli_free_result($result);
+mysqli_close($conn);
+?&gt;
+</code></pre></p>
+<p><strong>Traps:</strong> <code>&gt;</code> vs <code>&gt;=</code> — the question says <em>greater than</em> 50; the empty-result branch is worth a mark and is usually forgotten.</p>
+<hr />
+<h4 id="q252-update-role-of-affected_rows-10-raise-by-department">Q252 — UPDATE + role of affected_rows + 10% raise by department</h4>
+<p><strong>Structure:</strong> 6 — UPDATE mechanics and <code>affected_rows</code>; 8 — the raise program.</p>
+<p><strong>Full answer (a) — explanation</strong></p>
+<p><code>UPDATE table SET col = value WHERE condition</code> rewrites matching rows (4:L634). <code>mysqli_affected_rows($conn)</code> returns how many rows the last write <strong>actually changed</strong> (4:L640, L513) — the difference between "the query ran" and "the data changed". It is <code>0</code> when the WHERE matched nothing, and also <code>0</code> when the new value equals the old one, because MySQL counts changed rows, not matched rows (standard). That is why you compare it against a <code>SELECT COUNT(*)</code> when the distinction matters.</p>
+<p><strong>Full answer (b) — program</strong></p>
+<p><pre><code class="language-php">&lt;?php
+$conn = mysqli_connect(&quot;localhost&quot;, &quot;root&quot;, &quot;&quot;, &quot;company_db&quot;);
+if (!$conn) { die(&quot;Connection failed: &quot; . mysqli_connect_error()); }
+
+$dept = $_POST[&quot;department&quot;];
+
+$stmt = mysqli_prepare($conn,
+    &quot;UPDATE employees SET salary = salary * 1.10 WHERE department = ?&quot;);
+mysqli_stmt_bind_param($stmt, &quot;s&quot;, $dept);
+mysqli_stmt_execute($stmt);
+
+$n = mysqli_stmt_affected_rows($stmt);
+if ($n &gt; 0) {
+    echo &quot;$n employee(s) in &quot; . htmlspecialchars($dept) . &quot; received a 10% raise&quot;;
+} else {
+    echo &quot;No employee found in that department&quot;;
+}
+mysqli_stmt_close($stmt);
+mysqli_close($conn);
+?&gt;
+</code></pre></p>
+<p>SQL-only form for the first half: <code>UPDATE employees SET salary = salary * 1.10 WHERE department = &#x27;Sales&#x27;;</code> — note the arithmetic happens <em>inside</em> SQL, so no PHP loop is required.</p>
+<p><strong>Traps:</strong> computing the raise in PHP row by row (works, but wastes marks — one statement does it); <code>salary * 1.1</code> on a <code>DECIMAL</code> is exact, on <code>FLOAT</code> it drifts.</p>
+<hr />
+<h4 id="q253-steps-for-dynamic-html-from-mysql-students-list">Q253 — Steps for dynamic HTML from MySQL + students list ⭐</h4>
+<p><strong>Structure:</strong> 6 — the steps/architecture; 8 — the listing program with names and marks.</p>
+<p><strong>Full answer (a) — the steps</strong> (4:L774–780)</p>
+<ol>
+<li><strong>Connect</strong> to MySQL.</li>
+<li><strong>Query</strong> — <code>SELECT name, marks FROM students</code>.</li>
+<li><strong>Fetch</strong> — loop <code>mysqli_fetch_assoc($result)</code>.</li>
+<li><strong>Render</strong> — echo one HTML row per record, escaping user data.</li>
+<li><strong>Close</strong> — free result, close connection.
+Say why it is <em>dynamic</em>: the same file emits different HTML per request because the rows are read at request time (4:L705, L780).</li>
+</ol>
+<p><strong>Full answer (b) — program</strong> (alternative syntax — the deck's own shape, 4:L782–792)</p>
+<p><pre><code class="language-php">&lt;?php
+$conn = mysqli_connect(&quot;localhost&quot;, &quot;root&quot;, &quot;&quot;, &quot;college_db&quot;);
+if (!$conn) { die(&quot;Connection failed: &quot; . mysqli_connect_error()); }
+
+$result = mysqli_query($conn, &quot;SELECT name, marks FROM students&quot;);
+if (!$result) { die(&quot;Query failed: &quot; . mysqli_error($conn)); }
+?&gt;
+&lt;table border=&quot;1&quot;&gt;
+&lt;tr&gt;&lt;th&gt;Name&lt;/th&gt;&lt;th&gt;Marks&lt;/th&gt;&lt;/tr&gt;
+&lt;?php while ($row = mysqli_fetch_assoc($result)): ?&gt;
+&lt;tr&gt;
+    &lt;td&gt;&lt;?= htmlspecialchars($row[&quot;name&quot;]) ?&gt;&lt;/td&gt;
+    &lt;td&gt;&lt;?= $row[&quot;marks&quot;] ?&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;?php endwhile; ?&gt;
+&lt;/table&gt;
+&lt;?php
+mysqli_free_result($result);
+mysqli_close($conn);
+?&gt;
+</code></pre></p>
+<p><strong>Traps:</strong> <code>while (...)</code> with braces instead of <code>while (...):</code> … <code>endwhile;</code> is a syntax error when the body is HTML — pick one style and stay in it; <code>&lt;?=</code> needs no semicolon but does need the closing <code>?&gt;</code>.</p>
+<hr />
+<h2 id="4-part-3-code-you-must-write-by-hand">4. PART 3 — Code you must write by hand<a class="anchor" href="#4-part-3-code-you-must-write-by-hand">#</a></h2>
+<p>Write these on paper, closed book, until they come out without thinking. Line counts are what a 14-mark answer can afford. <strong>Every drill from D3 onward assumes <code>$conn</code> is already open (D1/D2) and that <code>college_db</code> with a <code>students</code> table exists.</strong></p>
+<p><strong>D1 — Connect and close (the 6-line skeleton)</strong></p>
+<p><pre><code class="language-php">&lt;?php
+$conn = mysqli_connect(&quot;localhost&quot;, &quot;root&quot;, &quot;&quot;, &quot;college_db&quot;);
+mysqli_close($conn);
+?&gt;
+</code></pre>
+<em>Memorise:</em> four arguments in order — host, user, password, database.</p>
+<p><strong>D2 — Connect with an error check (both styles)</strong></p>
+<p><pre><code class="language-php">&lt;?php
+// procedural
+$conn = mysqli_connect(&quot;localhost&quot;, &quot;root&quot;, &quot;&quot;, &quot;college_db&quot;);
+if (!$conn) {
+    die(&quot;Connection failed: &quot; . mysqli_connect_error());
+}
+echo &quot;Connected successfully&quot;;
+
+// OO equivalent
+$conn2 = new mysqli(&quot;localhost&quot;, &quot;root&quot;, &quot;&quot;, &quot;college_db&quot;);
+if ($conn2-&gt;connect_error) {
+    die(&quot;Connection failed: &quot; . $conn2-&gt;connect_error);
+}
+?&gt;
+</code></pre>
+<em>Memorise:</em> <code>if (!$conn)</code> + <code>mysqli_connect_error()</code>; OO is <code>$conn-&gt;connect_error</code>.</p>
+<p><strong>D3 — Create a table + list databases</strong></p>
+<p><pre><code class="language-php">&lt;?php
+$sql = &quot;CREATE TABLE students (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(50) NOT NULL,
+    marks INT
+)&quot;;
+if (!mysqli_query($conn, $sql)) {
+    die(&quot;Create failed: &quot; . mysqli_error($conn));
+}
+
+$db = mysqli_query($conn, &quot;SHOW DATABASES&quot;);
+while ($row = mysqli_fetch_row($db)) {
+    echo $row[0] . &quot;&lt;br&gt;&quot;;
+}
+?&gt;
+</code></pre>
+<em>Memorise:</em> <code>CREATE TABLE name (col type, …)</code>; <code>SHOW DATABASES</code> + <code>fetch_row()[0]</code>.</p>
+<p><strong>D4 — Insert with error handling</strong></p>
+<p><pre><code class="language-php">&lt;?php
+$name  = $_POST[&quot;name&quot;];
+$marks = (int)$_POST[&quot;marks&quot;];
+$sql   = &quot;INSERT INTO students (name, marks) VALUES (&#x27;$name&#x27;, $marks)&quot;;
+
+if (mysqli_query($conn, $sql)) {
+    echo &quot;Inserted. id = &quot; . mysqli_insert_id($conn);
+} else {
+    echo &quot;Insert failed: &quot; . mysqli_error($conn);
+}
+?&gt;
+</code></pre>
+<em>Memorise:</em> strings quoted, numbers cast, <code>mysqli_insert_id()</code> on success.</p>
+<p><strong>D5 — Insert with a prepared statement</strong></p>
+<p><pre><code class="language-php">&lt;?php
+$stmt = mysqli_prepare($conn, &quot;INSERT INTO students (name, marks) VALUES (?, ?)&quot;);
+mysqli_stmt_bind_param($stmt, &quot;si&quot;, $name, $marks);
+if (mysqli_stmt_execute($stmt)) {
+    echo &quot;Inserted. id = &quot; . mysqli_insert_id($conn);
+} else {
+    echo &quot;Error: &quot; . mysqli_stmt_error($stmt);
+}
+mysqli_stmt_close($stmt);
+?&gt;
+</code></pre>
+<em>Memorise:</em> prepare → bind_param("si", …) → execute → close. One letter per <code>?</code>.</p>
+<p><strong>D6 — Select all into an HTML table</strong></p>
+<p><pre><code class="language-php">&lt;?php
+$result = mysqli_query($conn, &quot;SELECT regno, name, marks FROM students&quot;);
+if (!$result) { die(mysqli_error($conn)); }
+?&gt;
+&lt;table border=&quot;1&quot;&gt;
+&lt;tr&gt;&lt;th&gt;Reg No&lt;/th&gt;&lt;th&gt;Name&lt;/th&gt;&lt;th&gt;Marks&lt;/th&gt;&lt;/tr&gt;
+&lt;?php while ($row = mysqli_fetch_assoc($result)): ?&gt;
+&lt;tr&gt;
+    &lt;td&gt;&lt;?= htmlspecialchars($row[&quot;regno&quot;]) ?&gt;&lt;/td&gt;
+    &lt;td&gt;&lt;?= htmlspecialchars($row[&quot;name&quot;]) ?&gt;&lt;/td&gt;
+    &lt;td&gt;&lt;?= $row[&quot;marks&quot;] ?&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;?php endwhile; ?&gt;
+&lt;/table&gt;
+</code></pre>
+<em>Memorise:</em> <code>while (...):</code> … <code>endwhile;</code> and <code>&lt;?= ?&gt;</code>.</p>
+<p><strong>D7 — Select with WHERE, ORDER BY, LIMIT</strong></p>
+<p><pre><code class="language-php">&lt;?php
+$sql = &quot;SELECT name, marks FROM students
+        WHERE marks &gt;= 50
+        ORDER BY marks DESC
+        LIMIT 5&quot;;
+$result = mysqli_query($conn, $sql);
+while ($row = mysqli_fetch_assoc($result)) {
+    echo $row[&quot;name&quot;] . &quot; — &quot; . $row[&quot;marks&quot;] . &quot;&lt;br&gt;&quot;;
+}
+?&gt;
+</code></pre>
+<em>Memorise:</em> clause order <code>WHERE → ORDER BY → LIMIT</code>.</p>
+<p><strong>D8 — Update with affected_rows</strong></p>
+<p><pre><code class="language-php">&lt;?php
+$id    = (int)$_POST[&quot;id&quot;];
+$email = $_POST[&quot;email&quot;];
+$sql   = &quot;UPDATE students SET email = &#x27;$email&#x27; WHERE id = $id&quot;;
+
+if (!mysqli_query($conn, $sql)) {
+    die(&quot;Update failed: &quot; . mysqli_error($conn));
+}
+echo mysqli_affected_rows($conn) . &quot; row(s) updated&quot;;
+?&gt;
+</code></pre>
+<em>Memorise:</em> <code>UPDATE t SET col = val WHERE key = val</code> and the affected-rows count.</p>
+<p><strong>D9 — Delete with WHERE</strong></p>
+<p><pre><code class="language-php">&lt;?php
+$id  = (int)$_POST[&quot;id&quot;];
+$sql = &quot;DELETE FROM students WHERE id = $id&quot;;
+
+if (!mysqli_query($conn, $sql)) {
+    die(&quot;Delete failed: &quot; . mysqli_error($conn));
+}
+echo mysqli_affected_rows($conn) . &quot; row(s) deleted&quot;;
+?&gt;
+</code></pre>
+<em>Memorise:</em> <code>DELETE FROM t WHERE …</code> — never without WHERE.</p>
+<p><strong>D10 — Session login/logout pair</strong>
+<em>login.php</em></p>
+<p><pre><code class="language-php">&lt;?php
+session_start();
+$_SESSION[&quot;user&quot;] = &quot;Anu&quot;;
+$_SESSION[&quot;time&quot;] = date(&quot;d-m-Y h:i A&quot;);
+header(&quot;Location: home.php&quot;);     // redirect
+exit;
+?&gt;
+</code></pre>
+<em>home.php</em></p>
+<p><pre><code class="language-php">&lt;?php
+session_start();
+if (!isset($_SESSION[&quot;user&quot;])) { die(&quot;Not logged in&quot;); }
+echo &quot;Welcome &quot; . htmlspecialchars($_SESSION[&quot;user&quot;]);
+echo &quot; | &lt;a href=&#x27;logout.php&#x27;&gt;Logout&lt;/a&gt;&quot;;
+?&gt;
+</code></pre>
+<em>logout.php</em></p>
+<p><pre><code class="language-php">&lt;?php
+session_start();
+session_unset();
+session_destroy();
+header(&quot;Location: login.php&quot;);
+exit;
+?&gt;
+</code></pre>
+<em>Memorise:</em> <code>session_start()</code> on <strong>every</strong> page; <code>session_unset()</code> before <code>session_destroy()</code>.</p>
+<p><strong>D11 — Cookie set / read / delete</strong></p>
+<p><pre><code class="language-php">&lt;?php
+setcookie(&quot;username&quot;, &quot;Anu&quot;, time() + 3600, &quot;/&quot;);   // set, 1 hour
+if (isset($_COOKIE[&quot;username&quot;])) {                  // read (next request)
+    echo &quot;Welcome &quot; . htmlspecialchars($_COOKIE[&quot;username&quot;]);
+}
+setcookie(&quot;username&quot;, &quot;&quot;, time() - 3600, &quot;/&quot;);      // delete
+?&gt;
+</code></pre>
+<em>Memorise:</em> <code>time()+3600</code> to set, <code>time()-3600</code> to delete, nothing echoed before <code>setcookie()</code>.</p>
+<p><strong>D12 — Dynamic date/time greeting page</strong></p>
+<p><pre><code class="language-php">&lt;?php
+date_default_timezone_set(&quot;Asia/Kolkata&quot;);
+$h = (int) date(&quot;H&quot;);
+if ($h &lt; 12)      { $g = &quot;Good morning&quot;; }
+elseif ($h &lt; 17)  { $g = &quot;Good afternoon&quot;; }
+elseif ($h &lt; 21)  { $g = &quot;Good evening&quot;; }
+else              { $g = &quot;Good night&quot;; }
+?&gt;
+&lt;h1&gt;&lt;?= $g ?&gt;, visitor!&lt;/h1&gt;
+&lt;p&gt;&lt;?= date(&quot;l, d F Y — h:i:s A&quot;) ?&gt;&lt;/p&gt;
+</code></pre>
+<em>Memorise:</em> <code>date(&quot;H&quot;)</code> for the 24-hour hour; <code>H i s A l d F Y</code> format letters.</p>
+<p><strong>D13 — Square root</strong></p>
+<p><pre><code class="language-php">&lt;?php
+$n = 25;
+echo &quot;Square root of $n = &quot; . sqrt($n);        // 5
+?&gt;
+</code></pre>
+<em>Memorise:</em> <code>sqrt($n)</code>; guard negatives if the question says "any number".</p>
+<p><strong>D14 — Factorial (recursive)</strong></p>
+<p><pre><code class="language-php">&lt;?php
+function fact($n) {
+    if ($n &lt;= 1) return 1;
+    return $n * fact($n - 1);
+}
+echo fact(5);        // 120
+?&gt;
+</code></pre>
+<em>Memorise:</em> base case first, then <code>$n * fact($n-1)</code>.</p>
+<p><strong>D15 — File upload</strong></p>
+<p><pre><code class="language-php">&lt;?php
+if (isset($_FILES[&quot;f&quot;]) &amp;&amp; $_FILES[&quot;f&quot;][&quot;error&quot;] == 0) {
+    $target = &quot;uploads/&quot; . basename($_FILES[&quot;f&quot;][&quot;name&quot;]);
+    if (move_uploaded_file($_FILES[&quot;f&quot;][&quot;tmp_name&quot;], $target)) {
+        echo &quot;Uploaded: &quot; . htmlspecialchars($target);
+    } else {
+        echo &quot;Move failed&quot;;
+    }
+} else {
+    echo &quot;No file / upload error&quot;;
+}
+?&gt;
+&lt;form method=&quot;post&quot; enctype=&quot;multipart/form-data&quot;&gt;
+  &lt;input type=&quot;file&quot; name=&quot;f&quot;&gt;&lt;input type=&quot;submit&quot;&gt;
+&lt;/form&gt;
+</code></pre>
+<em>Memorise:</em> <code>enctype=&quot;multipart/form-data&quot;</code>, <code>$_FILES[&quot;f&quot;][&quot;tmp_name&quot;]</code>, <code>move_uploaded_file()</code>, <code>basename()</code>.</p>
+<p><strong>D16 — Registration form → MySQL insert, with validation</strong></p>
+<p><pre><code class="language-php">&lt;?php
+$msg = &quot;&quot;;
+if ($_SERVER[&quot;REQUEST_METHOD&quot;] == &quot;POST&quot;) {
+    $name  = trim($_POST[&quot;name&quot;]);
+    $email = trim($_POST[&quot;email&quot;]);
+    $pass  = $_POST[&quot;password&quot;];
+
+    if ($name == &quot;&quot; || $email == &quot;&quot; || $pass == &quot;&quot;) {
+        $msg = &quot;All fields are required&quot;;
+    } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        $msg = &quot;Invalid email format&quot;;
+    } elseif (strlen($pass) &lt; 8) {
+        $msg = &quot;Password must be at least 8 characters&quot;;
+    } else {
+        $conn = mysqli_connect(&quot;localhost&quot;, &quot;root&quot;, &quot;&quot;, &quot;college_db&quot;);
+        if (!$conn) { die(&quot;Connection failed: &quot; . mysqli_connect_error()); }
+
+        $hash = password_hash($pass, PASSWORD_DEFAULT);
+        $stmt = mysqli_prepare($conn,
+            &quot;INSERT INTO users (name, email, password) VALUES (?, ?, ?)&quot;);
+        mysqli_stmt_bind_param($stmt, &quot;sss&quot;, $name, $email, $hash);
+        if (mysqli_stmt_execute($stmt)) {
+            $msg = &quot;Registered successfully as &quot; . htmlspecialchars($name);
+        } else {
+            $msg = &quot;Insert failed: &quot; . mysqli_stmt_error($stmt);
+        }
+        mysqli_stmt_close($stmt);
+        mysqli_close($conn);
+    }
+}
+?&gt;
+&lt;form method=&quot;post&quot; action=&quot;&lt;?= htmlspecialchars($_SERVER[&#x27;PHP_SELF&#x27;]) ?&gt;&quot;&gt;
+  Name: &lt;input type=&quot;text&quot; name=&quot;name&quot;&gt;&lt;br&gt;
+  Email: &lt;input type=&quot;text&quot; name=&quot;email&quot;&gt;&lt;br&gt;
+  Password: &lt;input type=&quot;password&quot; name=&quot;password&quot;&gt;&lt;br&gt;
+  &lt;input type=&quot;submit&quot; value=&quot;Register&quot;&gt;
+&lt;/form&gt;
+&lt;p&gt;&lt;?= $msg ?&gt;&lt;/p&gt;
+</code></pre>
+<em>Memorise:</em> validate → connect → hash → prepare/bind/execute → report. <code>password_hash()</code> is standard, not in the deck.</p>
+<hr />
+<h2 id="5-night-before-memorize-sheet">5. 🔴 Night-before memorize sheet<a class="anchor" href="#5-night-before-memorize-sheet">#</a></h2>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Exact syntax / signature</th>
+<th>Why it is asked</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Connect</td>
+<td><code>mysqli_connect(&#x27;localhost&#x27;,&#x27;user&#x27;,&#x27;pass&#x27;,&#x27;db&#x27;)</code></td>
+<td>Q92, 110, 116, 234, 240 — the first line of every answer</td>
+</tr>
+<tr>
+<td>Connect error</td>
+<td><code>mysqli_connect_error()</code> · OO <code>$conn-&gt;connect_error</code></td>
+<td>The "error handling" mark in every connection question</td>
+</tr>
+<tr>
+<td>Close</td>
+<td><code>mysqli_close($conn);</code> · OO <code>$conn-&gt;close();</code></td>
+<td>Completes the lifecycle; cheap mark</td>
+</tr>
+<tr>
+<td>Query</td>
+<td><code>mysqli_query($conn, $sql)</code></td>
+<td>Q126; result handle vs bool is the examined detail</td>
+</tr>
+<tr>
+<td>Query error</td>
+<td><code>mysqli_error($conn)</code></td>
+<td>Any "with error handling" question</td>
+</tr>
+<tr>
+<td>Fetch loop</td>
+<td><code>while ($row = mysqli_fetch_assoc($result))</code></td>
+<td>Q128, 243, 251, 253 — the canonical pattern</td>
+</tr>
+<tr>
+<td>Row access</td>
+<td><code>$row[&quot;column_name&quot;]</code></td>
+<td>Every display answer</td>
+</tr>
+<tr>
+<td>Count rows</td>
+<td><code>mysqli_num_rows($result)</code></td>
+<td>"No records found" branch, paging</td>
+</tr>
+<tr>
+<td>Rows changed</td>
+<td><code>mysqli_affected_rows($conn)</code> · OO <code>$conn-&gt;affected_rows</code></td>
+<td>Q127, 244, 250, 252</td>
+</tr>
+<tr>
+<td>Last id</td>
+<td><code>mysqli_insert_id($conn)</code></td>
+<td>Any INSERT answer</td>
+</tr>
+<tr>
+<td>Prepared INSERT</td>
+<td><code>mysqli_prepare($conn, &quot;INSERT … VALUES (?, ?)&quot;)</code></td>
+<td>Q99, 242, 250</td>
+</tr>
+<tr>
+<td>Bind</td>
+<td><code>mysqli_stmt_bind_param($stmt, &quot;ssi&quot;, $a, $b, $c)</code></td>
+<td>The type string <code>s</code>/<code>i</code>/<code>d</code>/<code>b</code> is the mark</td>
+</tr>
+<tr>
+<td>Execute</td>
+<td><code>mysqli_stmt_execute($stmt)</code></td>
+<td>—</td>
+</tr>
+<tr>
+<td>Prepared rows</td>
+<td><code>mysqli_stmt_affected_rows($stmt)</code> · <code>mysqli_stmt_error($stmt)</code></td>
+<td>Different from the <code>$conn</code> versions</td>
+</tr>
+<tr>
+<td>Start session</td>
+<td><code>session_start();</code></td>
+<td>Q115, 125 — must be the first statement</td>
+</tr>
+<tr>
+<td>Session write/read</td>
+<td><code>$_SESSION[&quot;key&quot;] = value;</code> · <code>echo $_SESSION[&quot;key&quot;];</code></td>
+<td>Q95, 100, 111</td>
+</tr>
+<tr>
+<td>End session</td>
+<td><code>session_unset(); session_destroy();</code></td>
+<td>Q239, 246</td>
+</tr>
+<tr>
+<td>Set cookie</td>
+<td><code>setcookie(&#x27;name&#x27;,&#x27;value&#x27;,time()+3600,&#x27;/&#x27;);</code></td>
+<td>Q113, 124, 238, 239</td>
+</tr>
+<tr>
+<td>Read cookie</td>
+<td><code>$_COOKIE[&quot;name&quot;]</code></td>
+<td>—</td>
+</tr>
+<tr>
+<td>Delete cookie</td>
+<td><code>setcookie(&#x27;name&#x27;,&#x27;&#x27;,time()-3600,&#x27;/&#x27;);</code></td>
+<td>Past expiry, same path</td>
+</tr>
+<tr>
+<td>Create table</td>
+<td><code>CREATE TABLE t (id INT AUTO_INCREMENT PRIMARY KEY, name VARCHAR(50));</code></td>
+<td>Q109, 117, 241, 249</td>
+</tr>
+<tr>
+<td>Insert</td>
+<td><code>INSERT INTO t (col1, col2) VALUES (&#x27;str&#x27;, 123);</code></td>
+<td>Q118</td>
+</tr>
+<tr>
+<td>Update</td>
+<td><code>UPDATE t SET col = value WHERE key = value;</code></td>
+<td>Q121, 244, 252</td>
+</tr>
+<tr>
+<td>Delete</td>
+<td><code>DELETE FROM t WHERE key = value;</code></td>
+<td>Q119, 242, 250</td>
+</tr>
+<tr>
+<td>Select</td>
+<td><code>SELECT cols FROM t WHERE cond ORDER BY col DESC LIMIT 5;</code></td>
+<td>Q120, 251</td>
+</tr>
+<tr>
+<td>List databases</td>
+<td><code>SHOW DATABASES</code> (+ <code>SHOW TABLES</code>, <code>DESCRIBE t</code>)</td>
+<td>Q107</td>
+</tr>
+<tr>
+<td>Alternative loop</td>
+<td><code>&lt;?php while (...): ?&gt; … &lt;?php endwhile; ?&gt;</code></td>
+<td>Q243, 253 — syntax mark</td>
+</tr>
+<tr>
+<td>Short echo</td>
+<td><code>&lt;?= $row[&quot;name&quot;] ?&gt;</code></td>
+<td>Same as <code>&lt;?php echo …; ?&gt;</code></td>
+</tr>
+<tr>
+<td>Escape output</td>
+<td><code>htmlspecialchars($str)</code></td>
+<td>XSS mark, every display question</td>
+</tr>
+<tr>
+<td>Self action</td>
+<td><code>$_SERVER[&#x27;PHP_SELF&#x27;]</code> (not <code>$_PHP_SELF</code>)</td>
+<td>Q103</td>
+</tr>
+<tr>
+<td>Email regex</td>
+<td><code>/^[\w.-]+@[\w.-]+\.[A-Za-z]{2,}$/</code> with <code>preg_match()</code></td>
+<td>Q97, 229, 232, 235</td>
+</tr>
+<tr>
+<td>Phone regex</td>
+<td><code>/^[0-9]{10}$/</code> or <code>/^[6-9][0-9]{9}$/</code></td>
+<td>Q235, 237</td>
+</tr>
+<tr>
+<td>Greeting hour</td>
+<td><code>(int) date(&quot;H&quot;)</code> + <code>if/elseif</code></td>
+<td>Q231</td>
+</tr>
+<tr>
+<td>Root</td>
+<td><code>sqrt($n)</code></td>
+<td>Q105</td>
+</tr>
+<tr>
+<td>Factorial</td>
+<td><code>return $n * fact($n-1);</code> with base case <code>$n &lt;= 1</code></td>
+<td>Q233</td>
+</tr>
+<tr>
+<td>Upload</td>
+<td><code>$_FILES[&quot;f&quot;][&quot;tmp_name&quot;]</code> + <code>move_uploaded_file()</code> + <code>enctype=&quot;multipart/form-data&quot;</code></td>
+<td>Q233</td>
+</tr>
+<tr>
+<td>Sort assoc</td>
+<td><code>asort()</code> by value, <code>ksort()</code> by key, <code>unset($a[&quot;k&quot;])</code></td>
+<td>Q238</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="6-diagram-figure-index">6. 📐 Diagram + figure index<a class="anchor" href="#6-diagram-figure-index">#</a></h2>
+<p><code>grep &#x27;Image Description&#x27; module4.md</code> returns <strong>16</strong> hits. Fifteen are decorative slide furniture; exactly <strong>one</strong> is a real diagram — know that one cold.</p>
+<table>
+<thead>
+<tr>
+<th>Line</th>
+<th>What the figure shows</th>
+<th>Exam value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>4:L1</td>
+<td>Dark circular database-cylinder icon — title slide furniture</td>
+<td>none</td>
+</tr>
+<tr>
+<td>4:L57</td>
+<td>Small DB cylinder + PHP logo — furniture</td>
+<td>none</td>
+</tr>
+<tr>
+<td>4:L96</td>
+<td>DB cylinder + PHP logo — furniture</td>
+<td>none</td>
+</tr>
+<tr>
+<td>4:L200</td>
+<td>DB cylinder + PHP logo — furniture</td>
+<td>none</td>
+</tr>
+<tr>
+<td>4:L238</td>
+<td>DB cylinder + PHP logo — furniture</td>
+<td>none</td>
+</tr>
+<tr>
+<td>4:L310</td>
+<td>DB cylinder + PHP logo — furniture</td>
+<td>none</td>
+</tr>
+<tr>
+<td>4:L345</td>
+<td>DB cylinder + PHP logo — furniture</td>
+<td>none</td>
+</tr>
+<tr>
+<td>4:L399</td>
+<td><strong>The five-step query cycle</strong> — five boxes: (1) Build SQL string, (2) <code>mysqli_query()</code>, (3) Result handle returned, (4) <code>while</code> + <code>fetch_assoc()</code> loops through rows, (5) echo HTML for each row, all sitting above a bar labelled "Browser displays the finished table"</td>
+<td><strong>High</strong> — draw this for Q243/Q245/Q248/Q253, and the prose list is at 4:L407–417</td>
+</tr>
+<tr>
+<td>4:L425</td>
+<td>DB cylinder + "PHP + SQL" tag — furniture</td>
+<td>none</td>
+</tr>
+<tr>
+<td>4:L462</td>
+<td>DB cylinder + "PHP + SQL" tag</td>
+<td>none</td>
+</tr>
+<tr>
+<td>4:L499</td>
+<td>DB cylinder + "PHP + SQL" tag</td>
+<td>none</td>
+</tr>
+<tr>
+<td>4:L552</td>
+<td>DB cylinder + "PHP + SQL" tag</td>
+<td>none</td>
+</tr>
+<tr>
+<td>4:L589</td>
+<td>DB cylinder + "PHP + SQL" tag</td>
+<td>none</td>
+</tr>
+<tr>
+<td>4:L624</td>
+<td>DB cylinder + "PHP + SQL" tag</td>
+<td>none</td>
+</tr>
+<tr>
+<td>4:L729</td>
+<td>DB cylinder + PHP logo</td>
+<td>none</td>
+</tr>
+<tr>
+<td>4:L764</td>
+<td>DB cylinder + PHP logo</td>
+<td>none</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Flows you may be asked to sketch that are NOT drawn in this deck</strong></p>
+<ul>
+<li><strong>Request/response flow</strong> (browser → Apache → PHP → MySQL → HTML back): described in words in Module 3, diagram at <code>module3.md</code> L57. Reuse it for Q245/Q253 — but say "the request–response cycle from Module 3", do not claim Module 4 draws it.</li>
+<li><strong>Session flow</strong> (browser ⇄ <code>PHPSESSID</code> cookie ⇄ server session file): not drawn; the prose is 4:L106–112, reconstructed in §2.3.</li>
+<li><strong>Cookie round trip</strong> (<code>Set-Cookie</code> response header → cookie jar → <code>Cookie</code> request header → <code>$_COOKIE</code>): not drawn; prose 4:L39.</li>
+</ul>
+<hr />
+<h2 id="7-say-this-if-grilled-defence-lines">7. Say-this-if-grilled defence lines<a class="anchor" href="#7-say-this-if-grilled-defence-lines">#</a></h2>
+<ol>
+<li><strong>Why sessions beat cookies for login:</strong> the identity is a server-side record and the browser holds only an unguessable ID, so nothing the user can edit decides who they are.</li>
+<li><strong>Why <code>WHERE</code> is non-negotiable:</strong> without it <code>UPDATE</code> writes every row and <code>DELETE</code> empties the table — and neither has an undo.</li>
+<li><strong>Why prepared statements stop injection:</strong> the statement is compiled before the values arrive, so input is data forever and can never be parsed as SQL syntax.</li>
+<li><strong>Why <code>mysqli_fetch_assoc()</code> returns <code>NULL</code> at the end:</strong> the result set has an internal pointer; once it passes the last row there is nothing to return, and <code>NULL</code> is falsy — which is exactly what ends the <code>while</code>.</li>
+<li><strong>Why the connection must precede the query:</strong> <code>mysqli_query()</code> needs a live handle as its first argument; without one you are passing <code>false</code> into a function that expects a connection.</li>
+<li><strong>Why <code>setcookie()</code>/<code>session_start()</code> must be first:</strong> both emit HTTP headers, and headers are already on the wire once any body output starts.</li>
+<li><strong>Why <code>affected_rows</code> matters even when there was no error:</strong> MySQL happily reports success for a statement that matched zero rows; the count is the only evidence the right rows changed.</li>
+<li><strong>Why <code>mysqli_query()</code> returns two different things:</strong> SELECT-type statements produce a result set to iterate; write statements produce only a status, so there is nothing to fetch.</li>
+<li><strong>Why you escape with <code>htmlspecialchars()</code> on output, not input:</strong> the danger is a value being <em>interpreted as HTML</em> when it is displayed, so the escaping belongs at the point of rendering.</li>
+<li><strong>Why the page is dynamic even though the file never changes:</strong> the file is a program; the HTML is rebuilt per request from whatever the database holds at that moment.</li>
+<li><strong>Why <code>(int)</code> casting is not a substitute for prepared statements:</strong> it closes injection through numeric fields only; strings still need binding.</li>
+<li><strong>Why <code>session_destroy()</code> alone looks broken:</strong> it deletes the server file but leaves <code>$_SESSION</code> populated for the rest of that request — <code>session_unset()</code> first, then destroy.</li>
+<li><strong>Why the deck's string-built SQL is still shown:</strong> it is clearer for teaching the query/fetch cycle; the deck itself flags <code>mysqli_prepare()</code> as the production path (4:L302–304).</li>
+<li><strong>Why cookies still matter if you use sessions:</strong> every session <em>is</em> a cookie — the mechanism is layered, not alternative.</li>
+</ol>
+  </main>
+</div>
+<div class="tools">
+  <button id="theme" title="Toggle light / dark">☾</button>
+  <button id="top" title="Back to top">↑</button>
+</div>
+<script>
+(function(){
+  var root=document.documentElement, key='minotes-theme';
+  var saved=localStorage.getItem(key);
+  var prefers=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';
+  root.setAttribute('data-theme', saved || prefers);
+
+  var btn=document.getElementById('theme');
+  function sync(){ if(btn) btn.textContent = root.getAttribute('data-theme')==='dark' ? '\u2600' : '\u263E'; }
+  sync();
+  if(btn) btn.addEventListener('click',function(){
+    var next = root.getAttribute('data-theme')==='dark' ? 'light' : 'dark';
+    root.setAttribute('data-theme', next); localStorage.setItem(key,next); sync();
+  });
+
+  var bar=document.getElementById('progress');
+  if(bar) addEventListener('scroll',function(){
+    var h=document.documentElement.scrollHeight-innerHeight;
+    bar.style.width=(h>0?(scrollY/h*100):0)+'%';
+  },{passive:true});
+
+  document.querySelectorAll('pre').forEach(function(pre){
+    var b=document.createElement('button');
+    b.className='copy'; b.textContent='copy';
+    b.addEventListener('click',function(){
+      var t=pre.querySelector('code'); var txt=t?t.innerText:pre.innerText;
+      navigator.clipboard.writeText(txt).then(function(){
+        b.textContent='copied'; setTimeout(function(){b.textContent='copy';},1200);
+      });
+    });
+    pre.appendChild(b);
+  });
+
+  document.querySelectorAll('main table').forEach(function(t){
+    if(t.parentElement.classList.contains('table-scroll')) return;
+    var w=document.createElement('div'); w.className='table-scroll';
+    t.parentNode.insertBefore(w,t); w.appendChild(t);
+  });
+
+  var links=[].slice.call(document.querySelectorAll('.sidebar a[href^="#"]'));
+  var map={}; links.forEach(function(a){ map[a.getAttribute('href').slice(1)]=a; });
+  var heads=[].slice.call(document.querySelectorAll('main h2[id], main h3[id]'));
+  if('IntersectionObserver' in window && heads.length){
+    var obs=new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if(!e.isIntersecting) return;
+        links.forEach(function(a){a.classList.remove('active');});
+        var a=map[e.target.id]; if(a){a.classList.add('active');}
+      });
+    },{rootMargin:'-10% 0px -75% 0px'});
+    heads.forEach(function(h){obs.observe(h);});
+  }
+
+  var top=document.getElementById('top');
+  if(top) top.addEventListener('click',function(){ scrollTo({top:0,behavior:'smooth'}); });
+})();
+</script>
+</body>
+</html>

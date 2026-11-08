@@ -1,0 +1,888 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Question Bank.pdf -&gt; markdown · Web Programming</title>
+<style>
+:root{
+  --bg:#fbfaf8; --panel:#ffffff; --ink:#232120; --muted:#5f5a53; --line:#e6e1da;
+  --accent:#7a4fd0; --accent-soft:#f1ecfb; --code-bg:#f5f2ee; --code-ink:#2b2a28;
+  --warn-bg:#fff8e6; --warn-line:#f0d9a0;
+  --sans:"Inter","Segoe UI",system-ui,-apple-system,"Noto Sans",sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,"SF Mono",Menlo,Consolas,"Fira Code",monospace;
+}
+html[data-theme="dark"]{
+  --bg:#141317; --panel:#1b1a20; --ink:#e8e4de; --muted:#a8a199; --line:#2f2c36;
+  --accent:#b79cf5; --accent-soft:#241f33; --code-bg:#22202a; --code-ink:#e8e4de;
+  --warn-bg:#2a2417; --warn-line:#4a3d22;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0; background:var(--bg); color:var(--ink); font-family:var(--sans);
+  font-size:16.5px; line-height:1.72; -webkit-font-smoothing:antialiased;
+}
+#progress{position:fixed;top:0;left:0;height:3px;width:0;background:var(--accent);z-index:50;transition:width .1s linear}
+
+.wrap{display:flex;align-items:flex-start;min-height:100vh}
+.sidebar{
+  position:sticky;top:0;height:100vh;width:300px;flex:0 0 300px;overflow-y:auto;
+  padding:26px 20px 60px;border-right:1px solid var(--line);background:var(--panel);
+}
+.sidebar h1{font-size:15px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);
+  margin:0 0 4px;font-weight:600}
+.sidebar .sub{font-size:12.5px;color:var(--muted);margin:0 0 18px}
+.sidebar nav{font-size:14px}
+.sidebar .toc>ul{padding-left:0}
+.sidebar ul{list-style:none;margin:0;padding-left:12px}
+.sidebar ul ul{border-left:1px solid var(--line);margin-left:4px;padding-left:10px}
+.sidebar li{margin:3px 0}
+.sidebar a{color:var(--ink);text-decoration:none;display:block;padding:3px 8px;border-radius:8px;
+  line-height:1.35;transition:background .12s,color .12s}
+.sidebar a:hover{background:var(--accent-soft);color:var(--accent)}
+.sidebar a.active{background:var(--accent-soft);color:var(--accent);font-weight:600}
+.sidebar .home{display:inline-flex;align-items:center;gap:6px;margin-bottom:16px;font-size:13.5px;
+  color:var(--muted);text-decoration:none;border:1px solid var(--line);padding:5px 10px;border-radius:999px}
+.sidebar .home:hover{color:var(--accent);border-color:var(--accent)}
+
+main{flex:1;min-width:0;padding:46px 56px 120px;max-width:980px;margin:0 auto}
+.doc-head{border-bottom:1px solid var(--line);padding-bottom:18px;margin-bottom:34px}
+.doc-head .kicker{font-size:12.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);
+  font-weight:700;margin-bottom:8px}
+.doc-head .meta{font-size:13.5px;color:var(--muted)}
+
+h1,h2,h3,h4{line-height:1.25;font-weight:700;letter-spacing:-.01em}
+h1{font-size:2.05rem;margin:.2em 0 .5em}
+h2{font-size:1.55rem;margin:2.4em 0 .7em;padding-bottom:.35em;border-bottom:1px solid var(--line)}
+h3{font-size:1.2rem;margin:1.9em 0 .55em}
+h4{font-size:1.03rem;margin:1.5em 0 .45em;color:var(--muted)}
+h2 .anchor,h3 .anchor{opacity:0;margin-left:.35em;font-size:.8em;color:var(--muted);text-decoration:none}
+h2:hover .anchor,h3:hover .anchor{opacity:1}
+p{margin:.75em 0}
+a{color:var(--accent);text-underline-offset:2px}
+strong{font-weight:650}
+hr{border:0;border-top:1px solid var(--line);margin:2.6em 0}
+ul,ol{margin:.7em 0;padding-left:1.4em}
+li{margin:.3em 0}
+li>ul,li>ol{margin:.25em 0}
+blockquote{
+  margin:1.3em 0;padding:12px 18px;background:var(--warn-bg);border-left:3px solid var(--warn-line);
+  border-radius:0 10px 10px 0;color:var(--ink)
+}
+blockquote p{margin:.3em 0}
+
+code{font-family:var(--mono);font-size:.87em;background:var(--code-bg);color:var(--code-ink);
+  padding:.15em .38em;border-radius:6px;border:1px solid var(--line);
+  box-decoration-break:clone;-webkit-box-decoration-break:clone;overflow-wrap:anywhere}
+pre{position:relative;background:var(--code-bg);border:1px solid var(--line);border-radius:12px;
+  padding:16px 18px;overflow-x:auto;margin:1.1em 0}
+pre code{background:none;border:0;padding:0;font-size:13.6px;line-height:1.62;white-space:pre}
+.copy{position:absolute;top:8px;right:8px;font:600 11px/1 var(--sans);color:var(--muted);
+  background:var(--panel);border:1px solid var(--line);border-radius:7px;padding:5px 8px;cursor:pointer;
+  opacity:0;transition:opacity .15s}
+pre:hover .copy{opacity:1}
+.copy:hover{color:var(--accent);border-color:var(--accent)}
+
+.table-scroll{overflow-x:auto;margin:1.3em 0;border:1px solid var(--line);border-radius:12px;background:var(--panel)}
+table{border-collapse:collapse;width:100%;font-size:14.6px}
+th,td{padding:9px 13px;text-align:left;vertical-align:top;border-bottom:1px solid var(--line)}
+th{background:var(--accent-soft);font-weight:650;font-size:13px;letter-spacing:.02em;
+  position:sticky;top:0;backdrop-filter:blur(4px)}
+tr:last-child td{border-bottom:0}
+tbody tr:nth-child(even){background:color-mix(in srgb,var(--panel) 60%,var(--bg))}
+tbody tr:hover{background:var(--accent-soft)}
+
+.tools{position:fixed;right:22px;bottom:22px;display:flex;flex-direction:column;gap:8px;z-index:40}
+.tools button{width:42px;height:42px;border-radius:12px;border:1px solid var(--line);background:var(--panel);
+  color:var(--ink);cursor:pointer;font-size:16px;box-shadow:0 4px 14px rgba(0,0,0,.10)}
+.tools button:hover{color:var(--accent);border-color:var(--accent)}
+@media (max-width:1000px){
+  .wrap{display:block}
+  .sidebar{position:static;width:auto;height:auto;border-right:0;border-bottom:1px solid var(--line)}
+  .sidebar nav{max-height:40vh;overflow:auto}
+  main{padding:28px 20px 100px}
+}
+@media print{
+  .sidebar,.tools,#progress,.copy{display:none!important}
+  body{background:#fff;color:#000;font-size:11pt}
+  main{padding:0;max-width:none}
+  h2{break-after:avoid} pre,table,blockquote{break-inside:avoid}
+  a{color:#000;text-decoration:none}
+}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+<div class="wrap">
+  <aside class="sidebar">
+    <a class="home" href="index.html">← Web Programming</a>
+    <h1>Question bank</h1>
+    <p class="sub">286 questions · 14 pages</p>
+    <nav class="toc"><div class="toc">
+<ul>
+<li><a href="#p1">p1</a></li>
+<li><a href="#p2">p2</a></li>
+<li><a href="#p3">p3</a></li>
+<li><a href="#p4">p4</a></li>
+<li><a href="#p5">p5</a></li>
+<li><a href="#p6">p6</a></li>
+<li><a href="#p7">p7</a></li>
+<li><a href="#p8">p8</a></li>
+<li><a href="#p9">p9</a></li>
+<li><a href="#p10">p10</a></li>
+<li><a href="#p11">p11</a></li>
+<li><a href="#p12">p12</a></li>
+<li><a href="#p13">p13</a></li>
+<li><a href="#p14">p14</a></li>
+</ul>
+</div>
+</nav>
+  </aside>
+  <main>
+    <div class="doc-head">
+      <div class="kicker">20CST461 · Web Programming</div>
+      <div class="meta">286 questions · 14 pages · rendered from question_bank.md</div>
+    </div>
+    <h1 id="question-bankpdf-markdown">Question Bank.pdf -&gt; markdown</h1>
+<p>Converted from the PDF text layer (pymupdf). Page markers <code>### p&lt;N&gt;</code> map 1:1 to PDF pages. <code>[Image Description: ...]</code> blocks are placeholders: the page is diagram/figure-heavy and must be rendered and viewed, not guessed.</p>
+<h3 id="p1">p1<a class="anchor" href="#p1">#</a></h3>
+<p>QUESTION BANK 
+20CST461 – Web Technologies 
+Course Outcomes 
+• 
+20CST461.1 – Understand the fundamentals of WWW and use hypertext Markup Language (HTML) for 
+authoring web pages. 
+• 
+20CST461.2 – Explain the importance of object exchange formats using JSON and the MVC based web 
+application development frameworks (Laravel). 
+• 
+20CST461.3 – Construct and visually format responsive, interactive web pages using CSS and JavaScript 
+(JS). 
+• 
+20CST461.4 – Construct websites using advanced sever side programming tool PHP. 
+• 
+20CST461.5 – Develop dynamic web applications using PHP and perform MySQL database operations.</p>
+<h3 id="p2">p2<a class="anchor" href="#p2">#</a></h3>
+<p>PART A – SHORT-ANSWER QUESTIONS 
+Module 1: World Wide Web and HTML 
+1. Differentiate between the Internet and the World Wide Web. 
+2. List and Explain the main components of a URL? 
+3. Describe the purpose of MIME in email communication. 
+4. What is the role of a web server in the client-server model? 
+5. What is the purpose of the declaration in an HTML5 document? 
+6. Explain the role of the element in an HTML document. What types of information are typically placed inside 
+the ? 
+7. How are headings structured in an HTML document using HTML5? Why is proper use of headings important 
+for accessibility and SEO? 
+8. Describe the process of embedding an image in an HTML document. What attributes are essential for the 
+tag? 
+9. What is the significance of using the alt attribute in the tag? Provide an example of its usage. 
+10. How do you create a hyperlink in an HTML document? Provide an example. 
+11. Explain the process of creating an internal link within the same HTML document. 
+12. What is the difference between &lt;ul&gt;, &lt;ol&gt;, and &lt;li&gt; tags in HTML? 
+13. Explain the purposes of the &lt;div&gt; and &lt;span&gt; tags in HTML? 
+14. How do you create a basic HTML table? Mention the key elements used. 
+15. What is the purpose of the tag in an HTML document? Provide an example. 
+16. How do you create a hyperlink that links to an email address? Provide an example of the HTML code. 
+17. How would you create a list where each item is displayed with a bullet point? Provide an example using 
+HTML. 
+18. Describe the difference between using the &lt;ol&gt; tag and &lt;ul&gt; tag for a list. Provide one scenario where each 
+would be appropriately used. 
+19. What is the role of the target attribute in the &lt;a&gt; tag? How does it affect the behavior of hyperlinks? 
+20. Explain the significance of using the id attribute in HTML for internal linking. 
+21. Explain the use of different HTML5 form input types, such as text, email, and date, and how they enhance 
+user input validation. 
+22. What is the significance of the autocomplete attribute in HTML5 form elements? Provide examples of how it 
+can be used in a form. 
+23. What is the purpose of the email input type in HTML5 forms, and how does it help with data validation? 
+24. Compare the text and password input types in HTML5 forms. How do they differ in terms of user experience 
+and data handling? 
+25. Compare the &lt;article&gt; and &lt;section&gt; elements in HTML5 in terms of their use cases and impact on webpage 
+structure. 
+26. Explain the role of a web browser in web programming. How does it act as an interface between users and 
+the World Wide Web? 
+27. What is the diffrene between web servers and web browsers in the context of their implementation and 
+functionality? 
+28. Discuss URI's and URL. 
+29. Write and explain HTML code for adding an image and hyperlink. 
+30. Identify the role of &lt;meta&gt; tag in HTML5 
+31. Define HTML5 semantic elements. 
+32. Differentiate between a URI and a URL with examples. 
+33. What is MIME? Explain its role in web communication with suitable examples. 
+34. Write the basic structure of an HTML5 document and explain the use of heading tags (&lt;h1&gt; to &lt;h6&gt;) and the 
+&lt;img&gt; tag with its attributes. 
+35. Explain the use of special characters (character entities) and the horizontal rule (&lt;hr&gt;) tag in HTML5. Also 
+describe the purpose of the &lt;meta&gt; element with examples.</p>
+<h3 id="p3">p3<a class="anchor" href="#p3">#</a></h3>
+<ol start="36">
+<li>Differentiate between &lt;div&gt; and &lt;span&gt; elements. Explain the structure of an HTML table using &lt;table&gt;, &lt;tr&gt;, 
+&lt;th&gt;, and &lt;td&gt; tags with an example. 
+Module 2: CSS and JavaScript </li>
+<li>Explain the basic syntax and structure of a CSS rule? Give example. </li>
+<li>How do inline styles differ from external style sheets in terms of application and scope? </li>
+<li>What is an embedded style sheet, and when would you use it over other types of CSS? </li>
+<li>How do you link an external style sheet to an HTML document? Provide an example. </li>
+<li>List any 2 advantages of using an external style sheet over inline styles? </li>
+<li>What is the difference between absolute positioning and relative positioning in CSS? </li>
+<li>How does the CSS box model influence the layout of an element on a webpage? </li>
+<li>What are media queries in CSS, and how are they used to create responsive web designs? </li>
+<li>How can background images be positioned and repeated in CSS? Provide examples. </li>
+<li>Describe the purpose of the prompt dialog in JavaScript and explain how it is utilized to obtain user input. </li>
+<li>Illustrate how arithmetic operations are performed in JavaScript with an example of a basic arithmetic 
+expression. </li>
+<li>Examine how JavaScript utilizes control statements and provide an example of a switch statement. </li>
+<li>Explain how arrays are used in JavaScript. Provide an example of creating an array and accessing its 
+elements. </li>
+<li>What are objects in JavaScript? Explain with an example how to define an object and access its properties. </li>
+<li>Describe the role of the Document Object Model (DOM) in web development. How can JavaScript interact 
+with the DOM? </li>
+<li>What is the difference between accessing an array element by index and accessing an object property by 
+key? Provide examples for both. </li>
+<li>How can you update the content of an HTML element using JavaScript? Provide an example using methods 
+like getElementById and innerHTML. </li>
+<li>How do you add a new property to a JavaScript object? Provide a simple example showing how to add a 
+property and assign a value. </li>
+<li>Differentiate between inline, embedded, and external CSS </li>
+<li>Compare Absolute Positioning and Relative positioning. </li>
+<li>Define a callback function in JavaScript. How does it differ from a regular (normal) function? </li>
+<li>Define pseudo-classes in CSS with examples. </li>
+<li>Explain DOM in JavaScript </li>
+<li>Explain the basic syntax and structure of CSS3. Describe inline styles with an example. </li>
+<li>Differentiate between embedded style sheets and linking external style sheets, with examples. </li>
+<li>Explain different types of CSS selectors with examples of properties and values. </li>
+<li>Explain absolute and relative positioning in CSS with examples. </li>
+<li>Explain the CSS Box Model with a diagram. </li>
+<li>What is JavaScript? Explain the use of the prompt() dialog to obtain user input with an example. </li>
+<li>Explain arithmetic operators and decision-making (if/else) statements in JavaScript with examples. </li>
+<li>Explain JavaScript arrays and objects with a simple example. 
+Module 3: JSON and Laravel </li>
+<li>Describe the different data types available in PHP and give an example for each. </li>
+<li>Write a simple PHP program that takes two numbers as input and prints their sum. </li>
+<li>Explain the concept of variables in PHP. How do you declare and initialize a variable in PHP? </li>
+<li>Describe the role of flow control functions in PHP. Write a simple PHP program using an if-else statement to 
+check if a number is positive, negative, or zero. </li>
+<li>Explain the difference between if-else and switch statements in PHP </li>
+<li>Explain the concept of functions in PHP. Write a PHP function that takes two arguments, adds them together, 
+and returns the result. </li>
+<li>Describe the role of regular expressions in PHP for string processing.</li>
+</ol>
+<h3 id="p4">p4<a class="anchor" href="#p4">#</a></h3>
+<ol start="75">
+<li>Write a PHP script that concatenates two strings and converts the resulting string to uppercase </li>
+<li>write a note on php variable. </li>
+<li>write a note on datatypes of php. </li>
+<li>Explain the types of operators of php. </li>
+<li>Differentiate srand() and rand() functions in PHP. </li>
+<li>Draw the internal representation of PHP arrays and explain briefly. </li>
+<li>Explain the actions of next, reset and prev functions in PHP. </li>
+<li>Explain sorting of arrays in PHP with examples. </li>
+<li>Explain form handling in PHP. </li>
+<li>Explain cookies and session tracking in PHP. </li>
+<li>Explain type conversion in PHP. </li>
+<li>Write a simple PHP script demonstrating the use of basic building blocks such as variables, operators, and a 
+function to perform addition. </li>
+<li>Create a PHP script that declares two numbers, uses a function to calculate their sum and difference, and 
+displays the results. </li>
+<li>What are the different data types supported in PHP? Explain each data type with a simple example. </li>
+<li>Explain the use of explode() and implode() in PHP </li>
+<li>Describe the working of functions in PHP with an example. Write a PHP script that defines a function to 
+calculate the factorial of a number and display the result. </li>
+<li>Write a PHP program to check whether the given number is prime or not. 
+Module 4: PHP </li>
+<li>Discuss the various steps for establishing PHP-MySQL connection with a MySQL database. </li>
+<li>Describe the difference between $_SESSION and $_COOKIE in PHP. In what scenarios would you use one 
+over the other? </li>
+<li>Explain the difference between GET and POST methods in form submission in PHP. </li>
+<li>Write a PHP script that starts a session and stores a user's name in a session variable. Then, retrieve and 
+display this name on a different page. </li>
+<li>Write a PHP code snippet to insert a new record into a MySQL table. Include code to handle any errors that 
+might occur during the insertion </li>
+<li>Write a PHP function that accepts a string, checks if it matches a specific regular expression pattern (e.g., a 
+valid email address), and returns a boolean result. </li>
+<li>Explain how you would update a user's email address in a MySQL database using PHP. Provide a code 
+example that includes error handling </li>
+<li>What are prepared statements in PHP, and why are they important when working with MySQL databases? 
+Provide an example. </li>
+<li>Describe the use of PHP sessions for maintaining state across different web pages in a dynamic web 
+application. Why are sessions important? </li>
+<li>Explain how you can use PHP to retrieve and display data from a MySQL database on a web page. 
+Provide a basic example. </li>
+<li>What is the role of PHP in building dynamic web content, and how does it differ from static HTML? </li>
+<li>What is the purpose of $_PHP_SELF? </li>
+<li>Write the PHP code for fetching the data from a database to a webpage? </li>
+<li>Write a program in PHP to calculate Square Root of a number? </li>
+<li>Differentiate between mysql_fetch_array () and mysql_fetch_assoc (). </li>
+<li>Write a PHP script to list databases available in MYSQL database server. </li>
+<li>Write a php script to list data in table from database. </li>
+<li>Illustrate with a sample PHP script, how CREATE operations on My SQL table are implemented in PHP. </li>
+<li>Discuss the various steps for establishing PHP-My SQL connection with a MySQL database. </li>
+<li>Discuss the importance of sessions in web applications. Explain how they help in tracking user data 
+across multiple requests with a suitable example.</li>
+</ol>
+<h3 id="p5">p5<a class="anchor" href="#p5">#</a></h3>
+<ol start="112">
+<li>Write a PHP program to insert records into a MySQL table. Explain how the connection, query execution, 
+and error handling are implemented in the script. </li>
+<li>What is a cookie in PHP? State any two uses of cookies. </li>
+<li>How is a PHP session different from a cookie? </li>
+<li>Write the PHP statement used to start a session. </li>
+<li>Write the basic PHP code statement used to establish a MySQL connection. </li>
+<li>What is the purpose of the CREATE TABLE statement in PHP-MySQL applications? </li>
+<li>Which SQL command is used to add a new record to a MySQL table? Give its syntax. </li>
+<li>What is the purpose of the DELETE statement in MySQL? </li>
+<li>What is the purpose of the SELECT statement in PHP-MySQL applications? </li>
+<li>Which SQL command is used to modify existing records in a MySQL table? </li>
+<li>What is meant by dynamic content in a PHP application? </li>
+<li>State any three advantages of using sessions in a PHP web application. </li>
+<li>Write the PHP syntax for setting a cookie with an expiry time. </li>
+<li>What is the purpose of session_start() in PHP? </li>
+<li>What is the purpose of mysqli_query() in PHP? </li>
+<li>Why is the WHERE clause important in UPDATE and DELETE operations? </li>
+<li>What is mysqli_fetch_assoc() used for? </li>
+<li>Mention any two sources from which dynamic content can be generated in PHP. 
+Module 5: PHP and MySQL Database Operations </li>
+<li>Explain the JSON data interchange format and how it is used in data interchange. </li>
+<li>Write a PHP script to decode a JSON string, modify its content, and encode it back to JSON format. </li>
+<li>Write a note on Laravel Fraework. </li>
+<li>Explain the Design Patterns in Laravel. </li>
+<li>Write a note on Routing in Laravel. </li>
+<li>Explain Middleware in Laravel. </li>
+<li>What is the purpose of the @extends directive in Blade templating? Provide an example of how it is used. </li>
+<li>What is route model binding in Laravel? Provide a brief example of how implicit binding works. </li>
+<li>Explain the role of Resource Controllers in Laravel. How do they simplify CRUD (Create, Read, Update, 
+Delete) operations. </li>
+<li>Describe the schema of a document implemented in JSON with suitable example. </li>
+<li>Discuss the valid data types in JSON and demonstrate how they are used to represent structured data in 
+a web application. </li>
+<li>Explain tthe role of $schema and $id keywords in JSON Schema </li>
+<li>List any three features of Laravel framework. </li>
+<li>Define JSON and state two advantages over XML. </li>
+<li>List any three JSON data types with examples. </li>
+<li>Explain what is JSON Schema and it purpose </li>
+<li>Explain Middleware in Laravel? Give an example use case. </li>
+<li>Differentiate between GET, POST, and Route Model Binding. </li>
+<li>List the basic data types supported by JSON. </li>
+<li>What is the difference between a JSON object and a JSON array? </li>
+<li>What is JSON Schema used for? </li>
+<li>Name the PHP functions commonly used to convert JSON to a PHP value and a PHP value to JSON. </li>
+<li>What design pattern is followed by Laravel? </li>
+<li>State any three features of Laravel. </li>
+<li>What is the purpose of the Laravel application structure? </li>
+<li>What is routing in Laravel? </li>
+<li>What is middleware in Laravel? </li>
+<li>What is the role of a controller in Laravel? </li>
+<li>What is route model binding in Laravel?</li>
+</ol>
+<h3 id="p6">p6<a class="anchor" href="#p6">#</a></h3>
+<ol start="159">
+<li>What is Blade in Laravel? </li>
+<li>What is the purpose of the @foreach directive in a Blade template?</li>
+</ol>
+<h3 id="p7">p7<a class="anchor" href="#p7">#</a></h3>
+<p>PART B – DESCRIPTIVE / APPLICATION QUESTIONS 
+Module 1: World Wide Web and HTML 
+161. 
+a)Explain the key differences between the ARPANET and the modern Internet. How did ARPANET 
+contribute to the development of the Internet? b) Define a web browser and a web server. How do they 
+interact to deliver web pages to users? 
+162. 
+a)Explain the major milestones in the evolution of the Internet from the 1960s to the present day. 
+Highlight the impact of these milestones on global communication.(7 marks) b) Explain how the development 
+of HTML, HTTP, and web browsers contributed to the widespread adoption of the World Wide Web. How did 
+these technologies work together to revolutionize information sharing? (7 marks) 
+163. 
+a)Explain the client-server model in the context of web technologies. How does this model enable the 
+functioning of websites and web applications? (7 marks) b)Discuss the structure of a URL. Explain each 
+component of a URL, such as the scheme, host, port, path, query, and fragment, with examples.(7 marks) 
+164. 
+(a) Explain the importance of semantic elements in HTML5. How do elements like &lt;header&gt;, &lt;article&gt;, 
+and &lt;footer&gt; and contribute to the structure and accessibility of a web document? (7 marks) (b) Compare and 
+contrast the use of and semantic elements in structuring an HTML5 document. Provide examples to illustrate 
+your points.(7 marks) 
+165. 
+(a) Describe the process of creating a basic HTML5 document structure. What are the essential elements 
+that must be included, and what is the role of each? (7 marks) (b) Discuss the importance of metadata in 
+thesection of an HTML5 document. How does metadata influence the behavior and accessibility of a web 
+page? (7 marks) 
+166. 
+(a) Explain the importance of using headings h1 to h6 in structuring the content of an HTML5 document. 
+How do they contribute to both user experience and search engine optimization (SEO)? (7 marks) (b) Discuss 
+the role of heading structure in improving the accessibility of web content. How does a properly structured 
+heading hierarchy assist users with disabilities? (7 marks) 
+167. 
+(a)Explain the concept of responsive images in HTML5. How can the element and the srcset attribute be 
+used to deliver different images based on the user's device or screen resolution? (7 marks) (b)Discuss the 
+impact of image optimization on website performance. What techniques can be used to ensure that images 
+load quickly without compromising quality? (7 marks) 
+168. 
+(a) Explain how you would create a navigation menu using hyperlinks and lists in HTML. What is the 
+advantage of using an unordered list for a navigation menu? (6 Marks) (b) Design a simple webpage layout 
+using the &lt;div&gt; tag. Describe how you would use CSS to style the &lt;div&gt; elements to create a header, content 
+area, and footer. (8 marks) 
+169. 
+(a)How would you use the tag to improve the SEO and mobile responsiveness of a webpage? Provide 
+examples of relevant meta tags. (7 marks) (b)Explain the difference between block-level and inline elements 
+in HTML. Use and as examples to illustrate your explanation. 
+170. 
+(a)You are tasked with creating a table that displays a product list with columns for product name, price, 
+and availability. How would you structure this table in HTML? Additionally, explain how to add a caption to the 
+table. (8 marks) (b)Discuss the importance of using special characters in HTML. How would you include 
+characters like &amp;, &lt;, and &gt; in your HTML document? (6 marks) 
+171. 
+(a)Design a form that includes input fields for name, email, and message. Explain how you would use 
+placeholders and labels to improve user experience. (8 marks) (b)What are the key differences between an 
+ordered list (&lt;ol&gt;) and an unordered list (&lt;ul&gt;)? Provide examples where each type of list would be 
+appropriately used. (6 marks) 
+172. 
+(a) Explain how to create an internal navigation system within an HTML document. Include the steps for 
+setting up anchor points and creating navigation links. (6 Marks) (b) Design a webpage that includes an 
+internal navigation menu with at least three sections. Provide the HTML code for the navigation menu and the 
+sections, and explain how the internal linking works. (8 Marks) 
+173. 
+(a) Describe the purpose of using lists in HTML. Discuss the differences between ordered and unordered 
+lists and provide examples of scenarios where each type would be most appropriately used. (6 Marks) (b) 
+Create a webpage with a combination of an ordered list and an unordered list. The ordered list should</p>
+<h3 id="p8">p8<a class="anchor" href="#p8">#</a></h3>
+<p>describe a process with steps, and the unordered list should list features of a product. Provide the HTML code 
+and explain how the lists are used to convey information effectively. (8 Marks) 
+174. 
+(a) Compare the use of the &lt;nav&gt; element and the &lt;footer&gt; element in HTML5 in terms of their roles in 
+webpage structure and accessibility. (6 Marks) (b) Create a basic HTML5 structure that includes a navigation 
+menu using the &lt;nav&gt; element and a footer section. Explain your code. (8 Marks) 
+175. 
+(a) Compare the &lt;audio&gt; and &lt;video&gt; elements in HTML5. Discuss their key attributes and how they are 
+used to embed media in a webpage. (7 Marks) (b) Write an HTML5 code snippet to embed a video with 
+controls, autoplay, and a poster image. Explain each part of the code. (7 Marks) 
+176. 
+(a) Discuss the role of the input element in HTML5 forms and the significance of different input types like 
+text, email, and password. (7 Marks) (b) Create a sample HTML5 form that includes text, email, and password 
+input fields. Explain how each field is intended to be used. (7 Marks) 
+177. 
+a)Write the equivalent HTML code to implement the following in a web page: (4 mnark) l) An image titled 
+"flowerjpg" with proper attribute to set height, width and message text. 2) Unordered list with values tea, 
+coffee and milk b)Explain following html tags with proper example. (10) l.&lt;textarea&gt; 2. &lt; span&gt; 3.&lt; tr&gt; 4.&lt; 
+form&gt; 5.&lt;a&gt; 
+178. 
+a) Design a webpage that displays the following table(8 marks) b)Write down the general format of an 
+HTTP request and an HTTP response. What (6) is the purpose of the following HTTP headers? Also, identiff 
+whether they are included with an HTTP headeriresponse or both. i. host ii. last-modified 
+179. 
+a) Explain the evolution of Internet and WWW. (7) b) Describe HTTP request–response cycle with neat 
+diagram. (7) 
+180. 
+a) Discuss various input elements available in HTML5 forms. (7) b) Develop a student registration form 
+using HTML. (7) 
+181. 
+a) Explain the importance of HTML tables. (7) b) Write HTML code to design a timetable for a class. (7) 
+182. 
+a) Explain the evolution of the Internet and the World Wide Web, highlighting key milestones. (7 marks) b) 
+Discuss the concept of URI, URL, and MIME types with suitable examples, and explain how they work 
+together in web communication. (7 marks) 
+183. 
+a) Explain the basic structure of an HTML5 document with a neat diagram/code example. Describe the 
+purpose of &lt;!DOCTYPE html&gt;, &lt;head&gt;, and &lt;body&gt;. (7 marks) b) Explain heading tags and image tag 
+attributes in detail with examples, including accessibility considerations. (7 marks) 
+184. 
+a) Explain internal linking within a webpage using anchor tags and the id attribute, with a complete 
+example. (7 marks) b) Describe the different types of lists in HTML5 — ordered, unordered, and definition lists 
+— with syntax and examples. (7 marks) 
+185. 
+a) Explain HTML5 form input types with examples (e.g., email, date, number, range, color, search). (7 
+marks) b) Explain the &lt;datalist&gt; element, autocomplete attribute, and HTML5 page structure elements 
+(&lt;header&gt;, &lt;nav&gt;, &lt;section&gt;, &lt;article&gt;, &lt;footer&gt;) with examples. (7 marks) 
+Module 2: CSS and JavaScript 
+186. 
+(a) Discuss the differences between inline styles, embedded style sheets, and external style sheets in 
+CSS. Provide examples of each. (7 Marks) (b) Explain the advantages and disadvantages of using external 
+style sheets in web development. (7 Marks) 
+187. 
+(a) What are the key differences between CSS2 and CSS3? Highlight some of the new features 
+introduced in CSS3. (6 Marks) (b) Demonstrate how to use CSS3 features like border-radius, box-shadow, 
+and transition to enhance the design of a button. Explain the code you provide. (8 Marks) 
+188. 
+(a) How does the cascading aspect of CSS influence the way styles are applied to HTML elements? 
+Discuss the order of precedence among different CSS sources. (6 Marks) (b) Create a scenario where 
+conflicting CSS rules are applied to the same element from an inline style, an embedded style sheet, and an 
+external style sheet. Explain how the final style is determined and applied to the element. (8 Marks) 
+189. 
+(a) Describe the CSS box model and its components. How does the box model affect element dimensions 
+and spacing on a webpage? (7 Marks) (b) Provide an example of CSS code demonstrating the use of 
+padding, border, and margin properties. Explain how each property affects the layout of an element. (7 Marks) 
+190. 
+(a) Discuss the various methods of applying CSS styles to a webpage: inline styles, embedded styles, 
+and external style sheets. Compare their advantages and disadvantages. (7 Marks) (b) Provide examples of</p>
+<h3 id="p9">p9<a class="anchor" href="#p9">#</a></h3>
+<p>CSS code for inline, embedded, and external styles. Explain how each method is used and its effect on the 
+webpage. (7 Marks) 
+191. 
+(a) Explain the use of background-image, background-position, and background-repeat properties in 
+CSS. How do these properties control the appearance of background images? (7 Marks) (b) Create a CSS 
+code snippet to set a background image, position it in the center, and ensure it does not repeat. Provide an 
+explanation of how each property affects the background image. (7 Marks) 
+192. 
+(a) Explain the different ways to obtain user input in JavaScript. Discuss the prompt dialog and other 
+methods available for user interaction. (7 Marks) (b) Create a JavaScript code example demonstrating the 
+use of the prompt dialog to obtain and display user input. Include validation to check if the input is not empty. 
+(7 Marks) 
+193. 
+(a) Discuss the role of decision-making statements in JavaScript, including if, if-else, and switch 
+statements. Provide examples for each. (7 Marks) (b) Write a JavaScript function that uses a switch 
+statement to determine the day of the week based on a numeric input (1-7). Include examples and explain 
+how the function works. (7 Marks) 
+194. 
+(a) Explain the key programming fundamentals of JavaScript, including variables, data types, and 
+functions. (7 Marks) (b) Describe the use of control statements in JavaScript and their importance in 
+programming. Include explanations for for, while, and do-while loops. (7 Marks) 
+195. 
+(a) Describe how arrays are manipulated in JavaScript. Include methods for adding, removing, and 
+accessing elements. (7 Marks) (b) Write a JavaScript code snippet that demonstrates the following operations 
+on an array: adding elements to both the beginning and end, removing elements from both the beginning and 
+end, and accessing specific elements. Explain the results of each operation. (7 Marks) 
+196. 
+(a) Explain the concept of objects in JavaScript. Describe how to define an object and access its 
+properties. (7 Marks) (b) Write a JavaScript function that takes an object as a parameter and prints the values 
+of its properties. Include an example of calling this function with an object and explain the output. (7 Marks) 
+197. 
+(a) Explain the key differences between arrays and objects in JavaScript. Discuss their use cases and 
+how they are manipulated. (7 Marks) (b) Describe the process of form processing in JavaScript. Include how 
+to access form elements and handle form submissions. (7 Marks) 
+198. 
+a) Write CSS code forthe following: i) set the background color for the hover and active link states to 
+"yellow". ii) Set the list style for ordered lists to "lower case alphabet"' t iii) Set "Boat.gif'as the background 
+image ofthe page. iv) Set dotted border for the document. (6 marks) (b) Discuss various types of control 
+statements in JavaScript (8 marks) 
+199. 
+a)How are event handlers registered in JavaScript? Write the code for an HTML document with 
+embedded JavaScript scripts, which initially displays a paragraph with text "'Welcome" and a button titled 
+"Click". When the buffon is clicked, the-message "Hello from JavaScripf in bold should replace the paragraph 
+text.(8 marks) b) What are class selectors in CSS? Suppose that it is required to display the text content of p 
+tags in two different styles depending on the context.Style I - text should be dbplayed in blue colour, right 
+aligned, underlined, with font style of italics and spacing between the words of text set to 2 cm. Style 2 -text 
+should be displayed with a background colour of yellow, blue colour border, and with a padding of 1.5 cm 
+Write the equivalent CSS style rules.(6 marks) 
+200. 
+a) Describe CSS Box Model with neat diagram. (8) b) Show with example how padding and margin affect 
+layout. (6) 
+201. 
+a)Explain the Document Object Model (DOM) in JavaScript. Write a small HTML document with 
+JavaScript that changes the background color of a paragraph when a button is clicked.(7 marks) b) Write 
+JavaScript code to change paragraph text using a button click. (7) 
+202. 
+a)Explain CSS pseudo-classes with examples. (7) b) Write JavaScript program to create a simple digital 
+clock. (7) 
+Module 3: JSON and Laravel 
+203. 
+a)Describe the building blocks of PHP, including variables and data types.(6 marks) , b) Calculates the 
+area of a rectangle and displays the result along with some basic variable information. (8 marks) 
+204. 
+a) Describe how the switch statement in PHP can be used for handling multiple conditions. Write a PHP 
+script that uses a switch statement to determine the day of the week based on a numeric input (1-7), where 1</p>
+<h3 id="p10">p10<a class="anchor" href="#p10">#</a></h3>
+<p>corresponds to "Monday" and 7 corresponds to "Sunday". Provide explanations for the default case.(10 
+marks) . (b) . Explain the concept of expressions in PHP. How are expressions evaluated and what are the 
+different types of expressions you can use in PHP? 
+205. 
+a) Explain the process of type casting and type juggling in PHP with examples. How can you convert 
+between different data types (4 marks) b) Discuss the different operators in PHP, including arithmetic, 
+comparison, and logical operators, with examples.(10 marks) 
+206. 
+a) Explain the concept of functions in PHP and provide an example of defining and using a function. (b) 
+Explain the use of default parameter values in PHP functions with an example. 
+207. 
+a) Explain the various Control Statements used in php (8 Marks). (b) Explain the concept of Arrays in 
+PHP 96marks). 
+208. 
+Develop a user registration system for a website. This system requires users to enter their full name, 
+email address, and a password. The system must validate these inputs using string processing techniques, 
+regular expressions, and pattern matching. Additionally, the system should process the form and implement 
+business logic to display appropriate feedback messages(14 marks) 
+209. 
+Explain arrays in PHP a. Array creation. b. Functions for dealing with arrays. c. Sequential access d. 
+Sorting of arrays. 
+210. 
+Write PHP scripts for the following specifications. Write algorithm and functions for a. Parameter: An array 
+of strings. Return value: A list of unique strings in the parameter array. b. Parameter: An array of numbers. 
+Return value: The average and median of the parameter array. 
+211. 
+Write PHP scripts for the following specifications. Write algorithm and functions for a. Parameter: An array 
+of numbers(pass-by-value) and two arrays (pass-by-reference). b. Return value: None c. Result: The first 
+pass-by-reference parameter must have the values of the given array that are greater than zero; the second 
+must have the values that are less than zero. 
+212. 
+Write PHP scripts for the following specifications. Write algorithm and functions for a. Parameter: A file 
+variable of a file of text, where the words are separated by spaces or colon. b. Return value: The word that 
+appears most often in the file. 
+213. 
+a) What are the different ways to create an array in PHP?. Explain with example. (7) b) Distinguish 
+between implode and explode function in PHP with suitable examples. Write a PHP program to check 
+whether the given number is Armstrong or not?(7) 
+214. 
+a) Illustrate with a sample PHP script, how functions are implemented in PHP. (8) b) Explain the different 
+flow control functions in PHP.(6) 
+215. 
+a)What is the significance of cookies in web? How can a cookie be created and destroyed in PHP? (6) b) 
+Illustrate with an example the CREATE, DELETE, INSERT, UPDATE and SELECT operations on the MySQL 
+table from PHP program 
+216. 
+a) Write a PHP form handling program to perform the user registration of any website with a minimum of 5 
+different fields and insert the data into a MySQL table after establishing necessary connections with the DB. 
+(10 marks) b)Why PHP is considered to be dynamically typed? (4 marks) 
+217. 
+a) Explain different control statements in PHP. (7) b) Write a PHP script to check whether a number is 
+palindrome. (7) 
+218. 
+a) Define associative arrays in PHP with example. (7) b) Write a PHP script to sort and print student 
+marks. (7) 
+219. 
+a) Discuss PHP string handling functions. (8) b) Write a PHP program to count vowels in a given string. 
+(6) 
+220. 
+a)Explain any six string handling functions used in PHP with example. (6) b) What is the purpose of the 
+implicit arrays $_POST and $_GET in PHP? Consider that a web page displays a form containing two text 
+boxes (named numl and num2), where the user enters numeric data. Write a PHP script which collects this 
+form data, finds the sum, difference and the product of the two numbers and then displays the same with 
+suitable messages. Assume that the script is to be embedded in the web page specified by the action 
+attribute of the form and that the method used when the form is submitted is GET. (8 marks) 
+221. 
+a) Illustrate with a sample PHP script, how functions are implemented in PHP. (6) b) Why is PHP 
+considered to be dynamically typed? Distinguish between implode and explode function in PHP with suitable 
+examples.(8)</p>
+<h3 id="p11">p11<a class="anchor" href="#p11">#</a></h3>
+<ol start="222">
+<li>a) Explain the basic syntax and structure of CSS3 with inline styles, giving a complete example. (7 marks) 
+b) Differentiate embedded and external style sheets, discussing advantages of each approach. (7 marks) </li>
+<li>a) Explain different CSS selectors (type, class, ID, attribute, pseudo-class) with examples. (7 marks) b) 
+Explain CSS properties and values with examples of common properties (color, font, margin, padding). (7 
+marks) </li>
+<li>a) Explain absolute positioning, relative positioning, and backgrounds in CSS with examples. (7 marks) b) 
+Explain list styles and table layouts in CSS with examples. (7 marks) </li>
+<li>a) Explain the CSS Box Model and text flow with a diagram/example. (7 marks) b) Explain the basics of 
+responsive CSS using the viewport meta tag and media queries with an example. (7 marks) </li>
+<li>a) Explain JavaScript programming fundamentals and how user input is obtained using prompt() dialogs, 
+with a complete example. (7 marks) b) Explain arithmetic operators and decision-making control statements 
+(if-else, switch) in JavaScript with examples. (7 marks) </li>
+<li>a) Explain JavaScript arrays and objects with examples, including common array methods. (7 marks) b) 
+Explain the Document Object Model (DOM) and form processing in JavaScript with an example. (7 marks) </li>
+<li>a)Write a JavaScript program to check whether a given number is prime or not. (7 marks) b) Write a 
+JavaScript program that validates a simple registration form (name and email fields) using the DOM, and 
+displays an error message if a field is empty. 
+Module 4: PHP </li>
+<li>Develop a simple PHP-based web application that allows users to submit a form with their name and 
+email address. (14 marks) The application should validate the input and display a personalized welcome 
+message if the submission is successful. Explain the steps involved in building this application, including how 
+you would handle form validation and error handling in PHP. </li>
+<li>a) Discuss the importance of PHP in modern web development. How does PHP enable the creation of 
+dynamic and interactive web content, and what are some common challenges developers face when building 
+PHP-based applications? (10 marks) </li>
+<li>Design a PHP script that generates a dynamic webpage displaying the current date and time, along with 
+a greeting message based on the time of day (e.g., "Good morning," "Good afternoon," "Good evening"). How 
+PHP's date and time functions can be used to implement this feature. </li>
+<li>Write a PHP script which takes the username, password and e-mail values from user and checks whether 
+the user has filled the textboxes or not. Also, check the e-mail field whether it is incorrect format or not </li>
+<li>a) How would you handle file uploads in PHP? (6 marks) b) Write a PHP function to calculate the factorial 
+of a number using recursion. </li>
+<li>a) How to create a connection between PHP and My SQL? Explain its step by step [10 marks) b) Using 
+PHP create a database for maintaining a patient's records in a hospital (4 marks) </li>
+<li>a. give the php code to perform the followingusing regualr expression in php EXTRACTION OF EMAIL 
+ADRESS Validating a Phone Number Format </li>
+<li>give php code to eprfom the follwoing Replacing a Substring in a Text Extracting URLs from a String </li>
+<li>give the php code to perform the following Password Validation Validating a Phone Number Format </li>
+<li>a)What is the significance of cookies in web? How can cookies be created and destroyed in PHP(6 mark) 
+b)Write equivalent PHP statements cortespending to the following i)Declare an associative array named 
+"marks" to store the key-value pairs ("Ram", 40),("Alice",20),("Raj",45),("Mary",35).(2 marks) ii)Modify the 
+value associated with the key "Ram" to 50.(2 marks) iii)Sort the array and print the sorted key value pairs.(2 
+marks) iv)The entry identified by the key "Raj" (2 marks) </li>
+<li>a) Explain how cookies are created, accessed and deleted in PHP with suitable examples. b) Explain 
+PHP sessions and describe the steps for starting, storing, accessing and destroying session data. </li>
+<li>a) Explain the procedure for connecting PHP to a MySQL database using MySQLi, including error 
+handling. b) Write a PHP program to connect to a MySQL database and display a successful connection 
+message. </li>
+<li>a) Explain the CREATE, INSERT and DELETE operations on a MySQL table from PHP with suitable SQL 
+examples. b) Develop a PHP program that creates a student table and inserts a student record into it.</li>
+</ol>
+<h3 id="p12">p12<a class="anchor" href="#p12">#</a></h3>
+<ol start="242">
+<li>a) Explain how PHP can execute INSERT and DELETE queries safely using MySQLi prepared 
+statements. b) Write a PHP program to delete a student record based on register number. </li>
+<li>a) Explain the SELECT operation in PHP-MySQL and the steps for retrieving and displaying multiple 
+rows. b) Write a PHP program to select all students from a table and display them in an HTML table. </li>
+<li>a) Explain the UPDATE operation in PHP-MySQL with syntax and precautions. b) Write a PHP program 
+to update the email address of a student using the student's register number. </li>
+<li>a) Explain the architecture of a PHP application that builds dynamic content using database data. b) 
+Develop a PHP example that retrieves product records from MySQL and generates an HTML list dynamically. </li>
+<li>a) Explain the lifecycle of a PHP session and the role of the session ID. b) Write a PHP program to store 
+a user's name and login time in a session and display them on another page. </li>
+<li>a) Compare cookies and sessions with respect to storage location, lifetime, security and typical 
+applications. b) Recommend cookies or sessions for maintaining a logged-in user's state and justify your 
+choice. </li>
+<li>a) Explain the complete workflow for executing SQL commands from PHP using MySQLi. b) Write a PHP 
+program to execute an INSERT query and report whether the operation succeeded. </li>
+<li>a) Explain CREATE TABLE and the importance of defining appropriate column data types and 
+constraints. b) Write SQL executed from PHP to create an employee table with id, name, department and 
+salary fields. </li>
+<li>a) Explain how DELETE operations should be performed carefully in PHP-MySQL applications. b) Write a 
+prepared-statement PHP program to delete all records belonging to a specified department. </li>
+<li>a) Explain how a SELECT query result is processed in PHP using MySQLi. b) Write a PHP program to 
+display students whose marks are greater than 50. </li>
+<li>a) Explain UPDATE queries and the role of affected_rows in PHP-MySQL applications. b) Write a PHP 
+program to increase the salary of employees in a specified department by 10%. </li>
+<li>a) Explain the steps involved in generating dynamic HTML content from MySQL data. b) Build a PHP 
+example that displays a list of students with their names and marks retrieved from MySQL. 
+Module 5: PHP and MySQL Database Operations </li>
+<li>a)Explain the role of JSON Schema in validating JSON data ( 8marks) , () How error Error Handling is 
+done wih JSON Schema </li>
+<li>Describe the Model-View-Controller (MVC) architecture pattern as implemented in Laravel. Provide an 
+example to illustrate how Laravel's MVC structure organizes application code and handles HTTP requests.(14 
+Marks) </li>
+<li>(a) Explain the concept of Service Providers in Laravel. Describe their role in the Laravel application 
+lifecycle and how they facilitate dependency injection and service management with an exmaple( 10 marks) 
+(b) Describe the process of database migrations in Laravel ( 4 maks) </li>
+<li>a) Discuss the benefits of using resource controllers in Laravel for handling CRUD operations. Explain 
+how resource controllers provide a convention-based approach to managing resources and routes. ( 8 marks) 
+(b) Discuss the integration of third-party packages with Laravel’s routing and middleware systems. Explain 
+how packages can extend Laravel’s functionality and how to use them effectively in routing and middleware. </li>
+<li>(a) Discuss the Laravel routing system in detail. Explain how routes are defined, how route parameters 
+are handled, and how named routes are used.(10 marks) (b) Discuss the process of creating and using 
+custom middleware in Laravel.( 4 marks) </li>
+<li>a) Describe the Laravel view system. How are views created, and how can data be passed to them? 
+Explain the use of controllers to return views and the differences between using closures and controllers for 
+rendering views.( 10 marks) (b) Discuss Laravel's redirection system. How can you perform basic redirects, 
+redirect with input data or flash messages, and use route names for redirection? </li>
+<li>a) Explain the Laravel routing system's support for sub-domains. How can you define routes that are 
+specific to a sub-domain, and what are some common use cases for this feature? (7 marks) (b) Discuss the 
+concept of Blade template inheritance in Laravel. How do you define a base layout, extend it in child views, 
+and include sections of content? ( 7 marks)</li>
+</ol>
+<h3 id="p13">p13<a class="anchor" href="#p13">#</a></h3>
+<ol start="261">
+<li>a)With a neat diagram, explain about Laravel MVC Framework (6 mark) b) Dicuss in detail about 
+Laravel's Routing mechanisms(8 mark) </li>
+<li>a)List the datatypes used in JSON?Explain the use of parse() and stringify() functions in JSON with 
+example. (8 mark) b) What is Route Model Binding in Laravel? Which types of route model binding is 
+supported in Laravel (6 marks) </li>
+<li>a)List the data types used in JSON ? Illustrate document defenition of a 'Student Document' using JSON 
+schema.(8 marks) b) Discuss the folllowing Laravel views a) Creating and rendering views. b) Passing data to 
+views. c) Sharing data with All views. (6 marks) </li>
+<li>(a) Explain the concept of Middleware in Laravel with types and example(8 marks) (b) Write short notes 
+on Redirections in Laravel with example. (6 marks) </li>
+<li>(a) Larvel follows the MVC architecture where request and responding handling is central to application 
+flow. Discuss how Larvel process an HTTP request starting from the route to the controller and returns a 
+response. Include the role of middleware in this lifecycle(5 marks) (b) What is the Blade templating engine in 
+Laravel? Discuss its key features such as template inheritance, directives, conditional statements, loops, and 
+data binding with suitable code examples. (9 Marks) </li>
+<li>(a) Explain JSON syntax rules with examples. (7) (b) Write JSON to represent a student with name, roll 
+no, marks (array of subjects). (7) </li>
+<li>(a) Compare JSON data types with equivalent PHP data types. (7) (b) Write PHP code to decode a JSON 
+object and display values. (7) </li>
+<li>(a) Explain the process of serializing and deserializing JSON in PHP. (8) (b) Write a PHP program that 
+encodes an associative array of employees into JSON and then decodes it back. (6) </li>
+<li>(a) Explain MVC architecture in Laravel. (7) (b) Illustrate Laravel application structure with directory roles. 
+(7) </li>
+<li>(a) Explain Routing in Laravel with examples. (7) (b) Differentiate between GET, POST, and Route Model 
+Binding. (7) </li>
+<li>a) Explain JSON syntax and all supported JSON data types with examples. b) Design a JSON document 
+representing a student with name, register number, course, marks and a list of subjects. </li>
+<li>a) Explain JSON Schema and its role in validating JSON data. Describe type, required and properties 
+keywords. b) Write a JSON Schema for a student object having required name and register number fields and 
+a numeric mark field. </li>
+<li>a) Explain json_encode() and json_decode() in PHP with suitable examples. b) Write a PHP program that 
+decodes a JSON student record, changes the mark and encodes it back into JSON. </li>
+<li>a) Explain Laravel, its MVC design pattern and major features. Also describe the purpose of the standard 
+Laravel application structure. b) Explain the basic steps for setting up a Laravel development environment 
+and creating/running a Laravel application. </li>
+<li>a) Explain Laravel routing, middleware and controllers with suitable examples. b) Design a Laravel route 
+protected by middleware and handled by a controller method. </li>
+<li>a) Explain route model binding, views and redirections in Laravel. b) Develop a Laravel example that uses 
+route model binding to display a student and redirects to the student list after saving. </li>
+<li>a) Explain Blade templating in Laravel, including echoing data and control structures. b) Create a Blade 
+view that displays a student's name and conditionally shows a pass/fail message using a loop for subjects. </li>
+<li>a) Explain the rules for writing valid JSON syntax with examples of objects, arrays and nested data. b) 
+Create a nested JSON document for a college containing departments and a list of students in each 
+department. </li>
+<li>a) Explain JSON data types and identify the JSON data type represented by each of: true, 25, "PHP", 
+null, [1,2] and {"id":1}. b) Write a PHP program that creates an associative array and converts it into JSON. </li>
+<li>a) Explain how JSON Schema validates JSON data and describe type, properties, required, minimum 
+and maximum. b) Design a schema for a course object with code, title and credits, where credits must be 
+between 1 and 6. </li>
+<li>a) Explain the MVC architecture used by Laravel and the responsibilities of Model, View and Controller. b) 
+Given a student management application, identify suitable Model, View and Controller responsibilities.</li>
+</ol>
+<h3 id="p14">p14<a class="anchor" href="#p14">#</a></h3>
+<ol start="282">
+<li>a) Describe the important directories in a Laravel application and their purposes. b) Explain the role of the 
+routes, resources, app and database directories in a typical Laravel project. </li>
+<li>a) Explain Laravel middleware and describe how it can be used for authentication and request filtering. b) 
+Create a route that uses authentication middleware and explain the request flow. </li>
+<li>a) Explain Laravel routing syntax for GET and POST requests and the use of named routes. b) Write 
+routes for displaying a student form and processing its submission using a controller. </li>
+<li>a) Explain route model binding in detail and distinguish implicit and explicit binding. b) Write a Laravel 
+controller method using a bound Student model and return a Blade view. </li>
+<li>a) Explain Blade echoing, conditional directives and iteration directives with examples. b) Write a Blade 
+template that displays student details and marks a student as Pass when the mark is 40 or above.</li>
+</ol>
+  </main>
+</div>
+<div class="tools">
+  <button id="theme" title="Toggle light / dark">☾</button>
+  <button id="top" title="Back to top">↑</button>
+</div>
+<script>
+(function(){
+  var root=document.documentElement, key='minotes-theme';
+  var saved=localStorage.getItem(key);
+  var prefers=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';
+  root.setAttribute('data-theme', saved || prefers);
+
+  var btn=document.getElementById('theme');
+  function sync(){ if(btn) btn.textContent = root.getAttribute('data-theme')==='dark' ? '\u2600' : '\u263E'; }
+  sync();
+  if(btn) btn.addEventListener('click',function(){
+    var next = root.getAttribute('data-theme')==='dark' ? 'light' : 'dark';
+    root.setAttribute('data-theme', next); localStorage.setItem(key,next); sync();
+  });
+
+  var bar=document.getElementById('progress');
+  if(bar) addEventListener('scroll',function(){
+    var h=document.documentElement.scrollHeight-innerHeight;
+    bar.style.width=(h>0?(scrollY/h*100):0)+'%';
+  },{passive:true});
+
+  document.querySelectorAll('pre').forEach(function(pre){
+    var b=document.createElement('button');
+    b.className='copy'; b.textContent='copy';
+    b.addEventListener('click',function(){
+      var t=pre.querySelector('code'); var txt=t?t.innerText:pre.innerText;
+      navigator.clipboard.writeText(txt).then(function(){
+        b.textContent='copied'; setTimeout(function(){b.textContent='copy';},1200);
+      });
+    });
+    pre.appendChild(b);
+  });
+
+  document.querySelectorAll('main table').forEach(function(t){
+    if(t.parentElement.classList.contains('table-scroll')) return;
+    var w=document.createElement('div'); w.className='table-scroll';
+    t.parentNode.insertBefore(w,t); w.appendChild(t);
+  });
+
+  var links=[].slice.call(document.querySelectorAll('.sidebar a[href^="#"]'));
+  var map={}; links.forEach(function(a){ map[a.getAttribute('href').slice(1)]=a; });
+  var heads=[].slice.call(document.querySelectorAll('main h2[id], main h3[id]'));
+  if('IntersectionObserver' in window && heads.length){
+    var obs=new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if(!e.isIntersecting) return;
+        links.forEach(function(a){a.classList.remove('active');});
+        var a=map[e.target.id]; if(a){a.classList.add('active');}
+      });
+    },{rootMargin:'-10% 0px -75% 0px'});
+    heads.forEach(function(h){obs.observe(h);});
+  }
+
+  var top=document.getElementById('top');
+  if(top) top.addEventListener('click',function(){ scrollTo({top:0,behavior:'smooth'}); });
+})();
+</script>
+</body>
+</html>

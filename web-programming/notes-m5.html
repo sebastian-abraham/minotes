@@ -1,0 +1,900 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>module 5.pdf -&gt; markdown · Web Programming</title>
+<style>
+:root{
+  --bg:#fbfaf8; --panel:#ffffff; --ink:#232120; --muted:#5f5a53; --line:#e6e1da;
+  --accent:#7a4fd0; --accent-soft:#f1ecfb; --code-bg:#f5f2ee; --code-ink:#2b2a28;
+  --warn-bg:#fff8e6; --warn-line:#f0d9a0;
+  --sans:"Inter","Segoe UI",system-ui,-apple-system,"Noto Sans",sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,"SF Mono",Menlo,Consolas,"Fira Code",monospace;
+}
+html[data-theme="dark"]{
+  --bg:#141317; --panel:#1b1a20; --ink:#e8e4de; --muted:#a8a199; --line:#2f2c36;
+  --accent:#b79cf5; --accent-soft:#241f33; --code-bg:#22202a; --code-ink:#e8e4de;
+  --warn-bg:#2a2417; --warn-line:#4a3d22;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0; background:var(--bg); color:var(--ink); font-family:var(--sans);
+  font-size:16.5px; line-height:1.72; -webkit-font-smoothing:antialiased;
+}
+#progress{position:fixed;top:0;left:0;height:3px;width:0;background:var(--accent);z-index:50;transition:width .1s linear}
+
+.wrap{display:flex;align-items:flex-start;min-height:100vh}
+.sidebar{
+  position:sticky;top:0;height:100vh;width:300px;flex:0 0 300px;overflow-y:auto;
+  padding:26px 20px 60px;border-right:1px solid var(--line);background:var(--panel);
+}
+.sidebar h1{font-size:15px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);
+  margin:0 0 4px;font-weight:600}
+.sidebar .sub{font-size:12.5px;color:var(--muted);margin:0 0 18px}
+.sidebar nav{font-size:14px}
+.sidebar .toc>ul{padding-left:0}
+.sidebar ul{list-style:none;margin:0;padding-left:12px}
+.sidebar ul ul{border-left:1px solid var(--line);margin-left:4px;padding-left:10px}
+.sidebar li{margin:3px 0}
+.sidebar a{color:var(--ink);text-decoration:none;display:block;padding:3px 8px;border-radius:8px;
+  line-height:1.35;transition:background .12s,color .12s}
+.sidebar a:hover{background:var(--accent-soft);color:var(--accent)}
+.sidebar a.active{background:var(--accent-soft);color:var(--accent);font-weight:600}
+.sidebar .home{display:inline-flex;align-items:center;gap:6px;margin-bottom:16px;font-size:13.5px;
+  color:var(--muted);text-decoration:none;border:1px solid var(--line);padding:5px 10px;border-radius:999px}
+.sidebar .home:hover{color:var(--accent);border-color:var(--accent)}
+
+main{flex:1;min-width:0;padding:46px 56px 120px;max-width:980px;margin:0 auto}
+.doc-head{border-bottom:1px solid var(--line);padding-bottom:18px;margin-bottom:34px}
+.doc-head .kicker{font-size:12.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);
+  font-weight:700;margin-bottom:8px}
+.doc-head .meta{font-size:13.5px;color:var(--muted)}
+
+h1,h2,h3,h4{line-height:1.25;font-weight:700;letter-spacing:-.01em}
+h1{font-size:2.05rem;margin:.2em 0 .5em}
+h2{font-size:1.55rem;margin:2.4em 0 .7em;padding-bottom:.35em;border-bottom:1px solid var(--line)}
+h3{font-size:1.2rem;margin:1.9em 0 .55em}
+h4{font-size:1.03rem;margin:1.5em 0 .45em;color:var(--muted)}
+h2 .anchor,h3 .anchor{opacity:0;margin-left:.35em;font-size:.8em;color:var(--muted);text-decoration:none}
+h2:hover .anchor,h3:hover .anchor{opacity:1}
+p{margin:.75em 0}
+a{color:var(--accent);text-underline-offset:2px}
+strong{font-weight:650}
+hr{border:0;border-top:1px solid var(--line);margin:2.6em 0}
+ul,ol{margin:.7em 0;padding-left:1.4em}
+li{margin:.3em 0}
+li>ul,li>ol{margin:.25em 0}
+blockquote{
+  margin:1.3em 0;padding:12px 18px;background:var(--warn-bg);border-left:3px solid var(--warn-line);
+  border-radius:0 10px 10px 0;color:var(--ink)
+}
+blockquote p{margin:.3em 0}
+
+code{font-family:var(--mono);font-size:.87em;background:var(--code-bg);color:var(--code-ink);
+  padding:.15em .38em;border-radius:6px;border:1px solid var(--line);
+  box-decoration-break:clone;-webkit-box-decoration-break:clone;overflow-wrap:anywhere}
+pre{position:relative;background:var(--code-bg);border:1px solid var(--line);border-radius:12px;
+  padding:16px 18px;overflow-x:auto;margin:1.1em 0}
+pre code{background:none;border:0;padding:0;font-size:13.6px;line-height:1.62;white-space:pre}
+.copy{position:absolute;top:8px;right:8px;font:600 11px/1 var(--sans);color:var(--muted);
+  background:var(--panel);border:1px solid var(--line);border-radius:7px;padding:5px 8px;cursor:pointer;
+  opacity:0;transition:opacity .15s}
+pre:hover .copy{opacity:1}
+.copy:hover{color:var(--accent);border-color:var(--accent)}
+
+.table-scroll{overflow-x:auto;margin:1.3em 0;border:1px solid var(--line);border-radius:12px;background:var(--panel)}
+table{border-collapse:collapse;width:100%;font-size:14.6px}
+th,td{padding:9px 13px;text-align:left;vertical-align:top;border-bottom:1px solid var(--line)}
+th{background:var(--accent-soft);font-weight:650;font-size:13px;letter-spacing:.02em;
+  position:sticky;top:0;backdrop-filter:blur(4px)}
+tr:last-child td{border-bottom:0}
+tbody tr:nth-child(even){background:color-mix(in srgb,var(--panel) 60%,var(--bg))}
+tbody tr:hover{background:var(--accent-soft)}
+
+.tools{position:fixed;right:22px;bottom:22px;display:flex;flex-direction:column;gap:8px;z-index:40}
+.tools button{width:42px;height:42px;border-radius:12px;border:1px solid var(--line);background:var(--panel);
+  color:var(--ink);cursor:pointer;font-size:16px;box-shadow:0 4px 14px rgba(0,0,0,.10)}
+.tools button:hover{color:var(--accent);border-color:var(--accent)}
+@media (max-width:1000px){
+  .wrap{display:block}
+  .sidebar{position:static;width:auto;height:auto;border-right:0;border-bottom:1px solid var(--line)}
+  .sidebar nav{max-height:40vh;overflow:auto}
+  main{padding:28px 20px 100px}
+}
+@media print{
+  .sidebar,.tools,#progress,.copy{display:none!important}
+  body{background:#fff;color:#000;font-size:11pt}
+  main{padding:0;max-width:none}
+  h2{break-after:avoid} pre,table,blockquote{break-inside:avoid}
+  a{color:#000;text-decoration:none}
+}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+<div class="wrap">
+  <aside class="sidebar">
+    <a class="home" href="index.html">← Web Programming</a>
+    <h1>Notes · M5</h1>
+    <p class="sub">Lecture notes, 760 lines</p>
+    <nav class="toc"><div class="toc">
+<ul>
+<li><a href="#p1">p1</a></li>
+<li><a href="#p2">p2</a></li>
+<li><a href="#p3">p3</a></li>
+<li><a href="#p4">p4</a></li>
+<li><a href="#p5">p5</a></li>
+<li><a href="#p6">p6</a></li>
+<li><a href="#p7">p7</a></li>
+<li><a href="#p8">p8</a></li>
+<li><a href="#p9">p9</a></li>
+<li><a href="#p10">p10</a></li>
+<li><a href="#p11">p11</a></li>
+<li><a href="#p12">p12</a></li>
+<li><a href="#p13">p13</a></li>
+<li><a href="#p14">p14</a></li>
+<li><a href="#p15">p15</a></li>
+<li><a href="#p16">p16</a></li>
+<li><a href="#p17">p17</a></li>
+<li><a href="#p18">p18</a></li>
+<li><a href="#p19">p19</a></li>
+<li><a href="#p20">p20</a></li>
+<li><a href="#p21">p21</a></li>
+<li><a href="#p22">p22</a></li>
+<li><a href="#p23">p23</a></li>
+<li><a href="#p24">p24</a></li>
+<li><a href="#p25">p25</a></li>
+<li><a href="#p26">p26</a></li>
+<li><a href="#p27">p27</a></li>
+<li><a href="#p28">p28</a></li>
+</ul>
+</div>
+</nav>
+  </aside>
+  <main>
+    <div class="doc-head">
+      <div class="kicker">20CST461 · Web Programming</div>
+      <div class="meta">Lecture notes, 760 lines · rendered from module5.md</div>
+    </div>
+    <h1 id="module-5pdf-markdown">module 5.pdf -&gt; markdown</h1>
+<p>Converted from the PDF text layer (pymupdf). Page markers <code>### p&lt;N&gt;</code> map 1:1 to PDF pages. <code>[Image Description: ...]</code> blocks are placeholders: the page is diagram/figure-heavy and must be rendered and viewed, not guessed.</p>
+<h3 id="p1">p1<a class="anchor" href="#p1">#</a></h3>
+<p>MODULE 5
+JSON and Laravel
+7 Hours of Content Delivery
+•
+JSON syntax &amp; data types — 1 Hr
+•
+JSON schema &amp; PHP manipulation — 1 Hr
+•
+Laravel overview, MVC &amp; setup — 1 Hr
+•
+Routing, middleware &amp; controllers — 1 Hr
+•
+Route model binding, views &amp; redirections — 1 Hr
+•
+Blade templating — 2 Hrs
+Web Programming | Saintgits College of Engineering
+1</p>
+<h3 id="p2">p2<a class="anchor" href="#p2">#</a></h3>
+<p>MODULE V · 1 HR TOPIC
+What is JSON &amp; Why It Matters
+20CST461
+1
+JSON = JavaScript Object Notation
+A lightweight, text-based format for representing structured data — readable by humans and easy for machines to parse. Despite the name, it's used by virtually 
+every programming language, not just JavaScript.
+2
+Why it replaced XML for most APIs
+JSON is far less verbose than XML (no closing tags), maps directly onto common data structures (objects, arrays) that most languages already have, and parses 
+faster.
+3
+Where it shows up
+API responses, configuration files, the request/response bodies of almost every modern web service — including the database rows from Module IV, once 
+converted.
+4
+What it is NOT
+JSON is a data format, not a programming language — it has no functions, no comments, no logic. It only describes data.
+Web Programming | Saintgits College of Engineering
+2</p>
+<h3 id="p3">p3<a class="anchor" href="#p3">#</a></h3>
+<p>MODULE V · 1 HR TOPIC
+JSON Syntax — Objects &amp; Arrays
+20CST461
+JSON is built from exactly two structures: objects (key-value pairs) and arrays (ordered lists) — everything else nests inside these.
+•
+{ } defines an object: unordered key-value pairs
+•
+[ ] defines an array: an ordered list of values
+•
+Keys are ALWAYS double-quoted strings — single quotes 
+are invalid
+•
+No comments and no trailing commas — strict syntax, 
+unlike JavaScript object literals
+JSON
+{
+"name": "Anu",
+"age": 20,
+"isActive": true,
+"marks": [88, 92, 79]
+}
+Web Programming | Saintgits College of Engineering
+3</p>
+<h3 id="p4">p4<a class="anchor" href="#p4">#</a></h3>
+<p>MODULE V · 1 HR TOPIC
+JSON Data Types
+20CST461
+Type
+Example
+Notes
+string
+"Saintgits"
+Always double-quoted
+number
+20 or 499.50
+No distinction between int/float
+boolean
+true / false
+Lowercase, unquoted
+null
+null
+Represents 'no value'
+object
+{ "city": "Kottayam" }
+Nested key-value pairs
+array
+[88, 92, 79]
+Ordered list of any of the above
+Note: Unlike PHP arrays, JSON has no separate 'associative array' type — an object covers that role.
+Web Programming | Saintgits College of Engineering
+4</p>
+<h3 id="p5">p5<a class="anchor" href="#p5">#</a></h3>
+<p>MODULE V · 1 HR TOPIC
+Nested JSON — Objects Within Objects
+20CST461
+Real-world JSON is usually nested several levels deep — objects containing arrays of objects, and so on.
+•
+Any value (including another object or array) can sit inside 
+an object or array
+•
+Nesting models real relationships: a student HAS an 
+address, HAS a list of marks
+•
+Indentation is just for human readability — it has no 
+effect on parsing
+•
+This is the shape API responses typically take, including 
+ones built by Laravel later in this module
+JSON
+{
+"name": "Anu",
+"address": {
+"city": "Kottayam",
+"pin": "686532"
+},
+"courses": [
+{ "code": "20CST461", "title": "Web Programming" }
+]
+}
+Web Programming | Saintgits College of Engineering
+5</p>
+<h3 id="p6">p6<a class="anchor" href="#p6">#</a></h3>
+<p>MODULE V · 1 HR TOPIC
+What is JSON Schema?
+20CST461
+1
+The problem it solves
+JSON itself has no built-in way to say 'this field is required' or 'this must be a number' — JSON Schema is a separate JSON document that describes those rules for 
+another piece of JSON.
+2
+What it can specify
+Required fields, expected data types per field, value constraints (minimum/maximum, string patterns), and the structure of nested objects/arrays.
+3
+Why it matters for APIs
+Before trusting incoming JSON (e.g. from a form submitted via JavaScript, or another service), a schema lets you validate its shape automatically instead of writing 
+manual checks for every field.
+4
+Where it's used
+API documentation tools, request validation libraries, and configuration file validation — not required for every JSON use case, but valuable wherever JSON 
+crosses a trust boundary.
+Web Programming | Saintgits College of Engineering
+6</p>
+<h3 id="p7">p7<a class="anchor" href="#p7">#</a></h3>
+<p>MODULE V · 1 HR TOPIC
+json_encode() — PHP to JSON
+20CST461
+PHP's built-in json_encode() converts a PHP array or object directly into a JSON-formatted string.
+•
+json_encode($value) returns a JSON string built from the 
+given PHP value
+•
+PHP associative arrays become JSON objects automatically
+•
+PHP indexed arrays become JSON arrays automatically
+•
+JSON_PRETTY_PRINT flag formats the output with 
+readable indentation
+PHP
+&lt;?php
+$student = [
+"name" =&gt; "Anu",
+"marks" =&gt; [88, 92, 79]
+];
+echo json_encode($student);
+echo json_encode($student, JSON_PRETTY_PRINT);
+?&gt;
+Web Programming | Saintgits College of Engineering
+7</p>
+<h3 id="p8">p8<a class="anchor" href="#p8">#</a></h3>
+<p>MODULE V · 1 HR TOPIC
+json_decode() — JSON to PHP
+20CST461
+json_decode() does the reverse — turning a JSON string back into usable PHP data.
+•
+json_decode($jsonString) returns a PHP object by default
+•
+json_decode($jsonString, true) returns an associative 
+array instead — usually more convenient
+•
+json_last_error() checks whether decoding actually 
+succeeded
+•
+Common use: reading a JSON request body sent by a 
+JavaScript fetch() call
+PHP
+&lt;?php
+$json = '{"name":"Rahul","marks":[72,80]}';
+$asObject = json_decode($json);
+echo $asObject-&gt;name;
+$asArray = json_decode($json, true);
+echo $asArray["name"];
+?&gt;
+Web Programming | Saintgits College of Engineering
+8</p>
+<h3 id="p9">p9<a class="anchor" href="#p9">#</a></h3>
+<p>MODULE V · 1 HR TOPIC
+Putting It Together: A Database Row as JSON
+20CST461
+Combining Module IV's database pattern with json_encode() turns a query result into a ready-to-use API response — no HTML involved at all.
+•
+Fetch all rows into a plain PHP array first
+•
+json_encode() the whole array at once, after the loop
+•
+header("Content-Type: application/json") tells the client 
+what kind of response this is
+•
+This is the foundation of building an API endpoint instead 
+of an HTML page
+PHP
+&lt;?php
+header("Content-Type: application/json");
+$result = mysqli_query($conn, "SELECT name, marks FROM students");
+$students = [];
+while ($row = mysqli_fetch_assoc($result)) {
+$students[] = $row;
+}
+echo json_encode($students);
+?&gt;
+Web Programming | Saintgits College of Engineering
+9</p>
+<h3 id="p10">p10<a class="anchor" href="#p10">#</a></h3>
+<p>MODULE V · 1 HR TOPIC
+What is Laravel &amp; Why Use a Framework?
+20CST461
+1
+The problem at scale
+Modules III and IV's hand-written connect → query → loop → render pattern works, but repeating it across dozens of pages in a real application gets repetitive 
+and error-prone fast.
+2
+What Laravel provides
+A free, open-source PHP framework that supplies routing, database access (via an ORM), templating, authentication, and project structure out of the box — so 
+common problems are solved once, consistently.
+3
+'Framework' vs. 'library'
+A library (like a single PHP function file) is something your code calls. A framework calls your code — it defines the overall structure, and you fill in the specific 
+behaviour it asks for.
+4
+Where it fits in this course
+Everything from here builds on the PHP and MySQL fundamentals already covered — Laravel doesn't replace that knowledge, it organizes and accelerates it.
+Web Programming | Saintgits College of Engineering
+10</p>
+<h3 id="p11">p11<a class="anchor" href="#p11">#</a></h3>
+<p>MODULE V · 1 HR TOPIC
+The MVC Design Pattern
+20CST461
+Laravel enforces a separation of concerns: data, logic, and presentation each live in their own place.
+User
+Requests a page
+Controller
+Handles the request
+Model
+Talks to the database
+View
+Renders the response
+Response
+Sent back to the user
+In practice the Controller calls the Model first, then hands its data to the View — drawn here as one left-to-right journey.
+Controller never talks to the browser directly, and the Model never renders HTML — each layer has exactly one job.
+Web Programming | Saintgits College of Engineering
+11</p>
+<h3 id="p12">p12<a class="anchor" href="#p12">#</a></h3>
+<p>MODULE V · 1 HR TOPIC
+Key Laravel Features
+20CST461
+1
+Eloquent ORM
+Lets you work with database tables as PHP objects and methods (Student::find(1)) instead of writing raw mysqli_query() SQL strings by hand.
+2
+Blade templating engine
+Laravel's view layer — compiles clean directives like @if and @foreach into plain PHP behind the scenes (covered in depth later in this module).
+3
+Artisan CLI
+A command-line tool for scaffolding (php artisan make:controller), running migrations, and many other repetitive setup tasks.
+4
+Routing, middleware, migrations &amp; auth
+Built-in systems for mapping URLs to code, filtering requests, version-controlling database schema changes, and handling user login — each covered as its own 
+topic in this module.
+Web Programming | Saintgits College of Engineering
+12</p>
+<h3 id="p13">p13<a class="anchor" href="#p13">#</a></h3>
+<p>MODULE V · 1 HR TOPIC
+Setting Up &amp; Application Structure
+20CST461
+Laravel requires PHP, Composer (PHP's dependency manager), and a database — setup is a few command-line steps.
+•
+composer create-project laravel/laravel myapp —
+scaffolds a new project
+•
+php artisan serve — runs a local development server
+•
+app/Http/Controllers/ — your controller classes
+•
+resources/views/ — your Blade template files
+•
+routes/web.php — where URL-to-code mappings are 
+defined
+Shell + Folder Structure
+composer create-project laravel/laravel myapp
+cd myapp
+php artisan serve
+myapp/
+├── app/Http/Controllers/
+├── resources/views/
+├── routes/web.php
+└── database/migrations/
+Web Programming | Saintgits College of Engineering
+13</p>
+<h3 id="p14">p14<a class="anchor" href="#p14">#</a></h3>
+<p>MODULE V · 1 HR TOPIC
+Defining Routes
+20CST461
+A route maps a URL to the code that should handle it — the entry point for every request in a Laravel app.
+•
+Routes are defined in routes/web.php
+•
+Route::get('/path', function) — handles GET requests to 
+that path
+•
+Route::post(), Route::put(), Route::delete() — handle 
+other HTTP methods
+•
+A route can point to a closure (inline function) or, more 
+commonly, a controller method
+PHP (Laravel)
+use Illuminate\Support\Facades\Route;
+Route::get('/', function () {
+return "Welcome to Saintgits CSE";
+});
+Route::get('/students', [StudentController::class, 'index']);
+Web Programming | Saintgits College of Engineering
+14</p>
+<h3 id="p15">p15<a class="anchor" href="#p15">#</a></h3>
+<p>MODULE V · 1 HR TOPIC
+Controllers
+20CST461
+Controllers group related request-handling logic into a single class, keeping routes/web.php short and readable.
+•
+php artisan make:controller StudentController scaffolds a 
+new controller file
+•
+Controllers live in app/Http/Controllers/
+•
+Each public method typically handles one route
+•
+A controller method usually ends by returning a view or a 
+redirect
+PHP (Laravel)
+&lt;?php
+namespace App\Http\Controllers;
+class StudentController extends Controller {
+public function index() {
+$students = Student::all();
+return view('students.index', compact('students'));
+}
+}
+Web Programming | Saintgits College of Engineering
+15</p>
+<h3 id="p16">p16<a class="anchor" href="#p16">#</a></h3>
+<p>MODULE V · 1 HR TOPIC
+Middleware — Filtering Requests
+20CST461
+1
+What middleware does
+Code that runs BEFORE a request reaches its controller (or after the response is built) — a filtering/processing layer that wraps around the actual request 
+handling.
+2
+Common uses
+Checking whether a user is logged in (auth middleware), logging requests, checking permissions, or rate-limiting how often an endpoint can be called.
+3
+Applying middleware to a route
+Route::get('/dashboard', ...)-&gt;middleware('auth'); — this single line ensures the dashboard route only runs its controller logic for logged-in users.
+4
+Why it's separate from the controller
+Keeping this logic out of the controller means the same check (e.g. 'is logged in') doesn't need to be repeated inside every single controller method that needs it.
+Web Programming | Saintgits College of Engineering
+16</p>
+<h3 id="p17">p17<a class="anchor" href="#p17">#</a></h3>
+<p>MODULE V · 1 HR TOPIC
+Connecting Routes to Controllers
+20CST461
+Here's the full picture: a route, protected by middleware, pointing to a controller method.
+•
+The route declares the URL and which controller method 
+should run
+•
+Middleware (if any) runs first, and can stop the request 
+before it reaches the controller
+•
+The controller method runs last, doing the actual work
+•
+This three-piece chain — route, middleware, controller —
+handles every request in a Laravel app
+PHP (Laravel)
+// routes/web.php
+Route::get('/students', [StudentController::class, 'index'])
+-&gt;middleware('auth');
+// app/Http/Controllers/StudentController.php
+public function index() {
+$students = Student::all();
+return view('students.index', compact('students'));
+}
+Web Programming | Saintgits College of Engineering
+17</p>
+<h3 id="p18">p18<a class="anchor" href="#p18">#</a></h3>
+<p>MODULE V · 1 HR TOPIC
+Route Model Binding
+20CST461
+Laravel can automatically fetch a database record matching a route parameter, handing it straight to the controller — no manual query needed.
+•
+Route::get('/student/{student}', ...) — {student} is a 
+placeholder in the URL
+•
+Type-hinting the matching parameter as a Model triggers 
+automatic lookup by ID
+•
+If no matching record exists, Laravel automatically returns 
+a 404 response
+•
+Saves writing Student::find($id) and a null-check by hand 
+in every method
+PHP (Laravel)
+Route::get('/student/{student}',
+[StudentController::class, 'show']);
+public function show(Student $student) {
+// $student is already the correct DB row
+return view('students.show', compact('student'));
+}
+Web Programming | Saintgits College of Engineering
+18</p>
+<h3 id="p19">p19<a class="anchor" href="#p19">#</a></h3>
+<p>MODULE V · 1 HR TOPIC
+Views — Rendering Blade Templates
+20CST461
+A controller's most common job is choosing a view and handing it the data it needs to display.
+•
+view('name', $data) renders a Blade template, passing 
+data to it
+•
+Views live in resources/views/ as .blade.php files
+•
+compact('students') is a shortcut that bundles a variable 
+into an array keyed by its own name
+•
+Dot notation in view names maps to folders: 
+students.index means 
+resources/views/students/index.blade.php
+PHP (Laravel)
+public function index() {
+$students = Student::all();
+return view('students.index', compact('students'));
+}
+// equivalent to:
+return view('students.index', ['students' =&gt; $students]);
+Web Programming | Saintgits College of Engineering
+19</p>
+<h3 id="p20">p20<a class="anchor" href="#p20">#</a></h3>
+<p>MODULE V · 1 HR TOPIC
+Redirections
+20CST461
+Not every controller method ends in a view — after a form submission, redirecting to another route is usually the right move.
+•
+redirect('/path') sends the browser to a different route
+•
+redirect()-&gt;back() returns to the previous page —
+common after a failed validation
+•
+-&gt;with('key', 'value') attaches flash data the next page can 
+read (e.g. a success message)
+•
+Redirecting after a successful POST prevents accidental 
+duplicate form resubmission
+PHP (Laravel)
+public function store(Request $request) {
+Student::create($request-&gt;all());
+return redirect('/students')
+-&gt;with('message', 'Student added successfully!');
+}
+Web Programming | Saintgits College of Engineering
+20</p>
+<h3 id="p21">p21<a class="anchor" href="#p21">#</a></h3>
+<p>MODULE V · 1 HR TOPIC
+A Typical Laravel Request, Start to Finish
+20CST461
+1. Route matches
+the URL
+2. Middleware
+runs checks
+3. Controller
+method runs
+4a. Model Binding
+fetches DB data
+5a. view()
+renders Blade
+5b. redirect()
+to another route
+Response sent to the browser
+Step 5 branches: a GET request to show data usually ends in a view; a POST that changes data usually ends in 
+a redirect.
+Web Programming | Saintgits College of Engineering
+21</p>
+<h3 id="p22">p22<a class="anchor" href="#p22">#</a></h3>
+<p>MODULE V · 2 HR TOPIC
+What is Blade?
+20CST461
+1
+Laravel's templating engine
+Blade lets you write clean, readable directives (@if, @foreach) directly inside HTML, instead of constantly switching in and out of &lt;?php ?&gt; blocks like the raw PHP 
+from Module IV.
+2
+It compiles to plain PHP
+Behind the scenes, Blade templates are compiled into ordinary PHP code and cached — so there's no real performance cost compared to writing PHP by hand.
+3
+File naming convention
+Blade files end in .blade.php (e.g. index.blade.php) — Laravel uses this extension to know a file should be compiled as a Blade template.
+4
+Why it matters for this module
+Every view() call from the previous topic renders a Blade file — this is the syntax used inside those files to actually display data and control what's shown.
+Web Programming | Saintgits College of Engineering
+22</p>
+<h3 id="p23">p23<a class="anchor" href="#p23">#</a></h3>
+<p>MODULE V · 2 HR TOPIC
+Echoing Data with Blade
+20CST461
+Blade's curly-brace syntax is the most-used feature — and the choice between the two forms matters for security.
+•
+{{ $variable }} — echoes data, automatically escaped (safe 
+against XSS)
+•
+{!! $variable !!} — echoes raw, UNESCAPED HTML — only 
+use for trusted content
+•
+{{ $name ?? 'Guest' }} — Blade supports normal PHP 
+expressions inside the braces
+•
+Comments use {{-- comment --}}, never rendered in the 
+output
+Blade (.blade.php)
+&lt;h2&gt;Welcome, {{ $student-&gt;name }}&lt;/h2&gt;
+&lt;p&gt;{{ $bio ?? 'No bio provided.' }}&lt;/p&gt;
+{!! $trustedHtmlBlock !!}
+{{-- This comment never reaches the browser --}}
+Web Programming | Saintgits College of Engineering
+23</p>
+<h3 id="p24">p24<a class="anchor" href="#p24">#</a></h3>
+<p>MODULE V · 2 HR TOPIC
+Blade Conditionals
+20CST461
+Blade wraps PHP's if/else logic in cleaner directives that read naturally inside HTML.
+•
+@if / @elseif / @else / @endif — standard conditional 
+branching
+•
+@unless($condition) ... @endunless — runs when the 
+condition is false (inverse of @if)
+•
+@isset($variable) ... @endisset — checks a variable is set 
+and not null
+•
+@empty($variable) ... @endempty — checks a variable is 
+empty
+Blade (.blade.php)
+@if (count($students) &gt; 0)
+&lt;p&gt;{{ count($students) }} students found.&lt;/p&gt;
+@elseif ($searched)
+&lt;p&gt;No matches for your search.&lt;/p&gt;
+@else
+&lt;p&gt;No students yet.&lt;/p&gt;
+@endif
+@unless ($isLoggedIn)
+&lt;a href="/login"&gt;Please log in&lt;/a&gt;
+@endunless
+Web Programming | Saintgits College of Engineering
+24</p>
+<h3 id="p25">p25<a class="anchor" href="#p25">#</a></h3>
+<p>MODULE V · 2 HR TOPIC
+Blade Loops
+20CST461
+Blade's loop directives mirror PHP's, plus a handy built-in $loop variable inside @foreach.
+•
+@foreach($items as $item) ... @endforeach — the most 
+common loop in views
+•
+@for($i = 0; $i &lt; 10; $i++) ... @endfor — counted loops
+•
+@while($condition) ... @endwhile — condition-based 
+loops
+•
+$loop-&gt;index, $loop-&gt;first, $loop-&gt;last — available 
+automatically inside @foreach
+Blade (.blade.php)
+&lt;ul&gt;
+@foreach ($students as $s)
+&lt;li&gt;
+{{ $loop-&gt;iteration }}. {{ $s-&gt;name }}
+@if ($loop-&gt;last) (last student) @endif
+&lt;/li&gt;
+@endforeach
+&lt;/ul&gt;
+Web Programming | Saintgits College of Engineering
+25</p>
+<h3 id="p26">p26<a class="anchor" href="#p26">#</a></h3>
+<p>MODULE V · 2 HR TOPIC
+Template Inheritance
+20CST461
+Rather than repeating the header/footer markup on every page, Blade lets child views inherit a shared layout.
+•
+@extends('layout') — declares which parent layout this 
+view inherits
+•
+@section('name') ... @endsection — defines a named 
+block of content
+•
+@yield('name') — in the PARENT layout, marks where a 
+child's section gets inserted
+•
+@include('partial') — pulls in a reusable chunk of Blade 
+from another file
+Blade (.blade.php)
+{{-- layout.blade.php --}}
+&lt;body&gt;
+@include('partials.navbar')
+@yield('content')
+&lt;/body&gt;
+{{-- students/index.blade.php --}}
+@extends('layout')
+@section('content')
+&lt;h2&gt;Student List&lt;/h2&gt;
+@endsection
+Web Programming | Saintgits College of Engineering
+26</p>
+<h3 id="p27">p27<a class="anchor" href="#p27">#</a></h3>
+<p>MODULE V · 2 HR TOPIC
+Blade Directives — Quick Reference
+20CST461
+Directive
+Purpose
+{{ $var }}
+Echo data, auto-escaped (safe)
+{!! $var !!}
+Echo raw HTML, unescaped (use with caution)
+@if / @elseif / @else / @endif
+Conditional rendering
+@foreach / @endforeach
+Loop over a collection or array
+@extends / @section / @yield
+Template inheritance — shared layouts
+@include('view')
+Insert a reusable partial template
+Note: Every Blade directive is just a readable shorthand for plain PHP — nothing here is doing anything PHP itself couldn't do.
+Web Programming | Saintgits College of Engineering
+27</p>
+<h3 id="p28">p28<a class="anchor" href="#p28">#</a></h3>
+<p>MODULE 5 RECAP
+Key Takeaways
+20CST461
+JSON uses { } for objects and [ ] for arrays; keys are always double-
+quoted.
+json_encode() turns PHP data into JSON; json_decode() does the 
+reverse.
+Laravel implements MVC: Model (data), View (presentation), Controller 
+(logic) — each with one job.
+Routes (routes/web.php) map a URL to a controller method; 
+middleware filters requests before that.
+Route model binding auto-fetches a DB record from a route parameter 
+— no manual query needed.
+Controllers typically end by returning a view() or a redirect().
+Blade's {{ }} auto-escapes output for safety; {!! !!} does not — use 
+deliberately.
+@extends/@section/@yield let views inherit a shared layout, avoiding 
+repeated markup.
+Web Programming | Saintgits College of Engineering
+28</p>
+  </main>
+</div>
+<div class="tools">
+  <button id="theme" title="Toggle light / dark">☾</button>
+  <button id="top" title="Back to top">↑</button>
+</div>
+<script>
+(function(){
+  var root=document.documentElement, key='minotes-theme';
+  var saved=localStorage.getItem(key);
+  var prefers=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';
+  root.setAttribute('data-theme', saved || prefers);
+
+  var btn=document.getElementById('theme');
+  function sync(){ if(btn) btn.textContent = root.getAttribute('data-theme')==='dark' ? '\u2600' : '\u263E'; }
+  sync();
+  if(btn) btn.addEventListener('click',function(){
+    var next = root.getAttribute('data-theme')==='dark' ? 'light' : 'dark';
+    root.setAttribute('data-theme', next); localStorage.setItem(key,next); sync();
+  });
+
+  var bar=document.getElementById('progress');
+  if(bar) addEventListener('scroll',function(){
+    var h=document.documentElement.scrollHeight-innerHeight;
+    bar.style.width=(h>0?(scrollY/h*100):0)+'%';
+  },{passive:true});
+
+  document.querySelectorAll('pre').forEach(function(pre){
+    var b=document.createElement('button');
+    b.className='copy'; b.textContent='copy';
+    b.addEventListener('click',function(){
+      var t=pre.querySelector('code'); var txt=t?t.innerText:pre.innerText;
+      navigator.clipboard.writeText(txt).then(function(){
+        b.textContent='copied'; setTimeout(function(){b.textContent='copy';},1200);
+      });
+    });
+    pre.appendChild(b);
+  });
+
+  document.querySelectorAll('main table').forEach(function(t){
+    if(t.parentElement.classList.contains('table-scroll')) return;
+    var w=document.createElement('div'); w.className='table-scroll';
+    t.parentNode.insertBefore(w,t); w.appendChild(t);
+  });
+
+  var links=[].slice.call(document.querySelectorAll('.sidebar a[href^="#"]'));
+  var map={}; links.forEach(function(a){ map[a.getAttribute('href').slice(1)]=a; });
+  var heads=[].slice.call(document.querySelectorAll('main h2[id], main h3[id]'));
+  if('IntersectionObserver' in window && heads.length){
+    var obs=new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if(!e.isIntersecting) return;
+        links.forEach(function(a){a.classList.remove('active');});
+        var a=map[e.target.id]; if(a){a.classList.add('active');}
+      });
+    },{rootMargin:'-10% 0px -75% 0px'});
+    heads.forEach(function(h){obs.observe(h);});
+  }
+
+  var top=document.getElementById('top');
+  if(top) top.addEventListener('click',function(){ scrollTo({top:0,behavior:'smooth'}); });
+})();
+</script>
+</body>
+</html>

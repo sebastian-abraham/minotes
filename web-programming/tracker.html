@@ -1,0 +1,1029 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>📚 20CST461 Web Programming — Study Tracker · Web Programming</title>
+<style>
+:root{
+  --bg:#fbfaf8; --panel:#ffffff; --ink:#232120; --muted:#5f5a53; --line:#e6e1da;
+  --accent:#7a4fd0; --accent-soft:#f1ecfb; --code-bg:#f5f2ee; --code-ink:#2b2a28;
+  --warn-bg:#fff8e6; --warn-line:#f0d9a0;
+  --sans:"Inter","Segoe UI",system-ui,-apple-system,"Noto Sans",sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,"SF Mono",Menlo,Consolas,"Fira Code",monospace;
+}
+html[data-theme="dark"]{
+  --bg:#141317; --panel:#1b1a20; --ink:#e8e4de; --muted:#a8a199; --line:#2f2c36;
+  --accent:#b79cf5; --accent-soft:#241f33; --code-bg:#22202a; --code-ink:#e8e4de;
+  --warn-bg:#2a2417; --warn-line:#4a3d22;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0; background:var(--bg); color:var(--ink); font-family:var(--sans);
+  font-size:16.5px; line-height:1.72; -webkit-font-smoothing:antialiased;
+}
+#progress{position:fixed;top:0;left:0;height:3px;width:0;background:var(--accent);z-index:50;transition:width .1s linear}
+
+.wrap{display:flex;align-items:flex-start;min-height:100vh}
+.sidebar{
+  position:sticky;top:0;height:100vh;width:300px;flex:0 0 300px;overflow-y:auto;
+  padding:26px 20px 60px;border-right:1px solid var(--line);background:var(--panel);
+}
+.sidebar h1{font-size:15px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);
+  margin:0 0 4px;font-weight:600}
+.sidebar .sub{font-size:12.5px;color:var(--muted);margin:0 0 18px}
+.sidebar nav{font-size:14px}
+.sidebar .toc>ul{padding-left:0}
+.sidebar ul{list-style:none;margin:0;padding-left:12px}
+.sidebar ul ul{border-left:1px solid var(--line);margin-left:4px;padding-left:10px}
+.sidebar li{margin:3px 0}
+.sidebar a{color:var(--ink);text-decoration:none;display:block;padding:3px 8px;border-radius:8px;
+  line-height:1.35;transition:background .12s,color .12s}
+.sidebar a:hover{background:var(--accent-soft);color:var(--accent)}
+.sidebar a.active{background:var(--accent-soft);color:var(--accent);font-weight:600}
+.sidebar .home{display:inline-flex;align-items:center;gap:6px;margin-bottom:16px;font-size:13.5px;
+  color:var(--muted);text-decoration:none;border:1px solid var(--line);padding:5px 10px;border-radius:999px}
+.sidebar .home:hover{color:var(--accent);border-color:var(--accent)}
+
+main{flex:1;min-width:0;padding:46px 56px 120px;max-width:980px;margin:0 auto}
+.doc-head{border-bottom:1px solid var(--line);padding-bottom:18px;margin-bottom:34px}
+.doc-head .kicker{font-size:12.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);
+  font-weight:700;margin-bottom:8px}
+.doc-head .meta{font-size:13.5px;color:var(--muted)}
+
+h1,h2,h3,h4{line-height:1.25;font-weight:700;letter-spacing:-.01em}
+h1{font-size:2.05rem;margin:.2em 0 .5em}
+h2{font-size:1.55rem;margin:2.4em 0 .7em;padding-bottom:.35em;border-bottom:1px solid var(--line)}
+h3{font-size:1.2rem;margin:1.9em 0 .55em}
+h4{font-size:1.03rem;margin:1.5em 0 .45em;color:var(--muted)}
+h2 .anchor,h3 .anchor{opacity:0;margin-left:.35em;font-size:.8em;color:var(--muted);text-decoration:none}
+h2:hover .anchor,h3:hover .anchor{opacity:1}
+p{margin:.75em 0}
+a{color:var(--accent);text-underline-offset:2px}
+strong{font-weight:650}
+hr{border:0;border-top:1px solid var(--line);margin:2.6em 0}
+ul,ol{margin:.7em 0;padding-left:1.4em}
+li{margin:.3em 0}
+li>ul,li>ol{margin:.25em 0}
+blockquote{
+  margin:1.3em 0;padding:12px 18px;background:var(--warn-bg);border-left:3px solid var(--warn-line);
+  border-radius:0 10px 10px 0;color:var(--ink)
+}
+blockquote p{margin:.3em 0}
+
+code{font-family:var(--mono);font-size:.87em;background:var(--code-bg);color:var(--code-ink);
+  padding:.15em .38em;border-radius:6px;border:1px solid var(--line);
+  box-decoration-break:clone;-webkit-box-decoration-break:clone;overflow-wrap:anywhere}
+pre{position:relative;background:var(--code-bg);border:1px solid var(--line);border-radius:12px;
+  padding:16px 18px;overflow-x:auto;margin:1.1em 0}
+pre code{background:none;border:0;padding:0;font-size:13.6px;line-height:1.62;white-space:pre}
+.copy{position:absolute;top:8px;right:8px;font:600 11px/1 var(--sans);color:var(--muted);
+  background:var(--panel);border:1px solid var(--line);border-radius:7px;padding:5px 8px;cursor:pointer;
+  opacity:0;transition:opacity .15s}
+pre:hover .copy{opacity:1}
+.copy:hover{color:var(--accent);border-color:var(--accent)}
+
+.table-scroll{overflow-x:auto;margin:1.3em 0;border:1px solid var(--line);border-radius:12px;background:var(--panel)}
+table{border-collapse:collapse;width:100%;font-size:14.6px}
+th,td{padding:9px 13px;text-align:left;vertical-align:top;border-bottom:1px solid var(--line)}
+th{background:var(--accent-soft);font-weight:650;font-size:13px;letter-spacing:.02em;
+  position:sticky;top:0;backdrop-filter:blur(4px)}
+tr:last-child td{border-bottom:0}
+tbody tr:nth-child(even){background:color-mix(in srgb,var(--panel) 60%,var(--bg))}
+tbody tr:hover{background:var(--accent-soft)}
+
+.tools{position:fixed;right:22px;bottom:22px;display:flex;flex-direction:column;gap:8px;z-index:40}
+.tools button{width:42px;height:42px;border-radius:12px;border:1px solid var(--line);background:var(--panel);
+  color:var(--ink);cursor:pointer;font-size:16px;box-shadow:0 4px 14px rgba(0,0,0,.10)}
+.tools button:hover{color:var(--accent);border-color:var(--accent)}
+@media (max-width:1000px){
+  .wrap{display:block}
+  .sidebar{position:static;width:auto;height:auto;border-right:0;border-bottom:1px solid var(--line)}
+  .sidebar nav{max-height:40vh;overflow:auto}
+  main{padding:28px 20px 100px}
+}
+@media print{
+  .sidebar,.tools,#progress,.copy{display:none!important}
+  body{background:#fff;color:#000;font-size:11pt}
+  main{padding:0;max-width:none}
+  h2{break-after:avoid} pre,table,blockquote{break-inside:avoid}
+  a{color:#000;text-decoration:none}
+}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+<div class="wrap">
+  <aside class="sidebar">
+    <a class="home" href="index.html">← Web Programming</a>
+    <h1>Tracker</h1>
+    <p class="sub">Progress + prediction map</p>
+    <nav class="toc"><div class="toc">
+<ul>
+<li><a href="#how-to-start-a-session-new-chat">▶️ How to start a session (new chat)</a></li>
+<li><a href="#exam-profile">Exam profile</a></li>
+<li><a href="#materials-tooling-this-machine">📁 Materials &amp; tooling (this machine)</a></li>
+<li><a href="#module-kits-built-08-nov-2026-these-are-the-primary-study-artefacts-now">📦 Module kits (built 08 Nov 2026 — these are the primary study artefacts now)</a></li>
+<li><a href="#syllabus-scope-verbatim-from-the-scanned-syllabus-pp-34">Syllabus scope (verbatim, from the scanned syllabus pp. 3–4)</a></li>
+<li><a href="#module-3-introduction-to-php">Module 3 — Introduction to PHP</a></li>
+<li><a href="#module-4-phpmysql">Module 4 — PHP–MySQL</a></li>
+<li><a href="#prediction-map-syllabus-structure-of-the-deck-no-pyqs-available">Prediction Map (syllabus × structure of the deck — ⚠️ no PYQs available)</a></li>
+<li><a href="#diagram-index-converted-lecture-md">Diagram Index (converted lecture md)</a></li>
+<li><a href="#session-plan">Session Plan</a></li>
+<li><a href="#session-log">Session Log</a></li>
+</ul>
+</div>
+</nav>
+  </aside>
+  <main>
+    <div class="doc-head">
+      <div class="kicker">20CST461 · Web Programming</div>
+      <div class="meta">Progress + prediction map · rendered from wp_study_tracker.md</div>
+    </div>
+    <h1 id="20cst461-web-programming-study-tracker">📚 20CST461 Web Programming — Study Tracker</h1>
+<blockquote>
+<p><strong>ACTIVE TARGET: ESE — all 5 modules</strong> (3 hrs · 100 marks)
+Set up 24 Sep 2026 for Internal Test II (M3–M4); <strong>re-scoped 08 Nov 2026 to the full ESE</strong> now that the faculty Question Bank (286 questions) is in the folder.
+<strong>Per-module study kits are built</strong> — see §"Module kits" below. Modules 1 &amp; 2 were previously "done"; they now have kits too, because the ESE pulls 2 Part-A + 1 Part-B from every module.</p>
+</blockquote>
+<h2 id="how-to-start-a-session-new-chat">▶️ How to start a session (new chat)<a class="anchor" href="#how-to-start-a-session-new-chat">#</a></h2>
+<p>Paste this into a fresh chat:</p>
+<blockquote>
+<p><strong>Web Programming exam prep — read /home/haze/study/Web Programming/wp_study_tracker.md, then start Session 2.</strong></p>
+</blockquote>
+<p><strong>My side of the loop:</strong> read this tracker → read the relevant line ranges of <code>module3.md</code> / <code>module4.md</code> (line refs below) → <strong>PART 1</strong> Deep Dive (notes-first, every term from scratch) → <strong>PART 2</strong> Exam Kit (skeletons for all possible questions + 🔴 memorize lists) → <strong>PART 3</strong> code drills (write-it / predict-the-output, with answers) → grade with specific corrections → append to <code>wp_revision.md</code> + <code>wp_code_drills.md</code> → update tables and Session Log here.</p>
+<hr />
+<h2 id="exam-profile">Exam profile<a class="anchor" href="#exam-profile">#</a></h2>
+<p><strong>ESE (end-semester, official — from <code>Web Programming Syllabus.pdf</code> p4):</strong> 3 hrs · 100 marks
+- <strong>Part A:</strong> 10 questions × <strong>3 marks</strong> (2 per module, all compulsory) → 30
+- <strong>Part B:</strong> 5 questions × <strong>14 marks</strong> (2 per module, answer any <strong>one</strong>) → 70
+- CIE 50 = Internal Test I 12.5 + <strong>Internal Test II 12.5</strong> + assignments 15 + attendance 10
+- Internal tests: <strong>2-hour duration</strong> (syllabus p2, "Course Implementation Clock")
+- ⚠️ No internal-test paper for this course exists in the folder — internal format unconfirmed. ESE pattern above is the official one. <strong>Marks split drives skeleton length: 3-mark = 3 points; 14-mark = full program + explanation.</strong></p>
+<p><strong>🎯 Exam intel for this course (from Haze, Sep 2026):</strong>
+1. <strong>Modules 3 &amp; 4 are CODE-heavy</strong> — both modules are mostly syntax and programs. Expect <em>write a PHP program / predict the output / write the form-processing script / write the connect-query-loop-render page</em>.
+2. <strong>Haze is a first-time PHP learner</strong> — read the slides once, no practice yet. Every term gets explained from zero; no assumed PHP familiarity (C is a pre-requisite, so C-shape analogies are fine and welcome).
+3. Priority = <strong>syntax you can reproduce by hand</strong> (no interpreter in the exam): exact tags, <code>$</code>, <code>;</code>, <code>.</code> vs <code>+</code>, <code>-&gt;</code>, <code>=&gt;</code>, <code>==</code> vs <code>===</code>, <code>$_POST</code> vs <code>$_GET</code>, connect → query → loop → render.</p>
+<p><strong>Depth:</strong> 🔵 understand · 🔴 memorize · <strong>Confidence:</strong> 🔴 weak · 🟡 okay · 🟢 strong</p>
+<p><strong>Study method (my preferences):</strong>
+- Notes-first (module .md), PYQ/syllabus only set <em>priority</em>
+- 3 parts per session: Deep Dive → Exam Kit → code drills
+- Answer skeletons: numbered, attribution-free, matching the mark allocation
+- Question prediction = <strong>syllabus × PYQ cross-analysis</strong>. Here: <strong>no PYQs exist</strong> → syllabus + the official ESE pattern + the deck's own slide titles are the only signals (see Prediction Map).</p>
+<hr />
+<h2 id="materials-tooling-this-machine">📁 Materials &amp; tooling (this machine)<a class="anchor" href="#materials-tooling-this-machine">#</a></h2>
+<ul>
+<li>Folder: <code>/home/haze/study/Web Programming</code></li>
+<li><strong>PRIMARY TEACHING SOURCES:</strong> <code>module3.md</code> (773 lines, 26 slides, PHP) · <code>module4.md</code> (858 lines, 26 slides, PHP+MySQL)</li>
+<li><code>module3.pdf</code> / <code>module4.pdf</code> — source decks, <strong>both have full text layers</strong> (16.7k / 18.8k chars, 26 pp each). Conversion verdict (24 Sep 2026): all 26 slides of each deck are present in the .md with matching titles and code blocks — <strong>nothing missing</strong>. The only content the .md drops is the repeated slide chrome ("MODULE III · 1 HR TOPIC / 20CST461 / slide no."), which is correct.</li>
+<li><code>Web Programming Syllabus.pdf</code> — <strong>pure scan (0 extractable text)</strong>. Read via rendered-page vision; modules III &amp; IV transcribed into this tracker + the module tables below. To re-render: <code>~/.venvs/study/bin/python ~/.hermes/skills/study/study-tutor-sessions/scripts/render_pages.py &quot;Web Programming Syllabus.pdf&quot; /tmp/wpscan 1 2 3 4</code> (or pymupdf <code>get_pixmap(dpi=170)</code>).</li>
+<li><code>S7_QuestionPapers.pdf/.md</code> — scanned bundle; contains <strong>20CST401 AI, 20CST421 Cloud Computing, 20CET453 EHS, 20MCN401 Industrial Safety only. ❌ No Web Programming paper.</strong> → there is no PYQ evidence for this course; the Prediction Map is syllabus-derived only.</li>
+<li><strong><code>phprun.py</code> — online PHP runner (3v4l.org). DORMANT — the exam is written, so we no longer verify outputs.</strong> Kept only for the case where a claim is genuinely uncertain: <code>python3 phprun.py snippet.php</code>. <strong>PHP is NOT installed locally</strong> (needs sudo password); <code>sudo pacman -S php</code> would fix that (log it to <code>~/system-tweaks.md</code>). ✅ <em>(3v4l)</em> tags already in <code>wp_revision.md</code> came from this.</li>
+<li><code>wp_revision.md</code> — <strong>append-only revision notes</strong> (I append; you read; never read back into context)</li>
+<li><code>wp_code_drills.md</code> — <strong>append-only drill workbook: answer key</strong> (model answers for every drill set)</li>
+<li><strong><code>answers.php</code> — YOUR fill-in worksheet.</strong> Questions live in comment blocks with all scaffolding pre-typed; you fill only the blanks on the <code>// &gt;&gt;&gt; FILL:</code> lines, then say "done" in chat and I grade it in place (Part A = graded feedback, Part B = current set). Never put the answer key in here.</li>
+<li>Line-ref legend: <code>3:L275</code> = <code>module3.md</code> line 275 · <code>4:L431</code> = <code>module4.md</code> line 431</li>
+</ul>
+<hr />
+<h2 id="module-kits-built-08-nov-2026-these-are-the-primary-study-artefacts-now">📦 Module kits (built 08 Nov 2026 — these are the primary study artefacts now)<a class="anchor" href="#module-kits-built-08-nov-2026-these-are-the-primary-study-artefacts-now">#</a></h2>
+<p>Every kit follows the same shape: <strong>§1 coverage table (every bank question + where it is answered) → §2 Part-1 deep dive from zero → §3 Part-2 exam answer bank (3-mark masters + 14-mark skeletons with full code) → §4 Part-3 hand-writable drills → §5 night-before memorize table → §6 diagram index → §7 "say this if grilled" lines.</strong></p>
+<table>
+<thead>
+<tr>
+<th>Module</th>
+<th>Kit file</th>
+<th>Lines</th>
+<th>Bank questions covered</th>
+<th>ESE value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1 · WWW &amp; HTML5</td>
+<td><code>KIT_M1_WWW_HTML.md</code></td>
+<td>61 (Q1–36, Q161–185)</td>
+<td>100%</td>
+<td>~20 marks</td>
+</tr>
+<tr>
+<td>2 · CSS &amp; JavaScript</td>
+<td><code>KIT_M2_CSS_JS.md</code></td>
+<td>55 (Q37–67, Q186–202, Q222–228)</td>
+<td>100%</td>
+<td>~20 marks</td>
+</tr>
+<tr>
+<td>3 · Introduction to PHP</td>
+<td><code>KIT_M3_PHP.md</code></td>
+<td>43 (Q68–91, Q203–221)</td>
+<td>100%</td>
+<td>~20 marks</td>
+</tr>
+<tr>
+<td>4 · PHP + MySQL</td>
+<td><code>KIT_M4_PHP_MYSQL.md</code></td>
+<td>63 (Q92–129, Q229–253)</td>
+<td>100%</td>
+<td>~20 marks</td>
+</tr>
+<tr>
+<td>5 · JSON &amp; Laravel</td>
+<td><code>KIT_M5_JSON_LARAVEL.md</code></td>
+<td>64 (Q130–160, Q254–286)</td>
+<td>100%</td>
+<td>~20 marks</td>
+</tr>
+<tr>
+<td>—</td>
+<td><code>START_HERE.md</code></td>
+<td>—</td>
+<td>plan + how to use the kits</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Coverage verified programmatically on 08 Nov 2026:</strong> all 286 bank questions appear in exactly one kit's coverage table, no duplicates, no gaps.</p>
+<p>⚠️ <strong>Question-bank numbering quirk (faculty typo, confirmed):</strong> the bank's module headings for Q122–160 and Q203–286 are shifted by one — "Module 3: JSON and Laravel" actually holds PHP questions, "Module 4: PHP" holds PHP+MySQL, "Module 5: PHP and MySQL Database Operations" holds JSON/Laravel. The kits use the <strong>content</strong> mapping, which matches the syllabus:
+- <strong>M3 = PHP</strong>, <strong>M4 = PHP+MySQL</strong>, <strong>M5 = JSON+Laravel</strong>.</p>
+<p>⚠️ <strong>Source-file fix:</strong> <code>WEB PROGRAMMING MOD-2.md</code> was a byte-identical copy of Module 1 (same 33,332 bytes, same headings). The real Module 2 deck was re-converted to <strong><code>module2_fixed.md</code></strong> (22 pages, 985 lines) on 08 Nov 2026 — that is the file the M2 kit cites (<code>2:pN</code>). Treat the old MOD-2.md as dead.</p>
+<hr />
+<h2 id="syllabus-scope-verbatim-from-the-scanned-syllabus-pp-34">Syllabus scope (verbatim, from the scanned syllabus pp. 3–4)<a class="anchor" href="#syllabus-scope-verbatim-from-the-scanned-syllabus-pp-34">#</a></h2>
+<p><strong>Module III — Introduction to PHP</strong> (CO5 · 6 hrs · 20% ESE)
+| Syllabus line | Hrs |
+|---|---|
+| Building blocks of PHP – Variables – Data Type – simple PHP program | 1 |
+| Converting between Data Types – Operators and Expressions – Flow Control functions | 1 |
+| Control Statements – Working with Functions | 1 |
+| Initialising and Manipulating Arrays – Objects | 1 |
+| Working with Strings – String processing with Regular expression – Pattern Matching | 1 |
+| Form Processing and Business Logic | 1 |</p>
+<p><strong>Module IV — PHP–MySQL</strong> (CO4 · 6 hrs · 20% ESE)
+| Syllabus line | Hrs |
+|---|---|
+| Cookies – Sessions | 1 |
+| PHP and MySQL Integration – Connecting to MySQL with PHP | 1 |
+| Working with MySQL data | 1 |
+| Performing CREATE – DELETE – INSERT operations on MySQL table from PHP Program | 1 |
+| Performing SELECT and UPDATE operations on MySQL table from PHP Program | 1 |
+| Building Dynamic Content in PHP application | 1 |</p>
+<p><strong>Coverage sweep (checked 24 Sep 2026): every syllabus line of M3 and M4 maps to ≥1 topic row below. Nothing skipped.</strong> Module V (JSON–Laravel) is out of scope for this test; Modules I &amp; II already done.</p>
+<hr />
+<h2 id="module-3-introduction-to-php">Module 3 — Introduction to PHP<a class="anchor" href="#module-3-introduction-to-php">#</a></h2>
+<p>Source: <code>module3.md</code>. Slides per topic in brackets.</p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Topic (syllabus ↔ slides)</th>
+<th>Src (file:line)</th>
+<th>Depth</th>
+<th>Status</th>
+<th>Conf</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>M3.1</td>
+<td>What PHP is; server-side vs client-side; the request–response cycle (browser → server → PHP engine → MySQL → plain HTML)</td>
+<td>3:L27–77</td>
+<td>🔵</td>
+<td>☐</td>
+<td>🔴</td>
+<td>Know the 3-box flow diagram (3:L57) — a likely 3-mark "explain how PHP works"</td>
+</tr>
+<tr>
+<td>M3.2</td>
+<td><strong>Embedding + variables + data types + simple program</strong> — <code>&lt;?php ?&gt;</code>, <code>$var</code>, int/float/string/bool/array/NULL, <code>echo</code>, <code>;</code>, <code>gettype()</code>, <code>var_dump()</code></td>
+<td>3:L84–127</td>
+<td>🔴</td>
+<td>☐</td>
+<td>🔴</td>
+<td>The absolute base layer — must be automatic</td>
+</tr>
+<tr>
+<td>M3.3</td>
+<td>Converting between data types — casts <code>(int)</code> <code>(float)</code> <code>(string)</code> <code>(bool)</code> <code>(array)</code>, <code>intval()</code>/<code>floatval()</code>/<code>strval()</code>/<code>boolval()</code>, <code>settype()</code>, <code>is_int()</code>/<code>is_string()</code>/<code>is_array()</code></td>
+<td>3:L136–158</td>
+<td>🔴</td>
+<td>☐</td>
+<td>🔴</td>
+<td>High-yield output-prediction fodder</td>
+</tr>
+<tr>
+<td>M3.4</td>
+<td>Operators &amp; expressions — arithmetic incl. <code>**</code>, assignment, <code>.</code> / <code>.=</code>, precedence, expression = anything with a value</td>
+<td>3:L166–189</td>
+<td>🔴</td>
+<td>☐</td>
+<td>🔴</td>
+<td><code>.</code> vs <code>+</code> is THE classic trap</td>
+</tr>
+<tr>
+<td>M3.5</td>
+<td>Comparison &amp; logical operators — <code>==</code> vs <code>===</code>, <code>!=</code> vs <code>!==</code>, <code>&lt;</code> <code>&gt;</code>, <code>&amp;&amp;</code> <code>\|\|</code> <code>!</code>, loose-typing comparison rules</td>
+<td>3:L197–219</td>
+<td>🔴</td>
+<td>☐</td>
+<td>🔴</td>
+<td>"One of PHP's most exam-relevant quirks" — the deck says so itself</td>
+</tr>
+<tr>
+<td>M3.6</td>
+<td>Flow control functions — <code>if/elseif/else</code>, <code>exit()</code>/<code>die()</code>, <code>return</code></td>
+<td>3:L227–246</td>
+<td>🔵</td>
+<td>☐</td>
+<td>🔴</td>
+<td>4 named points = a 3-mark question</td>
+</tr>
+<tr>
+<td>M3.7</td>
+<td>Control statements — <code>if</code>/<code>elseif</code>/<code>else</code>, <code>switch</code>/<code>case</code>/<code>break</code>/<code>default</code>, nesting, ternary</td>
+<td>3:L255–282</td>
+<td>🔴</td>
+<td>☐</td>
+<td>🔴</td>
+<td>Write-a-program target</td>
+</tr>
+<tr>
+<td>M3.8</td>
+<td>Loops — <code>for</code>, <code>while</code>, <code>do…while</code>, <code>foreach</code> (and <code>foreach … as $k =&gt; $v</code>)</td>
+<td>3:L291–315</td>
+<td>🔴</td>
+<td>☐</td>
+<td>🔴</td>
+<td>Every 14-mark program needs a loop</td>
+</tr>
+<tr>
+<td>M3.9</td>
+<td>Functions — declaration, call, <code>return</code>, hoisting, no-return → NULL</td>
+<td>3:L324–349</td>
+<td>🔴</td>
+<td>☐</td>
+<td>🔴</td>
+<td></td>
+</tr>
+<tr>
+<td>M3.10</td>
+<td>Function parameters — default values, <strong>scope</strong> (<code>local</code> / <code>global</code> / <code>static</code>), <strong>pass by value vs <code>&amp;</code> by reference</strong>, variadics <code>...$nums</code></td>
+<td>3:L358–377</td>
+<td>🔴</td>
+<td>☐</td>
+<td>🔴</td>
+<td>4 named sub-points = ready-made exam question</td>
+</tr>
+<tr>
+<td>M3.11</td>
+<td>Indexed arrays — init <code>[]</code> vs <code>array()</code>, access, append <code>$arr[] =</code>, <code>count()</code></td>
+<td>3:L386–409</td>
+<td>🔴</td>
+<td>☐</td>
+<td>🔴</td>
+<td></td>
+</tr>
+<tr>
+<td>M3.12</td>
+<td>Associative &amp; multidimensional arrays — <code>key =&gt; value</code>, nested records, <code>foreach</code> with key</td>
+<td>3:L419–441</td>
+<td>🔴</td>
+<td>☐</td>
+<td>🔴</td>
+<td><code>=&gt;</code> is a syntax must</td>
+</tr>
+<tr>
+<td>M3.13</td>
+<td>Common array functions — <code>count</code>, <code>array_push</code>, <code>sort</code>/<code>rsort</code>, <code>array_map</code>, <code>array_filter</code>, <code>in_array</code>, (+<code>array_keys</code>, <code>array_values</code>, <code>array_merge</code>, <code>array_search</code>)</td>
+<td>3:L450–461</td>
+<td>🔴</td>
+<td>☐</td>
+<td>🔴</td>
+<td>Table on 3:L452 = a 3-mark "list the functions" question</td>
+</tr>
+<tr>
+<td>M3.14</td>
+<td>Objects &amp; classes — <code>class</code>, <code>public</code>, <code>new</code>, <code>-&gt;</code>, <code>$this</code>, <code>__construct()</code>, methods</td>
+<td>3:L471–498</td>
+<td>🔴</td>
+<td>☐</td>
+<td>🔴</td>
+<td>Write-a-class target; <code>-&gt;</code> not <code>.</code></td>
+</tr>
+<tr>
+<td>M3.15</td>
+<td>Strings — <code>strlen</code>, <code>strtoupper</code>/<code>strtolower</code>, <code>trim</code>, <code>substr</code> (+ single vs double quotes, interpolation, escaping)</td>
+<td>3:L508–529</td>
+<td>🔴</td>
+<td>☐</td>
+<td>🔴</td>
+<td></td>
+</tr>
+<tr>
+<td>M3.16</td>
+<td>String manipulation — <code>.</code> / <code>.=</code>, <code>str_replace</code>, <code>explode</code>, <code>implode</code> (+ <code>strpos</code>, <code>strrev</code>, <code>ucfirst</code>, <code>sprintf</code>)</td>
+<td>3:L538–556</td>
+<td>🔴</td>
+<td>☐</td>
+<td>🔴</td>
+<td>Fine</td>
+</tr>
+<tr>
+<td>M3.17</td>
+<td>Regular expressions — PCRE, <code>preg_match</code>, <code>preg_replace</code>, <code>preg_split</code>, <code>/delimiters/</code></td>
+<td>3:L568–586</td>
+<td>🔴</td>
+<td>☐</td>
+<td>🔴</td>
+<td></td>
+</tr>
+<tr>
+<td>M3.18</td>
+<td>Pattern matching for validation — the 5-pattern table (<code>^</code>,<code>$</code>,<code>\d</code>,<code>\w</code>,<code>{n}</code>, char classes, quantifiers)</td>
+<td>3:L597–609</td>
+<td>🔴</td>
+<td>☐</td>
+<td>🔴</td>
+<td>Memorize the 5 patterns verbatim</td>
+</tr>
+<tr>
+<td>M3.19</td>
+<td>Reading form data — <code>$_GET</code> vs <code>$_POST</code>, <code>$_REQUEST</code>, <code>$_SERVER[&quot;REQUEST_METHOD&quot;]</code>, <code>isset()</code></td>
+<td>3:L619–637</td>
+<td>🔴</td>
+<td>☐</td>
+<td>🔴</td>
+<td>The bridge to M4</td>
+</tr>
+<tr>
+<td>M3.20</td>
+<td>Validating &amp; sanitizing input — <code>trim</code>, <code>htmlspecialchars</code>, <code>empty</code>, <code>preg_match</code>, <code>??</code> null-coalescing, <code>die()</code></td>
+<td>3:L650–671</td>
+<td>🔴</td>
+<td>☐</td>
+<td>🔴</td>
+<td></td>
+</tr>
+<tr>
+<td>M3.21</td>
+<td>Business logic — validation vs business rule, why separate, examples (eligibility/fee/grade)</td>
+<td>3:L684–705</td>
+<td>🔵</td>
+<td>☐</td>
+<td>🔴</td>
+<td></td>
+</tr>
+<tr>
+<td>M3.22</td>
+<td><strong>Full form-processing script</strong> (the 5-step pipeline: method check → read+trim → validate → business logic → respond)</td>
+<td>3:L718–740</td>
+<td>🔴</td>
+<td>☐</td>
+<td>🔴</td>
+<td><strong>Prime 14-mark program candidate</strong></td>
+</tr>
+<tr>
+<td>M3.23</td>
+<td>Module 3 recap's 8 takeaways (3:L754–770)</td>
+<td>3:L752–773</td>
+<td>🔴</td>
+<td>☐</td>
+<td>🔴</td>
+<td>Fast revision list the night before</td>
+</tr>
+</tbody>
+</table>
+<h2 id="module-4-phpmysql">Module 4 — PHP–MySQL<a class="anchor" href="#module-4-phpmysql">#</a></h2>
+<p>Source: <code>module4.md</code>.</p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Topic (syllabus ↔ slides)</th>
+<th>Src (file:line)</th>
+<th>Depth</th>
+<th>Status</th>
+<th>Conf</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>M4.1</td>
+<td>Why state management — HTTP is stateless, cookies (client) vs sessions (server), why both exist</td>
+<td>4:L27–53</td>
+<td>🔵</td>
+<td>☐</td>
+<td>🔴</td>
+<td>4 named points = 3-mark question</td>
+</tr>
+<tr>
+<td>M4.2</td>
+<td>Cookies — <code>setcookie(name, value, expiry)</code>, <code>$_COOKIE</code>, delete via past expiry, must precede output, security limit, 4KB</td>
+<td>4:L63–88</td>
+<td>🔴</td>
+<td>☐</td>
+<td>🔴</td>
+<td>Write-a-cookie script</td>
+</tr>
+<tr>
+<td>M4.3</td>
+<td>Sessions — <code>session_start()</code>, <code>$_SESSION[key] = value</code>, persistence, <code>session_destroy()</code>, plus <code>unset()</code>/<code>session_unset()</code></td>
+<td>4:L102–124</td>
+<td>🔴</td>
+<td>☐</td>
+<td>🔴</td>
+<td></td>
+</tr>
+<tr>
+<td>M4.4</td>
+<td>Cookies vs sessions comparison table (storage, size, security, lifetime, good-for)</td>
+<td>4:L136–160</td>
+<td>🔴</td>
+<td>☐</td>
+<td>🔴</td>
+<td>5-row compare = 3-mark certain</td>
+</tr>
+<tr>
+<td>M4.5</td>
+<td>Why pair PHP with MySQL — no persistence in plain PHP, relational tables, MySQL reasons (free, LAMP), the bridge <code>mysqli</code> vs <code>PDO</code></td>
+<td>4:L170–195</td>
+<td>🔵</td>
+<td>☐</td>
+<td>🔴</td>
+<td></td>
+</tr>
+<tr>
+<td>M4.6</td>
+<td>Connecting — procedural <code>mysqli_connect(host,user,pass,db)</code>, failure check, <code>mysqli_connect_error()</code>, <code>mysqli_close()</code></td>
+<td>4:L206–230</td>
+<td>🔴</td>
+<td>☐</td>
+<td>🔴</td>
+<td><strong>Memorize exact signature</strong></td>
+</tr>
+<tr>
+<td>M4.7</td>
+<td>Connecting — OO style <code>new mysqli(...)</code>, <code>$conn-&gt;connect_error</code>, <code>$conn-&gt;query()</code>, <code>$conn-&gt;close()</code></td>
+<td>4:L244–268</td>
+<td>🔴</td>
+<td>☐</td>
+<td>🔴</td>
+<td>Both styles; know which is which</td>
+</tr>
+<tr>
+<td>M4.8</td>
+<td>Connection best practices — no hardcoded creds, always check failure, close when done, prepared statements ahead</td>
+<td>4:L280–305</td>
+<td>🔵</td>
+<td>☐</td>
+<td>🔴</td>
+<td>4 points = 3-mark</td>
+</tr>
+<tr>
+<td>M4.9</td>
+<td>Running queries — <code>mysqli_query($conn,$sql)</code> return type (result handle vs bool), <code>mysqli_error($conn)</code>, injection risk</td>
+<td>4:L316–337</td>
+<td>🔴</td>
+<td>☐</td>
+<td>🔴</td>
+<td></td>
+</tr>
+<tr>
+<td>M4.10</td>
+<td>Fetching — <code>mysqli_fetch_assoc()</code> one row at a time, returns NULL at end, <code>while</code> loop, <code>mysqli_num_rows()</code></td>
+<td>4:L351–370</td>
+<td>🔴</td>
+<td>☐</td>
+<td>🔴</td>
+<td>The canonical loop</td>
+</tr>
+<tr>
+<td>M4.11</td>
+<td>Other fetch styles — <code>fetch_array</code>, <code>fetch_row</code>, <code>fetch_object</code>, internal pointer advance</td>
+<td>4:L383–393</td>
+<td>🔴</td>
+<td>☐</td>
+<td>🔴</td>
+<td>5-row table = 3-mark "list"</td>
+</tr>
+<tr>
+<td>M4.12</td>
+<td>The full cycle — build SQL → <code>mysqli_query()</code> → result handle → <code>while</code>+<code>fetch_assoc()</code> → echo HTML → browser table</td>
+<td>4:L405–419</td>
+<td>🔴</td>
+<td>☐</td>
+<td>🔴</td>
+<td>Know the 5-step diagram (4:L399)</td>
+</tr>
+<tr>
+<td>M4.13</td>
+<td>CREATE TABLE — syntax, <code>AUTO_INCREMENT PRIMARY KEY</code>, column types <code>INT</code>/<code>VARCHAR(n)</code>/<code>TEXT</code>/<code>DATE</code>/<code>DECIMAL</code>, run once at setup</td>
+<td>4:L431–453</td>
+<td>🔴</td>
+<td>☐</td>
+<td>🔴</td>
+<td></td>
+</tr>
+<tr>
+<td>M4.14</td>
+<td>INSERT — <code>INSERT INTO t (cols) VALUES (vals)</code>, quote strings not numbers, <code>mysqli_insert_id($conn)</code></td>
+<td>4:L468–490</td>
+<td>🔴</td>
+<td>☐</td>
+<td>🔴</td>
+<td></td>
+</tr>
+<tr>
+<td>M4.15</td>
+<td>DELETE — <code>DELETE FROM t WHERE cond</code>, never omit WHERE, <code>mysqli_affected_rows($conn)</code>, SELECT-preview first</td>
+<td>4:L505–525</td>
+<td>🔴</td>
+<td>☐</td>
+<td>🔴</td>
+<td></td>
+</tr>
+<tr>
+<td>M4.16</td>
+<td>CREATE/INSERT/DELETE quick-ref table + "all three are write ops"</td>
+<td>4:L538–546</td>
+<td>🔴</td>
+<td>☐</td>
+<td>🔴</td>
+<td></td>
+</tr>
+<tr>
+<td>M4.17</td>
+<td>SELECT — <code>SELECT *</code> vs named columns, <code>WHERE</code>, SQL comparison ops incl. <code>LIKE</code></td>
+<td>4:L558–580</td>
+<td>🔴</td>
+<td>☐</td>
+<td>🔴</td>
+<td></td>
+</tr>
+<tr>
+<td>M4.18</td>
+<td>SELECT refinement — <code>ORDER BY col ASC/DESC</code>, <code>LIMIT n</code>, <code>LIMIT offset, count</code> (pagination)</td>
+<td>4:L595–615</td>
+<td>🔴</td>
+<td>☐</td>
+<td>🔴</td>
+<td></td>
+</tr>
+<tr>
+<td>M4.19</td>
+<td>UPDATE — <code>UPDATE t SET col = val WHERE cond</code>, multi-column SET, missing WHERE = whole table, <code>affected_rows</code></td>
+<td>4:L630–652</td>
+<td>🔴</td>
+<td>☐</td>
+<td>🔴</td>
+<td></td>
+</tr>
+<tr>
+<td>M4.20</td>
+<td>Safe practices — SELECT-test the WHERE, <code>(int)</code> cast input, <code>mysqli_prepare()</code> with <code>?</code>, always check <code>affected_rows</code></td>
+<td>4:L665–689</td>
+<td>🔵</td>
+<td>☐</td>
+<td>🔴</td>
+<td>4 points = 3-mark</td>
+</tr>
+<tr>
+<td>M4.21</td>
+<td>Dynamic content — static vs dynamic, mixing PHP in HTML, separating data/logic/presentation (MVC precursor)</td>
+<td>4:L699–726</td>
+<td>🔵</td>
+<td>☐</td>
+<td>🔴</td>
+<td></td>
+</tr>
+<tr>
+<td>M4.22</td>
+<td><strong>Looping rows into HTML</strong> — <code>while (...):</code> … <code>endwhile;</code> alternative syntax, <code>&lt;?= ?&gt;</code>, <code>htmlspecialchars()</code></td>
+<td>4:L735–755</td>
+<td>🔴</td>
+<td>☐</td>
+<td>🔴</td>
+<td>Syntax must: <code>:</code> + <code>endwhile</code></td>
+</tr>
+<tr>
+<td>M4.23</td>
+<td><strong>Complete dynamic page</strong> — connect → query → loop → render (4:L782 block)</td>
+<td>4:L770–792</td>
+<td>🔴</td>
+<td>☐</td>
+<td>🔴</td>
+<td><strong>Prime 14-mark program candidate</strong></td>
+</tr>
+<tr>
+<td>M4.24</td>
+<td>Looking ahead to Module V — JSON exchange, Laravel/Eloquent replacing raw <code>mysqli_query</code>, MVC</td>
+<td>4:L805–829</td>
+<td>🔵</td>
+<td>☐</td>
+<td>🔴</td>
+<td>Only if asked "how does this scale"</td>
+</tr>
+<tr>
+<td>M4.25</td>
+<td>Module 4 recap's 8 takeaways (4:L841–855)</td>
+<td>4:L839–858</td>
+<td>🔴</td>
+<td>☐</td>
+<td>🔴</td>
+<td>Fast revision list</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="prediction-map-syllabus-structure-of-the-deck-no-pyqs-available">Prediction Map (syllabus × structure of the deck — ⚠️ no PYQs available)<a class="anchor" href="#prediction-map-syllabus-structure-of-the-deck-no-pyqs-available">#</a></h2>
+<table>
+<thead>
+<tr>
+<th>Topic</th>
+<th>Probability</th>
+<th>Evidence</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Form processing script (<code>$_POST</code> + validate + sanitize + business logic)</td>
+<td><strong>Staple (14-mark)</strong></td>
+<td>M3.5 syllabus line "Form Processing and Business Logic" is a whole hour; deck builds to it (3:L718) and calls it "the full pipeline this module has built up to"</td>
+</tr>
+<tr>
+<td>Complete dynamic page (connect → query → loop → render)</td>
+<td><strong>Staple (14-mark)</strong></td>
+<td>M4.6 "Building Dynamic Content in PHP application"; deck's own "exact shape … backbone of almost every PHP page" (4:L780)</td>
+</tr>
+<tr>
+<td>CRUD from PHP: CREATE/INSERT/DELETE/SELECT/UPDATE program</td>
+<td><strong>Staple (14-mark)</strong></td>
+<td>M4.3+M4.4+M4.5 syllabus lines are each a separate hour — 3 of the 6 module hours are pure CRUD</td>
+</tr>
+<tr>
+<td>Cookies vs sessions (+ write a cookie/session script)</td>
+<td><strong>Staple (3+ or 14)</strong></td>
+<td>M4.1 is its own hour; the deck gives 2 full slide sets + a 5-row compare table</td>
+</tr>
+<tr>
+<td><code>==</code> vs <code>===</code> (with output prediction)</td>
+<td><strong>Staple (3)</strong></td>
+<td>Deck literally flags it as "one of PHP's most exam-relevant quirks" (3:L199) and the recap repeats it</td>
+</tr>
+<tr>
+<td>Data types / type conversion</td>
+<td><strong>Strong (3)</strong></td>
+<td>Two dedicated slides (3:L113, 3:L136)</td>
+</tr>
+<tr>
+<td>Arrays: indexed/associative/multidim + array functions</td>
+<td><strong>Strong (3 or 14)</strong></td>
+<td>Two slides + a function table (3:L450)</td>
+</tr>
+<tr>
+<td>Write a class with constructor and method</td>
+<td><strong>Strong (14)</strong></td>
+<td>"Objects" is a named syllabus line under M3.4</td>
+</tr>
+<tr>
+<td>Regex validation (<code>preg_match</code> patterns)</td>
+<td><strong>Strong (3 or 4)</strong></td>
+<td>A named syllabus line; deck hands over a 5-pattern table</td>
+</tr>
+<tr>
+<td>String functions (<code>strlen</code>/<code>trim</code>/<code>substr</code>/<code>explode</code>/<code>implode</code>/<code>str_replace</code>)</td>
+<td><strong>Strong (3)</strong></td>
+<td>Named syllabus line, two slides</td>
+</tr>
+<tr>
+<td>Functions: default args / by-reference / variadic / scope</td>
+<td><strong>Strong (3)</strong></td>
+<td>Slide 3:L358 lists exactly 4 sub-points</td>
+</tr>
+<tr>
+<td>Loops + control statements</td>
+<td><strong>Possible (inside a program)</strong></td>
+<td>Not a standalone syllabus line — always appears <em>inside</em> the bigger programs</td>
+</tr>
+<tr>
+<td>mysqli connect (both styles) + connect-failure check</td>
+<td><strong>Strong (3 or inside 14)</strong></td>
+<td>Two dedicated slides</td>
+</tr>
+<tr>
+<td>Fetch family (<code>fetch_assoc</code>/<code>array</code>/<code>row</code>/<code>object</code>, <code>num_rows</code>)</td>
+<td><strong>Strong (3)</strong></td>
+<td>Table on 4:L385</td>
+</tr>
+<tr>
+<td>Escape / SQL-injection / prepared statements / safe WHERE practice</td>
+<td><strong>Strong (3)</strong></td>
+<td>Two dedicated slides (4:L280, 4:L665)</td>
+</tr>
+<tr>
+<td>Static vs dynamic content</td>
+<td><strong>Possible (3)</strong></td>
+<td>One slide, 4 points</td>
+</tr>
+<tr>
+<td>JSON / Laravel</td>
+<td><strong>Low for M3–M4 test</strong></td>
+<td>Module V content; only touched in the "looking ahead" slide</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="diagram-index-converted-lecture-md">Diagram Index (converted lecture md)<a class="anchor" href="#diagram-index-converted-lecture-md">#</a></h2>
+<table>
+<thead>
+<tr>
+<th>Module</th>
+<th>Figure</th>
+<th>md line</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>M3</td>
+<td>PHP request–response cycle (browser → server → PHP engine → MySQL → plain HTML)</td>
+<td><code>module3.md</code> L57 (described) + L59–70 (labels)</td>
+</tr>
+<tr>
+<td>M3</td>
+<td>PHP logo / <code>&lt;/&gt;</code> / "A" typography slide furniture (no content)</td>
+<td><code>module3.md</code> L1, 22, 79, 131, 161, 192, 250, 286, 319, 353, 381, 414, 466, 503, 533, 563, 614, 645, 679, 713, 748</td>
+</tr>
+<tr>
+<td>M4</td>
+<td>Query → browser full cycle (5 steps + browser table)</td>
+<td><code>module4.md</code> L399 (described) + L407–417 (labels)</td>
+</tr>
+<tr>
+<td>M4</td>
+<td>Database-cylinder / PHP slide furniture (no content)</td>
+<td><code>module4.md</code> L1, 57, 96, 200, 238, 310, 345, 425, 462, 499, 552, 589, 624, 729, 764</td>
+</tr>
+<tr>
+<td>—</td>
+<td>Syllabus pages (scans, no .md)</td>
+<td><code>Web Programming Syllabus.pdf</code> pp. 1–4 → render with <code>render_pages.py</code></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="session-plan">Session Plan<a class="anchor" href="#session-plan">#</a></h2>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Covers</th>
+<th>Syllabus</th>
+<th>Drill focus</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>✅ <strong>1</strong></td>
+<td>M3.1–M3.6: what PHP is, embedding, variables, types, casts, operators, <code>==</code> vs <code>===</code>, flow-control functions</td>
+<td>M3 hrs 1–2</td>
+<td>write/predict: tags, <code>$</code>, <code>.</code> vs <code>+</code>, juggling, casts</td>
+</tr>
+<tr>
+<td><strong>2</strong></td>
+<td>M3.7–M3.10: control statements, loops, functions (defaults, <code>&amp;</code>, variadic, scope)</td>
+<td>M3 hr 3</td>
+<td>write a function; trace a loop; predict <code>global</code>/<code>static</code></td>
+</tr>
+<tr>
+<td><strong>3</strong></td>
+<td>M3.11–M3.14: arrays (indexed/assoc/multi-dim, functions) + classes &amp; objects</td>
+<td>M3 hr 4</td>
+<td>build a record array; write a class with <code>__construct</code></td>
+</tr>
+<tr>
+<td><strong>4</strong></td>
+<td>M3.15–M3.18: strings, string functions, regex, pattern matching</td>
+<td>M3 hr 5</td>
+<td>write 5 validation patterns from memory</td>
+</tr>
+<tr>
+<td><strong>5</strong></td>
+<td>M3.19–M3.23: form processing, validation/sanitization, business logic, full script</td>
+<td>M3 hr 6</td>
+<td><strong>write the 14-mark form script cold</strong></td>
+</tr>
+<tr>
+<td><strong>6</strong></td>
+<td>M4.1–M4.12: cookies, sessions, connecting (both styles), <code>mysqli_query</code>, fetch family, full cycle</td>
+<td>M4 hrs 1–3</td>
+<td>write cookie + session scripts; the fetch loop</td>
+</tr>
+<tr>
+<td><strong>7</strong></td>
+<td>M4.13–M4.25: CREATE/INSERT/DELETE/SELECT/UPDATE from PHP + dynamic content page</td>
+<td>M4 hrs 4–6</td>
+<td><strong>write the 14-mark dynamic page cold</strong></td>
+</tr>
+<tr>
+<td><strong>8</strong></td>
+<td>Full code-answer drill: 6 exam-style programs, timed, no notes, graded</td>
+<td>M3+M4 all</td>
+<td>exam simulation</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="session-log">Session Log<a class="anchor" href="#session-log">#</a></h2>
+<table>
+<thead>
+<tr>
+<th>Date</th>
+<th>Session</th>
+<th>Covered</th>
+<th>Drill score</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2026-09-24</td>
+<td>1</td>
+<td>M3.1–M3.6 (PHP basics → operators → <code>==</code> vs <code>===</code> → flow control) + tracker setup</td>
+<td>D1 ✅ · D2 ⏭️ · D3 ✅ · D4 ❌ missing <code>;</code> · D5 ❌ tautology</td>
+<td>Set up tracker; verified both deck conversions (26/26 slides present); syllabus read via vision; <strong>no PYQs exist for this course</strong>. Drill mode changed to fill-in worksheet in <code>answers.php</code> at Haze's request.</td>
+</tr>
+<tr>
+<td>2026-11-08</td>
+<td>—</td>
+<td><strong>ESE kit build, all 5 modules</strong> against the new faculty Question Bank (286 Q)</td>
+<td>not drilled yet</td>
+<td>Converted <code>Question Bank.pdf</code> → <code>question_bank.md</code>, <code>module 5.pdf</code> → <code>module5.md</code>, and re-converted the real Module 2 deck → <code>module2_fixed.md</code>. Wrote 5 kits (M1–M5), each with full question coverage, 3-mark masters, 14-mark skeletons, hand-writable drills, memorize sheet. ESE is the live target now.</td>
+</tr>
+</tbody>
+</table>
+  </main>
+</div>
+<div class="tools">
+  <button id="theme" title="Toggle light / dark">☾</button>
+  <button id="top" title="Back to top">↑</button>
+</div>
+<script>
+(function(){
+  var root=document.documentElement, key='minotes-theme';
+  var saved=localStorage.getItem(key);
+  var prefers=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';
+  root.setAttribute('data-theme', saved || prefers);
+
+  var btn=document.getElementById('theme');
+  function sync(){ if(btn) btn.textContent = root.getAttribute('data-theme')==='dark' ? '\u2600' : '\u263E'; }
+  sync();
+  if(btn) btn.addEventListener('click',function(){
+    var next = root.getAttribute('data-theme')==='dark' ? 'light' : 'dark';
+    root.setAttribute('data-theme', next); localStorage.setItem(key,next); sync();
+  });
+
+  var bar=document.getElementById('progress');
+  if(bar) addEventListener('scroll',function(){
+    var h=document.documentElement.scrollHeight-innerHeight;
+    bar.style.width=(h>0?(scrollY/h*100):0)+'%';
+  },{passive:true});
+
+  document.querySelectorAll('pre').forEach(function(pre){
+    var b=document.createElement('button');
+    b.className='copy'; b.textContent='copy';
+    b.addEventListener('click',function(){
+      var t=pre.querySelector('code'); var txt=t?t.innerText:pre.innerText;
+      navigator.clipboard.writeText(txt).then(function(){
+        b.textContent='copied'; setTimeout(function(){b.textContent='copy';},1200);
+      });
+    });
+    pre.appendChild(b);
+  });
+
+  document.querySelectorAll('main table').forEach(function(t){
+    if(t.parentElement.classList.contains('table-scroll')) return;
+    var w=document.createElement('div'); w.className='table-scroll';
+    t.parentNode.insertBefore(w,t); w.appendChild(t);
+  });
+
+  var links=[].slice.call(document.querySelectorAll('.sidebar a[href^="#"]'));
+  var map={}; links.forEach(function(a){ map[a.getAttribute('href').slice(1)]=a; });
+  var heads=[].slice.call(document.querySelectorAll('main h2[id], main h3[id]'));
+  if('IntersectionObserver' in window && heads.length){
+    var obs=new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if(!e.isIntersecting) return;
+        links.forEach(function(a){a.classList.remove('active');});
+        var a=map[e.target.id]; if(a){a.classList.add('active');}
+      });
+    },{rootMargin:'-10% 0px -75% 0px'});
+    heads.forEach(function(h){obs.observe(h);});
+  }
+
+  var top=document.getElementById('top');
+  if(top) top.addEventListener('click',function(){ scrollTo({top:0,behavior:'smooth'}); });
+})();
+</script>
+</body>
+</html>

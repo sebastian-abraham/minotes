@@ -1,0 +1,1386 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MODULE 2 — CSS and JavaScript · Complete Study Kit · Web Programming</title>
+<style>
+:root{
+  --bg:#fbfaf8; --panel:#ffffff; --ink:#232120; --muted:#5f5a53; --line:#e6e1da;
+  --accent:#7a4fd0; --accent-soft:#f1ecfb; --code-bg:#f5f2ee; --code-ink:#2b2a28;
+  --warn-bg:#fff8e6; --warn-line:#f0d9a0;
+  --sans:"Inter","Segoe UI",system-ui,-apple-system,"Noto Sans",sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,"SF Mono",Menlo,Consolas,"Fira Code",monospace;
+}
+html[data-theme="dark"]{
+  --bg:#141317; --panel:#1b1a20; --ink:#e8e4de; --muted:#a8a199; --line:#2f2c36;
+  --accent:#b79cf5; --accent-soft:#241f33; --code-bg:#22202a; --code-ink:#e8e4de;
+  --warn-bg:#2a2417; --warn-line:#4a3d22;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0; background:var(--bg); color:var(--ink); font-family:var(--sans);
+  font-size:16.5px; line-height:1.72; -webkit-font-smoothing:antialiased;
+}
+#progress{position:fixed;top:0;left:0;height:3px;width:0;background:var(--accent);z-index:50;transition:width .1s linear}
+
+.wrap{display:flex;align-items:flex-start;min-height:100vh}
+.sidebar{
+  position:sticky;top:0;height:100vh;width:300px;flex:0 0 300px;overflow-y:auto;
+  padding:26px 20px 60px;border-right:1px solid var(--line);background:var(--panel);
+}
+.sidebar h1{font-size:15px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);
+  margin:0 0 4px;font-weight:600}
+.sidebar .sub{font-size:12.5px;color:var(--muted);margin:0 0 18px}
+.sidebar nav{font-size:14px}
+.sidebar .toc>ul{padding-left:0}
+.sidebar ul{list-style:none;margin:0;padding-left:12px}
+.sidebar ul ul{border-left:1px solid var(--line);margin-left:4px;padding-left:10px}
+.sidebar li{margin:3px 0}
+.sidebar a{color:var(--ink);text-decoration:none;display:block;padding:3px 8px;border-radius:8px;
+  line-height:1.35;transition:background .12s,color .12s}
+.sidebar a:hover{background:var(--accent-soft);color:var(--accent)}
+.sidebar a.active{background:var(--accent-soft);color:var(--accent);font-weight:600}
+.sidebar .home{display:inline-flex;align-items:center;gap:6px;margin-bottom:16px;font-size:13.5px;
+  color:var(--muted);text-decoration:none;border:1px solid var(--line);padding:5px 10px;border-radius:999px}
+.sidebar .home:hover{color:var(--accent);border-color:var(--accent)}
+
+main{flex:1;min-width:0;padding:46px 56px 120px;max-width:980px;margin:0 auto}
+.doc-head{border-bottom:1px solid var(--line);padding-bottom:18px;margin-bottom:34px}
+.doc-head .kicker{font-size:12.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);
+  font-weight:700;margin-bottom:8px}
+.doc-head .meta{font-size:13.5px;color:var(--muted)}
+
+h1,h2,h3,h4{line-height:1.25;font-weight:700;letter-spacing:-.01em}
+h1{font-size:2.05rem;margin:.2em 0 .5em}
+h2{font-size:1.55rem;margin:2.4em 0 .7em;padding-bottom:.35em;border-bottom:1px solid var(--line)}
+h3{font-size:1.2rem;margin:1.9em 0 .55em}
+h4{font-size:1.03rem;margin:1.5em 0 .45em;color:var(--muted)}
+h2 .anchor,h3 .anchor{opacity:0;margin-left:.35em;font-size:.8em;color:var(--muted);text-decoration:none}
+h2:hover .anchor,h3:hover .anchor{opacity:1}
+p{margin:.75em 0}
+a{color:var(--accent);text-underline-offset:2px}
+strong{font-weight:650}
+hr{border:0;border-top:1px solid var(--line);margin:2.6em 0}
+ul,ol{margin:.7em 0;padding-left:1.4em}
+li{margin:.3em 0}
+li>ul,li>ol{margin:.25em 0}
+blockquote{
+  margin:1.3em 0;padding:12px 18px;background:var(--warn-bg);border-left:3px solid var(--warn-line);
+  border-radius:0 10px 10px 0;color:var(--ink)
+}
+blockquote p{margin:.3em 0}
+
+code{font-family:var(--mono);font-size:.87em;background:var(--code-bg);color:var(--code-ink);
+  padding:.15em .38em;border-radius:6px;border:1px solid var(--line);
+  box-decoration-break:clone;-webkit-box-decoration-break:clone;overflow-wrap:anywhere}
+pre{position:relative;background:var(--code-bg);border:1px solid var(--line);border-radius:12px;
+  padding:16px 18px;overflow-x:auto;margin:1.1em 0}
+pre code{background:none;border:0;padding:0;font-size:13.6px;line-height:1.62;white-space:pre}
+.copy{position:absolute;top:8px;right:8px;font:600 11px/1 var(--sans);color:var(--muted);
+  background:var(--panel);border:1px solid var(--line);border-radius:7px;padding:5px 8px;cursor:pointer;
+  opacity:0;transition:opacity .15s}
+pre:hover .copy{opacity:1}
+.copy:hover{color:var(--accent);border-color:var(--accent)}
+
+.table-scroll{overflow-x:auto;margin:1.3em 0;border:1px solid var(--line);border-radius:12px;background:var(--panel)}
+table{border-collapse:collapse;width:100%;font-size:14.6px}
+th,td{padding:9px 13px;text-align:left;vertical-align:top;border-bottom:1px solid var(--line)}
+th{background:var(--accent-soft);font-weight:650;font-size:13px;letter-spacing:.02em;
+  position:sticky;top:0;backdrop-filter:blur(4px)}
+tr:last-child td{border-bottom:0}
+tbody tr:nth-child(even){background:color-mix(in srgb,var(--panel) 60%,var(--bg))}
+tbody tr:hover{background:var(--accent-soft)}
+
+.tools{position:fixed;right:22px;bottom:22px;display:flex;flex-direction:column;gap:8px;z-index:40}
+.tools button{width:42px;height:42px;border-radius:12px;border:1px solid var(--line);background:var(--panel);
+  color:var(--ink);cursor:pointer;font-size:16px;box-shadow:0 4px 14px rgba(0,0,0,.10)}
+.tools button:hover{color:var(--accent);border-color:var(--accent)}
+@media (max-width:1000px){
+  .wrap{display:block}
+  .sidebar{position:static;width:auto;height:auto;border-right:0;border-bottom:1px solid var(--line)}
+  .sidebar nav{max-height:40vh;overflow:auto}
+  main{padding:28px 20px 100px}
+}
+@media print{
+  .sidebar,.tools,#progress,.copy{display:none!important}
+  body{background:#fff;color:#000;font-size:11pt}
+  main{padding:0;max-width:none}
+  h2{break-after:avoid} pre,table,blockquote{break-inside:avoid}
+  a{color:#000;text-decoration:none}
+}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+<div class="wrap">
+  <aside class="sidebar">
+    <a class="home" href="index.html">← Web Programming</a>
+    <h1>M2 · CSS &amp; JavaScript</h1>
+    <p class="sub">Q37–67 · Q186–202 · Q222–228</p>
+    <nav class="toc"><div class="toc">
+<ul>
+<li><a href="#0-how-to-use-this-kit">0. How to use this kit</a></li>
+<li><a href="#1-module-map-question-coverage">1. Module map + question coverage</a><ul>
+<li><a href="#11-coverage-table">1.1 Coverage table</a></li>
+<li><a href="#12-master-themes-55-questions-five">1.2 Master themes (55 questions → five)</a></li>
+</ul>
+</li>
+<li><a href="#2-part-1-deep-dive-from-zero">2. PART 1 — Deep dive, from zero</a><ul>
+<li><a href="#21-what-css-is-33">2.1 What CSS is (<code>2:p2</code>)</a></li>
+<li><a href="#22-css-rule-syntax-36">2.2 CSS rule syntax (<code>2:p2–3</code>)</a></li>
+<li><a href="#23-the-three-ways-to-attach-css-54">2.3 The three ways to attach CSS (<code>2:p3–5</code>)</a></li>
+<li><a href="#24-cascade-inheritance-and-specificity-70">2.4 Cascade, inheritance and specificity (<code>2:p5–7</code>)</a></li>
+<li><a href="#25-selectors-80">2.5 Selectors (<code>2:p6–7</code>)</a></li>
+<li><a href="#26-pseudo-classes-in-depth-q58-q202a">2.6 Pseudo-classes in depth (Q58, Q202a)</a></li>
+<li><a href="#27-backgrounds-list-styles-table-css-132">2.7 Backgrounds, list styles, table CSS (<code>2:p8–10</code>)</a></li>
+<li><a href="#28-positioning-147">2.8 Positioning (<code>2:p8</code>)</a></li>
+<li><a href="#29-the-box-model-163">2.9 The box model (<code>2:p11</code>)</a></li>
+<li><a href="#210-text-flow-174">2.10 Text flow (<code>2:p12</code>)</a></li>
+<li><a href="#211-responsive-css-viewport-media-queries-182">2.11 Responsive CSS, viewport, media queries (<code>2:p12–13</code>)</a></li>
+<li><a href="#212-what-javascript-is-193">2.12 What JavaScript is (<code>2:p14</code>)</a></li>
+<li><a href="#213-variables-types-200-201">2.13 Variables, types, <code>prompt()</code> (<code>2:p14–16</code>)</a></li>
+<li><a href="#214-operators-and-arithmetic-215">2.14 Operators and arithmetic (<code>2:p15, p17</code>)</a></li>
+<li><a href="#215-control-statements-237">2.15 Control statements (<code>2:p17–19</code>)</a></li>
+<li><a href="#216-arrays-247">2.16 Arrays (<code>2:p20</code>)</a></li>
+<li><a href="#217-objects-269">2.17 Objects (<code>2:p20–21</code>)</a></li>
+<li><a href="#218-the-dom-271">2.18 The DOM (<code>2:p21</code>)</a></li>
+<li><a href="#219-events-and-callbacks-283">2.19 Events and callbacks (<code>2:p21–22</code>)</a></li>
+</ul>
+</li>
+<li><a href="#3-part-2-answer-bank">3. PART 2 — Answer bank</a><ul>
+<li><a href="#31-3-mark-answers-part-a">3.1 3-mark answers (Part A)</a></li>
+<li><a href="#32-14-mark-answers-part-b">3.2 14-mark answers (Part B)</a></li>
+</ul>
+</li>
+<li><a href="#4-part-3-code-you-must-be-able-to-write-by-hand">4. PART 3 — Code you must be able to write by hand</a></li>
+<li><a href="#5-night-before-memorize-sheet">5. 🔴 Night-before memorize sheet</a></li>
+<li><a href="#6-diagram-figure-index">6. 📐 Diagram + figure index</a></li>
+<li><a href="#7-say-this-if-grilled-defence-lines">7. Say-this-if-grilled defence lines</a></li>
+</ul>
+</div>
+</nav>
+  </aside>
+  <main>
+    <div class="doc-head">
+      <div class="kicker">20CST461 · Web Programming</div>
+      <div class="meta">Q37–67 · Q186–202 · Q222–228 · rendered from KIT_M2_CSS_JS.md</div>
+    </div>
+    <h1 id="module-2-css-and-javascript-complete-study-kit">MODULE 2 — CSS and JavaScript · Complete Study Kit</h1>
+<blockquote>
+<p>20CST461 Web Technologies · ESE Part A = 3 marks, Part B = 14 marks · <strong>2 Part-A questions and 1 of 2 Part-B questions come from this module</strong>
+Sources: <code>module2_fixed.md</code> (page refs <code>2:p11</code>; the old <code>WEB PROGRAMMING MOD-2.md</code> was a duplicate of Module 1 — ignore it), faculty <code>Question Bank.pdf</code> (Q37–Q67, Q186–Q202, Q222–Q228). Items marked <strong>(standard, not in your deck)</strong> are exam-standard but not on your slides.</p>
+</blockquote>
+<hr />
+<h2 id="0-how-to-use-this-kit">0. How to use this kit<a class="anchor" href="#0-how-to-use-this-kit">#</a></h2>
+<p>Part 1 = understand (read once). Part 2 = what you write in the exam (3 marks = 3–4 numbered lines). Part 3 = code by hand. §5 = night-before list. §6 = figures to go look at.</p>
+<hr />
+<h2 id="1-module-map-question-coverage">1. Module map + question coverage<a class="anchor" href="#1-module-map-question-coverage">#</a></h2>
+<h3 id="11-coverage-table">1.1 Coverage table<a class="anchor" href="#11-coverage-table">#</a></h3>
+<table>
+<thead>
+<tr>
+<th>Q#</th>
+<th>What it asks (short)</th>
+<th>Marks</th>
+<th>Answered at</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>37</td>
+<td>CSS rule syntax and structure</td>
+<td>3</td>
+<td>§2.2</td>
+</tr>
+<tr>
+<td>38</td>
+<td>Inline vs external — application and scope</td>
+<td>3</td>
+<td>§2.3</td>
+</tr>
+<tr>
+<td>39</td>
+<td>Embedded stylesheet, when to prefer it</td>
+<td>3</td>
+<td>§2.3</td>
+</tr>
+<tr>
+<td>40</td>
+<td>Link an external stylesheet</td>
+<td>3</td>
+<td>§2.3</td>
+</tr>
+<tr>
+<td>41</td>
+<td>Two advantages of external over inline</td>
+<td>3</td>
+<td>§2.3</td>
+</tr>
+<tr>
+<td>42</td>
+<td>Absolute vs relative positioning</td>
+<td>3</td>
+<td>§2.8</td>
+</tr>
+<tr>
+<td>43</td>
+<td>Box model and layout</td>
+<td>3</td>
+<td>§2.9</td>
+</tr>
+<tr>
+<td>44</td>
+<td>Media queries and responsive design</td>
+<td>3</td>
+<td>§2.11</td>
+</tr>
+<tr>
+<td>45</td>
+<td>Background position and repeat</td>
+<td>3</td>
+<td>§2.7</td>
+</tr>
+<tr>
+<td>46</td>
+<td>Purpose of <code>prompt()</code></td>
+<td>3</td>
+<td>§2.13</td>
+</tr>
+<tr>
+<td>47</td>
+<td>Arithmetic in JS + expression example</td>
+<td>3</td>
+<td>§2.14</td>
+</tr>
+<tr>
+<td>48</td>
+<td>JS control statements + switch example</td>
+<td>3</td>
+<td>§2.15</td>
+</tr>
+<tr>
+<td>49</td>
+<td>Arrays in JS + example</td>
+<td>3</td>
+<td>§2.16</td>
+</tr>
+<tr>
+<td>50</td>
+<td>Objects in JS + define/access</td>
+<td>3</td>
+<td>§2.17</td>
+</tr>
+<tr>
+<td>51</td>
+<td>DOM role + JS interaction</td>
+<td>3</td>
+<td>§2.18</td>
+</tr>
+<tr>
+<td>52</td>
+<td>Array index vs object key</td>
+<td>3</td>
+<td>§2.16</td>
+</tr>
+<tr>
+<td>53</td>
+<td>Update element content with <code>getElementById</code>/<code>innerHTML</code></td>
+<td>3</td>
+<td>§2.18</td>
+</tr>
+<tr>
+<td>54</td>
+<td>Add a property to an object</td>
+<td>3</td>
+<td>§2.17</td>
+</tr>
+<tr>
+<td>55</td>
+<td>Inline vs embedded vs external (compare)</td>
+<td>3</td>
+<td>§2.3</td>
+</tr>
+<tr>
+<td>56</td>
+<td>Absolute vs relative positioning (compare)</td>
+<td>3</td>
+<td>§2.8</td>
+</tr>
+<tr>
+<td>57</td>
+<td>Callback function vs normal function</td>
+<td>3</td>
+<td>§2.19</td>
+</tr>
+<tr>
+<td>58</td>
+<td>Pseudo-classes with examples</td>
+<td>3</td>
+<td>§2.6</td>
+</tr>
+<tr>
+<td>59</td>
+<td>Explain the DOM</td>
+<td>3</td>
+<td>§2.18</td>
+</tr>
+<tr>
+<td>60</td>
+<td>CSS3 syntax + inline style example</td>
+<td>3</td>
+<td>§2.2</td>
+</tr>
+<tr>
+<td>61</td>
+<td>Embedded vs external with examples</td>
+<td>3</td>
+<td>§2.3</td>
+</tr>
+<tr>
+<td>62</td>
+<td>CSS selector types with properties/values</td>
+<td>3</td>
+<td>§2.5</td>
+</tr>
+<tr>
+<td>63</td>
+<td>Absolute and relative positioning with examples</td>
+<td>3</td>
+<td>§2.8</td>
+</tr>
+<tr>
+<td>64</td>
+<td>Box model with diagram</td>
+<td>3</td>
+<td>§2.9</td>
+</tr>
+<tr>
+<td>65</td>
+<td>What is JavaScript + <code>prompt()</code> example</td>
+<td>3</td>
+<td>§2.13</td>
+</tr>
+<tr>
+<td>66</td>
+<td>Arithmetic operators + if/else</td>
+<td>3</td>
+<td>§2.14</td>
+</tr>
+<tr>
+<td>67</td>
+<td>JS arrays and objects, simple example</td>
+<td>3</td>
+<td>§2.16, §2.17</td>
+</tr>
+<tr>
+<td>186</td>
+<td>Inline/embedded/external + pros and cons of external</td>
+<td>14</td>
+<td>§3.1</td>
+</tr>
+<tr>
+<td>187</td>
+<td>CSS2 vs CSS3 + border-radius/box-shadow/transition button</td>
+<td>14</td>
+<td>§3.2</td>
+</tr>
+<tr>
+<td>188</td>
+<td>Cascading and precedence + conflicting-rule scenario</td>
+<td>14</td>
+<td>§3.3</td>
+</tr>
+<tr>
+<td>189</td>
+<td>Box model + padding/border/margin example</td>
+<td>14</td>
+<td>§3.4</td>
+</tr>
+<tr>
+<td>190</td>
+<td>Three ways to apply CSS, compared</td>
+<td>14</td>
+<td>§3.5</td>
+</tr>
+<tr>
+<td>191</td>
+<td><code>background-image</code>/<code>-position</code>/<code>-repeat</code> + snippet</td>
+<td>14</td>
+<td>§3.6</td>
+</tr>
+<tr>
+<td>192</td>
+<td>Ways to obtain user input + <code>prompt()</code> with validation</td>
+<td>14</td>
+<td>§3.7</td>
+</tr>
+<tr>
+<td>193</td>
+<td>Decision statements if/if-else/switch + day-of-week switch</td>
+<td>14</td>
+<td>§3.8</td>
+</tr>
+<tr>
+<td>194</td>
+<td>JS fundamentals + for/while/do-while</td>
+<td>14</td>
+<td>§3.9</td>
+</tr>
+<tr>
+<td>195</td>
+<td>Array manipulation methods + demo</td>
+<td>14</td>
+<td>§3.10</td>
+</tr>
+<tr>
+<td>196</td>
+<td>Objects + function that prints an object's properties</td>
+<td>14</td>
+<td>§3.11</td>
+</tr>
+<tr>
+<td>197</td>
+<td>Arrays vs objects + form processing</td>
+<td>14</td>
+<td>§3.12</td>
+</tr>
+<tr>
+<td>198</td>
+<td>CSS: hover/active, lower-alpha list, Boat.gif bg, dotted border; JS control statements</td>
+<td>14</td>
+<td>§3.13</td>
+</tr>
+<tr>
+<td>199</td>
+<td>Event handlers + Welcome/Click demo; class selectors + two styles</td>
+<td>14</td>
+<td>§3.14</td>
+</tr>
+<tr>
+<td>200</td>
+<td>Box model diagram + padding/margin effect</td>
+<td>14</td>
+<td>§3.4</td>
+</tr>
+<tr>
+<td>201</td>
+<td>DOM + change paragraph background/text on click</td>
+<td>14</td>
+<td>§3.15</td>
+</tr>
+<tr>
+<td>202</td>
+<td>Pseudo-classes + JS digital clock</td>
+<td>14</td>
+<td>§3.16</td>
+</tr>
+<tr>
+<td>222</td>
+<td>CSS3 syntax with inline styles; embedded vs external + advantages</td>
+<td>14</td>
+<td>§3.5</td>
+</tr>
+<tr>
+<td>223</td>
+<td>Selectors (type, class, ID, attribute, pseudo-class) + properties</td>
+<td>14</td>
+<td>§3.17</td>
+</tr>
+<tr>
+<td>224</td>
+<td>Positioning + backgrounds; list styles + table layouts</td>
+<td>14</td>
+<td>§3.18</td>
+</tr>
+<tr>
+<td>225</td>
+<td>Box model and text flow; responsive CSS with viewport + media queries</td>
+<td>14</td>
+<td>§3.19</td>
+</tr>
+<tr>
+<td>226</td>
+<td>JS fundamentals + <code>prompt()</code>; arithmetic + if-else/switch</td>
+<td>14</td>
+<td>§3.9, §3.8</td>
+</tr>
+<tr>
+<td>227</td>
+<td>JS arrays/objects + methods; DOM and form processing</td>
+<td>14</td>
+<td>§3.20</td>
+</tr>
+<tr>
+<td>228</td>
+<td>JS prime check; JS form validation via DOM</td>
+<td>14</td>
+<td>§3.21</td>
+</tr>
+</tbody>
+</table>
+<h3 id="12-master-themes-55-questions-five">1.2 Master themes (55 questions → five)<a class="anchor" href="#12-master-themes-55-questions-five">#</a></h3>
+<ol>
+<li><strong>How CSS is attached and how conflicts resolve</strong> — inline/embedded/external, cascade, specificity (37–41, 55, 60, 61, 186, 188, 190, 222).</li>
+<li><strong>Selectors and styling surface</strong> — selector types, pseudo-classes, properties/values, backgrounds, lists, tables (45, 58, 62, 198, 202a, 223, 224b).</li>
+<li><strong>Layout</strong> — box model, positioning, text flow, responsive CSS (42, 43, 44, 56, 63, 64, 189, 191, 200, 225).</li>
+<li><strong>JavaScript language core</strong> — variables, types, operators, control flow, loops, arrays, objects, callbacks (46–50, 52, 54, 57, 65–67, 193–197, 226, 227a).</li>
+<li><strong>DOM + events + forms</strong> — selecting nodes, changing content, event handlers, validation (51, 53, 59, 199, 201, 227b, 228).</li>
+</ol>
+<hr />
+<h2 id="2-part-1-deep-dive-from-zero">2. PART 1 — Deep dive, from zero<a class="anchor" href="#2-part-1-deep-dive-from-zero">#</a></h2>
+<h3 id="21-what-css-is-33">2.1 What CSS is (<code>2:p2</code>)<a class="anchor" href="#21-what-css-is-33">#</a></h3>
+<p><strong>Story:</strong> HTML is the skeleton, CSS is the skin and clothing, JavaScript is the muscles. CSS = <em>Cascading Style Sheets</em>: a separate language whose only job is to say how HTML should <em>look</em>.</p>
+<ul>
+<li>Separating structure (HTML) from presentation (CSS) means one stylesheet can skin a hundred pages, and the same markup can be restyled for print/mobile/dark mode without touching content (<code>2:p2</code>).</li>
+<li><strong>"Cascading"</strong> = the set of rules that decides which declaration wins when several could apply: importance → specificity → source order.</li>
+<li>History: proposed by Håkon Wium Lie 1994, CSS1 Recommendation 1996, CSS2 1998 (positioning + media types), CSS3 from the early 2000s <strong>split into independent modules</strong> (Selectors, Flexbox, Grid, Media Queries, Animations…) each evolving at its own speed — that is why you say "CSS3 modules" rather than one spec (<code>2:p2</code>).</li>
+</ul>
+<h3 id="22-css-rule-syntax-36">2.2 CSS rule syntax (<code>2:p2–3</code>)<a class="anchor" href="#22-css-rule-syntax-36">#</a></h3>
+<p><pre><code class="language-css">/* selector { property: value; property: value; } */
+h1 {
+  color: #5E3E8E;
+  font-size: 28px;
+  text-align: center;
+}
+</code></pre></p>
+<table>
+<thead>
+<tr>
+<th>Part</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Selector</td>
+<td>Pattern choosing which elements the rule hits (<code>h1</code>, <code>.card</code>, <code>#logo</code>)</td>
+</tr>
+<tr>
+<td>Declaration block</td>
+<td>Everything inside <code>{ }</code></td>
+</tr>
+<tr>
+<td>Property</td>
+<td>What aspect is being set (<code>color</code>, <code>font-size</code>)</td>
+</tr>
+<tr>
+<td>Value</td>
+<td>The setting (<code>#5E3E8E</code>, <code>28px</code>)</td>
+</tr>
+<tr>
+<td>Declaration</td>
+<td>One <code>property: value;</code> pair — semicolon required</td>
+</tr>
+</tbody>
+</table>
+<p>Comments are <code>/* ... */</code> only (no <code>//</code>). Property names are case-insensitive but written lowercase-with-hyphens (<code>font-size</code>, never <code>fontSize</code>).</p>
+<p><strong>CSS3 modularity</strong> (<code>2:p2</code>): Selectors L3/4 (attribute, pseudo-class, combinators), Box Model (<code>box-sizing</code>), Backgrounds &amp; Borders (<code>border-radius</code>, <code>box-shadow</code>, multiple backgrounds), Flexbox (1-D layout), Grid (2-D), Media Queries, Transitions &amp; Animations.</p>
+<h3 id="23-the-three-ways-to-attach-css-54">2.3 The three ways to attach CSS (<code>2:p3–5</code>)<a class="anchor" href="#23-the-three-ways-to-attach-css-54">#</a></h3>
+<p><strong>Story:</strong> inline = writing the colour on each individual object; embedded = a note pinned inside one room; external = one master instruction sheet everybody shares.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Inline</th>
+<th>Embedded (<code>&lt;style&gt;</code> in <code>&lt;head&gt;</code>)</th>
+<th>External (<code>&lt;link&gt;</code> to <code>.css</code>)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Where</td>
+<td><code>style=&quot;&quot;</code> on one element</td>
+<td><code>&lt;style&gt;</code> block in the document</td>
+<td>separate file</td>
+</tr>
+<tr>
+<td>Scope</td>
+<td>one element</td>
+<td>one document</td>
+<td>every page that links it</td>
+</tr>
+<tr>
+<td>Reusability</td>
+<td>none</td>
+<td>low (copy per page)</td>
+<td>high</td>
+</tr>
+<tr>
+<td>Specificity</td>
+<td>highest</td>
+<td>medium</td>
+<td>lowest of the three</td>
+</tr>
+<tr>
+<td>Can do <code>:hover</code>, <code>::before</code>, media queries?</td>
+<td><strong>No</strong></td>
+<td>yes</td>
+<td>yes</td>
+</tr>
+<tr>
+<td>Typical use</td>
+<td>quick one-off, JS-generated styles</td>
+<td>single-page demo, page-specific override</td>
+<td>production sites</td>
+</tr>
+</tbody>
+</table>
+<p><pre><code class="language-html">&lt;!-- inline --&gt;
+&lt;p style=&quot;color:red; font-weight:bold; margin-top:10px;&quot;&gt;Inline styled&lt;/p&gt;
+&lt;!-- embedded --&gt;
+&lt;style&gt; body{font-family:Arial,sans-serif} h1{color:#5E3E8E} &lt;/style&gt;
+&lt;!-- external --&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;styles/main.css&quot;&gt;
+</code></pre></p>
+<p><code>&lt;link&gt;</code> attributes: <code>rel=&quot;stylesheet&quot;</code> (required), <code>href</code> (path/URL), <code>type=&quot;text/css&quot;</code> (optional in HTML5), <code>media=&quot;print&quot;</code> (restrict to print) (<code>2:p4</code>).</p>
+<p><strong>Why external wins in practice</strong> (<code>2:p5</code>): one file styles unlimited pages consistently; the browser caches it, so repeat visits are faster; content stays cleanly separated from presentation — the whole reason CSS exists. Disadvantages: an extra HTTP request on first load, and a failure in that one file breaks styling everywhere.</p>
+<h3 id="24-cascade-inheritance-and-specificity-70">2.4 Cascade, inheritance and specificity (<code>2:p5–7</code>)<a class="anchor" href="#24-cascade-inheritance-and-specificity-70">#</a></h3>
+<ul>
+<li><strong>Cascade order</strong> (lowest → highest priority): browser defaults → external → embedded → inline → <code>!important</code>.</li>
+<li><strong>Specificity score</strong> (a,b,c): inline style (1,0,0) &gt; ID (0,1,0) &gt; class/attribute/pseudo-class (0,0,1) &gt; element/type (0,0,0). Universal <code>*</code> counts zero.</li>
+<li><strong>Equal specificity → later rule wins</strong> (source order).</li>
+<li><strong>Inheritance</strong>: text properties (<code>color</code>, <code>font-family</code>, <code>line-height</code>) inherit from parent; box properties (margin, border, padding) do not.</li>
+</ul>
+<p>Worked scenario for Q188b: <code>&lt;p class=&quot;note&quot; id=&quot;intro&quot; style=&quot;color:red&quot;&gt;</code> with embedded <code>.note{color:blue}</code> and external <code>#intro{color:green}</code> → inline red wins; remove the inline style → the ID rule (<code>green</code>) beats the class rule.</p>
+<h3 id="25-selectors-80">2.5 Selectors (<code>2:p6–7</code>)<a class="anchor" href="#25-selectors-80">#</a></h3>
+<table>
+<thead>
+<tr>
+<th>Selector</th>
+<th>Example</th>
+<th>Matches</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Universal</td>
+<td><code>* { margin:0 }</code></td>
+<td>every element</td>
+</tr>
+<tr>
+<td>Type/element</td>
+<td><code>p { line-height:1.5 }</code></td>
+<td>all <code>&lt;p&gt;</code></td>
+</tr>
+<tr>
+<td>Class</td>
+<td><code>.card { padding:10px }</code></td>
+<td>all <code>class=&quot;card&quot;</code></td>
+</tr>
+<tr>
+<td>ID</td>
+<td><code>#header { height:60px }</code></td>
+<td>the one <code>id=&quot;header&quot;</code></td>
+</tr>
+<tr>
+<td>Grouping</td>
+<td><code>h1, h2, h3 { font-family:serif }</code></td>
+<td>all listed</td>
+</tr>
+<tr>
+<td>Descendant</td>
+<td><code>nav a { color:white }</code></td>
+<td><code>&lt;a&gt;</code> anywhere inside <code>&lt;nav&gt;</code></td>
+</tr>
+<tr>
+<td>Child</td>
+<td><code>ul &gt; li { list-style:none }</code></td>
+<td>direct <code>&lt;li&gt;</code> children</td>
+</tr>
+<tr>
+<td>Adjacent sibling</td>
+<td><code>h2 + p</code></td>
+<td>the <code>&lt;p&gt;</code> right after an <code>&lt;h2&gt;</code></td>
+</tr>
+<tr>
+<td>General sibling</td>
+<td><code>h2 ~ p</code></td>
+<td>all <code>&lt;p&gt;</code> siblings after an <code>&lt;h2&gt;</code></td>
+</tr>
+<tr>
+<td>Attribute</td>
+<td><code>input[type=&quot;text&quot;]</code>, <code>a[href^=&quot;https&quot;]</code>, <code>a[href$=&quot;.pdf&quot;]</code>, <code>a[href*=&quot;saintgits&quot;]</code></td>
+<td>by attribute value: exact / starts / ends / contains</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Pseudo-class</strong> = styles an element in a <em>state</em>: <code>:hover</code>, <code>:focus</code>, <code>:active</code>, <code>:visited</code>, <code>:first-child</code>, <code>:nth-child(2n)</code>. <strong>Pseudo-element</strong> = styles a <em>part</em> of an element: <code>::first-line</code>, <code>::first-letter</code>, <code>::before</code>, <code>::after</code> (<code>2:p6</code>).</p>
+<p><strong>Value types</strong> (<code>2:p6–7</code>): keyword (<code>bold</code>, <code>solid</code>), length (<code>16px</code>, <code>2em</code>, <code>1.5rem</code>, <code>100vh</code>), percentage (<code>50%</code>), colour (<code>red</code>, <code>#5E3E8E</code>, <code>rgb()</code>, <code>rgba()</code>, <code>hsl()</code>), URL (<code>url(&#x27;bg.png&#x27;)</code>), number (<code>1.5</code> unitless for opacity/line-height).</p>
+<h3 id="26-pseudo-classes-in-depth-q58-q202a">2.6 Pseudo-classes in depth (Q58, Q202a)<a class="anchor" href="#26-pseudo-classes-in-depth-q58-q202a">#</a></h3>
+<p><pre><code class="language-css">a:link    { color: blue; }     /* not yet visited */
+a:visited { color: purple; }   /* already visited */
+a:hover   { color: yellow; }   /* pointer over it */
+a:active  { color: red; }      /* being clicked */
+input:focus { border: 2px solid #5E3E8E; }
+li:nth-child(2) { font-weight: bold; }
+p::first-letter { font-size: 2em; }   /* pseudo-ELEMENT */
+</code></pre>
+Notes worth a mark: LVHA order matters (<code>:link :visited :hover :active</code>) because later rules of equal specificity win; <code>:hover</code> needs a pointing device; pseudo-class = one colon, pseudo-element = two.</p>
+<h3 id="27-backgrounds-list-styles-table-css-132">2.7 Backgrounds, list styles, table CSS (<code>2:p8–10</code>)<a class="anchor" href="#27-backgrounds-list-styles-table-css-132">#</a></h3>
+<p><pre><code class="language-css">.hero{
+  background-color:#f0f0f0;
+  background-image:url(&#x27;banner.jpg&#x27;);
+  background-repeat:no-repeat;      /* repeat | no-repeat | repeat-x | repeat-y */
+  background-position:center top;   /* center | top right | 20px 10px */
+  background-size:cover;            /* cover | contain | 300px 200px */
+  background-attachment:fixed;      /* scroll (default) | fixed = parallax */
+}
+/* shorthand */
+.hero{ background:#f0f0f0 url(&#x27;banner.jpg&#x27;) no-repeat center top / cover; }
+</code></pre></p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Controls</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>list-style-type</code></td>
+<td><code>disc circle square decimal upper-alpha lower-roman none</code></td>
+</tr>
+<tr>
+<td><code>list-style-position</code></td>
+<td><code>outside</code> (default) / <code>inside</code></td>
+</tr>
+<tr>
+<td><code>list-style-image</code></td>
+<td><code>url(&#x27;bullet.png&#x27;)</code></td>
+</tr>
+<tr>
+<td><code>border-collapse</code></td>
+<td><code>collapse</code> merges cell borders; <code>separate</code> (default) keeps them</td>
+</tr>
+<tr>
+<td><code>table-layout</code></td>
+<td><code>auto</code> (content-driven) / <code>fixed</code> (first-row widths, faster)</td>
+</tr>
+<tr>
+<td><code>tr:nth-child(even)</code></td>
+<td>zebra striping</td>
+</tr>
+</tbody>
+</table>
+<h3 id="28-positioning-147">2.8 Positioning (<code>2:p8</code>)<a class="anchor" href="#28-positioning-147">#</a></h3>
+<p><strong>Story:</strong> <code>relative</code> = nudging your own chair; <code>absolute</code> = leaving the room and standing exactly where a named landmark tells you; <code>fixed</code> = floating above the room, unaffected by scrolling.</p>
+<table>
+<thead>
+<tr>
+<th>Value</th>
+<th>Behaviour</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>static</code></td>
+<td>Default; <code>top/left</code> do nothing</td>
+</tr>
+<tr>
+<td><code>relative</code></td>
+<td>Offset from its own normal spot; <strong>space stays reserved</strong></td>
+</tr>
+<tr>
+<td><code>absolute</code></td>
+<td>Removed from flow (others close the gap); positioned against the nearest ancestor whose <code>position</code> ≠ static, else the viewport</td>
+</tr>
+<tr>
+<td><code>fixed</code></td>
+<td>Relative to the viewport; stays put when scrolling</td>
+</tr>
+<tr>
+<td><code>sticky</code></td>
+<td><code>relative</code> until a scroll threshold, then <code>fixed</code> within its container</td>
+</tr>
+</tbody>
+</table>
+<p><pre><code class="language-css">.container{ position:relative; width:400px; height:200px; }
+.badge{ position:absolute; top:10px; right:10px; }  /* pinned to container corner */
+</code></pre></p>
+<p>Common pattern (say this and you look competent): wrapper <code>relative</code>, child <code>absolute</code> — precise placement without disturbing layout. <code>z-index</code> controls stacking when positioned boxes overlap <strong>(standard)</strong>.</p>
+<h3 id="29-the-box-model-163">2.9 The box model (<code>2:p11</code>)<a class="anchor" href="#29-the-box-model-163">#</a></h3>
+<p><strong>Story:</strong> a framed photo — picture (content), mat (padding), frame (border), gap to the next frame (margin).</p>
+<p><pre><code>┌─────────────── margin ───────────────┐
+│  ┌──────────── border ───────────┐   │
+│  │  ┌────── padding ───────┐     │   │
+│  │  │     content          │     │   │
+│  │  └──────────────────────┘     │   │
+│  └───────────────────────────────┘   │
+└──────────────────────────────────────┘
+</code></pre></p>
+<p><code>.box{width:300px;padding:20px;border:5px solid;margin:15px}</code> → rendered width = 300 + 2(20) + 2(5) + 2(15) = <strong>380px</strong> by default (<code>content-box</code>).</p>
+<p><code>box-sizing:border-box</code> makes <code>width</code> include padding+border → declared width <em>is</em> rendered width; the near-universal reset is <code>*{box-sizing:border-box}</code>. Margins <strong>collapse</strong> between adjacent block elements; padding never does. <code>padding</code>/<code>margin</code> shorthands: <code>10px</code> all, <code>10px 20px</code> vertical/horizontal, <code>10px 20px 30px 40px</code> top/right/bottom/left.</p>
+<h3 id="210-text-flow-174">2.10 Text flow (<code>2:p12</code>)<a class="anchor" href="#210-text-flow-174">#</a></h3>
+<p><code>display</code> (<code>block|inline|inline-block|flex|grid|none</code>) selects the layout model. <code>float:left|right</code> pushes a box aside so text wraps around it (still valid for wrapping text around an image, superseded for page layout); <code>clear:both</code> stops wrapping. <code>text-align</code> aligns inline content; <code>white-space</code> controls wrapping/collapse; <code>overflow</code> decides what happens when content exceeds the box.</p>
+<h3 id="211-responsive-css-viewport-media-queries-182">2.11 Responsive CSS, viewport, media queries (<code>2:p12–13</code>)<a class="anchor" href="#211-responsive-css-viewport-media-queries-182">#</a></h3>
+<p><strong>Story:</strong> one suit that resizes itself instead of a different suit per customer.</p>
+<p>Three techniques: <strong>fluid units</strong> (<code>%</code>, <code>vw</code>, <code>vh</code>, <code>em</code>, <code>rem</code>), <strong>flexible images</strong> (<code>img{max-width:100%;height:auto}</code>), <strong>media queries</strong> + <strong>mobile-first</strong> authoring (base styles for small screens, then <code>min-width</code> rules add complexity).</p>
+<p>The viewport meta is mandatory or mobile browsers lay out at ~980px and zoom out, defeating everything:
+<pre><code class="language-html">&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;
+</code></pre></p>
+<p><pre><code class="language-css">.container{ display:block; padding:10px; }            /* base: mobile */
+@media (min-width:768px){ .container{ display:flex; padding:20px; } }
+@media (min-width:1200px){ .container{ max-width:1140px; margin:0 auto; } }
+@media print { nav, footer { display:none; } }
+</code></pre>
+Queries can test width, orientation, resolution (<code>min-resolution:2dppx</code>) and media type (<code>screen</code>/<code>print</code>). Breakpoints are guidelines (≤576 phones, 577–768 small tablets, 769–992 tablets, ≥993 desktop) — real ones go where the design breaks.</p>
+<h3 id="212-what-javascript-is-193">2.12 What JavaScript is (<code>2:p14</code>)<a class="anchor" href="#212-what-javascript-is-193">#</a></h3>
+<p>Lightweight, interpreted, dynamically typed scripting language that runs mainly in browsers and gives pages behaviour: react to clicks, validate forms, update content without reload. Third pillar next to HTML (structure) and CSS (presentation). Brendan Eich, 1995, Netscape; standardised as ECMAScript; unrelated to Java despite the name. Client-side by default; Node.js later took it server-side.</p>
+<p>Inclusion (<code>2:p14</code>): inline handler <code>onclick=&quot;alert(&#x27;Hi&#x27;)&quot;</code> (avoid), embedded <code>&lt;script&gt;...&lt;/script&gt;</code>, external <code>&lt;script src=&quot;app.js&quot; defer&gt;&lt;/script&gt;</code>. <code>defer</code> = download in parallel, execute after parsing, order preserved; <code>async</code> = execute as soon as ready, order not guaranteed; neither → parsing blocks.</p>
+<h3 id="213-variables-types-200-201">2.13 Variables, types, <code>prompt()</code> (<code>2:p14–16</code>)<a class="anchor" href="#213-variables-types-200-201">#</a></h3>
+<p><code>let</code> (block-scoped, reassignable), <code>const</code> (block-scoped, no reassignment), <code>var</code> (function-scoped, legacy). Types: Number, String, Boolean, Undefined, Null, Object, Array (specialised object). Dynamically typed — a variable's type follows its current value.</p>
+<p><pre><code class="language-js">let name = prompt(&quot;What is your name?&quot;, &quot;Enter name here&quot;);
+if (name !== null &amp;&amp; name.trim() !== &quot;&quot;) {
+  alert(&quot;Hello, &quot; + name + &quot;!&quot;);
+}
+</code></pre>
+| Function | Purpose | Returns |
+|---|---|---|
+| <code>prompt(msg, default)</code> | modal text input | the string, or <code>null</code> on Cancel |
+| <code>alert(msg)</code> | message + OK | <code>undefined</code> |
+| <code>confirm(msg)</code> | yes/no | <code>true</code> / <code>false</code> |</p>
+<p>Key trap: <strong><code>prompt()</code> always returns a string</strong> — <code>Number(x)</code> or <code>parseInt(x,10)</code> before arithmetic. Dialogs are blocking and modal; fine for teaching, dated for production UIs.</p>
+<h3 id="214-operators-and-arithmetic-215">2.14 Operators and arithmetic (<code>2:p15, p17</code>)<a class="anchor" href="#214-operators-and-arithmetic-215">#</a></h3>
+<p><code>+ - * / % **</code> plus <code>++ --</code>; <code>+</code> doubles as string concatenation (<code>5+3=8</code>, <code>&quot;a&quot;+&quot;b&quot;=&quot;ab&quot;</code>, <code>&quot;5&quot;+3=&quot;53&quot;</code>). Precedence follows BODMAS: <code>( )</code> → <code>**</code> → <code>* / %</code> → <code>+ -</code>, left to right. <code>(10+5)*2-3**2 = 21</code>.</p>
+<p>Comparison <code>== === != !== &lt; &gt; &lt;= &gt;=</code>; <strong><code>==</code> converts types</strong> (<code>&quot;5&quot;==5</code> is true), <code>===</code> compares value <em>and</em> type (<code>&quot;5&quot;===5</code> false) — always prefer <code>===</code>. Logical <code>&amp;&amp; || !</code>; assignment <code>= += -= *= /=</code>; type operators <code>typeof</code>, <code>instanceof</code>.</p>
+<h3 id="215-control-statements-237">2.15 Control statements (<code>2:p17–19</code>)<a class="anchor" href="#215-control-statements-237">#</a></h3>
+<p><pre><code class="language-js">if (marks &gt;= 90) grade = &quot;A+&quot;;
+else if (marks &gt;= 75) grade = &quot;A&quot;;
+else grade = &quot;F&quot;;
+
+switch (day) {
+  case 1: name = &quot;Monday&quot;; break;
+  case 2: name = &quot;Tuesday&quot;; break;
+  default: name = &quot;Invalid&quot;;
+}
+
+let category = (age &gt;= 18) ? &quot;Adult&quot; : &quot;Minor&quot;;
+</code></pre>
+<code>break</code> prevents fall-through; <code>default</code> is the else-branch. Loops: <code>for (init; test; update)</code>, <code>while (test)</code> (may run zero times), <code>do{...}while(test)</code> (<strong>runs at least once</strong>), plus <code>break</code>/<code>continue</code> and <code>for...of</code> / <code>for...in</code> <strong>(standard)</strong>.</p>
+<h3 id="216-arrays-247">2.16 Arrays (<code>2:p20</code>)<a class="anchor" href="#216-arrays-247">#</a></h3>
+<p>Ordered, zero-indexed list, mixed types allowed: <code>let s = [&quot;HTML&quot;,&quot;CSS&quot;,&quot;JS&quot;]; s[0] // &quot;HTML&quot;; s.length // 3</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Job</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>push(x)</code> / <code>pop()</code></td>
+<td>add / remove at end</td>
+</tr>
+<tr>
+<td><code>unshift(x)</code> / <code>shift()</code></td>
+<td>add / remove at start</td>
+</tr>
+<tr>
+<td><code>indexOf(x)</code></td>
+<td>position, <code>-1</code> if absent</td>
+</tr>
+<tr>
+<td><code>slice(a,b)</code></td>
+<td>copy of a portion, original unchanged</td>
+</tr>
+<tr>
+<td><code>splice(start,count,...)</code></td>
+<td>remove/insert in place, original changed</td>
+</tr>
+<tr>
+<td><code>map(fn)</code> / <code>filter(fn)</code> / <code>forEach(fn)</code></td>
+<td>transform / select / iterate with a callback</td>
+</tr>
+<tr>
+<td><code>join(sep)</code> / <code>sort()</code> / <code>reverse()</code> / <code>concat()</code></td>
+<td>string, order, combine <strong>(standard)</strong></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Index vs key</strong> (Q52): arrays use numeric indices <code>arr[0]</code> (order matters, <code>length</code> exists); objects use named keys <code>obj[&quot;name&quot;]</code>/<code>obj.name</code> (order irrelevant, no <code>length</code>).</p>
+<h3 id="217-objects-269">2.17 Objects (<code>2:p20–21</code>)<a class="anchor" href="#217-objects-269">#</a></h3>
+<p>An unordered collection of key–value pairs modelling one entity.</p>
+<p><pre><code class="language-js">let student = { name:&quot;Anjali&quot;, age:20, courses:[&quot;Web Programming&quot;,&quot;DBMS&quot;], isActive:true };
+console.log(student.name);       // dot notation
+console.log(student[&quot;age&quot;]);     // bracket notation
+student.branch = &quot;CSE&quot;;          // add a property dynamically
+delete student.isActive;         // remove a property
+</code></pre>
+Bracket notation is required when the key is dynamic (<code>student[key]</code>) or contains spaces. Objects hold arrays and arrays hold objects — nesting freely is exactly the shape JSON later formalises (Module 5).</p>
+<h3 id="218-the-dom-271">2.18 The DOM (<code>2:p21</code>)<a class="anchor" href="#218-the-dom-271">#</a></h3>
+<p><strong>Story:</strong> the browser reads your HTML file once and builds a live family tree in memory. JavaScript never edits the file — it edits that tree, and the screen updates.</p>
+<p>Every element, attribute and text becomes a <strong>node</strong>; <code>document</code> is the root.</p>
+<p><pre><code>document
+ └── html
+     ├── head → title
+     └── body → h1, p
+</code></pre></p>
+<table>
+<thead>
+<tr>
+<th>Task</th>
+<th>Code</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Select by id</td>
+<td><code>document.getElementById(&quot;main-title&quot;)</code></td>
+</tr>
+<tr>
+<td>By class</td>
+<td><code>document.getElementsByClassName(&quot;card&quot;)</code></td>
+</tr>
+<tr>
+<td>First match / all matches</td>
+<td><code>document.querySelector(&quot;.card&quot;)</code> / <code>querySelectorAll(&quot;.card&quot;)</code></td>
+</tr>
+<tr>
+<td>Read/write text</td>
+<td><code>el.textContent = &quot;New&quot;</code></td>
+</tr>
+<tr>
+<td>Write HTML</td>
+<td><code>el.innerHTML = &quot;&lt;em&gt;New&lt;/em&gt;&quot;</code></td>
+</tr>
+<tr>
+<td>Style</td>
+<td><code>el.style.color = &quot;purple&quot;</code></td>
+</tr>
+<tr>
+<td>Attribute</td>
+<td><code>el.setAttribute(&quot;class&quot;,&quot;highlighted&quot;)</code></td>
+</tr>
+</tbody>
+</table>
+<p><code>textContent</code> inserts literal text (safe); <code>innerHTML</code> parses markup (powerful, an injection risk with user data).</p>
+<h3 id="219-events-and-callbacks-283">2.19 Events and callbacks (<code>2:p21–22</code>)<a class="anchor" href="#219-events-and-callbacks-283">#</a></h3>
+<p>An <strong>event handler</strong> is a function that runs when something happens. Register it with <code>addEventListener(type, fn)</code> (preferred), an element property (<code>btn.onclick = fn</code>), or an inline attribute (<code>onclick=&quot;fn()&quot;</code> — avoid). Events asked about: <code>click</code>, <code>submit</code>, <code>change</code>, <code>input</code>, <code>load</code>, <code>keydown</code>/<code>keyup</code>.</p>
+<p><pre><code class="language-js">document.querySelector(&quot;#submitBtn&quot;).addEventListener(&quot;click&quot;, function(){
+  alert(&quot;Button was clicked!&quot;);
+});
+</code></pre></p>
+<p><strong>Callback vs normal function</strong> (Q57): a normal function is called by <em>you</em>; a <strong>callback</strong> is a function <em>you pass as an argument</em> so something else can call it later (an event, <code>setTimeout</code>, <code>map</code>). Same syntax, different contract — the caller is the browser or the library, and it decides <em>when</em>.</p>
+<p><pre><code class="language-js">function greet(name){ console.log(&quot;Hi &quot; + name); }   // normal
+setTimeout(() =&gt; greet(&quot;Anjali&quot;), 1000);             // greet passed as a callback
+[1,2,3].forEach(n =&gt; console.log(n));                // callback per element
+</code></pre></p>
+<hr />
+<h2 id="3-part-2-answer-bank">3. PART 2 — Answer bank<a class="anchor" href="#3-part-2-answer-bank">#</a></h2>
+<h3 id="31-3-mark-answers-part-a">3.1 3-mark answers (Part A)<a class="anchor" href="#31-3-mark-answers-part-a">#</a></h3>
+<p><strong>MASTER A — CSS rule syntax (Q37, Q60, Q222a).</strong> (1) A rule = selector + declaration block: <code>selector { property: value; }</code>; (2) the selector picks elements, each declaration is one <code>property:value;</code> pair terminated by a semicolon, the block is <code>{ }</code>; (3) example <code>h1{color:#5E3E8E;font-size:28px}</code> — CSS comments are <code>/* */</code> only, and property names are lowercase-hyphenated.</p>
+<p><strong>MASTER B — Three attachment methods (Q38, Q39, Q40, Q41, Q55, Q61, Q186a, Q190, Q222b).</strong> (1) Inline (<code>style=&quot;&quot;</code>) — one element, highest specificity, no <code>:hover</code>/media queries, no reuse; (2) embedded (<code>&lt;style&gt;</code> in <code>&lt;head&gt;</code>) — whole document, medium specificity, not reusable across pages; (3) external (<code>&lt;link rel=&quot;stylesheet&quot; href=&quot;main.css&quot;&gt;</code>) — any page that links it, lowest specificity, cached, best separation. Two advantages of external over inline: reuse across all pages from one file + browser caching (and clean separation of content/presentation).</p>
+<p><strong>MASTER C — Positioning (Q42, Q56, Q63, Q224a).</strong> (1) <code>relative</code> offsets the element from its own normal position and <strong>keeps its space reserved</strong>; (2) <code>absolute</code> removes it from flow and positions it against the nearest positioned ancestor (else the viewport), so siblings close the gap; (3) pattern: <code>relative</code> wrapper + <code>absolute</code> child to pin a badge; <code>fixed</code> is viewport-anchored, <code>static</code> is the default.</p>
+<p><strong>MASTER D — Box model (Q43, Q64, Q189, Q200).</strong> (1) Every element is a box of four layers: content → padding (inside, transparent, background shows through) → border → margin (outside, separates neighbours); (2) rendered width = width + 2(padding) + 2(border) + 2(margin) under <code>content-box</code>, and <code>box-sizing:border-box</code> makes the declared width inclusive; (3) margins collapse between block siblings, padding never does — so the box model explains all spacing and "why is my element wider than I said".</p>
+<p><strong>MASTER E — Media queries (Q44, Q225b).</strong> (1) A media query wraps rules in a condition: <code>@media (min-width:768px){ ... }</code>; (2) conditions can test width, orientation, resolution and media type (<code>print</code>); (3) responsive design = fluid units + flexible images (<code>max-width:100%</code>) + mobile-first <code>min-width</code> queries, and it only works with <code>&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;</code>.</p>
+<p><strong>MASTER F — Backgrounds (Q45, Q191).</strong> (1) <code>background-image:url(&#x27;x.jpg&#x27;)</code> draws an image behind content; (2) <code>background-repeat</code> (<code>repeat|no-repeat|repeat-x|repeat-y</code>) and <code>background-position</code> (<code>center top</code>, <code>20px 10px</code>) place it; (3) add <code>background-size:cover|contain</code> to fit it, <code>background-attachment:fixed</code> for parallax; shorthand <code>background:#f0f0f0 url(&#x27;x&#x27;) no-repeat center/cover</code>.</p>
+<p><strong>MASTER G — <code>prompt()</code> and JS input (Q46, Q65, Q192a).</strong> (1) <code>prompt(message, default)</code> opens a modal dialog and returns the typed text as a <strong>string</strong>, or <code>null</code> if Cancel is pressed; (2) because it is always a string, convert with <code>Number()</code> / <code>parseInt()</code> before arithmetic; (3) other inputs: <code>confirm()</code> (true/false), <code>alert()</code> (output only), and real form fields read via the DOM (<code>input.value</code>) — prefer forms for production UIs since dialogs block the page.</p>
+<p><strong>MASTER H — Arithmetic (Q47, Q66).</strong> (1) <code>+ - * / % **</code> plus <code>++</code>/<code>--</code>, with <code>+</code> also concatenating strings; (2) precedence BODMAS — parentheses, exponent, <code>* / %</code>, <code>+ -</code>, left to right; <code>(10+5)*2-3**2 = 21</code>; (3) divisions are floating point (<code>5/2 = 2.5</code>), unlike C.</p>
+<p><strong>MASTER I — Control statements (Q48, Q193a, Q226b).</strong> (1) <code>if / else if / else</code> selects one branch by condition; (2) <code>switch(expr){case v: ...; break; default: ...}</code> compares one value against many, and <code>break</code> prevents fall-through; (3) ternary <code>cond ? a : b</code> is a one-line if/else; loops <code>for</code>, <code>while</code>, <code>do...while</code> repeat.</p>
+<p><strong>MASTER J — Arrays (Q49, Q52, Q67).</strong> (1) <code>let a = [&quot;HTML&quot;,&quot;CSS&quot;,&quot;JS&quot;]</code> — ordered, zero-indexed, mixed types allowed, <code>a.length</code> gives the count; (2) access/assign <code>a[0]</code>, iterate <code>forEach</code>, add/remove with <code>push/pop/unshift/shift</code>, transform with <code>map/filter</code>; (3) an array is index-addressed; an object is key-addressed — <code>a[0]</code> vs <code>o[&quot;name&quot;]</code>.</p>
+<p><strong>MASTER K — Objects (Q50, Q54, Q67).</strong> (1) <code>let s = {name:&quot;Anjali&quot;, age:20}</code> — unordered key–value pairs; (2) access with dot (<code>s.name</code>) or brackets (<code>s[&quot;name&quot;]</code>, required for dynamic keys); (3) add dynamically <code>s.branch = &quot;CSE&quot;</code>, remove with <code>delete s.age</code> — no class declaration needed.</p>
+<p><strong>MASTER L — DOM (Q51, Q53, Q59).</strong> (1) The DOM is the browser's in-memory tree of nodes for the loaded HTML — the live structure JS reads and modifies; (2) select with <code>getElementById</code>, <code>querySelector(All)</code>, <code>getElementsByClassName</code>; (3) change with <code>el.textContent</code>, <code>el.innerHTML</code>, <code>el.style.x</code>, <code>setAttribute</code> — the page re-renders immediately, the source file is untouched.</p>
+<p><strong>MASTER M — Pseudo-classes (Q58, Q202a).</strong> (1) A pseudo-class styles an element in a state or position: <code>a:hover</code>, <code>a:visited</code>, <code>input:focus</code>, <code>li:first-child</code>, <code>li:nth-child(even)</code>; (2) written with one colon, unlike pseudo-elements (<code>::before</code>) which style a part; (3) classic uses: hover feedback, zebra table rows, focus outlines — and order matters (<code>:link :visited :hover :active</code>).</p>
+<p><strong>MASTER N — Selectors + properties (Q62, Q223).</strong> Type/element (<code>p</code>), universal (<code>*</code>), class (<code>.card</code>), ID (<code>#header</code>), grouping (<code>h1,h2</code>), attribute (<code>input[type=&quot;text&quot;]</code>), pseudo-class (<code>:hover</code>), combinator (<code>nav a</code>, <code>ul&gt;li</code>, <code>h2+p</code>); properties examples: <code>color:#333</code>, <code>font-size:18px</code>, <code>margin:10px auto</code>, <code>padding:8px 12px</code>, <code>background:#f5f5f5</code>.</p>
+<p><strong>MASTER O — Callback vs normal function (Q57).</strong> A normal function is invoked directly by your code; a callback is passed <em>as an argument</em> and invoked later by whoever receives it (an event listener, <code>setTimeout</code>, <code>map</code>). Same syntax; the difference is control of <em>when</em>. Example: <code>btn.addEventListener(&quot;click&quot;, handleClick)</code> — the browser calls <code>handleClick</code>, not you.</p>
+<h3 id="32-14-mark-answers-part-b">3.2 14-mark answers (Part B)<a class="anchor" href="#32-14-mark-answers-part-b">#</a></h3>
+<h4 id="31-q186-q190-q222-three-methods-of-applying-css">§3.1 Q186 / Q190 / Q222 — Three methods of applying CSS</h4>
+<p><strong>Structure:</strong> (a) 7: three methods with code, scope, specificity, reuse. (b) 7: advantages/disadvantages of external.
+Method table (see §2.3) + one code block per method + precedence line: browser default &lt; external &lt; embedded &lt; inline (with <code>!important</code> overriding all).
+External advantages: single source of truth, browser caching, easier maintenance/teamwork, clean separation, supports media queries and pseudo-classes. Disadvantages: extra request on first load; if the file fails, every page loses styling; requires correct relative paths; harder to override locally (lowest specificity).</p>
+<h4 id="32-q187-css2-vs-css3-a-styled-button">§3.2 Q187 — CSS2 vs CSS3 + a styled button</h4>
+<p>(a) CSS2 (1998): single monolithic spec, added positioning and media types. CSS3: modular, each module versioned separately (Selectors, Flexbox, Grid, Media Queries, Animations); new features: <code>border-radius</code>, <code>box-shadow</code>, gradients, <code>rgba()</code>, transitions/animations, transforms, flexbox/grid, web fonts, multiple backgrounds.
+(b)
+<pre><code class="language-css">.btn{
+  background:#5E3E8E; color:#fff; padding:10px 22px; border:none;
+  border-radius:8px; box-shadow:0 2px 6px rgba(0,0,0,.3);
+  transition:background .3s ease, transform .15s;
+}
+.btn:hover{ background:#7a5aa8; transform:translateY(-1px); }
+</code></pre>
+Explain each: <code>border-radius</code> rounds corners; <code>box-shadow</code> (x y blur colour) lifts it; <code>transition</code> animates property changes over time so hover is smooth, not a jump.</p>
+<h4 id="33-q188-the-cascade-and-conflicts">§3.3 Q188 — The cascade and conflicts</h4>
+<p>(a) The cascade is the conflict-resolution algorithm: (1) <strong>importance</strong> (<code>!important</code> beats normal), (2) <strong>origin/specificity</strong> (inline &gt; ID &gt; class/attr/pseudo-class &gt; type &gt; universal), (3) <strong>source order</strong> (later wins when tied); inheritance fills in unset inheritable properties.
+(b) Scenario: <code>&lt;p id=&quot;intro&quot; class=&quot;note&quot; style=&quot;color:red&quot;&gt;</code> with external <code>#intro{color:green}</code>, embedded <code>.note{color:blue}</code>, and the inline style. Trace it out loud: inline wins → red. Remove inline → compare ID (0,1,0) vs class (0,0,1) → green. Remove the ID rule → blue. Show the same link/p element at each step so the marker sees the mechanism, not just the answer.</p>
+<h4 id="34-q189-q200-box-model-with-numbers">§3.4 Q189 / Q200 — Box model with numbers</h4>
+<p>(a) Draw the nested-box figure, name the four layers, give the formula, mention <code>box-sizing</code>, margin collapse.
+(b) Code <code>.box{width:300px;padding:20px;border:5px solid #5E3E8E;margin:15px}</code> → explain each layer and compute rendered width 380px; then <code>box-sizing:border-box</code> → 300px total with 250px content. Add a two-box example proving margin collapse (20px + 30px margins → 30px gap).</p>
+<h4 id="35-q191-q224a-backgrounds-and-positioning-in-practice">§3.5 Q191 / Q224a — Backgrounds and positioning in practice</h4>
+<p>Give the shorthand plus longhand, <code>cover</code> vs <code>contain</code> (fill/may crop vs fit/may letterbox), <code>background-attachment:fixed</code> parallax, multiple backgrounds (<code>url(a), url(b)</code> with comma separation) <strong>(standard)</strong>. Combine with §2.8 positioning: a <code>relative</code> hero with an <code>absolute</code> caption pinned bottom-left.</p>
+<h4 id="36-q192-user-input-in-js">§3.6 Q192 — User input in JS</h4>
+<p>(a) <code>prompt()</code> for one-off text; <code>confirm()</code> for yes/no; form fields (<code>&lt;input&gt;</code>, <code>&lt;select&gt;</code>, <code>&lt;textarea&gt;</code>) read through the DOM; event-driven input (<code>input</code>, <code>change</code> events). Discuss blocking/modal nature and why forms are preferred in production.
+(b) Code: <code>prompt</code> → validate not null and not empty after <code>trim()</code> → <code>alert</code> greeting → else re-prompt / show error. Include numeric conversion for a second prompt.</p>
+<h4 id="37-q193-decision-making">§3.7 Q193 — Decision making</h4>
+<p>(a) <code>if</code>, <code>if...else</code>, <code>else if</code> ladder, <code>switch</code>, ternary — with a one-line example each.
+(b) Day-of-week function:
+<pre><code class="language-js">function dayName(n){
+  switch(n){
+    case 1: return &quot;Monday&quot;;
+    case 2: return &quot;Tuesday&quot;;
+    case 3: return &quot;Wednesday&quot;;
+    case 4: return &quot;Thursday&quot;;
+    case 5: return &quot;Friday&quot;;
+    case 6: return &quot;Saturday&quot;;
+    case 7: return &quot;Sunday&quot;;
+    default: return &quot;Invalid day&quot;;
+  }
+}
+</code></pre>
+Explain <code>default</code> (no match, e.g. 0 or 8), <code>break</code> vs <code>return</code> (return leaves the function immediately), and that <code>switch</code> uses strict comparison.</p>
+<h4 id="38-q194-q226-fundamentals-control-statements">§3.8 Q194 / Q226 — Fundamentals + control statements</h4>
+<p>(a) Variables (<code>let</code>/<code>const</code>), data types table, functions (declaration, parameters, <code>return</code>), <code>typeof</code>, dynamic typing.
+(b) <code>for</code> (known count), <code>while</code> (test first), <code>do...while</code> (test last → at least one iteration), <code>break</code>/<code>continue</code>, and a nested-loop example (a 3×3 table built with <code>for</code>).</p>
+<h4 id="39-q195-array-manipulation">§3.9 Q195 — Array manipulation</h4>
+<p>(a) <code>push/pop</code>, <code>unshift/shift</code>, <code>indexOf</code>, <code>slice</code> vs <code>splice</code>, <code>map/filter/forEach</code>, <code>length</code>.
+(b) Live demo code with <code>console.log</code> after each op and the resulting array written as a comment — examiners give marks for the <em>result</em> of each operation, so write the before/after array next to each line.</p>
+<h4 id="310-q196-objects-printing-properties">§3.10 Q196 — Objects + printing properties</h4>
+<p><pre><code class="language-js">let student = { name:&quot;Anjali&quot;, age:20, course:&quot;CSE&quot; };
+function printValues(obj){
+  for (let key in obj){ console.log(key + &quot;: &quot; + obj[key]); }
+}
+printValues(student);
+</code></pre>
+Explain <code>for...in</code> iterates keys, <code>obj[key]</code> is required because <code>key</code> is dynamic, and output order follows insertion order for string keys.</p>
+<h4 id="311-q197-q227-arrays-vs-objects-form-processing">§3.11 Q197 / Q227 — Arrays vs objects; form processing</h4>
+<p>(a) Table: ordered vs keyed, index vs key, <code>length</code> vs none, use for lists vs records, methods differ.
+(b) Form processing: <code>getElementById</code> on fields, read <code>.value</code>, validate, <code>event.preventDefault()</code> to stop the default reload, then either <code>form.submit()</code> or <code>fetch()</code>; and the reminder that client-side validation never replaces server-side validation.</p>
+<h4 id="312-q198-css-specifics-js-control-statements">§3.12 Q198 — CSS specifics + JS control statements</h4>
+<p>Four separate CSS answers (write them as labelled items — each is worth ~1.5):
+<pre><code class="language-css">a:hover, a:active { background-color: yellow; }
+ol { list-style-type: lower-alpha; }
+body { background-image: url(&#x27;Boat.gif&#x27;); }
+body { border: 1px dotted #000; }
+</code></pre>
+Note the trap: <code>lower case alphabet</code> = <code>lower-alpha</code> (not <code>lower-case</code>); the border shorthand order is width style colour.
+Then control statements: if/else, switch, for, while, do-while with one example each.</p>
+<h4 id="313-q199-event-handlers-class-selectors">§3.13 Q199 — Event handlers + class selectors</h4>
+<p>(a) Three registration methods (inline attribute, element property, <code>addEventListener</code>) and why the third is preferred (multiple handlers, removable, cleaner). Code the Welcome→"Hello from JavaScript" demo:
+<pre><code class="language-html">&lt;p id=&quot;msg&quot;&gt;Welcome&lt;/p&gt;&lt;button id=&quot;btn&quot;&gt;Click&lt;/button&gt;
+&lt;script&gt;
+  document.getElementById(&quot;btn&quot;).addEventListener(&quot;click&quot;, function(){
+    document.getElementById(&quot;msg&quot;).innerHTML = &quot;&lt;b&gt;Hello from JavaScript&lt;/b&gt;&quot;;
+  });
+&lt;/script&gt;
+</code></pre>
+(b) <code>.style1{color:blue;text-align:right;text-decoration:underline;font-style:italic;word-spacing:2cm}</code> and <code>.style2{background-color:yellow;border:1px solid blue;padding:1.5cm}</code> applied to <code>&lt;p class=&quot;style1&quot;&gt;</code> / <code>&lt;p class=&quot;style2&quot;&gt;</code>. Note <code>word-spacing</code> accepts lengths and <code>1.5cm</code> is legal CSS.</p>
+<h4 id="314-q201-dom-interaction">§3.14 Q201 — DOM interaction</h4>
+<p>(a) Explain the DOM tree and node selection; then the two snippets: change <code>p.style.backgroundColor</code> on click; change <code>p.textContent</code>/<code>innerHTML</code> on click. Use <code>addEventListener</code>, not inline <code>onclick</code>, and mention <code>document.querySelector</code>.
+(b) Same page with separate buttons for colour and text — shows you understand that handlers are independent functions.</p>
+<h4 id="315-q202-pseudo-classes-digital-clock">§3.15 Q202 — Pseudo-classes + digital clock</h4>
+<p>(a) §2.6 with runnable examples (link states, <code>:focus</code>, <code>:nth-child</code>, <code>::first-letter</code>).
+(b)
+<pre><code class="language-html">&lt;p id=&quot;clock&quot;&gt;&lt;/p&gt;
+&lt;script&gt;
+  function tick(){
+    const d = new Date();
+    const p = n =&gt; String(n).padStart(2,&#x27;0&#x27;);
+    document.getElementById(&quot;clock&quot;).textContent =
+      p(d.getHours()) + &quot;:&quot; + p(d.getMinutes()) + &quot;:&quot; + p(d.getSeconds());
+  }
+  tick();
+  setInterval(tick, 1000);
+&lt;/script&gt;
+</code></pre>
+Explain <code>Date</code>, <code>getHours/Minutes/Seconds</code>, <code>padStart</code> for two digits, <code>setInterval(fn, 1000)</code> repeating every second, and why <code>tick()</code> is called once immediately (otherwise the clock is blank for a second).</p>
+<h4 id="316-q223-q224-q225-the-css-sweep">§3.16 Q223 / Q224 / Q225 — The CSS sweep</h4>
+<p>Compose from MASTER N (selectors + properties), MASTER C (positioning) + MASTER F (backgrounds) + list/table CSS, and MASTER D + MASTER E. Each sub-part gets its own labelled block and one short code block; do not merge them into one essay.</p>
+<h4 id="317-q228-two-programs">§3.17 Q228 — Two programs</h4>
+<p>Prime check: loop <code>i</code> from 2 to <code>Math.sqrt(n)</code>, return false on divisibility, handle <code>n &lt; 2</code>.
+Form validation: <code>submit</code> listener, <code>preventDefault()</code>, check <code>.value.trim() === &quot;&quot;</code>, regex <code>/^[^@\s]+@[^@\s]+\.[a-z]{2,}$/i</code> for email, write the error into a <code>&lt;span id=&quot;err&quot;&gt;</code> rather than <code>alert</code> (better marks — shows DOM manipulation).</p>
+<hr />
+<h2 id="4-part-3-code-you-must-be-able-to-write-by-hand">4. PART 3 — Code you must be able to write by hand<a class="anchor" href="#4-part-3-code-you-must-be-able-to-write-by-hand">#</a></h2>
+<p><strong>D1.</strong> CSS rule with selector/declarations + comment syntax.
+<strong>D2.</strong> Same <code>&lt;p&gt;</code> styled inline, embedded, and external — plus the <code>&lt;link&gt;</code> line.
+<strong>D3.</strong> Specificity demo: inline vs <code>#id</code> vs <code>.class</code> vs <code>p</code> on one element.
+<strong>D4.</strong> Selector zoo: universal, type, class, id, group, descendant, child, adjacent, attribute (all four operators).
+<strong>D5.</strong> Link states in LVHA order, <code>:focus</code>, <code>:nth-child(even)</code> zebra rows, <code>::first-letter</code>.
+<strong>D6.</strong> Background hero: image + <code>no-repeat</code> + <code>center</code> + <code>cover</code>, and the shorthand version.
+<strong>D7.</strong> Positioning: <code>relative</code> parent + <code>absolute</code> badge top-right; then a <code>fixed</code> header.
+<strong>D8.</strong> Box model numbers: compute rendered width, then re-compute with <code>border-box</code>.
+<strong>D9.</strong> List styling: <code>lower-alpha</code>, <code>square</code>, <code>none</code>, <code>inside</code>.
+<strong>D10.</strong> Table CSS: <code>border-collapse</code>, cell padding, zebra striping, caption styling.
+<strong>D11.</strong> Mobile-first responsive: base + two <code>min-width</code> queries + <code>max-width:100%</code> image.
+<strong>D12.</strong> <code>prompt()</code> with empty-check and numeric conversion, output via <code>innerHTML</code>.
+<strong>D13.</strong> if/else-if ladder + <code>switch</code> day-of-week + ternary.
+<strong>D14.</strong> Loops: <code>for</code> 1–10, <code>while</code>, <code>do...while</code>, and a <code>for</code> that builds a table row.
+<strong>D15.</strong> Array ops demo: push/pop/unshift/shift/indexOf/slice/splice/map/filter with printed results.
+<strong>D16.</strong> Object ops: literal, dot + bracket access, add property, <code>for...in</code> print.
+<strong>D17.</strong> DOM update: <code>getElementById</code> + <code>innerHTML</code> + <code>style.color</code>, on button click via <code>addEventListener</code>.
+<strong>D18.</strong> Welcome→Hello button demo (Q199a) verbatim.
+<strong>D19.</strong> Prime check function + a form-validation handler with <code>preventDefault</code> and an error <code>&lt;span&gt;</code>.
+<strong>D20.</strong> Digital clock with <code>setInterval</code> and <code>padStart</code>.</p>
+<hr />
+<h2 id="5-night-before-memorize-sheet">5. 🔴 Night-before memorize sheet<a class="anchor" href="#5-night-before-memorize-sheet">#</a></h2>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Exact thing to recall</th>
+<th>Why</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Rule anatomy</td>
+<td><code>selector { property: value; }</code></td>
+<td>Q37, Q60</td>
+</tr>
+<tr>
+<td>Comment</td>
+<td><code>/* ... */</code> only</td>
+<td>Q37</td>
+</tr>
+<tr>
+<td>Attachment</td>
+<td>inline <code>style=&quot;&quot;</code> &gt; embedded <code>&lt;style&gt;</code> &gt; external <code>&lt;link rel=&quot;stylesheet&quot; href=&quot;&quot;&gt;</code></td>
+<td>Q38–41, Q55, Q186</td>
+</tr>
+<tr>
+<td>Specificity</td>
+<td>inline &gt; ID &gt; class/attr/pseudo-class &gt; type &gt; universal; tie → later rule</td>
+<td>Q188</td>
+</tr>
+<tr>
+<td>Specificity scores</td>
+<td>(1,0,0) (0,1,0) (0,0,1) (0,0,0)</td>
+<td>Q188</td>
+</tr>
+<tr>
+<td>Position values</td>
+<td>static, relative, absolute, fixed, sticky</td>
+<td>Q42, Q63, Q224</td>
+</tr>
+<tr>
+<td>Box layers</td>
+<td>content → padding → border → margin</td>
+<td>Q43, Q64, Q200</td>
+</tr>
+<tr>
+<td>Box formula</td>
+<td>width + 2·padding + 2·border (+ margins for outer size)</td>
+<td>Q189, Q200</td>
+</tr>
+<tr>
+<td><code>box-sizing</code></td>
+<td><code>content-box</code> default vs <code>border-box</code> inclusive</td>
+<td>Q189</td>
+</tr>
+<tr>
+<td>Background props</td>
+<td>image, repeat, position, size (<code>cover</code>/<code>contain</code>), attachment</td>
+<td>Q45, Q191</td>
+</tr>
+<tr>
+<td>List props</td>
+<td><code>list-style-type</code> (<code>lower-alpha</code>, <code>square</code>, <code>none</code>), <code>-position</code>, <code>-image</code></td>
+<td>Q198, Q224</td>
+</tr>
+<tr>
+<td>Table CSS</td>
+<td><code>border-collapse:collapse</code>, <code>nth-child(even)</code></td>
+<td>Q224</td>
+</tr>
+<tr>
+<td>Viewport meta</td>
+<td><code>width=device-width, initial-scale=1.0</code></td>
+<td>Q44, Q225</td>
+</tr>
+<tr>
+<td>Media query</td>
+<td><code>@media (min-width:768px){ }</code></td>
+<td>Q44, Q225</td>
+</tr>
+<tr>
+<td>JS vars</td>
+<td><code>let</code> / <code>const</code> / <code>var</code> scope difference</td>
+<td>Q194</td>
+</tr>
+<tr>
+<td>JS types</td>
+<td>Number, String, Boolean, Undefined, Null, Object, Array</td>
+<td>Q194</td>
+</tr>
+<tr>
+<td><code>==</code> vs <code>===</code></td>
+<td><code>&quot;5&quot;==5</code> true, <code>&quot;5&quot;===5</code> false</td>
+<td>Q194, Q226</td>
+</tr>
+<tr>
+<td><code>prompt()</code></td>
+<td>returns string or <code>null</code>; always convert</td>
+<td>Q46, Q65, Q192</td>
+</tr>
+<tr>
+<td>Array methods</td>
+<td>push pop shift unshift indexOf slice splice map filter forEach</td>
+<td>Q49, Q195</td>
+</tr>
+<tr>
+<td>Object access</td>
+<td><code>o.key</code>, <code>o[&quot;key&quot;]</code>, <code>o.newKey = v</code>, <code>delete o.key</code></td>
+<td>Q50, Q54</td>
+</tr>
+<tr>
+<td>DOM selectors</td>
+<td>getElementById, querySelector(All), getElementsByClassName</td>
+<td>Q51, Q199</td>
+</tr>
+<tr>
+<td>DOM writes</td>
+<td><code>textContent</code>, <code>innerHTML</code>, <code>style.x</code>, <code>setAttribute</code></td>
+<td>Q53, Q201</td>
+</tr>
+<tr>
+<td>Events</td>
+<td>click, submit, change, input, load, keydown</td>
+<td>Q199</td>
+</tr>
+<tr>
+<td><code>preventDefault</code></td>
+<td>stops the default submit/reload</td>
+<td>Q227, Q228</td>
+</tr>
+<tr>
+<td>Clock</td>
+<td><code>new Date()</code>, <code>getHours()</code>, <code>setInterval(fn,1000)</code>, <code>padStart(2,&#x27;0&#x27;)</code></td>
+<td>Q202</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="6-diagram-figure-index">6. 📐 Diagram + figure index<a class="anchor" href="#6-diagram-figure-index">#</a></h2>
+<table>
+<thead>
+<tr>
+<th>Figure</th>
+<th>Where</th>
+<th>What to draw</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CSS rule structure</td>
+<td><code>2:p2–3</code></td>
+<td>selector + block + declarations labelled</td>
+</tr>
+<tr>
+<td>Three attachment methods table</td>
+<td><code>2:p5</code></td>
+<td>scope/reuse/specificity grid</td>
+</tr>
+<tr>
+<td>Selector specificity ladder</td>
+<td><code>2:p7</code></td>
+<td>inline &gt; ID &gt; class &gt; type</td>
+</tr>
+<tr>
+<td>Position property table</td>
+<td><code>2:p8</code></td>
+<td>five values and behaviour</td>
+</tr>
+<tr>
+<td>Box model</td>
+<td><code>2:p11</code> (ASCII figure in the deck)</td>
+<td>four nested labelled boxes + width sum</td>
+</tr>
+<tr>
+<td>Media query breakpoints</td>
+<td><code>2:p13</code></td>
+<td>mobile → tablet → desktop</td>
+</tr>
+<tr>
+<td>DOM tree</td>
+<td><code>2:p21</code></td>
+<td>document → html → head/body → nodes</td>
+</tr>
+<tr>
+<td>Event table</td>
+<td><code>2:p21</code></td>
+<td>event → when it fires</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="7-say-this-if-grilled-defence-lines">7. Say-this-if-grilled defence lines<a class="anchor" href="#7-say-this-if-grilled-defence-lines">#</a></h2>
+<ol>
+<li>"CSS is a separate language so presentation can change without touching content — that separation is the reason it exists."</li>
+<li>"Inline styles win on specificity but lose on everything else — no reuse, no media queries, no pseudo-classes."</li>
+<li>"<code>!important</code> beats specificity; that is why it is a last resort and not a fix."</li>
+<li>"<code>relative</code> reserves the space; <code>absolute</code> does not — that one sentence explains most positioning bugs."</li>
+<li>"<code>box-sizing:border-box</code> exists because padding and border used to silently add to the declared width."</li>
+<li>"Margins collapse vertically between blocks; padding never collapses — that is why padding is used for inner spacing."</li>
+<li>"<code>prompt()</code> returns a string or null — <code>&quot;5&quot; + 3</code> gives <code>&quot;53&quot;</code>, so convert before arithmetic."</li>
+<li>"<code>===</code> avoids the coercion surprises of <code>==</code>; <code>&quot;5&quot; == 5</code> is true and that is a bug factory."</li>
+<li>"An array is index-addressed and ordered; an object is key-addressed and unordered — that is the whole difference."</li>
+<li>"The DOM is the live tree, not the HTML file — JavaScript mutates the tree and the screen follows."</li>
+<li>"A callback is not a different kind of function; it is a function handed to someone else to call."</li>
+<li>"Client-side validation is UX only — disable JavaScript and it is gone, so the server must validate again."</li>
+<li>"A media query without the viewport meta tag is wasted on phones, because the browser assumes a 980px desktop."</li>
+</ol>
+  </main>
+</div>
+<div class="tools">
+  <button id="theme" title="Toggle light / dark">☾</button>
+  <button id="top" title="Back to top">↑</button>
+</div>
+<script>
+(function(){
+  var root=document.documentElement, key='minotes-theme';
+  var saved=localStorage.getItem(key);
+  var prefers=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';
+  root.setAttribute('data-theme', saved || prefers);
+
+  var btn=document.getElementById('theme');
+  function sync(){ if(btn) btn.textContent = root.getAttribute('data-theme')==='dark' ? '\u2600' : '\u263E'; }
+  sync();
+  if(btn) btn.addEventListener('click',function(){
+    var next = root.getAttribute('data-theme')==='dark' ? 'light' : 'dark';
+    root.setAttribute('data-theme', next); localStorage.setItem(key,next); sync();
+  });
+
+  var bar=document.getElementById('progress');
+  if(bar) addEventListener('scroll',function(){
+    var h=document.documentElement.scrollHeight-innerHeight;
+    bar.style.width=(h>0?(scrollY/h*100):0)+'%';
+  },{passive:true});
+
+  document.querySelectorAll('pre').forEach(function(pre){
+    var b=document.createElement('button');
+    b.className='copy'; b.textContent='copy';
+    b.addEventListener('click',function(){
+      var t=pre.querySelector('code'); var txt=t?t.innerText:pre.innerText;
+      navigator.clipboard.writeText(txt).then(function(){
+        b.textContent='copied'; setTimeout(function(){b.textContent='copy';},1200);
+      });
+    });
+    pre.appendChild(b);
+  });
+
+  document.querySelectorAll('main table').forEach(function(t){
+    if(t.parentElement.classList.contains('table-scroll')) return;
+    var w=document.createElement('div'); w.className='table-scroll';
+    t.parentNode.insertBefore(w,t); w.appendChild(t);
+  });
+
+  var links=[].slice.call(document.querySelectorAll('.sidebar a[href^="#"]'));
+  var map={}; links.forEach(function(a){ map[a.getAttribute('href').slice(1)]=a; });
+  var heads=[].slice.call(document.querySelectorAll('main h2[id], main h3[id]'));
+  if('IntersectionObserver' in window && heads.length){
+    var obs=new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if(!e.isIntersecting) return;
+        links.forEach(function(a){a.classList.remove('active');});
+        var a=map[e.target.id]; if(a){a.classList.add('active');}
+      });
+    },{rootMargin:'-10% 0px -75% 0px'});
+    heads.forEach(function(h){obs.observe(h);});
+  }
+
+  var top=document.getElementById('top');
+  if(top) top.addEventListener('click',function(){ scrollTo({top:0,behavior:'smooth'}); });
+})();
+</script>
+</body>
+</html>

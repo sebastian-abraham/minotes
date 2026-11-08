@@ -1,0 +1,915 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MODULE 3 · Web Programming</title>
+<style>
+:root{
+  --bg:#fbfaf8; --panel:#ffffff; --ink:#232120; --muted:#5f5a53; --line:#e6e1da;
+  --accent:#7a4fd0; --accent-soft:#f1ecfb; --code-bg:#f5f2ee; --code-ink:#2b2a28;
+  --warn-bg:#fff8e6; --warn-line:#f0d9a0;
+  --sans:"Inter","Segoe UI",system-ui,-apple-system,"Noto Sans",sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,"SF Mono",Menlo,Consolas,"Fira Code",monospace;
+}
+html[data-theme="dark"]{
+  --bg:#141317; --panel:#1b1a20; --ink:#e8e4de; --muted:#a8a199; --line:#2f2c36;
+  --accent:#b79cf5; --accent-soft:#241f33; --code-bg:#22202a; --code-ink:#e8e4de;
+  --warn-bg:#2a2417; --warn-line:#4a3d22;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0; background:var(--bg); color:var(--ink); font-family:var(--sans);
+  font-size:16.5px; line-height:1.72; -webkit-font-smoothing:antialiased;
+}
+#progress{position:fixed;top:0;left:0;height:3px;width:0;background:var(--accent);z-index:50;transition:width .1s linear}
+
+.wrap{display:flex;align-items:flex-start;min-height:100vh}
+.sidebar{
+  position:sticky;top:0;height:100vh;width:300px;flex:0 0 300px;overflow-y:auto;
+  padding:26px 20px 60px;border-right:1px solid var(--line);background:var(--panel);
+}
+.sidebar h1{font-size:15px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);
+  margin:0 0 4px;font-weight:600}
+.sidebar .sub{font-size:12.5px;color:var(--muted);margin:0 0 18px}
+.sidebar nav{font-size:14px}
+.sidebar .toc>ul{padding-left:0}
+.sidebar ul{list-style:none;margin:0;padding-left:12px}
+.sidebar ul ul{border-left:1px solid var(--line);margin-left:4px;padding-left:10px}
+.sidebar li{margin:3px 0}
+.sidebar a{color:var(--ink);text-decoration:none;display:block;padding:3px 8px;border-radius:8px;
+  line-height:1.35;transition:background .12s,color .12s}
+.sidebar a:hover{background:var(--accent-soft);color:var(--accent)}
+.sidebar a.active{background:var(--accent-soft);color:var(--accent);font-weight:600}
+.sidebar .home{display:inline-flex;align-items:center;gap:6px;margin-bottom:16px;font-size:13.5px;
+  color:var(--muted);text-decoration:none;border:1px solid var(--line);padding:5px 10px;border-radius:999px}
+.sidebar .home:hover{color:var(--accent);border-color:var(--accent)}
+
+main{flex:1;min-width:0;padding:46px 56px 120px;max-width:980px;margin:0 auto}
+.doc-head{border-bottom:1px solid var(--line);padding-bottom:18px;margin-bottom:34px}
+.doc-head .kicker{font-size:12.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);
+  font-weight:700;margin-bottom:8px}
+.doc-head .meta{font-size:13.5px;color:var(--muted)}
+
+h1,h2,h3,h4{line-height:1.25;font-weight:700;letter-spacing:-.01em}
+h1{font-size:2.05rem;margin:.2em 0 .5em}
+h2{font-size:1.55rem;margin:2.4em 0 .7em;padding-bottom:.35em;border-bottom:1px solid var(--line)}
+h3{font-size:1.2rem;margin:1.9em 0 .55em}
+h4{font-size:1.03rem;margin:1.5em 0 .45em;color:var(--muted)}
+h2 .anchor,h3 .anchor{opacity:0;margin-left:.35em;font-size:.8em;color:var(--muted);text-decoration:none}
+h2:hover .anchor,h3:hover .anchor{opacity:1}
+p{margin:.75em 0}
+a{color:var(--accent);text-underline-offset:2px}
+strong{font-weight:650}
+hr{border:0;border-top:1px solid var(--line);margin:2.6em 0}
+ul,ol{margin:.7em 0;padding-left:1.4em}
+li{margin:.3em 0}
+li>ul,li>ol{margin:.25em 0}
+blockquote{
+  margin:1.3em 0;padding:12px 18px;background:var(--warn-bg);border-left:3px solid var(--warn-line);
+  border-radius:0 10px 10px 0;color:var(--ink)
+}
+blockquote p{margin:.3em 0}
+
+code{font-family:var(--mono);font-size:.87em;background:var(--code-bg);color:var(--code-ink);
+  padding:.15em .38em;border-radius:6px;border:1px solid var(--line);
+  box-decoration-break:clone;-webkit-box-decoration-break:clone;overflow-wrap:anywhere}
+pre{position:relative;background:var(--code-bg);border:1px solid var(--line);border-radius:12px;
+  padding:16px 18px;overflow-x:auto;margin:1.1em 0}
+pre code{background:none;border:0;padding:0;font-size:13.6px;line-height:1.62;white-space:pre}
+.copy{position:absolute;top:8px;right:8px;font:600 11px/1 var(--sans);color:var(--muted);
+  background:var(--panel);border:1px solid var(--line);border-radius:7px;padding:5px 8px;cursor:pointer;
+  opacity:0;transition:opacity .15s}
+pre:hover .copy{opacity:1}
+.copy:hover{color:var(--accent);border-color:var(--accent)}
+
+.table-scroll{overflow-x:auto;margin:1.3em 0;border:1px solid var(--line);border-radius:12px;background:var(--panel)}
+table{border-collapse:collapse;width:100%;font-size:14.6px}
+th,td{padding:9px 13px;text-align:left;vertical-align:top;border-bottom:1px solid var(--line)}
+th{background:var(--accent-soft);font-weight:650;font-size:13px;letter-spacing:.02em;
+  position:sticky;top:0;backdrop-filter:blur(4px)}
+tr:last-child td{border-bottom:0}
+tbody tr:nth-child(even){background:color-mix(in srgb,var(--panel) 60%,var(--bg))}
+tbody tr:hover{background:var(--accent-soft)}
+
+.tools{position:fixed;right:22px;bottom:22px;display:flex;flex-direction:column;gap:8px;z-index:40}
+.tools button{width:42px;height:42px;border-radius:12px;border:1px solid var(--line);background:var(--panel);
+  color:var(--ink);cursor:pointer;font-size:16px;box-shadow:0 4px 14px rgba(0,0,0,.10)}
+.tools button:hover{color:var(--accent);border-color:var(--accent)}
+@media (max-width:1000px){
+  .wrap{display:block}
+  .sidebar{position:static;width:auto;height:auto;border-right:0;border-bottom:1px solid var(--line)}
+  .sidebar nav{max-height:40vh;overflow:auto}
+  main{padding:28px 20px 100px}
+}
+@media print{
+  .sidebar,.tools,#progress,.copy{display:none!important}
+  body{background:#fff;color:#000;font-size:11pt}
+  main{padding:0;max-width:none}
+  h2{break-after:avoid} pre,table,blockquote{break-inside:avoid}
+  a{color:#000;text-decoration:none}
+}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+<div class="wrap">
+  <aside class="sidebar">
+    <a class="home" href="index.html">← Web Programming</a>
+    <h1>Notes · M3</h1>
+    <p class="sub">Lecture notes, 774 lines</p>
+    <nav class="toc"><div class="toc">
+<ul>
+<li><a href="#php">php</a></li>
+<li><a href="#6-hours-of-content-delivery">6 Hours of Content Delivery</a></li>
+<li><a href="#what-is-php-how-it-works">What is PHP &amp; How It Works</a><ul>
+<li><a href="#1">1</a></li>
+<li><a href="#2">2</a></li>
+<li><a href="#3">3</a></li>
+<li><a href="#4">4</a></li>
+</ul>
+</li>
+<li><a href="#php-in-the-request-response-cycle">PHP in the Request-Response Cycle</a></li>
+<li><a href="#php-syntax-variables">PHP Syntax &amp; Variables</a></li>
+<li><a href="#php-data-types">PHP Data Types</a></li>
+<li><a href="#converting-between-data-types">Converting Between Data Types</a></li>
+<li><a href="#operators-expressions">Operators &amp; Expressions</a></li>
+<li><a href="#comparison-logical-operators">Comparison &amp; Logical Operators</a></li>
+<li><a href="#flow-control-functions">Flow Control Functions</a><ul>
+<li><a href="#1_1">1</a></li>
+<li><a href="#2_1">2</a></li>
+<li><a href="#3_1">3</a></li>
+<li><a href="#4_1">4</a></li>
+</ul>
+</li>
+<li><a href="#control-statements-if-switch">Control Statements: if &amp; switch</a></li>
+<li><a href="#loops-in-php">Loops in PHP</a></li>
+<li><a href="#working-with-functions">Working with Functions</a></li>
+<li><a href="#function-parameters-defaults-scope">Function Parameters, Defaults &amp; Scope</a><ul>
+<li><a href="#1_2">1</a></li>
+<li><a href="#2_2">2</a></li>
+<li><a href="#3_2">3</a></li>
+<li><a href="#4_2">4</a></li>
+</ul>
+</li>
+<li><a href="#initialising-manipulating-indexed-arrays">Initialising &amp; Manipulating Indexed Arrays</a></li>
+<li><a href="#associative-multidimensional-arrays">Associative &amp; Multidimensional Arrays</a></li>
+<li><a href="#common-array-functions">Common Array Functions</a></li>
+<li><a href="#objects-classes-in-php">Objects &amp; Classes in PHP</a></li>
+<li><a href="#working-with-strings">Working with Strings</a></li>
+<li><a href="#string-manipulation-concatenation">String Manipulation &amp; Concatenation</a></li>
+<li><a href="#regular-expressions-in-php">Regular Expressions in PHP</a></li>
+<li><a href="#common-regex-patterns-for-validation">Common Regex Patterns for Validation</a></li>
+<li><a href="#reading-form-data-_get-vs-_post">Reading Form Data: $_GET vs. $_POST</a></li>
+<li><a href="#validating-sanitizing-input">Validating &amp; Sanitizing Input</a></li>
+<li><a href="#business-logic-example">Business Logic Example</a></li>
+<li><a href="#putting-it-together-a-form-processing-script">Putting It Together: A Form-Processing Script</a><ul>
+<li><a href="#php_1">php</a></li>
+</ul>
+</li>
+<li><a href="#key-takeaways">Key Takeaways</a></li>
+</ul>
+</div>
+</nav>
+  </aside>
+  <main>
+    <div class="doc-head">
+      <div class="kicker">20CST461 · Web Programming</div>
+      <div class="meta">Lecture notes, 774 lines · rendered from module3.md</div>
+    </div>
+    <p><em>[Image Description: A dark circular icon containing the white PHP logo set within an oval border against a dark blue background.]</em></p>
+<h1 id="module-3">MODULE 3</h1>
+<h3 id="php">php<a class="anchor" href="#php">#</a></h3>
+<h1 id="introduction-to-php">Introduction to PHP</h1>
+<h3 id="6-hours-of-content-delivery">6 Hours of Content Delivery<a class="anchor" href="#6-hours-of-content-delivery">#</a></h3>
+<ul>
+<li>Building blocks, variables &amp; data types - 1 Hr</li>
+<li>Type conversion, operators &amp; flow control - 1 Hr</li>
+<li>Control statements &amp; functions - 1 Hr</li>
+<li>Arrays &amp; objects - 1 Hr</li>
+<li>Strings, regex &amp; pattern matching - 1 Hr</li>
+<li>Form processing &amp; business logic - 1 Hr</li>
+</ul>
+<p><strong>Web Programming | Saintgits College of Engineering</strong></p>
+<hr />
+<p><em>[Image Description: Small PHP oval logo graphic in the top header.]</em></p>
+<p><strong>MODULE III 1 HR TOPIC</strong><br />
+<strong>20CST461</strong></p>
+<h2 id="what-is-php-how-it-works">What is PHP &amp; How It Works<a class="anchor" href="#what-is-php-how-it-works">#</a></h2>
+<h3 id="1">1<a class="anchor" href="#1">#</a></h3>
+<p><strong>Server-side scripting</strong><br />
+PHP (PHP: Hypertext Preprocessor) runs entirely on the web server, before anything reaches the browser. The visitor only ever receives plain HTML they never see the PHP source code.</p>
+<h3 id="2">2<a class="anchor" href="#2">#</a></h3>
+<p><strong>Why PHP is popular</strong><br />
+Free and open-source, runs on virtually any hosting platform, has a huge ecosystem (WordPress, Laravel), and is purpose-built for generating dynamic web pages and talking to databases.</p>
+<h3 id="3">3<a class="anchor" href="#3">#</a></h3>
+<p><strong>File extension &amp; embedding</strong><br />
+PHP files use the .php extension. PHP code can be mixed directly into an HTML file inside <code>&lt;?php ... ?&gt;</code> blocks the server processes those blocks and leaves the surrounding HTML untouched.</p>
+<h3 id="4">4<a class="anchor" href="#4">#</a></h3>
+<p><strong>What 'dynamic' means here</strong><br />
+Because the script runs fresh on every request, the same .php file can output different content depending on the time, the logged-in user, or data pulled from a database.</p>
+<p><strong>Web Programming | Saintgits College of Engineering</strong><br />
+<strong>2</strong></p>
+<hr />
+<p><em>[Image Description: Small PHP oval logo graphic in the top header.]</em></p>
+<p><strong>MODULE III 1 HR TOPIC</strong><br />
+<strong>20CST461</strong></p>
+<h2 id="php-in-the-request-response-cycle">PHP in the Request-Response Cycle<a class="anchor" href="#php-in-the-request-response-cycle">#</a></h2>
+<p><em>[Image Description: An architectural flow diagram depicting the PHP Request-Response Cycle. It shows three rounded rectangular process boxes along the top: the first teal-blue box is labeled "Browser Requests page.php", which connects to a dark navy-blue box labeled "Web Server", which in turn routes to another teal-blue box labeled "PHP Engine Runs the script". Below the server and engine boxes sits a green rectangular box representing the database, labeled "MySQL Database (if the script queries it)". Spanning across the lower section is a wide dark-blue rectangular container labeled "Plain HTML sent back to Browser", representing the final output delivered to the client.]</em></p>
+<p>Browser<br />
+Requests page.php</p>
+<p>Web Server</p>
+<p>PHP Engine<br />
+Runs the script</p>
+<p>MySQL Database<br />
+(if the script queries it)</p>
+<p>Plain HTML sent back to Browser</p>
+<p>The browser never sees the .php source only whatever HTML the script decided to output for this specific request.</p>
+<p><strong>Web Programming | Saintgits College of Engineering</strong><br />
+<strong>3</strong></p>
+<hr />
+<p><em>[Image Description: A code tag icon labeled "&lt;/&gt;" positioned in the top-left area alongside the PHP logo in the lower-right area.]</em></p>
+<p><strong>MODULE III 1 HR TOPIC</strong><br />
+<strong>20CST461</strong></p>
+<h2 id="php-syntax-variables">PHP Syntax &amp; Variables<a class="anchor" href="#php-syntax-variables">#</a></h2>
+<p>PHP code lives inside <code>&lt;?php ... ?&gt;</code>. Variables are loosely typed and always start with a dollar sign.</p>
+<ul>
+<li><code>&lt;?php ... ?&gt;</code> marks where PHP code begins and ends</li>
+<li>Variables: <code>$name</code>, <code>$age</code> no type keyword needed</li>
+<li>PHP is dynamically typed type is decided by the value currently stored</li>
+<li><code>echo</code> or <code>print</code> send output into the HTML response</li>
+<li>Statements end with a semicolon, same as C/Java</li>
+</ul>
+<p><pre><code class="language-php">&lt;?php
+$college = &quot;Saintgits&quot;;
+$year = 2026;
+$fee = 49999.50;
+echo &quot;Welcome to $college &lt;br&gt;&quot;;
+echo &quot;Year: &quot; . $year;
+?&gt;
+</code></pre></p>
+<p><strong>Web Programming | Saintgits College of Engineering</strong><br />
+<strong>PHP</strong><br />
+<strong>4</strong></p>
+<hr />
+<p><strong>MODULE III 1 HR TOPIC</strong><br />
+<strong>20CST461</strong></p>
+<h2 id="php-data-types">PHP Data Types<a class="anchor" href="#php-data-types">#</a></h2>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Type</th>
+<th style="text-align: left;">Example</th>
+<th style="text-align: left;">Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">int</td>
+<td style="text-align: left;"><code>$age = 21;</code></td>
+<td style="text-align: left;">Whole numbers</td>
+</tr>
+<tr>
+<td style="text-align: left;">float</td>
+<td style="text-align: left;"><code>$fee = 499.50;</code></td>
+<td style="text-align: left;">Decimal numbers</td>
+</tr>
+<tr>
+<td style="text-align: left;">string</td>
+<td style="text-align: left;"><code>$name = &quot;Anu&quot;;</code></td>
+<td style="text-align: left;">Text, single or double quotes</td>
+</tr>
+<tr>
+<td style="text-align: left;">bool</td>
+<td style="text-align: left;"><code>$active = true;</code></td>
+<td style="text-align: left;">true / false</td>
+</tr>
+<tr>
+<td style="text-align: left;">array</td>
+<td style="text-align: left;"><code>$m = [88, 92];</code></td>
+<td style="text-align: left;">Ordered or key-value collection</td>
+</tr>
+<tr>
+<td style="text-align: left;">NULL</td>
+<td style="text-align: left;"><code>$x = null;</code></td>
+<td style="text-align: left;">Explicitly 'no value'</td>
+</tr>
+</tbody>
+</table>
+<p>Note: <code>gettype($var)</code> returns a variable's current type as a string; <code>var_dump($var)</code> shows both type and value useful for debugging.</p>
+<p><strong>Web Programming | Saintgits College of Engineering</strong><br />
+<strong>5</strong></p>
+<hr />
+<p><em>[Image Description: PHP logo located in the bottom-right corner.]</em></p>
+<p><strong>MODULE III 1 HR TOPIC</strong><br />
+<strong>20CST461</strong></p>
+<h2 id="converting-between-data-types">Converting Between Data Types<a class="anchor" href="#converting-between-data-types">#</a></h2>
+<p>PHP converts types automatically in many contexts (loose typing), but explicit casting keeps behaviour predictable.</p>
+<ul>
+<li><code>(int)</code>, <code>(float)</code>, <code>(string)</code>, <code>(bool)</code>, <code>(array)</code> - explicit casts</li>
+<li><code>intval()</code>, <code>floatval()</code>, <code>strval()</code>, <code>boolval()</code> conversion functions</li>
+<li><code>settype($var, &quot;integer&quot;)</code> converts a variable in place</li>
+<li><code>is_int()</code>, <code>is_string()</code>, <code>is_array()</code> - type-checking functions</li>
+</ul>
+<p><pre><code class="language-php">&lt;?php
+$a = &quot;10&quot;;
+$b = (int)$a + 5; // 15
+$price = &quot;499.99&quot;;
+$total = floatval($price) * 2;
+echo is_string($a) ? &quot;yes&quot; : &quot;no&quot;;
+?&gt;
+</code></pre></p>
+<p><strong>Web Programming | Saintgits College of Engineering</strong><br />
+<strong>PHP</strong><br />
+<strong>6</strong></p>
+<hr />
+<p><em>[Image Description: A code tag icon labeled "&lt;/&gt;" in the header and PHP logo in the lower right.]</em></p>
+<p><strong>MODULE III 1 HR TOPIC</strong><br />
+<strong>20CST461</strong></p>
+<h2 id="operators-expressions">Operators &amp; Expressions<a class="anchor" href="#operators-expressions">#</a></h2>
+<p>PHP's arithmetic and assignment operators closely mirror C; string concatenation uses the dot (<code>.</code>) operator, not plus.</p>
+<ul>
+<li>Arithmetic: <code>+</code> <code>-</code> <code>*</code> <code>/</code> <code>%</code> <code>**</code> (exponent)</li>
+<li>Assignment: <code>=</code> <code>+=</code> <code>-=</code> <code>*=</code> <code>/=</code> <code>.=</code> (concatenate-and-assign)</li>
+<li>String concatenation: <code>.</code> joins two strings together</li>
+<li>An expression is anything that produces a value including a function call</li>
+</ul>
+<p><pre><code class="language-php">&lt;?php
+$a = 10; $b = 3;
+echo $a % $b; // 1
+echo $a ** 2; // 100
+$msg = &quot;Total: &quot;;
+$msg .= (5 + 3);
+echo $msg; // &quot;Total: 8&quot;
+?&gt;
+</code></pre></p>
+<p><strong>Web Programming | Saintgits College of Engineering</strong><br />
+<strong>PHP</strong><br />
+<strong>7</strong></p>
+<hr />
+<p><em>[Image Description: A code tag icon labeled "&lt;/&gt;" in the header and PHP logo in the lower right.]</em></p>
+<p><strong>MODULE III 1 HR TOPIC</strong><br />
+<strong>20CST461</strong></p>
+<h2 id="comparison-logical-operators">Comparison &amp; Logical Operators<a class="anchor" href="#comparison-logical-operators">#</a></h2>
+<p>Loose vs. strict comparison is one of PHP's most exam-relevant quirks.</p>
+<ul>
+<li><code>==</code> loose equality - converts types before comparing</li>
+<li><code>===</code> strict equality checks value AND type</li>
+<li><code>&lt;</code>, <code>&gt;</code>, <code>&lt;=</code>, <code>&gt;=</code>, <code>!=</code>, <code>!==</code> - standard relational comparisons</li>
+<li><code>&amp;&amp;</code> (and), <code>||</code> (or), <code>!</code> (not) combine conditions</li>
+</ul>
+<p><pre><code class="language-php">&lt;?php
+var_dump(0 == &quot;abc&quot;); // false (PHP 8+)
+var_dump(&quot;5&quot; == 5); // true
+var_dump(&quot;5&quot; === 5); // false
+$age = 20; $hasID = true;
+if ($age &gt;= 18 &amp;&amp; $hasID) {
+    echo &quot;Entry allowed&quot;;
+}
+?&gt;
+</code></pre></p>
+<p><strong>Web Programming | Saintgits College of Engineering</strong><br />
+<strong>PHP</strong><br />
+<strong>8</strong></p>
+<hr />
+<p><strong>MODULE III 1 HR TOPIC</strong><br />
+<strong>20CST461</strong></p>
+<h2 id="flow-control-functions">Flow Control Functions<a class="anchor" href="#flow-control-functions">#</a></h2>
+<h3 id="1_1">1<a class="anchor" href="#1_1">#</a></h3>
+<p><strong>if / elseif / else</strong><br />
+The core branching construct runs a block only when its condition evaluates to true, exactly as in C.</p>
+<h3 id="2_1">2<a class="anchor" href="#2_1">#</a></h3>
+<p><strong>exit() and die()</strong><br />
+Immediately stop script execution die() is an alias of exit(). Commonly used after a fatal error: <code>die(&quot;Connection failed&quot;);</code></p>
+<h3 id="3_1">3<a class="anchor" href="#3_1">#</a></h3>
+<p><strong>return</strong><br />
+Inside a function, return both sends a value back to the caller AND immediately stops that function's execution nothing after it runs.</p>
+<h3 id="4_1">4<a class="anchor" href="#4_1">#</a></h3>
+<p><strong>Why these matter as a group</strong><br />
+All of them control whether execution continues, branches, or stops the syllabus groups them as 'flow control functions' alongside the if/else statements covered next.</p>
+<p><strong>Web Programming | Saintgits College of Engineering</strong><br />
+<strong>9</strong></p>
+<hr />
+<p><em>[Image Description: PHP logo in the bottom-right corner.]</em></p>
+<p><strong>MODULE III 1 HR TOPIC</strong><br />
+<strong>20CST461</strong></p>
+<h2 id="control-statements-if-switch">Control Statements: if &amp; switch<a class="anchor" href="#control-statements-if-switch">#</a></h2>
+<p>PHP control statements mirror C syntax closely a natural fit given the course's C pre-requisite.</p>
+<ul>
+<li><code>if</code> / <code>elseif</code> / <code>else</code> for branching on arbitrary conditions</li>
+<li><code>switch</code> for matching one variable against several fixed values</li>
+<li><code>break</code> stops a case from falling through to the next one</li>
+<li><code>default</code> catches anything not explicitly matched</li>
+</ul>
+<p><pre><code class="language-php">&lt;?php
+function grade($m) {
+    if ($m &gt;= 90) return &quot;A&quot;;
+    elseif ($m &gt;= 75) return &quot;B&quot;;
+    else return &quot;C&quot;;
+}
+
+switch (date(&quot;N&quot;)) {
+    case 6:
+    case 7: echo &quot;Weekend&quot;; break;
+    default: echo &quot;Weekday&quot;;
+}
+?&gt;
+</code></pre></p>
+<p><strong>Web Programming | Saintgits College of Engineering</strong><br />
+<strong>PHP</strong><br />
+<strong>10</strong></p>
+<hr />
+<p><em>[Image Description: PHP logo in the bottom-right corner.]</em></p>
+<p><strong>MODULE III 1 HR TOPIC</strong><br />
+<strong>20CST461</strong></p>
+<h2 id="loops-in-php">Loops in PHP<a class="anchor" href="#loops-in-php">#</a></h2>
+<p>for, while, and foreach cover virtually every repetition need in PHP foreach is the idiomatic way to walk through an array.</p>
+<ul>
+<li><code>for (init; condition; step)</code> known number of repetitions</li>
+<li><code>while (condition)</code> checks before each pass; may run zero times</li>
+<li><code>do {...} while (condition)</code> checks after; always runs once</li>
+<li><code>foreach ($array as $value)</code> the natural way to loop over PHP arrays</li>
+</ul>
+<p><pre><code class="language-php">&lt;?php
+$marks = [88, 95, 60];
+foreach ($marks as $m) {
+    echo grade($m);
+}
+
+for ($i = 1; $i &lt;= 3; $i++) {
+    echo $i;
+}
+?&gt;
+</code></pre></p>
+<p><strong>Web Programming | Saintgits College of Engineering</strong><br />
+<strong>PHP</strong><br />
+<strong>11</strong></p>
+<hr />
+<p><em>[Image Description: A code tag icon labeled "&lt;/&gt;" in the header and PHP logo in the lower right.]</em></p>
+<p><strong>MODULE III 1 HR TOPIC</strong><br />
+<strong>20CST461</strong></p>
+<h2 id="working-with-functions">Working with Functions<a class="anchor" href="#working-with-functions">#</a></h2>
+<p>Functions package reusable logic. PHP functions are defined with the function keyword and can return any type.</p>
+<ul>
+<li><code>function name($params) { ... return value; }</code> defines a function</li>
+<li>Functions must be defined before OR after use PHP hoists function declarations</li>
+<li><code>return</code> immediately exits the function with a value</li>
+<li>A function with no return statement implicitly returns <code>NULL</code></li>
+</ul>
+<p><pre><code class="language-php">&lt;?php
+function calcTotal($price, $qty) {
+    return $price * $qty;
+}
+echo calcTotal(499, 3); // 1497
+
+function greet($name) {
+    echo &quot;Hello, $name!&quot;;
+}
+greet(&quot;Saintgits&quot;);
+?&gt;
+</code></pre></p>
+<p><strong>Web Programming | Saintgits College of Engineering</strong><br />
+<strong>PHP</strong><br />
+<strong>12</strong></p>
+<hr />
+<p><em>[Image Description: A code tag icon labeled "&lt;/&gt;" in the header.]</em></p>
+<p><strong>MODULE III 1 HR TOPIC</strong><br />
+<strong>20CST461</strong></p>
+<h2 id="function-parameters-defaults-scope">Function Parameters, Defaults &amp; Scope<a class="anchor" href="#function-parameters-defaults-scope">#</a></h2>
+<h3 id="1_2">1<a class="anchor" href="#1_2">#</a></h3>
+<p><strong>Default parameter values</strong><br />
+<code>function greet($name = &quot;Guest&quot;) { ... }</code> if the caller omits the argument, <code>&quot;Guest&quot;</code> is used automatically.</p>
+<h3 id="2_2">2<a class="anchor" href="#2_2">#</a></h3>
+<p><strong>Variable scope</strong><br />
+A variable declared inside a function is local to it by default - it does not exist outside. Use the <code>global</code> keyword inside a function to access a variable from the outer (global) scope.</p>
+<h3 id="3_2">3<a class="anchor" href="#3_2">#</a></h3>
+<p><strong>Passing by value vs. reference</strong><br />
+Arguments are passed by value (a copy) by default. Prefixing a parameter with <code>&amp;</code> (e.g. <code>function inc(&amp;$x)</code>) passes by reference, letting the function modify the caller's original variable.</p>
+<h3 id="4_2">4<a class="anchor" href="#4_2">#</a></h3>
+<p><strong>Variadic functions</strong><br />
+<code>function total(...$nums)</code> collects any number of arguments into an array called <code>$nums</code> inside the function useful when the argument count isn't fixed.</p>
+<p><strong>Web Programming | Saintgits College of Engineering</strong><br />
+<strong>13</strong></p>
+<hr />
+<p><em>[Image Description: PHP logo in the bottom-right corner.]</em></p>
+<p><strong>MODULE III 1 HR TOPIC</strong><br />
+<strong>20CST461</strong></p>
+<h2 id="initialising-manipulating-indexed-arrays">Initialising &amp; Manipulating Indexed Arrays<a class="anchor" href="#initialising-manipulating-indexed-arrays">#</a></h2>
+<p>An indexed array is an ordered list, numbered automatically from 0 unless you say otherwise.</p>
+<ul>
+<li><code>$arr = [10, 20, 30];</code> modern short syntax (<code>array(10, 20, 30)</code> also valid)</li>
+<li>Access by position: <code>$arr[0]</code> is 10</li>
+<li><code>$arr[] = 40;</code> appends a new element to the end</li>
+<li><code>count($arr)</code> gives the number of elements</li>
+</ul>
+<p><pre><code class="language-php">&lt;?php
+$marks = [88, 92, 79];
+$marks[] = 95;
+echo $marks[0]; // 88
+echo count($marks); // 4
+
+foreach ($marks as $i =&gt; $m) {
+    echo &quot;Index $i: $m\n&quot;;
+}
+?&gt;
+</code></pre></p>
+<p><strong>Web Programming | Saintgits College of Engineering</strong><br />
+<strong>PHP</strong><br />
+<strong>14</strong></p>
+<hr />
+<p><em>[Image Description: PHP logo in the bottom-right corner.]</em></p>
+<p><strong>MODULE III 1 HR TOPIC</strong><br />
+<strong>20CST461</strong></p>
+<h2 id="associative-multidimensional-arrays">Associative &amp; Multidimensional Arrays<a class="anchor" href="#associative-multidimensional-arrays">#</a></h2>
+<p>Associative arrays use named keys instead of numeric indices; arrays can also nest inside each other.</p>
+<ul>
+<li><code>$stu = [&quot;name&quot; =&gt; &quot;Anu&quot;, &quot;marks&quot; =&gt; 88];</code> - key =&gt; value pairs</li>
+<li>Access via <code>$stu[&quot;name&quot;]</code></li>
+<li>A multidimensional array is an array of arrays - e.g. a list of student records</li>
+<li><code>foreach</code> works on associative arrays too, exposing both key and value</li>
+</ul>
+<p><pre><code class="language-php">&lt;?php
+$students = [
+    [&quot;name&quot; =&gt; &quot;Anu&quot;, &quot;marks&quot; =&gt; 88],
+    [&quot;name&quot; =&gt; &quot;Rahul&quot;, &quot;marks&quot; =&gt; 72]
+];
+
+foreach ($students as $s) {
+    echo $s[&quot;name&quot;] . &quot; &quot; . $s[&quot;marks&quot;] . &quot;\n&quot;;
+}
+?&gt;
+</code></pre></p>
+<p><strong>Web Programming | Saintgits College of Engineering</strong><br />
+<strong>PHP</strong><br />
+<strong>15</strong></p>
+<hr />
+<p><strong>MODULE III 1 HR TOPIC</strong><br />
+<strong>20CST461</strong></p>
+<h2 id="common-array-functions">Common Array Functions<a class="anchor" href="#common-array-functions">#</a></h2>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Function</th>
+<th style="text-align: left;">Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">count($arr)</td>
+<td style="text-align: left;">Number of elements</td>
+</tr>
+<tr>
+<td style="text-align: left;">array_push($arr, $val)</td>
+<td style="text-align: left;">Add an element to the end (same as $arr[] = $val)</td>
+</tr>
+<tr>
+<td style="text-align: left;">sort($arr) / rsort($arr)</td>
+<td style="text-align: left;">Sort ascending / descending, re-indexing keys</td>
+</tr>
+<tr>
+<td style="text-align: left;">array_map($fn, $arr)</td>
+<td style="text-align: left;">Apply a function to every element, return a new array</td>
+</tr>
+<tr>
+<td style="text-align: left;">array_filter($fn, $arr)</td>
+<td style="text-align: left;">Keep only elements that pass a test function</td>
+</tr>
+<tr>
+<td style="text-align: left;">in_array($val, $arr)</td>
+<td style="text-align: left;">Check whether a value exists in the array</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Web Programming | Saintgits College of Engineering</strong><br />
+<strong>16</strong></p>
+<hr />
+<p><em>[Image Description: PHP logo in the bottom-right corner.]</em></p>
+<p><strong>MODULE III 1 HR TOPIC</strong><br />
+<strong>20CST461</strong></p>
+<h2 id="objects-classes-in-php">Objects &amp; Classes in PHP<a class="anchor" href="#objects-classes-in-php">#</a></h2>
+<p>A class is a blueprint; an object is a specific instance built from that blueprint, with its own data.</p>
+<ul>
+<li><code>class Name {...}</code> defines a blueprint with properties and methods</li>
+<li><code>new ClassName()</code> creates an instance (an object)</li>
+<li><code>-&gt;</code> accesses an object's properties and methods (not . like in some other languages)</li>
+<li><code>__construct()</code> is a special method that runs automatically when an object is created</li>
+</ul>
+<p><pre><code class="language-php">&lt;?php
+class Student {
+    public $name;
+    public function __construct($n) {
+        $this-&gt;name = $n;
+    }
+    public function greet() {
+        return &quot;Hi, &quot; . $this-&gt;name;
+    }
+}
+
+$s = new Student(&quot;Rahul&quot;);
+echo $s-&gt;greet();
+?&gt;
+</code></pre></p>
+<p><strong>Web Programming | Saintgits College of Engineering</strong><br />
+<strong>PHP</strong><br />
+<strong>17</strong></p>
+<hr />
+<p><em>[Image Description: A letter "A" / text typography icon in the upper-left header and a PHP logo in the bottom right.]</em></p>
+<p><strong>MODULE III 1 HR TOPIC</strong><br />
+<strong>20CST461</strong></p>
+<h2 id="working-with-strings">Working with Strings<a class="anchor" href="#working-with-strings">#</a></h2>
+<p>PHP has one of the largest built-in string-function libraries of any common server-side language.</p>
+<ul>
+<li><code>strlen($s)</code> - length of a string</li>
+<li><code>strtoupper($s)</code> / <code>strtolower($s)</code> - change case</li>
+<li><code>trim($s)</code> removes whitespace from both ends</li>
+<li><code>substr($s, start, length)</code> extracts part of a string</li>
+</ul>
+<p><pre><code class="language-php">&lt;?php
+$name = &quot;  Saintgits  &quot;;
+$clean = trim($name);
+echo strlen($clean); // 9
+echo strtoupper($clean); // SAINTGITS
+echo substr($clean, 0, 5); // Saint
+?&gt;
+</code></pre></p>
+<p><strong>Web Programming | Saintgits College of Engineering</strong><br />
+<strong>PHP</strong><br />
+<strong>18</strong></p>
+<hr />
+<p><em>[Image Description: A letter "A" / text typography icon in the upper-left header and a PHP logo in the bottom right.]</em></p>
+<p><strong>MODULE III 1 HR TOPIC</strong><br />
+<strong>20CST461</strong></p>
+<h2 id="string-manipulation-concatenation">String Manipulation &amp; Concatenation<a class="anchor" href="#string-manipulation-concatenation">#</a></h2>
+<p>Beyond reading strings, PHP makes it easy to build and transform them.</p>
+<ul>
+<li>Concatenation uses the <code>.</code> operator (and <code>.=</code> to append-and-assign)</li>
+<li><code>str_replace($search, $replace, $s)</code> - find-and-replace</li>
+<li><code>explode($delimiter, $s)</code> - splits a string into an array</li>
+<li><code>implode($glue, $arr)</code> joins an array back into a string</li>
+</ul>
+<p><pre><code class="language-php">&lt;?php
+$msg = &quot;Hello&quot; . &quot;, &quot; . &quot;World!&quot;;
+$parts = explode(&quot;,&quot;, &quot;HTML,CSS,JS&quot;);
+$joined = implode(&quot; + &quot;, $parts);
+$clean = str_replace(&quot;World&quot;, &quot;PHP&quot;, $msg);
+echo $joined; // HTML + CSS + JS
+?&gt;
+</code></pre></p>
+<p><strong>Web Programming | Saintgits College of Engineering</strong><br />
+<strong>PHP</strong><br />
+<strong>19</strong></p>
+<hr />
+<p><em>[Image Description: PHP logo in the bottom-right corner.]</em></p>
+<p><strong>MODULE III 1 HR TOPIC</strong><br />
+<strong>20CST461</strong></p>
+<h2 id="regular-expressions-in-php">Regular Expressions in PHP<a class="anchor" href="#regular-expressions-in-php">#</a></h2>
+<p>PHP supports Perl-compatible regular expressions (PCRE) for flexible pattern matching beyond what simple string functions can do.</p>
+<ul>
+<li><code>preg_match($pattern, $string)</code> tests whether a string matches a pattern</li>
+<li><code>preg_replace($pattern, $replacement, $string)</code> find &amp; replace via regex</li>
+<li><code>preg_split($pattern, $string)</code> - split a string using a regex delimiter</li>
+<li>Patterns are wrapped in delimiters, usually <code>/pattern/</code></li>
+</ul>
+<p><pre><code class="language-php">&lt;?php
+$email = &quot;user@saintgits.org&quot;;
+if (preg_match(&quot;/^[\w.-]+@[\w.-]+\.\w+$/&quot;, $email)) {
+    echo &quot;Valid email&quot;;
+}
+$clean = preg_replace(&quot;/[0-9]/&quot;, &quot;&quot;, &quot;Room12A&quot;);
+echo $clean; // RoomA
+?&gt;
+</code></pre></p>
+<p><strong>Web Programming | Saintgits College of Engineering</strong><br />
+<strong>PHP</strong><br />
+<strong>20</strong></p>
+<hr />
+<p><strong>MODULE III 1 HR TOPIC</strong><br />
+<strong>20CST461</strong></p>
+<h2 id="common-regex-patterns-for-validation">Common Regex Patterns for Validation<a class="anchor" href="#common-regex-patterns-for-validation">#</a></h2>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Pattern</th>
+<th style="text-align: left;">Matches</th>
+<th style="text-align: left;">Typical Use</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>/^[0-9]{10}$/</code></td>
+<td style="text-align: left;">Exactly 10 digits</td>
+<td style="text-align: left;">Phone number</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>/^[\w.-]+@[\w.-]+\.\w+$/</code></td>
+<td style="text-align: left;">Basic email shape</td>
+<td style="text-align: left;">Email validation</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>/^[A-Za-z]+$/</code></td>
+<td style="text-align: left;">Letters only</td>
+<td style="text-align: left;">Name field</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>/^\d{6}$/</code></td>
+<td style="text-align: left;">Exactly 6 digits</td>
+<td style="text-align: left;">PIN code</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>/^[A-Za-z0-9]+$/</code></td>
+<td style="text-align: left;">Letters and digits only</td>
+<td style="text-align: left;">Username field</td>
+</tr>
+</tbody>
+</table>
+<p>Note: <code>\d</code> means a digit, <code>\w</code> means a 'word character' (letter/digit/underscore), <code>{n}</code> means 'exactly n times', <code>^</code> and <code>$</code> anchor the start/end of the string.</p>
+<p><strong>Web Programming | Saintgits College of Engineering</strong><br />
+<strong>21</strong></p>
+<hr />
+<p><em>[Image Description: PHP logo in the bottom-right corner.]</em></p>
+<p><strong>MODULE III 1 HR TOPIC</strong><br />
+<strong>20CST461</strong></p>
+<h2 id="reading-form-data-_get-vs-_post">Reading Form Data: $_GET vs. $_POST<a class="anchor" href="#reading-form-data-_get-vs-_post">#</a></h2>
+<p>PHP exposes submitted form data through superglobal arrays - automatically populated for every request.</p>
+<ul>
+<li><code>$_GET[&quot;field&quot;]</code> - data sent via the URL query string (<code>method=&quot;GET&quot;</code>)</li>
+<li><code>$_POST[&quot;field&quot;]</code> data sent in the request body (<code>method=&quot;POST&quot;</code>)</li>
+<li><code>$_REQUEST</code> combines GET, POST, and COOKIE data (less precise usually avoid)</li>
+<li><code>isset($_POST[&quot;field&quot;])</code> checks whether a field was actually submitted</li>
+</ul>
+<p><pre><code class="language-php">&lt;?php
+if ($_SERVER[&quot;REQUEST_METHOD&quot;] == &quot;POST&quot;) {
+    if (isset($_POST[&quot;name&quot;])) {
+        $name = $_POST[&quot;name&quot;];
+        echo &quot;Hello, $name!&quot;;
+    }
+}
+?&gt;
+</code></pre></p>
+<p><strong>Web Programming | Saintgits College of Engineering</strong><br />
+<strong>PHP</strong><br />
+<strong>22</strong></p>
+<hr />
+<p><em>[Image Description: PHP logo in the bottom-right corner.]</em></p>
+<p><strong>MODULE III 1 HR TOPIC</strong><br />
+<strong>20CST461</strong></p>
+<h2 id="validating-sanitizing-input">Validating &amp; Sanitizing Input<a class="anchor" href="#validating-sanitizing-input">#</a></h2>
+<p>Never trust data from a form directly always validate its shape and sanitize it before using or storing it.</p>
+<ul>
+<li><code>trim()</code> removes accidental leading/trailing whitespace</li>
+<li><code>htmlspecialchars()</code> prevents HTML/JS injection when echoing user input back</li>
+<li><code>empty($_POST[&quot;field&quot;])</code> checks for a missing or blank field</li>
+<li>Combine with <code>preg_match()</code> from the previous topic for shape validation (email, phone, etc.)</li>
+</ul>
+<p><pre><code class="language-php">&lt;?php
+$name = trim($_POST[&quot;name&quot;] ?? &quot;&quot;);
+$email = trim($_POST[&quot;email&quot;] ?? &quot;&quot;);
+
+if (empty($name) || empty($email)) {
+    die(&quot;All fields are required.&quot;);
+}
+
+$safeName = htmlspecialchars($name);
+echo &quot;Welcome, $safeName&quot;;
+?&gt;
+</code></pre></p>
+<p><strong>Web Programming | Saintgits College of Engineering</strong><br />
+<strong>PHP</strong><br />
+<strong>23</strong></p>
+<hr />
+<p><em>[Image Description: PHP logo in the bottom-right corner.]</em></p>
+<p><strong>MODULE III 1 HR TOPIC</strong><br />
+<strong>20CST461</strong></p>
+<h2 id="business-logic-example">Business Logic Example<a class="anchor" href="#business-logic-example">#</a></h2>
+<p>'Business logic' is the application-specific rule applied to validated data separate from the validation itself.</p>
+<ul>
+<li>Validation asks: is this data well-formed?</li>
+<li>Business logic asks: given well-formed data, what should the application DO?</li>
+<li>Keeping these as distinct steps makes code easier to read and to test</li>
+<li>Example: eligibility rules, fee calculation, grade computation</li>
+</ul>
+<p><pre><code class="language-php">&lt;?php
+$marks = (int) ($_POST[&quot;marks&quot;] ?? 0);
+$attendance = (int) ($_POST[&quot;attendance&quot;] ?? 0);
+
+// Business rule: pass needs marks &gt;= 50 AND attendance &gt;= 75
+if ($marks &gt;= 50 &amp;&amp; $attendance &gt;= 75) {
+    echo &quot;Eligible to pass&quot;;
+} else {
+    echo &quot;Not eligible check marks/attendance&quot;;
+}
+?&gt;
+</code></pre></p>
+<p><strong>Web Programming | Saintgits College of Engineering</strong><br />
+<strong>PHP</strong><br />
+<strong>24</strong></p>
+<hr />
+<p><em>[Image Description: PHP logo in the bottom-right corner.]</em></p>
+<p><strong>MODULE III 1 HR TOPIC</strong><br />
+<strong>20CST461</strong></p>
+<h2 id="putting-it-together-a-form-processing-script">Putting It Together: A Form-Processing Script<a class="anchor" href="#putting-it-together-a-form-processing-script">#</a></h2>
+<p>A complete script combines: read input, validate, sanitize, apply business logic, and respond the full pipeline this module has built up to.</p>
+<ol>
+<li>Check the request method</li>
+<li>Read &amp; trim the submitted fields</li>
+<li>Validate (empty checks, regex where needed)</li>
+<li>Apply business logic</li>
+<li>Echo a response (Module IV will replace this with a database write)</li>
+</ol>
+<p><pre><code class="language-php">&lt;?php
+if ($_SERVER[&quot;REQUEST_METHOD&quot;] == &quot;POST&quot;) {
+    $name = trim($_POST[&quot;name&quot;] ?? &quot;&quot;);
+    $marks = (int) ($_POST[&quot;marks&quot;] ?? 0);
+
+    if (empty($name)) { die(&quot;Name required&quot;); }
+
+    $grade = $marks &gt;= 50 ? &quot;Pass&quot; : &quot;Fail&quot;;
+    echo htmlspecialchars($name) . &quot;: $grade&quot;;
+}
+?&gt;
+</code></pre></p>
+<p><strong>Web Programming | Saintgits College of Engineering</strong><br />
+<strong>PHP</strong><br />
+<strong>25</strong></p>
+<hr />
+<p><em>[Image Description: Small PHP logo in the upper header.]</em></p>
+<h3 id="php_1">php<a class="anchor" href="#php_1">#</a></h3>
+<h1 id="module-3-recap">MODULE 3 RECAP</h1>
+<h2 id="key-takeaways">Key Takeaways<a class="anchor" href="#key-takeaways">#</a></h2>
+<p>PHP runs entirely server-side; the browser only ever sees the resulting HTML.</p>
+<p>Variables are loosely typed and always start with $; types are decided at runtime.</p>
+<p>=== checks both value and type; == checks value only a frequent exam trap.</p>
+<p>foreach is the idiomatic way to iterate PHP arrays, indexed or associative.</p>
+<p>Functions support default parameters, by-reference params, and variadics.</p>
+<p>Objects use -&gt; (not .) to access properties and methods.</p>
+<p>preg_match()/preg_replace() bring regex pattern matching for validation.</p>
+<p>Form data arrives via $_GET or $_POST - always validate and sanitize before use.</p>
+<p><strong>20CST461</strong><br />
+<strong>Web Programming | Saintgits College of Engineering</strong><br />
+<strong>26</strong></p>
+  </main>
+</div>
+<div class="tools">
+  <button id="theme" title="Toggle light / dark">☾</button>
+  <button id="top" title="Back to top">↑</button>
+</div>
+<script>
+(function(){
+  var root=document.documentElement, key='minotes-theme';
+  var saved=localStorage.getItem(key);
+  var prefers=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';
+  root.setAttribute('data-theme', saved || prefers);
+
+  var btn=document.getElementById('theme');
+  function sync(){ if(btn) btn.textContent = root.getAttribute('data-theme')==='dark' ? '\u2600' : '\u263E'; }
+  sync();
+  if(btn) btn.addEventListener('click',function(){
+    var next = root.getAttribute('data-theme')==='dark' ? 'light' : 'dark';
+    root.setAttribute('data-theme', next); localStorage.setItem(key,next); sync();
+  });
+
+  var bar=document.getElementById('progress');
+  if(bar) addEventListener('scroll',function(){
+    var h=document.documentElement.scrollHeight-innerHeight;
+    bar.style.width=(h>0?(scrollY/h*100):0)+'%';
+  },{passive:true});
+
+  document.querySelectorAll('pre').forEach(function(pre){
+    var b=document.createElement('button');
+    b.className='copy'; b.textContent='copy';
+    b.addEventListener('click',function(){
+      var t=pre.querySelector('code'); var txt=t?t.innerText:pre.innerText;
+      navigator.clipboard.writeText(txt).then(function(){
+        b.textContent='copied'; setTimeout(function(){b.textContent='copy';},1200);
+      });
+    });
+    pre.appendChild(b);
+  });
+
+  document.querySelectorAll('main table').forEach(function(t){
+    if(t.parentElement.classList.contains('table-scroll')) return;
+    var w=document.createElement('div'); w.className='table-scroll';
+    t.parentNode.insertBefore(w,t); w.appendChild(t);
+  });
+
+  var links=[].slice.call(document.querySelectorAll('.sidebar a[href^="#"]'));
+  var map={}; links.forEach(function(a){ map[a.getAttribute('href').slice(1)]=a; });
+  var heads=[].slice.call(document.querySelectorAll('main h2[id], main h3[id]'));
+  if('IntersectionObserver' in window && heads.length){
+    var obs=new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if(!e.isIntersecting) return;
+        links.forEach(function(a){a.classList.remove('active');});
+        var a=map[e.target.id]; if(a){a.classList.add('active');}
+      });
+    },{rootMargin:'-10% 0px -75% 0px'});
+    heads.forEach(function(h){obs.observe(h);});
+  }
+
+  var top=document.getElementById('top');
+  if(top) top.addEventListener('click',function(){ scrollTo({top:0,behavior:'smooth'}); });
+})();
+</script>
+</body>
+</html>

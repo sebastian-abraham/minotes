@@ -1,0 +1,1480 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Web Programming - Module 1 Lecture Notes · Web Programming</title>
+<style>
+:root{
+  --bg:#fbfaf8; --panel:#ffffff; --ink:#232120; --muted:#5f5a53; --line:#e6e1da;
+  --accent:#7a4fd0; --accent-soft:#f1ecfb; --code-bg:#f5f2ee; --code-ink:#2b2a28;
+  --warn-bg:#fff8e6; --warn-line:#f0d9a0;
+  --sans:"Inter","Segoe UI",system-ui,-apple-system,"Noto Sans",sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,"SF Mono",Menlo,Consolas,"Fira Code",monospace;
+}
+html[data-theme="dark"]{
+  --bg:#141317; --panel:#1b1a20; --ink:#e8e4de; --muted:#a8a199; --line:#2f2c36;
+  --accent:#b79cf5; --accent-soft:#241f33; --code-bg:#22202a; --code-ink:#e8e4de;
+  --warn-bg:#2a2417; --warn-line:#4a3d22;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0; background:var(--bg); color:var(--ink); font-family:var(--sans);
+  font-size:16.5px; line-height:1.72; -webkit-font-smoothing:antialiased;
+}
+#progress{position:fixed;top:0;left:0;height:3px;width:0;background:var(--accent);z-index:50;transition:width .1s linear}
+
+.wrap{display:flex;align-items:flex-start;min-height:100vh}
+.sidebar{
+  position:sticky;top:0;height:100vh;width:300px;flex:0 0 300px;overflow-y:auto;
+  padding:26px 20px 60px;border-right:1px solid var(--line);background:var(--panel);
+}
+.sidebar h1{font-size:15px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);
+  margin:0 0 4px;font-weight:600}
+.sidebar .sub{font-size:12.5px;color:var(--muted);margin:0 0 18px}
+.sidebar nav{font-size:14px}
+.sidebar .toc>ul{padding-left:0}
+.sidebar ul{list-style:none;margin:0;padding-left:12px}
+.sidebar ul ul{border-left:1px solid var(--line);margin-left:4px;padding-left:10px}
+.sidebar li{margin:3px 0}
+.sidebar a{color:var(--ink);text-decoration:none;display:block;padding:3px 8px;border-radius:8px;
+  line-height:1.35;transition:background .12s,color .12s}
+.sidebar a:hover{background:var(--accent-soft);color:var(--accent)}
+.sidebar a.active{background:var(--accent-soft);color:var(--accent);font-weight:600}
+.sidebar .home{display:inline-flex;align-items:center;gap:6px;margin-bottom:16px;font-size:13.5px;
+  color:var(--muted);text-decoration:none;border:1px solid var(--line);padding:5px 10px;border-radius:999px}
+.sidebar .home:hover{color:var(--accent);border-color:var(--accent)}
+
+main{flex:1;min-width:0;padding:46px 56px 120px;max-width:980px;margin:0 auto}
+.doc-head{border-bottom:1px solid var(--line);padding-bottom:18px;margin-bottom:34px}
+.doc-head .kicker{font-size:12.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);
+  font-weight:700;margin-bottom:8px}
+.doc-head .meta{font-size:13.5px;color:var(--muted)}
+
+h1,h2,h3,h4{line-height:1.25;font-weight:700;letter-spacing:-.01em}
+h1{font-size:2.05rem;margin:.2em 0 .5em}
+h2{font-size:1.55rem;margin:2.4em 0 .7em;padding-bottom:.35em;border-bottom:1px solid var(--line)}
+h3{font-size:1.2rem;margin:1.9em 0 .55em}
+h4{font-size:1.03rem;margin:1.5em 0 .45em;color:var(--muted)}
+h2 .anchor,h3 .anchor{opacity:0;margin-left:.35em;font-size:.8em;color:var(--muted);text-decoration:none}
+h2:hover .anchor,h3:hover .anchor{opacity:1}
+p{margin:.75em 0}
+a{color:var(--accent);text-underline-offset:2px}
+strong{font-weight:650}
+hr{border:0;border-top:1px solid var(--line);margin:2.6em 0}
+ul,ol{margin:.7em 0;padding-left:1.4em}
+li{margin:.3em 0}
+li>ul,li>ol{margin:.25em 0}
+blockquote{
+  margin:1.3em 0;padding:12px 18px;background:var(--warn-bg);border-left:3px solid var(--warn-line);
+  border-radius:0 10px 10px 0;color:var(--ink)
+}
+blockquote p{margin:.3em 0}
+
+code{font-family:var(--mono);font-size:.87em;background:var(--code-bg);color:var(--code-ink);
+  padding:.15em .38em;border-radius:6px;border:1px solid var(--line);
+  box-decoration-break:clone;-webkit-box-decoration-break:clone;overflow-wrap:anywhere}
+pre{position:relative;background:var(--code-bg);border:1px solid var(--line);border-radius:12px;
+  padding:16px 18px;overflow-x:auto;margin:1.1em 0}
+pre code{background:none;border:0;padding:0;font-size:13.6px;line-height:1.62;white-space:pre}
+.copy{position:absolute;top:8px;right:8px;font:600 11px/1 var(--sans);color:var(--muted);
+  background:var(--panel);border:1px solid var(--line);border-radius:7px;padding:5px 8px;cursor:pointer;
+  opacity:0;transition:opacity .15s}
+pre:hover .copy{opacity:1}
+.copy:hover{color:var(--accent);border-color:var(--accent)}
+
+.table-scroll{overflow-x:auto;margin:1.3em 0;border:1px solid var(--line);border-radius:12px;background:var(--panel)}
+table{border-collapse:collapse;width:100%;font-size:14.6px}
+th,td{padding:9px 13px;text-align:left;vertical-align:top;border-bottom:1px solid var(--line)}
+th{background:var(--accent-soft);font-weight:650;font-size:13px;letter-spacing:.02em;
+  position:sticky;top:0;backdrop-filter:blur(4px)}
+tr:last-child td{border-bottom:0}
+tbody tr:nth-child(even){background:color-mix(in srgb,var(--panel) 60%,var(--bg))}
+tbody tr:hover{background:var(--accent-soft)}
+
+.tools{position:fixed;right:22px;bottom:22px;display:flex;flex-direction:column;gap:8px;z-index:40}
+.tools button{width:42px;height:42px;border-radius:12px;border:1px solid var(--line);background:var(--panel);
+  color:var(--ink);cursor:pointer;font-size:16px;box-shadow:0 4px 14px rgba(0,0,0,.10)}
+.tools button:hover{color:var(--accent);border-color:var(--accent)}
+@media (max-width:1000px){
+  .wrap{display:block}
+  .sidebar{position:static;width:auto;height:auto;border-right:0;border-bottom:1px solid var(--line)}
+  .sidebar nav{max-height:40vh;overflow:auto}
+  main{padding:28px 20px 100px}
+}
+@media print{
+  .sidebar,.tools,#progress,.copy{display:none!important}
+  body{background:#fff;color:#000;font-size:11pt}
+  main{padding:0;max-width:none}
+  h2{break-after:avoid} pre,table,blockquote{break-inside:avoid}
+  a{color:#000;text-decoration:none}
+}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+<div class="wrap">
+  <aside class="sidebar">
+    <a class="home" href="index.html">← Web Programming</a>
+    <h1>Notes · M1</h1>
+    <p class="sub">Lecture notes, 762 lines</p>
+    <nav class="toc"><div class="toc">
+<ul>
+<li><a href="#topics-covered">Topics Covered</a></li>
+<li><a href="#1-evolution-of-the-internet-and-the-world-wide-web">1. Evolution of the Internet and the World Wide Web</a><ul>
+<li><a href="#11-what-is-the-internet">1.1 What is the Internet?</a></li>
+<li><a href="#12-historical-timeline">1.2 Historical Timeline</a></li>
+<li><a href="#13-internet-vs-world-wide-web">1.3 Internet vs World Wide Web</a></li>
+<li><a href="#14-three-pillars-of-the-original-web-berners-lee-1989">1.4 Three Pillars of the Original Web (Berners-Lee, 1989)</a></li>
+<li><a href="#15-generations-of-the-web">1.5 Generations of the Web</a></li>
+<li><a href="#16-web-basics">1.6 Web Basics</a></li>
+<li><a href="#17-mime-multipurpose-internet-mail-extensions">1.7 MIME (Multipurpose Internet Mail Extensions)</a></li>
+</ul>
+</li>
+<li><a href="#2-structuring-and-editing-an-html5-document">2. Structuring and Editing an HTML5 Document</a><ul>
+<li><a href="#21-what-is-html">2.1 What is HTML?</a></li>
+<li><a href="#22-basic-structure-of-an-html5-document">2.2 Basic Structure of an HTML5 Document</a></li>
+<li><a href="#23-anatomy-of-an-html-element">2.3 Anatomy of an HTML Element</a></li>
+<li><a href="#24-headings">2.4 Headings</a></li>
+<li><a href="#25-images">2.5 Images</a></li>
+</ul>
+</li>
+<li><a href="#3-hyperlinks-and-lists">3. Hyperlinks and Lists</a><ul>
+<li><a href="#31-hyperlinks-the-a-element">3.1 Hyperlinks - The &lt;a&gt; Element</a></li>
+<li><a href="#32-lists">3.2 Lists</a></li>
+</ul>
+</li>
+<li><a href="#4-special-characters-horizontal-rules-meta-divspan-tables-and-forms">4. Special Characters, Horizontal Rules, meta, div/span, Tables and Forms</a><ul>
+<li><a href="#41-special-characters-characterentity-references">4.1 Special Characters (Character/Entity References)</a></li>
+<li><a href="#42-horizontal-rule">4.2 Horizontal Rule</a></li>
+<li><a href="#43-the-meta-element">4.3 The &lt;meta&gt; Element</a></li>
+<li><a href="#44-div-and-span-generic-containers">4.4 div and span - Generic Containers</a></li>
+<li><a href="#45-tables">4.5 Tables</a></li>
+<li><a href="#46-forms">4.6 Forms</a></li>
+</ul>
+</li>
+<li><a href="#5-html5-form-input-types-datalist-autocomplete-and-page-structure">5. HTML5 Form Input Types, datalist, autocomplete and Page Structure</a><ul>
+<li><a href="#51-html5-form-input-types">5.1 HTML5 Form Input Types</a></li>
+<li><a href="#52-the-datalist-element-and-autocomplete-attribute">5.2 The datalist Element and autocomplete Attribute</a></li>
+<li><a href="#53-page-structure-semantic-elements">5.3 Page Structure (Semantic) Elements</a></li>
+</ul>
+</li>
+<li><a href="#6-multimedia">6. Multimedia</a><ul>
+<li><a href="#61-why-native-multimedia-elements">6.1 Why Native Multimedia Elements?</a></li>
+<li><a href="#62-the-audio-element">6.2 The &lt;audio&gt; Element</a></li>
+<li><a href="#63-the-video-element">6.3 The &lt;video&gt; Element</a></li>
+<li><a href="#64-supported-formats-containercodec-compatibility">6.4 Supported Formats (Container/Codec Compatibility)</a></li>
+<li><a href="#65-scripting-media-with-javascript">6.5 Scripting Media with JavaScript</a></li>
+<li><a href="#66-accessibility-considerations">6.6 Accessibility Considerations</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</nav>
+  </aside>
+  <main>
+    <div class="doc-head">
+      <div class="kicker">20CST461 · Web Programming</div>
+      <div class="meta">Lecture notes, 762 lines · rendered from WEB PROGRAMING MOD-1.md</div>
+    </div>
+    <h1 id="web-programming-module-1-lecture-notes">Web Programming - Module 1 Lecture Notes</h1>
+<p>Introduction to the Web &amp; HTML5</p>
+<p>WEB PROGRAMMING
+Module 1 - Lecture Notes
+Introduction to the Web and HTML5</p>
+<h2 id="topics-covered">Topics Covered<a class="anchor" href="#topics-covered">#</a></h2>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Topic</th>
+<th>Hrs</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Evolution of the Internet and World Wide Web; Web Basics URIs and URLS; MIME</td>
+<td>1</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Structuring and Editing an HTML5 Document Fundamentals of HTML; Headings; Images</td>
+<td>1</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Hyperlinks Internal Linking; Lists</td>
+<td>1</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Special Characters and Horizontal Rules; meta Elements; div and span; Tables; Forms</td>
+<td>2</td>
+</tr>
+<tr>
+<td>5</td>
+<td>HTML5 Form Input Types input and datalist Elements; autocomplete Attribute; Page Structure Elements</td>
+<td>1</td>
+</tr>
+<tr>
+<td>6</td>
+<td>HTML5 Audio and Video Elements Multimedia</td>
+<td>1</td>
+</tr>
+</tbody>
+</table>
+<p>WEB PROGRAMMING
+JUSTIN MATHEW
+Web Programming - Module 1 Lecture Notes
+Introduction to the Web &amp; HTML5</p>
+<h2 id="1-evolution-of-the-internet-and-the-world-wide-web">1. Evolution of the Internet and the World Wide Web<a class="anchor" href="#1-evolution-of-the-internet-and-the-world-wide-web">#</a></h2>
+<h3 id="11-what-is-the-internet">1.1 What is the Internet?<a class="anchor" href="#11-what-is-the-internet">#</a></h3>
+<p>The Internet is a global network of interconnected computer networks that communicate using a common set of rules called protocols, principally TCP/IP (Transmission Control Protocol / Internet Protocol). It is a network of networks it does not belong to any single organisation or country, and no central authority controls it.
+It carries many services: email, file transfer (FTP), remote login, and the World Wide Web.
+It is packet-switched: data is broken into small packets, routed independently, and reassembled at the destination.
+Its decentralised design makes it fault-tolerant - if one path fails, packets are rerouted.</p>
+<h3 id="12-historical-timeline">1.2 Historical Timeline<a class="anchor" href="#12-historical-timeline">#</a></h3>
+<table>
+<thead>
+<tr>
+<th>Year</th>
+<th>Milestone</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1957</td>
+<td>Sputnik launch prompts the US to form ARPA (Advanced Research Projects Agency).</td>
+</tr>
+<tr>
+<td>1969</td>
+<td>ARPANET goes live - the first four nodes connect UCLA, SRI, UCSB and University of Utah.</td>
+</tr>
+<tr>
+<td>1971</td>
+<td>Ray Tomlinson sends the first network email and introduces the '@' addressing convention.</td>
+</tr>
+<tr>
+<td>1974</td>
+<td>Vint Cerf and Bob Kahn publish the TCP protocol specification.</td>
+</tr>
+<tr>
+<td>1983</td>
+<td>ARPANET formally adopts TCP/IP; this date is often cited as the 'birth of the Internet'.</td>
+</tr>
+<tr>
+<td>1989</td>
+<td>Tim Berners-Lee, at CERN, proposes an information management system the origin of the www.</td>
+</tr>
+<tr>
+<td>1990</td>
+<td>Berners-Lee writes the first web browser/editor (WorldWide Web) and the first web server.</td>
+</tr>
+<tr>
+<td>1991</td>
+<td>The World Wide Web is made publicly available on the Internet.</td>
+</tr>
+<tr>
+<td>1993</td>
+<td>NCSA Mosaic, the first popular graphical browser, is released.</td>
+</tr>
+<tr>
+<td>1994</td>
+<td>Netscape Navigator launches; W3C (World Wide Web Consortium) is founded by Berners-Lee.</td>
+</tr>
+<tr>
+<td>1995</td>
+<td>JavaScript is created; e-commerce (Amazon, eBay) begins.</td>
+</tr>
+<tr>
+<td>2004</td>
+<td>Term 'Web 2.0' popularised user-generated content, social media, AJAX-driven interactivity.</td>
+</tr>
+<tr>
+<td>2014</td>
+<td>HTML5 becomes an official W3C Recommendation.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="13-internet-vs-world-wide-web">1.3 Internet vs World Wide Web<a class="anchor" href="#13-internet-vs-world-wide-web">#</a></h3>
+<p>A very common point of confusion: the Internet and the Web are not the same thing.</p>
+<table>
+<thead>
+<tr>
+<th>Aspect</th>
+<th>Internet</th>
+<th>World Wide Web</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>What it is</td>
+<td>Physical/logical network infrastructure</td>
+<td>A service that runs on top of the Internet</td>
+</tr>
+<tr>
+<td>Protocols</td>
+<td>TCP/IP, UDP, etc.</td>
+<td>HTTP/HTTPS (uses TCP/IP underneath)</td>
+</tr>
+</tbody>
+</table>
+<p>WEB PROGRAMMING
+JUSTIN MATHEW
+Web Programming Module 1 Lecture Notes</p>
+<table>
+<thead>
+<tr>
+<th>Aspect</th>
+<th>Internet</th>
+<th>World Wide Web</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Unit of information</td>
+<td>Data packets</td>
+<td>Web pages/resources identified by URLs</td>
+</tr>
+<tr>
+<td>Analogy</td>
+<td>The road network</td>
+<td>One type of vehicle traffic (there are others: email, FTP)</td>
+</tr>
+<tr>
+<td>Introduced</td>
+<td>1969 (ARPANET)</td>
+<td>1989-1991 (Tim Berners-Lee, CERN)</td>
+</tr>
+</tbody>
+</table>
+<p>Introduction to the Web &amp; HTML5</p>
+<h3 id="14-three-pillars-of-the-original-web-berners-lee-1989">1.4 Three Pillars of the Original Web (Berners-Lee, 1989)<a class="anchor" href="#14-three-pillars-of-the-original-web-berners-lee-1989">#</a></h3>
+<ol>
+<li>HTML (HyperText Markup Language) a language to structure documents with hyperlinks.</li>
+<li>URI/URL a uniform way to address any resource on the network.</li>
+<li>HTTP (HyperText Transfer Protocol) a protocol to request and transfer those resources.
+Together these three inventions made it possible to link and retrieve documents stored on different machines anywhere in the world, using a browser - this combination is what we call the World Wide Web.</li>
+</ol>
+<h3 id="15-generations-of-the-web">1.5 Generations of the Web<a class="anchor" href="#15-generations-of-the-web">#</a></h3>
+<p>Web 1.0 (mid-1990s): Static, read-only pages. Content is published by a few and consumed by many.
+Web 2.0 (2000s): Read-write web. User-generated content, blogs, wikis, social networks, AJAX for dynamic pages without full reloads.
+Web 3.0 (emerging): Semantic/intelligent web, decentralisation, machine-readable data, and increasingly Al-driven services.
+Exam tip:
+Be ready to distinguish 'Internet' (the network) from 'Web' (an application/service riding on the Internet), and to place ARPANET (1969) vs the Web's invention at CERN (1989-91) correctly on a timeline.</p>
+<h3 id="16-web-basics">1.6 Web Basics<a class="anchor" href="#16-web-basics">#</a></h3>
+<p>URI and URL
+Every resource on the Web a page, an image, a video, a script needs a unique address so that it can be located and retrieved. This addressing scheme is defined by URIs.</p>
+<h4 id="161-uri-uniform-resource-identifier">1.6.1 URI (Uniform Resource Identifier)</h4>
+<p>A URI is a compact string of characters that identifies an abstract or physical resource. It is the umbrella term, and it has two sub-types:
+URL (Uniform Resource Locator) identifies a resource AND tells you how/where to access it (its location).
+URN (Uniform Resource Name) identifies a resource by name in a particular namespace, without necessarily specifying how to locate it, e.g. an ISBN: urn:isbn:0-486-27557-4.
+Rule of thumb: "All URLs are URIs, but not all URIs are URLs." A URL always tells you where and how; a URN only tells you what.</p>
+<h4 id="162-anatomy-of-a-url">1.6.2 Anatomy of a URL</h4>
+<p>WEB PROGRAMMING
+JUSTIN MATHEW
+Web Programming - Module 1 Lecture Notes
+Introduction to the Web &amp; HTML5</p>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Example</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Scheme / Protocol</td>
+<td>https://</td>
+<td>Rule used to access the resource (http, https, ftp, mailto, file)</td>
+</tr>
+<tr>
+<td>Host (Domain)</td>
+<td>www.saintgits.org</td>
+<td>Name/IP address of the server holding the resource</td>
+</tr>
+<tr>
+<td>Port</td>
+<td>:443</td>
+<td>TCP port the server listens on (80 for HTTP, 443 for HTTPS by default, often omitted)</td>
+</tr>
+<tr>
+<td>Path</td>
+<td>/dept/cse/faculty.html</td>
+<td>Location of the resource on the server (like a file-system path)</td>
+</tr>
+<tr>
+<td>Query String</td>
+<td>?year=2026&amp;dept=cse</td>
+<td>Key-value pairs sent to the server, starting with '?', pairs joined by '&amp;'</td>
+</tr>
+<tr>
+<td>Fragment / Anchor</td>
+<td>#profile</td>
+<td>Points to a specific part within the resource itself (handled by the browser, not sent to the server)</td>
+</tr>
+</tbody>
+</table>
+<p>https://www.saintgits.org:443/dept/cse/faculty.html?year=2026&amp;dept=cse#profile
+scheme host port path query fragment</p>
+<h4 id="163-absolute-vs-relative-urls">1.6.3 Absolute vs Relative URLs</h4>
+<p>Absolute URL: gives the complete address scheme, host and path, e.g. https://saintgits.in/images/logo.png
+Relative URL: gives the path relative to the current document's location, e.g. images/logo.png or ../css/style.css</p>
+<p><pre><code class="language-html">&lt;!-- Absolute --&gt;
+&lt;a href=&quot;https://icscst2026.saintgits.in/schedule.html&quot;&gt;Schedule&lt;/a&gt;
+&lt;!-- Relative, same folder --&gt;
+&lt;a href=&quot;schedule.html&quot;&gt;Schedule&lt;/a&gt;
+&lt;!-- Relative, parent folder --&gt;
+&lt;a href=&quot;../index.html&quot;&gt;Home&lt;/a&gt;
+</code></pre></p>
+<h4 id="164-url-encoding-percent-encoding">1.6.4 URL Encoding (Percent-Encoding)</h4>
+<p>URLs can only safely contain a limited set of ASCII characters. Reserved and unsafe characters (spaces, &amp;, #, ?, non-ASCII characters, etc.) must be percent-encoded as %XX, where XX is the hexadecimal ASCII/UTF-8 code.</p>
+<table>
+<thead>
+<tr>
+<th>Character</th>
+<th>Encoded</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>space</td>
+<td>%20 (or + in query strings)</td>
+</tr>
+<tr>
+<td>#</td>
+<td>%23</td>
+</tr>
+<tr>
+<td>&amp;</td>
+<td>%26</td>
+</tr>
+<tr>
+<td>/</td>
+<td>%2F</td>
+</tr>
+<tr>
+<td>?</td>
+<td>%3F</td>
+</tr>
+<tr>
+<td>:</td>
+<td>%3A</td>
+</tr>
+</tbody>
+</table>
+<p>WEB PROGRAMMING
+JUSTIN MATHEW
+Web Programming - Module 1 Lecture Notes</p>
+<h3 id="17-mime-multipurpose-internet-mail-extensions">1.7 MIME (Multipurpose Internet Mail Extensions)<a class="anchor" href="#17-mime-multipurpose-internet-mail-extensions">#</a></h3>
+<p>Introduction to the Web &amp; HTML5
+MIME types (also called media types or content types) tell a receiving application what kind of data a file contains, so it knows how to handle or render it. Originally designed to let email carry non-text attachments, MIME types are now fundamental to how HTTP transfers content every HTTP response carries a Content-Type header stating the MIME type of the body.</p>
+<h4 id="171-syntax">1.7.1 Syntax</h4>
+<p>type/subtype [;parameter]
+Example: text/html; charset=UTF-8
+The 'type' is a general category and the 'subtype' identifies the specific format within it. An optional parameter (like charset) can add more detail.</p>
+<h4 id="172-common-mime-types">1.7.2 Common MIME Types</h4>
+<table>
+<thead>
+<tr>
+<th>MIME Type</th>
+<th>Used For</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>text/html</td>
+<td>HTML documents</td>
+</tr>
+<tr>
+<td>text/css</td>
+<td>CSS stylesheets</td>
+</tr>
+<tr>
+<td>text/plain</td>
+<td>Plain text files</td>
+</tr>
+<tr>
+<td>application/javascript (or text/javascript)</td>
+<td>JavaScript files</td>
+</tr>
+<tr>
+<td>application/json</td>
+<td>JSON data</td>
+</tr>
+<tr>
+<td>application/pdf</td>
+<td>PDF documents</td>
+</tr>
+<tr>
+<td>application/xml</td>
+<td>XML documents</td>
+</tr>
+<tr>
+<td>image/jpeg, image/png, image/gif, image/svg+xml</td>
+<td>Image formats</td>
+</tr>
+<tr>
+<td>audio/mpeg, audio/ogg, audio/wav</td>
+<td>Audio formats</td>
+</tr>
+<tr>
+<td>video/mp4, video/webm, video/ogg</td>
+<td>Video formats</td>
+</tr>
+<tr>
+<td>multipart/form-data</td>
+<td>Form submissions that include file uploads</td>
+</tr>
+<tr>
+<td>application/octet-stream</td>
+<td>Generic binary data (unknown type)</td>
+</tr>
+</tbody>
+</table>
+<p>The server sends the MIME type in the HTTP Content-Type response header, e.g. Content-Type: text/html; charset=UTF-8. The browser uses this to decide whether to render the content as a page, display an image, play audio/video, or prompt a download.</p>
+<p>WEB PROGRAMMING
+JUSTIN MATHEW
+Web Programming - Module 1 Lecture Notes
+Introduction to the Web &amp; HTML5</p>
+<h2 id="2-structuring-and-editing-an-html5-document">2. Structuring and Editing an HTML5 Document<a class="anchor" href="#2-structuring-and-editing-an-html5-document">#</a></h2>
+<h3 id="21-what-is-html">2.1 What is HTML?<a class="anchor" href="#21-what-is-html">#</a></h3>
+<p>HTML (HyperText Markup Language) is not a programming language - it is a markup language that describes the structure and meaning (semantics) of content using elements made up of tags. Browsers parse HTML and render it as a visual (or audible, for screen readers) page.
+HyperText: text containing links to other text/resources.
+Markup: annotations (tags) added to plain text to describe structure headings, paragraphs, lists, etc.
+HTML5 is the fifth and current major version of HTML, standardised by the W3C/WHATWG, adding semantic elements, multimedia support, form enhancements, and APIs (Canvas, Geolocation, Local Storage, etc.).</p>
+<h3 id="22-basic-structure-of-an-html5-document">2.2 Basic Structure of an HTML5 Document<a class="anchor" href="#22-basic-structure-of-an-html5-document">#</a></h3>
+<p><pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+&lt;head&gt;
+&lt;meta charset=&quot;UTF-8&quot;&gt;
+&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;
+&lt;title&gt;Page Title&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;h1&gt;Welcome&lt;/h1&gt;
+&lt;p&gt;This is a paragraph.&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre></p>
+<h4 id="221-line-by-line-explanation">2.2.1 Line-by-line Explanation</h4>
+<table>
+<thead>
+<tr>
+<th>Line</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>&lt;!DOCTYPE html&gt;</code></td>
+<td>Document type declaration. Tells the browser to use HTML5 standards mode. Must be the very first line.</td>
+</tr>
+<tr>
+<td><code>&lt;html lang=&quot;en&quot;&gt;</code></td>
+<td>Root element enclosing the whole document; lang aids accessibility and search engines.</td>
+</tr>
+<tr>
+<td><code>&lt;head&gt;</code></td>
+<td>Container for meta-information not displayed directly on the page (title, meta tags, links to CSS/JS).</td>
+</tr>
+<tr>
+<td><code>&lt;meta charset=&quot;UTF-8&quot;&gt;</code></td>
+<td>Declares character encoding so text (including special/international characters) displays correctly.</td>
+</tr>
+<tr>
+<td><code>&lt;title&gt;</code></td>
+<td>Text shown in the browser tab/window title and used as the default bookmark name.</td>
+</tr>
+<tr>
+<td><code>&lt;body&gt;</code></td>
+<td>Contains all visible page content.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="23-anatomy-of-an-html-element">2.3 Anatomy of an HTML Element<a class="anchor" href="#23-anatomy-of-an-html-element">#</a></h3>
+<p>WEB PROGRAMMING
+JUSTIN MATHEW
+Web Programming - Module 1 Lecture Notes
+Introduction to the Web &amp; HTML5</p>
+<p><em>[Image Description: A diagram illustrating the anatomy of an HTML element. It displays the code <code>&lt;p class=&quot;intro&quot;&gt;Hello World&lt;/p&gt;</code> with lines pointing to its specific parts: <code>&lt;p</code> is labelled as the "opening tag / tag name", <code>class</code> is the "attribute name", <code>&quot;intro&quot;</code> is the "attribute value", <code>Hello World</code> is the "content", and <code>&lt;/p&gt;</code> is the "closing tag".]</em></p>
+<p>Most elements have an opening tag <code>&lt;tagname&gt;</code> and closing tag <code>&lt;/tagname&gt;</code>, enclosing content.
+Empty/void elements have no content and no closing tag: <code>&lt;br&gt;</code>, <code>&lt;hr&gt;</code>, <code>&lt;img&gt;</code>, <code>&lt;input&gt;</code>, <code>&lt;meta&gt;</code>, <code>&lt;link&gt;</code>.
+Attributes are <code>name=&quot;value&quot;</code> pairs inside the opening tag that configure or describe the element (id, class, src, href, etc.).
+HTML is (mostly) case-insensitive for tags, but the convention/best practice is lowercase.
+Elements can be nested, but nesting must not overlap a properly nested document is essential for valid HTML.</p>
+<h3 id="24-headings">2.4 Headings<a class="anchor" href="#24-headings">#</a></h3>
+<p>HTML provides six levels of section headings, <code>&lt;h1&gt;</code> through <code>&lt;h6&gt;</code>, in decreasing order of importance/size.
+<pre><code class="language-html">&lt;h1&gt;Main Page Title&lt;/h1&gt;
+&lt;h2&gt;Section Heading&lt;/h2&gt;
+&lt;h3&gt;Sub-section Heading&lt;/h3&gt;
+&lt;h4&gt;Minor Heading&lt;/h4&gt;
+&lt;h5&gt;Smaller Heading&lt;/h5&gt;
+&lt;h6&gt;Smallest Heading&lt;/h6&gt;
+</code></pre>
+<code>&lt;h1&gt;</code> should be used once per page to represent the main topic - important for SEO and accessibility.
+Headings should be used to convey document structure/outline, not merely to make text bigger or bold use CSS for pure styling.
+Heading levels should not be skipped arbitrarily (e.g. jumping from <code>&lt;h1&gt;</code> directly to <code>&lt;h4&gt;</code>) for a well-formed outline, though browsers will not enforce this.
+Screen readers let users navigate a page by jumping between headings, so semantic use matters for accessibility.</p>
+<h3 id="25-images">2.5 Images<a class="anchor" href="#25-images">#</a></h3>
+<p>The <code>&lt;img&gt;</code> tag embeds an image into the page. It is a void (self-closing) element.
+<pre><code class="language-html">&lt;img src=&quot;logo.png&quot; alt=&quot;Saintgits College Logo&quot; width=&quot;200&quot; height=&quot;100&quot;&gt;
+</code></pre></p>
+<table>
+<thead>
+<tr>
+<th>Attribute</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>src</td>
+<td>Path/URL to the image file (required).</td>
+</tr>
+<tr>
+<td>alt</td>
+<td>Alternative text describing the image shown if the image fails to load and read aloud by screen readers. Required for accessibility.</td>
+</tr>
+<tr>
+<td>width / height</td>
+<td>Sets display dimensions (in pixels by default); helps the browser reserve space before the image loads, reducing layout shift.</td>
+</tr>
+</tbody>
+</table>
+<p>WEB PROGRAMMING
+JUSTIN MATHEW
+Web Programming - Module 1 Lecture Notes</p>
+<table>
+<thead>
+<tr>
+<th>Attribute</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>title</td>
+<td>Tooltip text shown on hover (optional).</td>
+</tr>
+<tr>
+<td>loading</td>
+<td>'lazy' defers off-screen image loading for performance.</td>
+</tr>
+</tbody>
+</table>
+<p>Introduction to the Web &amp; HTML5
+Supported common image formats: JPEG/JPG (photographs, lossy compression), PNG (supports transparency, lossless), GIF (supports simple animation), SVG (vector graphics, scales without quality loss), WebP (modern, efficient compression).
+Using an image as a link: wrap the <code>&lt;img&gt;</code> tag inside an <code>&lt;a&gt;</code> tag.
+<pre><code class="language-html">&lt;a href=&quot;https://saintgits.org&quot;&gt;
+&lt;img src=&quot;logo.png&quot; alt=&quot;Saintgits Home&quot;&gt;
+&lt;/a&gt;
+</code></pre></p>
+<p>WEB PROGRAMMING
+JUSTIN MATHEW
+Web Programming - Module 1 Lecture Notes
+Introduction to the Web &amp; HTML5</p>
+<h2 id="3-hyperlinks-and-lists">3. Hyperlinks and Lists<a class="anchor" href="#3-hyperlinks-and-lists">#</a></h2>
+<h3 id="31-hyperlinks-the-a-element">3.1 Hyperlinks - The &lt;a&gt; Element<a class="anchor" href="#31-hyperlinks-the-a-element">#</a></h3>
+<p>The anchor element <code>&lt;a&gt;</code> is what makes HTML 'hypertext' it creates a clickable link to another resource: another page, another site, a file, an email address, a phone number, or a location within the same page.
+<pre><code class="language-html">&lt;a href=&quot;https://www.saintgits.org&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;
+Visit Saintgits
+&lt;/a&gt;
+</code></pre></p>
+<table>
+<thead>
+<tr>
+<th>Attribute</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>href</td>
+<td>Destination URL (Hypertext REFerence) - required for the link to be functional.</td>
+</tr>
+<tr>
+<td>target</td>
+<td>Where to open the link: _self (default, same tab), _blank (new tab/window), _parent, _top.</td>
+</tr>
+<tr>
+<td>rel</td>
+<td>Relationship to the target; rel="noopener noreferrer" is a security best practice with target="_blank".</td>
+</tr>
+<tr>
+<td>download</td>
+<td>Prompts the browser to download the linked resource rather than navigate to it.</td>
+</tr>
+</tbody>
+</table>
+<h4 id="311-types-of-links">3.1.1 Types of Links</h4>
+<p>External link: points to another website. e.g. <code>&lt;a href=&quot;https://www.w3.org&quot;&gt;W3C&lt;/a&gt;</code>
+Internal link: points to another page within the same site, usually with a relative URL. e.g. <code>&lt;a href=&quot;about.html&quot;&gt;About Us&lt;/a&gt;</code>
+Email link: uses the mailto: scheme. e.g. <code>&lt;a href=&quot;mailto:info@saintgits.org&quot;&gt;Email us&lt;/a&gt;</code>
+Telephone link: uses the tel: scheme. e.g. <code>&lt;a href=&quot;tel:+914812345678&quot;&gt;Call us&lt;/a&gt;</code>
+Fragment/anchor link: jumps to a specific point within a page (see below).</p>
+<h4 id="312-internal-linking-same-page-navigation-with-fragments">3.1.2 Internal Linking (Same-page navigation with Fragments)</h4>
+<p>To link to a specific section within a page, give the target element an id attribute, then point the href at #id.
+<pre><code class="language-html">&lt;!-- Table of contents at the top of the page --&gt;
+&lt;nav&gt;
+&lt;a href=&quot;#section1&quot;&gt;Introduction&lt;/a&gt; |
+&lt;a href=&quot;#section2&quot;&gt;Syllabus&lt;/a&gt; |
+&lt;a href=&quot;#section3&quot;&gt;Contact&lt;/a&gt;
+&lt;/nav&gt;
+&lt;!-- Later in the same document --&gt;
+&lt;h2 id=&quot;section1&quot;&gt;Introduction&lt;/h2&gt;
+&lt;p&gt;...&lt;/p&gt;
+&lt;h2 id=&quot;section2&quot;&gt;Syllabus&lt;/h2&gt;
+&lt;p&gt;...&lt;/p&gt;
+&lt;h2 id=&quot;section3&quot;&gt;Contact&lt;/h2&gt;
+&lt;p&gt;...&lt;/p&gt;
+</code></pre></p>
+<p>WEB PROGRAMMING
+JUSTIN MATHEW
+Web Programming Module 1 Lecture Notes
+Introduction to the Web &amp; HTML5
+id values must be unique within a page (no two elements share the same id).
+A link to "#top" (or an empty fragment, href="#") conventionally scrolls to the top of the page.
+You can also link to a section of a different page: page.html#section2.</p>
+<h3 id="32-lists">3.2 Lists<a class="anchor" href="#32-lists">#</a></h3>
+<p>HTML provides three list types to present grouped/sequenced content.</p>
+<h4 id="321-unordered-list-ul">3.2.1 Unordered List &lt;ul&gt;</h4>
+<p>Used when the order of items does not matter; items are marked with bullets by default.
+<pre><code class="language-html">&lt;ul&gt;
+&lt;li&gt;HTML&lt;/li&gt;
+&lt;li&gt;CSS&lt;/li&gt;
+&lt;li&gt;JavaScript&lt;/li&gt;
+&lt;/ul&gt;
+</code></pre></p>
+<h4 id="322-ordered-list-ol">3.2.2 Ordered List &lt;ol&gt;</h4>
+<p>Used when sequence/order matters; items are numbered automatically.
+<pre><code class="language-html">&lt;ol type=&quot;1&quot; start=&quot;1&quot;&gt;
+&lt;li&gt;Boil water&lt;/li&gt;
+&lt;li&gt;Add tea leaves&lt;/li&gt;
+&lt;li&gt;Simmer for 2 minutes&lt;/li&gt;
+&lt;/ol&gt;
+</code></pre>
+type attribute controls the marker style: "1" (default, numbers), "A", "a", "I", "i" (letters/roman numerals).
+start attribute sets the starting number/letter.
+reversed attribute counts the list down instead of up.</p>
+<h4 id="323-description-list-dl">3.2.3 Description List &lt;dl&gt;</h4>
+<p>Used for name-value / term-description pairs, such as a glossary.
+<pre><code class="language-html">&lt;dl&gt;
+&lt;dt&gt;HTML&lt;/dt&gt;
+&lt;dd&gt;HyperText Markup Language&lt;/dd&gt;
+&lt;dt&gt;CSS&lt;/dt&gt;
+&lt;dd&gt;Cascading Style Sheets&lt;/dd&gt;
+&lt;/dl&gt;
+</code></pre></p>
+<h4 id="324-nested-lists">3.2.4 Nested Lists</h4>
+<p><pre><code class="language-html">&lt;ul&gt;
+&lt;li&gt;Frontend
+&lt;ul&gt;
+&lt;li&gt;HTML&lt;/li&gt;
+&lt;li&gt;CSS&lt;/li&gt;
+&lt;/ul&gt;
+</code></pre></p>
+<p>WEB PROGRAMMING
+JUSTIN MATHEW
+Web Programming - Module 1 Lecture Notes
+<pre><code class="language-html">&lt;/li&gt;
+&lt;li&gt;Backend&lt;/li&gt;
+&lt;/ul&gt;
+</code></pre>
+Introduction to the Web &amp; HTML5
+A nested list is placed as a child of the <code>&lt;li&gt;</code> element it belongs under, not as a sibling of the outer <code>&lt;ul&gt;</code>/<code>&lt;ol&gt;</code>.</p>
+<p>WEB PROGRAMMING
+JUSTIN MATHEW
+Web Programming - Module 1 Lecture Notes
+Introduction to the Web &amp; HTML5</p>
+<h2 id="4-special-characters-horizontal-rules-meta-divspan-tables-and-forms">4. Special Characters, Horizontal Rules, meta, div/span, Tables and Forms<a class="anchor" href="#4-special-characters-horizontal-rules-meta-divspan-tables-and-forms">#</a></h2>
+<h3 id="41-special-characters-characterentity-references">4.1 Special Characters (Character/Entity References)<a class="anchor" href="#41-special-characters-characterentity-references">#</a></h3>
+<p>Some characters have special meaning in HTML markup (like &lt; and &gt;) or are not easily typed on a keyboard (like or non-breaking space). These must be written using character entities, in the form <code>&amp;name;</code> or <code>&amp;#number;</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Character</th>
+<th>Entity Name</th>
+<th>Numeric</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>&lt;</td>
+<td><code>&amp;lt;</code></td>
+<td><code>&amp;#60;</code></td>
+</tr>
+<tr>
+<td>&gt;</td>
+<td><code>&amp;gt;</code></td>
+<td><code>&amp;#62;</code></td>
+</tr>
+<tr>
+<td>&amp;</td>
+<td><code>&amp;amp;</code></td>
+<td><code>&amp;#38;</code></td>
+</tr>
+<tr>
+<td>"</td>
+<td><code>&amp;quot;</code></td>
+<td><code>&amp;#34;</code></td>
+</tr>
+<tr>
+<td>'</td>
+<td><code>&amp;apos;</code></td>
+<td><code>&amp;#39;</code></td>
+</tr>
+<tr>
+<td>Non-breaking space</td>
+<td><code>&amp;nbsp;</code></td>
+<td><code>&amp;#160;</code></td>
+</tr>
+<tr>
+<td>©</td>
+<td><code>&amp;copy;</code></td>
+<td><code>&amp;#169;</code></td>
+</tr>
+<tr>
+<td>®</td>
+<td><code>&amp;reg;</code></td>
+<td><code>&amp;#174;</code></td>
+</tr>
+<tr>
+<td>₹ (Rupee)</td>
+<td><code>&amp;#8377;</code></td>
+<td><code>&amp;#8377;</code></td>
+</tr>
+<tr>
+<td>– (en dash)</td>
+<td><code>&amp;ndash;</code></td>
+<td><code>&amp;#8211;</code></td>
+</tr>
+</tbody>
+</table>
+<p>Why it matters: writing <code>&lt;b&gt;bold&lt;/b&gt;</code> in a paragraph would be interpreted as an actual tag by the browser; you must write <code>&amp;lt;b&amp;gt; bold&amp;lt;/b&amp;gt;</code> to display the literal angle brackets.</p>
+<h3 id="42-horizontal-rule">4.2 Horizontal Rule<a class="anchor" href="#42-horizontal-rule">#</a></h3>
+<p><code>&lt;hr&gt;</code>
+The <code>&lt;hr&gt;</code> element inserts a thematic break a horizontal line used to separate content into distinct sections (e.g., a change of topic within a chapter). It is a void element with no closing tag.
+<pre><code class="language-html">&lt;p&gt;Section one content...&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;Section two content...&lt;/p&gt;
+</code></pre></p>
+<h3 id="43-the-meta-element">4.3 The &lt;meta&gt; Element<a class="anchor" href="#43-the-meta-element">#</a></h3>
+<p>meta elements provide metadata about the HTML document - information about the page that isn't displayed but is used by browsers, search engines, and other web services. They live inside <code>&lt;head&gt;</code> and are void elements.
+<pre><code class="language-html">&lt;meta charset=&quot;UTF-8&quot;&gt;
+&lt;meta name=&quot;description&quot; content=&quot;Department of CSE, Saintgits College of Engineering&quot;&gt;
+&lt;meta name=&quot;keywords&quot; content=&quot;HTML, CSS, JavaScript, Web Programming&quot;&gt;
+&lt;meta name=&quot;author&quot; content=&quot;Justin Mathew&quot;&gt;
+&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;
+&lt;meta http-equiv=&quot;refresh&quot; content=&quot;30&quot;&gt;
+</code></pre></p>
+<p>WEB PROGRAMMING
+JUSTIN MATHEW
+Web Programming Module 1 Lecture Notes</p>
+<table>
+<thead>
+<tr>
+<th>Attribute Combination</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>charset</td>
+<td>Declares the character encoding of the document.</td>
+</tr>
+<tr>
+<td>name + content</td>
+<td>General metadata: description, keywords, author, viewport (responsive design), robots.</td>
+</tr>
+<tr>
+<td>http-equiv + content</td>
+<td>Simulates an HTTP response header, e.g. auto-refresh, content-type.</td>
+</tr>
+</tbody>
+</table>
+<p>Introduction to the Web &amp; HTML5
+The 'description' meta tag is often shown as the snippet text in search-engine results, and the 'viewport' meta tag is essential for making a page render correctly on mobile devices.</p>
+<h3 id="44-div-and-span-generic-containers">4.4 div and span - Generic Containers<a class="anchor" href="#44-div-and-span-generic-containers">#</a></h3>
+<p>div and span are content-neutral generic containers used purely for grouping content so that CSS/JavaScript can target the group they carry no semantic meaning of their own.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th><code>&lt;div&gt;</code></th>
+<th><code>&lt;span&gt;</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Display type</td>
+<td>Block-level (starts on a new line, takes full available width)</td>
+<td>Inline (flows within a line of text, only as wide as its content)</td>
+</tr>
+<tr>
+<td>Typical use</td>
+<td>Grouping larger sections: headers, containers, cards, layout wrappers</td>
+<td>Wrapping a small piece of text/inline content to style or script it individually</td>
+</tr>
+</tbody>
+</table>
+<p><pre><code class="language-html">&lt;div class=&quot;card&quot;&gt;
+&lt;h3&gt;Faculty Profile&lt;/h3&gt;
+&lt;p&gt;Justin Mathew is an &lt;span class=&quot;highlight&quot;&gt;Assistant Professor&lt;/span&gt; in the Department of CSE.&lt;/p&gt;
+&lt;/div&gt;
+</code></pre>
+Best practice:
+Prefer semantic elements (header, nav, main, article, section, footer see 5.3) over div where a meaningful equivalent exists; reserve div/span for cases with no semantic fit.</p>
+<h3 id="45-tables">4.5 Tables<a class="anchor" href="#45-tables">#</a></h3>
+<p>Tables present tabular data in rows and columns using <code>&lt;table&gt;</code>, <code>&lt;tr&gt;</code> (table row), <code>&lt;th&gt;</code> (header cell) and <code>&lt;td&gt;</code> (data cell).
+<pre><code class="language-html">&lt;table border=&quot;1&quot;&gt;
+&lt;caption&gt;Semester Result&lt;/caption&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Course&lt;/th&gt;
+&lt;th&gt;Credits&lt;/th&gt;
+&lt;th&gt;Grade&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;Web Programming&lt;/td&gt;
+</code></pre></p>
+<p>WEB PROGRAMMING
+JUSTIN MATHEW
+Web Programming - Module 1 Lecture Notes
+<pre><code class="language-html">&lt;td&gt;4&lt;/td&gt;
+&lt;td&gt;A&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Data Structures&lt;/td&gt;
+&lt;td&gt;4&lt;/td&gt;
+&lt;td&gt;A+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;tfoot&gt;
+&lt;tr&gt;&lt;td colspan=&quot;2&quot;&gt;Total Credits&lt;/td&gt;&lt;td&gt;8&lt;/td&gt;&lt;/tr&gt;
+&lt;/tfoot&gt;
+&lt;/table&gt;
+</code></pre></p>
+<table>
+<thead>
+<tr>
+<th>Tag/Attribute</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>&lt;table&gt;</code></td>
+<td>Defines the table.</td>
+</tr>
+<tr>
+<td><code>&lt;caption&gt;</code></td>
+<td>Title/description of the table, displayed above it.</td>
+</tr>
+<tr>
+<td><code>&lt;thead&gt;</code> / <code>&lt;tbody&gt;</code>/<code>&lt;tfoot&gt;</code></td>
+<td>Groups header, body and footer rows respectively (semantic + allows independent scrolling/styling).</td>
+</tr>
+<tr>
+<td><code>&lt;tr&gt;</code></td>
+<td>Table row.</td>
+</tr>
+<tr>
+<td><code>&lt;th&gt;</code></td>
+<td>Header cell bold and centred by default; scope="col" or scope="row" improves accessibility.</td>
+</tr>
+<tr>
+<td><code>&lt;td&gt;</code></td>
+<td>Standard data cell.</td>
+</tr>
+<tr>
+<td>colspan / rowspan</td>
+<td>Merge a cell across multiple columns / rows.</td>
+</tr>
+</tbody>
+</table>
+<p>Introduction to the Web &amp; HTML5</p>
+<h3 id="46-forms">4.6 Forms<a class="anchor" href="#46-forms">#</a></h3>
+<p>The <code>&lt;form&gt;</code> element collects user input and submits it to a server for processing.
+<pre><code class="language-html">&lt;form action=&quot;/submit&quot; method=&quot;POST&quot;&gt;
+&lt;label for=&quot;name&quot;&gt;Name:&lt;/label&gt;
+&lt;input type=&quot;text&quot; id=&quot;name&quot; name=&quot;name&quot; required&gt;
+
+&lt;label for=&quot;email&quot;&gt;Email:&lt;/label&gt;
+&lt;input type=&quot;email&quot; id=&quot;email&quot; name=&quot;email&quot; required&gt;
+
+&lt;button type=&quot;submit&quot;&gt;Submit&lt;/button&gt;
+&lt;/form&gt;
+</code></pre></p>
+<table>
+<thead>
+<tr>
+<th>Attribute</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>action</td>
+<td>URL that will process the submitted data.</td>
+</tr>
+<tr>
+<td>method</td>
+<td>HTTP method used: GET (appends data to the URL, visible, for non-sensitive/small data) or POST (sends data in the request body, used for sensitive/large data).</td>
+</tr>
+<tr>
+<td>autocomplete</td>
+<td>Whether the browser may auto-fill fields (on/off) see also Section 5.</td>
+</tr>
+<tr>
+<td>enctype</td>
+<td>How data is encoded when submitting; must be multipart/form-data for file uploads.</td>
+</tr>
+</tbody>
+</table>
+<p>WEB PROGRAMMING
+JUSTIN MATHEW
+Web Programming - Module 1 Lecture Notes
+Introduction to the Web &amp; HTML5
+The <code>&lt;label&gt;</code> element, linked via a matching for/id pair, associates descriptive text with a control - clicking the label focuses/activates the control, and it is essential for accessibility.</p>
+<p>WEB PROGRAMMING
+JUSTIN MATHEW
+Web Programming - Module 1 Lecture Notes
+Introduction to the Web &amp; HTML5</p>
+<h2 id="5-html5-form-input-types-datalist-autocomplete-and-page-structure">5. HTML5 Form Input Types, datalist, autocomplete and Page Structure<a class="anchor" href="#5-html5-form-input-types-datalist-autocomplete-and-page-structure">#</a></h2>
+<h3 id="51-html5-form-input-types">5.1 HTML5 Form Input Types<a class="anchor" href="#51-html5-form-input-types">#</a></h3>
+<p>HTML5 introduced many new values for the type attribute of <code>&lt;input&gt;</code>, giving browsers built-in validation and specialised Ul controls (date-pickers, colour swatches, sliders, on-screen numeric keypads on mobile) without needing JavaScript.</p>
+<table>
+<thead>
+<tr>
+<th>type value</th>
+<th>Purpose / Behaviour</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>text</td>
+<td>Single-line free text (the default type).</td>
+</tr>
+<tr>
+<td>email</td>
+<td>Validates a well-formed email address; shows an email-optimised mobile keyboard.</td>
+</tr>
+<tr>
+<td>password</td>
+<td>Masks entered characters.</td>
+</tr>
+<tr>
+<td>number</td>
+<td>Numeric-only entry with up/down steppers; supports min, max, step.</td>
+</tr>
+<tr>
+<td>range</td>
+<td>A slider control between a min and max value.</td>
+</tr>
+<tr>
+<td>date/month/week/time/ datetime-local</td>
+<td>Native date/time pickers.</td>
+</tr>
+<tr>
+<td>color</td>
+<td>A colour-swatch picker returning a hex value.</td>
+</tr>
+<tr>
+<td>tel</td>
+<td>Telephone number (no built-in format validation, but triggers a numeric keypad).</td>
+</tr>
+<tr>
+<td>url</td>
+<td>Validates a well-formed URL.</td>
+</tr>
+<tr>
+<td>search</td>
+<td>A text field styled/optimised for search (may show a clear ('x') button).</td>
+</tr>
+<tr>
+<td>checkbox</td>
+<td>Toggle for one or more options from a set (multiple can be selected).</td>
+</tr>
+<tr>
+<td>radio</td>
+<td>Selects exactly one option from a named group (share the same name attribute).</td>
+</tr>
+<tr>
+<td>file</td>
+<td>Uploads one or more files from the user's device (accept attribute restricts file types).</td>
+</tr>
+<tr>
+<td>hidden</td>
+<td>Not rendered; used to submit data the user shouldn't see/edit.</td>
+</tr>
+<tr>
+<td>submit/reset/button</td>
+<td>Form action buttons.</td>
+</tr>
+</tbody>
+</table>
+<p><pre><code class="language-html">&lt;input type=&quot;email&quot; name=&quot;email&quot; required&gt;
+&lt;input type=&quot;number&quot; name=&quot;age&quot; min=&quot;18&quot; max=&quot;60&quot; step=&quot;1&quot;&gt;
+&lt;input type=&quot;range&quot; name=&quot;volume&quot; min=&quot;0&quot; max=&quot;100&quot; value=&quot;50&quot;&gt;
+&lt;input type=&quot;date&quot; name=&quot;dob&quot;&gt;
+&lt;input type=&quot;color&quot; name=&quot;favcolor&quot; value=&quot;#2E5E4E&quot;&gt;
+&lt;input type=&quot;checkbox&quot; name=&quot;subject&quot; value=&quot;html&quot;&gt; HTML
+&lt;input type=&quot;radio&quot; name=&quot;gender&quot; value=&quot;male&quot;&gt; Male
+&lt;input type=&quot;file&quot; name=&quot;resume&quot; accept=&quot;.pdf,.doc,.docx&quot;&gt;
+</code></pre></p>
+<h4 id="511-built-in-validation-attributes">5.1.1 Built-in Validation Attributes</h4>
+<p>required field must be filled before submission.</p>
+<p>WEB PROGRAMMING
+JUSTIN MATHEW
+Web Programming - Module 1 Lecture Notes
+Introduction to the Web &amp; HTML5
+min/max/step numeric or date bounds and increments.
+minlength / maxlength character-count bounds for text.
+pattern a regular expression the value must match, e.g. pattern="[0-9]{6}" for a 6-digit PIN code.
+placeholder - greyed-out hint text shown when the field is empty (not a substitute for a <code>&lt;label&gt;</code>).</p>
+<h3 id="52-the-datalist-element-and-autocomplete-attribute">5.2 The datalist Element and autocomplete Attribute<a class="anchor" href="#52-the-datalist-element-and-autocomplete-attribute">#</a></h3>
+<h4 id="521-datalist">5.2.1 datalist</h4>
+<p><code>&lt;datalist&gt;</code> provides a predefined set of suggestions for an <code>&lt;input&gt;</code>, linked using the input's list attribute matching the datalist's id. Unlike a <code>&lt;select&gt;</code> dropdown, the user can still type a free-text value not present in the list - it behaves as an editable combo box.
+<pre><code class="language-html">&lt;label for=&quot;browser&quot;&gt;Choose a browser:&lt;/label&gt;
+&lt;input type=&quot;text&quot; id=&quot;browser&quot; name=&quot;browser&quot; list=&quot;browsers&quot;&gt;
+&lt;datalist id=&quot;browsers&quot;&gt;
+&lt;option value=&quot;Chrome&quot;&gt;
+&lt;option value=&quot;Firefox&quot;&gt;
+&lt;option value=&quot;Edge&quot;&gt;
+&lt;option value=&quot;Safari&quot;&gt;
+&lt;/datalist&gt;
+</code></pre>
+Useful for search boxes, city/country pickers, or any field where you want to guide input while still allowing custom values.
+Browser rendering of the suggestion list (as a dropdown) is native and cannot be styled with CSS the way a custom JS component could.</p>
+<h4 id="522-the-autocomplete-attribute">5.2.2 The autocomplete Attribute</h4>
+<p>autocomplete controls whether the browser may offer to auto-fill a field based on values the user previously entered (name, address, card number, etc.). It can be set on the <code>&lt;form&gt;</code> element (applying to all its controls) or on an individual field to override the form-level setting.
+<pre><code class="language-html">&lt;form autocomplete=&quot;on&quot;&gt;
+&lt;input type=&quot;text&quot; name=&quot;name&quot; autocomplete=&quot;name&quot;&gt;
+&lt;input type=&quot;email&quot; name=&quot;email&quot; autocomplete=&quot;email&quot;&gt;
+&lt;input type=&quot;text&quot; name=&quot;otp&quot; autocomplete=&quot;off&quot;&gt;
+&lt;/form&gt;
+</code></pre></p>
+<table>
+<thead>
+<tr>
+<th>Value</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>on</td>
+<td>Browser may auto-fill this field (default for most fields).</td>
+</tr>
+<tr>
+<td>off</td>
+<td>Browser should not auto-fill this field (e.g. for one-time codes/OTP, CAPTCHA-adjacent fields).</td>
+</tr>
+<tr>
+<td>name/email/tel/street-address / cc-number, etc.</td>
+<td>Named autofill tokens that tell the browser exactly what category of stored data to suggest, improving autofill accuracy.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="53-page-structure-semantic-elements">5.3 Page Structure (Semantic) Elements<a class="anchor" href="#53-page-structure-semantic-elements">#</a></h3>
+<p>WEB PROGRAMMING
+JUSTIN MATHEW
+Web Programming - Module 1 Lecture Notes
+Introduction to the Web &amp; HTML5
+HTML5 introduced semantic sectioning elements that describe the role of a region of the page, replacing generic <code>&lt;div&gt;</code>-only layouts of earlier HTML. This improves accessibility (screen readers can jump between regions), SEO, and code readability.</p>
+<table>
+<thead>
+<tr>
+<th>Element</th>
+<th>Represents</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>&lt;header&gt;</code></td>
+<td>Introductory content for the page or a section typically logo, title, navigation.</td>
+</tr>
+<tr>
+<td><code>&lt;nav&gt;</code></td>
+<td>A block of primary navigation links.</td>
+</tr>
+<tr>
+<td><code>&lt;main&gt;</code></td>
+<td>The dominant, unique content of the document (used once per page).</td>
+</tr>
+<tr>
+<td><code>&lt;section&gt;</code></td>
+<td>A thematic grouping of content, typically with its own heading.</td>
+</tr>
+<tr>
+<td><code>&lt;article&gt;</code></td>
+<td>Self-contained content that could be distributed/reused independently (a blog post, a news story, a forum post).</td>
+</tr>
+<tr>
+<td><code>&lt;aside&gt;</code></td>
+<td>Content tangentially related to the main content (sidebars, pull-quotes, ads).</td>
+</tr>
+<tr>
+<td><code>&lt;footer&gt;</code></td>
+<td>Footer for its nearest sectioning ancestor or the page typically copyright, contact links.</td>
+</tr>
+<tr>
+<td><code>&lt;figure&gt;</code>/<code>&lt;figcaption&gt;</code></td>
+<td>Self-contained media (image, diagram, code) with an optional caption.</td>
+</tr>
+</tbody>
+</table>
+<p><pre><code class="language-html">&lt;body&gt;
+&lt;header&gt;
+&lt;h1&gt;Saintgits CSE Department&lt;/h1&gt;
+&lt;nav&gt;
+&lt;a href=&quot;#about&quot;&gt;About&lt;/a&gt; &lt;a href=&quot;#faculty&quot;&gt;Faculty&lt;/a&gt;
+&lt;/nav&gt;
+&lt;/header&gt;
+
+&lt;main&gt;
+&lt;section id=&quot;about&quot;&gt;
+&lt;h2&gt;About the Department&lt;/h2&gt;
+&lt;p&gt;...&lt;/p&gt;
+&lt;/section&gt;
+
+&lt;article&gt;
+&lt;h2&gt;ICSCST 2026 Conference Highlights&lt;/h2&gt;
+&lt;p&gt;...&lt;/p&gt;
+&lt;/article&gt;
+
+&lt;aside&gt;
+&lt;h3&gt;Quick Links&lt;/h3&gt;
+&lt;/aside&gt;
+&lt;/main&gt;
+
+&lt;footer&gt;
+&lt;p&gt;&amp;copy; 2026 Saintgits College of Engineering&lt;/p&gt;
+&lt;/footer&gt;
+&lt;/body&gt;
+</code></pre></p>
+<p>Key distinction:</p>
+<p>WEB PROGRAMMING
+JUSTIN MATHEW
+Web Programming Module 1 Lecture Notes
+Introduction to the Web &amp; HTML5
+<code>&lt;section&gt;</code> groups related content under its own heading as part of the document outline; <code>&lt;article&gt;</code> is content that would still make complete sense if pulled out and syndicated on its own (an RSS post, a card in a news feed).</p>
+<p>WEB PROGRAMMING
+JUSTIN MATHEW
+Web Programming - Module 1 Lecture Notes</p>
+<h2 id="6-multimedia">6. Multimedia<a class="anchor" href="#6-multimedia">#</a></h2>
+<p>Introduction to the Web &amp; HTML5
+HTML5 Audio and Video Elements</p>
+<h3 id="61-why-native-multimedia-elements">6.1 Why Native Multimedia Elements?<a class="anchor" href="#61-why-native-multimedia-elements">#</a></h3>
+<p>Before HTML5, playing audio/video in a browser required third-party plugins such as Flash or Silverlight, which had security, performance, and mobile-compatibility problems. HTML5 introduced <code>&lt;audio&gt;</code> and <code>&lt;video&gt;</code> as native elements so browsers can play media directly, with a consistent scripting API (via JavaScript) and no plugins.</p>
+<h3 id="62-the-audio-element">6.2 The &lt;audio&gt; Element<a class="anchor" href="#62-the-audio-element">#</a></h3>
+<p><pre><code class="language-html">&lt;audio controls autoplay loop muted preload=&quot;auto&quot;&gt;
+&lt;source src=&quot;lecture.mp3&quot; type=&quot;audio/mpeg&quot;&gt;
+&lt;source src=&quot;lecture.ogg&quot; type=&quot;audio/ogg&quot;&gt;
+Your browser does not support the audio element.
+&lt;/audio&gt;
+</code></pre></p>
+<table>
+<thead>
+<tr>
+<th>Attribute</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>controls</td>
+<td>Displays the browser's built-in play/pause/volume/seek UI.</td>
+</tr>
+<tr>
+<td>autoplay</td>
+<td>Starts playback automatically on load (many browsers block this unless muted, to prevent unwanted noise).</td>
+</tr>
+<tr>
+<td>loop</td>
+<td>Restarts playback automatically when it ends.</td>
+</tr>
+<tr>
+<td>muted</td>
+<td>Starts with audio muted.</td>
+</tr>
+<tr>
+<td>preload</td>
+<td>Hints how much to buffer ahead: none, metadata, or auto.</td>
+</tr>
+<tr>
+<td><code>&lt;source&gt;</code></td>
+<td>Provides one candidate file per format; the browser picks the first one it can play allows fallback across formats.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="63-the-video-element">6.3 The &lt;video&gt; Element<a class="anchor" href="#63-the-video-element">#</a></h3>
+<p><pre><code class="language-html">&lt;video width=&quot;640&quot; height=&quot;360&quot; controls poster=&quot;thumbnail.jpg&quot;&gt;
+&lt;source src=&quot;demo.mp4&quot; type=&quot;video/mp4&quot;&gt;
+&lt;source src=&quot;demo.webm&quot; type=&quot;video/webm&quot;&gt;
+&lt;track kind=&quot;subtitles&quot; src=&quot;subs-en.vtt&quot; srclang=&quot;en&quot; label=&quot;English&quot;&gt;
+Your browser does not support the video tag.
+&lt;/video&gt;
+</code></pre></p>
+<table>
+<thead>
+<tr>
+<th>Attribute</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>width / height</td>
+<td>Display dimensions in pixels.</td>
+</tr>
+<tr>
+<td>controls</td>
+<td>Shows the native playback control bar.</td>
+</tr>
+<tr>
+<td>poster</td>
+<td>Image shown before playback starts (e.g., a thumbnail).</td>
+</tr>
+<tr>
+<td>autoplay/loop/muted/ preload</td>
+<td>Same meaning as for <code>&lt;audio&gt;</code>.</td>
+</tr>
+<tr>
+<td>playsinline</td>
+<td>On mobile, plays inline rather than forcing fullscreen (iOS Safari especially).</td>
+</tr>
+</tbody>
+</table>
+<p>WEB PROGRAMMING
+JUSTIN MATHEW
+Web Programming - Module 1 Lecture Notes</p>
+<table>
+<thead>
+<tr>
+<th>Attribute</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>&lt;track&gt;</code></td>
+<td>Adds timed text tracks - subtitles, captions, descriptions from a WebVTT (.vtt) file; kind can be subtitles, captions, descriptions, chapters.</td>
+</tr>
+</tbody>
+</table>
+<p>Introduction to the Web &amp; HTML5</p>
+<h3 id="64-supported-formats-containercodec-compatibility">6.4 Supported Formats (Container/Codec Compatibility)<a class="anchor" href="#64-supported-formats-containercodec-compatibility">#</a></h3>
+<table>
+<thead>
+<tr>
+<th>Media</th>
+<th>Common Formats</th>
+<th>Typical Codec</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Audio</td>
+<td>MP3, OGG, WAV, AAC</td>
+<td>MP3 (MPEG-1 Layer 3), Vorbis (OGG), PCM (WAV)</td>
+</tr>
+<tr>
+<td>Video</td>
+<td>MP4, WebM, OGG</td>
+<td>H.264/AVC (MP4), VP8/VP9 (WebM), Theora (OGG)</td>
+</tr>
+</tbody>
+</table>
+<p>Because no single format is supported by every browser, providing multiple <code>&lt;source&gt;</code> elements (as shown above) lets the browser choose the first format it can play, ensuring cross-browser compatibility. The fallback text inside the tag ("Your browser does not support...") is shown only in very old browsers with no support at all.</p>
+<h3 id="65-scripting-media-with-javascript">6.5 Scripting Media with JavaScript<a class="anchor" href="#65-scripting-media-with-javascript">#</a></h3>
+<p>Both <code>&lt;audio&gt;</code> and <code>&lt;video&gt;</code> expose a common HTMLMediaElement API, so the same JavaScript methods/properties work for either, enabling custom player controls.
+<pre><code class="language-javascript">const vid = document.querySelector(&quot;video&quot;);
+vid.play(); // start playback
+vid.pause(); // pause playback
+vid.currentTime = 30; // seek to 30 seconds
+vid.volume = 0.5; // set volume (0.0-1.0)
+vid.playbackRate = 1.5; // 1.5x speed
+vid.addEventListener(&quot;ended&quot;, () =&gt; {
+console.log(&quot;Playback finished&quot;);
+});
+</code></pre></p>
+<h3 id="66-accessibility-considerations">6.6 Accessibility Considerations<a class="anchor" href="#66-accessibility-considerations">#</a></h3>
+<p>Always provide captions/subtitles via <code>&lt;track&gt;</code> for video content, benefiting deaf/hard-of-hearing users and anyone viewing without sound.
+Avoid autoplay with unmuted sound disruptive and often blocked by browsers by default; if autoplay is used, pair it with muted.
+Provide a text transcript alternative for audio-only content where practical.
+Summary:
+HTML5's <code>&lt;audio&gt;</code> and <code>&lt;video&gt;</code> elements removed the dependency on browser plugins by building playback natively into the markup, with the <code>&lt;source&gt;</code> element handling format fallback and the <code>&lt;track&gt;</code> element handling accessibility through captions/subtitles.</p>
+<p>WEB PROGRAMMING
+JUSTIN MATHEW</p>
+  </main>
+</div>
+<div class="tools">
+  <button id="theme" title="Toggle light / dark">☾</button>
+  <button id="top" title="Back to top">↑</button>
+</div>
+<script>
+(function(){
+  var root=document.documentElement, key='minotes-theme';
+  var saved=localStorage.getItem(key);
+  var prefers=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';
+  root.setAttribute('data-theme', saved || prefers);
+
+  var btn=document.getElementById('theme');
+  function sync(){ if(btn) btn.textContent = root.getAttribute('data-theme')==='dark' ? '\u2600' : '\u263E'; }
+  sync();
+  if(btn) btn.addEventListener('click',function(){
+    var next = root.getAttribute('data-theme')==='dark' ? 'light' : 'dark';
+    root.setAttribute('data-theme', next); localStorage.setItem(key,next); sync();
+  });
+
+  var bar=document.getElementById('progress');
+  if(bar) addEventListener('scroll',function(){
+    var h=document.documentElement.scrollHeight-innerHeight;
+    bar.style.width=(h>0?(scrollY/h*100):0)+'%';
+  },{passive:true});
+
+  document.querySelectorAll('pre').forEach(function(pre){
+    var b=document.createElement('button');
+    b.className='copy'; b.textContent='copy';
+    b.addEventListener('click',function(){
+      var t=pre.querySelector('code'); var txt=t?t.innerText:pre.innerText;
+      navigator.clipboard.writeText(txt).then(function(){
+        b.textContent='copied'; setTimeout(function(){b.textContent='copy';},1200);
+      });
+    });
+    pre.appendChild(b);
+  });
+
+  document.querySelectorAll('main table').forEach(function(t){
+    if(t.parentElement.classList.contains('table-scroll')) return;
+    var w=document.createElement('div'); w.className='table-scroll';
+    t.parentNode.insertBefore(w,t); w.appendChild(t);
+  });
+
+  var links=[].slice.call(document.querySelectorAll('.sidebar a[href^="#"]'));
+  var map={}; links.forEach(function(a){ map[a.getAttribute('href').slice(1)]=a; });
+  var heads=[].slice.call(document.querySelectorAll('main h2[id], main h3[id]'));
+  if('IntersectionObserver' in window && heads.length){
+    var obs=new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if(!e.isIntersecting) return;
+        links.forEach(function(a){a.classList.remove('active');});
+        var a=map[e.target.id]; if(a){a.classList.add('active');}
+      });
+    },{rootMargin:'-10% 0px -75% 0px'});
+    heads.forEach(function(h){obs.observe(h);});
+  }
+
+  var top=document.getElementById('top');
+  if(top) top.addEventListener('click',function(){ scrollTo({top:0,behavior:'smooth'}); });
+})();
+</script>
+</body>
+</html>

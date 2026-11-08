@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>📝 20CST461 Web Programming — Revision Notes (append-only) · Web Programming</title>
+<style>
+:root{
+  --bg:#fbfaf8; --panel:#ffffff; --ink:#232120; --muted:#5f5a53; --line:#e6e1da;
+  --accent:#7a4fd0; --accent-soft:#f1ecfb; --code-bg:#f5f2ee; --code-ink:#2b2a28;
+  --warn-bg:#fff8e6; --warn-line:#f0d9a0;
+  --sans:"Inter","Segoe UI",system-ui,-apple-system,"Noto Sans",sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,"SF Mono",Menlo,Consolas,"Fira Code",monospace;
+}
+html[data-theme="dark"]{
+  --bg:#141317; --panel:#1b1a20; --ink:#e8e4de; --muted:#a8a199; --line:#2f2c36;
+  --accent:#b79cf5; --accent-soft:#241f33; --code-bg:#22202a; --code-ink:#e8e4de;
+  --warn-bg:#2a2417; --warn-line:#4a3d22;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0; background:var(--bg); color:var(--ink); font-family:var(--sans);
+  font-size:16.5px; line-height:1.72; -webkit-font-smoothing:antialiased;
+}
+#progress{position:fixed;top:0;left:0;height:3px;width:0;background:var(--accent);z-index:50;transition:width .1s linear}
+
+.wrap{display:flex;align-items:flex-start;min-height:100vh}
+.sidebar{
+  position:sticky;top:0;height:100vh;width:300px;flex:0 0 300px;overflow-y:auto;
+  padding:26px 20px 60px;border-right:1px solid var(--line);background:var(--panel);
+}
+.sidebar h1{font-size:15px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);
+  margin:0 0 4px;font-weight:600}
+.sidebar .sub{font-size:12.5px;color:var(--muted);margin:0 0 18px}
+.sidebar nav{font-size:14px}
+.sidebar .toc>ul{padding-left:0}
+.sidebar ul{list-style:none;margin:0;padding-left:12px}
+.sidebar ul ul{border-left:1px solid var(--line);margin-left:4px;padding-left:10px}
+.sidebar li{margin:3px 0}
+.sidebar a{color:var(--ink);text-decoration:none;display:block;padding:3px 8px;border-radius:8px;
+  line-height:1.35;transition:background .12s,color .12s}
+.sidebar a:hover{background:var(--accent-soft);color:var(--accent)}
+.sidebar a.active{background:var(--accent-soft);color:var(--accent);font-weight:600}
+.sidebar .home{display:inline-flex;align-items:center;gap:6px;margin-bottom:16px;font-size:13.5px;
+  color:var(--muted);text-decoration:none;border:1px solid var(--line);padding:5px 10px;border-radius:999px}
+.sidebar .home:hover{color:var(--accent);border-color:var(--accent)}
+
+main{flex:1;min-width:0;padding:46px 56px 120px;max-width:980px;margin:0 auto}
+.doc-head{border-bottom:1px solid var(--line);padding-bottom:18px;margin-bottom:34px}
+.doc-head .kicker{font-size:12.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);
+  font-weight:700;margin-bottom:8px}
+.doc-head .meta{font-size:13.5px;color:var(--muted)}
+
+h1,h2,h3,h4{line-height:1.25;font-weight:700;letter-spacing:-.01em}
+h1{font-size:2.05rem;margin:.2em 0 .5em}
+h2{font-size:1.55rem;margin:2.4em 0 .7em;padding-bottom:.35em;border-bottom:1px solid var(--line)}
+h3{font-size:1.2rem;margin:1.9em 0 .55em}
+h4{font-size:1.03rem;margin:1.5em 0 .45em;color:var(--muted)}
+h2 .anchor,h3 .anchor{opacity:0;margin-left:.35em;font-size:.8em;color:var(--muted);text-decoration:none}
+h2:hover .anchor,h3:hover .anchor{opacity:1}
+p{margin:.75em 0}
+a{color:var(--accent);text-underline-offset:2px}
+strong{font-weight:650}
+hr{border:0;border-top:1px solid var(--line);margin:2.6em 0}
+ul,ol{margin:.7em 0;padding-left:1.4em}
+li{margin:.3em 0}
+li>ul,li>ol{margin:.25em 0}
+blockquote{
+  margin:1.3em 0;padding:12px 18px;background:var(--warn-bg);border-left:3px solid var(--warn-line);
+  border-radius:0 10px 10px 0;color:var(--ink)
+}
+blockquote p{margin:.3em 0}
+
+code{font-family:var(--mono);font-size:.87em;background:var(--code-bg);color:var(--code-ink);
+  padding:.15em .38em;border-radius:6px;border:1px solid var(--line);
+  box-decoration-break:clone;-webkit-box-decoration-break:clone;overflow-wrap:anywhere}
+pre{position:relative;background:var(--code-bg);border:1px solid var(--line);border-radius:12px;
+  padding:16px 18px;overflow-x:auto;margin:1.1em 0}
+pre code{background:none;border:0;padding:0;font-size:13.6px;line-height:1.62;white-space:pre}
+.copy{position:absolute;top:8px;right:8px;font:600 11px/1 var(--sans);color:var(--muted);
+  background:var(--panel);border:1px solid var(--line);border-radius:7px;padding:5px 8px;cursor:pointer;
+  opacity:0;transition:opacity .15s}
+pre:hover .copy{opacity:1}
+.copy:hover{color:var(--accent);border-color:var(--accent)}
+
+.table-scroll{overflow-x:auto;margin:1.3em 0;border:1px solid var(--line);border-radius:12px;background:var(--panel)}
+table{border-collapse:collapse;width:100%;font-size:14.6px}
+th,td{padding:9px 13px;text-align:left;vertical-align:top;border-bottom:1px solid var(--line)}
+th{background:var(--accent-soft);font-weight:650;font-size:13px;letter-spacing:.02em;
+  position:sticky;top:0;backdrop-filter:blur(4px)}
+tr:last-child td{border-bottom:0}
+tbody tr:nth-child(even){background:color-mix(in srgb,var(--panel) 60%,var(--bg))}
+tbody tr:hover{background:var(--accent-soft)}
+
+.tools{position:fixed;right:22px;bottom:22px;display:flex;flex-direction:column;gap:8px;z-index:40}
+.tools button{width:42px;height:42px;border-radius:12px;border:1px solid var(--line);background:var(--panel);
+  color:var(--ink);cursor:pointer;font-size:16px;box-shadow:0 4px 14px rgba(0,0,0,.10)}
+.tools button:hover{color:var(--accent);border-color:var(--accent)}
+@media (max-width:1000px){
+  .wrap{display:block}
+  .sidebar{position:static;width:auto;height:auto;border-right:0;border-bottom:1px solid var(--line)}
+  .sidebar nav{max-height:40vh;overflow:auto}
+  main{padding:28px 20px 100px}
+}
+@media print{
+  .sidebar,.tools,#progress,.copy{display:none!important}
+  body{background:#fff;color:#000;font-size:11pt}
+  main{padding:0;max-width:none}
+  h2{break-after:avoid} pre,table,blockquote{break-inside:avoid}
+  a{color:#000;text-decoration:none}
+}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+<div class="wrap">
+  <aside class="sidebar">
+    <a class="home" href="index.html">← Web Programming</a>
+    <h1>Revision log</h1>
+    <p class="sub">Append-only session notes</p>
+    <nav class="toc"><div class="toc">
+<ul>
+<li><a href="#part-1-deep-dive">PART 1 — DEEP DIVE</a><ul>
+<li><a href="#11-what-php-actually-is-3l2753">1.1 What PHP actually is (3:L27–53)</a></li>
+<li><a href="#12-the-five-syntax-rules-that-govern-every-single-line-3l84102">1.2 The five syntax rules that govern every single line (3:L84–102)</a></li>
+<li><a href="#13-data-types-3l113124">1.3 Data types (3:L113–124)</a></li>
+<li><a href="#14-output-65-vs-66-vs-67-3l91">1.4 Output: <code>echo</code> vs <code>print</code> vs <code>&lt;?=</code> (3:L91)</a></li>
+<li><a href="#15-string-syntax-single-vs-double-quotes-this-is-not-spelled-out-on-your-slides-but-it-is-a-standard-exam-question-and-it-changes-the-output-of-nearly-every-program">1.5 String syntax — single vs double quotes (⭐ this is not spelled out on your slides, but it is a standard exam question and it changes the output of nearly every program)</a></li>
+<li><a href="#16-converting-between-data-types-3l136153">1.6 Converting between data types (3:L136–153)</a></li>
+<li><a href="#17-operators-expressions-3l166184">1.7 Operators &amp; expressions (3:L166–184)</a></li>
+<li><a href="#18-comparison-239-vs-240-the-decks-own-most-exam-relevant-quirk-3l197215">1.8 Comparison: <code>==</code> vs <code>===</code> — the deck's own "most exam-relevant quirk" (3:L197–215)</a></li>
+<li><a href="#19-flow-control-functions-3l227243">1.9 Flow control functions (3:L227–243)</a></li>
+</ul>
+</li>
+<li><a href="#part-2-exam-kit-all-questions-this-chunk-can-produce">PART 2 — EXAM KIT (all questions this chunk can produce)</a><ul>
+<li><a href="#a-3-mark-skeletons">A. 3-mark skeletons</a></li>
+<li><a href="#b-14-mark-program-skeleton-write-a-simple-php-program-that-the-shape-to-reuse-in-every-m3-program">B. 14-mark program skeleton — "write a simple PHP program that …" (the shape to reuse in every M3 program)</a></li>
+<li><a href="#c-predict-the-output-method-this-is-the-biggest-code-question-format-a-method-not-luck">C. Predict-the-output method (this is the biggest code-question format — a method, not luck)</a></li>
+<li><a href="#d-memorize-verbatim-night-before-list-for-this-chunk">D. 🔴 Memorize verbatim (night-before list for this chunk)</a></li>
+<li><a href="#e-diagram-pointers">E. 📐 Diagram pointers</a></li>
+<li><a href="#f-php-vs-c-differences-c-is-the-pre-requisite-so-compare-with-c-is-a-natural-exam-ask">F. PHP-vs-C differences (C is the pre-requisite, so "compare with C" is a natural exam ask)</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</nav>
+  </aside>
+  <main>
+    <div class="doc-head">
+      <div class="kicker">20CST461 · Web Programming</div>
+      <div class="meta">Append-only session notes · rendered from wp_revision.md</div>
+    </div>
+    <h1 id="20cst461-web-programming-revision-notes-append-only">📝 20CST461 Web Programming — Revision Notes (append-only)</h1>
+<blockquote>
+<p><strong>What this file is:</strong> the durable record of every teaching session — PART 1 Deep Dive (from scratch), PART 2 Exam Kit (skeletons + memorize lists), PART 3 worked code answers, and every correction from a graded drill. <strong>Haze reads this; the agent never reads it back into context.</strong> Newest session at the bottom.</p>
+<p>Facts marked ✅ <em>(3v4l)</em> were <strong>executed on a real PHP interpreter</strong> (8.2/8.3) — trust them over any memory or slide. Unmarked = directly from the deck.</p>
+</blockquote>
+<hr />
+<h1 id="session-1-module-3-hours-12-what-php-is-and-the-syntax-layer-under-everything">SESSION 1 — Module 3, hours 1–2: what PHP is, and the syntax layer under everything</h1>
+<p>Covers <code>module3.md</code> L27–246 (M3.1–M3.6 in the tracker).</p>
+<hr />
+<h2 id="part-1-deep-dive">PART 1 — DEEP DIVE<a class="anchor" href="#part-1-deep-dive">#</a></h2>
+<h3 id="11-what-php-actually-is-3l2753">1.1 What PHP actually is (3:L27–53)<a class="anchor" href="#11-what-php-actually-is-3l2753">#</a></h3>
+<p><strong>One-line story:</strong> a web page that never changes is a <em>poster</em>; PHP is the <em>kitchen</em> — the visitor orders (a URL), and the kitchen cooks a fresh plate (HTML) per order. The visitor never sees the kitchen.</p>
+<ul>
+<li><strong>Static page:</strong> the <code>.html</code> file on the server <em>is</em> the page. Every visitor gets byte-identical bytes. Written once, same forever.</li>
+<li><strong>Dynamic page:</strong> the server holds a <em>program</em>, runs it fresh on every single request, and sends out whatever HTML that program printed <em>this</em> time. Same file, different output per request — different user, different time, different database rows.</li>
+<li><strong>Server-side scripting:</strong> the program runs <strong>on the web server, before anything reaches the browser</strong>. This is the whole point: the user's browser receives <em>only plain HTML</em>. If the script queries the database, the password is never in the page. If the script chooses which rows to show, the user can't peek at the rows you didn't send.</li>
+<li>Contrast (Module II): <strong>JavaScript is client-side</strong> — it ships to the browser as source and runs there. PHP is the mirror image: it stays home and only its <em>output</em> travels.</li>
+<li><strong>The name:</strong> PHP = "PHP: Hypertext Preprocessor" (a recursive acronym — the first P stands for PHP itself). "Hypertext preprocessor" literally = <em>it processes text before it becomes hypertext/HTML</em>.</li>
+<li><strong>File extension <code>.php</code></strong>; PHP code is <strong>mixed directly into HTML</strong> inside <code>&lt;?php ... ?&gt;</code> blocks. The server processes those blocks; the plain HTML around them is passed through untouched.</li>
+<li><strong>Why it's popular (3:L33–35):</strong> free and open-source; runs on virtually any hosting platform; huge ecosystem (WordPress, Laravel); purpose-built for dynamic pages and talking to databases. It's the <strong>P in LAMP</strong> (Linux, Apache, MySQL, PHP).</li>
+</ul>
+<p><strong>The request–response cycle</strong> (diagram 3:L57) — learn it as 5 boxes:</p>
+<p><pre><code>Browser  --requests page.php--&gt;  Web Server  --&gt;  PHP Engine runs the script
+                                                      |
+                                              MySQL Database (if the script queries it)
+                                                      |
+        &lt;--plain HTML sent back to Browser&lt;-----------+
+</code></pre></p>
+<p>The browser <strong>never sees the <code>.php</code> source</strong> — only whatever HTML the script decided to output for <em>this</em> request (3:L72).</p>
+<blockquote>
+<p><strong>Say this if grilled:</strong> "PHP is a server-side scripting language: it executes on the web server, may talk to a database, and the client receives only the generated HTML — never the source."</p>
+</blockquote>
+<h3 id="12-the-five-syntax-rules-that-govern-every-single-line-3l84102">1.2 The five syntax rules that govern every single line (3:L84–102)<a class="anchor" href="#12-the-five-syntax-rules-that-govern-every-single-line-3l84102">#</a></h3>
+<p>Every PHP line you will ever write obeys these. Get these into your fingers and the rest is vocabulary.</p>
+<p><strong>Rule 1 — the tags.</strong> <code>&lt;?php ... ?&gt;</code> marks where PHP begins and ends. Anything outside them is HTML and is passed straight through.
+<pre><code class="language-php">&lt;?php
+echo &quot;inside PHP&quot;;      // the server interprets this
+?&gt;
+&lt;h1&gt;plain HTML — the server leaves this alone&lt;/h1&gt;
+</code></pre>
+- A file may open and close <code>&lt;?php ?&gt;</code> <strong>many times</strong>, interleaving PHP and HTML. That is exactly how the Module 4 dynamic page works.
+- <strong>Short echo tag:</strong> <code>&lt;?= $row[&quot;name&quot;] ?&gt;</code> is a shorthand for <code>&lt;?php echo $row[&quot;name&quot;]; ?&gt;</code>. Only for echoing one value.
+- ⚠️ <strong>No output may leave the server before <code>setcookie()</code> / <code>session_start()</code></strong> — headers must be sent first (Module 4).</p>
+<p><strong>Rule 2 — variables start with <code>$</code> and need no type keyword.</strong> <code>$college = &quot;Saintgits&quot;; $year = 2026;</code></p>
+<p><strong>Rule 3 — dynamically (loosely) typed.</strong> "int" is not a thing you <em>declare</em>; it's a label describing whatever value currently sits in the box. <code>$x = &quot;5&quot;;</code> then <code>$x = 5;</code> is legal — same variable, now a different type. Type is decided <strong>at runtime</strong>.</p>
+<p><strong>Rule 4 — statements end with <code>;</code></strong> (same as C/Java). Missing <code>;</code> is the #1 beginner error. Blocks <code>{ }</code> and <code>if (...)</code> lines do <strong>not</strong> get a semicolon.</p>
+<p><strong>Rule 5 — output goes out with <code>echo</code> / <code>print</code>,</strong> and it becomes part of the HTML response. <code>echo</code> is not "printing to a console" — it is <em>appending to the page that is being built</em>.</p>
+<p>The first program (3:L94–102), annotated:
+<pre><code class="language-php">&lt;?php
+$college = &quot;Saintgits&quot;;     // string
+$year    = 2026;            // int
+$fee     = 49999.50;        // float
+echo &quot;Welcome to $college &lt;br&gt;&quot;;   // double quotes → $college is substituted
+echo &quot;Year: &quot; . $year;             // . joins string + number into &quot;Year: 2026&quot;
+?&gt;
+</code></pre>
+Notice the two <em>different</em> ways of getting a variable into output: <strong>inside double quotes it's interpolated</strong>, <strong>outside you glue it with <code>.</code></strong>. Both appear on every slide in this module.</p>
+<h3 id="13-data-types-3l113124">1.3 Data types (3:L113–124)<a class="anchor" href="#13-data-types-3l113124">#</a></h3>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Example</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>int</code></td>
+<td><code>$age = 21;</code></td>
+<td>Whole numbers</td>
+</tr>
+<tr>
+<td><code>float</code> (a.k.a. <em>double</em>)</td>
+<td><code>$fee = 499.50;</code></td>
+<td>Decimal numbers</td>
+</tr>
+<tr>
+<td><code>string</code></td>
+<td><code>$name = &quot;Anu&quot;;</code></td>
+<td>Text, single or double quotes</td>
+</tr>
+<tr>
+<td><code>bool</code></td>
+<td><code>$active = true;</code></td>
+<td><code>true</code> / <code>false</code> (case-insensitive: <code>TRUE</code> works too)</td>
+</tr>
+<tr>
+<td><code>array</code></td>
+<td><code>$m = [88, 92];</code></td>
+<td>Ordered list <strong>or</strong> key-value map — the same type</td>
+</tr>
+<tr>
+<td><code>NULL</code></td>
+<td><code>$x = null;</code></td>
+<td>Explicitly "no value"</td>
+</tr>
+</tbody>
+</table>
+<p>Plus, for completeness: <code>object</code> (an instance of a class, M3.14) and <code>resource</code> (a connection handle like <code>$conn</code> in Module 4).</p>
+<p><strong>Inspecting types — the debugging pair (3:L124):</strong>
+<pre><code class="language-php">gettype($var)   // returns the type NAME as a string: &quot;integer&quot;, &quot;double&quot;, &quot;string&quot;, &quot;boolean&quot;, &quot;array&quot;, &quot;NULL&quot;
+var_dump($var)  // prints type AND value: string(6) &quot;Anu&quot;  → length in the string(bytes) form
+</code></pre>
+✅ <em>(3v4l)</em> <strong>Gotcha that trips people:</strong> <code>gettype(1.0)</code> returns <strong><code>&quot;double&quot;</code></strong>, not <code>&quot;float&quot;</code> — the float type's old name shows through in <code>gettype</code>/<code>is_double</code>. In <code>var_dump</code> the float type shows as <code>float(1000)</code> in PHP 8. Know both names = same type.
+✅ <em>(3v4l)</em> Type-checking functions: <code>is_int()</code>, <code>is_string()</code>, <code>is_array()</code>, <code>is_float()</code>, <code>is_bool()</code>, <code>is_null()</code> each return <code>true</code>/<code>false</code>.</p>
+<h3 id="14-output-65-vs-66-vs-67-3l91">1.4 Output: <code>echo</code> vs <code>print</code> vs <code>&lt;?=</code> (3:L91)<a class="anchor" href="#14-output-65-vs-66-vs-67-3l91">#</a></h3>
+<table>
+<thead>
+<tr>
+<th></th>
+<th><code>echo</code></th>
+<th><code>print</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Arguments</td>
+<td>one or more, comma-separated: <code>echo &quot;a&quot;, &quot;b&quot;;</code></td>
+<td>exactly one: <code>print &quot;a&quot;;</code></td>
+</tr>
+<tr>
+<td>Returns a value</td>
+<td><strong>nothing</strong> (void) — so it can't be used inside an expression</td>
+<td>✅ returns <strong><code>1</code></strong> <em>(3v4l)</em> — so <code>$r = print &quot;x&quot;;</code> sets <code>$r</code> to 1</td>
+</tr>
+<tr>
+<td>Speed</td>
+<td>marginally faster (no return value, one construct fewer)</td>
+<td>slower</td>
+</tr>
+<tr>
+<td>Both</td>
+<td>language constructs, not functions → <strong>parentheses optional</strong>: <code>echo(&quot;hi&quot;)</code> and <code>echo &quot;hi&quot;</code> both work</td>
+<td>same</td>
+</tr>
+</tbody>
+</table>
+<p><pre><code class="language-php">echo &quot;A&quot;, &quot;B&quot;, &quot;C&quot;;          // ABC
+$r = print(&quot;E: &quot;);           // prints &quot;E: &quot; and returns 1  ✅ (3v4l: |1|)
+echo &quot;F:&quot;, 1, &quot; &quot;, 2;        // F:1 2
+</code></pre>
+- <code>echo</code> can output <strong>numbers, strings, booleans</strong> — anything convertable to a string. <code>(string)true</code> → <code>&quot;1&quot;</code>, <code>(string)false</code> → <code>&quot;&quot;</code> (empty!) ✅ <em>(3v4l)</em>. A classic: <code>echo false;</code> prints <strong>nothing</strong>.
+- The short echo tag <code>&lt;?= $x ?&gt;</code> does exactly <code>echo $x;</code>.</p>
+<h3 id="15-string-syntax-single-vs-double-quotes-this-is-not-spelled-out-on-your-slides-but-it-is-a-standard-exam-question-and-it-changes-the-output-of-nearly-every-program">1.5 String syntax — single vs double quotes (⭐ this is not spelled out on your slides, but it is a standard exam question and it changes the output of nearly every program)<a class="anchor" href="#15-string-syntax-single-vs-double-quotes-this-is-not-spelled-out-on-your-slides-but-it-is-a-standard-exam-question-and-it-changes-the-output-of-nearly-every-program">#</a></h3>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Double quotes <code>&quot;...&quot;</code></th>
+<th>Single quotes <code>&#x27;...&#x27;</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Variable interpolation</td>
+<td>✅ <strong>yes</strong> — <code>&quot;Hi $name&quot;</code> substitutes</td>
+<td>❌ <strong>no</strong> — <code>&#x27;Hi $name&#x27;</code> prints the literal characters <code>$name</code></td>
+</tr>
+<tr>
+<td>Escape sequences</td>
+<td>✅ interprets <code>\n</code> newline, <code>\t</code> tab, <code>\\</code> backslash, <code>\&quot;</code> quote, <code>\$</code> literal dollar</td>
+<td>only <code>\\</code> and <code>\&#x27;</code> mean anything; <code>&#x27;\n&#x27;</code> prints <code>\n</code> literally</td>
+</tr>
+<tr>
+<td>Speed</td>
+<td>marginally slower (the string is parsed for variables)</td>
+<td>marginally faster — "what you type is what you get"</td>
+</tr>
+<tr>
+<td>Use when</td>
+<td>you want interpolation/escapes</td>
+<td>you want the string <em>verbatim</em> (HTML/JS with <code>$</code>, regex patterns, SQL)</td>
+</tr>
+</tbody>
+</table>
+<p><pre><code class="language-php">$college = &quot;Saintgits&quot;;
+echo &quot;A: Welcome to $college&quot;;   // A: Welcome to Saintgits   ✅ (3v4l)
+echo &#x27;B: Welcome to $college&#x27;;   // B: Welcome to $college    ✅ (3v4l)  ← literal!
+echo &#x27;D: &#x27; . $college . &#x27;\&#x27;s fee&#x27;;  // D: Saintgits&#x27;s fee      ✅ (3v4l) escaping \&#x27;
+</code></pre></p>
+<p><strong>Interpolation rules you must know exactly</strong> ✅ <em>(3v4l)</em>:
+1. <strong>Simple</strong> syntax: <code>&quot;$name&quot;</code> or <code>&quot;$name more text&quot;</code> — a <code>$</code> plus a variable name. To glue a letter/digit straight on, use <strong>complex syntax with braces</strong>: <code>&quot;{$college}2026&quot;</code> → <code>Saintgits2026</code> (without braces <code>&quot;$college2026&quot;</code> looks for a variable literally named <code>$college2026</code>).
+2. <strong>Array elements need braces inside a string:</strong>
+   - <code>&quot;$arr[0]&quot;</code> → ✅ works for a plain numeric index.
+   - <code>&quot;$arr[&#x27;key&#x27;]&quot;</code> (or any string key) → ❌ <strong>error</strong> — <code>Warning: Undefined array key</code> ✅ <em>(3v4l)</em>. You <strong>must</strong> write <code>&quot;{$arr[&#x27;key&#x27;]}&quot;</code>.
+   - <strong>Safe rule to memorize: always use <code>{$arr[&#x27;key&#x27;]}</code>.</strong> It works in every case.
+3. <strong>Object properties</strong> interpolate without braces if simple (<code>&quot;$obj-&gt;name&quot;</code>) but braces are always safe: <code>&quot;{$obj-&gt;name}&quot;</code>.
+4. <strong>Variable variables</strong> (rare, but it's on slide 3:L86 as a <code>$</code> rule): <code>$college = &quot;x&quot;; echo ${&quot;college&quot;};</code> ✅ prints the value of <code>$college</code>.</p>
+<h3 id="16-converting-between-data-types-3l136153">1.6 Converting between data types (3:L136–153)<a class="anchor" href="#16-converting-between-data-types-3l136153">#</a></h3>
+<p><strong>Why it exists:</strong> PHP converts types <em>automatically</em> (loose typing) — but automatic conversion follows rules you may not have meant, so <em>explicit</em> casting keeps behaviour predictable. The deck's words: "PHP converts types automatically in many contexts (loose typing), but explicit casting keeps behaviour predictable."</p>
+<p><strong>Two mechanisms:</strong></p>
+<ol>
+<li><strong>Casts</strong> — put the target type in parentheses in front of the value. <strong>Does not change the original variable</strong>, it produces a converted value (for the expression at hand):
+   <code>php
+   (int)  (float)  (string)  (bool)  (array)
+   $b = (int)$a + 5;          // $a unchanged</code></li>
+<li><strong>Conversion functions</strong> — same job, function syntax:
+   <code>php
+   intval($x)  floatval($x)  strval($x)  boolval($x)</code></li>
+<li><strong><code>settype($var, &quot;integer&quot;)</code></strong> — different in kind: converts the variable <strong>in place</strong> (the real variable changes) ✅ <em>(3v4l: returns true and $x becomes int 5)</em>.</li>
+</ol>
+<p><strong>Type-checking companions:</strong> <code>is_int()</code>, <code>is_string()</code>, <code>is_array()</code>, <code>is_float()</code>, <code>is_bool()</code> — return a bool.</p>
+<p><strong>The conversion rules (all verified ✅ 3v4l):</strong></p>
+<table>
+<thead>
+<tr>
+<th>Expression</th>
+<th>Result</th>
+<th>Why</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>(int)true</code></td>
+<td><code>1</code></td>
+<td>bools → 1/0</td>
+</tr>
+<tr>
+<td><code>(int)false</code></td>
+<td><code>0</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>(int)null</code></td>
+<td><code>0</code></td>
+<td>NULL → 0</td>
+</tr>
+<tr>
+<td><code>(int)[]</code> (empty array)</td>
+<td><code>0</code></td>
+<td>arrays → 1 if non-empty, else 0</td>
+</tr>
+<tr>
+<td><code>(int)&quot;12abc&quot;</code></td>
+<td><code>12</code></td>
+<td>leading numeric part is taken; trailing junk ignored</td>
+</tr>
+<tr>
+<td><code>(int)&quot;499.99abc&quot;</code></td>
+<td><code>499</code></td>
+<td>truncates toward zero, no rounding</td>
+</tr>
+<tr>
+<td><code>(string)true</code></td>
+<td><code>&quot;1&quot;</code></td>
+<td>⭐ true becomes "1"</td>
+</tr>
+<tr>
+<td><code>(string)false</code></td>
+<td><code>&quot;&quot;</code></td>
+<td>⭐ <strong>false becomes the EMPTY string</strong></td>
+</tr>
+<tr>
+<td><code>(float)&quot;1e3&quot;</code></td>
+<td><code>1000.0</code></td>
+<td>scientific notation parses</td>
+</tr>
+<tr>
+<td><code>(bool)&quot;0&quot;</code></td>
+<td><code>false</code></td>
+<td>⭐⭐ the string <code>&quot;0&quot;</code> is <strong>falsy</strong></td>
+</tr>
+<tr>
+<td><code>(bool)&quot;false&quot;</code></td>
+<td><code>true</code></td>
+<td>⭐⭐ any non-empty string except <code>&quot;0&quot;</code> is <strong>truthy</strong> — <code>&quot;false&quot;</code> is TRUE</td>
+</tr>
+<tr>
+<td><code>(bool)&quot;&quot;</code></td>
+<td><code>false</code></td>
+<td>empty string falsy</td>
+</tr>
+<tr>
+<td><code>(bool)0.0</code>, <code>(bool)null</code>, <code>(bool)[]</code></td>
+<td><code>false</code></td>
+<td>the falsy set</td>
+</tr>
+</tbody>
+</table>
+<p><strong>The complete FALSY list (memorize — it decides every <code>if</code> you write):</strong>
+<code>false</code> · <code>0</code> (int) · <code>0.0</code> (float) · <code>&quot;&quot;</code> (empty string) · <code>&quot;0&quot;</code> (the string zero!) · <code>null</code> · <code>[]</code> (empty array) · <code>0</code>-valued variables. <strong>Everything else is truthy</strong>, including <code>&quot;0.0&quot;</code>, <code>&quot;false&quot;</code>, <code>-1</code>, and <code>[]</code>-containing elements. <code>(bool)&quot;0.0&quot;</code> is <strong>true</strong> ✅ (only the <em>string</em> <code>&quot;0&quot;</code> is falsy, not <code>&quot;0.0&quot;</code>).</p>
+<p><strong>Automatic (implicit) conversion in arithmetic:</strong> <code>&quot;10&quot; + 5</code> → <code>15</code> ✅; <code>&quot;10abc&quot; + 5</code> → <code>15</code> <strong>plus a Warning</strong> (<code>A non-numeric value encountered</code>) ✅ in PHP 8 — in PHP 7 that warning didn't exist and old code silently produced 15. So: numeric strings convert cleanly, partially-numeric strings convert + warn.</p>
+<blockquote>
+<p><strong>Say this if grilled:</strong> "PHP is loosely typed, so it converts automatically at runtime; explicit casting — <code>(int)</code>, <code>intval()</code>, <code>settype()</code> — is used to make the conversion intentional and the behaviour predictable."</p>
+</blockquote>
+<h3 id="17-operators-expressions-3l166184">1.7 Operators &amp; expressions (3:L166–184)<a class="anchor" href="#17-operators-expressions-3l166184">#</a></h3>
+<ul>
+<li><strong>Arithmetic:</strong> <code>+</code> <code>-</code> <code>*</code> <code>/</code> <code>%</code> (modulus, remainder) <code>**</code> (exponent). Division <code>/</code> always returns a <strong>float</strong> if not exact (<code>10/4</code> → <code>2.5</code>); <code>intdiv(7,3)</code> → <code>2</code> for integer division ✅. <code>%</code> takes the <strong>sign of the dividend like C</strong>: <code>7 % -3</code> → <code>1</code>, <code>-7 % 3</code> → <code>-1</code> ✅.</li>
+<li><strong><code>**</code> is right-associative:</strong> <code>2 ** 3 ** 2</code> = <code>2 ** (3 ** 2)</code> = <code>2**9</code> = <strong>512</strong> ✅ (not 64).</li>
+<li><strong>Assignment:</strong> <code>=</code> <code>+=</code> <code>-=</code> <code>*=</code> <code>/=</code> <code>%=</code> and the string one <code>.=</code> ("append to the string").</li>
+<li><strong>String concatenation is <code>.</code> (dot), NOT <code>+</code></strong> (3:L168). This is the single most common syntax transfer error from C/Java. <code>+</code> on strings does <em>arithmetic</em> — <code>&quot;5&quot; + 5</code> → <code>10</code>; <code>&quot;.&quot; </code> glues — <code>&quot;5&quot; . 5</code> → <code>&quot;55&quot;</code> ✅. The deck's example: <code>$msg = &quot;Total: &quot;; $msg .= (5 + 3);</code> → <code>&quot;Total: 8&quot;</code>.</li>
+<li><strong>Expression</strong> = "anything that produces a value" — a literal, a variable, <code>5+3</code>, a function call, even <code>$x = 7</code> (assignment is an expression returning 7).</li>
+</ul>
+<p><strong>Precedence trap:</strong> <code>.</code> and <code>+</code>/<code>-</code> sit at the <strong>same precedence level and evaluate left-to-right</strong> ✅ <em>(3v4l)</em>:
+<pre><code class="language-php">&quot;1&quot; . &quot;2&quot; + 3      →  (&quot;1&quot;.&quot;2&quot;) = &quot;12&quot;  →  &quot;12&quot; + 3 = 15  →  string(2) &quot;15&quot;   ✅
+</code></pre>
+Write parentheses when mixing <code>.</code> with arithmetic — the examiner doesn't either, and that is exactly why it shows up as an output-prediction question.</p>
+<table>
+<thead>
+<tr>
+<th>Operator group (high → low)</th>
+<th>Operators</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Arithmetic / exponent</td>
+<td><code>**</code> then <code>* / %</code> then <code>+ -</code></td>
+</tr>
+<tr>
+<td>Concatenation</td>
+<td><code>.</code> — same level as <code>+ -</code>, left-to-right</td>
+</tr>
+<tr>
+<td>Comparison</td>
+<td><code>&lt; &lt;= &gt; &gt;=</code></td>
+</tr>
+<tr>
+<td>Equality (non-associative)</td>
+<td><code>==</code> <code>!=</code> <code>===</code> <code>!==</code> <code>&lt;=&gt;</code></td>
+</tr>
+<tr>
+<td>Logical and</td>
+<td><code>&amp;&amp;</code> (then <code>\|\|</code>)</td>
+</tr>
+<tr>
+<td>Assignment</td>
+<td><code>=</code> <code>.=</code> <code>+=</code> … (lowest, right-associative)</td>
+</tr>
+</tbody>
+</table>
+<p>Also on the list: <code>??</code> (null-coalescing, "use this if the left side is null/missing") — you'll use it constantly in form handling: <code>$_POST[&quot;name&quot;] ?? &quot;&quot;</code>.</p>
+<h3 id="18-comparison-239-vs-240-the-decks-own-most-exam-relevant-quirk-3l197215">1.8 Comparison: <code>==</code> vs <code>===</code> — the deck's own "most exam-relevant quirk" (3:L197–215)<a class="anchor" href="#18-comparison-239-vs-240-the-decks-own-most-exam-relevant-quirk-3l197215">#</a></h3>
+<ul>
+<li><code>==</code> <strong>loose equality</strong> — converts types before comparing ("the values are equal after juggling")</li>
+<li><code>===</code> <strong>strict equality</strong> — checks <strong>value AND type</strong>, no conversion ("identical")</li>
+<li><code>!=</code> loose inequality, <code>!==</code> strict inequality, <code>&lt; &gt; &lt;= &gt;=</code> relational, <code>&lt;=&gt;</code> the three-way/spaceship operator (<strong>returns <code>-1</code>, <code>0</code>, or <code>1</code></strong> ✅)</li>
+<li><code>&amp;&amp;</code> and, <code>||</code> or, <code>!</code> not — combine conditions (<code>and</code>/<code>or</code> exist as low-precedence aliases; use <code>&amp;&amp;</code>/<code>||</code>).</li>
+</ul>
+<p><pre><code class="language-php">var_dump(&quot;5&quot; == 5);      // true    (the string is converted to 5)        ✅
+var_dump(&quot;5&quot; === 5);     // false   (string vs int — different types)     ✅
+var_dump(0 == &quot;abc&quot;);    // false   ← in PHP 8!  (was true in PHP ≤7)    ✅
+var_dump(&quot;abc&quot; == 0);    // false   ← in PHP 8!  (was true in PHP ≤7)    ✅
+var_dump(10 == &quot;1e1&quot;);   // true    (both are numeric → 10 vs 10.0)      ✅
+var_dump(0.1 + 0.2 == 0.3); // false (floating-point rounding!)          ✅
+</code></pre></p>
+<p><strong>How PHP 8 compares (the rules behind the table):</strong>
+1. <strong>bool vs anything</strong> → convert the other side to bool, compare.
+2. <strong>null vs anything</strong> → convert both to bool (<code>null == false</code> → <code>true</code> ✅, <code>&quot;&quot; == null</code> → <code>true</code> ✅, <code>[] == false</code> → <code>true</code> ✅).
+3. <strong>number vs number</strong> → compare numerically.
+4. <strong>number vs numeric string</strong> (<code>&quot;5&quot;</code>, <code>&quot;1e1&quot;</code>, <code>&quot; 5 &quot;</code>) → compare numerically → so <code>&quot;5&quot; == 5</code> is <code>true</code>.
+5. <strong>number vs NON-numeric string</strong> (PHP 8) → <strong>convert the number to a string and compare as strings</strong> → <code>0 == &quot;abc&quot;</code> is <code>false</code>. (PHP 7 did the reverse — converted the string to <code>0</code> — which is why <code>0 == &quot;abc&quot;</code> was famously <code>true</code> before PHP 8. Written in the deck as "false (PHP 8+)" — <strong>write the PHP 8 answer and say why</strong>.)
+6. <strong>string vs string</strong> → if <strong>both</strong> are numeric strings, compare numerically (<code>&quot;10&quot; == &quot;1e1&quot;</code> → true ✅); otherwise compare as ordinary strings, <strong>byte by byte, case-sensitively</strong> (<code>&quot;abc&quot; &lt; &quot;abd&quot;</code> → true ✅).
+7. <strong>array vs array</strong> → same size + same key/value pairs (<code>==</code>), or same order too (<code>===</code>).</p>
+<p><strong>Why this matters in real code:</strong> <code>==</code> with user input is a bug factory — <code>if ($pin == 0)</code> is <code>true</code> for the input <code>&quot;abc&quot;</code> in PHP 7. <strong>Rule to adopt: always use <code>===</code> unless you deliberately want type juggling.</strong></p>
+<p><strong>The practical <code>if</code> from the slide (3:L211–214):</strong>
+<pre><code class="language-php">$age = 20; $hasID = true;
+if ($age &gt;= 18 &amp;&amp; $hasID) {
+    echo &quot;Entry allowed&quot;;
+}
+</code></pre></p>
+<h3 id="19-flow-control-functions-3l227243">1.9 Flow control functions (3:L227–243)<a class="anchor" href="#19-flow-control-functions-3l227243">#</a></h3>
+<p>The deck groups four things under "flow control functions" — each controls whether execution branches or stops:</p>
+<ol>
+<li><strong><code>if / elseif / else</code></strong> — the core branching construct; runs a block only when the condition is true; "exactly as in C". Note the spelling: PHP's is <strong><code>elseif</code></strong> (one word) in the alternative syntax — <code>else if</code> also works as a plain nested <code>else</code>, but <code>elseif</code> is the PHP token.</li>
+<li><strong><code>exit()</code> / <code>die()</code></strong> — ✅ <strong>immediately stop the script.</strong> <code>die()</code> is an <strong>alias of <code>exit()</code></strong> — identical function, friendlier name. Both optionally take a message/status: <code>die(&quot;Connection failed&quot;);</code> prints that and halts. Used constantly right after a failed connection or failed validation.</li>
+<li><strong><code>return</code></strong> — inside a function: sends a value back to the caller <strong>and immediately stops that function</strong> — nothing after the <code>return</code> runs. (At file scope, <code>return</code> ends the included file.)</li>
+<li><strong>Why they're a group:</strong> all four decide whether execution continues, branches, or stops — the syllabus treats them alongside if/else.</li>
+</ol>
+<p>Careful: <code>exit(&quot;msg&quot;)</code> <strong>prints the message and stops with status 0</strong>; <code>exit()</code> with no argument is the plain stop. In a web script "stop" means the rest of the PHP never runs, so no further HTML is generated — the page is truncated there.</p>
+<hr />
+<h2 id="part-2-exam-kit-all-questions-this-chunk-can-produce">PART 2 — EXAM KIT (all questions this chunk can produce)<a class="anchor" href="#part-2-exam-kit-all-questions-this-chunk-can-produce">#</a></h2>
+<h3 id="a-3-mark-skeletons">A. 3-mark skeletons<a class="anchor" href="#a-3-mark-skeletons">#</a></h3>
+<p><strong>Q. What is PHP? Why is it called a server-side scripting language? (3)</strong>
+1. PHP = <strong>PHP: Hypertext Preprocessor</strong>, a free, open-source, <strong>server-side</strong> scripting language used to generate dynamic web pages — the "P" in LAMP.
+2. <strong>Server-side</strong> = the script executes <strong>on the web server</strong> before the response is sent; the client receives <strong>only the generated HTML</strong>, never the PHP source, and may receive different content on every request.
+3. It can embed directly into HTML via <code>&lt;?php ... ?&gt;</code> blocks, is <strong>loosely typed</strong>, supports arrays/objects/functions, and connects to databases (MySQL) — hence its use for dynamic, data-driven pages. <em>(Files use the <code>.php</code> extension.)</em></p>
+<p><strong>Q. Explain the PHP request–response cycle. (3)</strong>
+1. The browser requests a <code>.php</code> page → the <strong>web server</strong> hands it to the <strong>PHP engine</strong>.
+2. The engine <strong>runs the script</strong>; if it queries a database, <strong>MySQL</strong> is involved at this point; the script's <code>echo</code>/<code>print</code> output builds an HTML document.
+3. The web server returns <strong>plain HTML</strong> to the browser — the browser never sees the PHP source (draw the 3-box flow: Browser → Web Server → PHP Engine, with MySQL below, <code>module3.md</code> L57).</p>
+<p><strong>Q. List the data types in PHP with an example. (3)</strong> — table of 6: <code>int $age = 21;</code> · <code>float $fee = 499.50;</code> · <code>string $name = &quot;Anu&quot;;</code> · <code>bool $active = true;</code> · <code>array $m = [88, 92];</code> · <code>NULL $x = null;</code> — plus <code>object</code> and <code>resource</code>. Add the line: "PHP is <strong>loosely typed</strong> — the type is decided by the value stored at runtime, not declared; <code>gettype()</code>/<code>var_dump()</code> reveal it."</p>
+<p><strong>Q. Differentiate <code>==</code> and <code>===</code> with examples. (3)</strong>
+1. <code>==</code> = <strong>loose</strong> equality: <strong>converts types</strong> before comparing. <code>&quot;5&quot; == 5</code> → <strong>true</strong>.
+2. <code>===</code> = <strong>strict</strong> equality: compares <strong>value AND type</strong>, no conversion. <code>&quot;5&quot; === 5</code> → <strong>false</strong>.
+3. Consequence/why it matters: loose comparison produces surprising results with mixed-type input (<code>0 == &quot;abc&quot;</code> was <code>true</code> before PHP 8; <strong>in PHP 8 it is <code>false</code></strong> because PHP 8 converts the number to a string instead of the string to a number) → <strong>prefer <code>===</code></strong> for safety. <em>(Also: <code>!=</code> vs <code>!==</code> differ the same way.)</em></p>
+<p><strong>Q. Differentiate <code>echo</code> and <code>print</code>. (3)</strong>
+1. Both output text into the HTML response; both are <strong>language constructs</strong>, not functions (parentheses optional).
+2. <code>echo</code> accepts <strong>one or more comma-separated arguments</strong> and <strong>returns nothing</strong>; <code>print</code> accepts <strong>exactly one argument</strong> and <strong>returns <code>1</code></strong>, so it can be used in an expression (<code>$x = print &quot;hi&quot;;</code>). <code>echo</code> is marginally faster.
+3. Shorthand: <code>&lt;?= $var ?&gt;</code> is equivalent to <code>&lt;?php echo $var; ?&gt;</code>.</p>
+<p><strong>Q. Differentiate single-quoted and double-quoted strings in PHP. (3)</strong>
+1. <strong>Double quotes</strong> -&gt; variables are <strong>interpolated</strong> (<code>&quot;Hi $name&quot;</code>) and escape sequences work (<code>\n</code>, <code>\t</code>, <code>\&quot;</code>, <code>\$</code>); single quotes -&gt; the text is <strong>literal</strong>, <code>&#x27;Hi $name&#x27;</code> prints <code>$name</code> itself.
+2. Single quotes need escaping only for <code>\\</code> and <code>\&#x27;</code>; they are marginally faster because no interpolation pass is needed.
+3. Use <strong>single quotes</strong> for verbatim strings (HTML/JS containing <code>$</code>, regex patterns, SQL); double quotes when you want interpolation. Complex interpolation needs braces: <code>&quot;{$arr[&#x27;key&#x27;]}&quot;</code>.</p>
+<p><strong>Q. Explain type conversion in PHP. (3)</strong>
+1. <strong>Implicit (automatic):</strong> because PHP is loosely typed it converts operands as needed — <code>&quot;10&quot; + 5</code> → <code>15</code>, <code>&quot;10&quot; == 10</code> → <code>true</code>.
+2. <strong>Explicit (casting):</strong> prefix with <code>(int)</code>, <code>(float)</code>, <code>(string)</code>, <code>(bool)</code>, <code>(array)</code> — e.g. <code>$b = (int)$a + 5;</code> — or use the functions <code>intval()</code>, <code>floatval()</code>, <code>strval()</code>, <code>boolval()</code>; <code>settype($var,&quot;integer&quot;)</code> changes the variable <strong>in place</strong>.
+3. <strong>Why:</strong> explicit casting makes behaviour predictable and prevents bugs from unintended juggling; <code>is_int()</code>/<code>is_string()</code>/<code>is_array()</code> test the current type. <em>(Falsy values to quote: <code>0</code>, <code>&quot;0&quot;</code>, <code>&quot;&quot;</code>, <code>null</code>, <code>[]</code>, <code>false</code>.)</em></p>
+<p><strong>Q. Explain flow control functions in PHP. (3)</strong> — number it as the deck does: <code>if/elseif/else</code> (branch), <code>exit()</code>/<code>die()</code> (stop the script immediately; <code>die()</code> is an alias of <code>exit()</code>), <code>return</code> (send a value back and stop the current function), + one line on why they form a group (all decide continuation/branch/stop).</p>
+<p><strong>Q. What is the difference between <code>gettype()</code> and <code>var_dump()</code>? (3)</strong> — <code>gettype($x)</code> returns the <strong>type name as a string</strong> (<code>&quot;integer&quot;</code>, <code>&quot;string&quot;</code>, <code>&quot;double&quot;</code>, <code>&quot;boolean&quot;</code>, <code>&quot;array&quot;</code>, <code>&quot;NULL&quot;</code>); <code>var_dump($x)</code> prints the <strong>type and the value, including string length</strong> (<code>string(6) &quot;Anu&quot;</code>) and recurses into arrays/objects — the better debugging tool. Remember <code>gettype(1.0)</code> says <strong><code>&quot;double&quot;</code></strong> even though the type is also called <code>float</code>/<code>floatval</code>.</p>
+<h3 id="b-14-mark-program-skeleton-write-a-simple-php-program-that-the-shape-to-reuse-in-every-m3-program">B. 14-mark program skeleton — "write a simple PHP program that …" (the shape to reuse in every M3 program)<a class="anchor" href="#b-14-mark-program-skeleton-write-a-simple-php-program-that-the-shape-to-reuse-in-every-m3-program">#</a></h3>
+<p>Build in these 5 steps, in this order, every time:
+1. Open <code>&lt;?php</code>.
+2. <strong>Declare variables</strong> with <code>$</code> (a string, an int, a float — show you know types).
+3. <strong>Operate on them</strong> (arithmetic with <code>+ - * / %</code>, strings with <code>.</code>).
+4. <strong>Decide</strong> with <code>if / elseif / else</code> — spell <code>elseif</code> correctly.
+5. <strong>Output</strong> with <code>echo</code>, using <strong>double quotes for interpolation</strong> and <code>.</code> to glue. Close <code>?&gt;</code>.
+Then add a comment line per step if the question says "with comments". If the question says "using a loop/array/function" → see Sessions 2–3.</p>
+<h3 id="c-predict-the-output-method-this-is-the-biggest-code-question-format-a-method-not-luck">C. Predict-the-output method (this is the biggest code-question format — a method, not luck)<a class="anchor" href="#c-predict-the-output-method-this-is-the-biggest-code-question-format-a-method-not-luck">#</a></h3>
+<p>Run these 4 steps in order on every snippet:
+1. <strong>Mark the boundaries.</strong> Which lines are inside <code>&lt;?php ?&gt;</code> and which are literal HTML? Everything inside is <em>executed</em>; everything outside is <em>printed as-is</em>. Count that first.
+2. <strong>Build a variable table.</strong> One row per <code>$var</code>: value + type <em>at the point of use</em> (track reassignment; note that a value only changes when a statement assigns it — <code>(int)$a</code> does <strong>not</strong> change <code>$a</code>; <code>settype()</code> does).
+3. <strong>Resolve every <code>.</code> and every string.</strong> Ask "is the variable in single or double quotes?" — single = literal, double = interpolated. Then apply precedence: <code>.</code> is left-to-right at the same level as <code>+</code>/<code>-</code>.
+4. <strong>Decide the type before the comparison.</strong> For each <code>==</code>/<code>if</code>, apply the loose-comparison rules (§1.8); for each arithmetic op with a string operand, ask "numeric string (converts silently, ✅) or partially numeric (converts <strong>and warns</strong>)?"
+Then write the answer as the <strong>exact output text</strong>, line by line, and note any warnings (<code>Undefined array key</code>, <code>non-numeric value</code>) because examiners award marks for spotting them.</p>
+<h3 id="d-memorize-verbatim-night-before-list-for-this-chunk">D. 🔴 Memorize verbatim (night-before list for this chunk)<a class="anchor" href="#d-memorize-verbatim-night-before-list-for-this-chunk">#</a></h3>
+<ul>
+<li><code>&lt;?php ... ?&gt;</code> · <code>&lt;?= $x ?&gt;</code> · every statement ends <code>;</code> · variables <code>$name</code>, no type keyword, case-sensitive.</li>
+<li>The <strong>6 data types</strong> and one example each.</li>
+<li><strong><code>.</code> concatenates, <code>+</code> adds</strong> ("5" + 5 = 10; "5" . 5 = "55").</li>
+<li><code>==</code> value only, <code>===</code> value <strong>and</strong> type → <code>&quot;5&quot; == 5</code> true, <code>&quot;5&quot; === 5</code> false.</li>
+<li><strong>Falsy list:</strong> <code>0</code>, <code>&quot;0&quot;</code>, <code>&quot;&quot;</code>, <code>null</code>, <code>[]</code>, <code>false</code>.</li>
+<li><code>gettype()</code> → type name string (<code>float</code> shows as <strong>"double"</strong>); <code>var_dump()</code> → type + value.</li>
+<li><code>(string)true</code> = <code>&quot;1&quot;</code>, <code>(string)false</code> = <code>&quot;&quot;</code>.</li>
+<li><code>die()</code> = alias of <code>exit()</code>; stops the script.</li>
+<li>Single quotes = literal, double quotes = interpolated; <code>&quot;{$arr[&#x27;key&#x27;]}&quot;</code> always works.</li>
+</ul>
+<h3 id="e-diagram-pointers">E. 📐 Diagram pointers<a class="anchor" href="#e-diagram-pointers">#</a></h3>
+<ul>
+<li><strong>PHP request–response cycle</strong> — <code>module3.md</code> L57 (described) / L59–70 (labels). Reproduce as Browser → Web Server → PHP Engine, with MySQL below and "plain HTML back to browser" as the return path. This is the only figure in this chunk; it is also the answer diagram for "how PHP works".</li>
+</ul>
+<h3 id="f-php-vs-c-differences-c-is-the-pre-requisite-so-compare-with-c-is-a-natural-exam-ask">F. PHP-vs-C differences (C is the pre-requisite, so "compare with C" is a natural exam ask)<a class="anchor" href="#f-php-vs-c-differences-c-is-the-pre-requisite-so-compare-with-c-is-a-natural-exam-ask">#</a></h3>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>C</th>
+<th>PHP</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Variable declaration</td>
+<td><code>int age = 21;</code> type first</td>
+<td><code>$age = 21;</code> no type, <code>$</code> prefix</td>
+</tr>
+<tr>
+<td>Types</td>
+<td>static, fixed at compile time</td>
+<td>dynamic, decided at runtime, juggled automatically</td>
+</tr>
+<tr>
+<td>String join</td>
+<td><code>strcat</code>/<code>printf</code></td>
+<td><code>.</code> operator</td>
+</tr>
+<tr>
+<td>Output</td>
+<td><code>printf</code>, <code>puts</code></td>
+<td><code>echo</code>, <code>print</code> (goes into the HTML response)</td>
+</tr>
+<tr>
+<td>Booleans</td>
+<td><code>int</code> 0/1 (<code>stdbool.h</code> for <code>bool</code>)</td>
+<td>real <code>bool</code> <code>true/false</code></td>
+</tr>
+<tr>
+<td>Array</td>
+<td>fixed-size, same type, contiguous</td>
+<td>dynamic, mixed types, ordered map</td>
+</tr>
+<tr>
+<td>Errors</td>
+<td>compile errors</td>
+<td>runtime <strong>warnings</strong> that don't stop the script</td>
+</tr>
+</tbody>
+</table>
+  </main>
+</div>
+<div class="tools">
+  <button id="theme" title="Toggle light / dark">☾</button>
+  <button id="top" title="Back to top">↑</button>
+</div>
+<script>
+(function(){
+  var root=document.documentElement, key='minotes-theme';
+  var saved=localStorage.getItem(key);
+  var prefers=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';
+  root.setAttribute('data-theme', saved || prefers);
+
+  var btn=document.getElementById('theme');
+  function sync(){ if(btn) btn.textContent = root.getAttribute('data-theme')==='dark' ? '\u2600' : '\u263E'; }
+  sync();
+  if(btn) btn.addEventListener('click',function(){
+    var next = root.getAttribute('data-theme')==='dark' ? 'light' : 'dark';
+    root.setAttribute('data-theme', next); localStorage.setItem(key,next); sync();
+  });
+
+  var bar=document.getElementById('progress');
+  if(bar) addEventListener('scroll',function(){
+    var h=document.documentElement.scrollHeight-innerHeight;
+    bar.style.width=(h>0?(scrollY/h*100):0)+'%';
+  },{passive:true});
+
+  document.querySelectorAll('pre').forEach(function(pre){
+    var b=document.createElement('button');
+    b.className='copy'; b.textContent='copy';
+    b.addEventListener('click',function(){
+      var t=pre.querySelector('code'); var txt=t?t.innerText:pre.innerText;
+      navigator.clipboard.writeText(txt).then(function(){
+        b.textContent='copied'; setTimeout(function(){b.textContent='copy';},1200);
+      });
+    });
+    pre.appendChild(b);
+  });
+
+  document.querySelectorAll('main table').forEach(function(t){
+    if(t.parentElement.classList.contains('table-scroll')) return;
+    var w=document.createElement('div'); w.className='table-scroll';
+    t.parentNode.insertBefore(w,t); w.appendChild(t);
+  });
+
+  var links=[].slice.call(document.querySelectorAll('.sidebar a[href^="#"]'));
+  var map={}; links.forEach(function(a){ map[a.getAttribute('href').slice(1)]=a; });
+  var heads=[].slice.call(document.querySelectorAll('main h2[id], main h3[id]'));
+  if('IntersectionObserver' in window && heads.length){
+    var obs=new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if(!e.isIntersecting) return;
+        links.forEach(function(a){a.classList.remove('active');});
+        var a=map[e.target.id]; if(a){a.classList.add('active');}
+      });
+    },{rootMargin:'-10% 0px -75% 0px'});
+    heads.forEach(function(h){obs.observe(h);});
+  }
+
+  var top=document.getElementById('top');
+  if(top) top.addEventListener('click',function(){ scrollTo({top:0,behavior:'smooth'}); });
+})();
+</script>
+</body>
+</html>

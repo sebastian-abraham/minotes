@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>✍️ 20CST461 Web Programming — Code Drill Workbook (append-only) · Web Programming</title>
+<style>
+:root{
+  --bg:#fbfaf8; --panel:#ffffff; --ink:#232120; --muted:#5f5a53; --line:#e6e1da;
+  --accent:#7a4fd0; --accent-soft:#f1ecfb; --code-bg:#f5f2ee; --code-ink:#2b2a28;
+  --warn-bg:#fff8e6; --warn-line:#f0d9a0;
+  --sans:"Inter","Segoe UI",system-ui,-apple-system,"Noto Sans",sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,"SF Mono",Menlo,Consolas,"Fira Code",monospace;
+}
+html[data-theme="dark"]{
+  --bg:#141317; --panel:#1b1a20; --ink:#e8e4de; --muted:#a8a199; --line:#2f2c36;
+  --accent:#b79cf5; --accent-soft:#241f33; --code-bg:#22202a; --code-ink:#e8e4de;
+  --warn-bg:#2a2417; --warn-line:#4a3d22;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0; background:var(--bg); color:var(--ink); font-family:var(--sans);
+  font-size:16.5px; line-height:1.72; -webkit-font-smoothing:antialiased;
+}
+#progress{position:fixed;top:0;left:0;height:3px;width:0;background:var(--accent);z-index:50;transition:width .1s linear}
+
+.wrap{display:flex;align-items:flex-start;min-height:100vh}
+.sidebar{
+  position:sticky;top:0;height:100vh;width:300px;flex:0 0 300px;overflow-y:auto;
+  padding:26px 20px 60px;border-right:1px solid var(--line);background:var(--panel);
+}
+.sidebar h1{font-size:15px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);
+  margin:0 0 4px;font-weight:600}
+.sidebar .sub{font-size:12.5px;color:var(--muted);margin:0 0 18px}
+.sidebar nav{font-size:14px}
+.sidebar .toc>ul{padding-left:0}
+.sidebar ul{list-style:none;margin:0;padding-left:12px}
+.sidebar ul ul{border-left:1px solid var(--line);margin-left:4px;padding-left:10px}
+.sidebar li{margin:3px 0}
+.sidebar a{color:var(--ink);text-decoration:none;display:block;padding:3px 8px;border-radius:8px;
+  line-height:1.35;transition:background .12s,color .12s}
+.sidebar a:hover{background:var(--accent-soft);color:var(--accent)}
+.sidebar a.active{background:var(--accent-soft);color:var(--accent);font-weight:600}
+.sidebar .home{display:inline-flex;align-items:center;gap:6px;margin-bottom:16px;font-size:13.5px;
+  color:var(--muted);text-decoration:none;border:1px solid var(--line);padding:5px 10px;border-radius:999px}
+.sidebar .home:hover{color:var(--accent);border-color:var(--accent)}
+
+main{flex:1;min-width:0;padding:46px 56px 120px;max-width:980px;margin:0 auto}
+.doc-head{border-bottom:1px solid var(--line);padding-bottom:18px;margin-bottom:34px}
+.doc-head .kicker{font-size:12.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);
+  font-weight:700;margin-bottom:8px}
+.doc-head .meta{font-size:13.5px;color:var(--muted)}
+
+h1,h2,h3,h4{line-height:1.25;font-weight:700;letter-spacing:-.01em}
+h1{font-size:2.05rem;margin:.2em 0 .5em}
+h2{font-size:1.55rem;margin:2.4em 0 .7em;padding-bottom:.35em;border-bottom:1px solid var(--line)}
+h3{font-size:1.2rem;margin:1.9em 0 .55em}
+h4{font-size:1.03rem;margin:1.5em 0 .45em;color:var(--muted)}
+h2 .anchor,h3 .anchor{opacity:0;margin-left:.35em;font-size:.8em;color:var(--muted);text-decoration:none}
+h2:hover .anchor,h3:hover .anchor{opacity:1}
+p{margin:.75em 0}
+a{color:var(--accent);text-underline-offset:2px}
+strong{font-weight:650}
+hr{border:0;border-top:1px solid var(--line);margin:2.6em 0}
+ul,ol{margin:.7em 0;padding-left:1.4em}
+li{margin:.3em 0}
+li>ul,li>ol{margin:.25em 0}
+blockquote{
+  margin:1.3em 0;padding:12px 18px;background:var(--warn-bg);border-left:3px solid var(--warn-line);
+  border-radius:0 10px 10px 0;color:var(--ink)
+}
+blockquote p{margin:.3em 0}
+
+code{font-family:var(--mono);font-size:.87em;background:var(--code-bg);color:var(--code-ink);
+  padding:.15em .38em;border-radius:6px;border:1px solid var(--line);
+  box-decoration-break:clone;-webkit-box-decoration-break:clone;overflow-wrap:anywhere}
+pre{position:relative;background:var(--code-bg);border:1px solid var(--line);border-radius:12px;
+  padding:16px 18px;overflow-x:auto;margin:1.1em 0}
+pre code{background:none;border:0;padding:0;font-size:13.6px;line-height:1.62;white-space:pre}
+.copy{position:absolute;top:8px;right:8px;font:600 11px/1 var(--sans);color:var(--muted);
+  background:var(--panel);border:1px solid var(--line);border-radius:7px;padding:5px 8px;cursor:pointer;
+  opacity:0;transition:opacity .15s}
+pre:hover .copy{opacity:1}
+.copy:hover{color:var(--accent);border-color:var(--accent)}
+
+.table-scroll{overflow-x:auto;margin:1.3em 0;border:1px solid var(--line);border-radius:12px;background:var(--panel)}
+table{border-collapse:collapse;width:100%;font-size:14.6px}
+th,td{padding:9px 13px;text-align:left;vertical-align:top;border-bottom:1px solid var(--line)}
+th{background:var(--accent-soft);font-weight:650;font-size:13px;letter-spacing:.02em;
+  position:sticky;top:0;backdrop-filter:blur(4px)}
+tr:last-child td{border-bottom:0}
+tbody tr:nth-child(even){background:color-mix(in srgb,var(--panel) 60%,var(--bg))}
+tbody tr:hover{background:var(--accent-soft)}
+
+.tools{position:fixed;right:22px;bottom:22px;display:flex;flex-direction:column;gap:8px;z-index:40}
+.tools button{width:42px;height:42px;border-radius:12px;border:1px solid var(--line);background:var(--panel);
+  color:var(--ink);cursor:pointer;font-size:16px;box-shadow:0 4px 14px rgba(0,0,0,.10)}
+.tools button:hover{color:var(--accent);border-color:var(--accent)}
+@media (max-width:1000px){
+  .wrap{display:block}
+  .sidebar{position:static;width:auto;height:auto;border-right:0;border-bottom:1px solid var(--line)}
+  .sidebar nav{max-height:40vh;overflow:auto}
+  main{padding:28px 20px 100px}
+}
+@media print{
+  .sidebar,.tools,#progress,.copy{display:none!important}
+  body{background:#fff;color:#000;font-size:11pt}
+  main{padding:0;max-width:none}
+  h2{break-after:avoid} pre,table,blockquote{break-inside:avoid}
+  a{color:#000;text-decoration:none}
+}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+<div class="wrap">
+  <aside class="sidebar">
+    <a class="home" href="index.html">← Web Programming</a>
+    <h1>Drill key</h1>
+    <p class="sub">Model answers to drills</p>
+    <nav class="toc"><div class="toc">
+<ul>
+<li><a href="#set-1-syntax-drills-module-3-chunk-1">SET 1 — Syntax drills (Module 3, chunk 1)</a></li>
+<li><a href="#-">---</a></li>
+<li><a href="#drill-log">Drill log</a></li>
+</ul>
+</div>
+</nav>
+  </aside>
+  <main>
+    <div class="doc-head">
+      <div class="kicker">20CST461 · Web Programming</div>
+      <div class="meta">Model answers to drills · rendered from wp_code_drills.md</div>
+    </div>
+    <h1 id="20cst461-web-programming-code-drill-workbook-append-only">✍️ 20CST461 Web Programming — Code Drill Workbook (append-only)</h1>
+<blockquote>
+<p><strong>How to use:</strong> each drill is a <em>write-it-by-hand</em> task, exactly like the exam. Write your answer in the chat (or on paper), get it graded for <strong>syntax</strong>, then check yourself against the model answer at the bottom of this file. Answers are marked <code>✅</code> where they are straight from the deck and <code>⚠️</code> where a subtle syntax point is being tested.</p>
+<p><strong>Set 1 = Session 1</strong> (Module 3, hours 1–2: tags, variables, types, casts, operators, <code>==</code> vs <code>===</code>, flow control functions).</p>
+</blockquote>
+<hr />
+<h2 id="set-1-syntax-drills-module-3-chunk-1">SET 1 — Syntax drills (Module 3, chunk 1)<a class="anchor" href="#set-1-syntax-drills-module-3-chunk-1">#</a></h2>
+<p><strong>D1.</strong> Write a complete PHP block that: opens the tag, declares a college name as a string, a year as an integer and a fee as a float, then prints <code>Welcome to Saintgits</code> followed by a <code>&lt;br&gt;</code> on one line, and <code>Fee: 49999.5</code> on the next line — <strong>using <code>$college</code>, <code>$year</code>, <code>$fee</code></strong> (do not hardcode the values into the strings).</p>
+<p><strong>D2.</strong> Rewrite D1's two output lines <strong>once</strong> using only double-quote interpolation and <strong>once</strong> using only <code>.</code> concatenation. Both must print identical text.</p>
+<p><strong>D3.</strong> You have <code>$a = &quot;10&quot;;</code>. Write <strong>three different</strong> statements that each produce the integer <code>15</code> from <code>$a</code> and <code>5</code> — one with a cast, one with a conversion function, one that relies on automatic conversion.</p>
+<p><strong>D4.</strong> You have <code>$price = &quot;499.99&quot;;</code>. Write the statement(s) to compute double the price into <code>$total</code> using <code>floatval()</code>, and then print the type and value of <code>$total</code> for debugging.</p>
+<p><strong>D5.</strong> Write a statement that converts <code>$x = &quot;5&quot;</code> <strong>in place</strong> into an integer, then a statement that prints <code>yes</code> if <code>$x</code> is now an integer and <code>no</code> otherwise, using the ternary <code>?:</code> operator.</p>
+<p><strong>D6.</strong> Write the exact PHP line(s) that print, on one line: <code>Rate: 75%</code>. (<code>$r = 75;</code> is already set.) Get the <code>%</code> into the output without PHP treating it as anything special, and get the variable in.</p>
+<p><strong>D7.</strong> Write a statement that prints the string <code>It&#x27;s a PHP file</code> using <strong>single quotes</strong>, and then the string <code>He said &quot;PHP&quot;</code> using <strong>single quotes</strong>. Use escaping where needed.</p>
+<p><strong>D8.</strong> Write the single line that prints <code>Welcome to Saintgits 2026</code> where <code>$college</code> and <code>$year</code> are variables, and both are inside one double-quoted string with <strong>no string concatenation</strong>. ⚠️ Careful: <code>$college2026</code> would be read as a different variable.</p>
+<p><strong>D9.</strong> Given <code>$stu = [&quot;name&quot; =&gt; &quot;Anu&quot;, &quot;marks&quot; =&gt; 88];</code> write the exact interpolation you would use to echo <code>Anu scored 88</code> inside a double-quoted string. ⚠️ This is the array-in-string syntax rule.</p>
+<p><strong>D10.</strong> Write an <code>if / elseif / else</code> block that prints <code>A</code> if <code>$m &gt;= 90</code>, <code>B</code> if <code>$m &gt;= 75</code>, otherwise <code>C</code>. Then write the same logic as a single <code>?:</code>-style one-liner if you can.</p>
+<p><strong>D11.</strong> Write a <code>switch</code> statement on <code>$day</code> (an integer 1–7) that prints <code>Weekend</code> for 6 and 7 and <code>Weekday</code> for everything else. 💡 Note how two cases share one body.</p>
+<p><strong>D12.</strong> Write the statement that stops the script immediately with the message <code>All fields are required.</code> — using <code>die()</code>.</p>
+<p><strong>D13.</strong> For each line, write what it prints or <code>ERROR</code>, then justify it in ≤6 words:
+<pre><code>$a) echo &quot;Total: &quot; . 5 + 3;
+$b) echo &quot;Total: &quot; . (5 + 3);
+$c) echo 5 + 3 . &quot; total&quot;;
+$d) echo &quot;5&quot; + 5;
+$e) echo &quot;5&quot; . 5;
+$f) var_dump(&quot;5&quot; === 5);
+</code></pre>
+<strong>D14.</strong> Write a complete PHP program (with an HTML form-free style, no database) that: declares marks and attendance as integers, applies the rule "pass needs <code>marks &gt;= 50</code> AND <code>attendance &gt;= 75</code>", and prints <code>Eligible</code> or <code>Not eligible</code>. Include comments naming the two steps (validation vs business logic).</p>
+<p><strong>D15.</strong> Fix the syntax of this snippet (there are <strong>4</strong> syntax errors):
+<pre><code class="language-php">&lt;?
+$name = &#x27;Anu&#x27;
+$marks = 88;
+if ($marks &gt;= 50)
+    echo &quot;Passed $name;
+else
+    echo &#x27;Failed&#x27;
+&gt;
+</code></pre></p>
+<h2 id="-">---<a class="anchor" href="#-">#</a></h2>
+<h1 id="model-answers-set-1">MODEL ANSWERS — SET 1</h1>
+<blockquote>
+<p>Scroll only after writing your own attempt.</p>
+</blockquote>
+<p><strong>D1. ✅ (deck 3:L94)</strong>
+<pre><code class="language-php">&lt;?php
+$college = &quot;Saintgits&quot;;
+$year = 2026;
+$fee = 49999.50;
+echo &quot;Welcome to $college &lt;br&gt;&quot;;
+echo &quot;Fee: $fee&quot;;
+?&gt;
+</code></pre>
+Marks come from: <code>&lt;?php</code> tag, <code>$</code> on all three names, <code>;</code> on every statement, <code>1</code> int vs <code>49999.50</code> float (no quotes on numbers), <code>&lt;br&gt;</code> inside the string, closing <code>?&gt;</code>.</p>
+<p><strong>D2.</strong>
+<pre><code class="language-php">// interpolation-only
+echo &quot;Welcome to $college &lt;br&gt;&quot;;
+echo &quot;Fee: $fee&quot;;
+// concatenation-only
+echo &quot;Welcome to &quot; . $college . &quot; &lt;br&gt;&quot;;
+echo &quot;Fee: &quot; . $fee;
+</code></pre>
+⚠️ Note the spaces: <code>&quot;Welcome to &quot;</code> needs the trailing space, <code>&quot; &lt;br&gt;&quot;</code> needs the leading space. Forgetting those spaces is the usual mark lost.</p>
+<p><strong>D3.</strong> <code>$a = &quot;10&quot;;</code>
+<pre><code class="language-php">$b = (int)$a + 5;          // cast
+$c = intval($a) + 5;       // conversion function
+$d = $a + 5;               // automatic/loose conversion
+</code></pre></p>
+<p><strong>D4.</strong>
+<pre><code class="language-php">$price = &quot;499.99&quot;;
+$total = floatval($price) * 2;
+var_dump($total);            // float(999.98)
+// also valid: var_dump(gettype($total), $total);
+</code></pre></p>
+<p><strong>D5.</strong>
+<pre><code class="language-php">$x = &quot;5&quot;;
+settype($x, &quot;integer&quot;);       // converts in place; the value is now int 5
+echo is_int($x) ? &quot;yes&quot; : &quot;no&quot;;
+</code></pre>
+⚠️ <code>(int)$x;</code> alone would <strong>not</strong> work — a cast produces a value, it doesn't convert the variable. <code>settype()</code> is the in-place one.</p>
+<p><strong>D6.</strong>
+<pre><code class="language-php">$r = 75;
+echo &quot;Rate: $r%&quot;;     // % is not special in PHP strings — no escaping needed
+// equally fine: echo &quot;Rate: &quot; . $r . &quot;%&quot;;   or  echo &quot;Rate: {$r}%&quot;;
+</code></pre></p>
+<p><strong>D7.</strong>
+<pre><code class="language-php">echo &#x27;It\&#x27;s a PHP file&#x27;;      // \&#x27; escapes a single quote inside single quotes
+echo &#x27;He said &quot;PHP&quot;&#x27;;         // double quotes need NO escaping inside single quotes
+</code></pre></p>
+<p><strong>D8.</strong>
+<pre><code class="language-php">echo &quot;Welcome to {$college} {$year}&quot;;
+</code></pre>
+⚠️ <code>&quot;{$college} {$year}&quot;</code> — braces make the variable name unambiguous. <code>&quot;$college $year&quot;</code> also works because the space terminates the name; <code>&quot;$college$year&quot;</code> would <strong>not</strong>.</p>
+<p><strong>D9.</strong>
+<pre><code class="language-php">$stu = [&quot;name&quot; =&gt; &quot;Anu&quot;, &quot;marks&quot; =&gt; 88];
+echo &quot;{$stu[&#x27;name&#x27;]} scored {$stu[&#x27;marks&#x27;]}&quot;;
+</code></pre>
+⚠️ <code>&quot;$stu[&#x27;name&#x27;] scored&quot;</code> is <strong>wrong</strong> — a quoted key inside a double-quoted string needs <code>{ }</code>. <code>$stu[name]</code> (no quotes) happens to work in simple syntax but is not safe to rely on. Braces always work.</p>
+<p><strong>D10.</strong>
+<pre><code class="language-php">if ($m &gt;= 90) {
+    echo &quot;A&quot;;
+} elseif ($m &gt;= 75) {
+    echo &quot;B&quot;;
+} else {
+    echo &quot;C&quot;;
+}
+// one-liner form (nested ternary — parenthesise it, PHP requires it in PHP 8)
+echo $m &gt;= 90 ? &quot;A&quot; : ($m &gt;= 75 ? &quot;B&quot; : &quot;C&quot;);
+</code></pre>
+⚠️ Spelling: <strong><code>elseif</code></strong>, one word, no space. <code>$m &gt;= 90 ? &quot;A&quot; : $m &gt;= 75 ? &quot;B&quot; : &quot;C&quot;</code> without parentheses is a <strong>fatal error in PHP 8</strong> (nested ternaries without parentheses are deprecated/removed) — parentheses are the safe form.</p>
+<p><strong>D11. ✅ (deck 3:L272)</strong>
+<pre><code class="language-php">switch ($day) {
+    case 6:
+    case 7:
+        echo &quot;Weekend&quot;;
+        break;
+    default:
+        echo &quot;Weekday&quot;;
+}
+</code></pre>
+⚠️ Two <code>case</code> labels may share one body by stacking (fall-through on purpose). <code>break;</code> stops the fall-through; <code>default:</code> catches everything else and <strong>does not need</strong> a <code>break</code> at the end.</p>
+<p><strong>D12.</strong>
+<pre><code class="language-php">die(&quot;All fields are required.&quot;);     // or: die(&quot;All fields are required&quot;);
+</code></pre>
+Also correct: <code>exit(&quot;All fields are required.&quot;);</code> — same function.</p>
+<p><strong>D13.</strong>
+| | Output | Why |
+|---|---|---|
+| a | <code>Total: 8</code> | <code>.</code> and <code>+</code> are the same precedence, <strong>left to right</strong> → <code>(&quot;Total: &quot; . 5)</code> = <code>&quot;Total: 5&quot;</code>, then <code>+ 3</code> → <code>8</code> → <code>&quot;Total: 8&quot;</code>. ⚠️ PHP 8 warns "non-numeric value" here; the printed text is still <code>Total: 8</code> |
+| b | <code>Total: 8</code> | parentheses force <code>5 + 3</code> = <code>8</code>, then concatenate → identical here, but <strong>not</strong> always — this is why you always parenthesise |
+| c | <code>8 total</code> | <code>5 + 3</code> = <code>8</code> first, then <code>8 . &quot; total&quot;</code> → <code>8 total</code> |
+| d | <code>10</code> | <code>+</code> forces arithmetic: <code>&quot;5&quot;</code> becomes <code>5</code> |
+| e | <code>55</code> | <code>.</code> forces string glue: <code>5</code> becomes <code>&quot;5&quot;</code> |
+| f | <code>bool(false)</code> | <code>===</code> compares value <strong>and</strong> type; <code>&quot;5&quot;</code> is a string, <code>5</code> is an int |</p>
+<p><strong>D14. ✅ (deck 3:L694)</strong>
+<pre><code class="language-php">&lt;?php
+$marks = 60;          // integer
+$attendance = 80;     // integer
+
+// Business rule: pass needs marks &gt;= 50 AND attendance &gt;= 75
+if ($marks &gt;= 50 &amp;&amp; $attendance &gt;= 75) {
+    echo &quot;Eligible&quot;;
+} else {
+    echo &quot;Not eligible&quot;;
+}
+?&gt;
+</code></pre>
+⚠️ The combined condition needs <code>&amp;&amp;</code> (not <code>and</code>, not a comma) and <strong>both</strong> comparisons written out: <code>if ($marks &gt;= 50 &amp;&amp; $attendance &gt;= 75)</code> — a frequent slip is <code>$marks &gt;= 50 &amp;&amp; 75</code>.</p>
+<p><strong>D15.</strong> Four errors fixed:
+<pre><code class="language-php">&lt;?php
+$name = &#x27;Anu&#x27;;              // 1. missing semicolon
+$marks = 88;
+if ($marks &gt;= 50)
+    echo &quot;Passed $name&quot;;    // 2. missing closing double quote  &amp;  3. missing semicolon
+else
+    echo &#x27;Failed&#x27;;          // 4. missing semicolon
+?&gt;
+</code></pre>
+5th (bonus) point: <code>&lt;?</code> short-open tags are <strong>off by default</strong> in modern PHP — always write <code>&lt;?php</code>, and the closing tag must be <code>?&gt;</code> not <code>&gt;</code>.</p>
+<hr />
+<h2 id="drill-log">Drill log<a class="anchor" href="#drill-log">#</a></h2>
+<table>
+<thead>
+<tr>
+<th>Drill set</th>
+<th>Date</th>
+<th>Score</th>
+<th>Corrections to remember</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Set 1</td>
+<td>2026-09-24</td>
+<td>pending</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+  </main>
+</div>
+<div class="tools">
+  <button id="theme" title="Toggle light / dark">☾</button>
+  <button id="top" title="Back to top">↑</button>
+</div>
+<script>
+(function(){
+  var root=document.documentElement, key='minotes-theme';
+  var saved=localStorage.getItem(key);
+  var prefers=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';
+  root.setAttribute('data-theme', saved || prefers);
+
+  var btn=document.getElementById('theme');
+  function sync(){ if(btn) btn.textContent = root.getAttribute('data-theme')==='dark' ? '\u2600' : '\u263E'; }
+  sync();
+  if(btn) btn.addEventListener('click',function(){
+    var next = root.getAttribute('data-theme')==='dark' ? 'light' : 'dark';
+    root.setAttribute('data-theme', next); localStorage.setItem(key,next); sync();
+  });
+
+  var bar=document.getElementById('progress');
+  if(bar) addEventListener('scroll',function(){
+    var h=document.documentElement.scrollHeight-innerHeight;
+    bar.style.width=(h>0?(scrollY/h*100):0)+'%';
+  },{passive:true});
+
+  document.querySelectorAll('pre').forEach(function(pre){
+    var b=document.createElement('button');
+    b.className='copy'; b.textContent='copy';
+    b.addEventListener('click',function(){
+      var t=pre.querySelector('code'); var txt=t?t.innerText:pre.innerText;
+      navigator.clipboard.writeText(txt).then(function(){
+        b.textContent='copied'; setTimeout(function(){b.textContent='copy';},1200);
+      });
+    });
+    pre.appendChild(b);
+  });
+
+  document.querySelectorAll('main table').forEach(function(t){
+    if(t.parentElement.classList.contains('table-scroll')) return;
+    var w=document.createElement('div'); w.className='table-scroll';
+    t.parentNode.insertBefore(w,t); w.appendChild(t);
+  });
+
+  var links=[].slice.call(document.querySelectorAll('.sidebar a[href^="#"]'));
+  var map={}; links.forEach(function(a){ map[a.getAttribute('href').slice(1)]=a; });
+  var heads=[].slice.call(document.querySelectorAll('main h2[id], main h3[id]'));
+  if('IntersectionObserver' in window && heads.length){
+    var obs=new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if(!e.isIntersecting) return;
+        links.forEach(function(a){a.classList.remove('active');});
+        var a=map[e.target.id]; if(a){a.classList.add('active');}
+      });
+    },{rootMargin:'-10% 0px -75% 0px'});
+    heads.forEach(function(h){obs.observe(h);});
+  }
+
+  var top=document.getElementById('top');
+  if(top) top.addEventListener('click',function(){ scrollTo({top:0,behavior:'smooth'}); });
+})();
+</script>
+</body>
+</html>
