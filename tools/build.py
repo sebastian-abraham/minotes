@@ -560,10 +560,14 @@ def build_hub():
                      .replace("{{BLURB}}", html_mod.escape(subject["blurb"]))
                      .replace("{{META}}", f"{subject['tagline']} · {len(subject['docs'])} documents")
                      .replace("{{TAGS}}", html_mod.escape(subject["title"] + " " + subject["code"])))
+    if len(cards) == 1:
+        blocks = '<section class="group"><div class="grid">' + cards[0] + "</div></section>"
+    else:
+        blocks = ('<section class="group"><h2>Subjects</h2><div class="grid">'
+                  + "".join(cards) + "</div></section>")
     page = (HUB_PAGE
-            .replace("{{KICKER}}", f"{len(SUBJECTS)} subject{'s' if len(SUBJECTS) != 1 else ''}")
-            .replace("{{CARDS}}", '<section class="group"><h2>Subjects</h2><div class="grid">'
-                     + "".join(cards) + "</div></section>")
+            .replace("{{KICKER}}", "markdown → html · static")
+            .replace("{{CARDS}}", blocks)
             .replace("{{CSS}}", CSS + SHELL_CSS)
             .replace("{{JS}}", JS))
     write(os.path.join(ROOT, "index.html"), page)
