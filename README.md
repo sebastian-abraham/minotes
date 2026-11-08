@@ -66,6 +66,26 @@ uv venv ~/.venvs/study && uv pip install --python ~/.venvs/study/bin/python mark
 the published copy always matches what is being studied. Skip that step on a
 machine without the folder — the build falls back to the committed sources.
 
+## Practice drills
+
+`/<subject>/practice.html` — a small self-contained app page (no Markdown source).
+
+Ten combined tasks, two per module:
+
+| Type | What you do | Checked by |
+|---|---|---|
+| **fill** | scaffolds with inline blanks (`{{1}}`…); you type only the missing syntax | instant, per-blank, in the browser |
+| **write** | full answer from scratch | “Grade with tutor” → `/api/chat`, marks lost and exact fixes |
+| **output** | predict what a snippet prints | normalised text compare |
+| **mcq** | one of four | instant, with the reasoning |
+
+The fill drills are deliberately wide — one HTML page with 19 blanks, one PHP
+script with 9 — so each attempt touches most of a module instead of 30 tiny
+questions. Progress is kept in `localStorage`; “Mark done” ticks a drill.
+
+Adding a drill: edit `tools/drills.py` (schema in the docstring), rebuild. No
+other file needs touching.
+
 ## Ask-this-page assistant
 
 Every document page has a small assistant: **select any text → "Ask about this"**, or press the ✳ button to ask about the section you are reading. Answers stream in from `api/chat.js` (a Vercel function) using the opencode-go endpoint.

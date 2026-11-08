@@ -22,6 +22,9 @@ import html as html_mod
 import markdown
 from markdown.extensions.toc import slugify_unicode
 
+import drills as drill_data
+import practice as practice_page
+
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)                 # repo root = site root
 SOURCES = os.path.join(ROOT, "sources")
@@ -75,6 +78,7 @@ SUBJECTS = [
 
 GROUPS = [
     ("start", "Start"),
+    ("practice", "Practice — type it until it sticks"),
     ("kits", "Module kits — every bank question answered"),
     ("source", "Source material — the notes and the bank"),
     ("progress", "Progress &amp; drills"),
@@ -476,6 +480,7 @@ PAGE = """<!DOCTYPE html>
 <div class="wrap">
   <aside class="sidebar">
     <a class="home" href="index.html">← {{SUBJECT}}</a>
+    <a class="home" href="practice.html">Practice drills</a>
     <h1>{{LABEL}}</h1>
     <p class="sub">{{SUB}}</p>
     <nav class="toc">{{TOC}}</nav>
@@ -755,6 +760,20 @@ def build_subject(subject):
                 .replace("{{SUB}}", html_mod.escape(sub))
                 .replace("{{TAGS}}", html_mod.escape(f"{label} {pretty} {blurb} {src_name}")))
         cards.setdefault(group, []).append(card)
+
+    cards.setdefault("practice", []).append(
+        DOC_CARD
+        .replace("{{CLASS}}", " hero-card")
+        .replace("{{FILE}}", "practice.html")
+        .replace("{{LABEL}}", "Practice")
+        .replace("{{TITLE}}", "Syntax drills — 10 combined tasks")
+        .replace("{{BLURB}}", "Two per module: fill the blanks, or write the whole thing and have the tutor grade it.")
+        .replace("{{SUB}}", "fill · output · write · checked in the browser")
+        .replace("{{TAGS}}", "practice drills coding syntax fill output write"))
+
+    page = practice_page.build(drill_data.DRILLS, subject["title"], CSS + SHELL_CSS, JS)
+    write(os.path.join(ROOT, subject["slug"], "practice.html"), page)
+    print(f"  {subject['slug']}/practice.html      {os.path.getsize(os.path.join(ROOT, subject['slug'], 'practice.html')) // 1024:5d} KB  ({len(drill_data.DRILLS)} drills)")
 
     blocks = []
     for key, heading in GROUPS:
