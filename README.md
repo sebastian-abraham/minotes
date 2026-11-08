@@ -66,6 +66,35 @@ uv venv ~/.venvs/study && uv pip install --python ~/.venvs/study/bin/python mark
 the published copy always matches what is being studied. Skip that step on a
 machine without the folder — the build falls back to the committed sources.
 
+## Ask-this-page assistant
+
+Every document page has a small assistant: **select any text → "Ask about this"**, or press the ✳ button to ask about the section you are reading. Answers stream in from `api/chat.js` (a Vercel function) using the opencode-go endpoint.
+
+**Context sent per question:** the selected text, the section it sits in (≤3 000 chars), the page outline, and the page title. No index, no vector store — the page is the context, which keeps it fast and cheap.
+
+**Required env var on the host** (Vercel → Project → Settings → Environment Variables):
+
+| Name | Value |
+|---|---|
+| `OPENCODE_GO_API_KEY` | your opencode-go key |
+
+Optional:
+
+| Name | Default | Notes |
+|---|---|---|
+| `CHAT_MODEL` | `deepseek-v4.1-flash` | `glm-5.3-flash` answers in ~1.3 s vs ~5.8 s (measured), same provider |
+| `OPENCODE_GO_BASE_URL` | `https://opencode.ai/zen/go/v1` | |
+| `CHAT_ALLOW_ORIGINS` | same-origin + `*.vercel.app` | comma-separated allowlist if you add a custom domain |
+
+**Abuse limits** (the endpoint is public): origin check, 20 requests/minute per IP per warm instance, 500 output tokens. It is a convenience guard, not a security boundary — if the URL gets hammered, rotate the key.
+
+Local test:
+
+```bash
+OPENCODE_GO_API_KEY=... node tools/dev-server.js      # static site + /api/chat
+node tools/test-chat.js "why is $_POST safer than $_GET?" "some selected text"
+```
+
 ## Deploying
 
 Vercel → **Add New → Project → Import** `sebastian-abraham/minotes`:
