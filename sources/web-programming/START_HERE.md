@@ -14,7 +14,15 @@ Built 08 Nov 2026 from the faculty Question Bank (286 questions). Every question
 
 (Each kit's §1 table lists every question number and the section that answers it, so you can jump straight to any question.)
 
-Each kit has the same seven sections: coverage table → deep dive → 3-mark answers → 14-mark answers → hand-writable drills → night-before memorize table → "say this if grilled" lines.
+Every kit is the same seven sections, written to be skimmed:
+
+1. **Coverage map** — all questions for the module, with the section that answers each.
+2. **Deep dive** — one block per concept: a one-line **What:**, 3–5 bullets, code only where it teaches syntax, one **Trap:** line.
+3. **Answer bank** — 3.1: every 3-mark answer as exactly three numbered lines; 3.2: every 14-mark answer as Structure → Answer (code/bullets) → Traps.
+4. **Code to write from memory** — drills with full code and one *Memorise:* line each.
+5. **Night-before table** — the syntax to recall, nothing else.
+6. **Diagram index** — which figure to draw and where it sits in the deck.
+7. **Defence lines** — one-liners for when the examiner probes.
 
 ## Exam pattern this is built for
 
@@ -26,10 +34,10 @@ So each module is worth ~20 marks and *cannot be skipped* — a module you haven
 
 ## How to use a kit (per module, ~2 hours)
 
-1. **§2 deep dive** — read once. Don't memorise; just make the story click (analogy → term → code).
+1. **§2 deep dive** — read once, fast. Each block is a definition plus the bullets that matter; skip nothing but re-read nothing.
 2. **§3.1 Part-A masters** — cover the right column and say the 3 points out loud. These are the exact 3-mark answers; there are only ~15–25 of them per module because the bank repeats itself.
 3. **§3.2 Part-B skeletons** — read the *Structure* line first, then the code. You are memorising the **shape** (what goes in which order, what to draw), not the prose.
-4. **§4 drills** — write each one on paper, closed book, then compare. This is the only step that converts reading into marks in a 3-hour writing exam.
+4. **§4 drills** — write each one on paper, closed book, then compare. This is the only step that converts reading into marks in a three-hour writing exam.
 5. **§5 memorize table** — final 20 minutes before you sleep, and again on exam morning.
 
 ## Order of attack (highest return first)

@@ -1,145 +1,114 @@
-# MODULE 4 — PHP + MySQL · Complete Study Kit
+# MODULE 4 — PHP + MySQL · Exam Kit
 
 > 20CST461 Web Technologies · ESE Part A = 3 marks, Part B = 14 marks · 2 Part-A questions and 1 of 2 Part-B questions come from this module
 
----
+**The module in one line:** connect → build a SQL string → `mysqli_query()` → loop `mysqli_fetch_assoc()` → echo HTML.
 
-## 0. How to use this kit
-
-You have never written PHP. That is fine — this module is **one pattern repeated five times**, not 63 separate things.
-
-Read in this order and stop when the clock says stop:
-
-| When | Read | Time |
-|---|---|---|
-| First pass, learning | §2 concepts 2.1 → 2.21 in order, typing every snippet | 2 hrs |
-| Second pass | §3.1 (all 26 master answers — these are your Part A marks) | 45 min |
-| Third pass | §3.2 only the 8 Part-B answers marked ⭐ (highest probability) | 60 min |
-| Hand practice | §4 drills D1–D16, on paper, closed book | 90 min |
-| Night before | §5 memorize sheet + §7 defence lines | 25 min |
-
-**Conventions used in this file**
-
-- `4:L431–453` = lines 431–453 of `module4.md` (your lecture deck). Every one of these was checked against the file; if a claim has no ref, it is either my addition or flagged.
-- **"(standard, not in your deck)"** = correct PHP that your slides never show. The question bank still asks it (regex, `$_PHP_SELF`, file upload, `SHOW DATABASES`). Learn it, but do not claim the slide said it.
-- All code is inside fenced blocks, exactly as you would write it on the answer sheet. Copy it verbatim; nothing is escaped or mangled.
-- Procedural `mysqli_*` functions are the default in this kit (that is what the deck teaches). Where the deck also shows the object-oriented style I say so, and §5 gives you both forms of every hot function.
-
-**The one sentence that is the whole module:** *connect → build a SQL string → `mysqli_query()` → loop `mysqli_fetch_assoc()` → echo HTML.*
+**Refs:** `4:L431–453` = lines 431–453 of `module4.md` (lecture deck). **"(standard, not in your deck)"** = correct PHP your slides never show — the bank still asks it (regex, `$_PHP_SELF`, file upload, `SHOW DATABASES`). Learn it; don't claim the slide said it.
 
 ---
 
 ## 1. Module map + question coverage
 
-63 questions: **38 Part A** (Q92–Q129, 3 marks each) and **25 Part B** (Q229–Q253, 14 marks each).
+63 questions: **38 Part A** (Q92–Q129, 3 marks) and **25 Part B** (Q229–Q253, 14 marks).
 
-⚠️ The faculty bank's module headings are wrong: it prints "Module 4: PHP" above Q92–Q129, then "Module 5: PHP and MySQL Database Operations" above Q130 onwards — but Q130–Q153 are JSON/Laravel (real Module 5) while **Q229–Q253 sit under a second "Module 4: PHP" heading and are the descriptive (14-mark) block for this module**. Both blocks are covered here.
+Bank headings are wrong: Q92–Q129 sit under "Module 4: PHP", Q130–Q153 are JSON/Laravel (Module 5), and **Q229–Q253 sit under a second "Module 4: PHP" heading** — the 14-mark set. Both covered.
 
-| Q# | What it asks (≤8 words) | Mark shape | Answered at |
-|---|---|---|---|
-| 92 | Steps to establish PHP–MySQL connection | 3 · Part A | §3.1 A1, §2.6 |
-| 93 | `$_SESSION` vs `$_COOKIE`, when each | 3 · Part A | §3.1 A2, §2.4 |
-| 94 | GET vs POST in form submission | 3 · Part A | §3.1 A3 |
-| 95 | Session: store name, show other page | 3 · Part A | §3.1 A4, §4 D10 |
-| 96 | Insert record, handle errors | 3 · Part A | §3.1 A6, §4 D4 |
-| 97 | Regex email check returning boolean | 3 · Part A | §3.1 A7, §4 D16 |
-| 98 | Update email, with error handling | 3 · Part A | §3.1 A8, §4 D8 |
-| 99 | Prepared statements and why | 3 · Part A | §3.1 A9, §2.18 |
-| 100 | Sessions keep state across pages | 3 · Part A | §3.1 A5 |
-| 101 | Retrieve and display MySQL data | 3 · Part A | §3.1 A10, §4 D6 |
-| 102 | PHP's role vs static HTML | 3 · Part A | §3.1 A11, §2.20 |
-| 103 | Purpose of `$_PHP_SELF` | 3 · Part A | §3.1 A12 |
-| 104 | Fetch data from DB to webpage | 3 · Part A | §3.1 A10, §4 D6 |
-| 105 | Square root program | 3 · Part A | §3.1 A13, §4 D13 |
-| 106 | `mysql_fetch_array` vs `_assoc` | 3 · Part A | §3.1 A14, §2.10 |
-| 107 | List databases on MySQL server | 3 · Part A | §3.1 A15, §4 D3 |
-| 108 | List data in a table | 3 · Part A | §3.1 A10 |
-| 109 | CREATE operations from PHP | 3 · Part A | §3.1 A16, §4 D3 |
-| 110 | Connection steps (duplicate of 92) | 3 · Part A | §3.1 A1 |
-| 111 | Session importance across requests | 3 · Part A | §3.1 A5 |
-| 112 | Insert + connection/query/errors | 3 · Part A | §3.1 A6, §4 D4 |
-| 113 | What is a cookie + two uses | 3 · Part A | §3.1 A17, §2.2 |
-| 114 | Session vs cookie | 3 · Part A | §3.1 A2 |
-| 115 | Statement to start a session | 3 · Part A | §3.1 A18 |
-| 116 | Basic MySQL connection statement | 3 · Part A | §3.1 A1, §2.6 |
-| 117 | Purpose of CREATE TABLE | 3 · Part A | §3.1 A16, §2.13 |
-| 118 | SQL to add a record + syntax | 3 · Part A | §3.1 A19, §2.14 |
-| 119 | Purpose of DELETE | 3 · Part A | §3.1 A20, §2.15 |
-| 120 | Purpose of SELECT | 3 · Part A | §3.1 A21, §2.16 |
-| 121 | SQL to modify existing records | 3 · Part A | §3.1 A22, §2.15 |
-| 122 | What is dynamic content | 3 · Part A | §3.1 A11 |
-| 123 | Three advantages of sessions | 3 · Part A | §3.1 A5 |
-| 124 | Cookie syntax with expiry | 3 · Part A | §3.1 A17, §5 |
-| 125 | Purpose of `session_start()` | 3 · Part A | §3.1 A18 |
-| 126 | Purpose of `mysqli_query()` | 3 · Part A | §3.1 A23, §2.9 |
-| 127 | Why WHERE matters in UPDATE/DELETE | 3 · Part A | §3.1 A24 |
-| 128 | What `mysqli_fetch_assoc()` is for | 3 · Part A | §3.1 A25, §2.10 |
-| 129 | Two sources of dynamic content | 3 · Part A | §3.1 A26 |
-| 229 | Form app: name + email validation ⭐ | 14 · Part B | §3.2 Q229, §4 D16 |
-| 230 | PHP's importance + challenges (10m) | 14 · Part B | §3.2 Q230 |
-| 231 | Dynamic page: date/time + greeting ⭐ | 14 · Part B | §3.2 Q231, §4 D12 |
-| 232 | Username/password/email filled + format | 14 · Part B | §3.2 Q232 |
-| 233 | File uploads + recursive factorial | 14 · Part B | §3.2 Q233, §4 D14–D15 |
-| 234 | Connection step-by-step + patients DB ⭐ | 14 · Part B | §3.2 Q234 |
-| 235 | Regex: extract emails + validate phone | 14 · Part B | §3.2 Q235 |
-| 236 | Regex: replace substring + extract URLs | 14 · Part B | §3.2 Q236 |
-| 237 | Password validation + phone validation | 14 · Part B | §3.2 Q237 |
-| 238 | Cookies + associative array operations | 14 · Part B | §3.2 Q238 |
-| 239 | Cookies create/access/delete + sessions | 14 · Part B | §3.2 Q239, §4 D10–D11 |
-| 240 | MySQLi connection + error handling + program | 14 · Part B | §3.2 Q240, §4 D2 |
-| 241 | CREATE/INSERT/DELETE + student table ⭐ | 14 · Part B | §3.2 Q241, §4 D3–D4 |
-| 242 | Prepared INSERT/DELETE by register no. | 14 · Part B | §3.2 Q242, §4 D5 |
-| 243 | SELECT multi-row → HTML table ⭐ | 14 · Part B | §3.2 Q243, §4 D6 |
-| 244 | UPDATE syntax/precautions + update email ⭐ | 14 · Part B | §3.2 Q244, §4 D8 |
-| 245 | App architecture + products into HTML list | 14 · Part B | §3.2 Q245 |
-| 246 | Session lifecycle + session ID + login time | 14 · Part B | §3.2 Q246 |
-| 247 | Cookies vs sessions + recommend for login | 14 · Part B | §3.2 Q247 |
-| 248 | Full SQL workflow + INSERT success report | 14 · Part B | §3.2 Q248 |
-| 249 | CREATE TABLE types/constraints + employee | 14 · Part B | §3.2 Q249 |
-| 250 | Careful DELETE + prepared delete by dept | 14 · Part B | §3.2 Q250 |
-| 251 | SELECT result processing + marks > 50 | 14 · Part B | §3.2 Q251 |
-| 252 | UPDATE + affected_rows + 10% raise | 14 · Part B | §3.2 Q252 |
-| 253 | Steps for dynamic HTML + students list | 14 · Part B | §3.2 Q253 |
+| Q# | What it asks (≤8 words) | Answered at |
+|---|---|---|
+| 92 | Steps to establish PHP–MySQL connection | §3.1 A1, §2.6 |
+| 93 | `$_SESSION` vs `$_COOKIE`, when each | §3.1 A2, §2.4 |
+| 94 | GET vs POST in form submission | §3.1 A3 |
+| 95 | Session: store name, show other page | §3.1 A4, §4 D10 |
+| 96 | Insert record, handle errors | §3.1 A6, §4 D4 |
+| 97 | Regex email check returning boolean | §3.1 A7, §4 D16 |
+| 98 | Update email, with error handling | §3.1 A8, §4 D8 |
+| 99 | Prepared statements and why | §3.1 A9, §2.18 |
+| 100 | Sessions keep state across pages | §3.1 A5 |
+| 101 | Retrieve and display MySQL data | §3.1 A10, §4 D6 |
+| 102 | PHP's role vs static HTML | §3.1 A11, §2.20 |
+| 103 | Purpose of `$_PHP_SELF` | §3.1 A12 |
+| 104 | Fetch data from DB to webpage | §3.1 A10, §4 D6 |
+| 105 | Square root program | §3.1 A13, §4 D13 |
+| 106 | `mysql_fetch_array` vs `_assoc` | §3.1 A14, §2.10 |
+| 107 | List databases on MySQL server | §3.1 A15, §4 D3 |
+| 108 | List data in a table | §3.1 A10 |
+| 109 | CREATE operations from PHP | §3.1 A16, §4 D3 |
+| 110 | Connection steps (duplicate of 92) | §3.1 A1 |
+| 111 | Session importance across requests | §3.1 A5 |
+| 112 | Insert + connection/query/errors | §3.1 A6, §4 D4 |
+| 113 | What is a cookie + two uses | §3.1 A17, §2.2 |
+| 114 | Session vs cookie | §3.1 A2 |
+| 115 | Statement to start a session | §3.1 A18 |
+| 116 | Basic MySQL connection statement | §3.1 A1, §2.6 |
+| 117 | Purpose of CREATE TABLE | §3.1 A16, §2.13 |
+| 118 | SQL to add a record + syntax | §3.1 A19, §2.14 |
+| 119 | Purpose of DELETE | §3.1 A20, §2.15 |
+| 120 | Purpose of SELECT | §3.1 A21, §2.16 |
+| 121 | SQL to modify existing records | §3.1 A22, §2.15 |
+| 122 | What is dynamic content | §3.1 A11 |
+| 123 | Three advantages of sessions | §3.1 A5 |
+| 124 | Cookie syntax with expiry | §3.1 A17, §5 |
+| 125 | Purpose of `session_start()` | §3.1 A18 |
+| 126 | Purpose of `mysqli_query()` | §3.1 A23, §2.9 |
+| 127 | Why WHERE matters in UPDATE/DELETE | §3.1 A24 |
+| 128 | What `mysqli_fetch_assoc()` is for | §3.1 A25, §2.10 |
+| 129 | Two sources of dynamic content | §3.1 A26 |
+| 229 | Form app: name + email validation ⭐ | §3.2 Q229, §4 D16 |
+| 230 | PHP's importance + challenges (10m) | §3.2 Q230 |
+| 231 | Dynamic page: date/time + greeting ⭐ | §3.2 Q231, §4 D12 |
+| 232 | Username/password/email filled + format | §3.2 Q232 |
+| 233 | File uploads + recursive factorial | §3.2 Q233, §4 D14–D15 |
+| 234 | Connection step-by-step + patients DB ⭐ | §3.2 Q234 |
+| 235 | Regex: extract emails + validate phone | §3.2 Q235 |
+| 236 | Regex: replace substring + extract URLs | §3.2 Q236 |
+| 237 | Password validation + phone validation | §3.2 Q237 |
+| 238 | Cookies + associative array operations | §3.2 Q238 |
+| 239 | Cookies create/access/delete + sessions | §3.2 Q239, §4 D10–D11 |
+| 240 | MySQLi connection + error handling + program | §3.2 Q240, §4 D2 |
+| 241 | CREATE/INSERT/DELETE + student table ⭐ | §3.2 Q241, §4 D3–D4 |
+| 242 | Prepared INSERT/DELETE by register no. | §3.2 Q242, §4 D5 |
+| 243 | SELECT multi-row → HTML table ⭐ | §3.2 Q243, §4 D6 |
+| 244 | UPDATE syntax/precautions + update email ⭐ | §3.2 Q244, §4 D8 |
+| 245 | App architecture + products into HTML list | §3.2 Q245 |
+| 246 | Session lifecycle + session ID + login time | §3.2 Q246 |
+| 247 | Cookies vs sessions + recommend for login | §3.2 Q247 |
+| 248 | Full SQL workflow + INSERT success report | §3.2 Q248 |
+| 249 | CREATE TABLE types/constraints + employee | §3.2 Q249 |
+| 250 | Careful DELETE + prepared delete by dept | §3.2 Q250 |
+| 251 | SELECT result processing + marks > 50 | §3.2 Q251 |
+| 252 | UPDATE + affected_rows + 10% raise | §3.2 Q252 |
+| 253 | Steps for dynamic HTML + students list | §3.2 Q253 |
 
-### The six master themes (every question is one of these, wearing a hat)
+⭐ = highest probability.
 
-1. **State management** — HTTP forgets you; cookies (client, 4 KB, editable) and sessions (server, ID cookie) remember you. → Q93, 94, 95, 100, 111, 113, 114, 115, 123, 124, 125, 238, 239, 246, 247.
-2. **Connection** — `mysqli_connect()` / `new mysqli()` + failure check + `close()`. → Q92, 110, 116, 234, 240, 248.
-3. **Fetch loop** — result handle → `while ($row = mysqli_fetch_assoc($result))` → `$row["col"]`. → Q101, 104, 106, 108, 128, 243, 251, 253.
-4. **CRUD from PHP** — CREATE / INSERT / UPDATE / DELETE through `mysqli_query()`, with `affected_rows` and `insert_id`. → Q96, 98, 109, 117–121, 241, 242, 244, 248–252.
-5. **Prepared statements** — `?` placeholders + `bind_param("ssi", …)`; structure and data never mix. → Q99, 242, 250.
-6. **Dynamic pages** — static HTML vs HTML generated per request; PHP interleaved with markup, `<?= ?>`, alternative `while: endwhile`. → Q102, 122, 129, 229, 231, 245, 253.
+### Six themes — every question is one of these
+
+1. **State** — cookie (client, 4 KB, editable) or session (server, ID cookie)..
+2. **Connection** — `mysqli_connect()` / `new mysqli()` + failure check + `close()`..
+3. **Fetch loop** — handle → `while ($row = mysqli_fetch_assoc($result))` → `$row["col"]`..
+4. **CRUD** — CREATE / INSERT / UPDATE / DELETE, `affected_rows`, `insert_id`..
+5. **Prepared statements** — `?` + `bind_param("ssi", …)`; structure and data never mix..
+6. **Dynamic pages** — HTML built per request; `<?= ?>`, `while: endwhile`..
 
 ---
 
-## 2. PART 1 — Deep dive, from zero
+## 2. Concepts
 
-### 2.1 Why HTTP is stateless — the problem everything else solves (4:L27–53)
+### 2.1 Why HTTP is stateless (`4:L27–53`)
+**What:** each request is a complete, independent message; the server keeps nothing between them (4:L31–33).
+- Cheap for 10,000 strangers, fatal the moment you need "logged in": page 1 checks the password, page 2 knows nothing about it.
+- Only two memory mechanisms exist (4:L37–51):
 
-**Story:** a shop assistant with amnesia. Every time you walk up to the counter he greets you as a brand-new customer, because he genuinely cannot remember the last 30 seconds.
-
-**Definition.** HTTP is *stateless*: each request is a complete, independent message. The server opens nothing, remembers nothing, and by the time your second click arrives it has no idea the first one was also you (4:L31–33). That is a *feature* for serving 10,000 strangers cheaply, and a *bug* the moment you need "logged in".
-
-**Why it bites, concretely.** Page 1 checks the password and shows the dashboard. Page 2 is a separate request — it has no idea a password was ever checked. Without a memory mechanism, every page would need the password again.
-
-The deck names exactly two memory mechanisms (4:L37–51):
-
-| Mechanism | Where the data lives | Who can read it |
+| Mechanism | Data lives in | Who can read it |
 |---|---|---|
-| Cookie | Your browser's storage, sent back on every request to that domain | You — and any script on your machine (4:L73) |
-| Session | The server's disk/temp storage | Only the server; your browser holds just an ID (4:L45) |
+| Cookie | browser storage, replayed per request | the user — and any script (4:L73) |
+| Session | server disk/temp | only the server; browser holds an ID (4:L45) |
 
-**Why it matters for marks:** "why state management?" is the opening move of Q93, 100, 111, 113, 247. The 2-mark skeleton is *stateless HTTP → need memory → two places to put it → client (cookie) or server (session)*.
+**Skeleton that opens Q93, 100, 111, 113, 247:** stateless → need memory → two places → client or server.
 
-> **Say this if grilled:** "HTTP has no memory between requests, so any continuity — login, cart, multi-step form — must be carried by something: a cookie on the client, or a session on the server referenced by a cookie."
-
-### 2.2 Cookies — memory that lives in the browser (4:L63–88)
-
-**Story:** a coffee-shop loyalty card the customer carries. The shop writes your stamp on *your* card; you show it next visit. Lose it, edit it, or forge it — the shop can't tell.
-
-**Definition.** A cookie is a small name/value pair that the server sends in an HTTP **response header** (`Set-Cookie`) and asks the browser to store and replay automatically on every later request to that domain (4:L39).
-
-**The function** — `setcookie(name, value, expiry, path)`:
+### 2.2 Cookies (`4:L63–88`)
+**What:** a small name/value pair sent in a `Set-Cookie` response header, replayed automatically on every later request to that domain (4:L39).
 
 ```php
 <?php
@@ -156,36 +125,18 @@ setcookie("username", "", time() - 3600);
 ?>
 ```
 
-**Decoding the four arguments** (4:L67):
-
-| Argument | What it is | Value to memorise |
+| Argument | What it is | Memorise |
 |---|---|---|
-| `name` | The key you will read back | `"username"` |
-| `value` | The data (a string; keep it small) | `"Anu"` |
-| `expiry` | Unix timestamp after which the browser discards it | `time() + 3600` = 1 hour |
-| `path` | Which URLs on the site receive it | `"/"` = whole site |
+| `name` | key you read back | `"username"` |
+| `value` | the data, a string | `"Anu"` |
+| `expiry` | Unix timestamp to discard at | `time() + 3600` |
+| `path` | URLs that receive it | `"/"` = whole site |
 
-**The three rules that earn marks**
+**Three rules.** Before any output (4:L65) — headers flush first, one stray space gives *"headers already sent"*; same for `session_start()` (4:L104). Delete by re-setting a past expiry (4:L71) — no `deletecookie()`. Never store secrets (4:L73): the user can edit the file.
+**Limits:** ~4 KB (4:L142), a few dozen per domain, sent with every matching request. Good for theme/language, "remember me", last-visited (4:L148).
 
-1. **`setcookie()` must run before any HTML output** (4:L65). Cookies travel as HTTP *headers*, and headers are flushed before the body. One stray space, one `echo`, one blank line above `<?php` and you get *"headers already sent"*. Same rule for `session_start()` (4:L104).
-2. **To delete, re-set with a past expiry** (4:L71) — set the value to `""` and the expiry to `time() - 3600`. There is no `deletecookie()`.
-3. **Never store anything secret in a cookie** (4:L73). It sits in a text file the user can open and edit. A cookie saying `role=admin` is an invitation.
-
-**Limits** — say these numbers: ~**4 KB per cookie** (4:L142), a few dozen cookies per domain, and the whole cookie jar travels with *every* matching request, so fat cookies slow every page.
-
-**Where cookies are genuinely good** (4:L148): remembering a theme or language preference, a "remember me" token, a non-sensitive last-visited value.
-
-**Why it matters:** Q113, Q124 ask straight for this, Q238/Q239 ask for create/access/delete, and every session answer starts "the browser holds a cookie containing the session ID".
-
-> **Say this if grilled:** "A cookie is client-side storage written by `setcookie()` before any output, read back through `$_COOKIE`, deleted by re-setting it with a past expiry — and it is untrusted user-editable data, capped at about 4 KB."
-
-### 2.3 Sessions — memory that lives on the server (4:L102–124)
-
-**Story:** a cloakroom. You hand over your coat, you get a numbered token. The coat (your data) never leaves the building; you only carry the number.
-
-**Definition.** A session is server-side storage for one visitor, identified by a **session ID** that PHP sends to the browser as a cookie (by default named `PHPSESSID`) (4:L45, 4:L106).
-
-**The four calls** (4:L106–112):
+### 2.3 Sessions (`4:L102–124`)
+**What:** server-side storage for one visitor, keyed by a **session ID** sent as a cookie (`PHPSESSID`) (4:L45, 4:L106).
 
 ```php
 <?php
@@ -200,69 +151,48 @@ session_destroy();                     //    delete the server-side session file
 ?>
 ```
 
-**What each one actually does**
-
-| Call | Effect | Exam-critical detail |
+| Call | Effect | Exam detail |
 |---|---|---|
-| `session_start()` | Reads the incoming `PHPSESSID` cookie; if none, mints a new ID and creates the session | Must precede **every** `$_SESSION` read/write, and must precede output (4:L104) |
-| `$_SESSION["k"] = v` | Writes into the server's session store | Nothing is sent to the client except the ID |
-| `unset($_SESSION["k"])` | Removes one key | `session_unset()` removes all — *this is not on your slide, it is standard* |
-| `session_destroy()` | Deletes the session file on the server | It does **not** empty `$_SESSION` in the current request — call `session_unset()` first (standard) |
+| `session_start()` | reads the incoming `PHPSESSID`, else mints one | before every `$_SESSION` access **and** all output (4:L104) |
+| `$_SESSION["k"] = v` | writes server-side | only the ID reaches the client |
+| `unset($_SESSION["k"])` | removes one key | `session_unset()` removes all (standard) |
+| `session_destroy()` | deletes the server file | does not empty `$_SESSION` now — `session_unset()` first (standard) |
 
-**Lifecycle in one line each** (this is Q246): browser requests page → `session_start()` → no ID cookie, so PHP mints an ID and sends `Set-Cookie: PHPSESSID=…` → the server creates a file keyed by that ID → every later request replays the cookie → `session_start()` loads that file into `$_SESSION` → on logout `session_unset()` + `session_destroy()`, and the ID becomes worthless.
+**Lifecycle (Q246):** request → `session_start()` → no ID cookie, so PHP mints one and sends `Set-Cookie: PHPSESSID=…` → server makes a file keyed by it → later requests replay the cookie → `session_start()` loads it → logout: `session_unset()` + `session_destroy()`.
+**ID = the whole security model:** whoever holds it *is* you — keep it out of URLs, regenerate at login with `session_regenerate_id(true)` (standard).
 
-**Session ID — the whole security model in one object.** It is a long random string. Anyone holding it *is* you, so: never put it in a URL if you can avoid it, and regenerate it on login with `session_regenerate_id(true)` so a pre-login ID can't be reused (standard).
-
-**Why it matters:** sessions are the answer to Q95, Q100, Q111, Q123, Q125, Q246, Q247 — and the reason `$_SESSION["user_id"]` exists at all.
-
-> **Say this if grilled:** "A session stores data on the server and gives the browser only a random session ID in a cookie; `session_start()` loads or creates it, `session_destroy()` deletes it — so the sensitive data never travels."
-
-### 2.4 Cookies vs sessions — the comparison table you must be able to write cold (4:L136–160)
-
-**Story:** a note pinned to your own fridge (cookie) versus a locked filing cabinet at the office with your name on the drawer (session).
+### 2.4 Cookie vs session (`4:L136–160`)
 
 | Point | Cookie | Session |
 |---|---|---|
-| Storage location | Browser/client (4:L140) | Server (4:L152) |
-| What travels | The **data itself**, every request | Only the **session ID** |
-| Size limit | ~4 KB per cookie (4:L142) | Practically unlimited (server disk) |
-| Security | Visible and editable by the user — never sensitive (4:L144) | Data never leaves the server — safe for credentials/roles (4:L154) |
-| Lifetime | Whatever expiry you set — days or months (4:L146) | Until browser closes by default, or a server timeout (4:L156) |
-| Setup needed | `setcookie()` before output | `session_start()` on **every** page that uses it (4:L158) |
-| Good for | Preferences, "remember me" (4:L148) | Login state, shopping cart, multi-step forms (4:L160) |
+| Storage | browser/client (4:L140) | server (4:L152) |
+| Travels | the **data** | only the **ID** |
+| Size | ~4 KB (4:L142) | server disk |
+| Security | readable/editable — never sensitive (4:L144) | data stays server-side (4:L154) |
+| Lifetime | your expiry (4:L146) | browser close / timeout (4:L156) |
+| Setup | `setcookie()` before output | `session_start()` every page (4:L158) |
+| Good for | preferences (4:L148) | login, cart (4:L160) |
 
-**Exam shortcut:** every row is one of four axes — *where it lives, how big, how safe, how long*. Q247 explicitly asks for storage/lifetime/security/application, i.e. exactly this table minus two rows.
+**Four axes:** where it lives, how big, how safe, how long — Q247 asks exactly these; Q93/Q114 are the prose version.
 
-**Why it matters:** Q93 and Q114 are this table in prose; Q247 is this table plus a recommendation ("sessions, because the credential must not be client-editable").
+### 2.5 Why pair PHP with MySQL (`4:L170–195`)
+- **PHP forgets** everything at script end — variables, form data, sessions (4:L176).
+- **MySQL persists and shares** — relational tables on disk, same for every request and user (4:L182).
+- **Why MySQL** — free, default on shared hosting, the **M** in LAMP (4:L188).
+- **The bridge is an extension** — MySQLi for this course, PDO the database-agnostic alternative (4:L194).
 
-> **Say this if grilled:** "Cookies live in the browser and carry data; sessions live on the server and carry only an ID. Cookies are for preferences, sessions are for identity."
+**Architecture, one line:** browser → Apache → PHP → MySQL → rows → PHP prints HTML → browser; the browser never sees SQL or the password..
 
-### 2.5 Why pair PHP with MySQL (4:L170–195)
-
-**Story:** PHP is a brilliant talker with no memory; MySQL is a filing cabinet with no mouth. Together they can hold a conversation that lasts years.
-
-**Four points, in the deck's order**
-
-1. **Plain PHP forgets everything** (4:L176). Variables, sessions, form data all vanish when the script ends. Modules 1–3 gave you no permanent storage.
-2. **A database is persistent and shared** (4:L182). MySQL is *relational*: data in tables of rows and columns, stored on disk, identical for every future request and every user.
-3. **Why MySQL specifically** (4:L188): free and open-source, the default on almost all shared hosting, and the **M** in **LAMP** (Linux, Apache, MySQL, PHP).
-4. **The bridge is an extension** (4:L194): PHP cannot speak MySQL's wire protocol itself. **MySQLi** (MySQL Improved) is the classic choice for this course; **PDO** is the modern, database-agnostic alternative.
-
-**The one-line architecture** (also Q245, Q253): browser → Apache → PHP engine → MySQL → rows back to PHP → PHP prints HTML → browser. The browser never sees SQL, the schema, or the password.
-
-**Why it matters:** Q230 (PHP's importance) and Q234/Q245 want this framing before any code; Q102/Q122 want "dynamic = generated from live data" which is only possible *because* of this pairing.
-
-> **Say this if grilled:** "PHP alone has no persistence, so the database is the memory; MySQLi is the extension that lets PHP send SQL strings and receive rows."
-
-### 2.6 Connecting: `mysqli_connect()` — the very first step (4:L206–230)
-
-**Story:** dialling a phone number. Nothing can be said until the call connects, and if it doesn't connect you must *know* immediately instead of talking into silence.
-
-**Signature (memorise exactly):**
+### 2.6 Connecting: `mysqli_connect()` (`4:L206–230`)
+**What:** open a connection to the MySQL server; every query needs one first.
 
 ```text
 mysqli_connect(host, username, password, database)   ->  connection handle (object) | false
 ```
+
+- Procedural: `mysqli_connect(host, username, password, database)` → handle, or `false`.
+- Failure check: `if (!$conn) { die("Connection failed: " . mysqli_connect_error()); }` (PHP 8.1+ throws `mysqli_sql_exception` instead of returning `false`).
+- OO style: `new mysqli(...)`, then `$conn->connect_error`, `$conn->query()`, `$conn->close()`.
 
 ```php
 <?php
@@ -278,26 +208,16 @@ mysqli_close($conn);          // optional: PHP closes it at script end anyway
 ?>
 ```
 
-**Argument by argument** (4:L210–216)
-
 | Argument | Meaning | Typical value |
 |---|---|---|
-| `host` | Machine running MySQL | `"localhost"` when PHP and MySQL share a server (4:L214) |
-| `username` | MySQL account | `"root"` on XAMPP/local |
-| `password` | That account's password | `""` on default XAMPP, never `""` in production |
-| `database` | Which database to open | `"college_db"` — optional; if omitted you must `mysqli_select_db()` later |
+| `host` | machine running MySQL | `"localhost"` (4:L214) |
+| `username` | MySQL account | `"root"` on XAMPP |
+| `password` | its password | `""` locally, never in production |
+| `database` | database to open | `"college_db"`; optional — else `mysqli_select_db()` |
 
-**What comes back.** A **connection handle** — a `resource`/object representing the open link, stored in `$conn` and passed to *every* later call. On failure it returns `false` (procedural style) — which is why `if (!$conn)` works.
+**Trap:** query before connect = fatal; credentials belong in a config file, never in the repo (4:L286).
 
-**`mysqli_close($conn)`** releases the link (4:L216). The deck notes PHP closes it automatically at script end, so it is *discipline*, not necessity — but write it in exams, it shows you know the lifecycle.
-
-**Why it matters:** nothing else in this module compiles without a `$conn`. Q92, Q110, Q116, Q234, Q240, Q248 all start here.
-
-> **Say this if grilled:** "`mysqli_connect()` takes host, user, password and database and returns a connection handle or `false`; every subsequent query passes that handle, and `mysqli_close()` releases it."
-
-### 2.7 The same connection, object-oriented (4:L244–268)
-
-**Story:** same phone call, different handset — buttons instead of a switchboard operator.
+### 2.7 The same connection, object-oriented (`4:L244–268`)
 
 ```php
 <?php
@@ -313,28 +233,22 @@ $conn->close();
 ?>
 ```
 
-**Mapping table — know which side each name lives on** (4:L248–254)
-
 | Job | Procedural | Object-oriented |
 |---|---|---|
 | Connect | `mysqli_connect(...)` | `new mysqli(...)` |
-| Connection error | `mysqli_connect_error()` | `$conn->connect_error` |
-| Run a query | `mysqli_query($conn, $sql)` | `$conn->query($sql)` |
-| Fetch a row | `mysqli_fetch_assoc($result)` | `$result->fetch_assoc()` |
+| Connect error | `mysqli_connect_error()` | `$conn->connect_error` |
+| Query | `mysqli_query($conn, $sql)` | `$conn->query($sql)` |
+| Fetch row | `mysqli_fetch_assoc($result)` | `$result->fetch_assoc()` |
 | Rows affected | `mysqli_affected_rows($conn)` | `$conn->affected_rows` |
 | Last insert id | `mysqli_insert_id($conn)` | `$conn->insert_id` |
 | Error text | `mysqli_error($conn)` | `$conn->error` |
 | Close | `mysqli_close($conn)` | `$conn->close()` |
 
-**Which to write in the exam?** The procedural form — it is what 90% of the deck's examples use, and mixing the two mid-script is the classic way to lose a mark. But *know* the OO column, because questions say "using MySQLi" and examiners like `$conn->affected_rows`.
+**Write procedural in the exam** — 90% of the deck; know the OO column for "using MySQLi" questions.
+**Trap:** mixing the two mid-script is the classic lost mark.
 
-> **Say this if grilled:** "MySQLi exposes two APIs over the same engine — functions taking `$conn` first, or methods on the connection object; they are interchangeable, but never mixed in one script."
-
-### 2.8 Connection error handling + the four best practices (4:L280–305)
-
-**Story:** a pilot's pre-flight check. Thirty seconds of checking prevents a crash nobody can diagnose later.
-
-**The failure check is not optional.** A failed connection returns `false`; if you ignore it, every later call receives `false` where a handle should be and you get a chain of confusing warnings instead of one clear message (4:L290–292).
+### 2.8 Connection error handling + four practices (`4:L280–305`)
+**Why check:** failure returns `false`; later calls then get `false` where a handle belongs (4:L290–292).
 
 ```php
 <?php
@@ -346,26 +260,13 @@ if (!$conn) {
 ?>
 ```
 
-- `die("message")` prints the message and **stops the script** — correct here, because there is nothing sensible left to do without a database.
-- `mysqli_connect_error()` returns the *reason* (e.g. `Access denied for user 'root'@'localhost'`). Printing it while learning is fine; in production you log it and show a generic page, because it leaks server details (standard).
+- `die("message")` prints and **stops the script** — nothing sensible is left without a database.
+- `mysqli_connect_error()` gives the reason (`Access denied for user 'root'@'localhost'`); in production log it, show a generic page (standard).
 
-**The four practices** (4:L284–304)
+**Four practices** (4:L284–304): credentials in a config file out of version control (4:L286); always check failure (4:L290); close when done (4:L296); prepared statements are the production path (4:L302–304).
+**PHP 8.1 nuance (standard):** mysqli now *throws* `mysqli_sql_exception`, so `if (!$conn)` never fires. Both-worlds form: `try { … } catch (mysqli_sql_exception $e) { die($e->getMessage()); }`. Write the deck's form; mention exceptions only when asked how to harden it.
 
-1. **Never hardcode credentials in shared code** — put them in a separate config file kept out of version control (4:L286).
-2. **Always check for connection failure** (4:L290).
-3. **Close the connection when done** — good discipline in long-running scripts (4:L296).
-4. **Prepared statements are the production path** — the module builds SQL by string concatenation *for clarity*, but real code uses `mysqli_prepare()` (4:L302–304).
-
-**One thing your deck does not say but PHP 8 does** (standard): since PHP 8.1, mysqli throws `mysqli_sql_exception` by default instead of returning `false`, so `if (!$conn)` never fires. The exam-safe pattern that works in both worlds is `try { … } catch (mysqli_sql_exception $e) { die($e->getMessage()); }`. Write the `if (!$conn)` form the deck teaches; mention exceptions only if asked "how would you harden this".
-
-> **Say this if grilled:** "Check the return value immediately with `if (!$conn)` and `mysqli_connect_error()`, then `die()` — a silently failed connection produces misleading errors three function calls later."
-
-### 2.9 Running a query: `mysqli_query()` and the result handle (4:L316–337)
-
-**Story:** posting a letter. You hand it to the post office (MySQL). For a *question* ("SELECT") you get a parcel back; for an *instruction* ("INSERT") you get only a receipt saying it was accepted.
-
-**Signature:** `mysqli_query($conn, $sql)` — the deck's own summary: *executes a query and returns a result handle (for SELECT) or true/false (for INSERT/UPDATE/DELETE)* (4:L320).
-
+### 2.9 Running a query: `mysqli_query()` (`4:L316–337`)
 ```php
 <?php
 $sql = "SELECT name, marks FROM students";
@@ -377,24 +278,14 @@ if (!$result) {
 ?>
 ```
 
-**The two return types — this is the single most examined detail on the slide**
-
-| Query kind | Returns on success | You then do |
+| Query kind | Returns | You then |
 |---|---|---|
-| `SELECT`, `SHOW`, `DESCRIBE` | A **result handle** (a `mysqli_result` object) | `mysqli_fetch_assoc($result)` in a loop |
-| `INSERT`, `UPDATE`, `DELETE`, `CREATE` | `true` | `mysqli_affected_rows($conn)` / `mysqli_insert_id($conn)` |
+| `SELECT`, `SHOW`, `DESCRIBE` | **result handle** (`mysqli_result`) | `mysqli_fetch_assoc()` in a loop |
+| `INSERT`, `UPDATE`, `DELETE`, `CREATE` | `true` | `affected_rows()` / `insert_id()` |
 
-→ Trying to `fetch_assoc()` a `true` is the classic fatal error *"Call to a member function fetch_assoc() on bool"*.
+**Traps:** `fetch_assoc()` on a `true` → *"Call to a member function fetch_assoc() on bool"*; `$sql` is just a string, so input concatenated into it is how injection happens (4:L326) → §2.18..
 
-**Error path.** `mysqli_error($conn)` returns MySQL's own message for the *last* failed query (4:L324). `$sql` is just a string — building it from user input is exactly how injection happens (4:L326), see 2.18.
-
-**Why it matters:** Q126 asks its purpose in one line; every CRUD answer in Part B is this function with a different string.
-
-> **Say this if grilled:** "`mysqli_query()` sends one SQL statement and returns a result handle for SELECT or a boolean for writes — so you branch on what kind of statement you sent."
-
-### 2.10 Reading rows: `mysqli_fetch_assoc()` and its siblings (4:L351–370, 4:L383–393)
-
-**Story:** a ticket roll. Each pull gives you the next ticket; when the roll is finished you get nothing — and "nothing" is exactly how you know to stop.
+### 2.10 Reading rows: `mysqli_fetch_assoc()` (`4:L351–370`, `4:L383–393`)
 
 ```php
 <?php
@@ -406,32 +297,18 @@ echo "Total rows: " . mysqli_num_rows($result);
 ?>
 ```
 
-**How the loop terminates — say this precisely.** `mysqli_fetch_assoc()` returns one row as an **associative array** (`["column" => value]`) and advances an internal pointer (4:L355–357). When no rows remain it returns **`NULL`**, `NULL` is falsy, so the `while` condition fails and the loop ends. That is why `while ($row = mysqli_fetch_assoc($result))` needs no counter (4:L357, 4:L393).
+**Termination:** it returns one row as an associative array (`["column" => value]`) and advances a pointer (4:L355–357); with none left it returns **`NULL`**, which is falsy — that ends the `while`, no counter needed.
 
-**The four fetch styles** (4:L385–391) — Q106 is this table:
-
-| Function | Returns | Column access | Notes |
+| Function | Returns | Access | Note |
 |---|---|---|---|
-| `mysqli_fetch_assoc()` | Associative array | `$row["name"]` | Most common; readable (4:L387) |
-| `mysqli_fetch_array()` | **Both** numeric and associative keys | `$row["name"]` **or** `$row[0]` | Flexible but heavier — each value stored twice (4:L388) |
-| `mysqli_fetch_row()` | Indexed array only | `$row[0]` | Position-based; breaks if column order changes (4:L389) |
-| `mysqli_fetch_object()` | Object | `$row->name` | Nice for OO code (4:L390) |
+| `mysqli_fetch_assoc()` | associative | `$row["name"]` | the default (4:L387) |
+| `mysqli_fetch_array()` | both key sets | `$row["name"]` / `$row[0]` | values stored twice (4:L388) |
+| `mysqli_fetch_row()` | indexed | `$row[0]` | breaks on column reorder (4:L389) |
+| `mysqli_fetch_object()` | object | `$row->name` | for OO (4:L390) |
 
-**Related counters**
+**Counters:** `mysqli_num_rows($result)` counts without consuming (4:L361, 4:L391); `mysqli_affected_rows($conn)` counts rows *changed* (§2.17); `mysqli_free_result()` frees memory (standard)..
 
-- `mysqli_num_rows($result)` → integer count of returned rows, **without** consuming them (4:L361, 4:L391). Use it for "no records found" checks and paging.
-- `mysqli_affected_rows($conn)` → rows *changed* by the last write query — a different thing entirely (2.17).
-- `mysqli_free_result($result)` → frees the result memory (standard, optional).
-
-**Why it matters:** Q101, Q104, Q108, Q128, Q243, Q251, Q253 all end in this loop. Half of Part B is "fetch rows and print an HTML table".
-
-> **Say this if grilled:** "It pulls the next row as an associative array and moves the pointer; it returns `NULL` at the end, which is what terminates the `while` loop."
-
-### 2.11 The five-step cycle + closing discipline (4:L399, 4:L405–419)
-
-**Story:** a factory line with five stations. Every product — a student list, a product list, a marks report — goes through the same five stations.
-
-The deck's own diagram (4:L399) and numbered list (4:L407–417):
+### 2.11 The five-step cycle (`4:L399`, `4:L405–419`)
 
 ```text
 1. Build SQL string
@@ -446,8 +323,6 @@ Browser displays the finished table
 
 > "This five-step pattern — query, fetch, loop, echo — repeats throughout the rest of this module, regardless of what the query actually does." (4:L419)
 
-**Close-out order** for a full page (the tidy version you should write in exams):
-
 ```php
 <?php
 mysqli_free_result($result);   // release the result set
@@ -455,15 +330,8 @@ mysqli_close($conn);           // release the connection
 ?>
 ```
 
-**Why it matters:** it is the skeleton of Q243, Q245, Q248, Q251, Q253 and the "architecture" half of Q245. If you can draw five boxes and label them, you have 6–8 of those 14 marks before writing a line of code.
-
-> **Say this if grilled:** "Build the SQL, run it, get a handle, loop the handle into rows, echo one HTML fragment per row — and the browser only ever sees step 5's output."
-
-### 2.12 CREATE TABLE — defining structure before storing anything (4:L431–453)
-
-**Story:** buying a filing cabinet and labelling the drawers *before* you have any paper. Once paper is in, changing the drawer labels is painful.
-
-**SQL shape** (4:L435):
+### 2.12 CREATE TABLE (`4:L431–453`)
+**What:** declare the schema — columns, types, constraints — once; no INSERT works before it exists (4:L435).
 
 ```sql
 CREATE TABLE students (
@@ -474,20 +342,13 @@ CREATE TABLE students (
 );
 ```
 
-**The pieces you must be able to name**
-
-| Piece | Meaning | Why it's there |
-|---|---|---|
-| `CREATE TABLE name ( … )` | Defines columns and their types | A table must exist before any INSERT (4:L435) |
-| `INT AUTO_INCREMENT PRIMARY KEY` | Unique, self-numbering id | Every row gets an identity you can target with `WHERE id = …` (4:L437) |
-| `VARCHAR(50)` | Variable-length text up to 50 chars | Names, emails — the workhorse type |
-| `TEXT` | Long text | Descriptions, feedback |
-| `DATE` | Calendar date | `joined`, `admitted` |
-| `DECIMAL(10,2)` | Exact decimal, 2 places | Money — never `FLOAT` for currency (standard) |
-| `NOT NULL` | Column cannot be empty | Enforces data quality at the DB level (standard) |
-| `UNIQUE` | No duplicate values | Email, register number (standard) |
-
-**Run it from PHP** — the deck does this *once*, at setup (4:L441, 4:L445–452):
+| Piece | Meaning |
+|---|---|
+| `INT AUTO_INCREMENT PRIMARY KEY` | unique, self-numbering id to target with `WHERE id = …` (4:L437) |
+| `VARCHAR(50)` / `TEXT` | short text / long text |
+| `DATE` | calendar date — `joined` |
+| `DECIMAL(10,2)` | exact money, never `FLOAT` (standard) |
+| `NOT NULL` / `UNIQUE` | no empty / no duplicate (standard) |
 
 ```php
 <?php
@@ -505,17 +366,10 @@ echo "Table created";
 ?>
 ```
 
-**Two traps**: (a) running it on every page load → *"table already exists"*; use `CREATE TABLE IF NOT EXISTS` or run it once from phpMyAdmin (standard). (b) Forgetting the `PRIMARY KEY` → duplicate rows you cannot address individually.
+**Traps:** running it every page load → *"table already exists"* (use `IF NOT EXISTS` or run once, standard); no `PRIMARY KEY` → duplicate rows you cannot address..
 
-**Why it matters:** Q117 (purpose), Q109 (CREATE from PHP), Q241, Q249 all need this; Q249 additionally wants column types and constraints explained.
-
-> **Say this if grilled:** "CREATE TABLE declares the schema — column names, types and constraints — and is run once at setup, because INSERT can only write into a structure that already exists."
-
-### 2.13 INSERT — adding a new row (4:L468–490)
-
-**Story:** filling in one new index card and dropping it in the drawer. The drawer's labels already tell you which field goes where.
-
-**SQL shape** (4:L472): `INSERT INTO table (columns) VALUES (values)` — the deck insists the **explicit column list is safest**, because it survives later schema changes and cannot silently shift values into the wrong columns.
+### 2.13 INSERT (`4:L468–490`)
+**What:** `INSERT INTO table (columns) VALUES (values)` — the explicit column list is safest (4:L472).
 
 ```php
 <?php
@@ -533,24 +387,12 @@ echo "New ID: " . mysqli_insert_id($conn);
 ?>
 ```
 
-**Three rules**
+- **Strings quoted, numbers not** (4:L474) — unquote a string and MySQL reads it as a column: `Unknown column 'Anu' in 'field list'`.
+- **`mysqli_insert_id($conn)`** gives the new `AUTO_INCREMENT` id (4:L476).
+- **Raw input in `$sql` is injection** (4:L478); `(int)` covers numbers, prepared statements cover the rest (§2.18).
+**Trap:** `INSERT INTO students VALUES (…)` without a column list needs every column in table order and breaks when one is added (standard)..
 
-1. **Strings get quotes, numbers don't** (4:L474). `'$name'` is quoted in the SQL text; `$marks` is cast to `(int)` so it needs none. Forget the quotes around a string and MySQL reads the word as a column name → `Unknown column 'Anu' in 'field list'`.
-2. **`mysqli_insert_id($conn)`** returns the `AUTO_INCREMENT` id MySQL just assigned (4:L476) — the only way to know the new row's key without a second SELECT.
-3. **Building `$sql` from raw form input is unsafe** (4:L478): that is injection. The deck's own fix is `(int)` casting for numbers and, properly, prepared statements (2.18).
-
-**Omitting the column list** — `INSERT INTO students VALUES (…)` — works only if you supply *every* column in *table order*, and it breaks the moment a column is added (standard). Never do it in the exam.
-
-**Why it matters:** Q96, Q112, Q118, Q241, Q242, Q248, Q253 — inserting a record *with* error handling is the single most repeated Part A/B demand in this module.
-
-> **Say this if grilled:** "INSERT INTO table (columns) VALUES (values), strings quoted, numbers cast to int, checked with `if (!mysqli_query(...))` and confirmed with `mysqli_insert_id()`."
-
-### 2.14 DELETE — removing rows (4:L505–525)
-
-**Story:** a shredder, not a waste-paper basket. What goes in does not come back.
-
-**SQL shape** (4:L509): `DELETE FROM table WHERE condition`
-
+### 2.14 DELETE (`4:L505–525`)
 ```php
 <?php
 $id = (int)$_POST["id"];
@@ -565,25 +407,12 @@ echo mysqli_affected_rows($conn) . " row(s) deleted";
 ?>
 ```
 
-**The four points the slide makes**
+- `WHERE` limits deletion to matching rows (4:L509); **omit it and the table empties** (4:L511) — no undo.
+- `mysqli_affected_rows($conn)` says how many went (4:L513).
+- **Preview** with the same condition as a `SELECT` first (4:L515).
+**Trap:** a `WHERE` matching nothing *succeeds* with 0 rows, no error — only the count reveals it (4:L687–689)..
 
-1. `WHERE` limits deletion to matching rows (4:L509).
-2. **Never omit `WHERE` unless you mean to empty the table** (4:L511) — `DELETE FROM students` with no clause wipes everything, and there is no undo.
-3. `mysqli_affected_rows($conn)` tells you how many rows actually went (4:L513).
-4. **Preview with the equivalent SELECT first** (4:L515) — a habit, not syntax.
-
-**The zero-row trap.** A DELETE with a `WHERE` that matches nothing *succeeds* (no error) and affects 0 rows. Only `affected_rows` reveals that nothing happened (4:L687–689). Same for UPDATE.
-
-**Why it matters:** Q119 (purpose), Q242b (delete by register number), Q250 (delete by department, prepared) — and the "safe DELETE" discussion is worth 7 of those 14 marks.
-
-> **Say this if grilled:** "DELETE FROM table WHERE condition — the WHERE is the whole safety mechanism, affected_rows is the only proof it did what you meant, and a SELECT with the same WHERE is the dry run."
-
-### 2.15 UPDATE — changing existing values (4:L630–652)
-
-**Story:** correcting a typo on an existing card, not writing a new one. If you don't say *which* card, you rewrite the entire drawer.
-
-**SQL shape** (4:L634): `UPDATE table SET col = value WHERE condition`
-
+### 2.15 UPDATE (`4:L630–652`)
 ```php
 <?php
 $id    = (int)$_POST["id"];
@@ -601,38 +430,23 @@ echo mysqli_affected_rows($conn) . " row(s) updated";
 ?>
 ```
 
-**Points to state** (4:L634–640)
+- Multiple columns: `SET col1 = val1, col2 = val2` — one `SET`, commas.
+- **No `WHERE` = every row** — "almost always a mistake" (4:L638).
+- Compute in SQL: `SET salary = salary * 1.10` (Q252).
+**Subtlety (standard):** `affected_rows` counts rows whose values **actually changed** — re-saving the same value returns 0 though the row matched; `mysqli_info()` or a `SELECT` gives the match count..
 
-- Multiple columns in one statement: `SET col1 = val1, col2 = val2` (comma-separated, one `SET`).
-- **Without `WHERE`, every row is updated** — "almost always a mistake" (4:L638).
-- `mysqli_affected_rows($conn)` confirms how many rows actually changed (4:L640).
-- You can compute from the old value: `SET salary = salary * 1.10` (that is Q252).
-
-**Subtlety worth a mark** (standard): MySQL's `affected_rows` counts rows whose values **actually changed**. Re-saving the same value returns 0 even though the row matched. `mysqli_info($conn)` or a `SELECT` confirms the match count if you need it.
-
-**Why it matters:** Q98, Q121, Q244, Q252 — and Q127 wants exactly the "why WHERE matters" defence.
-
-> **Say this if grilled:** "UPDATE table SET col = value WHERE condition; no WHERE means every row, and `affected_rows` is how you prove the right number of rows changed."
-
-### 2.16 SELECT — the only statement that gives data back (4:L558–580, 4:L595–615)
-
-**Story:** asking a librarian a question — the only interaction where something comes back over the counter.
-
-**Definition.** SELECT *returns* rows; every other statement only succeeds or fails (4:L560). It is therefore the only statement whose result you loop over.
-
-**The pieces**
+### 2.16 SELECT (`4:L558–580`, `4:L595–615`)
+**What:** the only statement that **returns** rows; the rest merely succeed or fail (4:L560) — so only this one is looped.
 
 | Clause | Purpose | Example |
 |---|---|---|
-| `SELECT *` | Every column | `SELECT * FROM students` (4:L562) |
-| `SELECT col1, col2` | Only what you need — faster, clearer | `SELECT name, marks FROM students` (4:L564) |
-| `WHERE` | Filters **rows** | `WHERE marks >= 75` (4:L566) |
-| `ORDER BY col ASC/DESC` | Sorts rows | `ORDER BY marks DESC` (4:L599) |
-| `LIMIT n` | Caps row count | `LIMIT 5` (4:L601) |
-| `LIMIT offset, count` | Skips then takes — pagination | `LIMIT 10, 5` (4:L603) |
-| `LIKE` | Pattern match | `WHERE name LIKE 'A%'` (4:L568) |
+| `SELECT *` / `col1, col2` | all / chosen columns | `SELECT name, marks FROM students` (4:L564) |
+| `WHERE` | filters rows | `WHERE marks >= 75` (4:L566) |
+| `ORDER BY col ASC/DESC` | sorts | `ORDER BY marks DESC` (4:L599) |
+| `LIMIT n` / `LIMIT offset, count` | cap / page | `LIMIT 5`, `LIMIT 10, 5` (4:L601–603) |
+| `LIKE` | pattern | `WHERE name LIKE 'A%'` (4:L568) |
 
-**Operators** (4:L568): `=`, `!=`, `>`, `<`, `>=`, `<=`, `LIKE`. `LIKE` uses `%` for "any characters": `'A%'` starts with A, `'%a'` ends with a, `'%an%'` contains "an".
+**Operators** (4:L568): `=`, `!=`, `>`, `<`, `>=`, `<=`, `LIKE` — `%` is "any characters": `'A%'`, `'%a'`, `'%an%'`.
 
 ```php
 <?php
@@ -653,16 +467,9 @@ while ($row = mysqli_fetch_assoc($result)) {
 ?>
 ```
 
-**Clause order is fixed** — `SELECT … FROM … WHERE … ORDER BY … LIMIT …`. Swap two and MySQL errors out; this is a free mark in any "write the query" question.
+**Clause order is fixed:** `SELECT … FROM … WHERE … ORDER BY … LIMIT …` — swap two and MySQL errors..
 
-**Why it matters:** Q101, Q104, Q108, Q120, Q243, Q251, Q253. The WHERE variant (`marks > 50`) is literally Q251.
-
-> **Say this if grilled:** "SELECT is the read operation — column list, FROM, optional WHERE, ORDER BY, LIMIT — and it is the only query whose return value you fetch in a loop."
-
-### 2.17 `affected_rows` — the number that proves a write happened (4:L513, 4:L640, 4:L687–689)
-
-**Story:** a delivery receipt. "Delivered" without a count could mean one parcel or the whole warehouse.
-
+### 2.17 `affected_rows` (`4:L513`, `4:L640`, `4:L687–689`)
 ```php
 <?php
 mysqli_query($conn, $sql);                 // some UPDATE or DELETE
@@ -671,25 +478,16 @@ echo $conn->affected_rows;                 // OO form — same number
 ?>
 ```
 
-**Three counts, do not confuse them**
-
-| Function | Counts | Applies to |
+| Function | Counts | On |
 |---|---|---|
-| `mysqli_affected_rows($conn)` | Rows **changed** by the last write | INSERT / UPDATE / DELETE |
-| `mysqli_num_rows($result)` | Rows **returned** by a SELECT | SELECT only |
-| `mysqli_insert_id($conn)` | The id **generated** by the last INSERT | INSERT with AUTO_INCREMENT |
+| `mysqli_affected_rows($conn)` | rows **changed** | INSERT / UPDATE / DELETE |
+| `mysqli_num_rows($result)` | rows **returned** | SELECT |
+| `mysqli_insert_id($conn)` | id **generated** | INSERT + AUTO_INCREMENT |
 
-**Why the slide calls it a habit** (4:L687–689): a query can "succeed" with 0 affected rows — wrong `WHERE`, no matching id, duplicate value. No error is raised. The count is the only signal.
+**Why it is a habit** (4:L687–689): a query "succeeds" with 0 affected rows — wrong `WHERE`, no match, duplicate — and raises no error. The count is the only signal..
 
-**Why it matters:** Q252a asks its role in one half; Q244, Q250 want it in code.
-
-> **Say this if grilled:** "`affected_rows` is the count of rows the last UPDATE/DELETE/INSERT actually changed — success without a count can still mean zero rows matched."
-
-### 2.18 SQL injection and prepared statements (4:L302–304, 4:L326, 4:L681–683)
-
-**Story:** a form that asks for your name, and someone writes *"ignore the question, empty the safe"* — and the form obeys, because it pasted the answer into the instruction sheet.
-
-**The vulnerability, concretely.** This code looks harmless:
+### 2.18 SQL injection and prepared statements (`4:L302–304`, `4:L326`, `4:L681–683`)
+**The bug:** data concatenated into the SQL text, so the database cannot tell data from code (4:L326).
 
 ```php
 <?php
@@ -699,15 +497,13 @@ $result = mysqli_query($conn, $sql);
 ?>
 ```
 
-If the user submits `' OR '1'='1`, the string becomes:
+Submit `' OR '1'='1` and the statement becomes:
 
 ```sql
 SELECT * FROM users WHERE email = '' OR '1'='1'
 ```
 
-…which is true for every row: the whole table leaks. Submit `'; DROP TABLE users; --` and the table is gone. The cause is structural: **the data was concatenated into the SQL text, so the database cannot tell data from code** (4:L326).
-
-**The fix — placeholders.** `mysqli_prepare()` sends the SQL *structure* first with `?` where values go; the values are sent separately afterwards (4:L683):
+…true for every row, so the table leaks; `'; DROP TABLE users; --` destroys it.
 
 ```php
 <?php
@@ -725,30 +521,19 @@ mysqli_stmt_close($stmt);
 ?>
 ```
 
-**The `bind_param` type string — one letter per `?`, in order** (standard, the deck only names the function):
-
-| Letter | Type | Use for |
+| Letter | Type | For |
 |---|---|---|
-| `s` | string | names, emails, dates, decimals-as-text |
-| `i` | integer | ids, marks, counts |
-| `d` | double/float | prices, measurements |
-| `b` | blob | binary data |
+| `s` | string | names, emails, dates |
+| `i` | integer | ids, marks |
+| `d` | double | prices |
+| `b` | blob | binary |
 
-So `bind_param("ssi", $name, $email, $age)` means *string, string, int* — three placeholders, three variables, same order.
+`bind_param("ssi", $name, $email, $age)` = string, string, int — one letter per `?`, same order.
 
-**Why prepared statements actually stop injection** (the sentence that earns the marks): the statement is **parsed and compiled before the values arrive**, so a value can never be reinterpreted as SQL syntax. `' OR '1'='1` is stored as a literal 13-character email, not as a condition. Bonus: the same prepared statement can be executed repeatedly with different values, which is faster for bulk inserts.
+**Why it stops injection (the marked sentence):** the statement is compiled **before** the values arrive, so a value can never become syntax — `' OR '1'='1` is stored as a literal 13-character email. Bonus: one prepared statement re-executes with new values, faster for bulk work.
+**Other defences** (4:L675–677): `(int)` cast for numbers, `SELECT` the `WHERE` first (4:L669). → Q99, 242, 250; precautions halves of Q244/Q250.
 
-**Other defences the deck mentions** (4:L675–677): cast numeric input with `(int)`, and test the WHERE with a SELECT first (4:L669).
-
-**Why it matters:** Q99 is a Part A certainty, Q242 and Q250 are Part B prepared-statement programs, and any "precautions" half of Q244/Q250 wants this.
-
-> **Say this if grilled:** "Prepared statements compile the SQL before the data arrives, so user input is only ever a value — concatenation lets it become syntax, which is the entire injection bug."
-
-### 2.19 Mixing PHP into HTML — the alternative syntax (4:L735–755)
-
-**Story:** a stencil over a wall. The HTML is the wall; PHP lifts the stencil once per database row.
-
-**The pattern** (the deck's own code, 4:L748–755):
+### 2.19 Mixing PHP into HTML (`4:L735–755`)
 
 ```php
 <table border="1">
@@ -761,14 +546,10 @@ So `bind_param("ssi", $name, $email, $age)` means *string, string, int* — thre
 </table>
 ```
 
-**Four syntax facts to get right**
-
-1. **`while (...):` with a colon, closed by `endwhile;`** — not `{ }`. This is PHP's *alternative syntax*, designed for templates because a `}` alone in the middle of HTML is unreadable (4:L739). The same exists for `if: endif;` and `foreach: endforeach;`.
-2. **`<?= $expr ?>` is shorthand for `<?php echo $expr; ?>`** (4:L790, and 3:L55). Legal and expected in the dynamic-page answer.
-3. **A `<?php ?>` block may open and close many times inside one file** (4:L739) — that is the whole technique.
-4. **`htmlspecialchars()` around any user-supplied value** (4:L743) turns `<` into `&lt;`, so a stored name like `<script>alert(1)</script>` prints as text instead of executing. This is XSS defence, and it is a marked point.
-
-**The same loop in non-alternative syntax** — safe to write if you forget the colon form:
+- **`while (...):` + `endwhile;`** — the *alternative syntax*, because a lone `}` inside HTML is unreadable (4:L739); same for `if: endif;`, `foreach: endforeach;`.
+- **`<?= $expr ?>` = `<?php echo $expr; ?>`** (4:L790, 3:L55).
+- **A file may open and close `<?php ?>` many times** (4:L739).
+- **`htmlspecialchars()` on every user value** (4:L743) turns `<` into `&lt;`, so `<script>alert(1)</script>` prints as text — XSS defence, a marked point.
 
 ```php
 <?php while ($row = mysqli_fetch_assoc($result)) { ?>
@@ -776,13 +557,9 @@ So `bind_param("ssi", $name, $email, $age)` means *string, string, int* — thre
 <?php } ?>
 ```
 
-**Why it matters:** Q229, Q231, Q245, Q253 all end in "display it as HTML"; the colon/endwhile pair is the most commonly lost mark in the module.
+→ Q229, 231, 245, 253. The colon/`endwhile` pair is the module's most commonly lost mark.
 
-> **Say this if grilled:** "PHP can close and reopen mid-HTML; the alternative `while: … endwhile;` syntax keeps the markup readable, `<?=` echoes, and `htmlspecialchars()` stops stored HTML from executing."
-
-### 2.20 The complete dynamic page — every piece in one file (4:L770–792)
-
-**Story:** the whole kitchen, one service. Order in, plate out.
+### 2.20 The complete dynamic page (`4:L770–792`)
 
 ```php
 <?php
@@ -813,29 +590,21 @@ mysqli_close($conn);
 ?>
 ```
 
-**Annotation, in the deck's own three steps** (4:L774–778): 1. connect, 2. run the query, 3. loop and echo each row as HTML. The deck's claim to quote: *"This exact shape — connect, query, loop, render — is the backbone of almost every PHP page that shows database content"* (4:L780).
+**Three steps** (4:L774–778): connect, query, loop and echo each row. The deck's claim: *"This exact shape — connect, query, loop, render — is the backbone of almost every PHP page that shows database content"* (4:L780).
+**What "dynamic" means** (4:L705): the `.php` file never changes; the HTML it emits is rebuilt per request. Add a row in phpMyAdmin, refresh, the page changes with no edit — answers Q102, Q122, Q129, half of Q253.
+**Layering** (4:L717, Q245): data access, business logic, presentation visible as three concerns — the precursor to Module 5's MVC.
 
-**What "dynamic" means here, precisely** (4:L705): the `.php` file on disk never changes; the HTML it *emits* is rebuilt per request from whatever is in the table. Add a row in phpMyAdmin, refresh, and the page changes with no edit to the file. That sentence answers Q102, Q122, Q129 and half of Q253.
+### 2.21 Five clusters your deck never covers (all "standard, not in your deck")
 
-**Layering** (4:L717, and Q245): even in one file, keep three concerns visible — **data access** (the query), **business logic** (any PHP rules), **presentation** (the HTML). That separation is the informal precursor to Module V's MVC.
-
-**Why it matters:** this is the highest-probability 14-mark answer in the module and the direct answer to Q253.
-
-> **Say this if grilled:** "Connect, query, loop, render — the file is static, its output is not, because the row data is read at request time."
-
-### 2.21 What the bank asks that your deck never covers (all "(standard, not in your deck)")
-
-Five question clusters have no slide. Learn them here; do not claim the deck said them.
-
-**(a) `$_SERVER['PHP_SELF']` (Q103).** The bank writes `$_PHP_SELF`, which is a typo — there is no such superglobal. The real value is `$_SERVER['PHP_SELF']`: the *path of the currently executing script*, used as a form's `action` so the form posts to itself:
+**(a) `$_SERVER['PHP_SELF']` (Q103).** The bank writes `$_PHP_SELF` — a typo, no such superglobal. The real one is the executing script's path, used as a form action so the form posts to itself:
 
 ```php
 <form method="post" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>">
 ```
 
-`htmlspecialchars()` matters here: without it a crafted URL can inject script into the action attribute (XSS).
+`htmlspecialchars()` matters: without it a crafted URL injects script into the `action` attribute.
 
-**(b) Regex (Q97, Q235, Q236, Q237)** — the deck covers this in Module 3, not 4 (3:L568–586, telephone table 3:L597–607):
+**(b) Regex (Q97, 235, 236, 237)** — a Module 3 topic (3:L568–586, phone table 3:L597–607):
 
 ```php
 <?php
@@ -846,15 +615,14 @@ $clean = preg_replace("/[0-9]/", "", "Room12A");   // "RoomA"
 ?>
 ```
 
-- `preg_match()` returns `1` on match, `0` on no match, `false` on error → always compare with `== 1` or cast to bool.
-- `preg_match_all()` fills an array with **every** match — that is how you extract all emails from a page of text.
-- Delimiters `/…/` are required; `^` and `$` anchor start/end; `{n}` means exactly n times (3:L607).
+- `preg_match()` returns `1` / `0` / `false` on error → compare `== 1` or cast to bool.
+- `preg_match_all()` fills an array with **every** match — how you extract all emails from text.
+- Delimiters `/…/` required; `^` `$` anchor; `{n}` = exactly n times (3:L607).
 
-**(c) File upload (Q233a)** — `$_FILES`, `enctype`, `move_uploaded_file()`; full drill at §4 D15.
+**(c) File upload (Q233a)** — `$_FILES`, `enctype`, `move_uploaded_file()`; drill D15.
+**(d) `sqrt()` / factorial / `date()` (Q105, 231, 233b)** — plain PHP functions; drills D12–D14.
 
-**(d) `sqrt()` / factorial / `date()` (Q105, Q231, Q233b)** — plain PHP functions, drilled at §4 D12–D14.
-
-**(e) `SHOW DATABASES` (Q107)** — a SQL statement, not a PHP function:
+**(e) `SHOW DATABASES` (Q107)** — SQL, not a PHP function:
 
 ```php
 <?php
@@ -865,22 +633,21 @@ while ($row = mysqli_fetch_row($result)) {   // index 0 = database name
 ?>
 ```
 
-`SHOW TABLES` is the same idea one level down; `DESCRIBE students` lists a table's columns.
+`SHOW TABLES` is the same one level down; `DESCRIBE students` lists columns.
 
 ---
 
-## 3. PART 2 — Answer bank
+## 3. Answer bank
 
 ### 3.1 3-mark answers (Part A)
 
-Write **3 or 4 numbered/bulleted points**, or one short code block plus two lines. That is the whole shape of a 3-mark answer: three facts, or code + one explanation. Duplicates are merged into **MASTER ANSWERS**; the numbers each one covers are listed.
+3 marks = three facts, or one short code block plus a line. Duplicates are merged into master answers; the numbers each covers are listed.
 
 **A1 — Steps to establish a PHP–MySQL connection · also answers Q110, Q116, Q92**
 
-1. **Connect** — `mysqli_connect(host, user, password, database)` returns a connection handle or `false`.
-2. **Check** — `if (!$conn) { die("Connection failed: " . mysqli_connect_error()); }` so a failure stops the script with a readable reason.
-3. **Use** — pass `$conn` as the first argument to `mysqli_query()` for every statement.
-4. **Close** — `mysqli_close($conn)` (optional; PHP closes at script end).
+1. **Connect** — `mysqli_connect(host, user, password, database)` → handle, or `false`.
+2. **Check** — `if (!$conn) die(mysqli_connect_error());` stops the script immediately.
+3. **Use, close** — `$conn` first in every `mysqli_query()`, then `mysqli_close($conn)`.
 
 ```php
 <?php
@@ -891,37 +658,34 @@ mysqli_close($conn);
 ?>
 ```
 
-*OO one-liner variant if the question says "using object-oriented MySQLi":* `$conn = new mysqli("localhost","root","","college_db"); if ($conn->connect_error) die($conn->connect_error);`
+*OO variant if asked for object-oriented:* `$conn = new mysqli("localhost","root","","college_db"); if ($conn->connect_error) die($conn->connect_error);`
 
 **A2 — `$_SESSION` vs `$_COOKIE` · also answers Q93, Q114**
 
-| | `$_SESSION` | `$_COOKIE` |
-|---|---|---|
-| Stored on | Server | Client browser |
-| Browser holds | Only the session ID | The data itself |
-| Size | Large | ~4 KB |
-| Security | Safe for sensitive data | User-editable — never trust it |
-| Lifetime | Until browser closes / timeout | Until its expiry timestamp |
-| Needs | `session_start()` first | `setcookie()` before output |
+1. **Storage** — session on the server, browser holds only the ID; cookie on the client, data itself.
+2. **Limits** — session large and safe for secrets; cookie ~4 KB and user-editable.
+3. **Setup, use** — `session_start()` first for login/cart; `setcookie()` before output for preferences.
 
-**Use a session** for login state, a cart, anything secret. **Use a cookie** for a theme preference or "remember me" token.
+Full table: §2.4.
 
-**A3 — GET vs POST · Q94** *(Module 3 material: 3:L619–640)*
+**A3 — GET vs POST · Q94** *(Module 3: 3:L619–640)*
 
 | | GET | POST |
 |---|---|---|
-| Data goes | In the URL query string | In the request body |
-| Visible in address bar | Yes | No |
-| Length limit | ~2000 chars, browser-dependent | Effectively none |
-| Bookmark / cache / resend-safe | Yes | No |
-| Should be used for | Searches, filters, ids | Passwords, inserts, updates |
+| Data goes | in the URL query string | in the request body |
+| Visible in address bar | yes | no |
+| Length limit | ~2000 chars, browser-dependent | effectively none |
+| Bookmark / cache / resend-safe | yes | no |
+| Use for | searches, filters, ids | passwords, inserts, updates |
 | PHP reads it with | `$_GET["f"]` | `$_POST["f"]` |
 
-One extra mark: forms default to GET, so always write `method="post"` explicitly for anything that changes data or carries a password.
+Forms default to GET — always write `method="post"` explicitly for anything that changes data or carries a password.
 
 **A4 — Session: start, store name, display on another page · Q95**
 
-*page1.php* stores it:
+1. **Store** — `session_start()` then `$_SESSION["username"] = "Anu";` on page 1.
+2. **Separate request** — the browser replays the `PHPSESSID` cookie to page 2 automatically.
+3. **Read** — `session_start()` again on page 2, then `echo $_SESSION["username"];`.
 
 ```php
 <?php
@@ -930,7 +694,6 @@ $_SESSION["username"] = "Anu";
 echo "Stored. <a href='page2.php'>Next page</a>";
 ?>
 ```
-*page2.php* reads it — a completely separate request:
 
 ```php
 <?php
@@ -938,16 +701,18 @@ session_start();                                  // must repeat on every page
 echo "Welcome, " . $_SESSION["username"];
 ?>
 ```
-The link works because the browser replays the `PHPSESSID` cookie; `session_start()` on page 2 loads the same server-side data.
 
-**A5 — Sessions keep state across pages; why they matter; advantages · also answers Q100, Q111, Q123**
+**A5 — Sessions keep state across pages; advantages · also answers Q100, Q111, Q123**
 
-1. HTTP is stateless — each request is independent, so a login on page 1 is invisible to page 2 unless something carries it (4:L31–33).
-2. A session stores that state **on the server** and gives the browser only an ID, so credentials and roles never travel over the wire (4:L45).
-3. Data persists across page loads until the session ends, which is what makes multi-page workflows (login → dashboard → checkout) possible (4:L110).
-4. **Three advantages to name:** security (data not client-visible), capacity (far more than 4 KB), and continuity (survives navigation across the whole site) (4:L152–160).
+1. **Stateless HTTP** — page 1's login is invisible to page 2 (4:L31–33).
+2. **Server-side data** — only an ID travels; credentials never cross the wire (4:L45).
+3. **Three wins** — security (not client-visible), capacity (beyond 4 KB), continuity (4:L152–160).
 
 **A6 — Insert a record with error handling · also answers Q96, Q112**
+
+1. **Connect, check** — `mysqli_connect(...)` then `if (!$conn) die(mysqli_connect_error());`.
+2. **Build** — cast the number `(int)`, quote the string, explicit column list.
+3. **Branch** — on `true` echo `mysqli_insert_id($conn)`, on `false` echo `mysqli_error($conn)`.
 
 ```php
 <?php
@@ -967,9 +732,12 @@ if (mysqli_query($conn, $sql)) {
 mysqli_close($conn);
 ?>
 ```
-Points: connection check → `(int)` cast for the number → quoted string → branch on the boolean return of `mysqli_query()` → `mysqli_error()` on failure, `mysqli_insert_id()` on success.
 
 **A7 — Function that validates an email with regex and returns a boolean · Q97** *(regex: 3:L568–586)*
+
+1. **Function** — `function isValidEmail($email) { return (bool) preg_match($pattern, $email); }`.
+2. **Pattern** — `/^[\w.-]+@[\w.-]+\.[A-Za-z]{2,}$/` anchors whole string, literal dot, 2+ letter TLD.
+3. **Return** — `preg_match()` gives `1`/`0`, so cast to a real boolean.
 
 ```php
 <?php
@@ -981,9 +749,12 @@ if (isValidEmail("anu@saintgits.org")) { echo "Valid"; }
 else { echo "Invalid"; }
 ?>
 ```
-Explain: `preg_match()` returns `1`/`0`, so it is cast to a real boolean; `^`/`$` anchor the whole string; `[\w.-]+` allows letters, digits, underscore, dot, hyphen; `\.` is a literal dot; `{2,}` requires at least two letters in the TLD.
 
 **A8 — Update a user's email with error handling · Q98**
+
+1. **Shape** — `UPDATE users SET email = '$email' WHERE id = $id`, id cast to `(int)`.
+2. **Check** — `if (!mysqli_query(...)) die("Update failed: " . mysqli_error($conn));`.
+3. **Report** — `mysqli_affected_rows($conn)`; 0 means the id never matched.
 
 ```php
 <?php
@@ -998,14 +769,12 @@ if (!mysqli_query($conn, $sql)) {
 echo mysqli_affected_rows($conn) . " row(s) updated";
 ?>
 ```
-Key marks: `SET col = value WHERE key = value`, the id cast to `(int)`, the error branch, and `affected_rows` reported — because a successful query that changed 0 rows means the id did not match.
 
 **A9 — Prepared statements and why · Q99** *(4:L302–304, 4:L683)*
 
-1. A prepared statement sends the SQL **template** with `?` placeholders to MySQL, which parses and compiles it *before* any data arrives.
-2. The values are then bound separately: `mysqli_stmt_bind_param($stmt, "ssi", $name, $email, $age)` — one type letter per placeholder.
-3. Injection is impossible because user input is only ever a **value**; it cannot become SQL syntax.
-4. Bonus: the compiled statement can be executed repeatedly with new values — faster for bulk work.
+1. **Template first** — `mysqli_prepare()` sends SQL with `?` placeholders; MySQL compiles it before data arrives.
+2. **Bind after** — `mysqli_stmt_bind_param($stmt, "ssi", $name, $email, $age)`, one letter per placeholder.
+3. **Why safe** — input is only ever a value, never syntax; the compiled statement also re-executes cheaply.
 
 ```php
 <?php
@@ -1018,10 +787,9 @@ mysqli_stmt_close($stmt);
 
 **A10 — Retrieve and display MySQL data on a page · also answers Q101, Q104, Q108**
 
-1. Connect, then build a `SELECT`.
-2. `mysqli_query()` returns a **result handle** (not data).
-3. `while ($row = mysqli_fetch_assoc($result))` pulls one row per iteration and stops at `NULL`.
-4. `echo` inside the loop emits the HTML.
+1. **Connect, build** — open the connection, write the `SELECT`.
+2. **Query** — `mysqli_query()` returns a **result handle**, not data.
+3. **Loop** — `while ($row = mysqli_fetch_assoc($result))` pulls one row per pass, stops at `NULL`.
 
 ```php
 <?php
@@ -1038,22 +806,25 @@ echo "</table>";
 
 **A11 — PHP's role in dynamic content vs static HTML · also answers Q102, Q122**
 
-1. **Static:** the `.html` file *is* the response; every visitor gets identical bytes.
-2. **Dynamic:** the server runs a script per request and sends whatever HTML it produced *this* time — different user, different time, different rows (4:L705).
-3. PHP is **server-side**: it can read a database, apply logic, and loop; the browser only ever receives the generated HTML, never the source or the SQL.
-4. Consequence: the same `students.php` shows 3 rows or 3000 without a single edit to the file (4:L745).
+1. **Static** — the `.html` file *is* the response; identical bytes for every visitor.
+2. **Dynamic** — a script runs per request and sends the HTML it produced *this* time (4:L705).
+3. **Server-side** — PHP reads the DB, applies logic, loops; the browser sees only HTML, never SQL.
 
 **A12 — Purpose of `$_PHP_SELF` · Q103**
 
-1. There is no `$_PHP_SELF` variable — the real superglobal is **`$_SERVER['PHP_SELF']`**, the path of the currently running script.
-2. Used as a form's `action` so the form submits **to itself**, letting the same file both display and process the form.
-3. Must be escaped with `htmlspecialchars()` when echoed into HTML, or a crafted URL can inject script into the `action` attribute.
+1. **No such variable** — the real superglobal is `$_SERVER['PHP_SELF']`, the executing script's path.
+2. **Self-post** — as a form `action` it lets one file both display and process the form.
+3. **Escape it** — `htmlspecialchars()`, or a crafted URL injects script into the attribute.
 
 ```php
 <form method="post" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>">
 ```
 
 **A13 — Square root program · Q105**
+
+1. **Function** — `sqrt($num)` returns the root; `sqrt(-1)` yields `NAN`.
+2. **Output** — `echo "Square root of $num is " . sqrt($num);` gives `… 25 is 5`.
+3. **Guard** — test `$num < 0` first, otherwise print that the root is not real.
 
 ```php
 <?php
@@ -1065,21 +836,20 @@ if ($num < 0) {
 }
 ?>
 ```
-Output: `Square root of 25 is 5`. Two marks for `sqrt()` + `echo`, one for the negative-input guard (`sqrt(-1)` yields `NAN`).
 
 **A14 — `mysql_fetch_array()` vs `mysql_fetch_assoc()` · Q106**
 
-| | `mysql_fetch_array()` | `mysql_fetch_assoc()` |
-|---|---|---|
-| Keys | Numeric **and** associative | Associative only |
-| Access | `$row[0]` **or** `$row["name"]` | `$row["name"]` |
-| Memory | Larger — each value stored twice | Smaller |
-| Readability | Poor (magic numbers) | Good (column names) |
-| Default in modern code | Rare | `mysqli_fetch_assoc()` — the standard |
+1. **Keys** — `fetch_array()` gives numeric and associative; `fetch_assoc()` associative only.
+2. **Cost** — array stores each value twice (bigger, magic indexes); assoc is smaller and readable.
+3. **Both** — one row per call, `NULL` at the end; the bank's `mysql_` prefix is the dead API.
 
-Both return one row at a time and `NULL` when the rows run out; the bank's `mysql_` prefix is the deprecated PHP 5 API, the current names are `mysqli_fetch_*`. `mysqli_fetch_row()` is the indexed-only sibling.
+Modern names are `mysqli_fetch_*`; the full table is §2.10.
 
 **A15 — List the databases on the MySQL server · Q107** *(standard — no slide)*
+
+1. **Connect** — `mysqli_connect("localhost", "root", "")`, no database argument.
+2. **Query** — `mysqli_query($conn, "SHOW DATABASES")` returns one column per database.
+3. **Fetch** — `mysqli_fetch_row()` and echo `$row[0]`.
 
 ```php
 <?php
@@ -1093,13 +863,14 @@ while ($row = mysqli_fetch_row($result)) {
 mysqli_close($conn);
 ?>
 ```
-`SHOW DATABASES` returns one column per database, so `mysqli_fetch_row()` with `$row[0]` is the natural fetch. `SHOW TABLES` and `DESCRIBE tablename` are the same pattern one level down.
 
-**A16 — CREATE operations on a MySQL table from PHP; purpose of CREATE TABLE · also answers Q109, Q117**
+`SHOW TABLES` and `DESCRIBE tablename` are the same pattern one level down.
 
-1. `CREATE TABLE` defines a table's **structure** — column names, data types, keys, constraints. No data can be inserted until the structure exists (4:L433).
-2. It is a **setup-time** statement: run once, not on every page load (4:L441).
-3. From PHP it is executed like any other statement — a string through `mysqli_query()` — and returns only `true`/`false`, no rows.
+**A16 — CREATE operations from PHP; purpose of CREATE TABLE · also answers Q109, Q117**
+
+1. **Defines structure** — column names, types, keys, constraints; no data goes in first (4:L433).
+2. **Setup-time** — run once, not on every page load (4:L441); `IF NOT EXISTS` if unsure.
+3. **From PHP** — a string through `mysqli_query()` returning only `true`/`false`, no rows.
 
 ```php
 <?php
@@ -1114,90 +885,87 @@ else { echo "Error: " . mysqli_error($conn); }
 ?>
 ```
 
-**A17 — What is a cookie, its uses, and syntax with expiry · also answers Q113, Q124**
+**A17 — What is a cookie, two uses, syntax with expiry · also answers Q113, Q124**
 
-1. A cookie is a small name/value pair the server asks the browser to store; the browser replays it on every later request to that domain (4:L39).
-2. **Two uses:** remembering user preferences (theme, language) and "remember me" / non-sensitive tracking between visits (4:L148).
-3. Syntax: `setcookie("username", "Anu", time() + 3600, "/");` — name, value, **expiry as a Unix timestamp**, path. `time()+3600` = one hour (4:L67).
-4. It must be called **before any output** (headers), and it is user-visible, so never store secrets (4:L65, 4:L73).
+1. **Definition** — a name/value pair the browser stores and replays on later requests (4:L39).
+2. **Two uses** — preferences (theme, language) and "remember me" tracking (4:L148).
+3. **Syntax** — `setcookie("username", "Anu", time() + 3600, "/");` — name, value, timestamp expiry, path.
+
+Before any output; user-visible, so never store secrets (4:L65, 4:L73).
 
 **A18 — Purpose of `session_start()` · also answers Q115, Q125**
 
-1. It **starts or resumes** a session: it reads the incoming `PHPSESSID` cookie, and if there is none, generates a new session ID and sends it to the browser (4:L106).
-2. It loads the server-side session data into the `$_SESSION` array, so `$_SESSION[...]` is usable.
-3. It must be the **first thing** in the script — before any HTML output and before any `$_SESSION` access (4:L104).
-4. Statement: `session_start();` — that exact line, on every page that touches session data.
+1. **Starts or resumes** — reads the incoming `PHPSESSID`, or mints and sends one (4:L106).
+2. **Loads data** — the session file fills `$_SESSION`, making it usable.
+3. **Must be first** — before output and any `$_SESSION` access (4:L104); `session_start();` on every page using sessions.
 
 **A19 — SQL command to add a record, with syntax · Q118**
 
-`INSERT INTO table_name (col1, col2, col3) VALUES (val1, val2, val3);`
+1. **Form** — `INSERT INTO table_name (col1, col2, col3) VALUES (val1, val2, val3);`.
+2. **Quoting** — strings in single quotes, numbers bare, column list always explicit (4:L472).
+3. **From PHP** — pass the string to `mysqli_query()`, confirm with `mysqli_insert_id()` (4:L476).
 
 ```sql
 INSERT INTO students (name, marks, joined) VALUES ('Anu', 88, '2026-11-08');
 ```
-Points: strings in single quotes, numbers bare; the column list should always be explicit (4:L472); from PHP the string is passed to `mysqli_query()` and confirmed with `mysqli_insert_id()` (4:L476, 4:L489).
 
 **A20 — Purpose of DELETE · Q119**
 
-1. Permanently **removes rows** matching a `WHERE` condition: `DELETE FROM students WHERE id = 5;` (4:L509).
-2. It is irreversible — there is no undo, hence the `WHERE` discipline (4:L511).
-3. It returns no rows, only success/failure; `mysqli_affected_rows()` reports how many were deleted (4:L513).
-4. Safe practice: run the same condition as a `SELECT` first to preview the victims (4:L515).
+1. **Removes rows** — `DELETE FROM students WHERE id = 5;` permanently (4:L509).
+2. **Irreversible** — no undo, hence the `WHERE` discipline (4:L511).
+3. **No rows back** — only success/failure; `affected_rows()` reports the count (4:L513).
+
+Safe practice: the same condition as a `SELECT` first (4:L515).
 
 **A21 — Purpose of SELECT · Q120**
 
-1. **Reads** data — the only statement that returns rows rather than a status (4:L560).
-2. Shape: `SELECT columns FROM table WHERE condition ORDER BY col LIMIT n` (4:L562–603).
-3. In PHP the return value is a **result handle** you iterate with `mysqli_fetch_assoc()` (4:L355).
-4. It is how dynamic pages get their content: same query, fresh rows per request (4:L705).
+1. **Reads data** — the only statement returning rows, not a status (4:L560).
+2. **Shape** — `SELECT cols FROM table WHERE cond ORDER BY col LIMIT n` (4:L562–603).
+3. **In PHP** — returns a result handle you iterate with `mysqli_fetch_assoc()` (4:L355).
+
+That is how dynamic pages get content: same query, fresh rows (4:L705).
 
 **A22 — SQL command to modify existing records · Q121**
 
-`UPDATE table_name SET column = value WHERE condition;`
+1. **Form** — `UPDATE table_name SET column = value WHERE condition;`.
+2. **Multiple columns** — comma-separate assignments after one `SET`; no `WHERE` updates every row (4:L638).
+3. **Confirm** — `mysqli_affected_rows()` says how many rows actually changed (4:L640).
 
 ```sql
 UPDATE students SET marks = 92 WHERE id = 5;
 ```
-Points: comma-separate multiple assignments (`SET marks = 92, name = 'Anu'`); without `WHERE` **every row** is updated (4:L638); confirm with `mysqli_affected_rows()` (4:L640).
 
 **A23 — Purpose of `mysqli_query()` · Q126**
 
-1. It sends one SQL statement — SELECT, INSERT, UPDATE, DELETE, CREATE alike — to MySQL over an open connection (4:L320, 4:L847).
-2. Signature: `mysqli_query($conn, $sql)`.
-3. Return value differs by statement: a **result handle** for SELECT/SHOW, `true`/`false` for writes (4:L320).
-4. Always check it; on `false`, `mysqli_error($conn)` gives the reason (4:L322–324).
+1. **Sends one statement** — SELECT, INSERT, UPDATE, DELETE or CREATE over an open connection (4:L320).
+2. **Signature** — `mysqli_query($conn, $sql)`; `$conn` always first.
+3. **Two returns** — a result handle for SELECT/SHOW, `true`/`false` for writes; check with `mysqli_error()`.
 
-**A24 — Why the WHERE clause is important in UPDATE/DELETE · Q127**
+**A24 — Why WHERE matters in UPDATE/DELETE · Q127**
 
-1. `WHERE` selects **which rows** the statement acts on; it is the only thing standing between one row and the whole table (4:L509, 4:L638).
-2. Without it, `UPDATE` overwrites every row and `DELETE` empties the table — both irreversible in effect (4:L511, 4:L638).
-3. Test the clause first as `SELECT … WHERE …`; if it returns the wrong rows, the destructive query would have hit them too (4:L669).
-4. Even a correct-looking `WHERE` can match nothing — `mysqli_affected_rows()` (0) is the proof (4:L687–689).
+1. **Selects rows** — the only thing between one row and the whole table (4:L509, 4:L638).
+2. **Without it** — `UPDATE` overwrites all rows, `DELETE` empties the table (4:L511).
+3. **Verify first** — run it as `SELECT … WHERE …`; a plausible clause can still match 0.
 
 **A25 — What `mysqli_fetch_assoc()` is for · Q128**
 
-1. It fetches the **next row** of a result set as an **associative array** keyed by column name — `$row["name"]` (4:L355).
-2. Each call advances an internal pointer; it returns **`NULL`** when no rows remain, which terminates `while (...)` (4:L357).
-3. Used as `while ($row = mysqli_fetch_assoc($result)) { … }` to walk every row of a SELECT (4:L359, 4:L365).
-4. It works only on a result handle from SELECT-type queries — never on the `true` returned by INSERT/UPDATE/DELETE.
+1. **Fetches next row** — as an associative array keyed by column name: `$row["name"]` (4:L355).
+2. **Advances a pointer** — returns `NULL` when rows run out, which terminates the `while` (4:L357).
+3. **Only on result handles** — never on the `true` from INSERT/UPDATE/DELETE (4:L359).
 
 **A26 — Two sources of dynamic content · Q129**
 
-1. **A database** — rows read with `SELECT` at request time (the module's main source) (4:L705).
-2. **Server-side/environment data** — the current date and time (`date()`), form input (`$_POST`), session/cookie values, or file contents (standard; the "time of day greeting" of Q231 is exactly this).
-3. *(Third, for safety)* results of computation — totals, filtered lists, formatted numbers.
+1. **A database** — rows read with `SELECT` at request time, the module's main source (4:L705).
+2. **Server-side/environment data** — `date()`, `$_POST`, session/cookie values, file contents (standard).
+3. **Computation** — totals, filtered lists, formatted numbers, as in the Q231 time-of-day greeting.
 
 ### 3.2 14-mark answers (Part B)
 
-Each answer has **Structure** (how to split the marks), **Full answer** (code + the prose you write around it) and **Traps**. ⭐ = highest probability.
+#### Q229 — Form app: name + email validation
 
----
+**Structure (marks):** 4 HTML form · 6 validation (empty + regex) · 3 personalised welcome · 1 request/response explanation.
 
-#### Q229 — Form app with name + email validation ⭐
-
-**Structure:** 4 — the HTML form; 6 — validation logic (empty check + regex); 3 — personalised welcome on success; 1 — explanation of the request/response steps.
-
-**Full answer**
+**Answer:**
 
 ```php
 <?php
@@ -1232,33 +1000,37 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </form>
 ```
 
-**Explanation you write (2–3 sentences each):** the form posts back to the same script (`$_SERVER['PHP_SELF']`); `$_SERVER["REQUEST_METHOD"]` distinguishes the first display from the submitted request; `trim()` removes stray spaces; `empty()` catches missing fields; `preg_match()` checks the shape; errors accumulate in an array so all are shown at once; on success `htmlspecialchars()` neutralises anything HTML-like before echoing. *Optional 2-mark extension: insert the record with a prepared statement (§4 D5) instead of only echoing.*
+- **Self-post** — the form posts back to the same script via `$_SERVER['PHP_SELF']`.
+- **Two requests** — `REQUEST_METHOD == "POST"` separates display from submission.
+- **Clean, test** — `trim()`, `empty()`, then `preg_match()` for shape.
+- **Accumulate** — errors pile in an array; success escapes with `htmlspecialchars()`.
+- **Extension:** insert the record with a prepared statement (D5).
 
-**Traps:** `action=""` self-post works but `$_PHP_SELF` is the "expected" answer; echoing `$name` raw loses the XSS mark; `if (isset($_POST["name"]))` alone is weaker than checking `REQUEST_METHOD`.
+**Traps:**
+- `action=""` self-posts too, but `$_PHP_SELF` is the expected answer.
+- Echoing `$name` raw loses the XSS mark; `isset($_POST["name"])` alone is weaker than `REQUEST_METHOD`.
 
----
+#### Q230 — Importance of PHP + challenges (10 of the 14 marks)
 
-#### Q230 — Importance of PHP in modern web development + challenges (10 marks)
+**Structure (marks):** 5 why PHP matters · 3 how it produces dynamic content · 2 challenges.
 
-**Structure:** 5 — why PHP matters; 3 — how it produces dynamic/interactive content; 2 — challenges.
+**Answer** (essay, no code):
 
-**Full answer — point form (this is a 10-mark essay, not code)**
+- **Free, ubiquitous** — open-source, every shared host, the P in LAMP (4:L188); big ecosystem, cheap hosting and hiring.
+- **Purpose-built** — mixes with HTML, talks to MySQL directly (4:L194); low learning curve.
+- **Dynamic content** — server-side per request: read DB, apply rules, emit HTML from live data (4:L705).
+- **Interactivity** — `$_GET`/`$_POST` → validate → query → respond; cookies/sessions add memory (4:L31–51).
+- **Challenges + defence** — injection (prepared statements, 4:L326); XSS (escape output); reruns per request (cache); credentials in code (config file, 4:L286); SQL+logic+HTML in one file (MVC, 4:L717); `mysql_*` vs `mysqli`; PHP 5/7/8 drift.
 
-*Importance:* free and open-source; runs on virtually every shared host and on the LAMP stack (4:L188); huge ecosystem (WordPress, Laravel, Wikipedia); purpose-built for mixing with HTML and talking to MySQL (4:L194); low learning curve for a server-side language; enormous deployment base means cheap hosting and easy hiring.
+**Traps:**
+- 10 marks — do not spend it all on "it is free".
+- Name every challenge **with** its defence.
 
-*How it enables dynamic content:* the script runs on the **server** per request, so it can read a database (`SELECT`), apply business rules, and emit HTML built from live data — the same `.php` file shows different content per user and per moment (4:L705). Interactivity comes from the form pipeline: `$_GET`/`$_POST` in → validate → query → respond. Sessions/cookies add memory across requests (4:L31–51).
+#### Q231 — Dynamic page: date/time greeting
 
-*Challenges:* **SQL injection** if input is concatenated instead of bound (4:L326); **XSS** if output is echoed unescaped; performance — PHP re-runs the whole script per request, so heavy queries need caching; security misconfiguration (credentials in code, 4:L286); maintainability — mixing SQL, logic and HTML in one file, which is why frameworks impose MVC (4:L717); the old `mysql_*` API confusion vs `mysqli`/PDO; deployment/version drift between PHP 5/7/8.
+**Structure (marks):** 3 `date()` + timezone · 4 hour extraction + if/elseif · 3 formatted date · 2 per-request generation · 2 presentation.
 
-**Traps:** the question says 10 marks — do not spend it all on "it is free". Challenges must be named with the defence (`prepared statements`, `htmlspecialchars`).
-
----
-
-#### Q231 — Dynamic page: date/time + greeting by time of day ⭐
-
-**Structure:** 3 — `date()` and timezone; 4 — hour extraction + if/elseif/else; 3 — formatted date display; 2 — how the page is generated per request; 2 — presentation.
-
-**Full answer**
+**Answer:**
 
 ```php
 <?php
@@ -1280,17 +1052,19 @@ if ($hour < 12) {
 <p>Today is <?= date("l, d F Y") ?> and the time is <?= date("h:i:s A") ?>.</p>
 ```
 
-**Explanation:** `date("H")` returns the 24-hour hour as a two-digit string, cast to `int` for numeric comparison; the `if/elseif` chain maps ranges to greetings. Format characters to name: `H` 24-hour, `h` 12-hour, `i` minutes, `s` seconds, `A` AM/PM, `l` weekday name, `d` day, `F` month name, `Y` four-digit year. Because the script runs on each request, the page shows a different greeting in the morning and the evening without the file changing — that *is* the definition of dynamic content (4:L705).
+- **Format letters** — `H` 24-hour, `h` 12-hour, `i` minutes, `s` seconds, `A` AM/PM, `l` weekday, `d` day, `F` month, `Y` year.
+- **Cast** — `date("H")` is a string; `(int)` makes the comparisons numeric.
+- **Dynamic proof** — the file never changes, yet the greeting does (4:L705).
 
-**Traps:** forgetting `date_default_timezone_set()` gives a UTC time that looks wrong; comparing the string `"09"` with `< 12` works but `(int)` is cleaner and examiners like it; `date("h")` is 12-hour and breaks the logic — use `H`.
+**Traps:**
+- No `date_default_timezone_set()` → UTC time that looks wrong.
+- `date("h")` is 12-hour and breaks the ranges — use `H`.
 
----
+#### Q232 — Username/password/email filled + format
 
-#### Q232 — Username/password/email filled check + email format
+**Structure (marks):** 4 form · 4 `empty()` on all three · 4 regex/`filter_var` email test · 2 error display or success message.
 
-**Structure:** 4 — form; 4 — `empty()` checks on all three; 4 — regex email test; 2 — error display / success message.
-
-**Full answer**
+**Answer:**
 
 ```php
 <?php
@@ -1323,17 +1097,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </form>
 ```
 
-**Explanation:** three `empty()` tests answer "has the user filled the textboxes"; the email gets a *second*, shape-level test. Either `filter_var($email, FILTER_VALIDATE_EMAIL)` (built-in, returns the email or `false`) or `preg_match("/^[\w.-]+@[\w.-]+\.[A-Za-z]{2,}$/", $email)` is acceptable — name whichever you use.
+- Three `empty()` tests = "filled?"; the email gets a second, shape-level test.
+- `filter_var($email, FILTER_VALIDATE_EMAIL)` (returns the email or `false`) or the `preg_match` pattern — name the one you use.
 
-**Traps:** `empty("0")` is `true` in PHP — a password of `"0"` would be rejected, which is a known quirk worth a footnote; validating the password *format* is not asked here, only presence.
-
----
+**Traps:**
+- `empty("0")` is `true` in PHP, so a password of `"0"` is rejected — a known quirk worth a footnote.
+- Password *format* is not asked here, only presence.
 
 #### Q233 — File uploads (6) + recursive factorial (8)
 
-**Structure:** 6 — upload: form attributes, `$_FILES` keys, validation, `move_uploaded_file()`; 8 — factorial: function, base case, recursive call, output.
+**Structure (marks):** 6 upload (form attrs, `$_FILES` keys, validation, `move_uploaded_file`) · 8 factorial (function, base case, recursion, output).
 
-**Full answer (a) — upload**
+**Answer (a) — upload:**
 
 ```php
 <?php
@@ -1360,9 +1135,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_FILES["myfile"])) {
 </form>
 ```
 
-Points to write: `enctype="multipart/form-data"` is **mandatory** or `$_FILES` stays empty; `$_FILES["myfile"]` is an array with `name`, `type`, `tmp_name`, `size`, `error`; the file lands in a temp directory (`tmp_name`) and must be moved with `move_uploaded_file()` or it is deleted at script end; `error` codes — `0` OK, `1` exceeds `upload_max_filesize`, `2` exceeds `MAX_FILE_SIZE`, `3` partial, `4` no file chosen; `basename()` blocks path tricks like `../../etc/passwd`; validate size and extension before moving (standard).
+- `enctype="multipart/form-data"` is **mandatory** or `$_FILES` stays empty.
+- `$_FILES["myfile"]` holds `name`, `type`, `tmp_name`, `size`, `error`.
+- Temp file must be moved with `move_uploaded_file()` or it dies at script end.
+- Error codes: `0` OK, `1` over `upload_max_filesize`, `2` over `MAX_FILE_SIZE`, `3` partial, `4` none chosen.
+- `basename()` blocks `../../etc/passwd`; validate size/extension first (standard).
 
-**Full answer (b) — recursive factorial**
+**Answer (b) — recursive factorial:**
 
 ```php
 <?php
@@ -1376,23 +1155,25 @@ echo "Factorial of 5 is " . factorial(5);   // 120
 ?>
 ```
 
-Trace to write out: `factorial(5)` → `5 * factorial(4)` → `5*4*factorial(3)` → … → `5*4*3*2*1 = 120`. The **base case** `$n <= 1` stops the recursion; without it you get infinite recursion and a stack/memory error. Iterative alternative: `for ($i = 2, $f = 1; $i <= $n; $i++) $f *= $i;`.
+- Trace: `factorial(5)` → `5 * factorial(4)` → … → `5*4*3*2*1 = 120`.
+- Base case `$n <= 1` stops it; without it, infinite recursion.
+- Iterative: `for ($i = 2, $f = 1; $i <= $n; $i++) $f *= $i;`
 
-**Traps:** forgetting `enctype` is the single most common lost mark; `move_uploaded_file` needs the destination directory to exist and be writable; factorial must return (not echo) inside the function.
+**Traps:**
+- Missing `enctype` is the most common lost mark; the destination dir must be writable.
+- Factorial must `return`, not `echo`.
 
----
+#### Q234 — Connection steps (10) + patients DB (4)
 
-#### Q234 — Connection step by step (10) + patients database (4) ⭐
+**Structure (marks):** 10 five steps with code and reason · 4 `CREATE DATABASE` + `CREATE TABLE patients` with sensible columns.
 
-**Structure:** 10 — five steps with code and the reason for each; 4 — `CREATE DATABASE` + `CREATE TABLE patients` with sensible columns.
+**Answer (a) — five steps:**
 
-**Full answer (a) — the five steps**
-
-1. **Locate the server** — host `localhost`, MySQL user, password (4:L210).
-2. **Connect** — `mysqli_connect(host, user, pass, db)` returns a handle or `false`.
-3. **Verify** — `if (!$conn) die("Connection failed: " . mysqli_connect_error());` (4:L224–226).
-4. **Run statements** — `mysqli_query($conn, $sql)` for every query; check each return value and report `mysqli_error($conn)` on failure (4:L320–324).
-5. **Close** — `mysqli_close($conn)` when finished (4:L216).
+1. **Locate** — host `localhost`, MySQL user, password (4:L210).
+2. **Connect** — `mysqli_connect(host, user, pass, db)` → handle or `false`.
+3. **Verify** — `if (!$conn) die(mysqli_connect_error());` (4:L224–226).
+4. **Run statements** — `mysqli_query($conn, $sql)`, checking each and reporting `mysqli_error()` (4:L320–324).
+5. **Close** — `mysqli_close($conn)` (4:L216).
 
 ```php
 <?php
@@ -1404,9 +1185,10 @@ echo "Connected successfully";
 mysqli_close($conn);
 ?>
 ```
-Say also: credentials belong in a config file, not inline (4:L286); the OO form is `new mysqli(...)` with `$conn->connect_error` (4:L258–263).
 
-**Full answer (b) — patients database**
+Add: credentials in a config file, not inline (4:L286); OO form `new mysqli(...)` + `$conn->connect_error` (4:L258–263).
+
+**Answer (b) — patients schema:**
 
 ```sql
 CREATE DATABASE hospital;
@@ -1424,15 +1206,17 @@ CREATE TABLE patients (
 );
 ```
 
-From PHP: `mysqli_query($conn, "CREATE DATABASE hospital")` **without** a database argument in the connect call, then `mysqli_select_db($conn, "hospital")` before creating the table (standard).
+From PHP: `mysqli_query($conn, "CREATE DATABASE hospital")` **without** a database argument, then `mysqli_select_db($conn, "hospital")` before creating the table (standard).
 
-**Traps:** creating the table before selecting/creating the database; `DECIMAL` vs `INT` for anything monetary; forgetting `PRIMARY KEY`.
+**Traps:**
+- Creating the table before the database is created or selected.
+- `INT` for money instead of `DECIMAL`; forgetting `PRIMARY KEY`.
 
-#### Q235 — Regex: extract email addresses + validate a phone number
+#### Q235 — Regex: extract emails + validate phone
 
-**Structure:** 7 — email extraction with `preg_match_all()` and explanation of the pattern; 7 — phone validation with `preg_match()` and the pattern table.
+**Structure (marks):** 7 email extraction with `preg_match_all()` + pattern explanation · 7 phone validation with `preg_match()` + pattern table.
 
-**Full answer**
+**Answer:**
 
 ```php
 <?php
@@ -1464,17 +1248,20 @@ echo isValidPhone("98765abcde") ? "Valid" : "Invalid";   // Invalid
 ?>
 ```
 
-**Pattern anatomy to write out** (3:L607): `[A-Za-z0-9._%+-]+` = local part (one or more allowed characters); `@` literal; `[A-Za-z0-9.-]+` = domain labels; `\.` = the literal dot before the TLD — unescaped `.` means "any character", so it would match `a@b,com`; `[A-Za-z]{2,}` = at least two letters. For the phone: `^…$` anchors prevent matching inside a longer string, `[0-9]{10}` (or `\d{10}`) means exactly ten digits — without the anchors `"98765432109"` would pass. Indian mobiles often use `^[6-9][0-9]{9}$` (standard). `preg_match_all()` returns the **count** and puts all matches in `$matches[0]`; `preg_match()` stops at the first.
+- **Anatomy** (3:L607): `[A-Za-z0-9._%+-]+` local part · `@` · `[A-Za-z0-9.-]+` domain · `\.` literal dot · `[A-Za-z]{2,}` TLD.
+- **Unescaped `.`** means "any character" — it would match `a@b,com`.
+- **Phone**: `^…$` stops a match inside longer strings (`"98765432109"`); `{10}` = exactly ten digits; Indian mobiles `^[6-9][0-9]{9}$` (standard).
+- `preg_match_all()` returns the **count** and fills `$matches[0]`; `preg_match()` stops at the first.
 
-**Traps:** `preg_match` returns `1`/`0`, not `true`/`false` — a strict `=== true` fails; forgetting delimiters `/…/` is a fatal pattern error; `$matches[1]` would be the first *group*, `$matches[0]` is the whole match.
+**Traps:**
+- `preg_match` returns `1`/`0`, not booleans — a strict `=== true` fails.
+- No delimiters `/…/` is a fatal pattern error; `$matches[1]` is the first group, `$matches[0]` the whole match.
 
----
+#### Q236 — Regex: replace substring + extract URLs
 
-#### Q236 — Regex: replace a substring + extract URLs
+**Structure (marks):** 7 `preg_replace()` literal + pattern · 7 URL extraction with `preg_match_all()`.
 
-**Structure:** 7 — `preg_replace()` with a literal and a pattern; 7 — URL extraction with `preg_match_all()`.
-
-**Full answer**
+**Answer:**
 
 ```php
 <?php
@@ -1506,17 +1293,20 @@ if (preg_match_all($pattern, $html, $m)) {
 ?>
 ```
 
-**Explanation:** `preg_replace($pattern, $replacement, $subject)` returns a **new string** — it does not modify the original unless you assign it back. The `/i` modifier makes matching case-insensitive (`WORLD` also matches). `(\w+)` captures a group, referenced in the replacement as `$1`, `$2`. For URLs, `https?` matches http/https, `[^\s"'<>]+` means "one or more characters that are not whitespace or quotes or angle brackets", and `#…#` is an alternative delimiter so the `/` inside URLs needs no escaping.
+- `preg_replace($pattern, $replacement, $subject)` returns a **new string** — assign it back.
+- `/i` = case-insensitive (`WORLD` matches).
+- `(\w+)` captures a group, referenced as `$1`, `$2` in the replacement.
+- URLs: `https?` = http/https, `[^\s"'<>]+` = not whitespace/quotes/brackets, `#…#` avoids escaping `/`.
 
-**Traps:** forgetting to assign the result (`preg_replace(...)` alone does nothing visible); `$1` inside a double-quoted PHP string is interpolated by PHP too — safest form is `"\${1}"` or use single quotes and concatenate; the URL pattern deliberately stops at quotes so it does not swallow HTML attributes.
+**Traps:**
+- `preg_replace(...)` alone does nothing visible — assign the result.
+- `$1` inside a double-quoted PHP string is interpolated by PHP; safest is `"\${1}"` or single quotes with concatenation.
 
----
+#### Q237 — Password + phone validation
 
-#### Q237 — Password validation + phone validation
+**Structure (marks):** 8 password policy with a lookahead regex + hashing points · 6 phone validation.
 
-**Structure:** 8 — password policy with a lookahead regex, plus points on hashing; 6 — phone validation.
-
-**Full answer**
+**Answer:**
 
 ```php
 <?php
@@ -1539,21 +1329,19 @@ echo isValidPhone($phone)    ? "Phone OK"     : "Invalid phone";
 ?>
 ```
 
-**How the password pattern works — decode it aloud in the exam:** `^…$` anchors the whole string; `(?=.*[a-z])` is a **lookahead** — "somewhere ahead there is a lowercase letter", and it consumes nothing; four lookaheads enforce four classes; `.{8,}` finally requires at least eight characters of any kind. Because lookaheads do not consume, the `.` keeps scanning from the same point, which is why all conditions can be checked in one pass.
+- **Decode aloud:** `(?=.*[a-z])` is a **lookahead** — "somewhere ahead a lowercase letter" — consuming nothing, so four lookaheads check four classes in one pass; `.{8,}` then demands eight characters.
+- **Discussion marks:** a regex validates *shape*, never *safety* — store with `password_hash()`, check with `password_verify()` (standard).
+- **Phone:** `^[6-9][0-9]{9}$` = Indian mobile prefix; `^\+91[0-9]{10}$` with country code.
 
-**What to add for the discussion marks:** a regex validates *shape*, never *safety*; the password must be stored with `password_hash($pass, PASSWORD_DEFAULT)` and checked with `password_verify()`, never in plain text (standard). Phone: `^[6-9][0-9]{9}$` enforces a valid Indian mobile prefix; `^\+91[0-9]{10}$` if the country code is required.
+**Traps:**
+- `[\W_]` (non-word or underscore) is the usual "special character" class; `(?=.*\W)` misses `_`.
+- Without `^…$` the pattern accepts `"aaaaA1!x"` embedded in junk.
 
-**Traps:** `[\W_]` (non-word or underscore) is the usual way to express "special character" inside a character class; `(?=.*\W)` misses `_`; a pattern without `^…$` accepts `"aaaaA1!x"` embedded in a longer junk string.
+#### Q238 — Cookies (6) + array operations (8)
 
----
+**Structure (marks):** 3 significance of cookies · 3 create and destroy · 8 four array statements (2 each).
 
-#### Q238 — Cookies (6) + associative array operations (8)
-
-**Structure:** 3 — significance of cookies; 3 — create and destroy; 8 — four array statements (2 marks each).
-
-**Full answer (a) — cookies**
-
-Significance: HTTP is stateless, so cookies give the client a memory — preferences, "remember me", tracking, and the session ID itself (4:L39, 4:L841).
+**Answer (a) — cookies:** HTTP is stateless, so cookies give the client memory — preferences, "remember me", tracking, and the session ID itself (4:L39, 4:L841).
 
 ```php
 <?php
@@ -1570,7 +1358,7 @@ setcookie("user", "", time() - 3600, "/");
 ?>
 ```
 
-**Full answer (b) — the four array statements**
+**Answer (b) — four array statements:**
 
 ```php
 <?php
@@ -1592,17 +1380,22 @@ unset($marks["Raj"]);
 ?>
 ```
 
-**Say which sort and why:** `asort()` sorts by **value** preserving keys (what a marks table wants); `ksort()` sorts by **key**; `arsort()`/`krsort()` are the descending versions; `sort()` renumbers and destroys the names, so it is wrong here. `unset($marks["Raj"])` removes the key *and* its value.
+| Sort | Orders by | Keeps names |
+|---|---|---|
+| `asort()` | value | yes — what a marks table wants |
+| `ksort()` | key | yes |
+| `arsort()` / `krsort()` | value / key, descending | yes |
+| `sort()` | value | **no** — renumbers, destroys names |
 
-**Traps:** `sort()` on an associative array loses the names — a classic 2-mark loss; `asort` must be assigned? No — it sorts in place (unlike `array_sort` in some languages); printing with `print_r()` is acceptable but the `foreach` form is what "print the sorted key-value pairs" asks for.
+**Traps:**
+- `sort()` on an associative array loses the names — a classic 2-mark loss.
+- `asort` sorts in place (no assignment); the `foreach` form is what "print the sorted pairs" wants.
 
----
+#### Q239 — Cookies create/access/delete + session calls
 
-#### Q239 — Cookies created/accessed/deleted + sessions start/store/access/destroy
+**Structure (marks):** 7 cookies (three snippets + header rule) · 7 sessions (four calls + ID explanation).
 
-**Structure:** 7 — cookies with three snippets and the header rule; 7 — sessions with four calls and the ID explanation.
-
-**Full answer (a) — cookies**
+**Answer (a) — cookies:**
 
 ```php
 <?php
@@ -1611,9 +1404,10 @@ echo $_COOKIE["theme"];                              // access (next request)
 setcookie("theme", "", time() - 3600, "/");          // delete
 ?>
 ```
-Three facts: `setcookie()` before any output (4:L65); `$_COOKIE` is only populated on the **next** request, not the same one; deletion = same name + past expiry (4:L71).
 
-**Full answer (b) — sessions**
+Facts: `setcookie()` before output (4:L65); `$_COOKIE` fills only on the **next** request; delete = same name + past expiry (4:L71).
+
+**Answer (b) — sessions:**
 
 ```php
 <?php
@@ -1629,26 +1423,26 @@ session_unset();                       // 4b. remove all
 session_destroy();                     // 4c. destroy the session (4:L112)
 ?>
 ```
-Explain that the browser holds only `PHPSESSID`, that `session_start()` must be repeated on every page, and that `session_destroy()` alone leaves `$_SESSION` populated until the request ends — hence `session_unset()` first.
 
-**Traps:** writing `$_SESSION` before `session_start()` silently does nothing; calling `session_start()` twice raises a notice; `unset($_SESSION)` is wrong — `unset()` takes a variable, not the whole superglobal (use `session_unset()`).
+Browser holds only `PHPSESSID`; `session_start()` repeats every page; `session_destroy()` alone leaves `$_SESSION` populated this request — `session_unset()` first.
 
----
+**Traps:**
+- Writing `$_SESSION` before `session_start()` silently does nothing; calling it twice raises a notice.
+- `unset($_SESSION)` is wrong — `unset()` takes a variable; use `session_unset()`.
 
-#### Q240 — MySQLi connection procedure + working connection program
+#### Q240 — MySQLi connection procedure + program
 
-**Structure:** 10 — procedure with error handling explained step by step; 4 — complete program with a success message.
+**Structure (marks):** 10 procedure with error handling, step by step · 4 complete program with a success message.
 
-**Full answer (a) — procedure**
+**Answer (a) — procedure:**
 
-1. **Have the four credentials** — host, MySQL user, password, database name (4:L210).
-2. **Call the connector** — procedural `mysqli_connect(...)` or OO `new mysqli(...)` (4:L258).
-3. **Test the result** — procedural: `if (!$conn)` + `mysqli_connect_error()`; OO: `if ($conn->connect_error)` (4:L224, 4:L262).
-4. **Fail loudly** — `die()`/`exit()` with the reason, because every later call needs a valid handle (4:L292).
-5. **Guard the body** — wrap queries in `try/catch (mysqli_sql_exception $e)` in PHP 8, where mysqli throws instead of returning `false` (standard).
-6. **Close** — `mysqli_close($conn)` / `$conn->close()` (4:L216).
+1. **Credentials** — host, user, password, database (4:L210).
+2. **Connect** — `mysqli_connect(...)` or `new mysqli(...)` (4:L258).
+3. **Test** — `if (!$conn)` + `mysqli_connect_error()`, or `$conn->connect_error` (4:L224, 4:L262).
+4. **Fail loudly** — `die()` with the reason (4:L292); guard the body with `try/catch (mysqli_sql_exception $e)` under PHP 8 (standard).
+5. **Close** — `mysqli_close($conn)` / `$conn->close()` (4:L216).
 
-**Full answer (b) — both styles, complete**
+**Answer (b) — both styles:**
 
 ```php
 <?php
@@ -1676,17 +1470,16 @@ $conn->close();
 ?>
 ```
 
-Common failure messages worth quoting: *Access denied for user* (wrong user/password), *Unknown database* (name typo or not created), *Connection refused* (MySQL not running / wrong host).
+Failure messages: *Access denied for user* (bad credentials), *Unknown database* (typo / not created), *Connection refused* (MySQL down / wrong host).
 
-**Traps:** mixing styles (`$conn->query()` on a procedural handle is fine, but `mysqli_query($conn,…)` after `new mysqli` also works — do not *claim* they are different objects); suppressing errors with `@` loses marks.
+**Traps:**
+- `@` suppression loses marks; both APIs drive one engine.
 
----
+#### Q241 — CREATE/INSERT/DELETE + student program
 
-#### Q241 — CREATE/INSERT/DELETE from PHP + student table program ⭐
+**Structure (marks):** 9 three operations with SQL and PHP each · 5 program that creates the table and inserts a row.
 
-**Structure:** 9 — three operations with SQL and PHP each; 5 — program that creates the table and inserts one row.
-
-**Full answer (a) — the three operations**
+**Answer (a) — three operations:**
 
 ```text
 CREATE  CREATE TABLE students (id INT AUTO_INCREMENT PRIMARY KEY,
@@ -1699,9 +1492,10 @@ INSERT  INSERT INTO students (name, marks) VALUES ('Anu', 88);
 DELETE  DELETE FROM students WHERE id = 5;
         -> removes matching rows, affected_rows reports count    (4:L509)
 ```
-The deck's one-line summary worth quoting: all three are **write** operations — they return no readable data, only success/failure and an affected-row count (4:L546).
 
-**Full answer (b) — program**
+All three are **write** operations: no readable data, only success/failure and a row count (4:L546).
+
+**Answer (b) — program:**
 
 ```php
 <?php
@@ -1728,15 +1522,15 @@ mysqli_close($conn);
 ?>
 ```
 
-**Traps:** running `CREATE TABLE` twice without `IF NOT EXISTS` errors on the second run; forgetting quotes around `'Anu'`; using `mysqli_num_rows()` on an INSERT (returns nothing useful — it is `affected_rows`).
+**Traps:**
+- Second run without `IF NOT EXISTS` errors; missing quotes around `'Anu'`.
+- `mysqli_num_rows()` on an INSERT gives nothing useful — it is `affected_rows`.
 
----
+#### Q242 — Prepared INSERT/DELETE by register no.
 
-#### Q242 — Prepared INSERT/DELETE + delete by register number
+**Structure (marks):** 8 why and how prepared statements work (`prepare`/`bind_param`/`execute`, type string) · 6 delete-by-regno program.
 
-**Structure:** 8 — why and how prepared statements work (`prepare`/`bind_param`/`execute`, type string); 6 — the delete-by-regno program.
-
-**Full answer (a) — how it works**
+**Answer (a) — how it works:**
 
 ```php
 <?php
@@ -1750,9 +1544,10 @@ echo "Inserted id: " . mysqli_insert_id($conn);
 mysqli_stmt_close($stmt);
 ?>
 ```
-Why it is safe: the SQL is parsed and compiled **before** the values arrive (4:L683), so a value can never become syntax. `bind_param` passes variables **by reference**, which is why you pass `$name`, not `'Anu'`; the first argument has one letter per `?` (`s` string, `i` int, `d` double, `b` blob).
 
-**Full answer (b) — delete by register number, prepared**
+The SQL is parsed and compiled **before** the values arrive (4:L683), so a value can never become syntax. `bind_param` takes variables **by reference** (pass `$name`, not `'Anu'`); the first argument has one letter per `?` — `s`, `i`, `d`, `b`.
+
+**Answer (b) — delete by register number:**
 
 ```php
 <?php
@@ -1775,21 +1570,23 @@ mysqli_close($conn);
 ?>
 ```
 
-**Traps:** `mysqli_stmt_affected_rows($stmt)` takes the **statement**, `mysqli_affected_rows($conn)` takes the **connection** — mixing them is the most common error; forgetting to check `affected_rows` loses the "no such student" mark.
+**Traps:**
+- `mysqli_stmt_affected_rows($stmt)` takes the **statement**, `mysqli_affected_rows($conn)` takes the **connection** — mixing them is the most common error.
+- Skipping the `affected_rows` check loses the "no such student" mark.
 
-#### Q243 — SELECT multi-row retrieval → all students in an HTML table ⭐
+#### Q243 — SELECT many rows → HTML table
 
-**Structure:** 6 — what SELECT returns and the fetch-loop steps; 8 — the program with table markup.
+**Structure (marks):** 6 what SELECT returns + fetch-loop steps · 8 the program with table markup.
 
-**Full answer (a) — the steps**
+**Answer (a) — steps:**
 
-1. Build the query string (`SELECT regno, name, marks FROM students`).
-2. `mysqli_query()` → returns a **result handle**, not data (4:L320).
-3. Check it — on `false`, `mysqli_error()`.
-4. Loop `while ($row = mysqli_fetch_assoc($result))` — one row per iteration, `NULL` ends it (4:L365).
-5. Echo one `<tr>` per iteration; `mysqli_num_rows()` for the count (4:L361).
+1. **Build** — `SELECT regno, name, marks FROM students`.
+2. **Query** — `mysqli_query()` returns a **result handle**, not data (4:L320).
+3. **Check** — on `false`, `mysqli_error()`.
+4. **Loop** — `while (...fetch_assoc...)`, one row per pass, `NULL` ends it (4:L365).
+5. **Render** — one `<tr>` per iteration; `num_rows()` for the count (4:L361).
 
-**Full answer (b) — program**
+**Answer (b) — program:**
 
 ```php
 <?php
@@ -1817,24 +1614,29 @@ mysqli_close($conn);
 ?>
 ```
 
-*(Alternative-syntax version with `while (...):` … `endwhile;` and `<?= ?>` — see §2.19; either earns full marks.)*
+The alternative-syntax version (`while (...):` … `endwhile;`, `<?= ?>`) earns full marks too — §2.19.
 
-**Traps:** calling `mysqli_num_rows()` *after* the loop still works (the pointer moved, the count did not); fetching inside the `<table>` before printing `<tr><th>` gives a headerless table; forgetting to close the `</table>`.
+**Traps:**
+- `mysqli_num_rows()` after the loop still works — the pointer moved, the count did not.
+- Fetching before printing `<tr><th>` gives a headerless table; forgetting `</table>`.
 
----
+#### Q244 — UPDATE syntax/precautions + update email
 
-#### Q244 — UPDATE syntax/precautions + update email by register number ⭐
+**Structure (marks):** 7 syntax, multi-column SET, WHERE rule, `affected_rows`, precautions · 7 the program.
 
-**Structure:** 7 — syntax, multi-column SET, the WHERE rule, `affected_rows`, precautions; 7 — the program.
-
-**Full answer (a) — syntax and precautions**
+**Answer (a) — syntax and precautions:**
 
 ```sql
 UPDATE students SET email = 'new@saintgits.org' WHERE regno = '20CST461';
 ```
-Precautions to list: (1) **never run UPDATE without WHERE** — every row changes (4:L638); (2) run the same `WHERE` as a `SELECT` first to see the target rows (4:L669); (3) cast numeric input `(int)` and prefer prepared statements for strings (4:L675–683); (4) check `mysqli_affected_rows()` — 0 means nothing matched, not that it worked (4:L687); (5) validate the new value (email format) before writing; (6) back up / use a transaction for bulk updates (standard).
 
-**Full answer (b) — program**
+1. **Never without `WHERE`** — every row changes (4:L638).
+2. **Preview** the rows with the same `WHERE` as a `SELECT` (4:L669).
+3. **Bind or cast** — `(int)` numbers, prepared statements for strings (4:L675–683).
+4. **Check** `affected_rows()` — 0 means nothing matched (4:L687).
+5. **Validate** the new value first; back up or use a transaction for bulk updates (standard).
+
+**Answer (b) — program:**
 
 ```php
 <?php
@@ -1863,15 +1665,15 @@ mysqli_close($conn);
 ?>
 ```
 
-**Traps:** two `"s"` letters because both are strings; binding order must match placeholder order (email first, regno second) — swap them and the email lands in the regno column.
+**Traps:**
+- Two `"s"` letters — both are strings.
+- Binding order must match placeholder order; swap them and the email lands in the regno column.
 
----
+#### Q245 — App architecture + products list
 
-#### Q245 — Architecture of a dynamic PHP app + products into an HTML list
+**Structure (marks):** 7 the layers and request flow · 7 product-listing program.
 
-**Structure:** 7 — the layers and the request flow; 7 — the product-listing program.
-
-**Full answer (a) — architecture**
+**Answer (a) — architecture:**
 
 ```text
 Browser  --HTTP request-->  Apache/IIS  -->  PHP engine
@@ -1882,9 +1684,11 @@ Browser  --HTTP request-->  Apache/IIS  -->  PHP engine
                                         MySQL  <-- SQL -->  tables on disk
 Browser  <--plain HTML------  PHP output
 ```
-Layers to name: **presentation** (HTML/CSS produced by echo), **business logic** (validation, calculations), **data access** (connection + SQL) — the deck's "separating concerns" (4:L717), the informal precursor of MVC. State is carried by cookies/sessions between the stateless requests (4:L31–51).
 
-**Full answer (b) — products as an HTML list**
+- **Presentation** — HTML produced by `echo`; **business logic** — validation, calculations; **data access** — connection + SQL. Separating them is 4:L717, the precursor of MVC.
+- **State** — cookies/sessions between stateless requests (4:L31–51).
+
+**Answer (b) — products as an HTML list:**
 
 ```php
 <?php
@@ -1904,28 +1708,26 @@ mysqli_close($conn);
 ?>
 ```
 
-**Why `<ul>` and not a table:** the container is irrelevant to the pattern — *one HTML fragment per row inside the loop* is the whole idea (4:L737). `number_format()` is presentational logic, correctly kept in the render step.
+`<ul>` vs `<table>` is irrelevant — *one HTML fragment per row inside the loop* is the idea (4:L737); `number_format()` is presentation logic in the render step.
 
-**Traps:** the "architecture" half is where marks are lost — draw the boxes, label the four PHP steps, mention MySQL on disk.
+**Traps:**
+- The architecture half is where marks are lost — draw the boxes and label the four PHP steps.
+- Omitting MySQL-on-disk or the state layer leaves the diagram half-answered.
 
----
+#### Q246 — Session lifecycle + ID + login time
 
-#### Q246 — Session lifecycle + session ID + store name & login time
+**Structure (marks):** 6 lifecycle stages · 4 role of the session ID · 4 two-page program.
 
-**Structure:** 6 — lifecycle stages; 4 — role of the session ID; 4 — the two-page program.
+**Answer (a) — lifecycle:**
 
-**Full answer (a) — lifecycle**
+1. **Create** — `session_start()`; no ID cookie exists, so PHP mints one and sends `Set-Cookie: PHPSESSID=…` (4:L106).
+2. **Store** — `$_SESSION["name"] = "Anu"` writes a server file named after that ID (4:L108).
+3. **Resume** — the cookie replays; `session_start()` reloads the file (4:L110).
+4. **Expire** — browser close, server timeout, or `session_unset()` + `session_destroy()` (4:L112, 4:L156).
 
-1. **Create** — `session_start()` on the first page; no ID cookie exists, so PHP generates a random ID (e.g. `7f3c…`) and sends `Set-Cookie: PHPSESSID=7f3c…` (4:L106).
-2. **Store** — `$_SESSION["name"] = "Anu"` writes into a server-side file named after that ID (4:L108).
-3. **Resume** — every later request replays the cookie; `session_start()` reads it and reloads the file into `$_SESSION` (4:L110).
-4. **Expire/end** — browser close (default), a server timeout, or explicit `session_unset()` + `session_destroy()` (4:L112, 4:L156).
+The ID is the only link between browser and data — a lookup key, no username or role. Steal it and you inherit the session: random, over HTTPS, regenerated at login (`session_regenerate_id(true)`, standard).
 
-**The ID's role:** it is the *only* link between the browser and the server-side data. It carries no information itself — no username, no role — just a lookup key. Anyone who steals it inherits the session, which is why it must be random, sent over HTTPS, and regenerated at login (`session_regenerate_id(true)`, standard).
-
-**Full answer (b) — two pages**
-
-*login.php*
+**Answer (b) — two pages:**
 
 ```php
 <?php
@@ -1935,8 +1737,6 @@ $_SESSION["login_time"] = date("d-m-Y h:i:s A");
 echo "Stored. <a href='welcome.php'>Go to welcome page</a>";
 ?>
 ```
-
-*welcome.php*
 
 ```php
 <?php
@@ -1949,42 +1749,46 @@ echo "You logged in at " . $_SESSION["login_time"];
 ?>
 ```
 
-**Traps:** missing `session_start()` on page 2 (the classic zero); no `isset` guard (an undefined-index warning); forgetting that `date()` must be evaluated **when storing**, not when displaying.
+**Traps:**
+- Missing `session_start()` on page 2 — the classic zero.
+- No `isset` guard gives an undefined-index warning; `date()` must run **when storing**, not when displaying.
 
----
+#### Q247 — Cookie vs session + recommendation
 
-#### Q247 — Cookies vs sessions on storage/lifetime/security/applications + recommendation
+**Structure (marks):** 8 four-axis comparison table · 6 recommendation with justification.
 
-**Structure:** 8 — the four-axis comparison table; 6 — the recommendation with justification.
-
-**Full answer (a) — comparison** (4:L136–160)
+**Answer (a) — comparison** (4:L136–160):
 
 | Axis | Cookie | Session |
 |---|---|---|
-| **Storage location** | Client — browser's cookie store, sent with every matching request (4:L140) | Server — file/DB keyed by session ID; browser holds only the ID (4:L152) |
-| **Lifetime** | Set explicitly by expiry — survives browser restarts (4:L146) | Until browser closes, or a server-side timeout/idle limit (4:L156) |
-| **Security** | Plain text on the user's machine: readable, editable, forgeable; ~4 KB cap; must never hold secrets (4:L144, L142) | Data never leaves the server; only a random ID travels; still needs HTTPS to stop ID theft (4:L154) |
-| **Typical applications** | Preferences (theme, language), "remember me" token, non-sensitive tracking (4:L148) | Login state, shopping cart, multi-step forms, flash messages (4:L160) |
+| **Storage** | client cookie store, sent with every request (4:L140) | server file/DB keyed by the ID (4:L152) |
+| **Lifetime** | your expiry — survives restarts (4:L146) | browser close, or server idle timeout (4:L156) |
+| **Security** | readable, editable, forgeable; ~4 KB (4:L144, L142) | data stays server-side; only a random ID travels; needs HTTPS (4:L154) |
+| **Applications** | preferences, "remember me", tracking (4:L148) | login state, cart, multi-step forms (4:L160) |
 
-**Full answer (b) — recommendation**
+**Answer (b) — recommendation:**
 
-**Sessions, for the logged-in state.** Justification: the login state is a security decision, so it must not be client-editable — a cookie saying `loggedin=1` can be forged in seconds, while a session ID cannot be invented and the data it points to stays on the server. Sessions also hold the whole user record (id, role, name) rather than a 4 KB-limited string, and they die when the browser closes, which is the behaviour users expect from a login. **Use a cookie only for the non-sensitive half** — a "remember me" token that is a long random value checked against the database, never the identity itself.
+- **Sessions, for the logged-in state** — login is a security decision, so it must not be client-editable: `loggedin=1` is forged in seconds, a session ID cannot be invented, and the data stays server-side.
+- **Capacity and lifetime** — a session holds the whole user record, not a 4 KB string, and dies at browser close — what users expect from a login.
+- **Cookie only for the non-sensitive half** — a long random "remember me" token checked against the DB, never the identity.
 
-**Traps:** "sessions are more secure" is only half a sentence — add *because the data is not client-side*; a good answer notes that sessions still rely on a cookie (the ID), so the mechanisms are layered, not alternatives.
+**Traps:**
+- "Sessions are more secure" is half a sentence — add *because the data is not client-side*.
+- Sessions still rely on a cookie (the ID), so the mechanisms are layered, not alternatives.
 
-#### Q248 — Complete SQL workflow from PHP + INSERT reporting success
+#### Q248 — SQL workflow + INSERT success report
 
-**Structure:** 7 — the workflow, step by step; 7 — the INSERT program with a success/failure report.
+**Structure (marks):** 7 the workflow step by step · 7 INSERT program with success/failure report.
 
-**Full answer (a) — the workflow** (this is the deck's five-step cycle, 4:L405–419)
+**Answer (a) — workflow** (the deck's five-step cycle, 4:L405–419):
 
 1. `mysqli_connect(...)` → handle, else `die()`.
-2. Build the SQL **string** (`INSERT INTO …`, quotes around strings).
+2. Build the SQL **string** (`INSERT INTO …`, strings quoted).
 3. `mysqli_query($conn, $sql)` → for writes, `true`/`false`.
-4. Branch: on `true` report success (+ `mysqli_insert_id()`), on `false` report `mysqli_error($conn)`.
+4. Branch: `true` → success + `mysqli_insert_id()`; `false` → `mysqli_error($conn)`.
 5. `mysqli_close($conn)`.
 
-**Full answer (b) — program**
+**Answer (b) — program:**
 
 ```php
 <?php
@@ -2011,32 +1815,29 @@ mysqli_close($conn);
 ?>
 ```
 
-**Say out loud:** `mysqli_query()`/`execute()` returning true proves the *statement ran*, not that the data was sensible — validation happens before the query, and `insert_id`/`affected_rows` after it.
+`execute()` returning true proves the *statement ran*, not that the data was sensible — validate before the query, and read `insert_id`/`affected_rows` after it.
 
-**Traps:** reporting success without checking the return value (the "always prints Success" bug); using `mysqli_error($conn)` after a *prepared* statement also works, but `mysqli_stmt_error($stmt)` is the precise form.
+**Traps:**
+- Reporting success without checking the return value — the "always prints Success" bug.
+- After a prepared statement `mysqli_stmt_error($stmt)` is the precise form (the `$conn` version also works).
 
----
+#### Q249 — CREATE TABLE types/constraints + employees
 
-#### Q249 — CREATE TABLE, column types & constraints + employee table
+**Structure (marks):** 7 types and constraints explained · 7 employee table SQL executed from PHP.
 
-**Structure:** 7 — types and constraints explained; 7 — the employee table SQL executed from PHP.
-
-**Full answer (a) — types and constraints**
+**Answer (a) — types and constraints:**
 
 | Category | Choice | Why |
 |---|---|---|
 | Whole numbers | `INT` | ids, age, counts |
-| Short text | `VARCHAR(n)` | name, department — n is the max length |
-| Long text | `TEXT` | remarks, descriptions |
+| Short/long text | `VARCHAR(n)` / `TEXT` | name, department / remarks |
 | Dates | `DATE` / `DATETIME` | admission, joined |
-| Money | `DECIMAL(10,2)` | exact — `FLOAT` rounds and loses paise |
-| Constraint `PRIMARY KEY` | unique row identity | needed for `WHERE id = …` (4:L437) |
-| `AUTO_INCREMENT` | MySQL assigns 1,2,3… | no manual id collisions |
-| `NOT NULL` | column must have a value | blocks empty critical fields |
-| `UNIQUE` | no duplicates | email, register number |
+| Money | `DECIMAL(10,2)` | exact — `FLOAT` loses paise |
+| `PRIMARY KEY` + `AUTO_INCREMENT` | unique identity, MySQL numbers 1,2,3… | needed for `WHERE id = …` (4:L437) |
+| `NOT NULL` / `UNIQUE` | value required / no duplicates | email, register number |
 | `DEFAULT` | fallback value | `DEFAULT 'General'` |
 
-**Full answer (b) — employee table from PHP**
+**Answer (b) — employee table from PHP:**
 
 ```php
 <?php
@@ -2055,24 +1856,23 @@ if (mysqli_query($conn, $sql)) {
 ?>
 ```
 
-**Traps:** `VARCHAR` with no length is a syntax error; storing salary as `INT` loses the decimal part; `PRIMARY KEY` and `AUTO_INCREMENT` on the same column is the normal pattern, not two separate keys.
+**Traps:**
+- `VARCHAR` with no length is a syntax error.
+- `salary INT` loses the decimal part.
 
----
+#### Q250 — Careful DELETE + prepared delete by dept
 
-#### Q250 — Careful DELETE + prepared delete by department
+**Structure (marks):** 6 why DELETE is dangerous + precautions · 8 the prepared-statement program.
 
-**Structure:** 6 — why DELETE is dangerous and the precautions; 8 — the prepared-statement program.
+**Answer (a) — precautions:**
 
-**Full answer (a) — precautions**
+1. **`WHERE` in intent** — without it the table empties (4:L511).
+2. **Preview** — `SELECT … WHERE department = ?` first (4:L515, L669).
+3. **Prepared** — so the value cannot inject (4:L683).
+4. **Verify** — `affected_rows` must match the preview (4:L687).
+5. **Soft delete** (`SET deleted = 1`) or a transaction (`START TRANSACTION` / `ROLLBACK`) where recovery matters (standard).
 
-1. `WHERE` is mandatory in intent — without it the table is emptied (4:L511).
-2. **Preview**: run `SELECT * FROM employees WHERE department = ?` with the same condition first (4:L515, L669).
-3. Prefer a **prepared statement** so the department value cannot inject (4:L683).
-4. Check `affected_rows` — delete count must match what the preview showed (4:L687).
-5. Prefer a **soft delete** (`UPDATE … SET deleted = 1`) where recovery matters, and take a backup before bulk deletes (standard).
-6. Use a transaction (`START TRANSACTION` / `ROLLBACK`) when deleting across tables (standard).
-
-**Full answer (b) — program**
+**Answer (b) — program:**
 
 ```php
 <?php
@@ -2100,19 +1900,17 @@ mysqli_close($conn);
 ?>
 ```
 
-**Traps:** the question wants the *prepared* form, not a concatenated `WHERE department = '$dept'`; `mysqli_stmt_get_result()` is needed before `fetch_assoc()` on a prepared SELECT.
+**Traps:**
+- The question wants the *prepared* form, not concatenated `WHERE department = '$dept'`.
+- `mysqli_stmt_get_result()` is required before `fetch_assoc()` on a prepared SELECT.
 
----
+#### Q251 — SELECT result processing + marks > 50
 
-#### Q251 — SELECT result processing + students with marks > 50
+**Structure (marks):** 6 result processing (handle → pointer → loop → free) · 8 filtered program.
 
-**Structure:** 6 — how a result set is processed (handle → pointer → loop → free); 8 — the filtered program.
+**Answer (a) — processing:** `mysqli_query()` returns a `mysqli_result` holding the set with an internal pointer (4:L353); `fetch_assoc()` returns the current row and advances it, `NULL` ends the `while` (4:L357); `num_rows()` counts without fetching (4:L361); `free_result()` releases memory.
 
-**Full answer (a) — processing steps**
-
-`mysqli_query()` returns a `mysqli_result` handle holding the whole set server-side with an internal pointer (4:L353). `mysqli_fetch_assoc()` returns the current row and advances the pointer; at the end it returns `NULL`, ending the `while` (4:L357). `mysqli_num_rows()` reports the count without fetching (4:L361). `mysqli_free_result()` releases memory when done.
-
-**Full answer (b) — program**
+**Answer (b) — program:**
 
 ```php
 <?php
@@ -2139,19 +1937,21 @@ mysqli_close($conn);
 ?>
 ```
 
-**Traps:** `>` vs `>=` — the question says *greater than* 50; the empty-result branch is worth a mark and is usually forgotten.
+**Traps:**
+- `>` vs `>=` — the question says *greater than* 50.
+- The empty-result branch is worth a mark and is usually forgotten.
 
----
+#### Q252 — UPDATE + affected_rows + 10% raise
 
-#### Q252 — UPDATE + role of affected_rows + 10% raise by department
+**Structure (marks):** 6 UPDATE mechanics and `affected_rows` · 8 the raise program.
 
-**Structure:** 6 — UPDATE mechanics and `affected_rows`; 8 — the raise program.
+**Answer (a) — explanation:**
 
-**Full answer (a) — explanation**
+- `UPDATE t SET col = value WHERE condition` rewrites matching rows (4:L634).
+- `affected_rows()` reports how many **actually changed** (4:L640, L513) — "query ran" vs "data changed".
+- It is `0` when the WHERE matched nothing **and** when the new value equals the old, since MySQL counts changed rows (standard); compare with `SELECT COUNT(*)`.
 
-`UPDATE table SET col = value WHERE condition` rewrites matching rows (4:L634). `mysqli_affected_rows($conn)` returns how many rows the last write **actually changed** (4:L640, L513) — the difference between "the query ran" and "the data changed". It is `0` when the WHERE matched nothing, and also `0` when the new value equals the old one, because MySQL counts changed rows, not matched rows (standard). That is why you compare it against a `SELECT COUNT(*)` when the distinction matters.
-
-**Full answer (b) — program**
+**Answer (b) — program:**
 
 ```php
 <?php
@@ -2176,26 +1976,27 @@ mysqli_close($conn);
 ?>
 ```
 
-SQL-only form for the first half: `UPDATE employees SET salary = salary * 1.10 WHERE department = 'Sales';` — note the arithmetic happens *inside* SQL, so no PHP loop is required.
+SQL-only form for the first half: `UPDATE employees SET salary = salary * 1.10 WHERE department = 'Sales';` — the arithmetic happens *inside* SQL, so no PHP loop is needed.
 
-**Traps:** computing the raise in PHP row by row (works, but wastes marks — one statement does it); `salary * 1.1` on a `DECIMAL` is exact, on `FLOAT` it drifts.
+**Traps:**
+- Computing the raise row by row in PHP works but wastes marks — one statement does it.
+- `salary * 1.1` is exact on `DECIMAL`, drifts on `FLOAT`.
 
----
+#### Q253 — Steps for dynamic HTML + students list
 
-#### Q253 — Steps for dynamic HTML from MySQL + students list ⭐
+**Structure (marks):** 6 the steps/architecture · 8 listing program with names and marks.
 
-**Structure:** 6 — the steps/architecture; 8 — the listing program with names and marks.
-
-**Full answer (a) — the steps** (4:L774–780)
+**Answer (a) — the steps** (4:L774–780):
 
 1. **Connect** to MySQL.
 2. **Query** — `SELECT name, marks FROM students`.
-3. **Fetch** — loop `mysqli_fetch_assoc($result)`.
-4. **Render** — echo one HTML row per record, escaping user data.
+3. **Fetch** — loop `fetch_assoc($result)`.
+4. **Render** — one HTML row per record, escaped.
 5. **Close** — free result, close connection.
-Say why it is *dynamic*: the same file emits different HTML per request because the rows are read at request time (4:L705, L780).
 
-**Full answer (b) — program** (alternative syntax — the deck's own shape, 4:L782–792)
+*Dynamic* because the same file emits different HTML per request (4:L705, L780).
+
+**Answer (b) — program** (alternative syntax, the deck's own shape, 4:L782–792):
 
 ```php
 <?php
@@ -2220,15 +2021,17 @@ mysqli_close($conn);
 ?>
 ```
 
-**Traps:** `while (...)` with braces instead of `while (...):` … `endwhile;` is a syntax error when the body is HTML — pick one style and stay in it; `<?=` needs no semicolon but does need the closing `?>`.
+**Traps:**
+- `while (...)` with braces holding HTML is a syntax error — pick `while (...):` … `endwhile;` and stay in it.
+- `<?=` needs no semicolon but does need the closing `?>`.
 
 ---
 
-## 4. PART 3 — Code you must write by hand
+## 4. Code you must write by hand
 
-Write these on paper, closed book, until they come out without thinking. Line counts are what a 14-mark answer can afford. **Every drill from D3 onward assumes `$conn` is already open (D1/D2) and that `college_db` with a `students` table exists.**
+On paper, closed book. Every drill from D3 onward assumes `$conn` is open (D1/D2) and that `college_db.students` exists.
 
-**D1 — Connect and close (the 6-line skeleton)**
+**D1 — Connect and close (6-line skeleton)**
 
 ```php
 <?php
@@ -2379,8 +2182,7 @@ echo mysqli_affected_rows($conn) . " row(s) deleted";
 ```
 *Memorise:* `DELETE FROM t WHERE …` — never without WHERE.
 
-**D10 — Session login/logout pair**
-*login.php*
+**D10 — Session login/home/logout trio**
 
 ```php
 <?php
@@ -2391,7 +2193,6 @@ header("Location: home.php");     // redirect
 exit;
 ?>
 ```
-*home.php*
 
 ```php
 <?php
@@ -2401,7 +2202,6 @@ echo "Welcome " . htmlspecialchars($_SESSION["user"]);
 echo " | <a href='logout.php'>Logout</a>";
 ?>
 ```
-*logout.php*
 
 ```php
 <?php
@@ -2425,7 +2225,7 @@ if (isset($_COOKIE["username"])) {                  // read (next request)
 setcookie("username", "", time() - 3600, "/");      // delete
 ?>
 ```
-*Memorise:* `time()+3600` to set, `time()-3600` to delete, nothing echoed before `setcookie()`.
+*Memorise:* `time()+3600` sets, `time()-3600` deletes, nothing echoed before `setcookie()`.
 
 **D12 — Dynamic date/time greeting page**
 
@@ -2533,94 +2333,76 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 ---
 
-## 5. 🔴 Night-before memorize sheet
+## 5. Night-before memorize sheet
 
-| Item | Exact syntax / signature | Why it is asked |
+| Item | Exact syntax / signature | Asked at |
 |---|---|---|
-| Connect | `mysqli_connect('localhost','user','pass','db')` | Q92, 110, 116, 234, 240 — the first line of every answer |
-| Connect error | `mysqli_connect_error()` · OO `$conn->connect_error` | The "error handling" mark in every connection question |
-| Close | `mysqli_close($conn);` · OO `$conn->close();` | Completes the lifecycle; cheap mark |
-| Query | `mysqli_query($conn, $sql)` | Q126; result handle vs bool is the examined detail |
-| Query error | `mysqli_error($conn)` | Any "with error handling" question |
-| Fetch loop | `while ($row = mysqli_fetch_assoc($result))` | Q128, 243, 251, 253 — the canonical pattern |
-| Row access | `$row["column_name"]` | Every display answer |
-| Count rows | `mysqli_num_rows($result)` | "No records found" branch, paging |
-| Rows changed | `mysqli_affected_rows($conn)` · OO `$conn->affected_rows` | Q127, 244, 250, 252 |
-| Last id | `mysqli_insert_id($conn)` | Any INSERT answer |
-| Prepared INSERT | `mysqli_prepare($conn, "INSERT … VALUES (?, ?)")` | Q99, 242, 250 |
-| Bind | `mysqli_stmt_bind_param($stmt, "ssi", $a, $b, $c)` | The type string `s`/`i`/`d`/`b` is the mark |
+| Connect | `mysqli_connect('localhost','user','pass','db')` | Q92 |
+| Connect error | `mysqli_connect_error()` · OO `$conn->connect_error` | every connection question |
+| Close | `mysqli_close($conn);` · OO `$conn->close();` | lifecycle mark |
+| Query | `mysqli_query($conn, $sql)` | Q126 |
+| Query error | `mysqli_error($conn)` | any "error handling" |
+| Fetch loop | `while ($row = mysqli_fetch_assoc($result))` | Q128 |
+| Row access | `$row["column_name"]` | every display answer |
+| Count rows | `mysqli_num_rows($result)` | "no records found", paging |
+| Rows changed | `mysqli_affected_rows($conn)` · OO `$conn->affected_rows` | Q127 |
+| Last id | `mysqli_insert_id($conn)` | any INSERT |
+| Prepared | `mysqli_prepare($conn, "INSERT … VALUES (?, ?)")` | Q99 |
+| Bind | `mysqli_stmt_bind_param($stmt, "ssi", $a, $b, $c)` | the type string is the mark |
 | Execute | `mysqli_stmt_execute($stmt)` | — |
-| Prepared rows | `mysqli_stmt_affected_rows($stmt)` · `mysqli_stmt_error($stmt)` | Different from the `$conn` versions |
-| Start session | `session_start();` | Q115, 125 — must be the first statement |
-| Session write/read | `$_SESSION["key"] = value;` · `echo $_SESSION["key"];` | Q95, 100, 111 |
-| End session | `session_unset(); session_destroy();` | Q239, 246 |
-| Set cookie | `setcookie('name','value',time()+3600,'/');` | Q113, 124, 238, 239 |
+| Prepared rows | `mysqli_stmt_affected_rows($stmt)` · `mysqli_stmt_error($stmt)` | not the `$conn` versions |
+| Start session | `session_start();` | Q115 |
+| Session write/read | `$_SESSION["key"] = value;` · `echo $_SESSION["key"];` | Q95 |
+| End session | `session_unset(); session_destroy();` | Q239 |
+| Set cookie | `setcookie('name','value',time()+3600,'/');` | Q113 |
 | Read cookie | `$_COOKIE["name"]` | — |
-| Delete cookie | `setcookie('name','',time()-3600,'/');` | Past expiry, same path |
-| Create table | `CREATE TABLE t (id INT AUTO_INCREMENT PRIMARY KEY, name VARCHAR(50));` | Q109, 117, 241, 249 |
+| Delete cookie | `setcookie('name','',time()-3600,'/');` | past expiry, same path |
+| Create table | `CREATE TABLE t (id INT AUTO_INCREMENT PRIMARY KEY, name VARCHAR(50));` | Q109 |
 | Insert | `INSERT INTO t (col1, col2) VALUES ('str', 123);` | Q118 |
-| Update | `UPDATE t SET col = value WHERE key = value;` | Q121, 244, 252 |
-| Delete | `DELETE FROM t WHERE key = value;` | Q119, 242, 250 |
-| Select | `SELECT cols FROM t WHERE cond ORDER BY col DESC LIMIT 5;` | Q120, 251 |
+| Update | `UPDATE t SET col = value WHERE key = value;` | Q121 |
+| Delete | `DELETE FROM t WHERE key = value;` | Q119 |
+| Select | `SELECT cols FROM t WHERE cond ORDER BY col DESC LIMIT 5;` | Q120 |
 | List databases | `SHOW DATABASES` (+ `SHOW TABLES`, `DESCRIBE t`) | Q107 |
-| Alternative loop | `<?php while (...): ?> … <?php endwhile; ?>` | Q243, 253 — syntax mark |
-| Short echo | `<?= $row["name"] ?>` | Same as `<?php echo …; ?>` |
-| Escape output | `htmlspecialchars($str)` | XSS mark, every display question |
+| Alternative loop | `<?php while (...): ?> … <?php endwhile; ?>` | Q243 |
+| Short echo | `<?= $row["name"] ?>` | = `<?php echo …; ?>` |
+| Escape output | `htmlspecialchars($str)` | XSS mark, every display |
 | Self action | `$_SERVER['PHP_SELF']` (not `$_PHP_SELF`) | Q103 |
-| Email regex | `/^[\w.-]+@[\w.-]+\.[A-Za-z]{2,}$/` with `preg_match()` | Q97, 229, 232, 235 |
-| Phone regex | `/^[0-9]{10}$/` or `/^[6-9][0-9]{9}$/` | Q235, 237 |
+| Email regex | `/^[\w.-]+@[\w.-]+\.[A-Za-z]{2,}$/` + `preg_match()` | Q97 |
+| Phone regex | `/^[0-9]{10}$/` or `/^[6-9][0-9]{9}$/` | Q235 |
 | Greeting hour | `(int) date("H")` + `if/elseif` | Q231 |
 | Root | `sqrt($n)` | Q105 |
-| Factorial | `return $n * fact($n-1);` with base case `$n <= 1` | Q233 |
+| Factorial | `return $n * fact($n-1);` base case `$n <= 1` | Q233 |
 | Upload | `$_FILES["f"]["tmp_name"]` + `move_uploaded_file()` + `enctype="multipart/form-data"` | Q233 |
-| Sort assoc | `asort()` by value, `ksort()` by key, `unset($a["k"])` | Q238 |
+| Sort assoc | `asort()` value, `ksort()` key, `unset($a["k"])` | Q238 |
 
 ---
 
-## 6. 📐 Diagram + figure index
+## 6. Figure index
 
-`grep 'Image Description' module4.md` returns **16** hits. Fifteen are decorative slide furniture; exactly **one** is a real diagram — know that one cold.
+`grep 'Image Description' module4.md` → **16** hits. Fifteen are slide furniture (DB cylinder + PHP logo at 4:L1, 57, 96, 200, 238, 310, 345, 425, 462, 499, 552, 589, 624, 729, 764) — no exam value.
 
-| Line | What the figure shows | Exam value |
+| Line | Figure | Exam value |
 |---|---|---|
-| 4:L1 | Dark circular database-cylinder icon — title slide furniture | none |
-| 4:L57 | Small DB cylinder + PHP logo — furniture | none |
-| 4:L96 | DB cylinder + PHP logo — furniture | none |
-| 4:L200 | DB cylinder + PHP logo — furniture | none |
-| 4:L238 | DB cylinder + PHP logo — furniture | none |
-| 4:L310 | DB cylinder + PHP logo — furniture | none |
-| 4:L345 | DB cylinder + PHP logo — furniture | none |
-| 4:L399 | **The five-step query cycle** — five boxes: (1) Build SQL string, (2) `mysqli_query()`, (3) Result handle returned, (4) `while` + `fetch_assoc()` loops through rows, (5) echo HTML for each row, all sitting above a bar labelled "Browser displays the finished table" | **High** — draw this for Q243/Q245/Q248/Q253, and the prose list is at 4:L407–417 |
-| 4:L425 | DB cylinder + "PHP + SQL" tag — furniture | none |
-| 4:L462 | DB cylinder + "PHP + SQL" tag | none |
-| 4:L499 | DB cylinder + "PHP + SQL" tag | none |
-| 4:L552 | DB cylinder + "PHP + SQL" tag | none |
-| 4:L589 | DB cylinder + "PHP + SQL" tag | none |
-| 4:L624 | DB cylinder + "PHP + SQL" tag | none |
-| 4:L729 | DB cylinder + PHP logo | none |
-| 4:L764 | DB cylinder + PHP logo | none |
+| 4:L399 | **Five-step query cycle** — five boxes: build SQL → `mysqli_query()` → result handle → `while` + `fetch_assoc()` → echo HTML per row, over the bar "Browser displays the finished table" | **High** — draw for Q243/245/248/253; prose 4:L407–417 |
 
-**Flows you may be asked to sketch that are NOT drawn in this deck**
-
-- **Request/response flow** (browser → Apache → PHP → MySQL → HTML back): described in words in Module 3, diagram at `module3.md` L57. Reuse it for Q245/Q253 — but say "the request–response cycle from Module 3", do not claim Module 4 draws it.
-- **Session flow** (browser ⇄ `PHPSESSID` cookie ⇄ server session file): not drawn; the prose is 4:L106–112, reconstructed in §2.3.
-- **Cookie round trip** (`Set-Cookie` response header → cookie jar → `Cookie` request header → `$_COOKIE`): not drawn; prose 4:L39.
+**Not drawn in this deck**
+- **Request/response** (browser → Apache → PHP → MySQL → HTML): `module3.md` L57 — cite the Module 3 cycle.
+- **Session flow** (`PHPSESSID` ⇄ server file): prose 4:L106–112, §2.3.
+- **Cookie round trip** (`Set-Cookie` → jar → `Cookie` → `$_COOKIE`): prose 4:L39.
 
 ---
 
-## 7. Say-this-if-grilled defence lines
+## 7. Defence lines
 
-1. **Why sessions beat cookies for login:** the identity is a server-side record and the browser holds only an unguessable ID, so nothing the user can edit decides who they are.
-2. **Why `WHERE` is non-negotiable:** without it `UPDATE` writes every row and `DELETE` empties the table — and neither has an undo.
-3. **Why prepared statements stop injection:** the statement is compiled before the values arrive, so input is data forever and can never be parsed as SQL syntax.
-4. **Why `mysqli_fetch_assoc()` returns `NULL` at the end:** the result set has an internal pointer; once it passes the last row there is nothing to return, and `NULL` is falsy — which is exactly what ends the `while`.
-5. **Why the connection must precede the query:** `mysqli_query()` needs a live handle as its first argument; without one you are passing `false` into a function that expects a connection.
-6. **Why `setcookie()`/`session_start()` must be first:** both emit HTTP headers, and headers are already on the wire once any body output starts.
-7. **Why `affected_rows` matters even when there was no error:** MySQL happily reports success for a statement that matched zero rows; the count is the only evidence the right rows changed.
-8. **Why `mysqli_query()` returns two different things:** SELECT-type statements produce a result set to iterate; write statements produce only a status, so there is nothing to fetch.
-9. **Why you escape with `htmlspecialchars()` on output, not input:** the danger is a value being *interpreted as HTML* when it is displayed, so the escaping belongs at the point of rendering.
-10. **Why the page is dynamic even though the file never changes:** the file is a program; the HTML is rebuilt per request from whatever the database holds at that moment.
-11. **Why `(int)` casting is not a substitute for prepared statements:** it closes injection through numeric fields only; strings still need binding.
-12. **Why `session_destroy()` alone looks broken:** it deletes the server file but leaves `$_SESSION` populated for the rest of that request — `session_unset()` first, then destroy.
-13. **Why the deck's string-built SQL is still shown:** it is clearer for teaching the query/fetch cycle; the deck itself flags `mysqli_prepare()` as the production path (4:L302–304).
-14. **Why cookies still matter if you use sessions:** every session *is* a cookie — the mechanism is layered, not alternative.
+1. **Sessions over cookies for login:** identity is a server-side record; the browser holds only an unguessable ID, so nothing the user can edit decides who they are.
+2. **`WHERE` is non-negotiable:** without it `UPDATE` writes every row, `DELETE` empties the table, and neither has an undo.
+3. **Prepared statements stop injection:** the statement is compiled before the values arrive, so input stays data and can never be parsed as syntax.
+4. **`fetch_assoc()` returns `NULL` at the end:** the result set has an internal pointer; past the last row there is nothing to return, and `NULL` is falsy, which ends the `while`.
+5. **Connection before query:** `mysqli_query()` needs a live handle; otherwise `false` goes where a connection belongs.
+6. **`setcookie()`/`session_start()` first:** both emit HTTP headers, and headers are already on the wire once body output starts.
+7. **`affected_rows` matters even with no error:** MySQL reports success for a statement that matched zero rows; the count is the only evidence.
+8. **`mysqli_query()` returns two things:** SELECT gives a result set to iterate, writes only a status — nothing to fetch.
+9. **Escape on output, not input:** the danger is a value being interpreted as HTML when displayed, so escaping belongs at rendering.
+10. **The page is dynamic though the file is not:** the file is a program; the HTML is rebuilt per request from whatever the database holds then.
+11. **`(int)` is not a substitute for prepared statements:** it closes injection through numeric fields only; strings still need binding.
+12. **`session_destroy()` alone looks broken:** it deletes the server file but leaves `$_SESSION` populated this request — `session_unset()` first. Every session *is* a cookie, so the mechanisms are layered.
