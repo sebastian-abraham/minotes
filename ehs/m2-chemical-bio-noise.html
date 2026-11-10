@@ -1,0 +1,1658 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Module 2 — Chemical and Biological Hazards, and Noise · Environmental Health &amp; Safety</title>
+<style>
+:root{
+  --bg:#fbfaf8; --panel:#ffffff; --ink:#232120; --muted:#5f5a53; --line:#e6e1da;
+  --accent:#7a4fd0; --accent-soft:#f1ecfb; --code-bg:#f5f2ee; --code-ink:#2b2a28;
+  --warn-bg:#fff8e6; --warn-line:#f0d9a0;
+  --sans:"Inter","Segoe UI",system-ui,-apple-system,"Noto Sans",sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,"SF Mono",Menlo,Consolas,"Fira Code",monospace;
+}
+html[data-theme="dark"]{
+  --bg:#141317; --panel:#1b1a20; --ink:#e8e4de; --muted:#a8a199; --line:#2f2c36;
+  --accent:#b79cf5; --accent-soft:#241f33; --code-bg:#22202a; --code-ink:#e8e4de;
+  --warn-bg:#2a2417; --warn-line:#4a3d22;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0; background:var(--bg); color:var(--ink); font-family:var(--sans);
+  font-size:16.5px; line-height:1.72; -webkit-font-smoothing:antialiased;
+}
+#progress{position:fixed;top:0;left:0;height:3px;width:0;background:var(--accent);z-index:50;transition:width .1s linear}
+
+.wrap{display:flex;align-items:flex-start;min-height:100vh}
+.sidebar{
+  position:sticky;top:0;height:100vh;width:300px;flex:0 0 300px;overflow-y:auto;
+  padding:26px 20px 60px;border-right:1px solid var(--line);background:var(--panel);
+}
+.sidebar h1{font-size:15px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);
+  margin:0 0 4px;font-weight:600}
+.sidebar .sub{font-size:12.5px;color:var(--muted);margin:0 0 18px}
+.sidebar nav{font-size:14px}
+.sidebar .toc>ul{padding-left:0}
+.sidebar ul{list-style:none;margin:0;padding-left:12px}
+.sidebar ul ul{border-left:1px solid var(--line);margin-left:4px;padding-left:10px}
+.sidebar li{margin:3px 0}
+.sidebar a{color:var(--ink);text-decoration:none;display:block;padding:3px 8px;border-radius:8px;
+  line-height:1.35;transition:background .12s,color .12s}
+.sidebar a:hover{background:var(--accent-soft);color:var(--accent)}
+.sidebar a.active{background:var(--accent-soft);color:var(--accent);font-weight:600}
+.sidebar .home{display:inline-flex;align-items:center;gap:6px;margin-bottom:16px;font-size:13.5px;
+  color:var(--muted);text-decoration:none;border:1px solid var(--line);padding:5px 10px;border-radius:999px}
+.sidebar .home:hover{color:var(--accent);border-color:var(--accent)}
+
+main{flex:1;min-width:0;padding:46px 56px 120px;max-width:980px;margin:0 auto}
+.doc-head{border-bottom:1px solid var(--line);padding-bottom:18px;margin-bottom:34px}
+.doc-head .kicker{font-size:12.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);
+  font-weight:700;margin-bottom:8px}
+.doc-head .meta{font-size:13.5px;color:var(--muted)}
+
+h1,h2,h3,h4{line-height:1.25;font-weight:700;letter-spacing:-.01em}
+h1{font-size:2.05rem;margin:.2em 0 .5em}
+h2{font-size:1.55rem;margin:2.4em 0 .7em;padding-bottom:.35em;border-bottom:1px solid var(--line)}
+h3{font-size:1.2rem;margin:1.9em 0 .55em}
+h4{font-size:1.03rem;margin:1.5em 0 .45em;color:var(--muted)}
+h2 .anchor,h3 .anchor{opacity:0;margin-left:.35em;font-size:.8em;color:var(--muted);text-decoration:none}
+h2:hover .anchor,h3:hover .anchor{opacity:1}
+p{margin:.75em 0}
+a{color:var(--accent);text-underline-offset:2px}
+strong{font-weight:650}
+hr{border:0;border-top:1px solid var(--line);margin:2.6em 0}
+ul,ol{margin:.7em 0;padding-left:1.4em}
+li{margin:.3em 0}
+li>ul,li>ol{margin:.25em 0}
+blockquote{
+  margin:1.3em 0;padding:12px 18px;background:var(--warn-bg);border-left:3px solid var(--warn-line);
+  border-radius:0 10px 10px 0;color:var(--ink)
+}
+blockquote p{margin:.3em 0}
+
+code{font-family:var(--mono);font-size:.87em;background:var(--code-bg);color:var(--code-ink);
+  padding:.15em .38em;border-radius:6px;border:1px solid var(--line);
+  box-decoration-break:clone;-webkit-box-decoration-break:clone;overflow-wrap:anywhere}
+pre{position:relative;background:var(--code-bg);border:1px solid var(--line);border-radius:12px;
+  padding:16px 18px;overflow-x:auto;margin:1.1em 0}
+pre code{background:none;border:0;padding:0;font-size:13.6px;line-height:1.62;white-space:pre}
+.copy{position:absolute;top:8px;right:8px;font:600 11px/1 var(--sans);color:var(--muted);
+  background:var(--panel);border:1px solid var(--line);border-radius:7px;padding:5px 8px;cursor:pointer;
+  opacity:0;transition:opacity .15s}
+pre:hover .copy{opacity:1}
+.copy:hover{color:var(--accent);border-color:var(--accent)}
+
+.table-scroll{overflow-x:auto;margin:1.3em 0;border:1px solid var(--line);border-radius:12px;background:var(--panel)}
+table{border-collapse:collapse;width:100%;font-size:14.6px}
+th,td{padding:9px 13px;text-align:left;vertical-align:top;border-bottom:1px solid var(--line)}
+th{background:var(--accent-soft);font-weight:650;font-size:13px;letter-spacing:.02em;
+  position:sticky;top:0;backdrop-filter:blur(4px)}
+tr:last-child td{border-bottom:0}
+tbody tr:nth-child(even){background:color-mix(in srgb,var(--panel) 60%,var(--bg))}
+tbody tr:hover{background:var(--accent-soft)}
+
+.tools{position:fixed;right:22px;bottom:22px;display:flex;flex-direction:column;gap:8px;z-index:40}
+.tools button{width:42px;height:42px;border-radius:12px;border:1px solid var(--line);background:var(--panel);
+  color:var(--ink);cursor:pointer;font-size:16px;box-shadow:0 4px 14px rgba(0,0,0,.10)}
+.tools button:hover{color:var(--accent);border-color:var(--accent)}
+@media (max-width:1000px){
+  .wrap{display:block}
+  .sidebar{position:static;width:auto;height:auto;border-right:0;border-bottom:1px solid var(--line)}
+  .sidebar nav{max-height:40vh;overflow:auto}
+  main{padding:28px 20px 100px}
+}
+@media print{
+  .sidebar,.tools,#progress,.copy{display:none!important}
+  body{background:#fff;color:#000;font-size:11pt}
+  main{padding:0;max-width:none}
+  h2{break-after:avoid} pre,table,blockquote{break-inside:avoid}
+  a{color:#000;text-decoration:none}
+}
+
+/* ---- ask-about-this ---- */
+#chat-btn{position:fixed;right:20px;bottom:112px;width:44px;height:44px;border-radius:50%;
+  border:1px solid var(--line);background:var(--panel);color:var(--accent);cursor:pointer;font-size:17px;
+  box-shadow:0 6px 18px rgba(0,0,0,.12);z-index:45;display:grid;place-items:center}
+#chat-btn:hover{border-color:var(--accent)}
+#sel-chip{position:absolute;z-index:46;transform:translate(-50%,-100%);background:var(--ink);color:var(--bg);
+  font:600 12px/1 var(--sans);padding:7px 11px;border-radius:999px;cursor:pointer;white-space:nowrap;
+  box-shadow:0 6px 18px rgba(0,0,0,.25);display:none}
+#sel-chip:hover{background:var(--accent);color:#fff}
+#chat-panel{position:fixed;right:20px;bottom:164px;width:min(420px,calc(100vw - 40px));max-height:min(70vh,620px);
+  background:var(--panel);border:1px solid var(--line);border-radius:14px;z-index:47;display:none;
+  flex-direction:column;box-shadow:0 18px 50px rgba(0,0,0,.18);overflow:hidden}
+#chat-panel.open{display:flex}
+#chat-head{display:flex;align-items:center;gap:8px;padding:11px 13px;border-bottom:1px solid var(--line);
+  font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:700}
+#chat-head .sp{flex:1}
+#chat-head button{background:none;border:0;color:var(--muted);cursor:pointer;font-size:15px;padding:2px 4px}
+#chat-head button:hover{color:var(--accent)}
+#chat-quote{display:none;margin:10px 13px 0;padding:8px 10px;border-left:2px solid var(--accent);
+  background:var(--accent-soft);color:var(--muted);font-size:12.5px;border-radius:0 8px 8px 0;
+  max-height:84px;overflow:auto;white-space:pre-wrap}
+#chat-log{flex:1;overflow-y:auto;padding:12px 13px;display:flex;flex-direction:column;gap:10px;font-size:13.6px;line-height:1.55}
+.msg{max-width:100%}
+.msg.user{align-self:flex-end;background:var(--accent-soft);color:var(--ink);padding:7px 11px;border-radius:11px 11px 2px 11px;
+  max-width:86%;white-space:pre-wrap}
+.msg.bot{color:var(--ink)}
+.msg.bot p{margin:.3em 0}
+.msg.bot ul{margin:.3em 0;padding-left:1.15em}
+.msg.bot code{font-size:.9em}
+.msg.bot pre{background:var(--code-bg);border-radius:8px;padding:9px 11px;overflow-x:auto;font-size:12px;margin:.4em 0}
+.msg.err{color:#b3261e;font-size:12.5px}
+.msg .cursor:after{content:"▍";color:var(--accent);animation:blink 1s steps(2) infinite}
+@keyframes blink{50%{opacity:0}}
+#chat-form{display:flex;gap:8px;padding:10px 13px;border-top:1px solid var(--line)}
+#chat-input{flex:1;resize:none;border:1px solid var(--line);border-radius:9px;background:var(--bg);color:var(--ink);
+  font:inherit;font-size:13.5px;padding:8px 10px;max-height:110px;min-height:38px}
+#chat-input:focus{outline:2px solid var(--accent);outline-offset:0}
+#chat-send{border:1px solid var(--accent);background:var(--accent);color:#fff;border-radius:9px;
+  width:38px;cursor:pointer;font-size:15px}
+#chat-send:disabled{opacity:.45;cursor:default}
+#chat-foot{font-size:11px;color:var(--muted);padding:0 13px 9px}
+@media (max-width:640px){
+  #chat-panel{right:8px;left:8px;width:auto;bottom:150px;max-height:66vh}
+  #chat-btn{bottom:104px;right:16px}
+}
+@media print{#chat-btn,#chat-panel,#sel-chip{display:none!important}}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+<div class="wrap">
+  <aside class="sidebar">
+    <a class="home" href="index.html">← Environmental Health &amp; Safety</a>
+    <a class="home" href="practice.html">Practice drills</a>
+    <h1>M2 · Chemical, bio, noise</h1>
+    <p class="sub">20% ESE · CO2</p>
+    <nav class="toc"><div class="toc">
+<ul>
+<li><a href="#1-coverage">1. Coverage</a></li>
+<li><a href="#2-concepts">2. Concepts</a><ul>
+<li><a href="#21-what-a-chemical-hazard-is-and-where-it-comes-from-5">2.1 What a chemical hazard is, and where it comes from (<code>slide 5–6</code>)</a></li>
+<li><a href="#22-the-six-physical-forms-13">2.2 The six physical forms (<code>slide 12–13</code>)</a></li>
+<li><a href="#23-routes-of-entry-into-the-body-25">2.3 Routes of entry into the body (<code>slide 7–10</code>)</a></li>
+<li><a href="#24-health-effects-34">2.4 Health effects (<code>slide 11</code>)</a></li>
+<li><a href="#25-controlling-chemical-hazards-at-the-workplace-38">2.5 Controlling chemical hazards at the workplace (<code>slide 14–17</code>)</a></li>
+<li><a href="#26-material-safety-data-sheet-msds-53">2.6 Material safety data sheet — MSDS (<code>slide 18–20</code>)</a></li>
+<li><a href="#27-biological-hazards-definition-and-where-they-occur-66">2.7 Biological hazards: definition and where they occur (<code>slide 23–24, 26–27</code>)</a></li>
+<li><a href="#28-classification-of-biohazardous-agents-76">2.8 Classification of biohazardous agents (<code>slide 25, 28</code>)</a></li>
+<li><a href="#29-bacterial-viral-fungal-and-parasitic-agents-83">2.9 Bacterial, viral, fungal and parasitic agents (<code>slide 29–34</code>)</a></li>
+<li><a href="#210-infectious-diseases-and-occupations-103">2.10 Infectious diseases and occupations (<code>slide 44–47</code>)</a></li>
+<li><a href="#211-control-of-biological-agents-at-the-workplace-109">2.11 Control of biological agents at the workplace (<code>slide 36–43</code>)</a></li>
+<li><a href="#212-noise-physics-and-measurement-121">2.12 Noise: physics and measurement (<code>slide 49–53</code>)</a></li>
+<li><a href="#213-noise-exposure-regulation-131">2.13 Noise exposure regulation (<code>slide 54–56</code>)</a></li>
+<li><a href="#214-effects-of-noise-138">2.14 Effects of noise (<code>slide 57–61</code>)</a></li>
+<li><a href="#215-noise-control-i-assessment-and-prevention-152">2.15 Noise control I — assessment and prevention (<code>slide 62–68</code>)</a></li>
+<li><a href="#216-noise-control-ii-source-path-receiver-160">2.16 Noise control II — source, path, receiver (<code>slide 69–75</code>)</a></li>
+</ul>
+</li>
+<li><a href="#3-answer-bank">3. Answer bank</a><ul>
+<li><a href="#31-3-mark-answers-part-a">3.1 3-mark answers (Part A)</a></li>
+<li><a href="#32-5-mark-answers-retest-style-part-a">3.2 5-mark answers (Retest-style Part A)</a></li>
+<li><a href="#33-78-mark-answers">3.3 7/8-mark answers</a></li>
+<li><a href="#34-14-mark-skeleton-part-b">3.4 14-mark skeleton (Part B)</a></li>
+</ul>
+</li>
+<li><a href="#4-definitions-and-numbers-to-memorise">4. Definitions and numbers to memorise</a></li>
+<li><a href="#5-diagrams-to-be-able-to-draw">5. Diagrams to be able to draw</a></li>
+<li><a href="#6-say-this-if-grilled">6. Say-this-if-grilled</a></li>
+</ul>
+</div>
+</nav>
+  </aside>
+  <main>
+    <div class="doc-head">
+      <div class="kicker">20CET453 · Environmental Health &amp; Safety</div>
+      <div class="meta">20% ESE · CO2 · rendered from KIT_M2_CHEMICAL_BIOLOGICAL_NOISE.md</div>
+    </div>
+    <h1 id="module-2-chemical-and-biological-hazards-and-noise">Module 2 — Chemical and Biological Hazards, and Noise</h1>
+<blockquote>
+<p>20CET453 Environmental Health and Safety · Module II (CO2) · 7 of 36 contact hours · ESE: 2 × 3-mark Part A + 1 × 14-mark Part B from this module; internal papers use 3/5/7/8 marks.
+Refs: <code>slide N</code> = <code>/home/haze/study/EHS/ehs_2.txt</code> · <code>FN §2.x</code> = <code>friend_notes.md</code> · <strong>(standard)</strong> = not in the deck, added because an examiner expects it.</p>
+</blockquote>
+<h2 id="1-coverage">1. Coverage<a class="anchor" href="#1-coverage">#</a></h2>
+<p><strong>Table 1 — syllabus lines, verbatim.</strong></p>
+<table>
+<thead>
+<tr>
+<th>Syllabus line (verbatim)</th>
+<th>Hrs</th>
+<th>Answered at §</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Dust — fumes — vapour — fog — gases — methods of control</td>
+<td>2</td>
+<td>§2.1–§2.5, §3.1.A, §3.1.E, §3.3.B, §3.3.D, §3.4.A</td>
+</tr>
+<tr>
+<td>Biological hazards — classification of bio-hazardous agents — bacterial, viral, fungal, parasitic agents</td>
+<td>2</td>
+<td>§2.6–§2.9, §3.1.D, §3.1.F, §3.2.A, §3.4.B</td>
+</tr>
+<tr>
+<td>Infectious diseases — control of biological agents at workplaces</td>
+<td>2</td>
+<td>§2.10–§2.11, §3.2.E, §3.3.C, §3.3.E</td>
+</tr>
+<tr>
+<td>Noise — noise exposure regulation and control</td>
+<td>1</td>
+<td>§2.12–§2.16, §3.1.G, §3.2.F, §3.3.A, §3.4.C</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Table 2 — every Module II question in the three internal papers.</strong></p>
+<table>
+<thead>
+<tr>
+<th>Internal question</th>
+<th>Paper</th>
+<th>Marks</th>
+<th>Answered at</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Describe the relevance of material safety data sheet</td>
+<td>IT1 Sep 2024, A2</td>
+<td>3</td>
+<td>§3.1.C</td>
+</tr>
+<tr>
+<td>List the types of biological agents with examples</td>
+<td>IT1 Sep 2024, A4</td>
+<td>3</td>
+<td>§3.1.D</td>
+</tr>
+<tr>
+<td>Outline the routes of entry of chemicals into the body</td>
+<td>IT1 Sep 2024, A5</td>
+<td>3</td>
+<td>§3.1.B</td>
+</tr>
+<tr>
+<td>Define (a) aerosols (b) fumes</td>
+<td>IT1 Sep 2024, A6</td>
+<td>3</td>
+<td>§3.1.A</td>
+</tr>
+<tr>
+<td>Elaborate on noise pollution and its effects</td>
+<td>IT1 Sep 2024, B9</td>
+<td>8</td>
+<td>§3.3.A</td>
+</tr>
+<tr>
+<td>Describe the measures to protect from hazardous chemicals</td>
+<td>IT1 Sep 2024, B10</td>
+<td>8</td>
+<td>§3.3.B</td>
+</tr>
+<tr>
+<td>Describe the relevance of material safety data sheet</td>
+<td>Retest I Oct 2026, A2</td>
+<td>5</td>
+<td>§3.2.D</td>
+</tr>
+<tr>
+<td>Elaborate on noise pollution and its effects</td>
+<td>Retest I Oct 2026, B5</td>
+<td>7</td>
+<td>§3.3.A</td>
+</tr>
+</tbody>
+</table>
+<p>No other paper touches Module II. Two topics repeat (MSDS, noise) — those two are the safest bets in the paper; the biological bullet has never been asked above 3 marks and is therefore the likeliest 14-mark surprise.</p>
+<hr />
+<h2 id="2-concepts">2. Concepts<a class="anchor" href="#2-concepts">#</a></h2>
+<h3 id="21-what-a-chemical-hazard-is-and-where-it-comes-from-5">2.1 What a chemical hazard is, and where it comes from (<code>slide 5–6</code>)<a class="anchor" href="#21-what-a-chemical-hazard-is-and-where-it-comes-from-5">#</a></h3>
+<p><strong>What:</strong> a hazardous substance is a substance that can have a harmful effect on health (<code>slide 5</code>).</p>
+<ul>
+<li>The category is far wider than the process industries: paints, cleaners, disinfectants and glues contain hazardous chemicals and are found in almost every home and workplace (<code>slide 5</code>).</li>
+<li>The deck's own examples are already sorted by physical form: chemicals (organic solvents, acids, pharmaceutical ingredients), dust (metal, wood, flour), fumes (welding, soldering), fibres (asbestos) (<code>slide 5</code>).</li>
+<li>Three origins, each with a different control (<code>slide 6</code>): naturally occurring (mycotoxin, pyrrolizidine alkaloids); intentionally added (preservatives — nitrite, sulfiting agents); unintentionally or incidentally added (pesticides, lead, arsenic, mercury).</li>
+<li>Origin decides the lever: an added preservative can be specified out of the purchase order, a natural toxin in stored grain can only be controlled by drying and storage, a contaminant only by supplier testing.</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Origin</th>
+<th>Deck example</th>
+<th>Control lever</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Naturally occurring</td>
+<td>Mycotoxin, pyrrolizidine alkaloids</td>
+<td>Storage, drying, source of raw material (<code>slide 6</code>)</td>
+</tr>
+<tr>
+<td>Intentionally added</td>
+<td>Nitrite, sulfiting agents (preservatives)</td>
+<td>Specification in the purchase order (<code>slide 6</code>)</td>
+</tr>
+<tr>
+<td>Unintentionally added</td>
+<td>Pesticides, lead, arsenic, mercury</td>
+<td>Supplier testing, substitution of source (<code>slide 6</code>)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Trap:</strong> the exam asks "types of chemical hazards" and the deck's three types are <em>origins</em>, not the six physical forms — give both if the marks allow.</p>
+<h3 id="22-the-six-physical-forms-13">2.2 The six physical forms (<code>slide 12–13</code>)<a class="anchor" href="#22-the-six-physical-forms-13">#</a></h3>
+<p><strong>What:</strong> the same substance can appear in several forms, and the form — not the chemical name — decides where it lands in the body and which control catches it.</p>
+<table>
+<thead>
+<tr>
+<th>Form</th>
+<th>Deck definition</th>
+<th>How it is generated</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Dust</strong></td>
+<td>solid particles in air formed by grinding, milling or blasting (<code>slide 13</code>)</td>
+<td>mechanical — breaking, crushing, cutting, handling powders</td>
+</tr>
+<tr>
+<td><strong>Fume</strong></td>
+<td>solid particles formed by combustion, sublimation or condensation of vaporised material (<code>slide 12</code>)</td>
+<td>thermal — metal vaporised then condensed; nothing is ground</td>
+</tr>
+<tr>
+<td><strong>Vapour</strong></td>
+<td>the gaseous phase of a material that is ordinarily solid or liquid at room temperature and pressure (<code>slide 12</code>)</td>
+<td>evaporation from a liquid surface, or sublimation</td>
+</tr>
+<tr>
+<td><strong>Gas</strong></td>
+<td>a substance that is in the gaseous state at room temperature and pressure (<code>slide 12</code>)</td>
+<td>already gaseous; also produced by reaction or combustion</td>
+</tr>
+<tr>
+<td><strong>Mist / fog</strong></td>
+<td>aerosols of liquid droplets formed by condensation of liquid droplets on particulate nuclei in the air (<code>slide 12</code>)</td>
+<td>condensation on nuclei, or atomisation by spraying</td>
+</tr>
+<tr>
+<td><strong>Fibre</strong></td>
+<td>solid particles with an increased aspect ratio (length ÷ width); they stay suspended longer than dusts and other aerosols (<code>slide 13</code>)</td>
+<td>mechanical, from materials with a fibrous habit</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>Aerosol is the umbrella, not a seventh form:</strong> a relatively stable suspension of solid particles in air, liquid droplets in air or solid particles dissolved or suspended in liquid droplets in air (<code>slide 13</code>). Dust, fume, mist and fog are aerosols; gas and vapour are not (<code>slide 13</code>, <code>FN §2.1</code>).</li>
+<li><strong>Size decides the disease, and the deck says so:</strong> the size of particles or droplets affects where the chemical settles in the respiratory tract, and where it settles determines which symptoms or diseases develop (<code>slide 8</code>).</li>
+<li><strong>The deck gives no micrometre cut-offs.</strong> Standard values, quote as standard: below about 5 µm is the respirable fraction that reaches the alveoli; above about 10 µm the nose filters it out <strong>(standard)</strong>.</li>
+<li><strong>Fibres are a shape problem:</strong> aerodynamic drag depends on diameter, not length, so a long thin fibre behaves like a sub-micron particle, reaches the alveoli and cannot be engulfed by the macrophage <strong>(standard)</strong>.</li>
+</ul>
+<p><strong>Trap:</strong> gas vs vapour is the single most examined distinction — a vapour is a liquid or solid that has got into the air; a gas was already there (<code>slide 12</code>).</p>
+<h3 id="23-routes-of-entry-into-the-body-25">2.3 Routes of entry into the body (<code>slide 7–10</code>)<a class="anchor" href="#23-routes-of-entry-into-the-body-25">#</a></h3>
+<p><strong>What:</strong> the deck names three routes; the body boundary is crossed at the lung, the skin or the gut.</p>
+<table>
+<thead>
+<tr>
+<th>Route</th>
+<th>Mechanism (deck wording)</th>
+<th>Deck example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Inhalation</strong></td>
+<td>airborne chemicals are breathed in through the mouth or nose; particle or droplet size decides where the chemical settles in the respiratory tract (<code>slide 8</code>)</td>
+<td>welding fume, solvent vapour, silica dust</td>
+</tr>
+<tr>
+<td><strong>Skin absorption</strong></td>
+<td>some chemicals pass through the skin and are taken into the body's system (<code>slide 9</code>)</td>
+<td>solvents and pesticides (<code>slide 9</code>)</td>
+</tr>
+<tr>
+<td><strong>Ingestion</strong></td>
+<td>swallowed chemicals are absorbed in the digestive tract (<code>slide 10</code>)</td>
+<td>chemicals rubbed off dirty hands onto food, drink or tobacco; dust settled on cups, plates, utensils and food (<code>slide 10</code>)</td>
+</tr>
+<tr>
+<td><strong>Injection</strong></td>
+<td>a needlestick, a cut from a contaminated edge, or high-pressure injection puts material straight into tissue <strong>(standard)</strong></td>
+<td>discarded needle in linen, burst hydraulic hose</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>Inhalation dominates occupationally because the alveolar surface is large, thin-walled and directly perfused with blood, with no first-pass metabolism (<code>FN §2.2</code>).</li>
+<li>Skin absorption bypasses the liver, so a splash on the forearm can deliver a systemic dose out of proportion to its size (<code>FN §2.2</code>).</li>
+<li>Ingestion at work is hand-to-mouth transfer, not deliberate: the deck's four ingestion sentences are all about dirty hands and settled dust (<code>slide 10</code>).</li>
+<li>For gases, water solubility fixes the site: soluble gases attack the upper airway at once, insoluble ones reach the alveoli and cause delayed oedema <strong>(standard)</strong>.</li>
+</ul>
+<p><strong>Trap:</strong> write "inhalation, skin absorption, ingestion" and <em>then</em> add injection — the deck names three, so replacing one loses the deck mark.</p>
+<h3 id="24-health-effects-34">2.4 Health effects (<code>slide 11</code>)<a class="anchor" href="#24-health-effects-34">#</a></h3>
+<p><strong>What:</strong> the deck splits effects by timing and then by target organ.</p>
+<ul>
+<li><strong>Acute:</strong> an immediate reaction (<code>slide 11</code>). <strong>Chronic:</strong> develops over years (<code>slide 11</code>).</li>
+<li>The deck's organ list, in its order: renal, respiratory, skin, haematologic, cardiovascular, neurologic diseases, plus carcinogenic and teratogenic effects (<code>slide 11</code>).</li>
+<li>Carcinogenic and teratogenic effects cut across the organ list and are assessed separately — a carcinogen is treated as having no threshold <strong>(standard)</strong>.</li>
+<li>Dose is concentration × duration × work rate, modified by individual susceptibility — which is why limits are population values and surveillance is individual <strong>(standard)</strong>.</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Target (deck)</th>
+<th>Representative agents <strong>(standard)</strong></th>
+<th>Effect</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Respiratory</td>
+<td>silica, asbestos, coal dust, welding fume</td>
+<td>pneumoconiosis, fibrosis, asthma, cancer</td>
+</tr>
+<tr>
+<td>Skin</td>
+<td>solvents, epoxy resins, chromates, cement</td>
+<td>dermatitis, sensitisation, ulceration</td>
+</tr>
+<tr>
+<td>Renal</td>
+<td>lead, mercury, cadmium, chlorinated solvents</td>
+<td>tubular damage, renal failure</td>
+</tr>
+<tr>
+<td>Haematologic</td>
+<td>benzene, lead, carbon monoxide, nitrites</td>
+<td>aplastic anaemia, leukaemia, methaemoglobinaemia</td>
+</tr>
+<tr>
+<td>Cardiovascular</td>
+<td>carbon monoxide, solvents, noise (see §2.14)</td>
+<td>arrhythmia, hypertension</td>
+</tr>
+<tr>
+<td>Neurologic</td>
+<td>n-hexane, carbon disulphide, organophosphates, mercury, lead</td>
+<td>neuropathy, cholinesterase inhibition</td>
+</tr>
+<tr>
+<td>Carcinogenic</td>
+<td>benzene, asbestos, benzidine, vinyl chloride</td>
+<td>leukaemia, mesothelioma, bladder and liver tumours</td>
+</tr>
+<tr>
+<td>Teratogenic</td>
+<td>lead, mercury, some solvents and anaesthetic gases</td>
+<td>developmental effects on the fetus</td>
+</tr>
+</tbody>
+</table>
+<h3 id="25-controlling-chemical-hazards-at-the-workplace-38">2.5 Controlling chemical hazards at the workplace (<code>slide 14–17</code>)<a class="anchor" href="#25-controlling-chemical-hazards-at-the-workplace-38">#</a></h3>
+<p><strong>What:</strong> the deck gives four slides of flat measures; the marks come from sorting them into a hierarchy.</p>
+<table>
+<thead>
+<tr>
+<th>Level</th>
+<th>Deck measures</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Eliminate / substitute</strong></td>
+<td>reduce or eliminate the use of hazardous chemicals whenever possible (<code>slide 14</code>); use the smallest amount of a chemical to do the job (<code>slide 16</code>)</td>
+</tr>
+<tr>
+<td><strong>Engineering</strong></td>
+<td>maintain adequate ventilation systems to reduce concentrations of airborne chemicals (<code>slide 14</code>); enclose a chemical process as much as possible (<code>slide 16</code>); maintain equipment and machinery to prevent leaks and breakdowns that release toxic substances (<code>slide 15–16</code>)</td>
+</tr>
+<tr>
+<td><strong>Administrative</strong></td>
+<td>policies on keeping hazardous chemicals (<code>slide 15</code>); rotate workers through different jobs or locations; perform maintenance work in off hours so an accidental release affects fewer workers (<code>slide 15</code>); know what is in the products you work with (<code>slide 16</code>)</td>
+</tr>
+<tr>
+<td><strong>Hygiene, storage, housekeeping</strong></td>
+<td>good personal hygiene and regular workplace cleaning (<code>slide 14</code>); avoid carrying hazardous substances home (<code>slide 14</code>); separate storage of chemicals and food items; separate storage of allergens from non-allergen ingredients; accurate ingredient listings (<code>slide 14</code>)</td>
+</tr>
+<tr>
+<td><strong>PPE</strong></td>
+<td>use personal protective equipment and devices (<code>slide 15</code>); wear the necessary PPE (<code>slide 16</code>)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Post-exposure drill (<code>slide 17</code>) — five lines, quotable as a sub-question:</strong> tell your supervisor · find out what the chemical was · follow the first-aid directions in the MSDS · get medical attention as needed · check your PPE before going back to the area.</p>
+<p><strong>Trap:</strong> "use ventilation" is not one measure — LEV captures at source, dilution ventilation only dilutes, and dilution is the wrong tool for dust, fume and vapours denser than air <strong>(standard)</strong>.</p>
+<h3 id="26-material-safety-data-sheet-msds-53">2.6 Material safety data sheet — MSDS (<code>slide 18–20</code>)<a class="anchor" href="#26-material-safety-data-sheet-msds-53">#</a></h3>
+<p><strong>What:</strong> a technical document, prepared by the supplier or manufacturer, containing detailed and comprehensive information on the hazards of a controlled product and how to work safely with it (<code>slide 18–19</code>).</p>
+<ul>
+<li><strong>Four content heads, verbatim (<code>slide 18</code>):</strong> health effects of exposure · hazard evaluation related to the product's handling, storage or use · measures to protect workers at risk of exposure · emergency procedures.</li>
+<li><strong>It also covers use, storage, handling and emergency protection related to the hazards of the material (<code>slide 18</code>).</strong></li>
+<li><strong>Status (<code>slide 19</code>):</strong> contains much more information than the label · prepared by the supplier or manufacturer · may be written, printed or otherwise expressed · must meet the availability, design and content requirements of WHMIS legislation · manufacturers must supply one for any hazardous chemical with the first shipment.</li>
+<li><strong>The deck's ten-item content list (<code>slide 20</code>):</strong> manufacturer information · ingredients · composition · hazard identification · first aid measures · PPE and toxicological information · ecological information · disposal considerations · regulatory information · handling and storage.</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Why it matters on site</th>
+<th>Which part of the sheet answers it</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>What to do in the first ten minutes</td>
+<td>first aid measures (<code>slide 20</code>)</td>
+</tr>
+<tr>
+<td>Which glove and respirator to issue</td>
+<td>PPE information (<code>slide 20</code>)</td>
+</tr>
+<tr>
+<td>Whether the vapour will sink into a trench</td>
+<td>physical/chemical data, handling and storage (<code>slide 20</code>)</td>
+</tr>
+<tr>
+<td>Whether it can be sewered or must be incinerated</td>
+<td>disposal considerations (<code>slide 20</code>)</td>
+</tr>
+<tr>
+<td>Which law applies</td>
+<td>regulatory information (<code>slide 20</code>)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Trap:</strong> an MSDS is not a label — the deck says explicitly it contains much more information than the label (<code>slide 19</code>). WHMIS is the Canadian legislation the deck names (<code>slide 19</code>); don't present it as Indian statute <strong>(standard)</strong>.</p>
+<h3 id="27-biological-hazards-definition-and-where-they-occur-66">2.7 Biological hazards: definition and where they occur (<code>slide 23–24, 26–27</code>)<a class="anchor" href="#27-biological-hazards-definition-and-where-they-occur-66">#</a></h3>
+<p><strong>What:</strong> biological agents are micro-organisms, including genetically modified ones, cell cultures and human endoparasites, which may be able to provoke any infection, allergy or toxicity (<code>slide 23</code>).</p>
+<ul>
+<li>A <strong>biohazardous agent</strong> is a biological agent which may be able to provoke any infection, allergy or toxicity (<code>slide 23</code>).</li>
+<li>Biological health hazards include bacteria, viruses, parasites and moulds or fungi; they threaten health when inhaled, eaten or brought into contact with skin (<code>slide 23</code>).</li>
+<li>Exposure can lead to sudden and long-term health issues, and sometimes life-threatening diseases (<code>slide 23</code>).</li>
+<li>High-risk sectors: healthcare, veterinary services, agriculture, sewage management and laboratories (<code>slide 23</code>) — the hazards exist everywhere, the <em>concentration</em> does not.</li>
+<li><strong>Activities the deck lists (<code>slide 24</code>):</strong> food production · contact with animals and/or products of animal origin · health care including isolation and post-mortem units · clinical, veterinary and diagnostic laboratories excluding diagnostic microbiological laboratories · refuse disposal plants · sewage purification installations.</li>
+</ul>
+<p><strong>Three kinds of harm, three controls (<code>slide 26</code>):</strong> being infected by the agent · being exposed to toxins the agent produces · having an allergic reaction to the agent or to substances it produces, e.g. enzymes.</p>
+<p><strong>Two modes of exposure (<code>slide 27</code>):</strong> intentional — the employee works directly for or with the agent, as in a laboratory or research facility; unintentional — exposure arises from the work itself, e.g. a healthcare worker exposed to a blood-borne virus, a laundry worker who receives a needle injury, a farmer exposed to an animal disease that also affects humans.</p>
+<p><strong>Trap:</strong> the deck's list <em>excludes</em> diagnostic microbiological laboratories (<code>slide 24</code>) — that is a deliberate carve-out in the source document; quote it rather than "correcting" it.</p>
+<h3 id="28-classification-of-biohazardous-agents-76">2.8 Classification of biohazardous agents (<code>slide 25, 28</code>)<a class="anchor" href="#28-classification-of-biohazardous-agents-76">#</a></h3>
+<p><strong>What:</strong> agents are classified into risk groups according to their level of risk of infection (<code>slide 25</code>).</p>
+<p><strong>The four criteria (<code>slide 28</code>, verbatim):</strong> whether the agent is pathogenic to humans · whether the agent is a hazard to the employee · whether the agent is transmissible to the community · whether there is effective treatment or prophylaxis available.</p>
+<table>
+<thead>
+<tr>
+<th>Group</th>
+<th>Deck definition (<code>slide 25</code>)</th>
+<th>Example agents</th>
+<th>Containment implied</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>1</strong></td>
+<td>unlikely to cause human disease</td>
+<td>non-pathogenic <em>E. coli</em>, baker's yeast <strong>(standard)</strong></td>
+<td>open bench, good microbiological practice</td>
+</tr>
+<tr>
+<td><strong>2</strong></td>
+<td>can cause human disease and might be a hazard to workers; unlikely to spread to the community; usually effective prophylaxis or treatment available</td>
+<td><em>Salmonella</em>, <em>Legionella</em> (<code>slide 29</code>); hepatitis B, <em>S. aureus</em> <strong>(standard)</strong></td>
+<td>restricted access, autoclave, cabinet for aerosol-generating work</td>
+</tr>
+<tr>
+<td><strong>3</strong></td>
+<td>can cause severe human disease and present a serious hazard to workers; may present a risk of spreading to the community, but usually effective prophylaxis or treatment available</td>
+<td><em>M. tuberculosis</em>, <em>Brucella</em>, HIV, anthrax <strong>(standard)</strong></td>
+<td>Class II/III cabinet, directional airflow, airlock, HEPA exhaust, surveillance</td>
+</tr>
+<tr>
+<td><strong>4</strong></td>
+<td>causes severe human disease and is a serious hazard to workers; may present a high risk of spreading to the community; usually no effective prophylaxis or treatment available</td>
+<td>Ebola, Marburg, Lassa <strong>(standard)</strong></td>
+<td>Class III cabinet or positive-pressure suit, dedicated building, double HEPA</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>The classification sets the containment, the cabinet class and the access rules — not the other way round (<code>FN §2.4</code>).</li>
+<li><strong>Primary containment</strong> protects the worker and the immediate bench (cabinet, sealed cup, technique); <strong>secondary containment</strong> protects the outside world (room, airflow, access, waste route) <strong>(standard)</strong>.</li>
+<li>Group 3 and 4 work adds secondary containment because the risk is no longer only to the person inside the room (<code>FN §2.4</code>).</li>
+</ul>
+<p><strong>Trap:</strong> groups 3 and 4 are <em>both</em> "severe human disease" — the difference is community spread plus the absence of prophylaxis or treatment, and that is the clause the examiner marks.</p>
+<h3 id="29-bacterial-viral-fungal-and-parasitic-agents-83">2.9 Bacterial, viral, fungal and parasitic agents (<code>slide 29–34</code>)<a class="anchor" href="#29-bacterial-viral-fungal-and-parasitic-agents-83">#</a></h3>
+<p><strong>What:</strong> the four groups differ in one thing that governs every control — whether the agent can multiply outside a host, and how it survives the trip between hosts.</p>
+<table>
+<thead>
+<tr>
+<th>Agent</th>
+<th>Deck definition</th>
+<th>Replication / survival</th>
+<th>Deck example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Bacteria</strong></td>
+<td>microscopic single-celled organisms that thrive in diverse environments (<code>slide 31</code>)</td>
+<td>binary fission about every 20 minutes given warmth 5–60 °C, moisture, food and pH 7 (<code>slide 31</code>)</td>
+<td><em>Legionella</em>, <em>Salmonella</em> (<code>slide 29</code>)</td>
+</tr>
+<tr>
+<td><strong>Viruses</strong></td>
+<td>small infectious agent that replicates only inside the living cells of an organism; the smallest microbe; DNA or RNA core under a protein coat (<code>slide 32</code>)</td>
+<td>latches onto host cells, takes over their functions, infected cell infects new cells (<code>slide 32</code>)</td>
+<td>hepatitis C, yellow fever (<code>slide 29</code>)</td>
+</tr>
+<tr>
+<td><strong>Fungi / moulds</strong></td>
+<td>primitive organism with a cell structure like plants and animals; mushrooms, mould and mildew (<code>slide 33</code>)</td>
+<td>reproduce by spores dispersed by air; spores inhaled or respired are the risk (<code>slide 33</code>)</td>
+<td>mould, mildew, <em>Aspergillus</em> <strong>(standard)</strong></td>
+</tr>
+<tr>
+<td><strong>Parasites</strong></td>
+<td>organism living in or on an organism of another species (its host), deriving nutrients at the host's expense (<code>slide 34</code>)</td>
+<td>many need an intermediate host or a soil/water stage <strong>(standard)</strong></td>
+<td>malaria, hookworm, schistosomiasis <strong>(standard)</strong></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>Bacteria are the ones that grow in the workplace:</strong> warmth 5–60 °C, moisture, food (including biological metalworking fluids) and neutral pH 7, and at 20-minute doubling one cell becomes millions in a shift (<code>slide 31</code>). Cleaning, temperature control and drying are therefore engineering controls.</li>
+<li><strong>Viruses cannot multiply on a bench,</strong> so control is disinfection plus prevention of inoculation injury — a single needlestick can deliver enough virus (<code>slide 32</code>, <code>FN §2.5</code>).</li>
+<li><strong>Fungal spores are the hazard</strong> because they are small enough to be inhaled and survive drying; only about half of all types of fungi are harmful (<code>slide 33</code>).</li>
+<li><strong>Parasite control is environmental</strong> — footwear, sanitation, safe water, drainage — because the life cycle runs through soil, water or a vector (<code>slide 34</code>, <code>FN §2.5</code>).</li>
+<li>The deck's wider list of biological hazard types also includes plants, insects and animals (<code>slide 29</code>); the four headings it then teaches are viruses, fungi, bacteria, parasites (<code>slide 30</code>).</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Agent</th>
+<th>Disease</th>
+<th>Occupation at risk (<code>slide 44–47</code>)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><em>Bacillus anthracis</em></td>
+<td>Anthrax</td>
+<td>animal handlers; handlers of carcasses, skins, hides or hair, including wool carpet processors</td>
+</tr>
+<tr>
+<td><em>Mycobacterium tuberculosis</em></td>
+<td>Tuberculosis</td>
+<td>silica workers, people exposed to heat and organic dusts, medical personnel</td>
+</tr>
+<tr>
+<td><em>Leptospira</em> <strong>(standard)</strong></td>
+<td>Leptospirosis / Weil's disease</td>
+<td>sewage and drain workers, abattoir workers, farmers <strong>(standard)</strong></td>
+</tr>
+<tr>
+<td>Hepatitis B virus <strong>(standard)</strong></td>
+<td>Hepatitis B</td>
+<td>healthcare, laboratory, dialysis and mortuary staff, waste handlers</td>
+</tr>
+<tr>
+<td><em>Aspergillus</em> <strong>(standard)</strong></td>
+<td>Aspergillosis</td>
+<td>farmers, grain and compost workers, damp-building cleaners</td>
+</tr>
+<tr>
+<td>Hookworm (<em>Ancylostoma</em>, <em>Necator</em>)</td>
+<td>Hookworm disease and anaemia</td>
+<td>miners, agricultural labourers, planters of sugar, tobacco, tea, rice and cotton; brick and tunnel workers</td>
+</tr>
+<tr>
+<td><em>Plasmodium</em> <strong>(standard)</strong></td>
+<td>Malaria</td>
+<td>outdoor, irrigation and construction workers in endemic areas</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Trap:</strong> "only about half of all types of fungi are harmful" is the deck's number (<code>slide 33</code>) — quoting "most moulds are harmless" contradicts it.</p>
+<h3 id="210-infectious-diseases-and-occupations-103">2.10 Infectious diseases and occupations (<code>slide 44–47</code>)<a class="anchor" href="#210-infectious-diseases-and-occupations-103">#</a></h3>
+<p><strong>What:</strong> the deck's four slides are one table, and it is the most directly examinable content in the biological half of the module.</p>
+<table>
+<thead>
+<tr>
+<th>Agent / disease</th>
+<th>Occupation (<code>slide 44–47</code>)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Colds, influenza, scarlet fever, diphtheria, smallpox</td>
+<td>may be spread anywhere</td>
+</tr>
+<tr>
+<td>Tuberculosis</td>
+<td>silica workers, people exposed to heat and organic dusts, and medical personnel</td>
+</tr>
+<tr>
+<td>Anthrax</td>
+<td>animal handlers and handlers of carcasses, skins, hides or hair of infected animals, including wool carpet processors and handlers</td>
+</tr>
+<tr>
+<td>Ringworm (in horses, cattle, deer, pigs, cats, dogs, birds)</td>
+<td>pet shop salesmen, stockmen, breeders of cats and dogs, other animal handlers</td>
+</tr>
+<tr>
+<td>Tetanus</td>
+<td>farmers (spores in soil) or anyone in contact with manure</td>
+</tr>
+<tr>
+<td>Psittacosis (in parrots, parakeets, pigeons, ducks, turkeys, chickens)</td>
+<td>pet shop personnel, gardeners, housewives, veterinary surgeons, researchers</td>
+</tr>
+<tr>
+<td>Hookworm</td>
+<td>miners, agricultural labourers, planters of sugar, tobacco, tea, rice and cotton; brick and tunnel workers</td>
+</tr>
+<tr>
+<td>Rabies (dogs, bats, rats, pigs, cats)</td>
+<td>veterinarians, letter carriers, laboratory research workers, agricultural workers</td>
+</tr>
+<tr>
+<td>Fungus</td>
+<td>farmers, outdoor workers, animal handlers</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>The pairings are not obvious and that is the point:</strong> tuberculosis is listed against silica workers and dust-exposed workers as well as medical staff, because a dust-damaged lung and crowding both raise the risk (<code>slide 44</code>).</li>
+<li><strong>Six transmission routes</strong> carry almost all occupational infection: airborne (droplet nuclei — tuberculosis, measles, varicella), droplet (influenza, pertussis), contact (ringworm, most healthcare-associated infection), blood-borne (hepatitis B and C, HIV), vector-borne (malaria, schistosomiasis), faecal-oral (hookworm larvae) (<code>FN §2.6</code>).</li>
+<li><strong>Most of the deck's list are zoonoses</strong> — infections transmitted from vertebrate animals to humans — which is why veterinary work, farming, abattoirs, wool and hide processing carry risks a factory of the same size does not (<code>FN §2.6</code>).</li>
+<li><strong>Vulnerable groups:</strong> pregnant workers, the immunocompromised, workers with open wounds or dermatitis, non-immune and new staff, and ancillary staff — cleaners, laundry, porters, waste handlers — whose exposure is unintentional (<code>FN §2.6</code>).</li>
+</ul>
+<p><strong>Trap:</strong> "spread anywhere" is a legitimate exam answer for the first row — it is the deck's wording, not a cop-out.</p>
+<h3 id="211-control-of-biological-agents-at-the-workplace-109">2.11 Control of biological agents at the workplace (<code>slide 36–43</code>)<a class="anchor" href="#211-control-of-biological-agents-at-the-workplace-109">#</a></h3>
+<p><strong>What:</strong> the same hierarchy as chemical control, but the engineering step is decisive — an organism that multiplies cannot be diluted away, so it must be kept where it was generated.</p>
+<p><strong>The principle, three parts (<code>slide 36</code>):</strong> replace a harmful biological agent with one that is not, or is less, dangerous under its conditions of use, in the present state of knowledge · exposure must be prevented · preventive measures differ with the classification of the hazard — e.g. construction of the workplace, registration of exposures, notification of the Government, training programmes, collective protection.</p>
+<p><strong>Risk reduction, the deck's nine measures (<code>slide 37</code>):</strong> as low as possible a number of workers exposed · work processes and engineering control measures to avoid or minimise release · collective protection and, additionally, individual protection · hygiene measures against accidental transfer or release · use of the biohazard sign · plans to deal with accidents · testing, where technically possible, for the presence of the agent outside the primary physical confinement · means for safe collection, storage and disposal of waste · arrangements for safe handling and transport.</p>
+<table>
+<thead>
+<tr>
+<th>Level (<code>slide 38</code>)</th>
+<th>What the deck puts in it (<code>slide 39–41</code>)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Elimination</strong></td>
+<td>remove the agent from the process</td>
+</tr>
+<tr>
+<td><strong>Substitution</strong></td>
+<td>a less dangerous agent under the conditions of use (<code>slide 36</code>)</td>
+</tr>
+<tr>
+<td><strong>Engineering</strong></td>
+<td>enclosure — access-controlled rooms, biohazardous safety cabinets; local exhaust ventilation with HEPA filters and fume hoods; mechanical ventilation exchanging and filtering air through ducting; natural ventilation giving a number of air changes per hour (<code>slide 39</code>)</td>
+</tr>
+<tr>
+<td><strong>Administrative</strong></td>
+<td>timing and organisation of work, policies, rules, SOPs, training, housekeeping, infection control, personal hygiene (<code>slide 40</code>); vaccination policies for specific hazards, treatment of water systems, health surveillance and health risk assessments, safe systems of work, awareness training on routes of transmission (<code>slide 40</code>)</td>
+</tr>
+<tr>
+<td><strong>PPE</strong></td>
+<td>only where higher controls leave a residual risk; protects only the wearer, and only when worn correctly, undamaged and without hindrance (<code>slide 41</code>)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Hygiene and personal protection (<code>slide 42–43</code>), five rules:</strong> no eating or drinking in working areas where there is a risk of contamination · appropriate protective or special clothing · adequate washing and toilet facilities, which may include eye washes and/or skin antiseptics · protective equipment stored in a well-defined place, checked, cleaned and replaced if needed · working clothes and equipment removed on leaving the work area, kept separately from other clothing, then decontaminated and cleaned or, if necessary, destroyed.</p>
+<p><strong>(standard) additions an 8-mark answer needs:</strong> a sharps policy (no recapping, puncture-resistant container at the point of use), autoclaving at the point of generation, spill treated as an aerosol-generating event (cover, disinfectant, work outward, never dry-sweep), and immediate reporting of exposure so post-exposure prophylaxis starts inside its window.</p>
+<p><strong>Trap:</strong> PPE is last in the deck's own hierarchy (<code>slide 38, 41</code>) — an answer that opens with gloves and masks has contradicted the source in its first line.</p>
+<h3 id="212-noise-physics-and-measurement-121">2.12 Noise: physics and measurement (<code>slide 49–53</code>)<a class="anchor" href="#212-noise-physics-and-measurement-121">#</a></h3>
+<p><strong>What:</strong> noise and vibration are both fluctuations in the pressure of air which affect the human body; vibrations detected by human ears are classified as sound, and noise is the term for unwanted sound (<code>slide 49</code>).</p>
+<ul>
+<li>Measured in decibels (dB) (<code>slide 49</code>). <strong>A-weighting</strong>, dB(A), measures average noise levels; <strong>C-weighting</strong>, dB(C), measures peak, impact or explosive noises (<code>slide 49</code>).</li>
+<li><strong>Every 3 dB doubles the noise</strong> (<code>slide 49</code>) — so small differences in the numbers are large differences in energy.</li>
+<li>The decibel is logarithmic, "which means that a small change in the number of decibels result in a huge change in the amount of noise &amp; potential damage to a person's hearing" (<code>slide 53</code>).</li>
+<li>The A-weighted level closely matches the perception of loudness by the human ear (<code>slide 53</code>).</li>
+<li><strong>Three field tests for a noise problem (<code>slide 50</code>):</strong> you hear ringing or humming in your ears when you leave work · you have to shout to be heard by a coworker an arm's length away · you experience temporary hearing loss when leaving work.</li>
+<li><strong>The risk predictor is LEX,8h</strong> — the daily noise exposure level, dB(A), the time-weighted average of the noise exposure levels for a nominal 8-hour working day (<code>slide 52</code>).</li>
+</ul>
+<p><strong>Trap:</strong> dB is a ratio, so "twice as loud" ≠ "twice the number" — the deck's own rule is +3 dB = double (<code>slide 49</code>).</p>
+<h3 id="213-noise-exposure-regulation-131">2.13 Noise exposure regulation (<code>slide 54–56</code>)<a class="anchor" href="#213-noise-exposure-regulation-131">#</a></h3>
+<p><strong>What:</strong> the deck gives two regulators, two numbers and one exchange-rate table.</p>
+<table>
+<thead>
+<tr>
+<th>Body</th>
+<th>Limit</th>
+<th>Exchange rate</th>
+<th>Source</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>OSHA</strong> permissible exposure limit (PEL)</td>
+<td><strong>90 dB(A)</strong> for all workers for an 8-hour day</td>
+<td><strong>5 dB(A)</strong> — every increase of 5 dB(A) doubles the noise and halves the exposure time</td>
+<td><code>slide 54</code></td>
+</tr>
+<tr>
+<td><strong>NIOSH</strong> recommendation</td>
+<td>keep exposure below <strong>85 dB(A)</strong> for 8 hours, to minimise occupational noise-induced hearing loss</td>
+<td><strong>3 dB(A)</strong></td>
+<td><code>slide 55</code></td>
+</tr>
+<tr>
+<td><strong>OSHA, 1981</strong> hearing conservation</td>
+<td>hearing conservation programme obligatory where the TWA is <strong>85 dB(A) or higher</strong> over an 8-hour shift</td>
+<td>—</td>
+<td><code>slide 55</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>The exchange-rate table the deck works out (<code>slide 54</code>):</strong> 90 dB(A) → 8 hours · 95 dB(A) → 4 hours · 100 dB(A) → 2 hours. <em>(The deck prints "50dBA exchange rate" in the same sentence; the worked table and the parenthetical both describe a 5 dB rate, so 5 dB is the intended value.)</em></p>
+<p><strong>Hearing conservation programme, what it obliges (<code>slide 56</code>):</strong> measure noise levels · provide free annual hearing protection · provide training · evaluate the adequacy of the hearing protectors in use · change tools, equipment and schedules so they are less noisy and exposure falls below 85 dB(A).</p>
+<p><strong>Typical sound levels the deck supplies (<code>slide 56</code>):</strong> 140 dB(A) threshold of pain · 130 jet taking off · 120 operating heavy equipment · 110 night club. <em>(No other rung of the scale is given — see §4. Do not invent 85/90/60 rows as deck values.)</em></p>
+<p><strong>Trap:</strong> 85 dB(A) is a <strong>trigger for a programme</strong>, 90 dB(A) is the <strong>legal ceiling</strong> — swapping them is the commonest error, and the deck states both on consecutive slides.</p>
+<h3 id="214-effects-of-noise-138">2.14 Effects of noise (<code>slide 57–61</code>)<a class="anchor" href="#214-effects-of-noise-138">#</a></h3>
+<p><strong>What:</strong> the deck's list has one dominant auditory effect and six wider ones.</p>
+<ul>
+<li><strong>Deck list (<code>slide 57</code>):</strong> hearing impairment and hearing disorders · noise and pregnant workers · work-related stress · influence on work tasks · disturbance of speech communication · noise as a cause of accidents · other health effects.</li>
+<li><strong>Hearing impairment is the most important effect of occupational noise</strong> (<code>slide 59</code>); excessive exposure is probably the most common cause of hearing loss, through damage to the inner ear (<code>slide 59</code>).</li>
+<li>In general, prolonged exposure above 85 dB(A) is potentially hazardous, although the important factor is the total amount of exposure — level × length of time (<code>slide 59</code>).</li>
+<li>The hair cells do not regenerate, so the loss is permanent (<code>FN §2.8</code>); the first stage is a <strong>temporary threshold shift</strong> (auditory fatigue) — temporary loss after loud noise, recovering within 16–48 hours — and the irreversible stage is a <strong>permanent threshold shift</strong> (<code>slide 58</code>).</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Deck wording</th>
+<th>Recovery</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Temporary threshold shift (auditory fatigue)</td>
+<td>temporary loss of hearing after exposure to loud noise</td>
+<td>within 16–48 hrs (<code>slide 58</code>)</td>
+</tr>
+<tr>
+<td>Permanent threshold shift</td>
+<td>irreversible loss of hearing</td>
+<td>none (<code>slide 58</code>)</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>Instant damage threshold:</strong> risk of instant, irreversible damage begins at about <strong>130–140 dB(C) peak</strong> — explosions, firearm reports, electric arcs (<code>slide 59</code>).</li>
+<li><strong>Health surveillance for hearing damage (<code>slide 60</code>):</strong> regular hearing checks in controlled conditions · telling employees the results · keeping health records · ensuring employees are examined by a doctor where damage is identified.</li>
+<li>Non-auditory effects an examiner expects named: annoyance and stress, disturbed sleep, raised blood pressure, speech interference, masking of warning signals (hence noise as a cause of accidents), effects on pregnant workers, reduced concentration (<code>slide 57</code>, <code>FN §2.8</code>).</li>
+</ul>
+<p><strong>Trap:</strong> tinnitus (ringing or humming after work, <code>slide 50</code>) is an early warning, not a third category of threshold shift.</p>
+<h3 id="215-noise-control-i-assessment-and-prevention-152">2.15 Noise control I — assessment and prevention (<code>slide 62–68</code>)<a class="anchor" href="#215-noise-control-i-assessment-and-prevention-152">#</a></h3>
+<p><strong>What:</strong> the deck's risk-prevention sequence is assessment → prevention → limitation by exposure/action levels → surveillance → information and training.</p>
+<p><strong>Five prevention actions (<code>slide 62</code>):</strong> assessment of the risks · prevention of exposure, including the use of personal hearing protection · limitation of exposure in accordance with exposure and action levels · health surveillance · information, consultation and training to, with and of workers.</p>
+<p><strong>What the risk assessment must consider (<code>slide 63–64</code>):</strong></p>
+<ul>
+<li>the level, type and duration of exposure, including impulse noise</li>
+<li>the exposure limit values and action values</li>
+<li>effects on workers in "risk groups"</li>
+<li>interactions between noise and work-related ototoxic substances, and between noise and vibration</li>
+<li>indirect effects from interaction between noise and warning signals or other sounds</li>
+<li>noise-emission information supplied by equipment manufacturers</li>
+<li>the existence of alternative equipment designed to emit less noise</li>
+<li>exposure beyond normal working hours under the employer's responsibility</li>
+<li>information from health surveillance</li>
+<li>availability of hearing protectors with adequate attenuation</li>
+</ul>
+<p><strong>Risk reduction in practice (<code>slide 66</code>):</strong> other working methods needing less exposure · choice of suitable work equipment emitting the least possible noise · design and layout of workplaces and work stations · adequate information and training so equipment is used to keep exposure to a minimum.</p>
+<p><strong>Technical means (<code>slide 67</code>):</strong> reduce airborne noise by shields, enclosures and sound-absorbent coverings · reduce structure-borne noise by damping or isolation · maintenance programmes for equipment, workplace and systems.</p>
+<p><strong>Organisational and administrative (<code>slide 68</code>):</strong> noise emission as an evaluation factor in procurement · working methods that generate less noise · organisation of work — keep the number of exposed workers to a minimum, task rotation, schedule noisy activities for when fewer workers are exposed, appropriate work schedules with adequate rest periods.</p>
+<p><strong>Trap:</strong> "limitation of exposure" is a legal term tied to action and limit values (<code>slide 62</code>) — it is not the same claim as "rotate the workers" (<code>slide 68</code>).</p>
+<h3 id="216-noise-control-ii-source-path-receiver-160">2.16 Noise control II — source, path, receiver (<code>slide 69–75</code>)<a class="anchor" href="#216-noise-control-ii-source-path-receiver-160">#</a></h3>
+<p><strong>What:</strong> control is applied in three places, in order of effectiveness, and the deck states the ranking explicitly.</p>
+<table>
+<thead>
+<tr>
+<th>Place</th>
+<th>Deck measures (<code>slide 69–71</code>)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>At the source</strong> (best)</td>
+<td>manufacture · engineering changes on the source itself · regular maintenance, lubrication and replacement of parts · changing the way materials are handled (<code>slide 69</code>); choose low-noise tools and machinery, oil bearings, enclose or isolate the source (<code>slide 70</code>)</td>
+</tr>
+<tr>
+<td><strong>In the path</strong></td>
+<td>enclose the source · place sound-reducing barriers between worker and source · increase the distance between worker and source (<code>slide 69</code>); place a barrier such as sound walls or curtains (<code>slide 70</code>); shields, enclosures, sound-absorbent coverings, damping or isolation (<code>slide 67</code>)</td>
+</tr>
+<tr>
+<td><strong>At the receiver</strong> (last, least effective)</td>
+<td>ear protection (<code>slide 69</code>), which "places the responsibility on the worker to protect his or her hearing" (<code>slide 69</code>)</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>Distance is the cheapest administrative control:</strong> for every doubling of the distance between the noise source and the worker, the noise decreases by <strong>6 dB(A)</strong> (<code>slide 71</code>).</li>
+<li>Other administrative controls: operate noisy machines on shifts when fewer people are exposed · limit the time a person spends at a noise source · provide quiet areas for relief (<code>slide 71</code>).</li>
+<li><strong>Hearing protection is used only when</strong> the risk cannot be prevented by other means, and technical control is ineffective, infeasible or prohibitively expensive; protectors must be selected to eliminate the risk or reduce it to a minimum, or at least keep exposure below the limit values; ensure they are worn; check the effectiveness of the measures (<code>slide 72</code>).</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Protector</th>
+<th>Deck description</th>
+<th>Attenuation best at (<code>slide 73</code>)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Earplugs</strong></td>
+<td>vinyl, silicone, spun fibreglass, cotton/wax, closed-cell foam, inserted or semi-inserted in the ear canal to form a noise-blocking seal</td>
+<td>below 500 Hz and above 2000 Hz</td>
+</tr>
+<tr>
+<td><strong>Earmuffs</strong></td>
+<td>ear cups, usually rigid plastic with an absorptive liner, enclosing the outer ear and sealed with foam- or fluid-filled cushions</td>
+<td>intermediate frequencies</td>
+</tr>
+<tr>
+<td><strong>Earmuffs with active noise cancellation</strong></td>
+<td>new technology giving active, noise-level-dependent attenuation plus passive protection</td>
+<td>lower frequency range</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Information and training (<code>slide 74–75</code>), nine items:</strong> the nature of the risks · the measures taken to eliminate or minimise them · the exposure limit and action levels · the results of assessment and measurement, with their significance and potential risks · the characteristics and properties of the hearing protectors · their correct use · why and how to detect and report signs of hearing damage · the circumstances in which health surveillance applies · safe working practices to minimise exposure.</p>
+<p><strong>Trap:</strong> an answer that ends at "provide earplugs" has named the least effective control and skipped the two that the deck ranks above it (<code>slide 69</code>).</p>
+<hr />
+<h2 id="3-answer-bank">3. Answer bank<a class="anchor" href="#3-answer-bank">#</a></h2>
+<blockquote>
+<p>3 marks = three numbered lines, bold lead, no preamble (a four- or five-line answer only where the classification itself has four or five members — the examiner marks members, not lines). 5 marks = five lines or four plus a sketch. 7/8 marks = a named structure, then the content, then traps. Handwritten, 5–10 minutes each.</p>
+</blockquote>
+<h3 id="31-3-mark-answers-part-a">3.1 3-mark answers (Part A)<a class="anchor" href="#31-3-mark-answers-part-a">#</a></h3>
+<h4 id="a-define-a-aerosols-b-fumes-it1-sep-2024-a6">A. Define (a) aerosols (b) fumes — IT1 Sep 2024 A6</h4>
+<ol>
+<li><strong>Aerosol</strong> — a relatively stable suspension of solid particles in air, liquid droplets in air or solid particles dissolved or suspended in liquid droplets in air (<code>slide 13</code>) — give all three cases.</li>
+<li><strong>Fume</strong> — solid particles formed by combustion, sublimation or condensation of vaporised material (<code>slide 12</code>); the metal is vaporised by heat and condenses in cooler air, so the particles are sub-micron and nothing is broken <strong>(standard)</strong>.</li>
+<li><strong>Contrast</strong> — dust is the mechanical version (grinding, milling, blasting, <code>slide 13</code>); fume is thermal; dust, fume, mist and fog are all aerosols, gas and vapour are not (<code>slide 13</code>).</li>
+</ol>
+<p><em>The trap: an aerosol is not "a spray" — the third case (solid dissolved or suspended in droplets) is the case candidates drop.</em></p>
+<h4 id="b-outline-the-routes-of-entry-of-chemicals-into-the-body-it1-sep-2024-a5">B. Outline the routes of entry of chemicals into the body — IT1 Sep 2024 A5</h4>
+<ol>
+<li><strong>Inhalation</strong> — airborne chemicals breathed in through mouth or nose; particle or droplet size decides where they settle, and the site decides the disease (<code>slide 8</code>).</li>
+<li><strong>Skin absorption</strong> — some chemicals pass through intact skin into the body's system; solvents and pesticides are the deck's examples (<code>slide 9</code>).</li>
+<li><strong>Ingestion</strong> — swallowed chemicals absorbed in the digestive tract; hand-to-mouth from dirty hands, or settled dust on cups, plates, utensils and food (<code>slide 10</code>).</li>
+<li><em>If a fourth line fits:</em> <strong>injection</strong> — needlestick or high-pressure jet puts material straight into tissue <strong>(standard)</strong>.</li>
+</ol>
+<h4 id="c-describe-the-relevance-of-material-safety-data-sheet-it1-sep-2024-a2">C. Describe the relevance of material safety data sheet — IT1 Sep 2024 A2</h4>
+<ol>
+<li><strong>What it is</strong> — a technical document from the supplier giving detailed, comprehensive information on a controlled product's health effects, hazard evaluation for handling/storage/use, protective measures and emergency procedures (<code>slide 18</code>).</li>
+<li><strong>Why it is needed</strong> — it carries far more than the label, and manufacturers must supply one with the first shipment of any hazardous chemical (<code>slide 19</code>); it is the written basis for training, storage, PPE selection and first aid (<code>slide 18</code>).</li>
+<li><strong>What it contains</strong> — manufacturer information, ingredients, composition, hazard identification, first aid, PPE and toxicological data, ecological data, disposal, regulatory information, handling and storage (<code>slide 20</code>).</li>
+</ol>
+<h4 id="d-list-the-types-of-biological-agents-with-examples-it1-sep-2024-a4">D. List the types of biological agents with examples — IT1 Sep 2024 A4</h4>
+<ol>
+<li><strong>Bacteria</strong> — <em>Legionella</em>, <em>Salmonella</em> (<code>slide 29</code>); single-celled, multiply in the environment given warmth 5–60 °C, moisture, food and pH 7 (<code>slide 31</code>).</li>
+<li><strong>Viruses</strong> — hepatitis C, yellow fever (<code>slide 29</code>); smallest microbe, DNA or RNA core in a protein coat, replicate only inside living cells (<code>slide 32</code>).</li>
+<li><strong>Fungi/moulds</strong> — mushrooms, mould, mildew (<code>slide 33</code>); reproduce by air-dispersed spores, which are the inhaled hazard; about half of all types are harmful (<code>slide 33</code>).</li>
+<li><strong>Parasites</strong> — malaria, hookworm, schistosomiasis <strong>(standard)</strong>; live in or on a host and derive nutrients at its expense (<code>slide 34</code>).</li>
+<li><em>One extra line if asked for five:</em> the deck also lists plants, insects and animals (<code>slide 29</code>).</li>
+</ol>
+<h4 id="e-the-six-physical-forms-of-chemical-hazards">E. The six physical forms of chemical hazards</h4>
+<ol>
+<li><strong>Dust</strong> — solid particles in air formed by grinding, milling or blasting (<code>slide 13</code>); <strong>fibre</strong> — a solid particle with a high length-to-width ratio, which stays airborne longer (<code>slide 13</code>).</li>
+<li><strong>Fume</strong> — solid particles from combustion, sublimation or condensation of vaporised material (<code>slide 12</code>); <strong>mist or fog</strong> — liquid-droplet aerosols formed by condensation on particulate nuclei (<code>slide 12</code>).</li>
+<li><strong>Vapour</strong> — the gaseous phase of a material ordinarily solid or liquid at room temperature (<code>slide 12</code>); <strong>gas</strong> — already gaseous at room temperature and pressure (<code>slide 12</code>).</li>
+</ol>
+<h4 id="f-classification-of-biohazardous-agents-into-risk-groups">F. Classification of biohazardous agents into risk groups</h4>
+<ol>
+<li><strong>Basis</strong> — level of risk of infection, judged on four criteria: pathogenic to humans, a hazard to the employee, transmissible to the community, effective treatment or prophylaxis available (<code>slide 25, 28</code>).</li>
+<li><strong>Groups 1 and 2</strong> — group 1 unlikely to cause human disease; group 2 can cause human disease and might be a hazard to workers, unlikely to spread to the community, usually effective prophylaxis or treatment (<code>slide 25</code>).</li>
+<li><strong>Groups 3 and 4</strong> — group 3 severe human disease, serious hazard to workers, may spread to the community, usually treatment available; group 4 severe human disease, high risk of spreading, usually no effective prophylaxis or treatment (<code>slide 25</code>).</li>
+</ol>
+<h4 id="g-dba-dbc-and-the-3-db-rule">G. dB(A), dB(C) and the 3 dB rule</h4>
+<ol>
+<li><strong>Measurement</strong> — noise is measured in decibels, a logarithmic ratio of sound pressure (<code>slide 49, 53</code>); a small change in the number is a large change in energy and in hearing damage (<code>slide 53</code>).</li>
+<li><strong>Weightings</strong> — A-weighting, dB(A), for average noise levels, because it closely matches the ear's perception of loudness; C-weighting, dB(C), for peak, impact or explosive noise (<code>slide 49, 53</code>).</li>
+<li><strong>The rule</strong> — every 3 dB doubles the noise (<code>slide 49</code>), so a 3 dB rise halves the permitted exposure time under a 3 dB exchange rate (<code>slide 55</code>).</li>
+</ol>
+<h4 id="h-noise-control-at-source-in-the-path-and-at-the-receiver">H. Noise control at source, in the path and at the receiver</h4>
+<ol>
+<li><strong>At source (best)</strong> — low-noise tools and machinery, engineering changes on the source, maintenance, lubrication and replacement of parts, quieter material handling (<code>slide 69–70</code>).</li>
+<li><strong>In the path</strong> — enclose or isolate the source, sound-reducing barriers, sound-absorbent coverings, damping or isolation of structure-borne noise, and distance: every doubling of distance cuts 6 dB(A) (<code>slide 67, 69, 71</code>).</li>
+<li><strong>At the receiver (last, least effective)</strong> — earplugs, earmuffs or active-cancelling muffs; protects only the wearer and depends on a seal (<code>slide 69, 72–73</code>).</li>
+</ol>
+<h3 id="32-5-mark-answers-retest-style-part-a">3.2 5-mark answers (Retest-style Part A)<a class="anchor" href="#32-5-mark-answers-retest-style-part-a">#</a></h3>
+<h4 id="a-classification-of-biohazardous-agents-and-why-it-matters">A. Classification of biohazardous agents, and why it matters</h4>
+<ol>
+<li><strong>Definition</strong> — biological agents are micro-organisms, including genetically modified ones, cell cultures and human endoparasites, which may provoke any infection, allergy or toxicity (<code>slide 23</code>).</li>
+<li><strong>Four criteria</strong> — pathogenicity to humans, hazard to the employee, transmissibility to the community, availability of effective treatment or prophylaxis (<code>slide 28</code>).</li>
+<li><strong>Group 1/2</strong> — group 1 unlikely to cause human disease; group 2 causes human disease and may be a hazard to workers, unlikely to spread to the community, treatment usually available (<code>slide 25</code>).</li>
+<li><strong>Group 3/4</strong> — group 3 severe disease, serious hazard, may spread, treatment usually available; group 4 severe disease, serious hazard, high risk of community spread, usually no treatment (<code>slide 25</code>).</li>
+<li><strong>Why it matters</strong> — the group fixes the containment, the cabinet class and the access rules; group 3 and 4 add secondary containment such as airlocks, negative pressure and HEPA-filtered exhaust (<code>FN §2.4</code>).</li>
+</ol>
+<h4 id="b-routes-of-entry-of-chemicals-expanded-5-marks">B. Routes of entry of chemicals — expanded (5 marks)</h4>
+<ol>
+<li><strong>Inhalation</strong> — the dominant occupational route: alveoli give tens of square metres of thin, perfused membrane with no filter and no first-pass metabolism; particle size decides the deposition site (<code>slide 8</code>, <code>FN §2.2</code>).</li>
+<li><strong>Skin absorption</strong> — the stratum corneum is a lipid barrier, so fat-soluble substances cross it: organic solvents, organophosphate pesticides, phenols; the absorbed dose bypasses the liver (<code>slide 9</code>, <code>FN §2.2</code>).</li>
+<li><strong>Ingestion</strong> — hand-to-mouth transfer: dirty hands contaminating food, drink or tobacco, and airborne dust settling on cups, plates, utensils and food (<code>slide 10</code>).</li>
+<li><strong>Injection</strong> — needlestick, a cut from a contaminated edge, or a high-pressure jet depositing material directly into tissue <strong>(standard)</strong>.</li>
+<li><strong>Why the route matters</strong> — the route fixes how much of the dose reaches the blood and how fast, which is why the same substance is more dangerous by one route than another (<code>FN §2.2</code>).</li>
+</ol>
+<h4 id="c-measures-to-protect-workers-from-hazardous-chemicals-short-form">C. Measures to protect workers from hazardous chemicals (short form)</h4>
+<ol>
+<li><strong>Eliminate or substitute</strong> — reduce or eliminate the use of hazardous chemicals wherever possible and use the smallest quantity that does the job (<code>slide 14, 16</code>).</li>
+<li><strong>Engineering</strong> — adequate ventilation to cut airborne concentration, enclosure of the process, and maintenance of plant to prevent leaks and breakdowns (<code>slide 14–16</code>).</li>
+<li><strong>Administrative</strong> — policies on keeping hazardous chemicals, rotation of workers through jobs or locations, maintenance scheduled in off hours (<code>slide 15</code>).</li>
+<li><strong>Hygiene and storage</strong> — personal hygiene and cleaning routines, not carrying substances home, chemicals stored apart from food, allergens stored apart from non-allergens, accurate ingredient listings (<code>slide 14</code>).</li>
+<li><strong>PPE and information</strong> — PPE where residual risk remains, and knowing what is in the products being used (<code>slide 15–16</code>); the MSDS is the source of that information (<code>slide 18</code>).</li>
+</ol>
+<h4 id="d-material-safety-data-sheet-relevance-5-marks-answers-retest-i-oct-2026-a2">D. Material safety data sheet — relevance (5 marks; answers Retest I Oct 2026 A2)</h4>
+<ol>
+<li><strong>Definition</strong> — a technical document prepared by the supplier or manufacturer providing detailed, comprehensive information on a controlled product (<code>slide 18–19</code>).</li>
+<li><strong>Four required heads</strong> — health effects of exposure; hazard evaluation for handling, storage or use; measures to protect workers at risk; emergency procedures (<code>slide 18</code>).</li>
+<li><strong>Contents in practice</strong> — manufacturer information, ingredients, composition, hazard identification, first aid, PPE and toxicological information, ecological information, disposal, regulatory information, handling and storage (<code>slide 20</code>).</li>
+<li><strong>Legal and practical status</strong> — must meet the availability, design and content requirements of WHMIS legislation, and a sheet must accompany the first shipment of any hazardous chemical (<code>slide 19</code>).</li>
+<li><strong>Use on site</strong> — it is the basis for first aid, PPE selection, storage segregation, spill response and training; it contains much more than the label (<code>slide 17–19</code>).</li>
+</ol>
+<h4 id="e-infectious-diseases-and-the-occupations-at-risk-5-marks">E. Infectious diseases and the occupations at risk (5 marks)</h4>
+<ol>
+<li><strong>Spread anywhere</strong> — colds, influenza, scarlet fever, diphtheria, smallpox (<code>slide 44</code>).</li>
+<li><strong>Dust- and crowd-related</strong> — tuberculosis in silica workers, people exposed to heat and organic dusts, and medical personnel (<code>slide 44</code>).</li>
+<li><strong>Animal contact</strong> — anthrax in handlers of carcasses, skins, hides and hair, including wool carpet processors; ringworm in pet shop staff, stockmen and breeders; rabies in veterinarians, letter carriers, laboratory workers and agricultural workers (<code>slide 44, 47</code>).</li>
+<li><strong>Soil and water</strong> — tetanus in farmers and anyone handling manure; hookworm in miners, agricultural labourers, planters of sugar, tobacco, tea, rice and cotton, and brick and tunnel workers (<code>slide 45–46</code>).</li>
+<li><strong>Bird contact and mould</strong> — psittacosis in pet shop personnel, gardeners, veterinary surgeons and researchers; fungus in farmers, outdoor workers and animal handlers (<code>slide 46–47</code>).</li>
+</ol>
+<h4 id="f-noise-exposure-regulation-5-marks">F. Noise exposure regulation (5 marks)</h4>
+<ol>
+<li><strong>Metric</strong> — LEX,8h: the daily noise exposure level in dB(A), the time-weighted average over a nominal 8-hour day (<code>slide 52</code>).</li>
+<li><strong>OSHA PEL</strong> — 90 dB(A) for all workers for an 8-hour day, with a 5 dB(A) exchange rate: 90 dB(A) for 8 h, 95 for 4 h, 100 for 2 h (<code>slide 54</code>).</li>
+<li><strong>NIOSH</strong> — exposure controlled below 85 dB(A) for 8 hours, with a 3 dB(A) exchange rate, to minimise occupational noise-induced hearing loss (<code>slide 55</code>).</li>
+<li><strong>Hearing conservation</strong> — since 1981 OSHA requires a programme wherever the TWA is 85 dB(A) or higher: measure levels, free annual hearing protection, training, evaluate protector adequacy, change tools and schedules (<code>slide 55–56</code>).</li>
+<li><strong>Scale</strong> — 110 dB(A) night club, 120 heavy equipment, 130 jet take-off, 140 threshold of pain (<code>slide 56</code>).</li>
+</ol>
+<h4 id="g-identifying-biological-hazards-in-the-workplace-5-marks">G. Identifying biological hazards in the workplace (5 marks)</h4>
+<ol>
+<li><strong>As a by-product or contaminant</strong> of work processes (<code>slide 35</code>).</li>
+<li><strong>Environmental exposure</strong> — animal and insect transmission, i.e. zoonoses (<code>slide 35</code>).</li>
+<li><strong>Communicable disease brought in from outside</strong> the organisation, transmitted person to person (<code>slide 35</code>).</li>
+<li><strong>Deliberate work with the agent</strong> — laboratories, research facilities, vaccine production (<code>slide 35</code>, <code>slide 27</code>).</li>
+<li><strong>Then classify</strong> — assign the agent to group 1–4 on the four criteria, because the control package is set by the group, not by the organism's name (<code>slide 25, 28</code>).</li>
+</ol>
+<h3 id="33-78-mark-answers">3.3 7/8-mark answers<a class="anchor" href="#33-78-mark-answers">#</a></h3>
+<h4 id="a-noise-pollution-and-its-effects-it1-sep-2024-b9-8-retest-i-oct-2026-b5-7">A. Noise pollution and its effects — IT1 Sep 2024 B9 (8) · Retest I Oct 2026 B5 (7)</h4>
+<p><strong>Structure (marks):</strong> physics and units 2 · regulation and numbers 2 · auditory effects 2 · non-auditory effects 1–2 · control 1.
+<strong>Answer:</strong>
+- <strong>Physics (2).</strong> Noise and vibration are fluctuations in air pressure; the ear-detected part is sound and "noise" is unwanted sound (<code>slide 49</code>). It is measured in decibels, a logarithmic ratio, so a small change in the number is a large change in energy and in hearing damage (<code>slide 49, 53</code>). A-weighting, dB(A), is used for average levels because it tracks the ear's loudness perception; C-weighting, dB(C), for peak, impact and explosive noise (<code>slide 49</code>). <strong>Every 3 dB doubles the noise</strong> (<code>slide 49</code>).
+- <strong>Regulation (2).</strong> The predictor is LEX,8h, the time-weighted average over a nominal 8-hour day (<code>slide 52</code>). OSHA's PEL is 90 dB(A) for 8 hours with a 5 dB exchange rate — 90/8 h, 95/4 h, 100/2 h (<code>slide 54</code>); NIOSH recommends below 85 dB(A) for 8 hours with a 3 dB rate, and since 1981 a hearing conservation programme is required at 85 dB(A) TWA (<code>slide 55</code>).
+- <strong>Auditory effects (2).</strong> Hearing impairment is the most important effect; prolonged exposure above 85 dB(A) is potentially hazardous, the total exposure being level × time (<code>slide 59</code>). A <strong>temporary threshold shift</strong> (auditory fatigue) recovers in 16–48 hours; a <strong>permanent threshold shift</strong> is irreversible because the inner-ear hair cells do not regenerate (<code>slide 58–59</code>). Instant irreversible damage starts at about 130–140 dB(C) peak — explosions, firearm reports, electric arcs (<code>slide 59</code>). Tinnitus, the ringing heard after leaving work, is an early warning (<code>slide 50</code>).
+- <strong>Non-auditory effects (1–2).</strong> Deck list: noise and pregnant workers, work-related stress, influence on work tasks, disturbance of speech communication, noise as a cause of accidents, other health effects (<code>slide 57</code>); add annoyance, disturbed sleep, raised blood pressure and masking of warning signals (<code>FN §2.8</code>).
+- <strong>Control (1).</strong> At source — low-noise tools, engineering changes, maintenance and lubrication (<code>slide 69–70</code>); in the path — enclosure, barriers, absorbent coverings, damping, distance (6 dB(A) per doubling, <code>slide 71</code>); at the receiver — earplugs, earmuffs, active-cancelling muffs, the last and least effective line (<code>slide 69, 73</code>), backed by health surveillance and training (<code>slide 60, 74</code>).
+<pre><code>dB scale sketch (five labels, deck values only):
+140 ─ threshold of pain      ← instant damage from 130–140 dB(C) peak
+130 ─ jet taking off
+120 ─ operating heavy equipment
+ 110 ─ night club
+ 85 ─ hearing conservation starts (NIOSH / OSHA 1981)
+ 90 ─ OSHA PEL, 8 h
+</code></pre>
+<strong>Traps:</strong>
+- Writing 85 dB(A) as the legal limit and 90 as the recommendation — the deck has them the other way round (<code>slide 54–55</code>).
+- Quoting dB figures the deck never gives (a 15-minute 115 dB row, an Indian 90 dB night-time standard). Only 110/120/130/140, 85, 90 and 130–140 dB(C) exist in this deck.</p>
+<h4 id="b-measures-to-protect-from-hazardous-chemicals-it1-sep-2024-b10-8">B. Measures to protect from hazardous chemicals — IT1 Sep 2024 B10 (8)</h4>
+<p><strong>Structure (marks):</strong> hierarchy framework 1 · elimination/substitution 1 · engineering 2 · administrative 1 · storage and hygiene 1 · PPE 1 · monitoring/surveillance/emergency 1.
+<strong>Answer:</strong>
+- <strong>Frame it first.</strong> Say that the measures are a hierarchy, most effective first, and that the MSDS supplies the information each level needs (<code>slide 18</code>, <code>FN §2.3</code>). Then walk the levels — this is what separates an 8 from a 5.
+- <strong>Eliminate / substitute.</strong> Reduce or eliminate the use of hazardous chemicals whenever possible and use the smallest amount that will do the job (<code>slide 14, 16</code>); substitute a chlorinated solvent with an aqueous cleaner, a solvent adhesive with a water-based one, a dusty powder with a pelletised product <strong>(standard)</strong>.
+- <strong>Engineering.</strong> Adequate ventilation to reduce airborne concentrations (<code>slide 14</code>), enclosure of the process as far as possible (<code>slide 16</code>), local exhaust ventilation capturing at the point of generation, and maintenance of equipment to prevent leaks and breakdowns (<code>slide 15–16</code>). Note that LEV capture velocity falls sharply with distance from the hood <strong>(standard)</strong>.
+- <strong>Administrative.</strong> Policies on keeping hazardous chemicals (<code>slide 15</code>); rotate workers through different jobs or locations; carry out maintenance in off hours so a release affects fewer workers (<code>slide 15</code>); training so workers know what is in the products they use (<code>slide 16</code>).
+- <strong>Storage and hygiene.</strong> Separate storage of chemicals and food; separate storage of allergens from non-allergen ingredients; accurate ingredient listings (<code>slide 14</code>); good personal hygiene and regular cleaning (<code>slide 14</code>); do not carry hazardous substances home (<code>slide 14</code>); minimum quantity, bunded and segregated incompatibles <strong>(standard)</strong>.
+- <strong>PPE.</strong> Where residual risk remains: use personal protective equipment and devices (<code>slide 15</code>), and check it before re-entering an area after an exposure (<code>slide 17</code>). State that PPE protects only the wearer and only while intact and correctly worn (<code>slide 41</code> applies the same logic to biological hazards).
+- <strong>Close the loop.</strong> Monitoring by repeat personal sampling, health surveillance, and the post-exposure drill — tell the supervisor, identify the chemical, follow the MSDS first aid, get medical attention, check PPE (<code>slide 17</code>).
+<strong>Traps:</strong>
+- Ten unordered measures with no hierarchy reads as a list of ideas; the marks are for the ordering and one justification per level.
+- "Adequate ventilation" alone is not an engineering control — name LEV versus dilution and say dilution is wrong for dust, fume and heavy vapours <strong>(standard)</strong>.</p>
+<h4 id="c-control-of-biological-agents-at-the-workplace-8-marks">C. Control of biological agents at the workplace — 8 marks</h4>
+<p><strong>Structure (marks):</strong> principle and classification link 1 · elimination/substitution 1 · engineering 2 · administrative 2 · PPE 1 · hygiene, waste and spill 1.
+<strong>Answer:</strong>
+- <strong>Principle.</strong> Replace a harmful agent with one that is not, or is less, dangerous under the conditions of use; exposure must be prevented; and the preventive measures differ with the classification of the hazard — workplace construction, registration of exposures, notification of the Government, training, collective protection (<code>slide 36</code>).
+- <strong>Elimination / substitution.</strong> Remove the agent from the process, or work with an attenuated or non-pathogenic strain; where this is impossible the risk is reduced rather than removed (<code>slide 36–37</code>).
+- <strong>Engineering.</strong> Enclosure — access-controlled rooms and biohazardous safety cabinets; LEV with HEPA filters and fume hoods; mechanical ventilation exchanging and filtering air through ducting; natural ventilation giving a stated number of air changes per hour (<code>slide 39</code>). Add, for group 3 and 4 work, an airlock, negative pressure relative to the corridor and HEPA-filtered non-recirculated exhaust (<code>FN §2.4</code>).
+- <strong>Administrative.</strong> Vaccination policies for the specific hazards present, treatment of water systems, health surveillance and health risk assessments, safe systems of work, awareness training on routes of transmission (<code>slide 40</code>); also as low as possible a number of workers exposed, accident plans, testing outside the primary confinement, and the biohazard sign (<code>slide 37</code>).
+- <strong>PPE.</strong> Only where higher controls leave a residual risk; protects only the wearer, only when worn correctly, undamaged and without hindrance (<code>slide 41</code>).
+- <strong>Hygiene and waste.</strong> No eating or drinking in contaminated areas; protective clothing; adequate washing and toilet facilities including eye washes and skin antiseptics; equipment stored in a defined place, checked, cleaned, replaced; work clothing removed on leaving and kept separately, then decontaminated, cleaned or destroyed (<code>slide 42–43</code>); safe collection, storage and disposal of waste and safe handling and transport (<code>slide 37</code>).
+- <strong>Add (standard):</strong> sharps policy — no recapping, puncture-resistant containers at the point of use; autoclave at the point of generation; treat a spill as an aerosol-generating event (cover, disinfectant, work outward, never dry-sweep or high-pressure hose); report exposures immediately so post-exposure prophylaxis starts inside its window.
+<strong>Traps:</strong>
+- Leading with PPE — the deck's hierarchy puts it last (<code>slide 38, 41</code>).
+- Forgetting that measures scale with the risk group: the same list at group 2 and group 4 strength is wrong, and saying so earns the classification mark.</p>
+<h4 id="d-dust-fume-vapour-fog-gas-forms-and-methods-of-control-7-marks">D. Dust, fume, vapour, fog, gas — forms and methods of control — 7 marks</h4>
+<p><strong>Structure (marks):</strong> five definitions 3 · behaviour and particle size 1 · control by form 2 · framework/hierarchy 1.
+<strong>Answer:</strong>
+- <strong>Definitions (<code>slide 12–13</code>).</strong> Dust: solid particles in air from grinding, milling or blasting. Fume: solid particles from combustion, sublimation or condensation of vaporised material. Vapour: the gaseous phase of a material ordinarily solid or liquid at room temperature and pressure. Mist/fog: aerosol of liquid droplets condensed on particulate nuclei. Gas: a substance already gaseous at room temperature and pressure. Note that dust, fume, mist and fog are aerosols, gas and vapour are not (<code>slide 13</code>).
+- <strong>Behaviour.</strong> Particle or droplet size decides where the chemical settles in the respiratory tract and therefore which disease develops (<code>slide 8</code>); below about 5 µm is respirable and reaches the alveoli, above about 10 µm the nose filters it out <strong>(standard)</strong>. Vapours are generated at a rate set by vapour pressure and temperature and most solvent vapours are denser than air, so they pool in pits, sumps and trenches (<code>FN §2.1</code>). Gases diffuse and fill the space; fume diffuses like a gas and does not settle readily (<code>FN §2.1</code>).
+- <strong>Control by form.</strong> Coarse dust — contain close to the source, wet methods, enclosure; fine dust and fume — capture before dispersion with LEV, because they travel with room air; vapour — enclosure, LEV at the vessel, and recognition that heavy vapour collects low; mist — enclosure of spraying, baffles, LEV; gas — enclosure, scrubbing, detection, and ventilation designed for the gas's density (<code>FN §2.1</code>, <code>slide 14–16</code>).
+- <strong>Framework.</strong> Then the hierarchy: eliminate/substitute, engineering (ventilation, enclosure), administrative (rotation, off-hours maintenance, policies), hygiene and storage separation, PPE (<code>slide 14–16</code>). General or dilution ventilation is for low-toxicity material released steadily; it is not a substitute for capture <strong>(standard)</strong>.
+- <strong>The examinable line:</strong> the form decides the control, because it decides where the substance goes in the air and in the body (<code>slide 8, 12–13</code>).
+<strong>Traps:</strong>
+- Defining dust and fume as synonyms — one is mechanical, one is thermal.
+- No particle-size numbers in the deck: give 5 µm/10 µm only if you label them standard.</p>
+<h4 id="e-infectious-diseases-at-work-and-their-control-7-marks">E. Infectious diseases at work and their control — 7 marks</h4>
+<p><strong>Structure (marks):</strong> disease–occupation table 3 · transmission routes 2 · control 2.
+<strong>Answer:</strong>
+- <strong>The pairings (<code>slide 44–47</code>).</strong> Give six to eight rows: tuberculosis — silica workers, heat and organic-dust exposure, medical personnel; anthrax — handlers of carcasses, skins, hides, hair, wool and carpet processors; tetanus — farmers and manure handlers; ringworm — pet shop staff, stockmen, breeders; psittacosis — pet shop personnel, gardeners, veterinary surgeons, researchers; hookworm — miners, planters of sugar, tobacco, tea, rice and cotton, brick and tunnel workers; rabies — veterinarians, letter carriers, laboratory workers, agricultural workers; fungus — farmers, outdoor workers, animal handlers. Colds, influenza, scarlet fever, diphtheria and smallpox may be spread anywhere (<code>slide 44</code>).
+- <strong>Routes (<code>FN §2.6</code>).</strong> Airborne droplet nuclei (tuberculosis), droplet (influenza), contact (ringworm), blood-borne (hepatitis B, HIV), vector-borne (malaria), faecal-oral and soil entry (hookworm). Most of the table are zoonoses, which is why animal work carries risk a factory of equal size does not.
+- <strong>Control by route.</strong> Airborne — ventilation, negative-pressure rooms, respiratory protection; droplet — distance and cohorting; contact — hand hygiene, surface decontamination; blood-borne — sharps policy and PPE; vector-borne and faecal-oral — drainage, sanitation, footwear, vector control (<code>FN §2.6</code>).
+- <strong>Then the workplace package (<code>slide 36–43</code>).</strong> Vaccination policy, health surveillance and risk assessment, exclusion of susceptible workers, hygiene rules (no eating or drinking, washing facilities, protective clothing removed on leaving), biohazard sign, accident plans, safe waste disposal.
+- <strong>Vulnerable groups.</strong> Pregnant, immunocompromised, non-immune, workers with broken skin, and ancillary staff — cleaners, laundry, porters, waste handlers — whose exposure is unintentional (<code>FN §2.6</code>).
+<strong>Traps:</strong>
+- Naming occupations without the route — the route is what justifies the pairing.
+- Claiming vaccination covers everything: the deck's administrative list also carries surveillance, water-system treatment and safe systems of work (<code>slide 40</code>).</p>
+<h3 id="34-14-mark-skeleton-part-b">3.4 14-mark skeleton (Part B)<a class="anchor" href="#34-14-mark-skeleton-part-b">#</a></h3>
+<h4 id="14a-chemical-hazards-forms-entry-effects-and-control">14A — Chemical hazards: forms, entry, effects and control</h4>
+<p><strong>Marks:</strong> intro/definition 2 · six forms with definitions 4 · routes of entry 3 · health effects 2 · control hierarchy 3, one of which is the MSDS. <strong>Diagram:</strong> the six forms feeding three routes of entry into a body outline (§5, figures 1–2).
+1. <strong>Open with the definition and the thesis</strong> — a hazardous substance is one that can have a harmful effect on health (<code>slide 5</code>); the <em>form</em> decides the route, the route decides the effect, and the hierarchy decides the control.
+2. <strong>Origins (1 line each)</strong> — naturally occurring, intentionally added, unintentionally added (<code>slide 6</code>).
+3. <strong>Six forms, one line each, with the generation mechanism</strong> — dust, fume, vapour, mist/fog, gas, fibre (<code>slide 12–13</code>); state that dust/fume/mist/fog are aerosols (<code>slide 13</code>).
+4. <strong>Particle size and deposition</strong> — size decides where it settles, site decides the disease (<code>slide 8</code>); 5 µm respirable fraction <strong>(standard)</strong>.
+5. <strong>Routes of entry</strong> — inhalation, skin absorption, ingestion, plus injection <strong>(standard)</strong>; one mechanism and one example each (<code>slide 7–10</code>).
+6. <strong>Health effects</strong> — acute versus chronic (<code>slide 11</code>); the deck's eight organ/system categories (<code>slide 11</code>), one example agent each.
+7. <strong>Control, in hierarchy order</strong> — eliminate/substitute, engineering (ventilation, enclosure, maintenance), administrative (rotation, off-hours maintenance, policies), hygiene and storage separation, PPE (<code>slide 14–16</code>).
+8. <strong>The information layer</strong> — MSDS: definition, four content heads, ten-item list, first shipment duty (<code>slide 18–20</code>), and the post-exposure drill (<code>slide 17</code>).
+9. <strong>Close with the principle</strong> — controls are ranked because they differ in reliability: engineering does not depend on the worker's behaviour, PPE does.</p>
+<h4 id="14b-biological-hazards-classification-agents-infectious-disease-and-control">14B — Biological hazards: classification, agents, infectious disease and control</h4>
+<p><strong>Marks:</strong> definition and sectors 2 · four criteria + four groups 4 · four agent types with examples 3 · disease–occupation pairs 2 · control hierarchy 3. <strong>Diagram:</strong> the group 1→4 containment ladder (§5, figure 4).
+1. <strong>Definition</strong> — biological agents are micro-organisms, including genetically modified ones, cell cultures and human endoparasites, able to provoke infection, allergy or toxicity (<code>slide 23</code>); a biohazardous agent is one that may do so (<code>slide 23</code>).
+2. <strong>Where the risk sits</strong> — healthcare, veterinary, agriculture, sewage management, laboratories (<code>slide 23</code>); the activity list (<code>slide 24</code>); intentional versus unintentional exposure (<code>slide 27</code>).
+3. <strong>Three harms</strong> — infection, toxin, allergy (<code>slide 26</code>).
+4. <strong>Classification</strong> — four criteria (<code>slide 28</code>), then groups 1–4 with one example each and the containment each implies (<code>slide 25</code>).
+5. <strong>The four agent types</strong> — bacteria (20-minute doubling, 5–60 °C, pH 7), viruses (replicate only in living cells, smallest microbe, DNA/RNA + protein coat), fungi (spores, inhaled), parasites (host, life cycle through soil/water) (<code>slide 31–34</code>).
+6. <strong>Infectious disease table</strong> — six to eight disease–occupation pairs (<code>slide 44–47</code>), and the transmission route that explains each (<code>FN §2.6</code>).
+7. <strong>Control</strong> — elimination/substitution, engineering (enclosure, safety cabinet, LEV with HEPA, ventilation, air changes), administrative (vaccination, surveillance, safe systems, training, exposure registers, notification), PPE, hygiene rules, waste and spill handling (<code>slide 36–43</code>).
+8. <strong>Close</strong> — the classification is what makes the control proportionate: the same agent in a group 2 lab and a group 4 suite needs two different buildings.</p>
+<h4 id="14c-noise-exposure-regulation-and-control">14C — Noise: exposure regulation and control</h4>
+<p><strong>Marks:</strong> physics and units 3 · exposure metrics and limits 4 · effects 3 · control 4. <strong>Diagram:</strong> the dB scale with 85/90/140 marked, and a source–path–receiver sketch (§5, figures 5–6).
+1. <strong>Physics</strong> — pressure fluctuation, sound versus noise (<code>slide 49</code>); decibel as a logarithmic ratio, so +3 dB doubles the noise (<code>slide 49, 53</code>); A-weighting for average, C-weighting for peak (<code>slide 49</code>).
+2. <strong>Metric</strong> — LEX,8h, the time-weighted average over a nominal 8-hour day (<code>slide 52</code>); the total exposure is level × time (<code>slide 59</code>).
+3. <strong>Regulation</strong> — OSHA PEL 90 dB(A) for 8 h with a 5 dB exchange rate and the 90/8, 95/4, 100/2 table (<code>slide 54</code>); NIOSH 85 dB(A) for 8 h at a 3 dB rate (<code>slide 55</code>); the 1981 hearing conservation requirement at 85 dB(A) TWA and what the programme obliges (<code>slide 55–56</code>); typical levels 110/120/130/140 (<code>slide 56</code>).
+4. <strong>Assessment</strong> — the ten considerations on <code>slide 63–64</code>, grouped as exposure, risk groups, interactions, equipment data, surveillance and protector attenuation.
+5. <strong>Effects</strong> — hearing impairment is the most important (<code>slide 59</code>); temporary threshold shift recovering in 16–48 h versus permanent threshold shift (<code>slide 58</code>); 130–140 dB(C) peak for instant damage (<code>slide 59</code>); then the non-auditory list (<code>slide 57</code>).
+6. <strong>Control</strong> — at source, in the path, at the receiver (<code>slide 69–71</code>), with the 6 dB(A) distance rule (<code>slide 71</code>) and the three protector types (<code>slide 73</code>).
+7. <strong>Supporting programme</strong> — health surveillance (<code>slide 60</code>), information and training content (<code>slide 74–75</code>), organisational measures such as procurement and task rotation (<code>slide 68</code>).
+8. <strong>Close</strong> — engineering control is preferred because hearing protection depends on a seal that hair, a hard hat or bad insertion breaks, and hearing loss is irreversible.</p>
+<hr />
+<h2 id="4-definitions-and-numbers-to-memorise">4. Definitions and numbers to memorise<a class="anchor" href="#4-definitions-and-numbers-to-memorise">#</a></h2>
+<table>
+<thead>
+<tr>
+<th>Term / value</th>
+<th>Exact wording to reproduce</th>
+<th>Where used</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Hazardous substance</td>
+<td>"substances that can have a harmful effect on health"</td>
+<td>§2.1 (<code>slide 5</code>)</td>
+</tr>
+<tr>
+<td>Dust</td>
+<td>"solid particles in air formed by grinding, milling or blasting"</td>
+<td>§2.2 (<code>slide 13</code>)</td>
+</tr>
+<tr>
+<td>Fume</td>
+<td>"solid particles formed by combustion, sublimation or condensation of vaporized material"</td>
+<td>§3.1.A (<code>slide 12</code>)</td>
+</tr>
+<tr>
+<td>Vapour</td>
+<td>"the gaseous phase of a material that is ordinarily solid or liquid at room temperature and pressure"</td>
+<td>§2.2 (<code>slide 12</code>)</td>
+</tr>
+<tr>
+<td>Gas</td>
+<td>"a substance that is in the gaseous state at room temperature and pressure"</td>
+<td>§2.2 (<code>slide 12</code>)</td>
+</tr>
+<tr>
+<td>Mist / fog</td>
+<td>"aerosols of liquid droplets formed by condensation of liquid droplets on particulate nuclei in the air"</td>
+<td>§2.2 (<code>slide 12</code>)</td>
+</tr>
+<tr>
+<td>Fibre</td>
+<td>"solid particles with an increased aspect ratio … suspended in air for longer periods than dusts"</td>
+<td>§2.2 (<code>slide 13</code>)</td>
+</tr>
+<tr>
+<td>Aerosol</td>
+<td>"a relatively stable suspension of solid particles in air, liquid droplets in air or solid particles dissolved or suspended in liquid droplets in air"</td>
+<td>§3.1.A (<code>slide 13</code>)</td>
+</tr>
+<tr>
+<td>Routes of entry</td>
+<td>inhalation, skin absorption, ingestion — three in the deck; injection is <strong>(standard)</strong></td>
+<td>§2.3 (<code>slide 7–10</code>)</td>
+</tr>
+<tr>
+<td>Acute / chronic</td>
+<td>"immediate reaction" / "develop over years"</td>
+<td>§2.4 (<code>slide 11</code>)</td>
+</tr>
+<tr>
+<td>MSDS</td>
+<td>"a technical document which provides detailed and comprehensive information on a controlled product"</td>
+<td>§3.1.C (<code>slide 18</code>)</td>
+</tr>
+<tr>
+<td>First shipment duty</td>
+<td>manufacturers must supply an MSDS "for any hazardous chemical with the first shipment"</td>
+<td>§2.6 (<code>slide 19</code>)</td>
+</tr>
+<tr>
+<td>Biological agent</td>
+<td>"micro-organisms, including those which have been genetically modified, cell cultures and human endoparasites, which may be able to provoke any infection, allergy or toxicity"</td>
+<td>§2.7 (<code>slide 23</code>)</td>
+</tr>
+<tr>
+<td>Risk groups</td>
+<td>1 unlikely · 2 disease, unlikely to spread, treatable · 3 severe, may spread, treatable · 4 severe, high spread risk, usually no treatment</td>
+<td>§3.1.F (<code>slide 25</code>)</td>
+</tr>
+<tr>
+<td>Classification criteria</td>
+<td>pathogenic to humans · hazard to the employee · transmissible to the community · effective treatment or prophylaxis available</td>
+<td>§2.8 (<code>slide 28</code>)</td>
+</tr>
+<tr>
+<td>Bacteria growth window</td>
+<td>"usually bacteria thrive between 5 to 60C"</td>
+<td>§2.9 (<code>slide 31</code>)</td>
+</tr>
+<tr>
+<td>Bacteria doubling</td>
+<td>"bacteria divide in two every 20 minutes"</td>
+<td>§3.1.D (<code>slide 31</code>)</td>
+</tr>
+<tr>
+<td>Bacterial pH</td>
+<td>"most bacteria reproduce best at a neutral pH level of 7"</td>
+<td>§2.9 (<code>slide 31</code>)</td>
+</tr>
+<tr>
+<td>Fungi</td>
+<td>"only about half of all types of fungi are harmful"</td>
+<td>§2.9 (<code>slide 33</code>)</td>
+</tr>
+<tr>
+<td>Decibel doubling</td>
+<td>"every 3 dB doubles the noise"</td>
+<td>§3.1.G (<code>slide 49</code>)</td>
+</tr>
+<tr>
+<td>LEX,8h</td>
+<td>"the time-weighted average of the noise exposure levels for a nominal 8-hour working day"</td>
+<td>§2.12 (<code>slide 52</code>)</td>
+</tr>
+<tr>
+<td>OSHA PEL</td>
+<td>90 dB(A), 8-hour day, 5 dB(A) exchange rate</td>
+<td>§3.2.F (<code>slide 54</code>)</td>
+</tr>
+<tr>
+<td>Exchange table</td>
+<td>90 dB(A) → 8 h · 95 dB(A) → 4 h · 100 dB(A) → 2 h</td>
+<td>§2.13 (<code>slide 54</code>)</td>
+</tr>
+<tr>
+<td>NIOSH</td>
+<td>below 85 dB(A) for 8 hours, 3 dB(A) exchange rate</td>
+<td>§3.2.F (<code>slide 55</code>)</td>
+</tr>
+<tr>
+<td>Hearing conservation trigger</td>
+<td>TWA of 85 dB(A) or higher over an 8-hour shift (OSHA, 1981)</td>
+<td>§2.13 (<code>slide 55</code>)</td>
+</tr>
+<tr>
+<td>Typical levels</td>
+<td>140 threshold of pain · 130 jet taking off · 120 operating heavy equipment · 110 night club</td>
+<td>§2.13 (<code>slide 56</code>)</td>
+</tr>
+<tr>
+<td>Hazardous threshold</td>
+<td>"prolonged exposure to sound levels &gt; 85 dB(A) is potentially hazardous"</td>
+<td>§2.14 (<code>slide 59</code>)</td>
+</tr>
+<tr>
+<td>Instant damage</td>
+<td>"risk of instant, irreversible damage begins at +/- 130–140 dB(C) peak level"</td>
+<td>§2.14 (<code>slide 59</code>)</td>
+</tr>
+<tr>
+<td>Temporary threshold shift</td>
+<td>"recovery within 16–48 hrs"</td>
+<td>§3.3.A (<code>slide 58</code>)</td>
+</tr>
+<tr>
+<td>Distance rule</td>
+<td>"for every doubling of the distance … the noise is decreased by 6 dBA"</td>
+<td>§2.16 (<code>slide 71</code>)</td>
+</tr>
+<tr>
+<td>Earplug attenuation</td>
+<td>better below 500 Hz and above 2000 Hz</td>
+<td>§2.16 (<code>slide 73</code>)</td>
+</tr>
+<tr>
+<td>Not in the deck</td>
+<td>5 µm respirable / 10 µm nose cut-off · 130 dB(C) vs 140 dB(A) equivalence · any ppm, TLV or mg/m³ value · any Indian noise standard</td>
+<td>mark <strong>(standard)</strong> or omit</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="5-diagrams-to-be-able-to-draw">5. Diagrams to be able to draw<a class="anchor" href="#5-diagrams-to-be-able-to-draw">#</a></h2>
+<table>
+<thead>
+<tr>
+<th>Figure</th>
+<th>Deck ref</th>
+<th>What to draw</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1. Six forms → three routes</td>
+<td><code>slide 7–13</code> (slides 7, 51, 61, 65 are picture-only, no text)</td>
+<td>A boxed list of dust/fume/vapour/mist-gas/fibre on the left, arrows labelled "inhale / absorb / swallow" into a body outline; under the body, three labels: lung→blood, skin→blood, gut→liver. Caption: the form decides the route.</td>
+</tr>
+<tr>
+<td>2. Aerosol family tree</td>
+<td><code>slide 12–13</code></td>
+<td>"AEROSOL" at the top; branches to dust, fume, mist/fog, fibre; gas and vapour drawn <em>outside</em> the box. One annotation: particle size decides deposition.</td>
+</tr>
+<tr>
+<td>3. Hierarchy of control (chemical)</td>
+<td><code>slide 14–17</code>, <code>slide 38</code></td>
+<td>A five-band ladder — elimination, substitution, engineering, administrative, PPE — with one deck measure written beside each band and an arrow "increasing reliability" pointing upwards.</td>
+</tr>
+<tr>
+<td>4. Risk-group ladder 1→4</td>
+<td><code>slide 25, 28</code></td>
+<td>Four stacked steps, each with its one-line definition and one example; a vertical arrow "risk to worker and community" and a second arrow "containment required". Mark the 3/4 break as "secondary containment".</td>
+</tr>
+<tr>
+<td>5. dB scale</td>
+<td><code>slide 56</code>, <code>slide 59</code></td>
+<td>A vertical scale with only deck values: 140 threshold of pain (mark 130–140 dB(C) as the instant-damage band), 130 jet, 120 heavy equipment, 110 night club; a separate dashed line for 90 (OSHA PEL 8 h) and 85 (hearing conservation). Do not add rungs the deck does not give.</td>
+</tr>
+<tr>
+<td>6. Source–path–receiver</td>
+<td><code>slide 69–71</code></td>
+<td>A noise source box, a worker, and three intervention arrows: "at source" (maintenance, low-noise tool), "in the path" (enclosure, barrier, distance with 6 dB(A) per doubling), "at receiver" (earplug/earmuff). Rank them 1-2-3 in effectiveness.</td>
+</tr>
+</tbody>
+</table>
+<p>Deck tables worth reproducing verbatim in an answer: the group 1–4 definitions (<code>slide 25</code>) · the disease–occupation table (<code>slide 44–47</code>) · the OSHA exchange table (<code>slide 54</code>) · the ten typical-level rows (<code>slide 56</code>) · the MSDS ten-item content list (<code>slide 20</code>).</p>
+<hr />
+<h2 id="6-say-this-if-grilled">6. Say-this-if-grilled<a class="anchor" href="#6-say-this-if-grilled">#</a></h2>
+<ol>
+<li><strong>Why is the <em>form</em> more important than the chemical name?</strong> — Because the form sets the particle or droplet size, the size sets the deposition site, and the site sets the disease (<code>slide 8</code>); it also decides which control catches it — LEV for fume, wet suppression for dust, enclosure for vapour.</li>
+<li><strong>Gas or vapour — what turns on the answer?</strong> — Where it came from, not what it looks like: a gas is already gaseous at room temperature and pressure; a vapour is the gaseous phase of something ordinarily solid or liquid (<code>slide 12</code>).</li>
+<li><strong>Why is inhalation the route that matters?</strong> — Alveoli give a large, thin, directly perfused surface with no filter and no first-pass metabolism, so the dose reaches blood almost intact (<code>slide 8</code>, <code>FN §2.2</code>).</li>
+<li><strong>What does the MSDS actually change on site?</strong> — Four decisions: which glove and respirator (PPE section), where it may be stored (handling and storage), what to do in the first ten minutes (first aid), and whether the waste can be sewered (disposal) (<code>slide 20</code>).</li>
+<li><strong>Why does the classification have four criteria and not just "dangerous or not"?</strong> — Because each criterion maps to a control: pathogenicity and hazard set training, cabinet class and surveillance; transmissibility changes the building; treatment availability decides how far vaccination and prophylaxis can be relied on (<code>slide 28</code>, <code>FN §2.4</code>).</li>
+<li><strong>What separates group 3 from group 4?</strong> — Not severity — both are severe. Group 4 has a high risk of community spread <em>and</em> usually no effective prophylaxis or treatment (<code>slide 25</code>), which is what forces a Class III cabinet or a suit laboratory.</li>
+<li><strong>Why can't you dilute a biological hazard the way you dilute a solvent vapour?</strong> — An organism multiplies: warmth 5–60 °C, moisture, food and pH 7 give binary fission every 20 minutes (<code>slide 31</code>), so dilution changes the concentration and not the reservoir — it has to be contained and killed.</li>
+<li><strong>85 or 90 dB(A) — which is the limit?</strong> — 90 dB(A) is OSHA's permissible exposure limit for 8 hours at a 5 dB exchange rate (<code>slide 54</code>); 85 dB(A) is the action level at which the hearing conservation programme becomes obligatory (<code>slide 55</code>).</li>
+<li><strong>Why is hearing protection called the last line?</strong> — Because it is the least effective: it protects only the wearer, depends on a seal that hair or a hard hat breaks, and "places the responsibility on the worker to protect his or her hearing" (<code>slide 69</code>) — the deck ranks source and path control above it.</li>
+<li><strong>Why is noise-induced hearing loss such a serious occupational disease?</strong> — The inner-ear hair cells do not regenerate, so a permanent threshold shift is irreversible (<code>slide 58–59</code>), and the early sign — temporary shift recovering in 16–48 hours, or ringing after the shift — is easy to ignore (<code>slide 50, 58</code>).</li>
+</ol>
+  </main>
+</div>
+<button id="chat-btn" title="Ask about this page (select text first)">✳</button>
+<div id="sel-chip">Ask about this</div>
+<div id="chat-panel" role="dialog" aria-label="Ask about this page">
+  <div id="chat-head"><span>Ask this page</span><span class="sp"></span><button id="chat-close" title="Close">✕</button></div>
+  <div id="chat-quote"></div>
+  <div id="chat-log"></div>
+  <form id="chat-form" autocomplete="off">
+    <textarea id="chat-input" rows="1" placeholder="Ask about the selection or the section…"></textarea>
+    <button id="chat-send" title="Send">↑</button>
+  </form>
+  <div id="chat-foot">Select text → “Ask about this”. Enter sends, Shift+Enter newline.</div>
+</div>
+<div class="tools">
+  <button id="theme" title="Toggle light / dark">☾</button>
+  <button id="top" title="Back to top">↑</button>
+</div>
+<script>
+(function(){
+  var root=document.documentElement, key='minotes-theme';
+  var saved=localStorage.getItem(key);
+  var prefers=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';
+  root.setAttribute('data-theme', saved || prefers);
+
+  var btn=document.getElementById('theme');
+  function sync(){ if(btn) btn.textContent = root.getAttribute('data-theme')==='dark' ? '\u2600' : '\u263E'; }
+  sync();
+  if(btn) btn.addEventListener('click',function(){
+    var next = root.getAttribute('data-theme')==='dark' ? 'light' : 'dark';
+    root.setAttribute('data-theme', next); localStorage.setItem(key,next); sync();
+  });
+
+  var bar=document.getElementById('progress');
+  if(bar) addEventListener('scroll',function(){
+    var h=document.documentElement.scrollHeight-innerHeight;
+    bar.style.width=(h>0?(scrollY/h*100):0)+'%';
+  },{passive:true});
+
+  document.querySelectorAll('pre').forEach(function(pre){
+    var b=document.createElement('button');
+    b.className='copy'; b.textContent='copy';
+    b.addEventListener('click',function(){
+      var t=pre.querySelector('code'); var txt=t?t.innerText:pre.innerText;
+      navigator.clipboard.writeText(txt).then(function(){
+        b.textContent='copied'; setTimeout(function(){b.textContent='copy';},1200);
+      });
+    });
+    pre.appendChild(b);
+  });
+
+  document.querySelectorAll('main table').forEach(function(t){
+    if(t.parentElement.classList.contains('table-scroll')) return;
+    var w=document.createElement('div'); w.className='table-scroll';
+    t.parentNode.insertBefore(w,t); w.appendChild(t);
+  });
+
+  var links=[].slice.call(document.querySelectorAll('.sidebar a[href^="#"]'));
+  var map={}; links.forEach(function(a){ map[a.getAttribute('href').slice(1)]=a; });
+  var heads=[].slice.call(document.querySelectorAll('main h2[id], main h3[id]'));
+  if('IntersectionObserver' in window && heads.length){
+    var obs=new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if(!e.isIntersecting) return;
+        links.forEach(function(a){a.classList.remove('active');});
+        var a=map[e.target.id]; if(a){a.classList.add('active');}
+      });
+    },{rootMargin:'-10% 0px -75% 0px'});
+    heads.forEach(function(h){obs.observe(h);});
+  }
+
+  var top=document.getElementById('top');
+  if(top) top.addEventListener('click',function(){ scrollTo({top:0,behavior:'smooth'}); });
+})();
+
+(function(){
+  var API="/api/chat";
+  var panel=document.getElementById("chat-panel"),
+      btn=document.getElementById("chat-btn"),
+      chip=document.getElementById("sel-chip"),
+      quote=document.getElementById("chat-quote"),
+      log=document.getElementById("chat-log"),
+      input=document.getElementById("chat-input"),
+      send=document.getElementById("chat-send"),
+      form=document.getElementById("chat-form");
+
+  if(!panel) return;
+  var pendingSelection="", busy=false, lastSelection="";
+
+  function esc(s){return s.replace(/[&<>]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;"}[c];});}
+
+  // minimal markdown: fenced code, inline code, bold, bullets, numbered lists
+  function md(src){
+    var parts=src.split(/```/), out="";
+    for(var i=0;i<parts.length;i++){
+      if(i%2){ out+="<pre><code>"+esc(parts[i].replace(/^\w*\n/,""))+"</code></pre>"; continue; }
+      var t=esc(parts[i]);
+      t=t.replace(/`([^`\n]+)`/g,"<code>$1</code>").replace(/\*\*([^*]+)\*\*/g,"<b>$1</b>");
+      var lines=t.split(/\n/), html="", inUl=false, inOl=false;
+      for(var j=0;j<lines.length;j++){
+        var line=lines[j];
+        if(/^\s*[-*]\s+/.test(line)){
+          if(inOl){html+="</ol>";inOl=false;}
+          if(!inUl){html+="<ul>";inUl=true;}
+          html+="<li>"+line.replace(/^\s*[-*]\s+/,"")+"</li>"; continue;
+        }
+        if(/^\s*\d+[.)]\s+/.test(line)){
+          if(inUl){html+="</ul>";inUl=false;}
+          if(!inOl){html+="<ol>";inOl=true;}
+          html+="<li>"+line.replace(/^\s*\d+[.)]\s+/,"")+"</li>"; continue;
+        }
+        if(inUl){html+="</ul>";inUl=false;}
+        if(inOl){html+="</ol>";inOl=false;}
+        if(line.trim()==="") continue;
+        html+="<p>"+line+"</p>";
+      }
+      if(inUl)html+="</ul>";
+      if(inOl)html+="</ol>";
+      out+=html;
+    }
+    return out;
+  }
+
+  function outline(){
+    return [].slice.call(document.querySelectorAll("main h2, main h3")).slice(0,40)
+      .map(function(h){return (h.tagName==="H3"?"  - ":"- ")+h.textContent.replace(/#$/,"").trim();}).join("\n");
+  }
+
+  function sectionFor(node){
+    var el = node && (node.nodeType===1?node:node.parentElement);
+    if(!el || !el.closest) return "";
+    el = el.closest("main") ? el : null;
+    if(!el) return "";
+    var heads=[].slice.call(document.querySelectorAll("main h2, main h3"));
+    var cur=null, idx=-1;
+    for(var i=0;i<heads.length;i++){
+      if(heads[i].compareDocumentPosition(el) & Node.DOCUMENT_POSITION_FOLLOWING) { cur=heads[i]; idx=i; }
+    }
+    if(!cur) return "";
+    var stop = heads[idx+1] || null, txt=[], n=cur;
+    while((n=n.nextSibling) && n!==stop){ if(n.textContent) txt.push(n.textContent); }
+    return (cur.textContent+"\n"+txt.join("\n")).replace(/\s+\n/g,"\n").slice(0,3000);
+  }
+
+  function placeChip(x,y){
+    chip.style.left=x+"px"; chip.style.top=(y+window.scrollY-8)+"px"; chip.style.display="block";
+  }
+  function hideChip(){ chip.style.display="none"; }
+
+  document.addEventListener("mouseup",function(e){
+    setTimeout(function(){
+      var s=window.getSelection(), text=s?s.toString().trim():"";
+      if(!text || text.length<3 || !s.anchorNode || !(s.anchorNode.parentElement||s.anchorNode).closest("main")){hideChip();return;}
+      lastSelection=text;
+      var r=s.getRangeAt(0).getBoundingClientRect();
+      placeChip(r.left+r.width/2, Math.max(r.top,8));
+    },10);
+  });
+  document.addEventListener("mousedown",function(e){ if(e.target!==chip) hideChip(); });
+
+  chip.addEventListener("mousedown",function(e){ e.preventDefault(); });
+  chip.addEventListener("click",function(e){
+    e.stopPropagation();
+    pendingSelection=lastSelection; hideChip(); open(pendingSelection);
+  });
+
+  function open(sel){
+    panel.classList.add("open");
+    if(sel){ quote.style.display="block"; quote.textContent=sel; pendingSelection=sel; }
+    else { quote.style.display="none"; quote.textContent=""; pendingSelection=""; }
+    setTimeout(function(){input.focus();},60);
+  }
+  function close(){ panel.classList.remove("open"); }
+
+  btn.addEventListener("click",function(){ panel.classList.contains("open")?close():open(lastSelection||""); });
+  document.getElementById("chat-close").addEventListener("click",close);
+  document.addEventListener("keydown",function(e){ if(e.key==="Escape") close(); });
+
+  function addMsg(cls,html){
+    var d=document.createElement("div"); d.className="msg "+cls; d.innerHTML=html; log.appendChild(d);
+    log.scrollTop=log.scrollHeight; return d;
+  }
+
+  async function ask(q){
+    if(busy||!q.trim()) return;
+    busy=true; send.disabled=true;
+    addMsg("user",esc(q));
+    var bot=addMsg("bot",'<span class="cursor"></span>');
+    var acc="";
+    var sid=sessionStorage.getItem("mn-sid");
+    if(!sid){ sid=(crypto.randomUUID?crypto.randomUUID():String(Date.now())+Math.random().toString(16).slice(2)); sessionStorage.setItem("mn-sid",sid); }
+    var payload={q:q, sid:sid, sel:pendingSelection||"", page:document.querySelector("h1")?document.querySelector("h1").textContent.trim():document.title,
+                 section:sectionFor(window.getSelection()&&window.getSelection().anchorNode?"":document.querySelector("main h2"))||"",
+                 outline:outline()};
+    // section: prefer the one containing the selection, else the first heading on screen
+    try{
+      var sel=window.getSelection();
+      if(pendingSelection && sel && sel.anchorNode){ payload.section=sectionFor(sel.anchorNode); }
+      if(!payload.section){
+        var vis=[].slice.call(document.querySelectorAll("main h2, main h3")).filter(function(h){
+          var r=h.getBoundingClientRect(); return r.top>-80 && r.top<window.innerHeight*0.6; }).pop();
+        if(vis) payload.section=sectionFor(vis);
+      }
+    }catch(_){}
+
+    try{
+      var res=await fetch(API,{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify(payload)});
+      if(!res.ok){
+        var j=await res.json().catch(function(){return{};});
+        throw new Error(j.error||("HTTP "+res.status));
+      }
+      var reader=res.body.getReader(), dec=new TextDecoder(), buf="";
+      for(;;){
+        var r=await reader.read(); if(r.done) break;
+        buf+=dec.decode(r.value,{stream:true});
+        var lines=buf.split("\n"); buf=lines.pop()||"";
+        for(var i=0;i<lines.length;i++){
+          var l=lines[i].trim(); if(l.indexOf("data:")!==0) continue;
+          var d=l.slice(5).trim(); if(d==="[DONE]") continue;
+          try{ var o=JSON.parse(d); if(o.d){acc+=o.d; bot.innerHTML=md(acc)+'<span class="cursor"></span>'; log.scrollTop=log.scrollHeight;} if(o.error) throw new Error(o.error);}catch(_){}
+        }
+      }
+      bot.innerHTML=md(acc||"_no answer_");
+    }catch(err){
+      bot.className="msg err";
+      bot.textContent = String(err.message).indexOf("Failed to fetch")>-1 || String(err.message).indexOf("HTTP 5")>-1
+        ? "Assistant unavailable — it only works on the deployed site (needs the /api/chat function)."
+        : "Error: "+err.message;
+    }finally{
+      busy=false; send.disabled=false; input.value=""; input.focus();
+      pendingSelection=""; quote.style.display="none";
+    }
+  }
+
+  form.addEventListener("submit",function(e){ e.preventDefault(); ask(input.value); });
+  input.addEventListener("keydown",function(e){
+    if(e.key==="Enter"&&!e.shiftKey){ e.preventDefault(); ask(input.value); }
+  });
+  input.addEventListener("input",function(){ input.style.height="auto"; input.style.height=Math.min(input.scrollHeight,110)+"px"; });
+})();
+</script>
+</body>
+</html>

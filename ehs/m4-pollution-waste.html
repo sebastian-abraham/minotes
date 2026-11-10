@@ -1,0 +1,2345 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Module 4 — Air and Water Pollution, and Waste Management · Environmental Health &amp; Safety</title>
+<style>
+:root{
+  --bg:#fbfaf8; --panel:#ffffff; --ink:#232120; --muted:#5f5a53; --line:#e6e1da;
+  --accent:#7a4fd0; --accent-soft:#f1ecfb; --code-bg:#f5f2ee; --code-ink:#2b2a28;
+  --warn-bg:#fff8e6; --warn-line:#f0d9a0;
+  --sans:"Inter","Segoe UI",system-ui,-apple-system,"Noto Sans",sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,"SF Mono",Menlo,Consolas,"Fira Code",monospace;
+}
+html[data-theme="dark"]{
+  --bg:#141317; --panel:#1b1a20; --ink:#e8e4de; --muted:#a8a199; --line:#2f2c36;
+  --accent:#b79cf5; --accent-soft:#241f33; --code-bg:#22202a; --code-ink:#e8e4de;
+  --warn-bg:#2a2417; --warn-line:#4a3d22;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0; background:var(--bg); color:var(--ink); font-family:var(--sans);
+  font-size:16.5px; line-height:1.72; -webkit-font-smoothing:antialiased;
+}
+#progress{position:fixed;top:0;left:0;height:3px;width:0;background:var(--accent);z-index:50;transition:width .1s linear}
+
+.wrap{display:flex;align-items:flex-start;min-height:100vh}
+.sidebar{
+  position:sticky;top:0;height:100vh;width:300px;flex:0 0 300px;overflow-y:auto;
+  padding:26px 20px 60px;border-right:1px solid var(--line);background:var(--panel);
+}
+.sidebar h1{font-size:15px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);
+  margin:0 0 4px;font-weight:600}
+.sidebar .sub{font-size:12.5px;color:var(--muted);margin:0 0 18px}
+.sidebar nav{font-size:14px}
+.sidebar .toc>ul{padding-left:0}
+.sidebar ul{list-style:none;margin:0;padding-left:12px}
+.sidebar ul ul{border-left:1px solid var(--line);margin-left:4px;padding-left:10px}
+.sidebar li{margin:3px 0}
+.sidebar a{color:var(--ink);text-decoration:none;display:block;padding:3px 8px;border-radius:8px;
+  line-height:1.35;transition:background .12s,color .12s}
+.sidebar a:hover{background:var(--accent-soft);color:var(--accent)}
+.sidebar a.active{background:var(--accent-soft);color:var(--accent);font-weight:600}
+.sidebar .home{display:inline-flex;align-items:center;gap:6px;margin-bottom:16px;font-size:13.5px;
+  color:var(--muted);text-decoration:none;border:1px solid var(--line);padding:5px 10px;border-radius:999px}
+.sidebar .home:hover{color:var(--accent);border-color:var(--accent)}
+
+main{flex:1;min-width:0;padding:46px 56px 120px;max-width:980px;margin:0 auto}
+.doc-head{border-bottom:1px solid var(--line);padding-bottom:18px;margin-bottom:34px}
+.doc-head .kicker{font-size:12.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);
+  font-weight:700;margin-bottom:8px}
+.doc-head .meta{font-size:13.5px;color:var(--muted)}
+
+h1,h2,h3,h4{line-height:1.25;font-weight:700;letter-spacing:-.01em}
+h1{font-size:2.05rem;margin:.2em 0 .5em}
+h2{font-size:1.55rem;margin:2.4em 0 .7em;padding-bottom:.35em;border-bottom:1px solid var(--line)}
+h3{font-size:1.2rem;margin:1.9em 0 .55em}
+h4{font-size:1.03rem;margin:1.5em 0 .45em;color:var(--muted)}
+h2 .anchor,h3 .anchor{opacity:0;margin-left:.35em;font-size:.8em;color:var(--muted);text-decoration:none}
+h2:hover .anchor,h3:hover .anchor{opacity:1}
+p{margin:.75em 0}
+a{color:var(--accent);text-underline-offset:2px}
+strong{font-weight:650}
+hr{border:0;border-top:1px solid var(--line);margin:2.6em 0}
+ul,ol{margin:.7em 0;padding-left:1.4em}
+li{margin:.3em 0}
+li>ul,li>ol{margin:.25em 0}
+blockquote{
+  margin:1.3em 0;padding:12px 18px;background:var(--warn-bg);border-left:3px solid var(--warn-line);
+  border-radius:0 10px 10px 0;color:var(--ink)
+}
+blockquote p{margin:.3em 0}
+
+code{font-family:var(--mono);font-size:.87em;background:var(--code-bg);color:var(--code-ink);
+  padding:.15em .38em;border-radius:6px;border:1px solid var(--line);
+  box-decoration-break:clone;-webkit-box-decoration-break:clone;overflow-wrap:anywhere}
+pre{position:relative;background:var(--code-bg);border:1px solid var(--line);border-radius:12px;
+  padding:16px 18px;overflow-x:auto;margin:1.1em 0}
+pre code{background:none;border:0;padding:0;font-size:13.6px;line-height:1.62;white-space:pre}
+.copy{position:absolute;top:8px;right:8px;font:600 11px/1 var(--sans);color:var(--muted);
+  background:var(--panel);border:1px solid var(--line);border-radius:7px;padding:5px 8px;cursor:pointer;
+  opacity:0;transition:opacity .15s}
+pre:hover .copy{opacity:1}
+.copy:hover{color:var(--accent);border-color:var(--accent)}
+
+.table-scroll{overflow-x:auto;margin:1.3em 0;border:1px solid var(--line);border-radius:12px;background:var(--panel)}
+table{border-collapse:collapse;width:100%;font-size:14.6px}
+th,td{padding:9px 13px;text-align:left;vertical-align:top;border-bottom:1px solid var(--line)}
+th{background:var(--accent-soft);font-weight:650;font-size:13px;letter-spacing:.02em;
+  position:sticky;top:0;backdrop-filter:blur(4px)}
+tr:last-child td{border-bottom:0}
+tbody tr:nth-child(even){background:color-mix(in srgb,var(--panel) 60%,var(--bg))}
+tbody tr:hover{background:var(--accent-soft)}
+
+.tools{position:fixed;right:22px;bottom:22px;display:flex;flex-direction:column;gap:8px;z-index:40}
+.tools button{width:42px;height:42px;border-radius:12px;border:1px solid var(--line);background:var(--panel);
+  color:var(--ink);cursor:pointer;font-size:16px;box-shadow:0 4px 14px rgba(0,0,0,.10)}
+.tools button:hover{color:var(--accent);border-color:var(--accent)}
+@media (max-width:1000px){
+  .wrap{display:block}
+  .sidebar{position:static;width:auto;height:auto;border-right:0;border-bottom:1px solid var(--line)}
+  .sidebar nav{max-height:40vh;overflow:auto}
+  main{padding:28px 20px 100px}
+}
+@media print{
+  .sidebar,.tools,#progress,.copy{display:none!important}
+  body{background:#fff;color:#000;font-size:11pt}
+  main{padding:0;max-width:none}
+  h2{break-after:avoid} pre,table,blockquote{break-inside:avoid}
+  a{color:#000;text-decoration:none}
+}
+
+/* ---- ask-about-this ---- */
+#chat-btn{position:fixed;right:20px;bottom:112px;width:44px;height:44px;border-radius:50%;
+  border:1px solid var(--line);background:var(--panel);color:var(--accent);cursor:pointer;font-size:17px;
+  box-shadow:0 6px 18px rgba(0,0,0,.12);z-index:45;display:grid;place-items:center}
+#chat-btn:hover{border-color:var(--accent)}
+#sel-chip{position:absolute;z-index:46;transform:translate(-50%,-100%);background:var(--ink);color:var(--bg);
+  font:600 12px/1 var(--sans);padding:7px 11px;border-radius:999px;cursor:pointer;white-space:nowrap;
+  box-shadow:0 6px 18px rgba(0,0,0,.25);display:none}
+#sel-chip:hover{background:var(--accent);color:#fff}
+#chat-panel{position:fixed;right:20px;bottom:164px;width:min(420px,calc(100vw - 40px));max-height:min(70vh,620px);
+  background:var(--panel);border:1px solid var(--line);border-radius:14px;z-index:47;display:none;
+  flex-direction:column;box-shadow:0 18px 50px rgba(0,0,0,.18);overflow:hidden}
+#chat-panel.open{display:flex}
+#chat-head{display:flex;align-items:center;gap:8px;padding:11px 13px;border-bottom:1px solid var(--line);
+  font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:700}
+#chat-head .sp{flex:1}
+#chat-head button{background:none;border:0;color:var(--muted);cursor:pointer;font-size:15px;padding:2px 4px}
+#chat-head button:hover{color:var(--accent)}
+#chat-quote{display:none;margin:10px 13px 0;padding:8px 10px;border-left:2px solid var(--accent);
+  background:var(--accent-soft);color:var(--muted);font-size:12.5px;border-radius:0 8px 8px 0;
+  max-height:84px;overflow:auto;white-space:pre-wrap}
+#chat-log{flex:1;overflow-y:auto;padding:12px 13px;display:flex;flex-direction:column;gap:10px;font-size:13.6px;line-height:1.55}
+.msg{max-width:100%}
+.msg.user{align-self:flex-end;background:var(--accent-soft);color:var(--ink);padding:7px 11px;border-radius:11px 11px 2px 11px;
+  max-width:86%;white-space:pre-wrap}
+.msg.bot{color:var(--ink)}
+.msg.bot p{margin:.3em 0}
+.msg.bot ul{margin:.3em 0;padding-left:1.15em}
+.msg.bot code{font-size:.9em}
+.msg.bot pre{background:var(--code-bg);border-radius:8px;padding:9px 11px;overflow-x:auto;font-size:12px;margin:.4em 0}
+.msg.err{color:#b3261e;font-size:12.5px}
+.msg .cursor:after{content:"▍";color:var(--accent);animation:blink 1s steps(2) infinite}
+@keyframes blink{50%{opacity:0}}
+#chat-form{display:flex;gap:8px;padding:10px 13px;border-top:1px solid var(--line)}
+#chat-input{flex:1;resize:none;border:1px solid var(--line);border-radius:9px;background:var(--bg);color:var(--ink);
+  font:inherit;font-size:13.5px;padding:8px 10px;max-height:110px;min-height:38px}
+#chat-input:focus{outline:2px solid var(--accent);outline-offset:0}
+#chat-send{border:1px solid var(--accent);background:var(--accent);color:#fff;border-radius:9px;
+  width:38px;cursor:pointer;font-size:15px}
+#chat-send:disabled{opacity:.45;cursor:default}
+#chat-foot{font-size:11px;color:var(--muted);padding:0 13px 9px}
+@media (max-width:640px){
+  #chat-panel{right:8px;left:8px;width:auto;bottom:150px;max-height:66vh}
+  #chat-btn{bottom:104px;right:16px}
+}
+@media print{#chat-btn,#chat-panel,#sel-chip{display:none!important}}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+<div class="wrap">
+  <aside class="sidebar">
+    <a class="home" href="index.html">← Environmental Health &amp; Safety</a>
+    <a class="home" href="practice.html">Practice drills</a>
+    <h1>M4 · Pollution &amp; waste</h1>
+    <p class="sub">20% ESE · CO4</p>
+    <nav class="toc"><div class="toc">
+<ul>
+<li><a href="#1-coverage">1. Coverage</a></li>
+<li><a href="#2-concepts">2. Concepts</a><ul>
+<li><a href="#21-what-air-pollution-is-and-why-every-process-pollutes-9-10">2.1 What air pollution is, and why every process pollutes (<code>4:p3</code>, <code>4:p4</code>)</a></li>
+<li><a href="#22-sources-of-air-pollution-1516">2.2 Sources of air pollution (<code>4:p5</code>–<code>p9</code>)</a></li>
+<li><a href="#23-classification-primary-vs-secondary-point-vs-non-point-2324">2.3 Classification: primary vs secondary, point vs non-point (<code>4:p9</code>–<code>p15</code>)</a></li>
+<li><a href="#24-the-major-pollutants-industry-by-industry-30-3132">2.4 The major pollutants, industry by industry (<code>4:p14</code>, <code>4:p16</code>–<code>p23</code>)</a></li>
+<li><a href="#25-effects-on-human-health-4546">2.5 Effects on human health (<code>4:p24</code>–<code>p26</code>)</a></li>
+<li><a href="#26-effects-on-plants-54">2.6 Effects on plants (<code>4:p27</code>)</a></li>
+<li><a href="#27-effects-on-animals-and-birds-62">2.7 Effects on animals and birds (<code>4:p29</code>)</a></li>
+<li><a href="#28-effects-on-materials-64">2.8 Effects on materials (<code>4:p28</code>)</a></li>
+<li><a href="#29-air-pollution-control-75-76">2.9 Air pollution control (<code>4:p30</code>, <code>4:p31</code>)</a></li>
+<li><a href="#210-depletion-of-the-ozone-layer-8081">2.10 Depletion of the ozone layer (<code>4:p32</code>–<code>p39</code>)</a></li>
+<li><a href="#211-clean-coal-combustion-technology-9596">2.11 Clean coal combustion technology (<code>4:p40</code>–<code>p48</code>)</a></li>
+<li><a href="#212-water-pollution-sources-and-types-112113">2.12 Water pollution: sources and types (<code>4:p50</code>–<code>p61</code>)</a></li>
+<li><a href="#213-water-pollutants-family-by-family-122123">2.13 Water pollutants, family by family (<code>4:p62</code>–<code>p68</code>)</a></li>
+<li><a href="#214-health-hazards-of-water-pollutants-127128">2.14 Health hazards of water pollutants (<code>4:p69</code>–<code>p75</code>)</a></li>
+<li><a href="#215-effluent-quality-standards-145-146147">2.15 Effluent quality standards (<code>4:p50</code>, <code>4:p63</code>–<code>p68</code>)</a></li>
+<li><a href="#216-waste-identification-and-characterisation-154-155">2.16 Waste: identification and characterisation (<code>4:p78</code>, <code>4:p79</code>)</a></li>
+<li><a href="#217-waste-classification-160-161-162-163-164">2.17 Waste classification (<code>4:p78</code>, <code>4:p82</code>, <code>4:p100</code>, <code>4:p102</code>, <code>4:p124</code>)</a></li>
+<li><a href="#218-waste-hierarchy-recycling-and-reuse-176177-178">2.18 Waste hierarchy, recycling and reuse (<code>4:p80</code>–<code>p86</code>, <code>4:p125</code>)</a></li>
+</ul>
+</li>
+<li><a href="#3-answer-bank">3. Answer bank</a><ul>
+<li><a href="#31-three-mark-answers-a1a15">3.1 Three-mark answers (A1–A15)</a></li>
+<li><a href="#32-five-mark-answers-b1b12">3.2 Five-mark answers (B1–B12)</a></li>
+<li><a href="#33-seven-and-eight-mark-answers-c1c6">3.3 Seven- and eight-mark answers (C1–C6)</a></li>
+<li><a href="#34-fourteen-mark-skeletons-d1d4">3.4 Fourteen-mark skeletons (D1–D4)</a></li>
+</ul>
+</li>
+<li><a href="#4-definitions-and-numbers-to-memorise">4. Definitions and numbers to memorise</a><ul>
+<li><a href="#41-definitions-word-perfect">4.1 Definitions — word-perfect</a></li>
+<li><a href="#42-numbers-the-deck-states-with-units">4.2 Numbers the deck states — with units</a></li>
+<li><a href="#43-numbers-the-deck-does-not-give-never-invent-these">4.3 Numbers the deck does not give — never invent these</a></li>
+</ul>
+</li>
+<li><a href="#5-diagrams-to-be-able-to-draw">5. Diagrams to be able to draw</a><ul>
+<li><a href="#d1-the-ozone-catalytic-cycle-427428-must">D1 — The ozone catalytic cycle (<code>4:p32</code>–<code>p34</code>) · must</a></li>
+<li><a href="#d2-clean-coal-as-a-chain-429430-must">D2 — Clean coal as a chain (<code>4:p42</code>–<code>p47</code>) · must</a></li>
+<li><a href="#d3-the-waste-hierarchy-431432-must">D3 — The waste hierarchy (<code>4:p80</code>–<code>p81</code>) · must</a></li>
+<li><a href="#d4-the-eutrophication-cascade-436">D4 — The eutrophication cascade (<code>4:p72</code>)</a></li>
+<li><a href="#d5-source-pathway-receptor-437-438">D5 — Source → pathway → receptor (<code>4:p15</code>, <code>4:p30</code>)</a></li>
+<li><a href="#d6-biomagnification-439">D6 — Biomagnification (<code>4:p75</code>)</a></li>
+<li><a href="#d7-the-four-receptacles-of-air-pollution-one-page-440441">D7 — The four receptacles of air pollution (one page, <code>4:p24</code>–<code>p29</code>)</a></li>
+<li><a href="#d8-the-water-treatment-train-standard">D8 — The water treatment train (standard)</a></li>
+</ul>
+</li>
+<li><a href="#6-say-this-if-grilled">6. Say-this-if-grilled</a></li>
+</ul>
+</div>
+</nav>
+  </aside>
+  <main>
+    <div class="doc-head">
+      <div class="kicker">20CET453 · Environmental Health &amp; Safety</div>
+      <div class="meta">20% ESE · CO4 · rendered from KIT_M4_AIR_WATER_POLLUTION_WASTE.md</div>
+    </div>
+    <h1 id="module-4-air-and-water-pollution-and-waste-management">Module 4 — Air and Water Pollution, and Waste Management</h1>
+<blockquote>
+<p>20CET453 Environmental Health and Safety · Module IV · CO4 · 8 hrs · 20% ESE · <strong>no ESE paper and no question bank exist — the syllabus is the scope</strong> · <code>4:pN</code> = page N of <code>ehs_4.txt</code>, the Module IV deck (127 pages, Alice Johny) · <strong>(standard)</strong> = true and answerable, but no slide says it — never claim the deck for it.</p>
+</blockquote>
+<p>Two internal papers asked this module six times: clean coal (twice), plants (once), water pollutants (once), ozone (once), causes (once). Those five answers below are the ones to have word-perfect.</p>
+<hr />
+<h2 id="1-coverage">1. Coverage<a class="anchor" href="#1-coverage">#</a></h2>
+<p><strong>Syllabus, verbatim, with the hours the syllabus allots.</strong></p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Syllabus line</th>
+<th>Hrs</th>
+<th>Answered at</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Air pollutants from industries — effect on human health, animals, plants and materials</td>
+<td>2</td>
+<td>§2.2–2.9, §3.1 A1–A5, §3.2 B1–B5, §3.3 C3</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Depletion of the ozone layer</td>
+<td>1</td>
+<td>§2.10, §3.1 A6–A7, §3.2 B7, §3.3 C1</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Concept of clean coal combustion technology</td>
+<td>1</td>
+<td>§2.11, §3.1 A8–A9, §3.3 C2, §3.4 D2</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Water pollutants — health hazards</td>
+<td>1</td>
+<td>§2.12–2.14, §3.1 A10–A12, §3.2 B3/B8/B11, §3.3 C4</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Effluent quality standards</td>
+<td>1</td>
+<td>§2.15, §3.1 A14, §3.2 B12</td>
+</tr>
+<tr>
+<td>6</td>
+<td>Waste management — waste identification — characterisation and classification — recycling and reuse</td>
+<td>2</td>
+<td>§2.16–2.18, §3.1 A13/A15, §3.2 B9–B10, §3.3 C5, §3.4 D4</td>
+</tr>
+</tbody>
+</table>
+<p>Total 8 hrs — the largest module in the course, and it appeared in <strong>both</strong> the 2025 and 2026 papers (the 2024 paper was Module I/II only).</p>
+<p><strong>Internal questions from this module, with the marks actually carried.</strong></p>
+<table>
+<thead>
+<tr>
+<th>Paper</th>
+<th>Q</th>
+<th>What it asks</th>
+<th>Marks</th>
+<th>Answered at</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Special Retest II, Oct 2025</td>
+<td>A3</td>
+<td>Categorize various causes of air pollution</td>
+<td>5</td>
+<td>§3.2 B1</td>
+</tr>
+<tr>
+<td>Special Retest II, Oct 2025</td>
+<td>A4</td>
+<td>Enlist any five common water pollutants and their associated health hazards</td>
+<td>5</td>
+<td>§3.2 B3</td>
+</tr>
+<tr>
+<td>Special Retest II, Oct 2025</td>
+<td>B7</td>
+<td>Investigate the causes, effects and solutions for ozone layer depletion</td>
+<td>7</td>
+<td>§3.3 C1</td>
+</tr>
+<tr>
+<td>Special Retest II, Oct 2025</td>
+<td>B8</td>
+<td>Elaborate on the concept of clean coal combustion technology</td>
+<td>8</td>
+<td>§3.3 C2</td>
+</tr>
+<tr>
+<td>Retest I, Oct 2026</td>
+<td>A4</td>
+<td>Explain the effects of air pollution on plants</td>
+<td>5</td>
+<td>§3.2 B2</td>
+</tr>
+<tr>
+<td>Retest I, Oct 2026</td>
+<td>B7</td>
+<td>Elaborate on the concept of clean coal combustion technology</td>
+<td>7</td>
+<td>§3.3 C2</td>
+</tr>
+<tr>
+<td>Internal Test 1, Sep 2024</td>
+<td>—</td>
+<td>nothing from Module IV</td>
+<td>—</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<p><strong>What that pattern means.</strong> Clean coal is the module's banker (asked twice, always Part B, always "elaborate on the concept"). Plants and "five water pollutants" are Part-A five-markers that reward a mechanism per item, not a list. Ozone is a Part B that divides into causes/effects/solutions. Nothing internal has yet asked the <em>waste</em> bullet or <em>effluent standards</em> — both carry syllabus hours and are exactly the kind of gap a setter fills in a 14-marker.</p>
+<hr />
+<h2 id="2-concepts">2. Concepts<a class="anchor" href="#2-concepts">#</a></h2>
+<h3 id="21-what-air-pollution-is-and-why-every-process-pollutes-9-10">2.1 What air pollution is, and why every process pollutes (<code>4:p3</code>, <code>4:p4</code>)<a class="anchor" href="#21-what-air-pollution-is-and-why-every-process-pollutes-9-10">#</a></h3>
+<p><strong>What:</strong> one or more contaminants, alone or combined, in such quantities and for such durations as may be injurious to human, animal or plant life or property, or which unreasonably interferes with the comfortable enjoyment of life or property or the conduct of business.</p>
+<ul>
+<li>Second deck definition, worth opening with: <em>any substance introduced into the environment that adversely affects the usefulness of a resource</em> (<code>4:p3</code>).</li>
+<li>Every clause carries a mark: <strong>quantity + duration</strong> make a pollutant a dose, not a substance; <strong>property</strong> covers corrosion and soiling; <strong>enjoyment</strong> covers nuisance — odour, haze, lost visibility.</li>
+<li>Why pollution is unavoidable: <strong>no process is 100% efficient, so each process produces pollution</strong> (<code>4:p3</code>). Whatever is not converted to product leaves as waste, and the gaseous and fine-dust fraction leaves through the air.</li>
+<li>Amplifier: the atmosphere is a fixed mixture of gases, and an increase or decrease in the percentage of any of them is harmful; the deck draws the line from that imbalance to ozone depletion and to global warming, "the biggest threat the contemporary world has to overcome" (<code>4:p4</code>).</li>
+<li>Air pollution is contamination of air <strong>irrespective of indoor or outdoor</strong> (<code>4:p3</code>) — indoor air is the same mass of vapour in a far smaller volume.</li>
+</ul>
+<p><strong>Trap:</strong> the definition is quotable and gets the first mark on its own; do not paraphrase it into "harmful gases in the air", which scores nothing.</p>
+<h3 id="22-sources-of-air-pollution-1516">2.2 Sources of air pollution (<code>4:p5</code>–<code>p9</code>)<a class="anchor" href="#22-sources-of-air-pollution-1516">#</a></h3>
+<p><strong>What:</strong> five named man-made causes, plus a natural set that sets the baseline against which man-made pollution is judged.</p>
+<table>
+<thead>
+<tr>
+<th>Cause (<code>4:p5</code>–<code>p6</code>)</th>
+<th>What it releases</th>
+<th>Where</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Burning of fossil fuels</td>
+<td>SO₂ from coal, petroleum, factory combustibles</td>
+<td>Power plants, furnaces, boilers</td>
+</tr>
+<tr>
+<td>Agricultural activities</td>
+<td>Ammonia; insecticide, pesticide and fertilizer residues</td>
+<td>Fields, animal rearing, spraying</td>
+</tr>
+<tr>
+<td>Exhaust from factories and industries</td>
+<td>CO, hydrocarbons, organic compounds, chemicals</td>
+<td>Manufacturing plants, petroleum refineries</td>
+</tr>
+<tr>
+<td>Mining operations</td>
+<td>Dust and chemicals from extraction, blasting, crushing</td>
+<td>Open-cast and underground mines</td>
+</tr>
+<tr>
+<td>Indoor air pollution</td>
+<td>Toxic chemicals from household cleaning products, painting</td>
+<td>Homes, offices</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>Natural sources (<code>4:p7</code>): wind-blown dust from ground with little or no green cover; gases from body processes (CO₂ from respiration, methane from cattle digestion, O₂ from plants in photosynthesis); smoke from combustion of inflammable objects; volcanic eruptions.</li>
+<li>Man-made (<code>4:p8</code>): smoke from biomass, factories, vehicles, furnaces; <strong>landfill waste generating methane</strong>; harmful fumes from reactions between gases and chemicals.</li>
+<li>Industries responsible, beyond energy production (<code>4:p14</code>): petrochemical, chemical, mineral, and metal production/processing, plus water treatment, food industry, dry cleaning and garages. Processes are of two kinds — <strong>combustion of fuel oil, gas oil and natural gas</strong>, and <strong>production processes that emit without combusting</strong>.</li>
+<li>Natural sources matter numerically: about <strong>67% of atmospheric SOₓ is volcanic and other natural</strong> (<code>4:p19</code>), yet SO₂ is still an industrial pollutant because industry emits it <strong>where people are</strong>. Concentration, not mass, causes disease.</li>
+</ul>
+<p><strong>Trap:</strong> "categorize the causes" wants groups (fuel, industry, agriculture, mining, indoor, natural) — a flat list of six sentences with no grouping reads as five marks lost to a three-mark answer.</p>
+<h3 id="23-classification-primary-vs-secondary-point-vs-non-point-2324">2.3 Classification: primary vs secondary, point vs non-point (<code>4:p9</code>–<code>p15</code>)<a class="anchor" href="#23-classification-primary-vs-secondary-point-vs-non-point-2324">#</a></h3>
+<p><strong>What:</strong> two independent cuts — by how the pollutant is formed, and by how it leaves the plant.</p>
+<p><strong>Primary pollutants</strong> — emitted directly from identifiable sources: SO₂ from factories, particulate matter, NOₓ, volatile organic compounds, CO, lead (<code>4:p10</code>).
+<strong>Secondary pollutants</strong> — produced in the atmosphere when primary pollutants react with one another or with other chemicals: <strong>atmospheric sulphuric acid and photochemical smog</strong> are the deck's two examples (<code>4:p10</code>).</p>
+<table>
+<thead>
+<tr>
+<th>Cut</th>
+<th>Type</th>
+<th>Definition (<code>4:p10</code>, <code>4:p15</code>)</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Formation</td>
+<td>Primary</td>
+<td>Emitted directly, already harmful</td>
+<td>SO₂, PM, NOₓ, VOC, CO, Pb</td>
+</tr>
+<tr>
+<td>Formation</td>
+<td>Secondary</td>
+<td>Formed in air by reaction of primaries</td>
+<td>H₂SO₄ mist, photochemical smog, ground-level O₃, PAN</td>
+</tr>
+<tr>
+<td>Release</td>
+<td>Point source</td>
+<td>Discrete conveyance — chimney, pipe, vent; measurable</td>
+<td>Stack, flue</td>
+</tr>
+<tr>
+<td>Release</td>
+<td>Non-point (fugitive)</td>
+<td>Field sources (tanks, pools) or leaks (valves, taps, couplings); runoff</td>
+<td>Tank farm, flange leak, construction runoff</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>Why the first cut matters: a <strong>primary</strong> pollutant can be captured at the end of the pipe; a <strong>secondary</strong> one cannot — by the time it exists the pipe is kilometres behind, so only its precursors can be attacked.</li>
+<li><strong>Photochemical smog</strong> (<code>4:p13</code>): a complex series of reactions involving <strong>sunlight, NOₓ and VOCs</strong>; a <strong>brown haze</strong>, commonest in populated cities in warm climates; produces <strong>ground-level ozone and airborne particles</strong>; its formation is tied to the concentration of primary pollutants; the deck says it is most prominent <strong>during mornings and afternoons</strong>.</li>
+<li>Fugitive emissions never appear in a stack test, and together can exceed the stack — the honest reason a plant's emission inventory is usually an understatement.</li>
+<li>Place any pollutant on the <strong>source → pathway → receptor</strong> chain: every control in §2.9 acts at one of those three links.</li>
+</ul>
+<p><strong>Trap:</strong> ozone is a pollutant at ground level and a shield in the stratosphere — the same molecule, two sections, two opposite verdicts. Say which one you mean.</p>
+<h3 id="24-the-major-pollutants-industry-by-industry-30-3132">2.4 The major pollutants, industry by industry (<code>4:p14</code>, <code>4:p16</code>–<code>p23</code>)<a class="anchor" href="#24-the-major-pollutants-industry-by-industry-30-3132">#</a></h3>
+<p><strong>What:</strong> seven families carry the marks, and the deck gives each one a source list and an effect list.</p>
+<table>
+<thead>
+<tr>
+<th>Pollutant</th>
+<th>Sources in the deck</th>
+<th>Effects in the deck</th>
+<th>Mechanism (one line)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>CO</strong> (<code>4:p16</code>)</td>
+<td>Transport <strong>75%</strong>, residential wood burning <strong>10%</strong>, industrial processes <strong>15%</strong>; volcanoes, natural gas, seed germination</td>
+<td>Reduces oxygen-carrying capacity of blood; decreased vision; cardiovascular disorders</td>
+<td>Binds haemoglobin as carboxyhaemoglobin in preference to O₂ — no irritation, no warning</td>
+</tr>
+<tr>
+<td><strong>CO₂</strong> (<code>4:p17</code>)</td>
+<td>Fossil-fuel combustion, jet aircraft, burning</td>
+<td>Headache and nausea; raises global temperature</td>
+<td>Asphyxiant by displacement in confined space; greenhouse gas</td>
+</tr>
+<tr>
+<td><strong>NOₓ</strong> — NO, NO₂, N₂O (<code>4:p18</code>)</td>
+<td>Fuel combustion in vehicles and industry, lightning, forest fires, natural ionising radiation</td>
+<td>Reduced blood-carrying capacity; lung problems</td>
+<td>Made by <strong>heat</strong>, not fuel: N₂ + O₂ combine at flame temperature; NO₂ is poorly soluble, reaches small airways</td>
+</tr>
+<tr>
+<td><strong>SOₓ</strong> — SO₂, SO₃ (<code>4:p19</code>)</td>
+<td><strong>67% volcanic/natural</strong>; rest fossil-fuel burning, transport, industry</td>
+<td>Respiratory problems in risk groups; marble, cloth, paper, leather attacked; plants heavily affected</td>
+<td>Made by <strong>sulphur in the fuel</strong>; very soluble, absorbed as sulphite in nose and throat</td>
+</tr>
+<tr>
+<td><strong>Hydrocarbons</strong> (<code>4:p20</code>)</td>
+<td>Coal fields, natural fires, incomplete combustion, forest fires, agricultural burning</td>
+<td>Carcinogenic; form <strong>ozone and PAN</strong>; damage plants, rubber, fabric, paints</td>
+<td>Photochemical reaction with NOₓ in sunlight</td>
+</tr>
+<tr>
+<td><strong>NMVOC</strong> (<code>4:p21</code>)</td>
+<td>Vegetation, biomass burning, geogenic sources, human activity</td>
+<td>Carcinogenicity in some; liver, kidney, CNS damage; eye/nose/throat irritation; headache, loss of coordination, fatigue, dizziness; allergic skin reaction</td>
+<td>Lipid-soluble solvents; hepatic metabolism to reactive intermediates</td>
+</tr>
+<tr>
+<td><strong>Particulates</strong> (<code>4:p22</code>–<code>p23</code>)</td>
+<td>Diesel trucks and buses, construction equipment, power plants, wildfires</td>
+<td>Premature death, aggravated asthma, acute respiratory symptoms, chronic bronchitis, decreased lung function</td>
+<td><strong>Smaller diameter = greater damage</strong>, because it penetrates deeper; the fine fraction evades mucociliary clearance</td>
+</tr>
+<tr>
+<td><strong>Lead</strong> (<code>4:p25</code>)</td>
+<td>Metal processing, older fuels and paints</td>
+<td>Poisoning; liver and kidney damage at high concentration</td>
+<td>Blocks haem synthesis (anaemia); mimics calcium, so it enters bone and the child's nervous system (standard)</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>Particulate family names, learn as a set (<code>4:p22</code>): <strong>aerosols, dust, smoke, fumes, mist, fog</strong> — all solid particles or liquid droplets suspended in air, varying widely in size.</li>
+<li>Industrial emissions list, quotable (<code>4:p24</code>): SO₂, particulates, NOₓ, CO and <strong>ammonia</strong>.</li>
+<li>Two particulate figures worth carrying: the deck's own rule that damage rises as diameter falls (<code>4:p22</code>); the conventional cut-offs are ~10 µm for the nose and ~2.5 µm for the alveoli <strong>(standard)</strong>.</li>
+</ul>
+<p><strong>Trap:</strong> CO and NOₓ are both "blood" pollutants and both are asked together — CO displaces O₂ from haemoglobin, NO₂'s nitrite oxidises haemoglobin to methaemoglobin. Two different mechanisms, two different words.</p>
+<h3 id="25-effects-on-human-health-4546">2.5 Effects on human health (<code>4:p24</code>–<code>p26</code>)<a class="anchor" href="#25-effects-on-human-health-4546">#</a></h3>
+<p><strong>What:</strong> short-term irritation, long-term organ damage, and a quantified share of ordinary respiratory disease.</p>
+<ul>
+<li>Scale of the claim: high concentrations from industrial zones cause <strong>morbidity and mortality</strong>, depending on the pollutant and the concentration the local population is exposed to (<code>4:p24</code>).</li>
+<li>The deck's quantitative line, worth memorising verbatim: <strong>around 30–40% of asthma cases and 20–30% of all respiratory disease are caused by air pollution</strong> (<code>4:p25</code>).</li>
+<li><strong>Short-term</strong> (<code>4:p24</code>): irritation of nose, eyes, throat; bronchitis; headache. <strong>Long-term</strong>: lung disease, chronic respiratory problems, damage to heart, brain and eyes.</li>
+<li>Effect-by-pollutant (<code>4:p25</code>): eye irritation — NOₓ, O₃, PAN, particulates · nose and throat irritation — SO₂, NOₓ · odour nuisance — H₂S, SO₂, NO₂, hydrocarbons · respiratory tract irritation — SOₓ, NOₓ, CO, O₃ · increased mortality · bronchitis and asthma — high SO₂, NO₂ and SPM · reduced O₂ carriage — CO and NO reacting with haemoglobin · lead poisoning, liver and kidney damage.</li>
+<li><strong>Five factors that decide how badly a person is affected</strong> (<code>4:p26</code>) — learn as a two-part list: nature of the pollutant · concentration · duration of exposure | state of health of the receptor · age group of the receptor. The first three belong to the exposure, the last two to the person.</li>
+<li>Solubility decides where the dose lands (standard, and it explains the deck's lists): a very soluble gas (SO₂, NH₃) gives up its mass in the nose and upper airway; a poorly soluble one (NO₂, O₃, phosgene) passes to the alveoli and produces delayed oedema.</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Pollutant</th>
+<th>Signature health effect</th>
+<th>Who is at risk</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SO₂</td>
+<td>Bronchoconstriction, bronchitis, asthma aggravation</td>
+<td>Asthmatics respond where healthy adults do not</td>
+</tr>
+<tr>
+<td>NO₂</td>
+<td>Airway inflammation, reduced blood O₂ carriage</td>
+<td>Existing respiratory disease</td>
+</tr>
+<tr>
+<td>CO</td>
+<td>Tissue hypoxia, impaired vision, cardiovascular strain</td>
+<td>Heart disease; confined spaces</td>
+</tr>
+<tr>
+<td>O₃ / PAN</td>
+<td>Eye and throat irritation, reduced lung function</td>
+<td>Children, outdoor workers</td>
+</tr>
+<tr>
+<td>PM (fine)</td>
+<td>Premature death, chronic bronchitis, asthma</td>
+<td>Elderly, children, existing heart disease (<code>4:p23</code>)</td>
+</tr>
+<tr>
+<td>Pb</td>
+<td>Anaemia, neuropathy, kidney damage</td>
+<td>Children</td>
+</tr>
+<tr>
+<td>H₂S, NH₃</td>
+<td>Odour nuisance, upper-airway irritation</td>
+<td>Neighbours of the plant</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Trap:</strong> the question "effect on human health" is worth more when you separate <em>acute irritation</em> from <em>chronic disease</em>, then attach one pollutant to each — the deck's own structure at <code>4:p24</code>.</p>
+<h3 id="26-effects-on-plants-54">2.6 Effects on plants (<code>4:p27</code>)<a class="anchor" href="#26-effects-on-plants-54">#</a></h3>
+<p><strong>What:</strong> gases enter through the stomata and injure the leaf — the single mechanism behind every symptom the deck lists.</p>
+<ul>
+<li>Entry: the gas diffuses through the stomatal pore and dissolves in the water film on the internal cell walls, becoming an acid or an oxidant in contact with living tissue. <strong>Roots are spared; leaves take the dose.</strong> Stomata are open in daylight, so injury is worst in bright, warm weather (standard — the deck gives the symptoms, not the entry route).</li>
+<li>The three named symptoms, each worth a mark:</li>
+<li><strong>Chlorosis</strong> — leaf bleaching from loss of chlorophyll, so photosynthesis is reduced; the plant is starving before it looks sick (<code>4:p27</code>).</li>
+<li><strong>Necrosis</strong> — dead spots on the leaf structure; irreversible, because the cells are dead, not depleted (<code>4:p27</code>).</li>
+<li><strong>Abscission</strong> — premature falling of leaves, the plant shedding tissue it can no longer maintain (<code>4:p27</code>).</li>
+<li>Whole-plant consequences (<code>4:p27</code>): suppressed growth and premature ageing · suppressed growth of vegetables · decreased agricultural yield · leaf injury and damage to young plants · decreased growth rate and increased death rate.</li>
+<li>The distinction an examiner rewards: <strong>visible injury and yield loss are different measurements</strong> — a crop can lose a fifth of its yield with almost no mark on it.</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Pollutant</th>
+<th>Plant symptom (<code>4:p27</code>, <code>4:p19</code>–<code>p20</code>)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SO₂</td>
+<td>Bleaching and chlorosis, then necrosis between the veins; "plants heavily affected"</td>
+</tr>
+<tr>
+<td>NOₓ</td>
+<td>Suppressed growth; contributes to acid deposition</td>
+</tr>
+<tr>
+<td>O₃ and PAN</td>
+<td>Necrotic flecks, premature ageing, abscission</td>
+</tr>
+<tr>
+<td>Hydrocarbons</td>
+<td>Damage to plants alongside rubber, fabric and paints</td>
+</tr>
+<tr>
+<td>Particulates</td>
+<td>Block stomata, cut light to the leaf</td>
+</tr>
+<tr>
+<td>Acid deposition</td>
+<td>Nutrient leaching and aluminium toxicity at the root (standard)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Trap:</strong> this is the internal 5-marker (Oct 2026). Five bullets, mechanism first — "suppressed growth, chlorosis, abscission, necrosis, yield loss" with no entry route reads as a list off a slide.</p>
+<h3 id="27-effects-on-animals-and-birds-62">2.7 Effects on animals and birds (<code>4:p29</code>)<a class="anchor" href="#27-effects-on-animals-and-birds-62">#</a></h3>
+<p><strong>What:</strong> the human pattern at lower intensity, plus two effects that have no human analogue — appetite and migration.</p>
+<ul>
+<li>Primary action on the <strong>mucous lining of the respiratory tract</strong>, causing <strong>bronchitis and asthma</strong> in livestock kept near a source.</li>
+<li><strong>Lack of appetite in pet animals</strong> — the deck's homely indicator, and the first thing a vet sees.</li>
+<li><strong>Acid deposition damages aquatic life</strong>, so a fish-eating bird or mammal loses its food base before it loses anything itself.</li>
+<li><strong>Migration of seasonal birds is hampered</strong> by severe air pollution — a behaviour effect, not a toxic one, but a population effect that takes years to show.</li>
+<li>Ozone depletion adds a separate animal burden: skin and eye cancer, and hampered larval development in amphibians (<code>4:p36</code>).</li>
+</ul>
+<p><strong>Trap:</strong> five bullets, and the last two (aquatic life via acid deposition, migration) are the ones that lift a 5/5 to a 7/8.</p>
+<h3 id="28-effects-on-materials-64">2.8 Effects on materials (<code>4:p28</code>)<a class="anchor" href="#28-effects-on-materials-64">#</a></h3>
+<p><strong>What:</strong> the most visible economic loss — corrosion, soiling and structural decay, all with one chemistry.</p>
+<ul>
+<li><strong>Acid deposition corrodes metals and eats away stone on statues and monuments</strong>; decolours buildings and cloth fabrics (<code>4:p28</code>).</li>
+<li><strong>Concrete:</strong> pollutants penetrate the structure and <strong>corrode the reinforcement</strong>, weakening structural members. The corrosion product occupies more volume than the steel it replaced, so the concrete spalls and the section is lost without ever being overloaded (mechanism standard).</li>
+<li>The chemistry, stated once and reused: <strong>SO₂ + O₂ + moisture → H₂SO₄</strong>; the acid reacts with <strong>limestone and marble (CaCO₃)</strong> to form calcium sulphate, which is soluble and recrystallises with a larger volume — so the surface crumbles rather than merely staining (<code>4:p28</code>).</li>
+<li><strong>Soiling and erosion</strong> of building materials; <strong>O₃ and PAN crack rubber and electrical insulation</strong>; SO₂, O₃, H₂S and aerosols <strong>damage protective coatings and paints</strong>, so the protection fails before the substrate does (<code>4:p28</code>).</li>
+<li><strong>Deterioration of artwork due to SPM</strong> (<code>4:p28</code>) — the line that makes the Taj Mahal answer possible without leaving the deck.</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Pollutant</th>
+<th>Material attacked</th>
+<th>Effect</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SO₂ → H₂SO₄</td>
+<td>Limestone, marble, metals, cloth, paper, leather</td>
+<td>Crumbling, corrosion, decolouration (<code>4:p19</code>, <code>4:p28</code>)</td>
+</tr>
+<tr>
+<td>O₃, PAN</td>
+<td>Rubber, electrical insulation, paints</td>
+<td>Cracking, coating failure (<code>4:p28</code>)</td>
+</tr>
+<tr>
+<td>H₂S</td>
+<td>Metals</td>
+<td>Tarnishing; odour nuisance (<code>4:p25</code>)</td>
+</tr>
+<tr>
+<td>SPM</td>
+<td>Stone, artwork, surfaces</td>
+<td>Soiling, erosion, loss of detail (<code>4:p28</code>)</td>
+</tr>
+<tr>
+<td>Acid deposition</td>
+<td>Reinforced concrete</td>
+<td>Rebar corrosion → expansion → spalling (<code>4:p28</code>)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Trap:</strong> the material answer is one chemistry told four times. If you write the H₂SO₄ + CaCO₃ reaction once, the statue, the facade and the concrete all follow from it.</p>
+<h3 id="29-air-pollution-control-75-76">2.9 Air pollution control (<code>4:p30</code>, <code>4:p31</code>)<a class="anchor" href="#29-air-pollution-control-75-76">#</a></h3>
+<p><strong>What:</strong> pollution cannot be fully prevented, only controlled — and the deck splits control into prevention (source) and cure (device).</p>
+<p><strong>Preventive measures — source control (<code>4:p30</code>)</strong>
+1. <strong>Selection of a suitable fuel</strong> — low-sulphur coal in a power plant, CNG instead of diesel; removes the precursor before it enters the furnace.
+2. <strong>Modification of the industrial process</strong> — attacks the formation mechanism instead of the emission (low-NOₓ burners, §2.11).
+3. <strong>Selection of a suitable site and zoning</strong> — reduces no gram of emission, but puts the source where the plume disperses before it reaches people.</p>
+<p><strong>Control measures — where source control is not possible (<code>4:p31</code>)</strong>
+- <strong>Collect</strong> the pollutants using equipment (cyclone, filter, precipitator, scrubber).
+- <strong>Destroy</strong> them by thermal or catalytic combustion.
+- <strong>Change</strong> them into a less toxic form.
+- <strong>Release through tall chimneys</strong> for greater dispersion — the weakest option: the mass is unchanged, and a local problem becomes a regional one.</p>
+<p><strong>Devices, with the force each uses (standard — the deck names only collection, not the hardware).</strong></p>
+<table>
+<thead>
+<tr>
+<th>Device</th>
+<th>Force</th>
+<th>Removes</th>
+<th>Limitation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Settling chamber</td>
+<td>Gravity</td>
+<td>Coarse grit only</td>
+<td>Huge, useless on fine dust</td>
+</tr>
+<tr>
+<td>Cyclone</td>
+<td>Centrifugal inertia</td>
+<td>Medium dust</td>
+<td>Fine fraction escapes with the gas</td>
+</tr>
+<tr>
+<td>Fabric filter (baghouse)</td>
+<td>Sieving, impaction, diffusion</td>
+<td>Fine dust, high efficiency</td>
+<td>Temperature, moisture; a torn bag fails silently</td>
+</tr>
+<tr>
+<td>Electrostatic precipitator</td>
+<td>Electrostatic attraction</td>
+<td>Fine dust at large volume — <strong>99%</strong> (<code>4:p44</code>)</td>
+<td>Cost, space, sensitive to dust resistivity</td>
+</tr>
+<tr>
+<td>Wet scrubber</td>
+<td>Impaction + absorption</td>
+<td>Dust and soluble gas together</td>
+<td>Liquid effluent, visible plume, fan power</td>
+</tr>
+<tr>
+<td>Catalytic converter</td>
+<td>Catalytic oxidation/reduction</td>
+<td>CO, hydrocarbons, NOₓ</td>
+<td>Poisoned by lead; narrow air–fuel window</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>Sequence for any answer: <strong>prevent at source → capture at the stack → disperse what remains → protect the receptor.</strong> Each capture device creates a solid or liquid waste that must itself be managed — closing the loop to §2.16.</li>
+</ul>
+<p><strong>Trap:</strong> a tall chimney is not a control. Say so in one clause and you have the discrimination mark.</p>
+<h3 id="210-depletion-of-the-ozone-layer-8081">2.10 Depletion of the ozone layer (<code>4:p32</code>–<code>p39</code>)<a class="anchor" href="#210-depletion-of-the-ozone-layer-8081">#</a></h3>
+<p><strong>What:</strong> the gradual thinning of the ozone layer in the upper atmosphere, caused by the release of compounds containing gaseous <strong>chlorine or bromine</strong> from industry and other human activity (<code>4:p33</code>).</p>
+<ul>
+<li>The layer: a region of the <strong>stratosphere</strong> with a high ozone concentration, absorbing <strong>97–99% of harmful UV</strong> radiation (<code>4:p32</code>).</li>
+<li>The measurement: a reduction of about <strong>5% between 1979 and 1990</strong> (<code>4:p32</code>).</li>
+<li><strong>Ozone hole ≠ general thinning:</strong> the hole is the <strong>annual, temporary reduction in the polar regions</strong>, where large losses occur each spring followed by recovery in summer (<code>4:p32</code>). Not a gap — a region where the column has fallen by more than half.</li>
+<li><strong>ODS</strong> — compounds that release chlorine or bromine on exposure to high UV (<code>4:p33</code>):</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Halogen</th>
+<th>ODS families (<code>4:p33</code>)</th>
+<th>Uses (<code>4:p34</code>)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Chlorine</td>
+<td><strong>CFCs (most abundant)</strong>, carbon tetrachloride, HCFCs</td>
+<td>Solvents, spray aerosols, refrigerators, air conditioners</td>
+</tr>
+<tr>
+<td>Bromine</td>
+<td>Halons, methyl bromide, hydrobromofluorocarbons</td>
+<td>Fire extinguishers, fumigation</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>Causes</strong> (<code>4:p34</code>–<code>p35</code>): CFCs above all (their stratospheric molecules are broken by UV, releasing chlorine atoms that attack ozone) · <strong>unregulated rocket launches</strong>, which the deck claims may deplete more than CFCs and could cost a huge loss of layer by <strong>2050</strong> · <strong>nitrogenous compounds</strong> NO, NO₂, N₂O · natural causes — sunspots, stratospheric winds, volcanic eruptions, but <strong>not more than 1–2%</strong> of the depletion.</li>
+<li><strong>The catalytic mechanism</strong> (standard, and the marks live here): UV-C splits the C–Cl bond → Cl· attacks O₃ giving ClO + O₂ → ClO meets a free O atom, returns the oxygen and <strong>regenerates Cl·</strong> → the cycle repeats thousands of times. The chlorine is a <strong>catalyst: regenerated, never consumed</strong>, which is why a trace mass of CFC does enormous damage.</li>
+<li><strong>Effects</strong> (<code>4:p36</code>–<code>p37</code>): <em>human</em> — direct exposure to UV; skin disease, cancer, sunburn, quick ageing, weakened immune system · <em>animals</em> — skin and eye cancer; hampered growth and development of larvae in many species, amphibians included · <em>environment</em> — minimal growth, flowering and photosynthesis in plants; forests affected · <em>marine</em> — plankton badly affected, and everything above them in the food chain follows.</li>
+<li><strong>Solutions</strong> (<code>4:p38</code>–<code>p39</code>): avoid CFCs — no CFC refrigerators and air conditioners, replace halon extinguishers · minimise vehicle use (greenhouse gases and ozone depletion) · eco-friendly cleaning products instead of chlorine- and bromine-releasing ones · prohibit nitrous oxide use, with public awareness so it is minimised at individual level.</li>
+<li><strong>The treaty (standard):</strong> the <strong>Montreal Protocol, 1987</strong>, phased out CFCs, then halons, then HCFCs. Caveat worth one line: the common substitutes (HFCs) are potent greenhouse gases, so part of the burden moved from ozone to climate.</li>
+</ul>
+<p><strong>Trap:</strong> "causes, effects and solutions" is a three-part question, and the marks are 1 + 2 + 1 with the cycle carrying the rest. Do not spend the whole answer on effects.</p>
+<h3 id="211-clean-coal-combustion-technology-9596">2.11 Clean coal combustion technology (<code>4:p40</code>–<code>p48</code>)<a class="anchor" href="#211-clean-coal-combustion-technology-9596">#</a></h3>
+<p><strong>What:</strong> CCTs are technologies designed to <strong>enhance the efficiency of conversion and the environmental acceptability of coal extraction, preparation and use</strong> (<code>4:p40</code>) — a family of processes across the whole chain, not a clean fuel.</p>
+<ul>
+<li>Why coal survives at all: it is the <strong>cheapest fuel per unit of heat</strong> delivered to a power station (<code>4:p42</code>). That single economic fact explains the expense of the suite, and it is also why the verdict at the end matters.</li>
+<li>The deck's own structure is a chain — <strong>prepare → burn better → gasify → capture</strong> — and the chain is the answer.</li>
+</ul>
+<p><strong>1. Before combustion — coal washing (<code>4:p42</code>).</strong> Grind the coal into pieces and pass it through gravity separation: a barrel of liquid at a chosen specific density, in which <strong>coal floats and impurities sink</strong>. Clean coal is less dense than shale and pyritic sulphur, so the separation needs no chemical reaction at all. Removes ash and part of the sulphur before the furnace, cutting both the particulate load and the SO₂ the flue plant must later capture.</p>
+<p><strong>2. During combustion — low-NOₓ burners (<code>4:p43</code>), three stages.</strong>
+- <strong>First:</strong> combustion in an <strong>oxygen-deficient zone</strong>, where NOₓ would normally form.
+- <strong>Second:</strong> hydrocarbons are formed, which react with the NOₓ already present and reduce it.
+- <strong>Third:</strong> internal air staging completes the combustion — but this stage can make fresh NOₓ, which is minimised by <strong>completing combustion in an air-lean environment</strong>.</p>
+<p><strong>3. After combustion — flue-gas desulphurisation (<code>4:p43</code>).</strong> Limestone and water are sprayed into the flue; <strong>SO₂ + CaCO₃ → gypsum (calcium sulphate)</strong>, which is collected and used in construction. The deck gives <strong>99% effective</strong>. The sale of the by-product is what keeps the economics tolerable.</p>
+<p><strong>4. Particulates — electrostatic precipitators (<code>4:p44</code>).</strong> An electric field removes charged particles; <strong>99% effective</strong>.</p>
+<p><strong>5. Gasification (<code>4:p45</code>).</strong> Coal reacted with <strong>oxygen and steam</strong> to form <strong>syngas — mostly hydrogen with some CO</strong> — which is cleaned and burned to turn a turbine; as the gas cools it heats water for a <strong>second turbine</strong>. Deck's assessment: seen as part of a zero-emission system; SO₂ and NOₓ already low and further improved; <strong>up to 45% efficient</strong>; <strong>unproven at scale — only demonstration units</strong>; syngas is cleaned cold today, hot cleaning would raise efficiency; costly, but existing plants can be modified.</p>
+<p><strong>6. Carbon capture and storage (<code>4:p46</code>).</strong> Capture CO₂ and store it underground — <strong>geosequestration</strong>. Problems as the deck lists them: CO₂ is hard to capture; once captured it must be <strong>liquefied, which takes 20% of the energy the coal yielded</strong>; the storage site must be monitored; only so many formations suit mass storage; transport is costly.</p>
+<p><strong>7. Fuel cells and plasma (<code>4:p47</code>).</strong> Hydrogen from coal reacted with oxygen electrochemically — early development, costly. Plasma route: coal burned to an extremely hot gas or plasma, given an electrical charge by adding a compound such as <strong>potassium salt</strong>, passed through a magnetic field to generate electricity, with the heat also driving a steam turbine.</p>
+<p><strong>The verdict, verbatim (<code>4:p48</code>):</strong> <em>there is no way to make coal clean.</em> Gasification makes burning more efficient but the coal still burns and still produces CO₂; CCS can put that CO₂ underground but may create future problems; coal is inefficient and a huge cause of global warming, but cheap. "Clean coal" describes many different technologies, and as a description of the fuel it is by no means accurate.</p>
+<table>
+<thead>
+<tr>
+<th>Stage</th>
+<th>Technology</th>
+<th>Deck's number</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Preparation</td>
+<td>Dense-medium coal washing</td>
+<td>— (density separation)</td>
+</tr>
+<tr>
+<td>Combustion</td>
+<td>Low-NOₓ burner, three-stage air staging</td>
+<td>—</td>
+</tr>
+<tr>
+<td>Flue gas — sulphur</td>
+<td>Limestone FGD → gypsum</td>
+<td><strong>99%</strong> (<code>4:p43</code>)</td>
+</tr>
+<tr>
+<td>Flue gas — particles</td>
+<td>Electrostatic precipitator</td>
+<td><strong>99%</strong> (<code>4:p44</code>)</td>
+</tr>
+<tr>
+<td>Conversion</td>
+<td>Gasification + combined cycle (IGCC)</td>
+<td><strong>up to 45% efficient</strong> (<code>4:p45</code>)</td>
+</tr>
+<tr>
+<td>CO₂</td>
+<td>Capture and storage (geosequestration)</td>
+<td><strong>20% energy penalty</strong> (<code>4:p46</code>)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Trap:</strong> the question is "elaborate on the <strong>concept</strong>", and the concept includes the verdict. An answer that lists seven technologies and claims coal has been made clean loses the last two marks that the deck's own slide at <code>4:p48</code> hands you.</p>
+<h3 id="212-water-pollution-sources-and-types-112113">2.12 Water pollution: sources and types (<code>4:p50</code>–<code>p61</code>)<a class="anchor" href="#212-water-pollution-sources-and-types-112113">#</a></h3>
+<p><strong>What:</strong> contamination of water bodies — lakes, rivers, oceans and groundwater — usually by human activity: any change in the physical, chemical or biological properties of water that has a detrimental consequence for living things (<code>4:p50</code>).</p>
+<ul>
+<li>Occurs when pollutants are discharged <strong>directly or indirectly</strong> into a water body <strong>without enough treatment</strong> to remove the harmful compounds; the deck calls water pollution <strong>the second most important environmental concern alongside air pollution</strong> (<code>4:p50</code>).</li>
+<li><strong>Point sources</strong> (<code>4:p52</code>): discharge directly at a known place — oil wells near water bodies, factories, power plants, underground coal mines.</li>
+<li><strong>Non-point sources</strong> (<code>4:p52</code>): no specific location — runoff from agricultural fields, lawns, gardens, construction sites, roads and streets. As with air, the harder problem: there is nothing to put a pipe on and nothing to sample.</li>
+<li><strong>Seven types the deck names</strong> (<code>4:p55</code>–<code>p61</code>), and this list is itself a 5-mark answer:</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Mechanism (<code>4:p55</code>–<code>p61</code>)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1. Nutrients pollution</td>
+<td>High nutrient wastewater, fertilizers, sewage → algae and weed growth → undrinkable, clogged filters, oxygen used up, organisms die of oxygen starvation</td>
+</tr>
+<tr>
+<td>2. Surface water pollution</td>
+<td>Hazardous substances dissolving or mixing physically with rivers, lakes, lagoons, oceans</td>
+</tr>
+<tr>
+<td>3. Oxygen depleting</td>
+<td>Too much biodegradable matter → more micro-organisms → oxygen used up → aerobics die, anaerobics produce ammonia and sulphides</td>
+</tr>
+<tr>
+<td>4. Ground water pollution</td>
+<td>Pesticides and chemicals washed deep by rain into underground water; wells and boreholes must then be checked</td>
+</tr>
+<tr>
+<td>5. Suspended matter</td>
+<td>Insoluble particulate matter settles; harms or kills bottom-living aquatic life</td>
+</tr>
+<tr>
+<td>6. Chemical water pollution</td>
+<td>Weed, insect and pest control chemicals; metals and solvents from industry; poison aquatic life, slow development, cause infertility</td>
+</tr>
+<tr>
+<td>7. Oil spillage</td>
+<td>Localised but can spread for miles; kills fish, sticks to seabirds' feathers and destroys flight</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Trap:</strong> the seven types and the eleven pollutant families (§2.13) are different lists. "Types of water pollution" ≠ "water pollutants" — mixing them is the commonest way to lose the structure marks.</p>
+<h3 id="213-water-pollutants-family-by-family-122123">2.13 Water pollutants, family by family (<code>4:p62</code>–<code>p68</code>)<a class="anchor" href="#213-water-pollutants-family-by-family-122123">#</a></h3>
+<p><strong>What:</strong> eleven substance families, each with a mechanism in the water — and this is the source list for the internal "five pollutants and their health hazards" question.</p>
+<p>Deck's own entry list (<code>4:p62</code>): domestic sewage from riverside areas · industrial effluents with high oil, heavy metals and detergents · chemical fertilizers, pesticides, insecticides, herbicides and plant remains · radioactive waste from nuclear reactors · excretory wastes of humans and animals.</p>
+<table>
+<thead>
+<tr>
+<th>Family (<code>4:p63</code>–<code>p68</code>)</th>
+<th>What it does in the water</th>
+<th>Health or use consequence</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Inorganic salts</strong> — nitrates, phosphates, carbonates, chlorides, sulphates of Ca, Mg, Fe</td>
+<td>Make water hard, scale pipes; nitrates and phosphates → algal bloom (eutrophication)</td>
+<td>Increased soap consumption, iron stains on fabric; undrinkable</td>
+</tr>
+<tr>
+<td><strong>Acids and alkalis</strong> — soap making, textile dyeing, leather tanning</td>
+<td>Push pH outside the natural <strong>6–8</strong></td>
+<td>Directly lethal to fish; high pH detrimental to aquatic life</td>
+</tr>
+<tr>
+<td><strong>Organic matter</strong> — sewage, food waste, slaughterhouse washings</td>
+<td>Decomposition consumes dissolved oxygen faster than it is replenished</td>
+<td>Oxygen depletion; fish need <strong>8 to 4 mg/l</strong> of DO</td>
+</tr>
+<tr>
+<td><strong>Suspended solids</strong></td>
+<td>Settle or stay suspended; raise turbidity; bank deposits decompose</td>
+<td>Smothering of the bed; odour nuisance</td>
+</tr>
+<tr>
+<td><strong>Floating matter</strong> — oil, grease, foam</td>
+<td>Unsightly; obstruct light; hinder self-purification</td>
+<td>Blocks re-aeration and photosynthesis</td>
+</tr>
+<tr>
+<td><strong>Thermal discharge</strong> — cooling water from nuclear plants, boilers</td>
+<td>Warm water is lighter → <strong>stratification</strong>; bacterial action rises → DO falls</td>
+<td>Aquatic life retreats to the stream bottom</td>
+</tr>
+<tr>
+<td><strong>Colouring materials</strong> — textile, paper mills, tanneries, slaughterhouses</td>
+<td>Reduce sunlight transmission, hence natural disinfection</td>
+<td>Indicator of pollution; public attention</td>
+</tr>
+<tr>
+<td><strong>Toxic chemicals</strong> — cyanides, sulphides, acetylene, alcohols</td>
+<td>Cumulative effect on the aquatic environment</td>
+<td><strong>Hexavalent chromium in wet cement</strong> is water-soluble, soaks through skin, causes allergic reaction</td>
+</tr>
+<tr>
+<td><strong>Micro-organisms</strong> — domestic sector, food industries, slaughterhouses</td>
+<td>Two kinds: those that degrade organic matter, and those that are <strong>pathogenic</strong></td>
+<td>Water-borne disease; diarrhoea and pneumonia are the biggest killers of children under five in India</td>
+</tr>
+<tr>
+<td><strong>Radioactive materials</strong> — radioisotopes emitting ionising radiation</td>
+<td>Not readily detectable by usual contaminant tests</td>
+<td>Mutation and cancer on high exposure</td>
+</tr>
+<tr>
+<td><strong>Foam-producing matter</strong> — textile, pulp and paper, chemical manufacture</td>
+<td>Undesirable appearance of the receiving stream</td>
+<td>Aesthetic and oxygen-transfer effect</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Trap:</strong> "thermal discharge" is a pollutant with no mass. Examiners like it because it shows you understand that pollution is a change in properties, not only an added substance.</p>
+<h3 id="214-health-hazards-of-water-pollutants-127128">2.14 Health hazards of water pollutants (<code>4:p69</code>–<code>p75</code>)<a class="anchor" href="#214-health-hazards-of-water-pollutants-127128">#</a></h3>
+<p><strong>What:</strong> the largest environmental-health burden in India, plus two food-chain mechanisms that turn a small discharge into a large dose.</p>
+<ul>
+<li><strong>Water-borne disease</strong> (<code>4:p70</code>): consumption of polluted water is a major cause of ill health in India; the deck's list is <strong>cholera, dysentery, diarrhoea, tuberculosis, jaundice</strong>. About <strong>80% of stomach diseases in India are caused by polluted water</strong>.</li>
+<li><strong>Metals</strong> (<code>4:p70</code>): excess metals in drinking water cause general body weakness, mental retardation, failure of internal organs, cancers and even death. Trace Mn, Zn and Cu are essential and regulate physiological functions; the same metals are toxic in excess (<code>4:p73</code>).</li>
+<li><strong>Shellfish</strong> (<code>4:p69</code>): sewage in water poisons shellfish, which then cause <strong>paralytic shellfish poisoning</strong> in the people who eat them — the filter feeder concentrates the toxin and cooking does not destroy it.</li>
+<li><strong>Eutrophication</strong> (<code>4:p71</code>–<code>p72</code>) — <em>the enrichment of water with nutrients such as nitrates and phosphates that triggers the growth of green algae.</em> The deck's cascade, reproduce it in order:</li>
+</ul>
+<p>sewage/fertiliser runoff → nutrient enrichment of the lake → algae multiply into an <strong>algal bloom</strong> → algae use up oxygen and begin to die → decomposers (bacteria) multiply and use more oxygen → fish and other organisms die of oxygen shortage.</p>
+<p>The bloom is the visible symptom; the <strong>decomposer step is the mechanism</strong>, so an answer that stops at green water stops at half marks.
+- <strong>Biomagnification</strong> (<code>4:p74</code>–<code>p75</code>) — <em>the entry of harmful non-biodegradable chemicals in small concentrations and their accumulation in greater concentrations at successive levels of the food chain.</em> The deck's worked example, learn the numbers:</p>
+<p><strong>water 0.2 ppm → algae 77 ppm → fish 500–600 ppm → pelican (top consumer) 1700 ppm</strong></p>
+<p>DDT is not metabolised and not excreted efficiently, so each level retains what it eats. The consequence in birds is <strong>weak egg shells</strong>, hence a falling population — a population effect from a concentration that was never toxic in the water.
+- <strong>Effects beyond health</strong> (<code>4:p69</code>): tourism damaged; oil spills hit coastal communities; urban water bodies polluted by both individual garbage and chemicals dumped legally or illegally by industry, health centres, schools and markets.</p>
+<table>
+<thead>
+<tr>
+<th>Pollutant</th>
+<th>Health hazard</th>
+<th>Mechanism</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Pathogens (sewage)</td>
+<td>Cholera, dysentery, diarrhoea, tuberculosis, jaundice (<code>4:p70</code>)</td>
+<td>Faecal–oral; 80% of stomach disease</td>
+</tr>
+<tr>
+<td>Nitrates, phosphates</td>
+<td>Eutrophication; methaemoglobinaemia in infants (standard)</td>
+<td>Algal bloom → oxygen crash</td>
+</tr>
+<tr>
+<td>Lead</td>
+<td>Anaemia, neuropathy, cognitive loss in children (standard)</td>
+<td>Blocks haem synthesis; mimics calcium</td>
+</tr>
+<tr>
+<td>Mercury</td>
+<td>Neurological damage (<code>4:p70</code> general; standard for detail)</td>
+<td>Methylated in sediment, biomagnified</td>
+</tr>
+<tr>
+<td>Cadmium</td>
+<td>Kidney damage, bone softening (standard)</td>
+<td>Concentrates in kidney</td>
+</tr>
+<tr>
+<td>Hexavalent chromium</td>
+<td>Allergic dermatitis; carcinogen by inhalation (<code>4:p67</code>)</td>
+<td>Water-soluble, penetrates skin</td>
+</tr>
+<tr>
+<td>Arsenic</td>
+<td>Skin lesions, cancers (standard)</td>
+<td>Groundwater contamination</td>
+</tr>
+<tr>
+<td>Pesticides (DDT)</td>
+<td>Biomagnification; eggshell thinning (<code>4:p74</code>–<code>p75</code>)</td>
+<td>Non-biodegradable, lipophilic</td>
+</tr>
+<tr>
+<td>Radioisotopes</td>
+<td>Mutation and cancer (<code>4:p68</code>)</td>
+<td>Ionising radiation, undetected by routine tests</td>
+</tr>
+<tr>
+<td>Oil</td>
+<td>Smothering, tainting (<code>4:p61</code>)</td>
+<td>Physical coating of organisms and feathers</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Trap:</strong> the 5-mark internal is "<strong>five</strong> pollutants <strong>and their health hazards</strong>" — five rows, one hazard each, mechanism in the same line. Ten lines of prose about water pollution scores three.</p>
+<h3 id="215-effluent-quality-standards-145-146147">2.15 Effluent quality standards (<code>4:p50</code>, <code>4:p63</code>–<code>p68</code>)<a class="anchor" href="#215-effluent-quality-standards-145-146147">#</a></h3>
+<p><strong>What:</strong> a limit placed on a listed parameter in a discharge, so that the receiving water can still meet its designated use (standard definition — the deck does not define the term).</p>
+<ul>
+<li><strong>The deck gives no numeric effluent standard.</strong> It never states a BOD, COD, suspended-solids, oil-and-grease, ammonia or metals limit, and attributes no standard to any authority. Do not invent one, and do not attribute a figure to CPCB/IS 10500 that the deck does not carry.</li>
+<li>What the deck does supply, and all it supplies, are the <strong>two water-quality numbers</strong> — and both are about the <em>receiving water</em>, not the effluent:</li>
+<li>natural pH of most fresh water bodies: <strong>6 to 8</strong> (<code>4:p64</code>);</li>
+<li>minimum dissolved oxygen for fish life: <strong>8 to 4 mg/l</strong>, the deck's own wording (<code>4:p65</code>).</li>
+<li>The parameters an effluent standard controls, and why each, built from the deck's pollutant list:</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Why it is limited</th>
+<th>Value the deck gives</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>pH</td>
+<td>Governs every chemical and biological behaviour; extreme values are directly lethal</td>
+<td>Natural fresh water 6–8 (<code>4:p64</code>)</td>
+</tr>
+<tr>
+<td>Dissolved oxygen</td>
+<td>The state of the receiving water, not of the effluent</td>
+<td>4–8 mg/l minimum for fish (<code>4:p65</code>)</td>
+</tr>
+<tr>
+<td>BOD</td>
+<td>Oxygen the discharge will steal from the river</td>
+<td><strong>deck gives no value</strong></td>
+</tr>
+<tr>
+<td>COD</td>
+<td>Total oxidisable load, including the non-biodegradable fraction</td>
+<td><strong>deck gives no value</strong></td>
+</tr>
+<tr>
+<td>Total suspended solids</td>
+<td>Turbidity, smothering, adsorbed pollutants</td>
+<td><strong>deck gives no value</strong></td>
+</tr>
+<tr>
+<td>Oil and grease</td>
+<td>Floating film, light blockage, hindered re-aeration</td>
+<td><strong>deck gives no value</strong></td>
+</tr>
+<tr>
+<td>Temperature</td>
+<td>Thermal stratification and oxygen loss</td>
+<td><strong>deck gives no value</strong></td>
+</tr>
+<tr>
+<td>Toxic metals, cyanides</td>
+<td>Cumulative poisoning, carcinogenicity</td>
+<td><strong>deck gives no value</strong></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>BOD, COD and DO, functionally</strong> (standard; the deck discusses oxygen depletion at <code>4:p65</code> and <code>4:p57</code> but never names BOD or COD): <strong>DO</strong> is what the fish breathe · <strong>BOD</strong> is the oxygen micro-organisms will take while oxidising the biodegradable matter, so it measures the food the water carries · <strong>COD</strong> is the oxygen equivalent of everything a strong chemical oxidant can oxidise, biodegradable or not. COD ≥ BOD always, and the <strong>gap measures the non-biodegradable fraction</strong> — a high COD with a low BOD means solvents or dyes that will pass a biological plant untouched, which is why both are measured.</li>
+<li>Structure of a standards answer, if the paper wants one: <strong>parameter → why limited → who it protects → how it is checked</strong>. Then state plainly that the deck's numbers are pH 6–8 and DO 4–8 mg/l and that discharge limits are set per industry by the pollution control authority (standard).</li>
+</ul>
+<p><strong>Trap:</strong> the safest high-scoring line in the whole kit — <em>"the deck gives the parameters, not the limits; the only figures it supplies are pH 6–8 and DO 4–8 mg/l."</em> A wrong number in a standards answer costs more than an honest sentence.</p>
+<h3 id="216-waste-identification-and-characterisation-154-155">2.16 Waste: identification and characterisation (<code>4:p78</code>, <code>4:p79</code>)<a class="anchor" href="#216-waste-identification-and-characterisation-154-155">#</a></h3>
+<p><strong>What:</strong> waste management is <em>the collection, transport, recovery and disposal of waste, including the supervision of such operations and aftercare of disposal sites</em> — the EU Directive wording the deck adopts (<code>4:p79</code>).</p>
+<ul>
+<li>Scope (<code>4:p78</code>): collection · transport · treatment · disposal · monitoring and regulation of processes, laws, technologies and economic mechanisms. It deals with industrial, biological, household, municipal, organic, biomedical and radioactive waste, and its purpose is to <strong>reduce the adverse effects of waste on human health, the environment, planetary resources and aesthetics</strong>. A major part of the practice is municipal waste.</li>
+<li>The newer layer (<code>4:p79</code>): waste management now means <strong>reduce, reuse and recycle</strong>, over and above disposal.</li>
+<li>Waste may be <strong>solid, liquid or gaseous</strong>; <strong>biodegradable or non-biodegradable</strong>; <strong>hazardous or non-hazardous</strong> (<code>4:p78</code>) — three independent cuts, learn them as a triple, not a list.</li>
+<li><strong>Identification</strong> (standard): the waste audit — take each process or department, list every material leaving it, measure it by weight or volume over a stated period, and build a composition profile. Without the profile, a recycling scheme is designed for the waste the designer imagines.</li>
+<li><strong>Characterisation</strong> (standard): the properties that decide which route is possible — <em>physical</em> (bulk density, moisture, particle size, calorific value), <em>chemical</em> (proximate analysis — moisture, volatiles, fixed carbon, ash; pH; heavy metals; chlorine and sulphur; leaching potential), <em>biological</em> (biodegradable fraction, pathogen content).</li>
+<li>Why characterisation exists: <strong>moisture and biodegradability point to composting, calorific value to incineration, chlorine to a dioxin problem, heavy metals to leachate risk.</strong> It is a routing decision, not a laboratory exercise.</li>
+</ul>
+<p><strong>Trap:</strong> identification, characterisation and classification are three different verbs. Identification = <em>what is in the bin</em>; characterisation = <em>what are its properties</em>; classification = <em>which legal stream does it belong to</em>.</p>
+<h3 id="217-waste-classification-160-161-162-163-164">2.17 Waste classification (<code>4:p78</code>, <code>4:p82</code>, <code>4:p100</code>, <code>4:p102</code>, <code>4:p124</code>)<a class="anchor" href="#217-waste-classification-160-161-162-163-164">#</a></h3>
+<p><strong>What:</strong> sorting the inventory into categories that each carry their own legal route — by source, by physical state, by hazard.</p>
+<ul>
+<li><strong>By source</strong> (<code>4:p78</code>): municipal, industrial, household, commercial/institutional, biological, organic, biomedical, radioactive — plus <strong>construction and demolition</strong> and <strong>electronic</strong> (standard; the deck treats e-waste separately at <code>4:p102</code>).</li>
+<li><strong>By physical state</strong>: solid, liquid, sludge, gas (<code>4:p78</code>).</li>
+<li><strong>By hazard</strong> (<code>4:p78</code>): hazardous or non-hazardous. Hazardous is a <em>set of characteristics</em> — ignitable, corrosive, reactive, toxic, infectious, radioactive (standard; the deck's own binary is at <code>4:p78</code>). A waste is hazardous if it exhibits any one, which is why a laboratory solvent and a discarded thermometer travel the same route.</li>
+<li><strong>Radioactive waste</strong> (<code>4:p100</code>): waste containing radioactive material, usually a by-product of nuclear power generation and other applications of nuclear fission or nuclear technology, such as research and medicine. Sources are natural — cosmic rays, radioactive rocks and minerals in the earth, radionuclides in organisms (<strong>K-40, tritium H-3, C-14, radium, polonium</strong> especially in bone, <strong>radon</strong> especially in lung) — and man-made.</li>
+<li><strong>E-waste</strong> (<code>4:p102</code>): electronic and electrical equipment or products that have become obsolete through changes in fashion, style and status, or because they are nearing the end of their useful life.</li>
+<li><strong>Health hazards of radioactive waste</strong> (<code>4:p124</code>), a quotable seven: behavioural abnormalities · cancer · genetic mutations · physiological malfunction such as kidney failure · respiratory problems · heart disease · physical deformation · birth defects.</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Stream</th>
+<th>Typical source</th>
+<th>Character</th>
+<th>Route</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Municipal solid waste</td>
+<td>Households, markets, streets</td>
+<td>Mixed, wet, high biodegradable fraction</td>
+<td>Segregation, composting, recycling, sanitary landfill</td>
+</tr>
+<tr>
+<td>Industrial waste</td>
+<td>Manufacturing, processing</td>
+<td>Variable — inert or hazardous</td>
+<td>Reuse in process, treatment, secure landfill</td>
+</tr>
+<tr>
+<td>Hazardous waste</td>
+<td>Chemical plants, workshops, laboratories</td>
+<td>Ignitable, corrosive, reactive or toxic</td>
+<td>Licensed treatment, storage and disposal</td>
+</tr>
+<tr>
+<td>Biomedical waste</td>
+<td>Hospitals, clinics, laboratories</td>
+<td>Infectious, sharps, pathological</td>
+<td>Autoclave or incinerate; never mixed with municipal</td>
+</tr>
+<tr>
+<td>Electronic waste (<code>4:p102</code>)</td>
+<td>Obsolete appliances and equipment</td>
+<td>Metals, plastics, lead, mercury, flame retardants</td>
+<td>Dismantling and material recovery by authorised recyclers</td>
+</tr>
+<tr>
+<td>Radioactive waste (<code>4:p100</code>)</td>
+<td>Nuclear power, research, medicine</td>
+<td>Ionising, long-lived</td>
+<td>Engineered storage and disposal (Module III kit — radioactive waste disposal)</td>
+</tr>
+<tr>
+<td>Construction debris</td>
+<td>Demolition and site clearance</td>
+<td>Inert, heavy, bulky</td>
+<td>Crushing for aggregate; fill</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>Segregation at source is the decision that fixes everything downstream</strong> (standard, and the single most examinable sentence here): a mixed stream cannot be composted (plastic and batteries enter the windrow), cannot be recycled economically (separation cost exceeds the recovered value), and cannot be incinerated safely (chlorine and heavy metals become dioxins and contaminated fly ash).</li>
+<li><strong>Effects of waste that justify the effort</strong> (<code>4:p82</code>): environmental — surface water contamination, groundwater contamination, soil contamination, air contamination; economic — municipal wellbeing, recycling revenue.</li>
+</ul>
+<p><strong>Trap:</strong> "hazardous" is not a synonym for "industrial" and not a synonym for "chemical". It is six named characteristics; say them.</p>
+<h3 id="218-waste-hierarchy-recycling-and-reuse-176177-178">2.18 Waste hierarchy, recycling and reuse (<code>4:p80</code>–<code>p86</code>, <code>4:p125</code>)<a class="anchor" href="#218-waste-hierarchy-recycling-and-reuse-176177-178">#</a></h3>
+<p><strong>What:</strong> the ranking of waste management options by preference — <strong>prevention, reuse, recycling, energy recovery, disposal</strong> — in which each step down consumes more energy and destroys more of the material's value (standard; the deck's hierarchy is a figure at <code>4:p80</code>–<code>p81</code>).</p>
+<ul>
+<li><strong>Reduce</strong> — the only option that prevents the cost rather than managing it. Deck's examples (<code>4:p84</code>): double-sided copies · circulate memos, documents and periodicals · durable cups and silverware · proof-read on screen · buy in bulk or with minimal packaging · read periodicals online · send e-cards.</li>
+<li><strong>Reuse</strong> — keeps an object in service without reprocessing. Deck's examples (<code>4:p86</code>): reuse envelopes · single-sided paper as scratch paper · foam peanuts and packaging · remanufactured or surplus office equipment · rechargeable batteries · refillable cartridges · compost grass clippings and food waste · donate toys and items to charity.</li>
+<li><strong>Recycle</strong> — breaks the material down and makes something new. Deck's five benefits (<code>4:p83</code>): saves limited natural resources · prevents greenhouse gas emissions and water pollutants · saves energy · provides raw materials for industry and creates jobs · saves landfill space.</li>
+<li><strong>Recycling and reuse of hazardous waste</strong> (<code>4:p125</code>) — the deck's own economics, in two columns:</li>
+<li><em>Environmental:</em> reduced consumption of raw materials · reduced pollution · reduced energy use · reduced volume of water.</li>
+<li><em>Economic:</em> recycling raises production efficiency and cuts raw-material purchase cost · recycling may eliminate the waste stream and with it the legal-regulatory requirements for disposing of it.</li>
+<li><strong>The rest of the ladder (standard):</strong> energy recovery by <strong>incineration</strong> (cuts volume, recovers calorific value, but heavy metals and chlorine leave in flue gas and fly ash, and poor combustion makes dioxins — so fly ash is itself hazardous); <strong>composting</strong> (aerobic windrows turned to keep oxygen in, product a soil conditioner) versus <strong>anaerobic digestion</strong> (sealed reactor, produces biogas mostly methane plus a digestate fertiliser — composting releases the carbon, digestion captures it as fuel); <strong>sanitary landfill</strong> (compacted clay plus synthetic liner, leachate collection and treatment, gas wells to vent or flare methane, daily soil cover, capped and monitored for decades).</li>
+<li><strong>Extended producer responsibility</strong> (standard): take-back and safe-disposal cost sits with the producer, because only the producer can design for dismantling — the mechanism behind e-waste, battery, plastic-packaging and used-oil rules.</li>
+</ul>
+<p><strong>Trap:</strong> an answer that describes incineration without saying it ranks <em>below</em> recycling, or landfill without saying it is the <em>last resort</em>, reads as a list of technologies rather than as management.</p>
+<hr />
+<h2 id="3-answer-bank">3. Answer bank<a class="anchor" href="#3-answer-bank">#</a></h2>
+<p>Hand-writing budget: 3-mark ≈ 3 minutes, 5-mark ≈ 5 minutes, 7/8-mark ≈ 8–9 minutes, 14-mark ≈ 15 minutes with one sketch. Every answer below is already the shape you write, not a summary of it.</p>
+<h3 id="31-three-mark-answers-a1a15">3.1 Three-mark answers (A1–A15)<a class="anchor" href="#31-three-mark-answers-a1a15">#</a></h3>
+<h4 id="a1-define-air-pollution-also-opens-every-long-answer">A1 — Define air pollution · <em>also opens every long answer</em></h4>
+<ol>
+<li><strong>Definition:</strong> one or more contaminants, alone or combined, in such quantities and durations as may be injurious to human, animal or plant life or property, or which unreasonably interfere with the enjoyment of life or the conduct of business.</li>
+<li><strong>Second sense:</strong> any substance introduced into the environment that adversely affects the usefulness of a resource <code>4:p3</code>.</li>
+<li><strong>Why it is unavoidable:</strong> no process is 100% efficient, so every process produces pollution <code>4:p3</code>.</li>
+</ol>
+<h4 id="a2-primary-vs-secondary-pollutants">A2 — Primary vs secondary pollutants</h4>
+<ol>
+<li><strong>Primary:</strong> emitted directly from identifiable sources — SO₂, PM, NOₓ, VOC, CO, lead <code>4:p10</code>.</li>
+<li><strong>Secondary:</strong> produced in the atmosphere by reaction among primary pollutants — sulphuric acid, photochemical smog, ground-level ozone, PAN <code>4:p10</code>.</li>
+<li><strong>Consequence for control:</strong> a primary pollutant is captured at the stack; a secondary one can only be prevented by cutting its precursors.</li>
+</ol>
+<h4 id="a3-point-vs-non-point-fugitive-emissions">A3 — Point vs non-point (fugitive) emissions</h4>
+<ol>
+<li><strong>Point:</strong> released from a discrete conveyance — chimney, pipe, vent — at a measurable location <code>4:p15</code>.</li>
+<li><strong>Non-point:</strong> field sources (tanks, pools) or leaks (valves, taps, couplings); runoff is the classic case <code>4:p15</code>.</li>
+<li><strong>Why it matters:</strong> point sources are measurable and controllable; fugitive ones never appear in a stack test and together may exceed the stack.</li>
+</ol>
+<h4 id="a4-photochemical-smog">A4 — Photochemical smog</h4>
+<ol>
+<li><strong>Formation:</strong> a complex series of reactions involving sunlight, NOₓ and VOCs present in the air as a result of pollution <code>4:p13</code>.</li>
+<li><strong>Appearance:</strong> a brown haze, commonest in populated cities in warm climates; most prominent in mornings and afternoons <code>4:p13</code>.</li>
+<li><strong>Products:</strong> ground-level ozone and airborne particles; formation tracks the concentration of primary pollutants <code>4:p13</code>.</li>
+</ol>
+<h4 id="a5-effects-of-air-pollution-on-materials">A5 — Effects of air pollution on materials</h4>
+<ol>
+<li><strong>Acid attack:</strong> SO₂ + O₂ + moisture → H₂SO₄, which corrodes metals and eats limestone and marble, so statues, monuments and facades crumble <code>4:p28</code>.</li>
+<li><strong>Concrete:</strong> pollutants penetrate and corrode the reinforcement, weakening structural members; soiling and erosion of building materials <code>4:p28</code>.</li>
+<li><strong>Coatings and elastomers:</strong> SO₂, O₃, H₂S and aerosols destroy paints and protective coatings; O₃ and PAN crack rubber and electrical insulation; SPM deteriorates artwork <code>4:p28</code>.</li>
+</ol>
+<h4 id="a6-ozone-layer-ozone-depletion-ozone-hole">A6 — Ozone layer, ozone depletion, ozone hole</h4>
+<ol>
+<li><strong>Layer:</strong> stratospheric region with high ozone concentration; absorbs <strong>97–99%</strong> of harmful UV <code>4:p32</code>.</li>
+<li><strong>Depletion:</strong> gradual thinning caused by chlorine- and bromine-containing compounds; about <strong>5%</strong> loss measured 1979–1990 <code>4:p32</code>–<code>p33</code>.</li>
+<li><strong>Hole:</strong> the annual, temporary polar reduction each spring, recovering in summer — seasonal, not a permanent gap <code>4:p32</code>.</li>
+</ol>
+<h4 id="a7-ozone-depleting-substances">A7 — Ozone-depleting substances</h4>
+<ol>
+<li><strong>Definition:</strong> compounds that release chlorine or bromine on exposure to high UV <code>4:p33</code>.</li>
+<li><strong>Chlorine-bearing:</strong> CFCs (<strong>most abundant</strong>), carbon tetrachloride, HCFCs <code>4:p33</code>.</li>
+<li><strong>Bromine-bearing:</strong> halons, methyl bromide, hydrobromofluorocarbons; sources are solvents, aerosols, refrigerators, air conditioners, fire extinguishers <code>4:p33</code>–<code>p34</code>.</li>
+</ol>
+<h4 id="a8-clean-coal-technologies-defined">A8 — Clean coal technologies, defined</h4>
+<ol>
+<li><strong>Definition:</strong> technologies designed to enhance the efficiency of conversion and the environmental acceptability of coal extraction, preparation and use <code>4:p40</code>.</li>
+<li><strong>Chain:</strong> wash the coal · burn it better (low-NOₓ) · clean the flue (FGD, ESP) · gasify (IGCC) · capture CO₂ <code>4:p42</code>–<code>p46</code>.</li>
+<li><strong>Verdict:</strong> a family of technologies, not a clean fuel — there is no way to make coal clean <code>4:p48</code>.</li>
+</ol>
+<h4 id="a9-coal-washing">A9 — Coal washing</h4>
+<ol>
+<li><strong>Process:</strong> grind the coal and separate it by gravity — a barrel of liquid at a chosen specific density, in which coal floats and impurities sink <code>4:p42</code>.</li>
+<li><strong>Principle:</strong> clean coal is less dense than shale and pyritic sulphur, so separation needs no chemical reaction.</li>
+<li><strong>Benefit:</strong> removes ash and part of the sulphur before the furnace, cutting particulate load and the SO₂ the flue plant must capture.</li>
+</ol>
+<h4 id="a10-water-pollution-and-its-two-source-classes">A10 — Water pollution, and its two source classes</h4>
+<ol>
+<li><strong>Definition:</strong> contamination of water bodies — lakes, rivers, oceans, groundwater — usually by human activity; any change in physical, chemical or biological properties with a detrimental consequence for living things <code>4:p50</code>.</li>
+<li><strong>Point sources:</strong> oil wells near water bodies, factories, power plants, underground coal mines — direct discharge at a known place <code>4:p52</code>.</li>
+<li><strong>Non-point:</strong> runoff from fields, lawns, gardens, construction sites, roads — no specific location, nothing to sample <code>4:p52</code>.</li>
+</ol>
+<h4 id="a11-eutrophication">A11 — Eutrophication</h4>
+<ol>
+<li><strong>Definition:</strong> enrichment of water with nutrients such as nitrates and phosphates, triggering excessive growth of green algae <code>4:p71</code>.</li>
+<li><strong>Sequence:</strong> nutrients → algal bloom → algae die → decomposers multiply and consume oxygen → fish die of oxygen shortage <code>4:p72</code>.</li>
+<li><strong>Source:</strong> fertilizer runoff and sewage; the bloom is the symptom, the oxygen crash is the mechanism.</li>
+</ol>
+<h4 id="a12-biomagnification">A12 — Biomagnification</h4>
+<ol>
+<li><strong>Definition:</strong> entry of harmful non-biodegradable chemicals at small concentration and their accumulation at greater concentration through successive levels of a food chain <code>4:p74</code>.</li>
+<li><strong>Deck's DDT chain:</strong> water 0.2 ppm → algae 77 ppm → fish 500–600 ppm → pelican 1700 ppm <code>4:p75</code>.</li>
+<li><strong>Consequence:</strong> weak egg shells and falling bird populations — a population effect from a concentration never toxic in the water.</li>
+</ol>
+<h4 id="a13-waste-management-defined">A13 — Waste management, defined</h4>
+<ol>
+<li><strong>Definition:</strong> the collection, transport, recovery and disposal of waste, including supervision of those operations and aftercare of disposal sites <code>4:p79</code>.</li>
+<li><strong>Scope:</strong> collection, transport, treatment, disposal, and monitoring and regulation of processes, laws, technologies and economic mechanisms <code>4:p78</code>.</li>
+<li><strong>Purpose and extension:</strong> reduce adverse effects on health, environment, resources and aesthetics; the modern layer adds reduce, reuse, recycle <code>4:p78</code>–<code>p79</code>.</li>
+</ol>
+<h4 id="a14-effluent-quality-standard-the-honest-answer">A14 — Effluent quality standard · <em>the honest answer</em></h4>
+<ol>
+<li><strong>Definition:</strong> a limit placed on a listed parameter in a discharge so that the receiving water can still meet its designated use.</li>
+<li><strong>Parameters:</strong> pH · BOD · COD · total suspended solids · oil and grease · temperature · toxic metals and cyanides.</li>
+<li><strong>Deck's figures:</strong> only two, both about the receiving water — natural pH <strong>6–8</strong> and minimum DO <strong>4–8 mg/l</strong> <code>4:p64</code>–<code>p65</code>; the deck states no discharge limit for any parameter.</li>
+</ol>
+<h4 id="a15-effects-of-waste">A15 — Effects of waste</h4>
+<ol>
+<li><strong>Environmental:</strong> surface water contamination, groundwater contamination, soil contamination, air contamination <code>4:p82</code>.</li>
+<li><strong>Economic:</strong> municipal wellbeing and recycling revenue <code>4:p82</code>.</li>
+<li><strong>Mechanism:</strong> leachate carries contaminants into groundwater, open burning and gas release contaminate air, and unsegregated heaps remove any possibility of recovery.</li>
+</ol>
+<h3 id="32-five-mark-answers-b1b12">3.2 Five-mark answers (B1–B12)<a class="anchor" href="#32-five-mark-answers-b1b12">#</a></h3>
+<h4 id="b1-categorize-the-causes-of-air-pollution-internal-oct-2025-5-marks">B1 — Categorize the causes of air pollution · <strong>internal, Oct 2025, 5 marks</strong></h4>
+<ol>
+<li><strong>Fuel combustion</strong> — SO₂, NOₓ, particulates and CO₂ from coal, petroleum and factory combustibles; the single largest man-made group <code>4:p5</code>.</li>
+<li><strong>Industrial process emissions</strong> — CO, hydrocarbons, organic compounds and chemicals from manufacturing and petroleum refining; also non-combustion releases such as solvent evaporation and acid mist <code>4:p6</code>, <code>4:p14</code>.</li>
+<li><strong>Agriculture</strong> — ammonia as a by-product, plus insecticides, pesticides and fertilizers <code>4:p5</code>.</li>
+<li><strong>Mining and construction</strong> — dust and chemicals released during extraction, blasting and crushing <code>4:p6</code>.</li>
+<li><strong>Indoor and consumer sources, plus natural background</strong> — cleaning products and paints indoors <code>4:p6</code>; natural sources are wind-blown dust, body-process gases, smoke and volcanic emissions, and they supply about 67% of atmospheric SOₓ <code>4:p7</code>, <code>4:p19</code>.</li>
+</ol>
+<p>Add one closing line: man-made sources concentrate where people live, and concentration, not mass, causes disease.</p>
+<h4 id="b2-effects-of-air-pollution-on-plants-internal-oct-2026-5-marks">B2 — Effects of air pollution on plants · <strong>internal, Oct 2026, 5 marks</strong></h4>
+<ol>
+<li><strong>Entry:</strong> gases diffuse through the stomata and dissolve in the water film on internal cell walls, becoming an acid or oxidant in contact with living tissue — roots are spared, leaves take the dose (standard mechanism).</li>
+<li><strong>Chlorosis:</strong> loss or bleaching of chlorophyll, so photosynthesis falls; the plant is starving before it looks sick <code>4:p27</code>.</li>
+<li><strong>Necrosis:</strong> dead spots on the leaf structure — irreversible, because the cells are dead <code>4:p27</code>.</li>
+<li><strong>Abscission:</strong> premature falling of leaves — the plant discards tissue it cannot maintain <code>4:p27</code>.</li>
+<li><strong>Whole-plant and crop effects:</strong> suppressed growth, premature ageing, suppressed growth of vegetables, leaf injury and damage to young plants, decreased yield, decreased growth rate and increased death rate <code>4:p27</code>.</li>
+</ol>
+<p>Close with the distinction that earns the last mark: visible injury and yield loss are different measurements — a crop can lose a fifth of its yield with no mark on it.</p>
+<h4 id="b3-five-water-pollutants-and-their-health-hazards-internal-oct-2025-5-marks">B3 — Five water pollutants and their health hazards · <strong>internal, Oct 2025, 5 marks</strong></h4>
+<ol>
+<li><strong>Pathogens from domestic sewage</strong> — cholera, dysentery, diarrhoea, tuberculosis, jaundice; about 80% of stomach disease in India is water-borne <code>4:p70</code>.</li>
+<li><strong>Organic matter</strong> — decomposition strips dissolved oxygen (fish need 8–4 mg/l), so aquatic life dies of oxygen starvation rather than poison <code>4:p65</code>.</li>
+<li><strong>Nitrates and phosphates</strong> — eutrophication; algal bloom, then oxygen crash <code>4:p71</code>–<code>p72</code>.</li>
+<li><strong>Heavy metals (lead, mercury, cadmium, chromium)</strong> — weakness, mental retardation, organ failure, cancers, death; hexavalent chromium from wet cement soaks through skin and sensitises it <code>4:p67</code>, <code>4:p70</code>.</li>
+<li><strong>Pesticides such as DDT</strong> — biomagnification from 0.2 ppm in water to 1700 ppm in the top consumer, with weak egg shells and falling populations <code>4:p74</code>–<code>p75</code>.</li>
+</ol>
+<h4 id="b4-effects-of-air-pollution-on-human-health">B4 — Effects of air pollution on human health</h4>
+<ol>
+<li><strong>Scale:</strong> industrial emissions of SO₂, particulates, NOₓ, CO and ammonia raise morbidity and mortality according to pollutant and concentration <code>4:p24</code>.</li>
+<li><strong>Quantified share:</strong> 30–40% of asthma cases and 20–30% of all respiratory disease are caused by air pollution <code>4:p25</code>.</li>
+<li><strong>Short-term:</strong> irritation of nose, eyes and throat, bronchitis, headache <code>4:p24</code>.</li>
+<li><strong>Long-term:</strong> lung disease, chronic respiratory problems, damage to heart, brain and eyes; bronchitis and asthma from high SO₂, NO₂ and SPM; increased mortality <code>4:p24</code>–<code>p25</code>.</li>
+<li><strong>Mechanisms:</strong> CO and NO react with haemoglobin and cut oxygen carriage; lead poisons and damages liver and kidney; O₃ and PAN irritate eyes <code>4:p25</code>.</li>
+</ol>
+<p>Add the five modifying factors in one line: nature of pollutant, concentration, duration, state of health, age group of the receptor <code>4:p26</code>.</p>
+<h4 id="b5-effects-on-animals-and-birds">B5 — Effects on animals and birds</h4>
+<ol>
+<li><strong>Respiratory:</strong> the mucous lining of the respiratory tract is affected, causing bronchitis and asthma in animals near a source <code>4:p29</code>.</li>
+<li><strong>Appetite:</strong> lack of appetite in pet animals — the earliest visible sign <code>4:p29</code>.</li>
+<li><strong>Food base:</strong> acid deposition damages aquatic life, so fish-eating animals lose their food supply <code>4:p29</code>.</li>
+<li><strong>Behaviour:</strong> migration of seasonal birds is hampered by severe air pollution <code>4:p29</code>.</li>
+<li><strong>Reproduction and survival under UV:</strong> ozone depletion causes skin and eye cancer in animals and hampers larval development in amphibians <code>4:p36</code>.</li>
+</ol>
+<h4 id="b6-air-pollution-control-measures">B6 — Air pollution control measures</h4>
+<ol>
+<li><strong>Prevent at source</strong> — suitable fuel (low-sulphur coal, CNG), process modification, siting and zoning of the industry <code>4:p30</code>.</li>
+<li><strong>Collect</strong> the pollutant with equipment — cyclone, fabric filter, electrostatic precipitator at 99%, wet scrubber <code>4:p31</code>, <code>4:p44</code>.</li>
+<li><strong>Destroy</strong> by thermal or catalytic combustion — the route for CO and hydrocarbons <code>4:p31</code>.</li>
+<li><strong>Convert</strong> to a less toxic form — the limestone FGD route turning SO₂ into saleable gypsum at 99% <code>4:p31</code>, <code>4:p43</code>.</li>
+<li><strong>Disperse</strong> what remains through tall chimneys, and protect the receptor — stating that dispersion is the weakest option, since the mass is unchanged and the problem becomes regional <code>4:p31</code>.</li>
+</ol>
+<h4 id="b7-ozone-depletion-in-five-marks-compressed-from-c1">B7 — Ozone depletion in five marks (compressed from C1)</h4>
+<ol>
+<li><strong>Definition and scale:</strong> thinning of the stratospheric ozone layer by chlorine- and bromine-bearing compounds; the layer absorbs 97–99% of UV and lost about 5% between 1979 and 1990 <code>4:p32</code>–<code>p33</code>.</li>
+<li><strong>Cause:</strong> CFCs from refrigerants, aerosols and solvents; halons; nitrogenous compounds; rocket launches; natural causes not more than 1–2% <code>4:p34</code>–<code>p35</code>.</li>
+<li><strong>Mechanism:</strong> UV splits the C–Cl bond, chlorine attacks ozone and is regenerated — a catalyst, so trace amounts do large damage (standard).</li>
+<li><strong>Effects:</strong> human skin cancer, sunburn, quick ageing, weak immunity; animal skin and eye cancer and failed larval development; reduced plant growth and flowering; plankton damage at the base of the marine food chain <code>4:p36</code>–<code>p37</code>.</li>
+<li><strong>Solutions:</strong> avoid CFCs in refrigerators and air conditioners, replace halon extinguishers, cut vehicle emissions, use eco-friendly cleaning products, prohibit nitrous oxide, and the Montreal Protocol (standard).</li>
+</ol>
+<h4 id="b8-water-pollutant-families">B8 — Water pollutant families</h4>
+<ol>
+<li><strong>Oxygen-demanding:</strong> organic matter and sewage — decomposition consumes dissolved oxygen <code>4:p65</code>.</li>
+<li><strong>Nutrient:</strong> nitrates, phosphates — eutrophication <code>4:p64</code>.</li>
+<li><strong>Physical:</strong> suspended solids, floating matter, thermal discharge, colour, foam — turbidity, light blockage, stratification, re-aeration loss <code>4:p65</code>–<code>p66</code>.</li>
+<li><strong>Chemical:</strong> acids and alkalis (pH outside 6–8), salts (hardness, scale), toxic chemicals (cyanides, sulphides, chromium) <code>4:p64</code>, <code>4:p67</code>.</li>
+<li><strong>Biological and radioactive:</strong> pathogenic micro-organisms and radioisotopes — water-borne disease, mutation and cancer <code>4:p67</code>–<code>p68</code>.</li>
+</ol>
+<h4 id="b9-waste-identification-characterisation-classification">B9 — Waste identification, characterisation, classification</h4>
+<ol>
+<li><strong>Identification:</strong> the waste audit — every material leaving each process, measured by weight or volume over a period, giving a stream inventory and composition profile.</li>
+<li><strong>Physical characterisation:</strong> bulk density, moisture, particle size, calorific value.</li>
+<li><strong>Chemical and biological characterisation:</strong> proximate analysis (moisture, volatiles, fixed carbon, ash), pH, heavy metals, chlorine and sulphur, leaching potential; biodegradability and pathogen content.</li>
+<li><strong>Classification by source and state:</strong> municipal, industrial, biomedical, electronic, radioactive, construction; solid, liquid, sludge, gas <code>4:p78</code>.</li>
+<li><strong>Classification by hazard:</strong> non-hazardous, and hazardous defined by characteristics — ignitable, corrosive, reactive, toxic, infectious, radioactive — each category carrying its own legal route.</li>
+</ol>
+<h4 id="b10-recycling-and-reuse-and-their-benefits">B10 — Recycling and reuse, and their benefits</h4>
+<ol>
+<li><strong>Recycle benefits:</strong> saves natural resources, prevents greenhouse gas and water pollutants, saves energy, supplies industry and creates jobs, saves landfill space <code>4:p83</code>.</li>
+<li><strong>Reduce:</strong> double-sided copying, circulating documents, durable cups, minimal packaging, reading online <code>4:p84</code>.</li>
+<li><strong>Reuse:</strong> envelopes, scratch paper, packaging material, remanufactured equipment, rechargeable batteries and cartridges, composting, donation <code>4:p86</code>.</li>
+<li><strong>Hazardous waste specifically:</strong> environmental gains — less raw material, less pollution, less energy, less water; economic gains — higher production efficiency, lower raw-material cost, and elimination of the waste stream and its regulatory burden <code>4:p125</code>.</li>
+<li><strong>Position on the hierarchy:</strong> prevention first, then reuse, then recycling, then energy recovery, then disposal — value falls at each step down.</li>
+</ol>
+<h4 id="b11-dissolved-oxygen-bod-and-cod-standard-deck-covers-oxygen-depletion-at-283">B11 — Dissolved oxygen, BOD and COD (standard; deck covers oxygen depletion at <code>4:p65</code>)</h4>
+<ol>
+<li><strong>DO:</strong> the oxygen dissolved in the water — the state of the river; minimum for fish life 8–4 mg/l in the deck's wording <code>4:p65</code>.</li>
+<li><strong>BOD:</strong> oxygen consumed by micro-organisms oxidising biodegradable matter under stated conditions — an indirect measure of the food the water carries.</li>
+<li><strong>COD:</strong> oxygen equivalent of everything oxidisable by a strong chemical oxidant, biodegradable or not; obtained in hours rather than days.</li>
+<li><strong>Relationship:</strong> COD ≥ BOD always; the gap is the non-biodegradable fraction — solvents, dyes, resistant compounds that pass a biological plant untouched.</li>
+<li><strong>Why all three:</strong> DO says whether the river is already damaged, BOD says what the discharge will take from it, COD says whether treatment can work at all.</li>
+</ol>
+<h4 id="b12-effluent-quality-standards-parameters-and-purpose">B12 — Effluent quality standards: parameters and purpose</h4>
+<ol>
+<li><strong>Purpose:</strong> a limit on a listed parameter so the receiving water still meets its designated use — drinking, bathing, irrigation, aquatic life.</li>
+<li><strong>pH:</strong> governs every chemical and biological behaviour; extremes are directly lethal; natural fresh water 6–8 <code>4:p64</code>.</li>
+<li><strong>Oxygen parameters:</strong> DO 4–8 mg/l minimum for fish <code>4:p65</code>; BOD and COD limited because they measure the oxygen the discharge will remove.</li>
+<li><strong>Solids and oil:</strong> suspended solids for turbidity, smothering and adsorbed pollutants; oil and grease for the floating film that blocks light and re-aeration <code>4:p65</code>.</li>
+<li><strong>Toxics and temperature:</strong> metals, cyanides and pesticides for cumulative poisoning; thermal discharge for stratification and oxygen loss <code>4:p66</code>–<code>p67</code>. State that the deck gives no numeric discharge limits.</li>
+</ol>
+<h3 id="33-seven-and-eight-mark-answers-c1c6">3.3 Seven- and eight-mark answers (C1–C6)<a class="anchor" href="#33-seven-and-eight-mark-answers-c1c6">#</a></h3>
+<h4 id="c1-ozone-layer-depletion-causes-effects-solutions-7-marks-internal-oct-2025">C1 — Ozone layer depletion: causes, effects, solutions · <strong>7 marks, internal Oct 2025</strong></h4>
+<p><em>Shape: definition (1) → causes (2) → mechanism (2) → effects (1.5) → solutions (0.5). One sketch of the cycle if time allows.</em></p>
+<ol>
+<li><strong>Definition.</strong> Gradual thinning of the ozone layer in the upper atmosphere, caused by release of compounds containing gaseous chlorine or bromine from industry and other human activity <code>4:p33</code>. The layer absorbs <strong>97–99%</strong> of harmful UV <code>4:p32</code>; about <strong>5%</strong> was lost between 1979 and 1990 <code>4:p32</code>. The <strong>ozone hole</strong> is the annual, temporary polar reduction each spring, recovering in summer — seasonal, not a permanent gap <code>4:p32</code>.</li>
+<li><strong>Causes.</strong>
+   - <strong>CFCs</strong>, the most abundant ODS: released by solvents, spray aerosols, refrigerators and air conditioners; their stratospheric molecules are broken by UV, releasing chlorine atoms that destroy ozone <code>4:p34</code>.
+   - <strong>Bromine compounds:</strong> halons, methyl bromide, hydrobromofluorocarbons — halons from fire extinguishers <code>4:p33</code>.
+   - <strong>Nitrogenous compounds:</strong> NO, NO₂, N₂O <code>4:p35</code>.
+   - <strong>Unregulated rocket launches</strong> — the deck's claim that these may deplete more than CFCs and could cost a huge loss by 2050 <code>4:p34</code>.
+   - <strong>Natural:</strong> sunspots, stratospheric winds, volcanic eruptions — <strong>not more than 1–2%</strong> <code>4:p35</code>.</li>
+<li><strong>Mechanism, the marks-bearing paragraph.</strong> CFCs are stable, unreactive and insoluble, so nothing in the troposphere destroys them and they survive the decade needed to drift into the stratosphere. There, short-wavelength UV breaks the C–Cl bond and frees a chlorine atom. That atom attacks ozone, taking an oxygen atom to form chlorine monoxide and ordinary oxygen; chlorine monoxide then meets a free oxygen atom, gives the oxygen back, and <strong>regenerates the chlorine atom</strong>. The chlorine is a <strong>catalyst — regenerated, never consumed</strong> — so one atom destroys thousands of ozone molecules, which is why a trace mass of CFC does enormous damage (standard mechanism; the deck states the chlorine-release step at <code>4:p34</code>).</li>
+<li><strong>Effects</strong>, grouped the way the deck groups them <code>4:p36</code>–<code>p37</code>:
+   - <em>Human:</em> direct exposure to UV → skin disease, skin cancer, sunburn, quick ageing, weakened immune system.
+   - <em>Animals:</em> skin and eye cancer; hampered growth and development of larvae in many species, amphibians included.
+   - <em>Plants and forests:</em> minimal growth, flowering and photosynthesis.
+   - <em>Marine:</em> plankton badly affected — and they are the base of the aquatic food chain, so everything above them follows.</li>
+<li><strong>Solutions</strong> <code>4:p38</code>–<code>p39</code>. Avoid CFCs — no CFC refrigerators or air conditioners, replace halon extinguishers; minimise vehicle use, since vehicles emit greenhouse gases that drive both warming and depletion; use eco-friendly cleaning products instead of chlorine- and bromine-releasing ones; prohibit nitrous oxide, with public awareness so it is minimised at individual level. Add the legal instrument in one clause: the <strong>Montreal Protocol, 1987</strong>, phased out CFCs, halons and HCFCs (standard).</li>
+</ol>
+<p><strong>The sketch</strong> (§5 D1) is worth a mark on its own: CFC → UV → Cl· → ClO → Cl· regenerated, with O₃ going in and O₂ coming out.</p>
+<h4 id="c2-clean-coal-combustion-technology-7-or-8-marks-internal-oct-2025-and-oct-2026-the-modules-banker">C2 — Clean coal combustion technology · <strong>7 or 8 marks, internal Oct 2025 and Oct 2026 — the module's banker</strong></h4>
+<p><em>Shape: definition (1) → why coal at all (0.5) → the chain, five stages (4) → numbers (1) → verdict (1). The verdict is not optional.</em></p>
+<ol>
+<li><strong>Definition.</strong> Clean coal technologies are technologies designed to <strong>enhance the efficiency of conversion and the environmental acceptability of coal extraction, preparation and use</strong> <code>4:p40</code>. The definition covers the whole chain, because washing the coal, burning it better and cleaning the flue gas are three different engineering problems.</li>
+<li><strong>Why any of this is done.</strong> Coal is the cheapest fuel per unit of heat delivered to a power station <code>4:p42</code> — which explains the expense of the suite, and also explains why the alternative is not being chosen on cost alone.</li>
+<li><strong>Before combustion — coal washing</strong> <code>4:p42</code>. Grind the coal and separate it by gravity in a liquid of chosen specific density: <strong>coal floats, impurities sink</strong>, because clean coal is less dense than shale and pyritic sulphur. Removes ash and part of the sulphur before the furnace, reducing both the particulate load and the SO₂ that must later be captured.</li>
+<li><strong>During combustion — low-NOₓ burners</strong> <code>4:p43</code>. Three stages: combustion first in an <strong>oxygen-deficient zone</strong>, where NOₓ would normally form; then hydrocarbons form and react with the NOₓ already present, reducing it; then internal air staging completes combustion, with new NOₓ minimised by finishing in an <strong>air-lean environment</strong>. The device attacks the formation mechanism, not the emission.</li>
+<li><strong>After combustion — flue-gas desulphurisation and precipitation</strong> <code>4:p43</code>–<code>p44</code>. Limestone and water sprayed into the flue; <strong>SO₂ + CaCO₃ → gypsum</strong>, collected and used in construction, <strong>99% effective</strong>. Particulates removed by electrostatic precipitator — an electric field removing charged particles — also <strong>99% effective</strong>.</li>
+<li><strong>Gasification and combined cycle</strong> <code>4:p45</code>. Coal reacted with <strong>oxygen and steam</strong> to make <strong>syngas, mostly hydrogen with some CO</strong>; the syngas is cleaned and burned to turn a turbine, and as it cools it heats water for a <strong>second turbine</strong>. Seen as part of a zero-emission system, SO₂ and NOₓ already low, <strong>up to 45% efficient</strong> — but unproven at scale, only demonstration units, cleaned cold today when hot cleaning would be better, and costly although existing plants can be modified.</li>
+<li><strong>Carbon capture and storage</strong> <code>4:p46</code>. CO₂ captured and stored underground (geosequestration). CO₂ is hard to capture; once captured it must be <strong>liquefied, consuming 20% of the energy the coal yielded</strong>; the site must be monitored; only limited formations suit mass storage; transport is costly. Fuel cells and the plasma route are the deck's two further options, both early-stage and costly <code>4:p47</code>.</li>
+<li><strong>Verdict — write it.</strong> <em>There is no way to make coal clean.</em> Gasification improves the efficiency of burning but the coal still burns and still emits CO₂; CCS can put that CO₂ underground but may create problems later; coal is inefficient and a huge cause of global warming, but it is cheap. "Clean coal" is a label for many technologies, and as a description of the fuel it is <strong>by no means clean</strong> <code>4:p48</code>.</li>
+</ol>
+<p><strong>Numbers to carry into the answer:</strong> FGD 99% · ESP 99% · IGCC up to 45% · CCS 20% energy penalty. Four numbers, and they are the four marks most candidates drop.</p>
+<h4 id="c3-air-pollutants-from-industries-and-their-effects-on-health-animals-plants-and-materials-8-marks">C3 — Air pollutants from industries and their effects on health, animals, plants and materials · <strong>8 marks</strong></h4>
+<p><em>Shape: pollutant table (3) → four receptor paragraphs (4) → control line (1). The table does the work.</em></p>
+<ol>
+<li><strong>The industrial list</strong> <code>4:p14</code>, <code>4:p24</code>: SO₂, particulates, NOₓ, CO and ammonia, from the petrochemical, chemical, mineral and metal-processing sectors, plus water treatment, food, dry cleaning and garages; emissions are either combustion of fuel oil, gas oil and natural gas, or non-combustion process releases.</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th>Pollutant</th>
+<th>Source</th>
+<th>Human</th>
+<th>Plant</th>
+<th>Material</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SO₂</td>
+<td>Sulphur in fuel; 67% natural</td>
+<td>Bronchoconstriction, bronchitis, asthma</td>
+<td>Bleaching, chlorosis, necrosis</td>
+<td>H₂SO₄ → stone, metal, cloth</td>
+</tr>
+<tr>
+<td>NOₓ</td>
+<td>High-temperature combustion</td>
+<td>Airway inflammation, methaemoglobinaemia</td>
+<td>Suppressed growth; acid deposition</td>
+<td>Fading of dyes and coatings</td>
+</tr>
+<tr>
+<td>CO</td>
+<td>Transport 75%, industry 15%</td>
+<td>Tissue hypoxia, impaired vision</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td>PM</td>
+<td>Diesel, construction, power plants</td>
+<td>Premature death, bronchitis, asthma</td>
+<td>Blocked stomata, reduced light</td>
+<td>Soiling, erosion, artwork</td>
+</tr>
+<tr>
+<td>Hydrocarbons, NMVOC</td>
+<td>Incomplete combustion, solvents</td>
+<td>Carcinogenicity, liver/kidney/CNS</td>
+<td>Damage via ozone and PAN</td>
+<td>Cracked rubber and insulation</td>
+</tr>
+<tr>
+<td>Pb, NH₃</td>
+<td>Metal processing, agriculture</td>
+<td>Anaemia, neuropathy; odour, irritation</td>
+<td>—</td>
+<td>Tarnishing</td>
+</tr>
+</tbody>
+</table>
+<ol start="2">
+<li><strong>Human health</strong> <code>4:p24</code>–<code>p26</code>: short-term irritation of nose, eyes, throat, bronchitis, headache; long-term lung disease, chronic respiratory problems, heart, brain and eye damage; 30–40% of asthma and 20–30% of respiratory disease attributed to air pollution; modified by pollutant nature, concentration, duration, health state and age.</li>
+<li><strong>Plants</strong> <code>4:p27</code>: entry through stomata; chlorosis from chlorophyll loss; necrosis of leaf tissue; abscission; suppressed growth and premature ageing; reduced yield and greater damage to young plants.</li>
+<li><strong>Animals</strong> <code>4:p29</code>: mucous lining of the respiratory tract affected, bronchitis and asthma; loss of appetite in pet animals; acid deposition damaging aquatic life; hampered migration of seasonal birds.</li>
+<li><strong>Materials</strong> <code>4:p28</code>: acid deposition corrodes metals and eats stone on statues and monuments; decolouration of buildings and cloth; penetration of concrete with rebar corrosion and loss of section; soiling and erosion; O₃ and PAN cracking rubber and insulation; SPM deteriorating artwork.</li>
+<li><strong>Control, one closing paragraph</strong> <code>4:p30</code>–<code>p31</code>: fuel selection and process modification at source, zoning for siting, then collection (ESP 99%), destruction by thermal or catalytic combustion, conversion to a less toxic form (FGD → gypsum), and tall stacks only for what remains.</li>
+</ol>
+<h4 id="c4-water-pollutants-health-hazards-eutrophication-and-biomagnification-8-marks">C4 — Water pollutants, health hazards, eutrophication and biomagnification · <strong>8 marks</strong></h4>
+<p><em>Shape: sources (1) → pollutant families table (3) → health hazards (2) → the two food-chain mechanisms (2).</em></p>
+<ol>
+<li><strong>Sources</strong> <code>4:p50</code>–<code>p52</code>: point — factories, power plants, oil wells, underground coal mines; non-point — agricultural, garden and construction runoff. Plus the deck's entry list: domestic sewage, industrial effluent with oil, heavy metals and detergents, fertilizers and pesticides, radioactive waste, excretory wastes.</li>
+<li><strong>Families</strong> <code>4:p63</code>–<code>p68</code>: inorganic salts (hardness, scale, eutrophication) · acids and alkalis (pH outside 6–8) · organic matter (oxygen depletion; fish need 8–4 mg/l) · suspended solids (turbidity, smothering) · floating matter (light blockage, self-purification hindered) · thermal discharge (stratification, faster bacterial action, lower DO) · colouring materials (reduced sunlight disinfection) · toxic chemicals (cyanides, sulphides, hexavalent chromium) · micro-organisms (pathogenic and degradative) · radioactive materials (undetectable by routine tests; mutation, cancer) · foam-producing matter.</li>
+<li><strong>Health hazards</strong> <code>4:p70</code>: cholera, dysentery, diarrhoea, tuberculosis, jaundice; <strong>80% of stomach diseases in India</strong> from polluted water; excess metals cause weakness, mental retardation, organ failure, cancers and death; sewage-poisoned shellfish cause paralytic shellfish poisoning.</li>
+<li><strong>Eutrophication</strong> <code>4:p71</code>–<code>p72</code>: nutrient enrichment (nitrates, phosphates) → algal bloom → bloom dies → decomposers multiply and consume oxygen → fish die of oxygen starvation. Five steps; the decomposer step is the mechanism.</li>
+<li><strong>Biomagnification</strong> <code>4:p74</code>–<code>p75</code>: non-biodegradable pesticides accumulate up the food chain — 0.2 ppm water, 77 ppm algae, 500–600 ppm fish, 1700 ppm pelican — producing weak egg shells and population decline.</li>
+<li><strong>Control, one closing line</strong> <code>4:p76</code>–<code>p77</code>: recycle and reuse water, treat industrial effluent before discharge, separate sewage and river channels, phosphate-free detergents, reduced fertilizer use, public awareness, and standards enforced and revised as technology changes.</li>
+</ol>
+<h4 id="c5-waste-management-identification-characterisation-classification-recycling-and-reuse-78-marks">C5 — Waste management: identification, characterisation, classification, recycling and reuse · <strong>7–8 marks</strong></h4>
+<p><em>Shape: definition (1) → three verbs separated (3) → classification table (2) → hierarchy and 3R (2).</em></p>
+<ol>
+<li><strong>Definition</strong> <code>4:p79</code>: collection, transport, recovery and disposal of waste, including supervision of those operations and aftercare of disposal sites; extended by the modern layer of reduce, reuse, recycle.</li>
+<li><strong>Identification:</strong> the waste audit — each process or department in turn, every material leaving it, measured by weight or volume over a stated period, producing a stream inventory and a composition profile.</li>
+<li><strong>Characterisation:</strong> physical (bulk density, moisture, particle size, calorific value), chemical (proximate analysis, pH, heavy metals, chlorine, sulphur, leaching), biological (biodegradability, pathogens). Its purpose is to choose a route — moisture and biodegradability to composting, calorific value to incineration, chlorine to a dioxin risk.</li>
+<li><strong>Classification</strong> <code>4:p78</code>, <code>4:p102</code>, <code>4:p100</code>: by source (municipal, industrial, biomedical, electronic, radioactive, construction), by state (solid, liquid, sludge, gas), by hazard (non-hazardous, or hazardous by ignitable/corrosive/reactive/toxic/infectious/radioactive characteristics), each category with its own legal route.</li>
+<li><strong>Hierarchy:</strong> prevention → reuse → recycling → energy recovery → disposal, value falling at each step <code>4:p80</code>.</li>
+<li><strong>Recycling and reuse</strong> <code>4:p83</code>–<code>p86</code>, <code>4:p125</code>: recycle saves resources, greenhouse gas, water pollutants, energy, landfill space and creates jobs; reduce and reuse examples; hazardous waste recycling yields environmental gains (raw material, pollution, energy, water) and economic gains (efficiency, cost, regulatory relief).</li>
+<li><strong>One closing line:</strong> segregation at source is the decision that fixes everything downstream — a mixed stream cannot be composted, recycled economically or incinerated safely.</li>
+</ol>
+<h4 id="c6-air-pollution-control-devices-compared-7-marks">C6 — Air pollution control devices compared · <strong>7 marks</strong></h4>
+<p><em>Shape: three lines per device — force, size range, limitation. The limitation is the mark.</em></p>
+<table>
+<thead>
+<tr>
+<th>Device</th>
+<th>Force</th>
+<th>Suits</th>
+<th>Limitation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Settling chamber</td>
+<td>Gravity</td>
+<td>Coarse grit only</td>
+<td>Very large; useless on fine dust</td>
+</tr>
+<tr>
+<td>Cyclone</td>
+<td>Centrifugal inertia</td>
+<td>Medium dust</td>
+<td>Fine fraction escapes with the gas</td>
+</tr>
+<tr>
+<td>Fabric filter</td>
+<td>Sieving, impaction, diffusion</td>
+<td>Fine dust, high efficiency</td>
+<td>Temperature and moisture; torn bag silent</td>
+</tr>
+<tr>
+<td>Electrostatic precipitator</td>
+<td>Electrostatic attraction</td>
+<td>Fine dust, very large volumes, <strong>99%</strong> <code>4:p44</code></td>
+<td>Cost, space, dust resistivity</td>
+</tr>
+<tr>
+<td>Wet scrubber</td>
+<td>Impaction + absorption</td>
+<td>Dust and soluble gas together</td>
+<td>Liquid effluent, plume, fan power</td>
+</tr>
+<tr>
+<td>Catalytic converter</td>
+<td>Catalytic oxidation/reduction</td>
+<td>CO, hydrocarbons, NOₓ</td>
+<td>Lead poisoning, narrow air–fuel window</td>
+</tr>
+</tbody>
+</table>
+<p>Close with the ordering: <strong>prevent at source (fuel, process, siting), capture next, disperse last</strong> — and note that every capture device produces a waste that must itself be managed <code>4:p30</code>–<code>p31</code>.</p>
+<h3 id="34-fourteen-mark-skeletons-d1d4">3.4 Fourteen-mark skeletons (D1–D4)<a class="anchor" href="#34-fourteen-mark-skeletons-d1d4">#</a></h3>
+<p>For the assumed ESE Part B. Each skeleton is a plan with the marks allocated, plus the sketch to draw. Prose is yours to write; these are the headings and the numbers.</p>
+<h4 id="d1-air-pollution-sources-classification-effects-on-healthanimalsplantsmaterials-control-14">D1 — Air pollution: sources, classification, effects on health/animals/plants/materials, control (14)</h4>
+<table>
+<thead>
+<tr>
+<th>Marks</th>
+<th>Block</th>
+<th>Content</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2</td>
+<td>Definition + cause</td>
+<td>Quotable definition <code>4:p3</code>; no process is 100% efficient; natural vs man-made sources <code>4:p5</code>–<code>p8</code></td>
+</tr>
+<tr>
+<td>2</td>
+<td>Classification</td>
+<td>Primary vs secondary table with examples; point vs non-point <code>4:p10</code>, <code>4:p15</code></td>
+</tr>
+<tr>
+<td>2</td>
+<td>Pollutant families</td>
+<td>CO, CO₂, NOₓ, SOₓ, HC/NMVOC, PM, Pb — source and mechanism for each <code>4:p16</code>–<code>p23</code></td>
+</tr>
+<tr>
+<td>3</td>
+<td>Effects</td>
+<td>Four receptor paragraphs: human (30–40% asthma, five modifying factors) <code>4:p24</code>–<code>p26</code>; plants (chlorosis, necrosis, abscission, yield) <code>4:p27</code>; animals <code>4:p29</code>; materials (H₂SO₄ + CaCO₃, rebar, O₃/PAN on rubber) <code>4:p28</code></td>
+</tr>
+<tr>
+<td>2</td>
+<td>Control</td>
+<td>Preventive (fuel, process, siting) then control (collect, destroy, convert, disperse) <code>4:p30</code>–<code>p31</code>; ESP 99%</td>
+</tr>
+<tr>
+<td>1</td>
+<td>Sketch</td>
+<td>Source → pathway → receptor with one control at each link</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Closure</td>
+<td>Photochemical smog as the secondary-pollutant example <code>4:p13</code>; the honest line that a tall stack disperses rather than removes</td>
+</tr>
+</tbody>
+</table>
+<h4 id="d2-clean-coal-combustion-technology-full-chain-14">D2 — Clean coal combustion technology, full chain (14)</h4>
+<table>
+<thead>
+<tr>
+<th>Marks</th>
+<th>Block</th>
+<th>Content</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2</td>
+<td>Definition + economics</td>
+<td>CCT definition <code>4:p40</code>; coal is cheapest per unit heat <code>4:p42</code></td>
+</tr>
+<tr>
+<td>2</td>
+<td>Preparation</td>
+<td>Coal washing by dense medium — coal floats, impurities sink <code>4:p42</code></td>
+</tr>
+<tr>
+<td>3</td>
+<td>Combustion</td>
+<td>Low-NOₓ burner, three stages <code>4:p43</code>; FGD limestone → gypsum, 99% <code>4:p43</code>; ESP 99% <code>4:p44</code></td>
+</tr>
+<tr>
+<td>3</td>
+<td>Gasification</td>
+<td>Syngas H₂ + CO; two turbines; up to 45% efficient; unproven, demonstration only, cold cleaning, costly <code>4:p45</code></td>
+</tr>
+<tr>
+<td>2</td>
+<td>CCS</td>
+<td>Geosequestration; 20% energy penalty to liquefy; monitoring, siting, transport problems <code>4:p46</code></td>
+</tr>
+<tr>
+<td>1</td>
+<td>Sketch</td>
+<td>The chain: prepare → burn/gasify → capture → stack, with the three reject streams</td>
+</tr>
+<tr>
+<td>1</td>
+<td>Verdict</td>
+<td>There is no way to make coal clean <code>4:p48</code></td>
+</tr>
+</tbody>
+</table>
+<h4 id="d3-water-pollution-health-hazards-and-effluent-standards-14">D3 — Water pollution, health hazards and effluent standards (14)</h4>
+<table>
+<thead>
+<tr>
+<th>Marks</th>
+<th>Block</th>
+<th>Content</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2</td>
+<td>Definition + sources</td>
+<td>Definition <code>4:p50</code>; point vs non-point <code>4:p52</code></td>
+</tr>
+<tr>
+<td>2</td>
+<td>Types</td>
+<td>The seven types: nutrients, surface, oxygen-depleting, groundwater, suspended, chemical, oil <code>4:p55</code>–<code>p61</code></td>
+</tr>
+<tr>
+<td>3</td>
+<td>Pollutant families</td>
+<td>The eleven-family table <code>4:p63</code>–<code>p68</code> with one mechanism each</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Health hazards</td>
+<td>Cholera/dysentery/diarrhoea/TB/jaundice, 80% of stomach disease <code>4:p70</code>; metals; shellfish poisoning; eutrophication cascade <code>4:p71</code>–<code>p72</code>; biomagnification numbers <code>4:p75</code></td>
+</tr>
+<tr>
+<td>2</td>
+<td>Effluent standards</td>
+<td>Parameters and why each is limited; <strong>only</strong> pH 6–8 and DO 4–8 mg/l from the deck <code>4:p64</code>–<code>p65</code>; state no discharge limits are given</td>
+</tr>
+<tr>
+<td>1</td>
+<td>Treatment (standard)</td>
+<td>Primary physical, secondary biological, tertiary and disinfection — stage, pollutant removed, mechanism</td>
+</tr>
+<tr>
+<td>1</td>
+<td>Sketch</td>
+<td>The eutrophication cascade, five arrows</td>
+</tr>
+</tbody>
+</table>
+<h4 id="d4-waste-management-identification-characterisation-classification-recycling-and-reuse-14">D4 — Waste management: identification, characterisation, classification, recycling and reuse (14)</h4>
+<table>
+<thead>
+<tr>
+<th>Marks</th>
+<th>Block</th>
+<th>Content</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2</td>
+<td>Definition + scope</td>
+<td>EU Directive wording <code>4:p79</code>; collection, transport, treatment, disposal, monitoring, aftercare <code>4:p78</code></td>
+</tr>
+<tr>
+<td>2</td>
+<td>Identification</td>
+<td>Waste audit, stream inventory, composition profile</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Characterisation</td>
+<td>Physical, chemical, biological tests and what each decides</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Classification</td>
+<td>By source, by state, by hazard — the six stream table with route for each <code>4:p78</code>, <code>4:p100</code>, <code>4:p102</code></td>
+</tr>
+<tr>
+<td>2</td>
+<td>Hierarchy + 3R</td>
+<td>Five levels in order <code>4:p80</code>; reduce and reuse examples <code>4:p84</code>, <code>4:p86</code>; recycle's five benefits <code>4:p83</code></td>
+</tr>
+<tr>
+<td>1</td>
+<td>Hazardous waste</td>
+<td>Recycling/reuse benefits, environmental and economic <code>4:p125</code>; radioactive waste hazards <code>4:p124</code></td>
+</tr>
+<tr>
+<td>1</td>
+<td>Sketch</td>
+<td>The inverted pyramid: prevention at the top, disposal at the base</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="4-definitions-and-numbers-to-memorise">4. Definitions and numbers to memorise<a class="anchor" href="#4-definitions-and-numbers-to-memorise">#</a></h2>
+<h3 id="41-definitions-word-perfect">4.1 Definitions — word-perfect<a class="anchor" href="#41-definitions-word-perfect">#</a></h3>
+<table>
+<thead>
+<tr>
+<th>Term</th>
+<th>Definition to write</th>
+<th>Page</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Air pollution</td>
+<td>One or more contaminants, alone or combined, in such quantities and durations as may be injurious to human, animal or plant life or property, or which unreasonably interferes with the comfortable enjoyment of life or property or the conduct of business</td>
+<td><code>4:p3</code></td>
+</tr>
+<tr>
+<td>Air pollutant</td>
+<td>A substance dwelling temporarily or permanently in the air which alters the environment by interfering with health, comfort or the food chain, or with property values</td>
+<td><code>4:p9</code></td>
+</tr>
+<tr>
+<td>Primary pollutant</td>
+<td>Emitted directly from identifiable sources — SO₂, PM, NOₓ, VOC, CO, lead</td>
+<td><code>4:p10</code></td>
+</tr>
+<tr>
+<td>Secondary pollutant</td>
+<td>Produced in the atmosphere by chemical reaction among primary pollutants — sulphuric acid, photochemical smog</td>
+<td><code>4:p10</code></td>
+</tr>
+<tr>
+<td>Point source</td>
+<td>Emission from a discrete conveyance (chimney, pipe, vent) at a measurable location</td>
+<td><code>4:p15</code></td>
+</tr>
+<tr>
+<td>Non-point (fugitive) source</td>
+<td>Emission from field sources (tanks, pools) or leaks (valves, taps, couplings), or as runoff</td>
+<td><code>4:p15</code></td>
+</tr>
+<tr>
+<td>Ozone layer</td>
+<td>Stratospheric region with high ozone concentration; absorbs 97–99% of harmful UV</td>
+<td><code>4:p32</code></td>
+</tr>
+<tr>
+<td>Ozone depletion</td>
+<td>Gradual thinning of the ozone layer in the upper atmosphere by chlorine- or bromine-bearing compounds</td>
+<td><code>4:p33</code></td>
+</tr>
+<tr>
+<td>Ozone hole</td>
+<td>Annual, temporary reduction of ozone over the polar regions each spring, recovering in summer</td>
+<td><code>4:p32</code></td>
+</tr>
+<tr>
+<td>ODS</td>
+<td>Compounds that release chlorine or bromine on exposure to high UV</td>
+<td><code>4:p33</code></td>
+</tr>
+<tr>
+<td>Clean coal technologies</td>
+<td>Technologies designed to enhance the efficiency of conversion and the environmental acceptability of coal extraction, preparation and use</td>
+<td><code>4:p40</code></td>
+</tr>
+<tr>
+<td>Water pollution</td>
+<td>Contamination of water bodies, usually by human activity; any change in physical, chemical or biological properties with a detrimental consequence for living things</td>
+<td><code>4:p50</code></td>
+</tr>
+<tr>
+<td>Eutrophication</td>
+<td>Enrichment of water with nutrients such as nitrates and phosphates that triggers excessive growth of green algae</td>
+<td><code>4:p71</code></td>
+</tr>
+<tr>
+<td>Biomagnification</td>
+<td>Entry of harmful non-biodegradable chemicals at small concentration and their accumulation at greater concentration through successive levels of a food chain</td>
+<td><code>4:p74</code></td>
+</tr>
+<tr>
+<td>Waste management</td>
+<td>The collection, transport, recovery and disposal of waste, including supervision of those operations and aftercare of disposal sites</td>
+<td><code>4:p79</code></td>
+</tr>
+<tr>
+<td>Radioactive waste</td>
+<td>Waste containing radioactive material, usually a by-product of nuclear power generation and other applications of nuclear fission or nuclear technology</td>
+<td><code>4:p100</code></td>
+</tr>
+<tr>
+<td>E-waste</td>
+<td>Electronic and electrical equipment or products that have become obsolete through changes in fashion, style and status, or by nearing the end of useful life</td>
+<td><code>4:p102</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="42-numbers-the-deck-states-with-units">4.2 Numbers the deck states — with units<a class="anchor" href="#42-numbers-the-deck-states-with-units">#</a></h3>
+<table>
+<thead>
+<tr>
+<th>Number</th>
+<th>What it measures</th>
+<th>Page</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>97–99%</strong></td>
+<td>Share of harmful UV absorbed by the ozone layer</td>
+<td><code>4:p32</code></td>
+</tr>
+<tr>
+<td><strong>~5%</strong></td>
+<td>Ozone reduction measured 1979–1990</td>
+<td><code>4:p32</code></td>
+</tr>
+<tr>
+<td><strong>1–2%</strong></td>
+<td>Share of ozone depletion attributable to natural causes</td>
+<td><code>4:p35</code></td>
+</tr>
+<tr>
+<td><strong>2050</strong></td>
+<td>Year by which unregulated rocket launches could cost a huge loss of ozone (deck's claim)</td>
+<td><code>4:p34</code></td>
+</tr>
+<tr>
+<td><strong>99%</strong></td>
+<td>Effectiveness of limestone flue-gas desulphurisation (SO₂ → gypsum)</td>
+<td><code>4:p43</code></td>
+</tr>
+<tr>
+<td><strong>99%</strong></td>
+<td>Effectiveness of the electrostatic precipitator on particulates</td>
+<td><code>4:p44</code></td>
+</tr>
+<tr>
+<td><strong>up to 45%</strong></td>
+<td>Efficiency of gasification / IGCC</td>
+<td><code>4:p45</code></td>
+</tr>
+<tr>
+<td><strong>20%</strong></td>
+<td>Share of the coal's energy consumed to liquefy captured CO₂</td>
+<td><code>4:p46</code></td>
+</tr>
+<tr>
+<td><strong>0.1 ppm</strong></td>
+<td>CO concentration at which the deck says there is no effect</td>
+<td><code>4:p16</code></td>
+</tr>
+<tr>
+<td><strong>75 / 10 / 15%</strong></td>
+<td>CO contribution from transport / residential wood burning / industrial process</td>
+<td><code>4:p16</code></td>
+</tr>
+<tr>
+<td><strong>67%</strong></td>
+<td>Share of atmospheric SOₓ from volcanic and other natural sources</td>
+<td><code>4:p19</code></td>
+</tr>
+<tr>
+<td><strong>30–40%</strong></td>
+<td>Share of asthma cases caused by air pollution</td>
+<td><code>4:p25</code></td>
+</tr>
+<tr>
+<td><strong>20–30%</strong></td>
+<td>Share of all respiratory disease caused by air pollution</td>
+<td><code>4:p25</code></td>
+</tr>
+<tr>
+<td><strong>6–8</strong></td>
+<td>Natural pH range of most fresh water bodies</td>
+<td><code>4:p64</code></td>
+</tr>
+<tr>
+<td><strong>8 to 4 mg/l</strong></td>
+<td>Minimum dissolved oxygen for fish life (deck's own wording and order)</td>
+<td><code>4:p65</code></td>
+</tr>
+<tr>
+<td><strong>80%</strong></td>
+<td>Share of stomach diseases in India caused by polluted water</td>
+<td><code>4:p70</code></td>
+</tr>
+<tr>
+<td><strong>0.2 / 77 / 500–600 / 1700 ppm</strong></td>
+<td>DDT in water / algae / fish / pelican — the biomagnification chain</td>
+<td><code>4:p75</code></td>
+</tr>
+<tr>
+<td><strong>K-40, H-3, C-14, radium, polonium, radon</strong></td>
+<td>Natural radionuclides; polonium in bone, radon in lung</td>
+<td><code>4:p100</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="43-numbers-the-deck-does-not-give-never-invent-these">4.3 Numbers the deck does <strong>not</strong> give — never invent these<a class="anchor" href="#43-numbers-the-deck-does-not-give-never-invent-these">#</a></h3>
+<table>
+<thead>
+<tr>
+<th>Missing</th>
+<th>What to write instead</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>BOD limit for discharge</td>
+<td>"The deck gives the parameters, not the limits; BOD is limited because it measures the oxygen the discharge will remove."</td>
+</tr>
+<tr>
+<td>COD limit</td>
+<td>Same construction; add that COD ≥ BOD and the gap is the non-biodegradable fraction.</td>
+</tr>
+<tr>
+<td>TSS, oil and grease, ammonia, metal limits</td>
+<td>Name the parameter and its mechanism; state that limits are set per industry by the pollution control authority (standard).</td>
+</tr>
+<tr>
+<td>Ambient air quality limits (PM10, PM2.5, SO₂, NOₓ)</td>
+<td>Do not quote. The deck gives no ambient standard and no averaging period.</td>
+</tr>
+<tr>
+<td>Stack emission limits</td>
+<td>Do not quote. The deck gives device efficiencies (99%) instead.</td>
+</tr>
+<tr>
+<td>Sampling periods, averaging times</td>
+<td>Not in the deck; if pressed, say the standard is written with an averaging period and quote none.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Why this matters more than it looks:</strong> a wrong number is a wrong fact, and an examiner who knows the field marks it down twice — once for the number, once for not knowing that a standard is set per industry and per receiving-water use.</p>
+<hr />
+<h2 id="5-diagrams-to-be-able-to-draw">5. Diagrams to be able to draw<a class="anchor" href="#5-diagrams-to-be-able-to-draw">#</a></h2>
+<p>Five minutes each, pencil, labelled. A labelled sketch is usually worth 2 of the 8 marks; the three marked <strong>must</strong> are the ones the internal papers have already asked for.</p>
+<h3 id="d1-the-ozone-catalytic-cycle-427428-must">D1 — The ozone catalytic cycle (<code>4:p32</code>–<code>p34</code>) · <strong>must</strong><a class="anchor" href="#d1-the-ozone-catalytic-cycle-427428-must">#</a></h3>
+<p><pre><code>  CFC / halon released at ground level
+  (stable, unreactive, insoluble — survives the troposphere)
+                 │
+                 │  drifts to stratosphere
+                 ▼
+        UV-C splits the C–Cl bond
+                 │
+                 ▼
+        ┌─────▶ Cl·  (chlorine atom, freed) ─────┐
+        │              │                         │
+        │              ▼                         │
+        │        Cl· + O₃ ──▶ ClO + O₂           │   O₃ destroyed
+        │              │                         │
+        │              ▼                         │
+        └──────── ClO + O· ──▶ Cl· + O₂ ─────────┘   Cl· REGENERATED
+                                     (catalyst — never consumed)
+</code></pre>
+Label four things and the diagram is complete: <strong>UV splits C–Cl</strong> · <strong>Cl attacks O₃</strong> · <strong>ClO + O gives the chlorine back</strong> · <strong>one Cl destroys thousands of O₃</strong>. Write the two equations out beside it — they carry more marks than the boxes.</p>
+<h3 id="d2-clean-coal-as-a-chain-429430-must">D2 — Clean coal as a chain (<code>4:p42</code>–<code>p47</code>) · <strong>must</strong><a class="anchor" href="#d2-clean-coal-as-a-chain-429430-must">#</a></h3>
+<p><pre><code>  COAL
+   │
+   ├─[1] WASH ────────── dense-medium barrel: coal floats, impurities sink
+   │                     rejects: ash + pyritic sulphur
+   │
+   ├─[2] BURN ────────── low-NOₓ burner, 3 stages: O₂-deficient → HC reduces NOₓ
+   │        │                                        → air-lean completion
+   │        └─ flue gas ─┬─ FGD: limestone + water → GYPSUM  (99%)
+   │                     └─ ESP: charged plates → FLY ASH     (99%)
+   │
+   ├─[3] GASIFY ──────── coal + O₂ + steam → SYNGAS (H₂ + CO)
+   │                     syngas cleaned → gas turbine
+   │                     hot gas cools → steam → steam turbine   (IGCC, ≤45%)
+   │
+   └─[4] CAPTURE ─────── CO₂ separated → liquefied (−20% energy) → underground
+                         (geosequestration) → monitored for decades
+                                   │
+                                STACK → CO₂ that remains
+</code></pre>
+Every stage produces a reject stream — ash, gypsum, fly ash, CO₂ — and saying so is the sentence that distinguishes management from a list of technologies.</p>
+<h3 id="d3-the-waste-hierarchy-431432-must">D3 — The waste hierarchy (<code>4:p80</code>–<code>p81</code>) · <strong>must</strong><a class="anchor" href="#d3-the-waste-hierarchy-431432-must">#</a></h3>
+<p><pre><code>        ▲  MOST PREFERRED
+        │   1  PREVENTION      — no waste generated at all
+        │   2  REUSE           — same object, same purpose
+        │   3  RECYCLING       — material broken down, remade
+        │   4  ENERGY RECOVERY — incineration with heat/power
+        │   5  DISPOSAL        — sanitary landfill
+        ▼  LEAST PREFERRED
+   value destroyed and energy consumed increase downwards
+</code></pre>
+Draw it as an inverted pyramid or a ladder, and put one deck example on each rung: prevention — double-sided copies <code>4:p84</code>; reuse — envelopes and scratch paper <code>4:p86</code>; recycling — paper, glass, metal, plastic <code>4:p83</code>; energy recovery — incineration; disposal — engineered landfill.</p>
+<h3 id="d4-the-eutrophication-cascade-436">D4 — The eutrophication cascade (<code>4:p72</code>)<a class="anchor" href="#d4-the-eutrophication-cascade-436">#</a></h3>
+<p><pre><code>sewage / fertilizer runoff
+        ↓
+nutrient enrichment of the lake        (nitrates, phosphates)
+        ↓
+algae multiply → ALGAL BLOOM
+        ↓
+algae use up oxygen and begin to die
+        ↓
+decomposers (bacteria) multiply and use MORE oxygen
+        ↓
+fish and other aerobics die of oxygen shortage
+        ↓
+anaerobics take over → ammonia + sulphides → the rotten-egg smell
+</code></pre>
+Six arrows, one word each. The deck's version stops at the fish; the last arrow is the one that explains why a dead river stinks.</p>
+<h3 id="d5-source-pathway-receptor-437-438">D5 — Source → pathway → receptor (<code>4:p15</code>, <code>4:p30</code>)<a class="anchor" href="#d5-source-pathway-receptor-437-438">#</a></h3>
+<p><pre><code>  [1] SOURCE              [2] PATHWAY             [3] RECEPTOR
+  stack, vent,            wind, mixing,           lungs, leaves,
+  tank, field             washout, deposition     stone, water
+      │                        │                       │
+  control at source       intercept the plume     protect the receptor
+  fuel, process,          tall stack, zoning      shelter, warning,
+  ESP, FGD, scrubber                              evacuation
+</code></pre>
+Use it to place every control measure: a measure that cannot be assigned to one of the three links is not a control, it is a hope.</p>
+<h3 id="d6-biomagnification-439">D6 — Biomagnification (<code>4:p75</code>)<a class="anchor" href="#d6-biomagnification-439">#</a></h3>
+<p><pre><code>  pelican        1700 ppm   ▲
+  fish        500–600 ppm   │  concentration rises
+  algae            77 ppm   │  at each trophic level
+  water           0.2 ppm   │
+</code></pre>
+Label the mechanism — non-biodegradable, not metabolised, not excreted — and the outcome: weak egg shells, falling population.</p>
+<h3 id="d7-the-four-receptacles-of-air-pollution-one-page-440441">D7 — The four receptacles of air pollution (one page, <code>4:p24</code>–<code>p29</code>)<a class="anchor" href="#d7-the-four-receptacles-of-air-pollution-one-page-440441">#</a></h3>
+<p>A central box "industrial emissions: SO₂, PM, NOₓ, CO, NH₃" with four arrows out: <strong>human</strong> (irritation → chronic respiratory disease, 30–40% of asthma), <strong>plants</strong> (stomata → chlorosis → necrosis → abscission → yield loss), <strong>animals</strong> (mucous lining, bronchitis, appetite, migration), <strong>materials</strong> (H₂SO₄ + CaCO₃ → crumbling; O₃/PAN → cracked rubber; SPM → soiling). The best single diagram for D1 at 14 marks.</p>
+<h3 id="d8-the-water-treatment-train-standard">D8 — The water treatment train (standard)<a class="anchor" href="#d8-the-water-treatment-train-standard">#</a></h3>
+<p><pre><code>raw sewage → bar screen → grit removal → primary settling → aeration
+             (rags)       (sand, grit)   (settleable solids)  (activated sludge)
+                    → secondary settling → tertiary → disinfection → out
+                       (humus sludge)      (nutrients)  (pathogens)
+                            │
+                    return activated sludge → back to aeration
+</code></pre>
+Label what each stage removes and by what mechanism — that is the whole mark scheme.</p>
+<hr />
+<h2 id="6-say-this-if-grilled">6. Say-this-if-grilled<a class="anchor" href="#6-say-this-if-grilled">#</a></h2>
+<p>The "but why" answers. One sentence each; they are where the last two marks live.</p>
+<ol>
+<li><strong>"Why can air pollution never be eliminated?"</strong> Because no process is 100% efficient — whatever is not converted to product leaves as waste, so the choice is never zero emission but where the emission is moved to <code>4:p3</code>.</li>
+<li><strong>"Why does particle size matter more than the mass emitted?"</strong> Because deposition depth is set by diameter: the coarse fraction is caught in the nose and cleared, while the fine fraction reaches the alveoli where there is no escalator — so the same tonne does far more damage as fine dust <code>4:p22</code>–<code>p23</code>.</li>
+<li><strong>"Why is CO dangerous when it is not an irritant at all?"</strong> Because it binds haemoglobin in preference to oxygen and shifts the dissociation curve, so the injury is tissue hypoxia everywhere downstream, with no warning symptom to make the worker leave <code>4:p25</code>.</li>
+<li><strong>"Why is a secondary pollutant harder to control than a primary one?"</strong> By the time it exists the stack is kilometres behind — only its precursors can be attacked, which is why NOₓ and VOC control is really ozone control <code>4:p10</code>.</li>
+<li><strong>"Why is the ozone hole not simply a thinning?"</strong> Because it is seasonal and polar: chlorine is converted on polar-stratospheric ice crystals in winter and destroys ozone as soon as spring sunlight returns, then recovers in summer — the global column thins separately <code>4:p32</code>.</li>
+<li><strong>"Why does a trace concentration of CFC do so much damage?"</strong> Because chlorine is a catalyst — it is regenerated at the end of each cycle, so one atom destroys ozone thousands of times before it is removed.</li>
+<li><strong>"Is clean coal clean?"</strong> No. There is no way to make coal clean; gasification improves the efficiency of burning and capture can bury the CO₂, but the coal still burns and CCS costs a fifth of the energy to liquefy what it captures <code>4:p48</code>.</li>
+<li><strong>"Why wash coal at all when the flue is cleaned anyway?"</strong> Because a pollutant never formed needs no reagent, no fan power and no disposal route — washing removes ash and pyritic sulphur before the furnace, so both the precipitator and the scrubber face a smaller load <code>4:p42</code>.</li>
+<li><strong>"Why does organic pollution kill fish when it is not toxic?"</strong> Because it is food: bacteria oxidise it and take dissolved oxygen from the water faster than the atmosphere and algae can replace it, so the fish die of suffocation, not poisoning <code>4:p65</code>.</li>
+<li><strong>"Why does eutrophication get worse after the algae die?"</strong> Because the decomposers that consume the dead bloom are themselves aerobic — the oxygen demand peaks after the bloom, which is why the fish kill follows the green water rather than accompanying it <code>4:p72</code>.</li>
+<li><strong>"Why does DDT at 0.2 ppm kill pelicans at 1700 ppm?"</strong> Because it is non-biodegradable and lipophilic: each trophic level retains what it eats and passes the accumulated load upward, so the top consumer receives the sum of the chain <code>4:p74</code>–<code>p75</code>.</li>
+<li><strong>"Why is segregation at source the whole of waste management?"</strong> Because every later stage is an expensive attempt to undo mixing: a mixed stream cannot be composted, cannot be recycled at a profit, and cannot be incinerated without making dioxins from its chlorine and contaminating its fly ash with metals.</li>
+<li><strong>"Why does the deck refuse to give effluent limits?"</strong> Because a limit is set per industry and per receiving-water use — the same BOD is acceptable into a sewer and destructive into a fishing river — so the parameter and its purpose are the examinable part, and a memorised number is a liability.</li>
+<li><strong>"Why is landfill last on the hierarchy?"</strong> Because it is the only option that destroys the material's value entirely and still carries a liability — leachate and methane — for decades after the site closes.</li>
+</ol>
+<hr />
+<p><em>Built from <code>ehs_4.txt</code> (127 pages) with the friend notes §4.1–4.10 as second source; every <code>(standard)</code> tag marks content that is true and answerable but absent from the deck. No numeric effluent or emission standard appears in the deck, and none is invented here.</em></p>
+  </main>
+</div>
+<button id="chat-btn" title="Ask about this page (select text first)">✳</button>
+<div id="sel-chip">Ask about this</div>
+<div id="chat-panel" role="dialog" aria-label="Ask about this page">
+  <div id="chat-head"><span>Ask this page</span><span class="sp"></span><button id="chat-close" title="Close">✕</button></div>
+  <div id="chat-quote"></div>
+  <div id="chat-log"></div>
+  <form id="chat-form" autocomplete="off">
+    <textarea id="chat-input" rows="1" placeholder="Ask about the selection or the section…"></textarea>
+    <button id="chat-send" title="Send">↑</button>
+  </form>
+  <div id="chat-foot">Select text → “Ask about this”. Enter sends, Shift+Enter newline.</div>
+</div>
+<div class="tools">
+  <button id="theme" title="Toggle light / dark">☾</button>
+  <button id="top" title="Back to top">↑</button>
+</div>
+<script>
+(function(){
+  var root=document.documentElement, key='minotes-theme';
+  var saved=localStorage.getItem(key);
+  var prefers=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';
+  root.setAttribute('data-theme', saved || prefers);
+
+  var btn=document.getElementById('theme');
+  function sync(){ if(btn) btn.textContent = root.getAttribute('data-theme')==='dark' ? '\u2600' : '\u263E'; }
+  sync();
+  if(btn) btn.addEventListener('click',function(){
+    var next = root.getAttribute('data-theme')==='dark' ? 'light' : 'dark';
+    root.setAttribute('data-theme', next); localStorage.setItem(key,next); sync();
+  });
+
+  var bar=document.getElementById('progress');
+  if(bar) addEventListener('scroll',function(){
+    var h=document.documentElement.scrollHeight-innerHeight;
+    bar.style.width=(h>0?(scrollY/h*100):0)+'%';
+  },{passive:true});
+
+  document.querySelectorAll('pre').forEach(function(pre){
+    var b=document.createElement('button');
+    b.className='copy'; b.textContent='copy';
+    b.addEventListener('click',function(){
+      var t=pre.querySelector('code'); var txt=t?t.innerText:pre.innerText;
+      navigator.clipboard.writeText(txt).then(function(){
+        b.textContent='copied'; setTimeout(function(){b.textContent='copy';},1200);
+      });
+    });
+    pre.appendChild(b);
+  });
+
+  document.querySelectorAll('main table').forEach(function(t){
+    if(t.parentElement.classList.contains('table-scroll')) return;
+    var w=document.createElement('div'); w.className='table-scroll';
+    t.parentNode.insertBefore(w,t); w.appendChild(t);
+  });
+
+  var links=[].slice.call(document.querySelectorAll('.sidebar a[href^="#"]'));
+  var map={}; links.forEach(function(a){ map[a.getAttribute('href').slice(1)]=a; });
+  var heads=[].slice.call(document.querySelectorAll('main h2[id], main h3[id]'));
+  if('IntersectionObserver' in window && heads.length){
+    var obs=new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if(!e.isIntersecting) return;
+        links.forEach(function(a){a.classList.remove('active');});
+        var a=map[e.target.id]; if(a){a.classList.add('active');}
+      });
+    },{rootMargin:'-10% 0px -75% 0px'});
+    heads.forEach(function(h){obs.observe(h);});
+  }
+
+  var top=document.getElementById('top');
+  if(top) top.addEventListener('click',function(){ scrollTo({top:0,behavior:'smooth'}); });
+})();
+
+(function(){
+  var API="/api/chat";
+  var panel=document.getElementById("chat-panel"),
+      btn=document.getElementById("chat-btn"),
+      chip=document.getElementById("sel-chip"),
+      quote=document.getElementById("chat-quote"),
+      log=document.getElementById("chat-log"),
+      input=document.getElementById("chat-input"),
+      send=document.getElementById("chat-send"),
+      form=document.getElementById("chat-form");
+
+  if(!panel) return;
+  var pendingSelection="", busy=false, lastSelection="";
+
+  function esc(s){return s.replace(/[&<>]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;"}[c];});}
+
+  // minimal markdown: fenced code, inline code, bold, bullets, numbered lists
+  function md(src){
+    var parts=src.split(/```/), out="";
+    for(var i=0;i<parts.length;i++){
+      if(i%2){ out+="<pre><code>"+esc(parts[i].replace(/^\w*\n/,""))+"</code></pre>"; continue; }
+      var t=esc(parts[i]);
+      t=t.replace(/`([^`\n]+)`/g,"<code>$1</code>").replace(/\*\*([^*]+)\*\*/g,"<b>$1</b>");
+      var lines=t.split(/\n/), html="", inUl=false, inOl=false;
+      for(var j=0;j<lines.length;j++){
+        var line=lines[j];
+        if(/^\s*[-*]\s+/.test(line)){
+          if(inOl){html+="</ol>";inOl=false;}
+          if(!inUl){html+="<ul>";inUl=true;}
+          html+="<li>"+line.replace(/^\s*[-*]\s+/,"")+"</li>"; continue;
+        }
+        if(/^\s*\d+[.)]\s+/.test(line)){
+          if(inUl){html+="</ul>";inUl=false;}
+          if(!inOl){html+="<ol>";inOl=true;}
+          html+="<li>"+line.replace(/^\s*\d+[.)]\s+/,"")+"</li>"; continue;
+        }
+        if(inUl){html+="</ul>";inUl=false;}
+        if(inOl){html+="</ol>";inOl=false;}
+        if(line.trim()==="") continue;
+        html+="<p>"+line+"</p>";
+      }
+      if(inUl)html+="</ul>";
+      if(inOl)html+="</ol>";
+      out+=html;
+    }
+    return out;
+  }
+
+  function outline(){
+    return [].slice.call(document.querySelectorAll("main h2, main h3")).slice(0,40)
+      .map(function(h){return (h.tagName==="H3"?"  - ":"- ")+h.textContent.replace(/#$/,"").trim();}).join("\n");
+  }
+
+  function sectionFor(node){
+    var el = node && (node.nodeType===1?node:node.parentElement);
+    if(!el || !el.closest) return "";
+    el = el.closest("main") ? el : null;
+    if(!el) return "";
+    var heads=[].slice.call(document.querySelectorAll("main h2, main h3"));
+    var cur=null, idx=-1;
+    for(var i=0;i<heads.length;i++){
+      if(heads[i].compareDocumentPosition(el) & Node.DOCUMENT_POSITION_FOLLOWING) { cur=heads[i]; idx=i; }
+    }
+    if(!cur) return "";
+    var stop = heads[idx+1] || null, txt=[], n=cur;
+    while((n=n.nextSibling) && n!==stop){ if(n.textContent) txt.push(n.textContent); }
+    return (cur.textContent+"\n"+txt.join("\n")).replace(/\s+\n/g,"\n").slice(0,3000);
+  }
+
+  function placeChip(x,y){
+    chip.style.left=x+"px"; chip.style.top=(y+window.scrollY-8)+"px"; chip.style.display="block";
+  }
+  function hideChip(){ chip.style.display="none"; }
+
+  document.addEventListener("mouseup",function(e){
+    setTimeout(function(){
+      var s=window.getSelection(), text=s?s.toString().trim():"";
+      if(!text || text.length<3 || !s.anchorNode || !(s.anchorNode.parentElement||s.anchorNode).closest("main")){hideChip();return;}
+      lastSelection=text;
+      var r=s.getRangeAt(0).getBoundingClientRect();
+      placeChip(r.left+r.width/2, Math.max(r.top,8));
+    },10);
+  });
+  document.addEventListener("mousedown",function(e){ if(e.target!==chip) hideChip(); });
+
+  chip.addEventListener("mousedown",function(e){ e.preventDefault(); });
+  chip.addEventListener("click",function(e){
+    e.stopPropagation();
+    pendingSelection=lastSelection; hideChip(); open(pendingSelection);
+  });
+
+  function open(sel){
+    panel.classList.add("open");
+    if(sel){ quote.style.display="block"; quote.textContent=sel; pendingSelection=sel; }
+    else { quote.style.display="none"; quote.textContent=""; pendingSelection=""; }
+    setTimeout(function(){input.focus();},60);
+  }
+  function close(){ panel.classList.remove("open"); }
+
+  btn.addEventListener("click",function(){ panel.classList.contains("open")?close():open(lastSelection||""); });
+  document.getElementById("chat-close").addEventListener("click",close);
+  document.addEventListener("keydown",function(e){ if(e.key==="Escape") close(); });
+
+  function addMsg(cls,html){
+    var d=document.createElement("div"); d.className="msg "+cls; d.innerHTML=html; log.appendChild(d);
+    log.scrollTop=log.scrollHeight; return d;
+  }
+
+  async function ask(q){
+    if(busy||!q.trim()) return;
+    busy=true; send.disabled=true;
+    addMsg("user",esc(q));
+    var bot=addMsg("bot",'<span class="cursor"></span>');
+    var acc="";
+    var sid=sessionStorage.getItem("mn-sid");
+    if(!sid){ sid=(crypto.randomUUID?crypto.randomUUID():String(Date.now())+Math.random().toString(16).slice(2)); sessionStorage.setItem("mn-sid",sid); }
+    var payload={q:q, sid:sid, sel:pendingSelection||"", page:document.querySelector("h1")?document.querySelector("h1").textContent.trim():document.title,
+                 section:sectionFor(window.getSelection()&&window.getSelection().anchorNode?"":document.querySelector("main h2"))||"",
+                 outline:outline()};
+    // section: prefer the one containing the selection, else the first heading on screen
+    try{
+      var sel=window.getSelection();
+      if(pendingSelection && sel && sel.anchorNode){ payload.section=sectionFor(sel.anchorNode); }
+      if(!payload.section){
+        var vis=[].slice.call(document.querySelectorAll("main h2, main h3")).filter(function(h){
+          var r=h.getBoundingClientRect(); return r.top>-80 && r.top<window.innerHeight*0.6; }).pop();
+        if(vis) payload.section=sectionFor(vis);
+      }
+    }catch(_){}
+
+    try{
+      var res=await fetch(API,{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify(payload)});
+      if(!res.ok){
+        var j=await res.json().catch(function(){return{};});
+        throw new Error(j.error||("HTTP "+res.status));
+      }
+      var reader=res.body.getReader(), dec=new TextDecoder(), buf="";
+      for(;;){
+        var r=await reader.read(); if(r.done) break;
+        buf+=dec.decode(r.value,{stream:true});
+        var lines=buf.split("\n"); buf=lines.pop()||"";
+        for(var i=0;i<lines.length;i++){
+          var l=lines[i].trim(); if(l.indexOf("data:")!==0) continue;
+          var d=l.slice(5).trim(); if(d==="[DONE]") continue;
+          try{ var o=JSON.parse(d); if(o.d){acc+=o.d; bot.innerHTML=md(acc)+'<span class="cursor"></span>'; log.scrollTop=log.scrollHeight;} if(o.error) throw new Error(o.error);}catch(_){}
+        }
+      }
+      bot.innerHTML=md(acc||"_no answer_");
+    }catch(err){
+      bot.className="msg err";
+      bot.textContent = String(err.message).indexOf("Failed to fetch")>-1 || String(err.message).indexOf("HTTP 5")>-1
+        ? "Assistant unavailable — it only works on the deployed site (needs the /api/chat function)."
+        : "Error: "+err.message;
+    }finally{
+      busy=false; send.disabled=false; input.value=""; input.focus();
+      pendingSelection=""; quote.style.display="none";
+    }
+  }
+
+  form.addEventListener("submit",function(e){ e.preventDefault(); ask(input.value); });
+  input.addEventListener("keydown",function(e){
+    if(e.key==="Enter"&&!e.shiftKey){ e.preventDefault(); ask(input.value); }
+  });
+  input.addEventListener("input",function(){ input.style.height="auto"; input.style.height=Math.min(input.scrollHeight,110)+"px"; });
+})();
+</script>
+</body>
+</html>

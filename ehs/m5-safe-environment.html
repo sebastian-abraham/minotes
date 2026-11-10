@@ -1,0 +1,1377 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Module 5 — Safe Working Environment · Environmental Health &amp; Safety</title>
+<style>
+:root{
+  --bg:#fbfaf8; --panel:#ffffff; --ink:#232120; --muted:#5f5a53; --line:#e6e1da;
+  --accent:#7a4fd0; --accent-soft:#f1ecfb; --code-bg:#f5f2ee; --code-ink:#2b2a28;
+  --warn-bg:#fff8e6; --warn-line:#f0d9a0;
+  --sans:"Inter","Segoe UI",system-ui,-apple-system,"Noto Sans",sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,"SF Mono",Menlo,Consolas,"Fira Code",monospace;
+}
+html[data-theme="dark"]{
+  --bg:#141317; --panel:#1b1a20; --ink:#e8e4de; --muted:#a8a199; --line:#2f2c36;
+  --accent:#b79cf5; --accent-soft:#241f33; --code-bg:#22202a; --code-ink:#e8e4de;
+  --warn-bg:#2a2417; --warn-line:#4a3d22;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0; background:var(--bg); color:var(--ink); font-family:var(--sans);
+  font-size:16.5px; line-height:1.72; -webkit-font-smoothing:antialiased;
+}
+#progress{position:fixed;top:0;left:0;height:3px;width:0;background:var(--accent);z-index:50;transition:width .1s linear}
+
+.wrap{display:flex;align-items:flex-start;min-height:100vh}
+.sidebar{
+  position:sticky;top:0;height:100vh;width:300px;flex:0 0 300px;overflow-y:auto;
+  padding:26px 20px 60px;border-right:1px solid var(--line);background:var(--panel);
+}
+.sidebar h1{font-size:15px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);
+  margin:0 0 4px;font-weight:600}
+.sidebar .sub{font-size:12.5px;color:var(--muted);margin:0 0 18px}
+.sidebar nav{font-size:14px}
+.sidebar .toc>ul{padding-left:0}
+.sidebar ul{list-style:none;margin:0;padding-left:12px}
+.sidebar ul ul{border-left:1px solid var(--line);margin-left:4px;padding-left:10px}
+.sidebar li{margin:3px 0}
+.sidebar a{color:var(--ink);text-decoration:none;display:block;padding:3px 8px;border-radius:8px;
+  line-height:1.35;transition:background .12s,color .12s}
+.sidebar a:hover{background:var(--accent-soft);color:var(--accent)}
+.sidebar a.active{background:var(--accent-soft);color:var(--accent);font-weight:600}
+.sidebar .home{display:inline-flex;align-items:center;gap:6px;margin-bottom:16px;font-size:13.5px;
+  color:var(--muted);text-decoration:none;border:1px solid var(--line);padding:5px 10px;border-radius:999px}
+.sidebar .home:hover{color:var(--accent);border-color:var(--accent)}
+
+main{flex:1;min-width:0;padding:46px 56px 120px;max-width:980px;margin:0 auto}
+.doc-head{border-bottom:1px solid var(--line);padding-bottom:18px;margin-bottom:34px}
+.doc-head .kicker{font-size:12.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);
+  font-weight:700;margin-bottom:8px}
+.doc-head .meta{font-size:13.5px;color:var(--muted)}
+
+h1,h2,h3,h4{line-height:1.25;font-weight:700;letter-spacing:-.01em}
+h1{font-size:2.05rem;margin:.2em 0 .5em}
+h2{font-size:1.55rem;margin:2.4em 0 .7em;padding-bottom:.35em;border-bottom:1px solid var(--line)}
+h3{font-size:1.2rem;margin:1.9em 0 .55em}
+h4{font-size:1.03rem;margin:1.5em 0 .45em;color:var(--muted)}
+h2 .anchor,h3 .anchor{opacity:0;margin-left:.35em;font-size:.8em;color:var(--muted);text-decoration:none}
+h2:hover .anchor,h3:hover .anchor{opacity:1}
+p{margin:.75em 0}
+a{color:var(--accent);text-underline-offset:2px}
+strong{font-weight:650}
+hr{border:0;border-top:1px solid var(--line);margin:2.6em 0}
+ul,ol{margin:.7em 0;padding-left:1.4em}
+li{margin:.3em 0}
+li>ul,li>ol{margin:.25em 0}
+blockquote{
+  margin:1.3em 0;padding:12px 18px;background:var(--warn-bg);border-left:3px solid var(--warn-line);
+  border-radius:0 10px 10px 0;color:var(--ink)
+}
+blockquote p{margin:.3em 0}
+
+code{font-family:var(--mono);font-size:.87em;background:var(--code-bg);color:var(--code-ink);
+  padding:.15em .38em;border-radius:6px;border:1px solid var(--line);
+  box-decoration-break:clone;-webkit-box-decoration-break:clone;overflow-wrap:anywhere}
+pre{position:relative;background:var(--code-bg);border:1px solid var(--line);border-radius:12px;
+  padding:16px 18px;overflow-x:auto;margin:1.1em 0}
+pre code{background:none;border:0;padding:0;font-size:13.6px;line-height:1.62;white-space:pre}
+.copy{position:absolute;top:8px;right:8px;font:600 11px/1 var(--sans);color:var(--muted);
+  background:var(--panel);border:1px solid var(--line);border-radius:7px;padding:5px 8px;cursor:pointer;
+  opacity:0;transition:opacity .15s}
+pre:hover .copy{opacity:1}
+.copy:hover{color:var(--accent);border-color:var(--accent)}
+
+.table-scroll{overflow-x:auto;margin:1.3em 0;border:1px solid var(--line);border-radius:12px;background:var(--panel)}
+table{border-collapse:collapse;width:100%;font-size:14.6px}
+th,td{padding:9px 13px;text-align:left;vertical-align:top;border-bottom:1px solid var(--line)}
+th{background:var(--accent-soft);font-weight:650;font-size:13px;letter-spacing:.02em;
+  position:sticky;top:0;backdrop-filter:blur(4px)}
+tr:last-child td{border-bottom:0}
+tbody tr:nth-child(even){background:color-mix(in srgb,var(--panel) 60%,var(--bg))}
+tbody tr:hover{background:var(--accent-soft)}
+
+.tools{position:fixed;right:22px;bottom:22px;display:flex;flex-direction:column;gap:8px;z-index:40}
+.tools button{width:42px;height:42px;border-radius:12px;border:1px solid var(--line);background:var(--panel);
+  color:var(--ink);cursor:pointer;font-size:16px;box-shadow:0 4px 14px rgba(0,0,0,.10)}
+.tools button:hover{color:var(--accent);border-color:var(--accent)}
+@media (max-width:1000px){
+  .wrap{display:block}
+  .sidebar{position:static;width:auto;height:auto;border-right:0;border-bottom:1px solid var(--line)}
+  .sidebar nav{max-height:40vh;overflow:auto}
+  main{padding:28px 20px 100px}
+}
+@media print{
+  .sidebar,.tools,#progress,.copy{display:none!important}
+  body{background:#fff;color:#000;font-size:11pt}
+  main{padding:0;max-width:none}
+  h2{break-after:avoid} pre,table,blockquote{break-inside:avoid}
+  a{color:#000;text-decoration:none}
+}
+
+/* ---- ask-about-this ---- */
+#chat-btn{position:fixed;right:20px;bottom:112px;width:44px;height:44px;border-radius:50%;
+  border:1px solid var(--line);background:var(--panel);color:var(--accent);cursor:pointer;font-size:17px;
+  box-shadow:0 6px 18px rgba(0,0,0,.12);z-index:45;display:grid;place-items:center}
+#chat-btn:hover{border-color:var(--accent)}
+#sel-chip{position:absolute;z-index:46;transform:translate(-50%,-100%);background:var(--ink);color:var(--bg);
+  font:600 12px/1 var(--sans);padding:7px 11px;border-radius:999px;cursor:pointer;white-space:nowrap;
+  box-shadow:0 6px 18px rgba(0,0,0,.25);display:none}
+#sel-chip:hover{background:var(--accent);color:#fff}
+#chat-panel{position:fixed;right:20px;bottom:164px;width:min(420px,calc(100vw - 40px));max-height:min(70vh,620px);
+  background:var(--panel);border:1px solid var(--line);border-radius:14px;z-index:47;display:none;
+  flex-direction:column;box-shadow:0 18px 50px rgba(0,0,0,.18);overflow:hidden}
+#chat-panel.open{display:flex}
+#chat-head{display:flex;align-items:center;gap:8px;padding:11px 13px;border-bottom:1px solid var(--line);
+  font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:700}
+#chat-head .sp{flex:1}
+#chat-head button{background:none;border:0;color:var(--muted);cursor:pointer;font-size:15px;padding:2px 4px}
+#chat-head button:hover{color:var(--accent)}
+#chat-quote{display:none;margin:10px 13px 0;padding:8px 10px;border-left:2px solid var(--accent);
+  background:var(--accent-soft);color:var(--muted);font-size:12.5px;border-radius:0 8px 8px 0;
+  max-height:84px;overflow:auto;white-space:pre-wrap}
+#chat-log{flex:1;overflow-y:auto;padding:12px 13px;display:flex;flex-direction:column;gap:10px;font-size:13.6px;line-height:1.55}
+.msg{max-width:100%}
+.msg.user{align-self:flex-end;background:var(--accent-soft);color:var(--ink);padding:7px 11px;border-radius:11px 11px 2px 11px;
+  max-width:86%;white-space:pre-wrap}
+.msg.bot{color:var(--ink)}
+.msg.bot p{margin:.3em 0}
+.msg.bot ul{margin:.3em 0;padding-left:1.15em}
+.msg.bot code{font-size:.9em}
+.msg.bot pre{background:var(--code-bg);border-radius:8px;padding:9px 11px;overflow-x:auto;font-size:12px;margin:.4em 0}
+.msg.err{color:#b3261e;font-size:12.5px}
+.msg .cursor:after{content:"▍";color:var(--accent);animation:blink 1s steps(2) infinite}
+@keyframes blink{50%{opacity:0}}
+#chat-form{display:flex;gap:8px;padding:10px 13px;border-top:1px solid var(--line)}
+#chat-input{flex:1;resize:none;border:1px solid var(--line);border-radius:9px;background:var(--bg);color:var(--ink);
+  font:inherit;font-size:13.5px;padding:8px 10px;max-height:110px;min-height:38px}
+#chat-input:focus{outline:2px solid var(--accent);outline-offset:0}
+#chat-send{border:1px solid var(--accent);background:var(--accent);color:#fff;border-radius:9px;
+  width:38px;cursor:pointer;font-size:15px}
+#chat-send:disabled{opacity:.45;cursor:default}
+#chat-foot{font-size:11px;color:var(--muted);padding:0 13px 9px}
+@media (max-width:640px){
+  #chat-panel{right:8px;left:8px;width:auto;bottom:150px;max-height:66vh}
+  #chat-btn{bottom:104px;right:16px}
+}
+@media print{#chat-btn,#chat-panel,#sel-chip{display:none!important}}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+<div class="wrap">
+  <aside class="sidebar">
+    <a class="home" href="index.html">← Environmental Health &amp; Safety</a>
+    <a class="home" href="practice.html">Practice drills</a>
+    <h1>M5 · Safe environment</h1>
+    <p class="sub">20% ESE · CO5</p>
+    <nav class="toc"><div class="toc">
+<ul>
+<li><a href="#1-coverage-every-syllabus-line">1. Coverage — every syllabus line</a></li>
+<li><a href="#2-concepts">2. Concepts</a><ul>
+<li><a href="#21-safety-inspection-purpose-benefits-types-5-sl-38-2226">2.1 Safety inspection — purpose, benefits, types (<code>ehs_5.txt</code> sl 3–8, 22–26)</a></li>
+<li><a href="#22-running-an-inspection-preparation-walk-through-report-17-sl-921-2736">2.2 Running an inspection — preparation, walk-through, report (<code>ehs_5.txt</code> sl 9–21, 27–36)</a></li>
+<li><a href="#23-first-aid-appliances-section-45-32-sl-3940">2.3 First-aid appliances — Section 45 (<code>ehs_5.txt</code> sl 39–40)</a></li>
+<li><a href="#24-shelters-rest-rooms-and-lunch-rooms-welfare-sections-4247-37-sl-3738-4145">2.4 Shelters, rest rooms and lunch rooms — welfare, Sections 42–47 (<code>ehs_5.txt</code> sl 37–38, 41–45)</a></li>
+<li><a href="#25-personal-protective-equipment-40-sl-4685">2.5 Personal protective equipment (<code>ehs_5.txt</code> sl 46–85)</a></li>
+<li><a href="#26-role-of-the-individual-in-conservation-of-natural-resources-62-sl-86100">2.6 Role of the individual in conservation of natural resources (<code>ehs_5.txt</code> sl 86–100)</a></li>
+<li><a href="#27-methods-for-controlling-water-pollution-68-sl-101108">2.7 Methods for controlling water pollution (<code>ehs_5.txt</code> sl 101–108)</a></li>
+<li><a href="#28-role-of-the-individual-in-prevention-of-pollution-79-sl-109114">2.8 Role of the individual in prevention of pollution (<code>ehs_5.txt</code> sl 109–114)</a></li>
+</ul>
+</li>
+<li><a href="#3-answer-bank">3. Answer bank</a><ul>
+<li><a href="#31-three-mark-answers">3.1 Three-mark answers</a></li>
+<li><a href="#32-five-mark-answers">3.2 Five-mark answers</a></li>
+<li><a href="#33-seven-and-eight-mark-answers">3.3 Seven- and eight-mark answers</a></li>
+<li><a href="#34-fourteen-mark-skeletons">3.4 Fourteen-mark skeletons</a></li>
+</ul>
+</li>
+<li><a href="#4-definitions-and-numbers-to-memorise">4. Definitions and numbers to memorise</a></li>
+<li><a href="#5-diagrams-to-be-able-to-draw">5. Diagrams to be able to draw</a></li>
+<li><a href="#6-say-this-if-grilled">6. Say-this-if-grilled</a></li>
+</ul>
+</div>
+</nav>
+  </aside>
+  <main>
+    <div class="doc-head">
+      <div class="kicker">20CET453 · Environmental Health &amp; Safety</div>
+      <div class="meta">20% ESE · CO5 · rendered from KIT_M5_SAFE_WORKING_ENVIRONMENT.md</div>
+    </div>
+    <h1 id="module-5-safe-working-environment">Module 5 — Safe Working Environment</h1>
+<p><strong>20CET453 Environmental Health and Safety · ESE:</strong> Part A = 3 marks (10 questions, two per module), Part B = 14 marks (5 questions, one per module) · this module is 20% of the paper — one Part-B question and about two Part-A questions.
+Sources: <code>ehs_5.txt</code> (the Module V deck, 116 slides, cited as <code>sl N</code>), <code>friend_notes.md</code> §5.1–5.8 and its Module 5 key terms, <code>syllabus.md</code> Module V.
+<strong>This module has never been examined internally</strong> — all three internal papers contain zero Module V questions — so the syllabus wording below is the entire scope, and every bullet is answered here at full weight, not as an appendix.</p>
+<hr />
+<h2 id="1-coverage-every-syllabus-line">1. Coverage — every syllabus line<a class="anchor" href="#1-coverage-every-syllabus-line">#</a></h2>
+<table>
+<thead>
+<tr>
+<th>Syllabus line (verbatim)</th>
+<th>Hrs</th>
+<th>Answered at</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Basic purpose and benefits of safety inspection</td>
+<td>2</td>
+<td>§2.1 (purpose, benefits, types), §2.2 (procedure, report) · bank 3.1 A–D, 3.2 A–B, 3.3 A–B, 3.4 B</td>
+</tr>
+<tr>
+<td>First-aid appliances — shelters, rest rooms and lunch rooms — use of personal protective equipment</td>
+<td>2</td>
+<td>§2.3 (first aid), §2.4 (welfare), §2.5 (PPE) · bank 3.1 E–H, 3.2 C–E, 3.3 C–E, 3.4 A</td>
+</tr>
+<tr>
+<td>Role of an individual in conservation of natural resources</td>
+<td>1</td>
+<td>§2.6 · bank 3.1 I, 3.2 F, 3.3 F</td>
+</tr>
+<tr>
+<td>Methods for controlling water pollution — role of the individual in prevention of pollution</td>
+<td>2</td>
+<td>§2.7 (methods), §2.8 (individual's role) · bank 3.1 J, 3.2 G, 3.3 G, 3.4 C</td>
+</tr>
+</tbody>
+</table>
+<p>Total: <strong>7 hrs</strong> of the 36-hr course.</p>
+<p><strong>No internal-question table exists for this module.</strong> The three papers in <code>internal_questions.md</code> ask nothing from Module V — no inspection, no first aid, no welfare, no PPE, no conservation, no water-pollution control. Absence is not a signal: treat all four lines above as examinable, and expect the setter to compensate for two years of predictability.</p>
+<p><strong>Weighting warning.</strong> Line 2 is <strong>three topics in 2 hrs</strong> — first aid, welfare <em>and</em> PPE — which is far denser than any other syllabus line in the course. If a 14-mark question comes from this module it will almost certainly be that line, because it is the only one that can fill fourteen marks from one sentence of syllabus.</p>
+<hr />
+<h2 id="2-concepts">2. Concepts<a class="anchor" href="#2-concepts">#</a></h2>
+<h3 id="21-safety-inspection-purpose-benefits-types-5-sl-38-2226">2.1 Safety inspection — purpose, benefits, types (<code>ehs_5.txt</code> sl 3–8, 22–26)<a class="anchor" href="#21-safety-inspection-purpose-benefits-types-5-sl-38-2226">#</a></h3>
+<p><strong>What:</strong> a safety inspection is the structured, scheduled, recorded examination of the physical workplace to find hazards, confirm that standards are being met, and start corrective action — not a paperwork audit, and not a fault-finding walk by managers (<code>sl 3–4</code>).</p>
+<ul>
+<li><strong>Definition to quote</strong> (<code>sl 4</code>): "the process of critically examining the workplace for the identification and investigation of workplace hazards and to ensure action of reducing the severity, that all standards are met and workplace is in fact safe and free from any risk." It is an <strong>ongoing process</strong>, not a one-off certification, and it is a basic tool for establishing and maintaining safe conditions and discovering unsafe practices.</li>
+<li><strong>The four things an inspection discovers</strong> (<code>sl 3</code>) — the deck's own list, and the commonest 3-mark question in the topic:
+  1. <strong>Unsafe equipment</strong> — guards removed, interlocks bypassed, cracked ladders, frayed slings. Equipment degrades silently and keeps running after its protection has gone.
+  2. <strong>Unsafe conditions</strong> — the state of the place: blocked exits, oil on the floor, failed lighting over a stair, a duct re-routed so the hood no longer captures.
+  3. <strong>Unsafe processes</strong> — a method that cannot be done safely as written: a two-person job given to one person, isolation skipped because it takes an hour.
+  4. <strong>Unsafe work practice</strong> — what people actually do: shortcuts, cleaning skin with compressed air, working at height off a forklift pallet.</li>
+<li><strong>The four areas inspected</strong> (<code>sl 5</code>): <strong>People</strong> (workers, their behaviour and methods), <strong>Plant</strong> (machinery, equipment, vehicles), <strong>Premises</strong> (the workplace and working environment), <strong>Procedures</strong> (the methodology and safe system of work). An inspection that only walks past machines has covered one of four.</li>
+<li><strong>Purpose — seven reasons</strong> (<code>sl 7</code>), quotable as a list: listen to the concerns of workers and supervisors; gain further understanding of jobs and tasks; identify existing and potential hazards; determine the underlying causes of hazards; recommend corrective action; monitor the steps taken to eliminate hazards or control risk (engineering control, administrative control, PPE); meet regulatory and management-system requirements.</li>
+<li><strong>Benefits — four, split two-and-two</strong> (<code>sl 8</code>): <em>human</em> — increased employee satisfaction because regular checks give a sense of safety, and a visible regime that builds a <strong>high-performance safety culture</strong>; <em>financial</em> — an inspector who notices a failing part converts a large repair into a small one, and preventing injury prevents the related lawsuits. Culture is the benefit that earns the last mark.</li>
+<li><strong>Frequency</strong> (<code>sl 4, 22–23</code>): depends on the nature of the work, the materials, substances and equipment involved, and the procedures followed — hence daily, weekly, monthly or annually in different parts of the same plant. The deciding factors are legislative requirements; past incident records; number and size of work operations; type of equipment and processes; number of shifts; new processes or machinery; and high-hazard areas, which earn extra attention. <strong>The schedule must state when each area is inspected, who inspects it, and to what degree of detail</strong> — an inspection with no stated depth becomes "a quick look", and inspections are ineffective when the time allowed permits only that (<code>sl 21–22</code>).</li>
+<li><strong>Management-system context</strong> (<code>sl 3</code>): OHSAS 18001, the Occupational Health and Safety Assessment Series, is the international standard for occupational health and safety management systems; inspection is its "check" limb. Certification proves the organisation looks for hazards on a schedule and fixes what it finds — not that it has fewer hazards. <strong>(standard)</strong> OHSAS 18001 has been superseded by ISO 45001, which keeps the same plan–do–check–act logic.</li>
+</ul>
+<p><strong>Types of inspection</strong> (<code>sl 24–26</code>; the fourth row is <strong>(standard)</strong>, added because examiners use it):</p>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Trigger and rhythm</th>
+<th>Conducted by</th>
+<th>Documentation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Informal</strong></td>
+<td>Continuous; part of the working day and of every worksite visit</td>
+<td>Safety Officers on site visits, in cooperation with the area supervisor; supervisors routinely; employees in their own area</td>
+<td>None required; findings discussed at regularly scheduled safety meetings</td>
+</tr>
+<tr>
+<td><strong>Formal</strong></td>
+<td>Scheduled, planned walk-through of a facility or worksite</td>
+<td>Safety Officers and/or site managers, with area supervisors and employees</td>
+<td><strong>Mandatory</strong>: the specifics of the observed hazard and the dates by which it will be corrected</td>
+</tr>
+<tr>
+<td><strong>Special</strong></td>
+<td>Reactive: report of an unsafe act/condition, or a new substance, process, procedure or equipment; may accompany an accident investigation. Response time set by hazard severity</td>
+<td>Area/facility managers or the Health and Safety Department, on request, with supervisors and employees</td>
+<td><strong>Mandatory</strong>, plus <strong>follow-up procedures</strong> to confirm timely mitigation</td>
+</tr>
+<tr>
+<td><strong>Statutory</strong></td>
+<td>Set by the law of the jurisdiction and at its intervals</td>
+<td>The regulator's inspector, or the plant on the regulator's behalf</td>
+<td>Prescribed by statute; non-compliance is an offence, not a finding</td>
+</tr>
+</tbody>
+</table>
+<p>The formal inspection's written scope is worth naming, because it doubles as a checklist (<code>sl 25</code>): parking lots, loading docks, driveways, exits and other wall openings, windows, floors, walkways, ramps, platforms, electrical panels and wiring, ventilation, heating and cooling, fire prevention equipment, first aid kits, rest rooms, training rooms.</p>
+<p><strong>Trap:</strong> the <em>four things found</em> (equipment, conditions, processes, practice) and the <em>four areas searched</em> (people, plant, premises, procedures) are different lists that look alike. A question on "what does an inspection look for" wants the first; "what does it cover" wants the second. Do not merge them.</p>
+<h3 id="22-running-an-inspection-preparation-walk-through-report-17-sl-921-2736">2.2 Running an inspection — preparation, walk-through, report (<code>ehs_5.txt</code> sl 9–21, 27–36)<a class="anchor" href="#22-running-an-inspection-preparation-walk-through-report-17-sl-921-2736">#</a></h3>
+<p><strong>What:</strong> an inspection is a procedure with a fixed sequence — prepare, inspect, record, classify, assign, report, verify — and preparation decides the ceiling on what can be found.</p>
+<p><strong>Preparation — five types of information</strong> (<code>sl 17–19</code>):
+- <strong>Diagram of the area</strong> — drawn from the plant layout or floor plan; divide the workplace into areas by process, locate machinery, equipment and materials, and show the movement of material and workers plus the location of air ducts, stairways, emergency response equipment, alarms and fire exits. The diagram stops the inspection becoming a tour of the places the inspector already knows.
+- <strong>Equipment inventory</strong> — what machinery and equipment is present, with technical data sheets, manufacturers' instructions and safety manuals.
+- <strong>Hazardous product / chemical inventory</strong> — which products are used, whether safety data sheets are available, whether every source of exposure is properly controlled, whether workers are trained to use, handle and store them, and whether containers are labelled.
+- <strong>Management documents</strong> — policies, rules and regulations, procedures, safe work practices, reports, records: the standard reality is measured against.
+- <strong>Checklists and past inspection records</strong> — a checklist clarifies inspection responsibilities, controls the activity and provides the record of findings, but it is a <strong>prompt, not a boundary</strong> (<code>sl 19</code>). Past records show what was found, what an earlier team concentrated on and — by omission — what it never examined; use them to test whether recommendations were implemented, and <strong>never copy previous results forward</strong>.</p>
+<p>Two more preparations that carry marks: <strong>scope questions</strong> — every inspection must examine <em>who, what, where, when and how</em>, must pay particular attention to items likely to become unsafe through <strong>stress, wear, impact, vibration, heat or corrosion</strong>, and must include areas where no work is done regularly (parking lots, rest areas, storage areas, locker rooms) (<code>sl 10</code>); and <strong>workplace elements</strong> — people (numbers, demographics, shift schedules, supervision), environment (structure, noise, vibration, lighting, temperature, ventilation), equipment (machinery, tools, safety devices and PPE), materials (parts, ingredients, chemicals, services, wastes) and process (how the worker interacts with the other elements in a series of tasks) (<code>sl 11</code>).</p>
+<p><strong>The team</strong> (<code>sl 20</code>): health and safety committee members and representatives are the obvious choices for formal inspections, especially if trained or certified. Selection criteria are knowledge of regulations and procedures, knowledge of potential hazards, and experience of the work procedures involved; engineers, maintenance personnel, occupational hygienists and safety professionals join for particular aspects or to explain equipment and process. A team of managers inspecting a job none of them has done will find the housekeeping and miss the exposure.</p>
+<p><strong>Before the first step</strong> (<code>sl 27</code>), two rules:
+1. <strong>Huddle on the route</strong> — discuss where the team is going and what it is looking for, because a discussion before entering a noisy area removes the need for arm-waving and shouting, which is both useless communication and a hazard.
+2. <strong>Wear the PPE the area requires</strong> — if you do not have it and cannot get it, <strong>do not enter</strong>; list the absence as a deficiency and re-inspect when PPE is provided.</p>
+<p><strong>The walk-through</strong> (<code>sl 28–29, 33–34</code>) — the deck's guidelines and principles, compressed:
+- Use the checklist, and review it <strong>before</strong> starting; inspect in one area at a time (one room, one floor); take a supervisor familiar with the operation; ask the affected employees; document the participants.
+- Draw attention to <strong>immediate danger at once</strong> — everything else can await the report; <strong>shut down and lock out</strong> anything that cannot be brought to a safe operating standard until repaired.
+- <strong>Do not operate equipment</strong> — ask the operator for a demonstration. An operator who does not know the dangers of their own machine is itself a finding.
+- <strong>Never ignore an item</strong> because you feel unqualified to judge it — record and refer it.
+- Look <strong>up, down, around and inside</strong>; be methodical; the failure mode is the "once-over-lightly" approach.
+- <strong>Record on the spot</strong> — describe each hazard and its exact location in rough notes before it is forgotten, and record what you did and did not examine in case the inspection is interrupted. Photograph what you cannot describe or sketch.
+- Judge both the <strong>static</strong> (stopped) and <strong>dynamic</strong> (in motion) condition; if a machine is shut down, consider postponing that item until it runs.
+- Consider how work is organised and its pace, and discuss as a group: can a problem, hazard or incident be generated here; how serious are the outcomes; which safety regulations apply; what control is appropriate.
+- <strong>Do not rely on your senses.</strong> Noise, chemical exposure, radiation and biological agents cannot be judged by eye or ear — request that equipment be monitored. An inspector who "can tell" the noise is fine has replaced a measurement with an impression.</p>
+<p><strong>Observation, and the rule that decides whether the system works</strong> (<code>sl 30</code>): record deviations from accepted practice factually — <em>"a worker was observed operating a machine without a guard"</em> — and <strong>do not use information derived from inspections for disciplinary measures.</strong> If an inspection can get a colleague punished, workers stop being honest, hazards move out of sight, and the inspection measures appearance instead of condition.</p>
+<p>The hazardous practices to watch for (<code>sl 31–32</code>): machinery or tools used without authority; operating at unsafe speeds or in violation of safe practice; removing guards or making safety devices ineffective; repairing or adjusting equipment that is in motion, under pressure or electrically charged; defective, uninspected or overdue tools; hands or body used instead of tools, push sticks, lift-assists or carts; improper lifting, carrying, pulling or pushing; incorrect storage (overloading, crowding, unbalanced stacks, incompatible items mixed, chemical cabinets unused); failing to use, maintain or correctly use PPE; poor housekeeping, poor personal hygiene, eating or smoking in unauthorised areas; <strong>compressed air used on a person's skin, hair or clothes</strong>; standing or working under suspended loads, scaffolds, shafts or open hatches; and the psychosocial ones — workers overloaded, fatigued, in conflict, or working in isolation.</p>
+<p><strong>The report — five required contents</strong> (<code>sl 35</code>): who conducted the inspection with time, date and area; a clear description of existing or potential hazards observed; <strong>priority ranking according to risk</strong>; <strong>temporary measures until a permanent solution</strong> is implemented; recommendations for corrective action.</p>
+<p><strong>Report structure</strong> (<code>sl 36</code>): <em>Introduction</em> (department or area, date, time frame, team names and titles including technical experts) → <em>Observation</em> (each unsafe condition and act, numbered consecutively) → <em>Classification</em> (a hazard classification per item — electrical, material handling, machine guarding, ergonomic, biological, psychosocial — plus a severity grade) → <em>Follow-Up</em> (recommended corrective action, a <strong>responsible person</strong> and a <strong>definite correction due date</strong>) → <em>Review and Distribution</em> (written by one designated person or by the team in a post-inspection meeting; a copy to first-line and second-line supervisors, the headquarters Health and Safety Office and other appropriate management).</p>
+<p><strong>Severity scheme</strong> (<code>sl 36</code>) — deliberately coarse:</p>
+<table>
+<thead>
+<tr>
+<th>Grade</th>
+<th>Meaning</th>
+<th>Response</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>A</strong></td>
+<td>Major / High</td>
+<td>Immediate action</td>
+</tr>
+<tr>
+<td><strong>B</strong></td>
+<td>Serious / Medium</td>
+<td>Short-term action</td>
+</tr>
+<tr>
+<td><strong>C</strong></td>
+<td>Minor / Low</td>
+<td>Long-term action</td>
+</tr>
+</tbody>
+</table>
+<p>The response rules give the grades meaning (<code>sl 29</code>): reasonable correction dates are set on the basis of the hazard; priorities are set; <strong>serious hazards are corrected immediately</strong>, non-serious as soon as possible; and where correction cannot be handled in time, the employer <strong>changes the work procedure, takes the machine out of service, stops the operation, or takes any other necessary action to protect employees</strong> in the interim.</p>
+<p><strong>Trap:</strong> A/B/C is a <strong>severity</strong> grade, not a hazard type. The report carries both — a classification by type (electrical, ergonomic, biological…) and a grade by severity (A/B/C). Answers that use A/B/C as "types of hazard" lose the classification marks.</p>
+<p><strong>Why inspections decay into a paper exercise</strong> (<code>sl 19, 21</code>; notes §5.2): the checklist is cloned year after year and describes a plant that no longer exists; findings are written without an owner or a date, so nothing is anybody's job; corrective actions are recorded but never verified, so the same item returns and the workforce learns the report is theatre; and the inspection is used as a disciplinary instrument, so it stops seeing anything real. Where the whole workplace cannot be covered at once, <strong>rotate the section inspected each month</strong> so every area is covered in depth rather than all in none.</p>
+<h3 id="23-first-aid-appliances-section-45-32-sl-3940">2.3 First-aid appliances — Section 45 (<code>ehs_5.txt</code> sl 39–40)<a class="anchor" href="#23-first-aid-appliances-section-45-32-sl-3940">#</a></h3>
+<p><strong>What:</strong> first aid is "the first and immediate assistance given to any person with either a minor or serious illness or injury, with care provided to <strong>preserve life, prevent the condition from worsening, or promote recovery</strong> until medical services arrive" (<code>sl 39</code>). Those three verbs are the whole scope; none of it is diagnosis or treatment.</p>
+<ul>
+<li><strong>Why it is statutory:</strong> injuries are an inescapable part of factory life, so the Factories Act, 1948 makes provision an obligation of the occupier rather than an act of kindness (<code>sl 39</code>). Section 45 has <strong>four limbs</strong>:
+  1. The factory shall <strong>provide and maintain proper first-aid boxes in every workroom</strong>. The number "should not be less than <strong>one for every 100 or 50 workers</strong>" — the deck states the pair, so quote the range, do not pick one — and each box must hold all the relevant contents required by the Act.
+  2. <strong>Nothing except the prescribed contents</strong> may be kept in a first-aid box.
+  3. Each box must be <strong>under the control of a first-aid in-charge</strong>, who handles its requirements and its utilisation and <strong>must be an expert in the first-aid field</strong>.
+  4. Where the number of workers <strong>exceeds 500</strong>, the factory must arrange an <strong>ambulance room</strong> with all necessary equipment.</li>
+<li><strong>Why limb 4 matters:</strong> the probability of a serious event rises with person-hours worked; the ambulance room is the point at which the site must hold and stabilise a casualty rather than dress a cut and send them away. <strong>(standard)</strong> The corresponding escalation logic is the same as the welfare thresholds in §2.4.</li>
+<li><strong>Records:</strong> two, and they are examinable. The box's <strong>stock and check record</strong> keeps the box stocked — an item used on Tuesday is not there on Friday unless somebody wrote it down. The plant's <strong>treatment record</strong> (who was injured, how, what was done, whether they went to hospital) turns first aid into prevention: the same minor injury on the same machine at the same hour is a hazard report nobody had to fill in.</li>
+</ul>
+<p><strong>Contents by function</strong> — <code>sl 40</code> is an image of a first-aid kit with no text, so the deck gives <strong>no list and no quantities</strong>. The table below is the functional grouping from <code>friend_notes.md</code> §5.3; say "typical stock" in an exam, never a count.</p>
+<table>
+<thead>
+<tr>
+<th>Function</th>
+<th>Typical stock</th>
+<th>Injury it answers</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Control bleeding, cover wounds</td>
+<td>Sterile dressings, adhesive dressings, roller and triangular bandages, safety pins</td>
+<td>Lacerations, punctures, crush injury</td>
+</tr>
+<tr>
+<td>Clean and protect</td>
+<td>Antiseptic, cotton wool, sterile gauze, adhesive tape</td>
+<td>Abrasions, minor cuts, splinters</td>
+</tr>
+<tr>
+<td>Flush</td>
+<td>Eye wash, sterile water or saline, eye pads</td>
+<td>Chemical splash, dust and foreign bodies</td>
+</tr>
+<tr>
+<td>Dress a burn</td>
+<td>Burn dressings, non-adherent pads</td>
+<td>Thermal and chemical burns, metal spatter</td>
+</tr>
+<tr>
+<td>Protect rescuer and casualty</td>
+<td>Disposable gloves, scissors, forceps, blanket, mouth barrier</td>
+<td>Blood-borne infection, chemical contamination</td>
+</tr>
+</tbody>
+</table>
+<p>The gloves and mouth barrier are not for the casualty: they stop a colleague acquiring a blood-borne infection while helping. Eye wash must sit within reach of wherever chemicals are handled, because the first half-minute decides how much cornea is burned.</p>
+<p><strong>The emergency sequence</strong> (notes §5.3, not in the deck): make the scene safe before approaching (the commonest way to double a casualty count is for the rescuer to walk into the same hazard) → raise the alarm and name the location precisely → assess responsiveness, airway, breathing, circulation and catastrophic bleeding, in that order → give first aid within the limits of training → hand over a factual account (what happened, when, what was done, what the casualty has eaten or been given, and any chemical involved with its safety data sheet) → preserve the scene, record and investigate. Two prohibitions belong with it: do not move a casualty with a suspected spinal injury unless there is an immediate threat to life, and give nothing by mouth to a casualty who may need surgery.</p>
+<p><strong>Trap:</strong> the Act as the deck presents it fixes the <strong>number of boxes</strong>, the <strong>contents</strong> and the <strong>qualification of the in-charge</strong> — not a first-aider-to-worker headcount. Do not invent a first-aider ratio. Say instead that a box is useless if its in-charge is on the other shift, so every shift and every high-hazard area needs one trained person present.</p>
+<h3 id="24-shelters-rest-rooms-and-lunch-rooms-welfare-sections-4247-37-sl-3738-4145">2.4 Shelters, rest rooms and lunch rooms — welfare, Sections 42–47 (<code>ehs_5.txt</code> sl 37–38, 41–45)<a class="anchor" href="#24-shelters-rest-rooms-and-lunch-rooms-welfare-sections-4247-37-sl-3738-4145">#</a></h3>
+<p><strong>What:</strong> in general terms welfare is "the health, happiness, and fortunes of a person or group"; in the statutory sense it is the basic physical and material well-being an employer must provide as a condition of employing people at all (<code>sl 37</code>). The Factories Act, 1948 writes these duties into the same chapter as safety because a worker who cannot wash, sit, drink or eat properly is being injured slowly.</p>
+<p><strong>The provisions</strong> (<code>sl 41–45</code>; sl 38 is an image of this table):</p>
+<table>
+<thead>
+<tr>
+<th>Section</th>
+<th>Facility</th>
+<th>Applies when (deck)</th>
+<th>Requirement</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>42</strong></td>
+<td>Washing facilities</td>
+<td>Every factory</td>
+<td>Adequate and suitable washing facilities for all workers; <strong>separate and adequately screened</strong> facilities for men and women; accessible to all. The <strong>State Government</strong> may prescribe standards for any factory, class of factory or manufacturing process</td>
+</tr>
+<tr>
+<td><strong>43</strong></td>
+<td>Storing and drying clothes</td>
+<td>Where workers do not wear their working clothes</td>
+<td>The <strong>State Government</strong> may direct the <strong>place</strong> of storing and the <strong>manner</strong> of drying workers' clothes</td>
+</tr>
+<tr>
+<td><strong>44</strong></td>
+<td>Facilities for sitting</td>
+<td>Every factory</td>
+<td>Suitable seating so a worker can rest in free time, which also <strong>enhances efficiency</strong>; where the <strong>Chief Inspector</strong> finds a worker could work more efficiently sitting, he may direct the factory to provide seating. The State Government may, by notification, exempt a specified factory or process</td>
+</tr>
+<tr>
+<td><strong>45</strong></td>
+<td>First-aid appliances</td>
+<td>Every factory; ambulance room above 500</td>
+<td>Boxes at the prescribed ratio in every workroom, prescribed contents only, a trained in-charge per box, ambulance room above 500 workers (§2.3)</td>
+</tr>
+<tr>
+<td><strong>46</strong></td>
+<td>Canteens</td>
+<td><strong>Above 250 workers</strong></td>
+<td>The State Government may direct the factory to provide and maintain a canteen, and may lay down standards for construction, accommodation, furniture and equipment; the foodstuffs served; the date by which it is provided; the <strong>constitution of a managing committee</strong>; and delegation to the Chief Inspector</td>
+</tr>
+<tr>
+<td><strong>47</strong></td>
+<td>Shelters, rest-rooms and lunch-rooms</td>
+<td><strong>Above 150 workers</strong></td>
+<td>Construct and maintain shelters, rest-rooms and lunch-rooms so workers can eat food brought from home. <strong>Where a lunch-room exists, no worker shall eat any food in the work-room</strong></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>The thresholds are the memorisable spine</strong> — <strong>150 → shelter, rest-room and lunch-room; 250 → canteen; 500 → ambulance room.</strong> Population-based, escalating with person-hours.</li>
+<li><strong>The Act sets the floor and delegates the detail.</strong> Several sections give the State Government power to prescribe or direct, and section 44 adds the Chief Inspector. An answer that says only "the factory shall provide" is incomplete.</li>
+<li><strong>Drinking water</strong> is the one welfare item the deck's section list does not number; treat it as a requirement, not a section: wholesome water at accessible points, vessels cleaned, supply protected from contamination. In a hot plant it is also the cheapest heat-strain control available.</li>
+</ul>
+<p><strong>Why welfare is a safety issue — five mechanisms</strong> (notes §5.4):</p>
+<table>
+<thead>
+<tr>
+<th>Mechanism</th>
+<th>How a facility prevents injury</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Heat and hydration</strong></td>
+<td>A worker who cannot drink when thirsty loses concentration and reaction speed before any clinical sign appears; shade and a rest room are what make cooling down possible. A shelter is a heat control, not a perk</td>
+</tr>
+<tr>
+<td><strong>Fatigue</strong></td>
+<td>Capacity to stand has limits; prolonged standing produces leg and back pain, and pain produces the short cut — the load carried badly, the guard not replaced. Seating at the point of work is among the cheapest error-reduction measures in a plant</td>
+</tr>
+<tr>
+<td><strong>Hygiene and absorption</strong></td>
+<td>Washing controls a whole class of occupational dermatitis and percutaneous absorption — a worker handling solvents, pesticides or lead compounds with contaminated skin absorbs them through intact skin. Separate screened facilities are also an attendance issue</td>
+</tr>
+<tr>
+<td><strong>Ingestion</strong></td>
+<td>Section 47's "trivial" rule is an exposure control: eating at the workstation means eating the dust — lead, silica, pesticide residue, metal fume on hands, food and table — and hand-to-mouth transfer is a documented route of occupational lead intake. A lunch room with a washbasin before it breaks that route better than any respirator</td>
+</tr>
+<tr>
+<td><strong>Take-home contamination</strong></td>
+<td>Section 43 extends the duty to the family: clothing worn home carries lead, asbestos fibres, pesticides and solvents into the house. Lockers, a change of clothes and separate laundering are the control</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>Provision is not availability.</strong> A washbasin at the far end of a plant is not a washing facility for the worker on the near side; facilities must be reachable within the working time allowed, clean, maintained and separated from the process. Rest and lunch rooms need seating, ventilation and a washing point at the entrance, and canteens need a managing committee — which is why section 46 mentions one.</li>
+</ul>
+<p><strong>Trap:</strong> do not swap the thresholds (150/250/500) and do not attach "State Government may direct" to sections 42–45 only — 46 and 47 use the same device, and 44 adds the Chief Inspector. The delegation clause is worth a mark on its own.</p>
+<h3 id="25-personal-protective-equipment-40-sl-4685">2.5 Personal protective equipment (<code>ehs_5.txt</code> sl 46–85)<a class="anchor" href="#25-personal-protective-equipment-40-sl-4685">#</a></h3>
+<p><strong>What:</strong> PPE is equipment <strong>worn or held by the worker</strong> that protects against one or more hazards to health and safety — head, eyes and face, respiratory system, hearing, hands, feet and legs, and the body — used <strong>where the hazard cannot be eliminated or controlled at source</strong>.</p>
+<ul>
+<li><strong>Its place in the hierarchy is stated before any item</strong> (<code>sl 62</code>): eliminate the toxic material or substitute a less toxic one → enclose or confine the operation → general or local exhaust ventilation → <strong>only when engineering controls are not feasible, will respirators be used</strong>. An engineering control works on every worker, every shift, without being worn, remembered or fitted; PPE works on one worker for as long as they tolerate it.</li>
+<li><strong>The six groups</strong> (figure in notes §5.5, drawing body and legs together): head, eye and face, respiratory, hearing, hand, foot–leg–body.</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Body part</th>
+<th>Hazards named in the deck</th>
+<th>Example device</th>
+<th>How it fails</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Head</strong></td>
+<td>Falling objects from above; bumping the head against fixed objects (exposed pipes, beams); accidental head contact with electrical hazards (<code>sl 46</code>)</td>
+<td>Hard hat — Class G, E or C</td>
+<td>A shell drilled, painted or cracked loses its dielectric strength, which is why damaged shells are replaced</td>
+</tr>
+<tr>
+<td><strong>Eyes and face</strong></td>
+<td>Chemical splashes; blood or other potentially infectious material; intense light; dust and flying particles; molten metal splashes (<code>sl 52</code>)</td>
+<td>Safety glasses, goggles, face shield, welding shield, laser goggles</td>
+<td>A face shield is face protection, not eye protection, and has no impact rating unless stated; direct-ventilated goggles pass splash</td>
+</tr>
+<tr>
+<td><strong>Respiratory</strong></td>
+<td>Dust, fume, vapour, gas; oxygen-deficient or unknown atmospheres (<code>sl 62–67</code>)</td>
+<td>APR (particulate, chemical cartridge/gas mask, PAPR); SCBA or SAR</td>
+<td>Wrong cartridge for the contaminant; no medical evaluation or fit test; APR in an oxygen-deficient atmosphere</td>
+</tr>
+<tr>
+<td><strong>Hearing</strong></td>
+<td>Noise above 85 dB; impact noise above 140 dB (<code>sl 69–70</code>)</td>
+<td>Disposable foam plugs, moulded plugs, noise-cancelling plugs, ear muffs</td>
+<td>Shallow insertion loses most of the attenuation; muffs over spectacle arms break their seal at the temple</td>
+</tr>
+<tr>
+<td><strong>Hands</strong></td>
+<td>Skin absorption of hazardous substances; lacerations and severe cuts; punctures; chemical burns; thermal burns; extreme temperatures (<code>sl 73</code>)</td>
+<td>Gloves specified by the SDS for that chemical (<code>sl 74, 78</code>)</td>
+<td>A glove that swells, softens or lets solvent through holds the chemical against the skin — worse than a bare hand</td>
+</tr>
+<tr>
+<td><strong>Feet and legs</strong></td>
+<td>Falling or rolling heavy objects; crushing or penetrating materials; sharp objects through the sole; molten metal; hot, wet or slippery surfaces; electrical hazards (<code>sl 75</code>)</td>
+<td>Steel or composite impact-resistant toe/instep; metatarsal guard; metal shank; heat-resistant sole; liquid- or chemical-resistant; conductive or nonconductive (<code>sl 77–78</code>)</td>
+<td>Rubber or chemical-resistant footwear chosen without the SDS; conductive boot on live work</td>
+</tr>
+<tr>
+<td><strong>Body</strong></td>
+<td>Dust and splash; fire; abrasion; cuts and bruises; dry heat and flames; certain chemicals (<code>sl 80–81</code>)</td>
+<td>Laboratory coat, coveralls, vest, jacket, apron, surgical gown, full-body suit</td>
+<td>Material chosen by price rather than hazard — paper-like fibre for dust, treated wool/cotton for fire, duck for cuts, leather for dry heat, rubber/neoprene/plastics for chemicals</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Head protection — the three classes</strong> (<code>sl 48–50</code>):</p>
+<table>
+<thead>
+<tr>
+<th>Class</th>
+<th>Designed for</th>
+<th>Electrical protection</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>G — General</strong></td>
+<td>Impact and penetration</td>
+<td>Low voltage, <strong>proof-tested to 2,200 volts</strong></td>
+</tr>
+<tr>
+<td><strong>E — Electrical</strong></td>
+<td>Electrical and utility work; falling objects and impact</td>
+<td>High voltage, <strong>proof-tested to 20,000 volts</strong></td>
+</tr>
+<tr>
+<td><strong>C — Conductive</strong></td>
+<td>Comfort; bumping against fixed objects</td>
+<td><strong>None</strong> — no protection from falling objects or electrical hazards</td>
+</tr>
+</tbody>
+</table>
+<p>Class C is the trap: it looks like a hard hat and is sold as one, but a conductive shell on a site with overhead work or live equipment is the wrong hat, not a cheaper one.</p>
+<p><strong>Selecting eye and face protection — five elements</strong> (<code>sl 53</code>): ability to protect against the workplace hazards; proper fit; unrestricted vision and movement; durable and cleanable; and unrestricted functioning of other PPE. Prescription wearers must have protection that <strong>incorporates the prescription</strong> or fits over it <strong>without interfering with its proper positioning</strong> (<code>sl 55</code>).</p>
+<table>
+<thead>
+<tr>
+<th>Device</th>
+<th>Protects against</th>
+<th>The catch (<code>sl 57–60</code>)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Safety glasses</td>
+<td>Moderate impact from particles</td>
+<td>No seal, so no protection against splash, dust or vapour</td>
+</tr>
+<tr>
+<td>Goggles</td>
+<td>Eyes and the facial area immediately around them — impact, dust, splashes</td>
+<td>Vent type decides whether it stops splash</td>
+</tr>
+<tr>
+<td>Face shield</td>
+<td>Nuisance dusts, splashes and sprays of hazardous liquid</td>
+<td>Face protection only; no impact rating unless stated. Wear glasses or goggles beneath</td>
+</tr>
+<tr>
+<td>Welding shield</td>
+<td>Burns from infrared and intense radiant light; flying sparks, metal spatter, slag chips</td>
+<td>Shade must match the process; not general-purpose eye protection</td>
+</tr>
+<tr>
+<td>Laser goggles</td>
+<td>Flying particles; ultraviolet, laser and welding radiation</td>
+<td>Wavelength-specific</td>
+</tr>
+</tbody>
+</table>
+<p>Goggle ventilation is its own mini-question (<code>sl 57</code>): <strong>direct-ventilated</strong> allows air circulation, prevents fogging, resists direct passage of only large particles; <strong>indirect-ventilated</strong> allows circulation through a baffle, prevents fogging <em>and</em> protects against liquid or chemical splash; <strong>non-ventilated</strong> admits no air, prevents splash entry, and <strong>may fog and require frequent lens cleaning</strong> — the worker who takes them off to see is unprotected.</p>
+<p><strong>Respiratory protection — divided by where the air comes from</strong> (<code>sl 63–67</code>):</p>
+<table>
+<thead>
+<tr>
+<th>Family</th>
+<th>Types</th>
+<th>Limit</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Air-purifying (APR)</strong></td>
+<td>Particulate respirator; chemical cartridge or gas mask; powered air-purifying respirator (PAPR)</td>
+<td>Removes contaminants from the air it draws through a filter. Useless in an oxygen-deficient atmosphere, against a contaminant the cartridge is not rated for, or where the concentration is unknown</td>
+</tr>
+<tr>
+<td><strong>Atmosphere-supplying</strong></td>
+<td>Self-contained breathing apparatus (SCBA); supplied-air respirator (SAR)</td>
+<td>Supplies clean, breathable air from a cylinder or supply line, independent of the surrounding atmosphere</td>
+</tr>
+</tbody>
+</table>
+<p>Before fit testing and authorisation, a <strong>medical evaluation</strong> must determine the employee's ability to use a respirator, performed by a physician or other <strong>licensed health care professional (PLHCP)</strong> using a medical questionnaire or an initial medical evaluation (<code>sl 65</code>). Care and storage (<code>sl 66–67</code>): inspect for wear and tear <strong>before and after each use</strong>; wash in a detergent solution, then disinfect by immersing in a sanitising solution, dry, and store so the facepiece <strong>retains its natural configuration</strong>, protected from dust, sunlight, heat, extreme cold, excessive moisture and damaging chemicals.</p>
+<p><strong>Hearing protection — the three numbers</strong> (<code>sl 69–70</code>): exposure above <strong>85 dB</strong> can cause hearing loss; hearing protection is <strong>required at 90 dB</strong>; <strong>impact noise should not exceed 140 dB</strong>. The employer must provide ear protection where the level exceeds the permissible exposure table (29 CFR 1910.95(b)(1), reproduced in the deck):</p>
+<table>
+<thead>
+<tr>
+<th>Duration per day (hours)</th>
+<th>8</th>
+<th>6</th>
+<th>4</th>
+<th>3</th>
+<th>2</th>
+<th>1</th>
+<th>½</th>
+<th>¼</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Sound level (dBA)</td>
+<td>90</td>
+<td>92</td>
+<td>95</td>
+<td>97</td>
+<td>100</td>
+<td>105</td>
+<td>110</td>
+<td>115</td>
+</tr>
+</tbody>
+</table>
+<p>Devices are compared by <strong>Noise Reduction Rating (NRR)</strong>, a laboratory number; field attenuation is always worse, which is why an effective <strong>Hearing Conservation Programme</strong> matters more than the device — audiometry finds the loss before the worker does, and training fixes insertion.</p>
+<p><strong>EPA protection levels for HAZWOPER work</strong> (<code>sl 82–85</code>) — the detail that separates a full-marks PPE answer from a list:</p>
+<table>
+<thead>
+<tr>
+<th>Level</th>
+<th>Protection</th>
+<th>Typical ensemble</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>A</strong></td>
+<td>Highest: greatest potential for exposure, greatest skin, respiratory and eye protection</td>
+<td>Positive-pressure full-facepiece SCBA (or supplied air with escape SCBA), totally encapsulating chemical- and vapour-protective suit, inner and outer chemical-resistant gloves, disposable suit/gloves/boots</td>
+</tr>
+<tr>
+<td><strong>B</strong></td>
+<td>Highest respiratory protection, lesser skin protection</td>
+<td>Positive-pressure full-facepiece SCBA (or supplied air with escape SCBA), inner and outer chemical-resistant gloves, face shield, hooded chemical-resistant clothing, coveralls, outer chemical-resistant boots</td>
+</tr>
+<tr>
+<td><strong>C</strong></td>
+<td>Used when concentration and type of airborne substance are <strong>known</strong> and APR criteria are met</td>
+<td>Full-face air-purifying respirator, inner and outer chemical-resistant gloves, hard hat, escape mask, disposable chemical-resistant outer boots</td>
+</tr>
+<tr>
+<td><strong>D</strong></td>
+<td>Minimum protection; no contaminants present, or work precludes splash, immersion or unexpected inhalation/contact</td>
+<td>Gloves, coveralls, safety glasses, face shield, chemical-resistant steel-toe boots or shoes</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Why PPE fails — six stages</strong> (<code>sl 62–85</code>, notes §5.5): the <strong>wrong device</strong> is selected for the hazard; it <strong>does not fit</strong> (one size does not cover a workforce, and an unfitted respirator leaks at the face seal); it is <strong>uncomfortable</strong>, so it is worn on the forehead or removed "for just a minute" — the minute the exposure happens in; it is <strong>incompatible</strong> with the other PPE the task needs; it <strong>degrades in storage</strong> or a disposable is reused until it is a rag; and it is <strong>issued without training</strong>, so nobody checks the seal. The deepest failure is cultural: where PPE is the only control, any lapse in wearing it is an exposure, not a near miss.</p>
+<p><strong>Trap:</strong> two device confusions cost marks every year — a <strong>face shield is not eye protection</strong> (glasses or goggles go underneath), and <strong>Class C is a bump cap</strong>, not a hard hat, because it gives no protection from falling objects or electrical contact.</p>
+<h3 id="26-role-of-the-individual-in-conservation-of-natural-resources-62-sl-86100">2.6 Role of the individual in conservation of natural resources (<code>ehs_5.txt</code> sl 86–100)<a class="anchor" href="#26-role-of-the-individual-in-conservation-of-natural-resources-62-sl-86100">#</a></h3>
+<p><strong>What:</strong> conservation has three moves — <strong>use less, use it again, use it better</strong> — and the individual controls the spending at the point of use (the tap, the switch, the shop counter), which is the only place it can change without waiting for a policy.</p>
+<ul>
+<li>Individual action matters because demand is the sum of many small decisions.</li>
+<li>The deck's treatment is by <strong>resource</strong>, and that is the shape an answer should take: water (sl 91), energy (sl 94), food (sl 98), forests (sl 99), minerals (sl 100). Slides 86–90, 92–93 and 95–97 are image-only.</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Resource</th>
+<th>Individual actions named in the deck</th>
+<th>Mechanism — why it works</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Water</strong> (<code>sl 91</code>)</td>
+<td>Check for and repair leaks; adopt minimum-use patterns; install water-saving toilets using the optimum volume per flush; collect household wastewater for the kitchen garden; cooperate with beach clean-ups in coastal areas; save wetlands, lakes, ponds and wells</td>
+<td>A dripping tap is a continuous loss no tariff makes visible; greywater closes the loop between what the house discharges and what the garden demands; a wetland is a treatment plant that costs nothing to run and cannot be rebuilt once filled</td>
+</tr>
+<tr>
+<td><strong>Energy</strong> (<code>sl 94</code>)</td>
+<td>Construct buildings to obtain maximum sunlight; dry clothes in sunlight instead of a machine drier; use solar cookers; buy energy-efficient appliances after <strong>checking the consumption figure</strong>; minimise automobile use by bicycle, public transport and carpooling; reside near the place of work if possible; keep vehicles tuned for low fuel consumption; wear adequate woollen clothes in winter instead of a heat convector; grow deciduous trees at the proper place outside the house</td>
+<td>Daylight and solar heat are free; the running cost of an appliance exceeds its purchase price; a tuned engine burns less; deciduous shade cuts summer heat and electricity while letting winter sun through</td>
+</tr>
+<tr>
+<td><strong>Minerals</strong> (<code>sl 100</code>)</td>
+<td>Minimise use of minerals likely to be depleted or exhausted; minimise jewellery use; recycle and reuse minerals and glass; buy durable products that last; buy efficient vehicles; repair and reuse bicycles; use recyclable utensils</td>
+<td>Durability divides the resource by years of service; recycling substitutes secondary for primary material</td>
+</tr>
+<tr>
+<td><strong>Food</strong> (<code>sl 98</code>)</td>
+<td>Sustainable use and no waste; eat only as much as required for sustenance; consume local and seasonal vegetables; buy organically grown food; discourage packed, canned and preserved food</td>
+<td>Local and seasonal food saves the energy of transport, storage and preservation; processing and packaging add energy and waste per calorie</td>
+</tr>
+<tr>
+<td><strong>Forests</strong> (<code>sl 99</code>)</td>
+<td>Do not uproot existing trees when constructing; plant fast-growing species in open areas; plant ornamentals, herbs, shrubs or suitable trees around the house; maintain a lawn and garden; join community plantation programmes; encourage mass-scale plantation; cooperate with NGOs saving trees; plant generously in barren fields; tag a plantation to birthdays and marriage anniversaries</td>
+<td>A tagged tree is looked after rather than merely planted; existing trees take decades to replace</td>
+</tr>
+<tr>
+<td><strong>Soil and biodiversity</strong> (notes §5.6)</td>
+<td>Compost garden and kitchen waste rather than burning it; never pour oils, paints or solvents onto the ground; keep ground cover and plant natives; on site, strip and stockpile topsoil and control silt before it leaves the boundary</td>
+<td>Organic matter and its nutrients return to the soil; bare soil erodes; a mown monoculture supports almost nothing</td>
+</tr>
+</tbody>
+</table>
+<p><strong>The honest limit, worth one sentence in any answer:</strong> individual restraint reduces demand but does not substitute for regulation — a household that sorts its waste while an industry discharges untreated effluent has not solved the problem. The individual's real leverage is where they hold a decision: a purchase, a habit, a vote, or a <strong>specification at work</strong>, and the largest of those is usually the workplace, where one person's insistence on a less toxic solvent or a closed loop outweighs a decade of domestic thrift.</p>
+<p><strong>Trap:</strong> an answer that only says "save water, plant trees" gets half marks. Group by resource and give the mechanism for each action — the mechanism is what separates a list from an answer.</p>
+<h3 id="27-methods-for-controlling-water-pollution-68-sl-101108">2.7 Methods for controlling water pollution (<code>ehs_5.txt</code> sl 101–108)<a class="anchor" href="#27-methods-for-controlling-water-pollution-68-sl-101108">#</a></h3>
+<p><strong>What:</strong> control is a <strong>chain, not a treatment plant at the end of a pipe</strong> — stop the waste being made, treat what is made, reuse what can be reused, and discharge only what is left.</p>
+<p>Sources to name (<code>sl 101</code> is an image; list from notes §5.7): domestic sewage, industrial effluent, agricultural runoff carrying fertiliser, pesticide, slurry and crop residue, thermal discharges, radioactive wastes, oil spillage, and sediment from construction.</p>
+<p><strong>(a) Stabilisation of the ecosystem</strong> (<code>sl 102</code>) — a set of practices, not a plant:
+- <strong>Reduction of waste at source</strong>
+- <strong>Harvesting and removal of biomass</strong>
+- <strong>Trapping of the nutrients</strong>
+- <strong>Fish management</strong>
+- <strong>Water hyacinth</strong> — extremely efficient at absorbing and concentrating dissolved nutrients from the water it lives in, so a hyacinth pond becomes a nutrient pump that can be harvested. <strong>(standard)</strong> The harvested plant must then be removed, or the nutrients return when it decays.</p>
+<p><strong>(b) Chemical methods for industrial effluent before discharge</strong> (<code>sl 103</code>) — the four the deck names, and the table examiners want:</p>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>What it removes / does</th>
+<th>Where it fits</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Ion exchange</strong></td>
+<td>A <strong>reversible</strong> reaction in which an ion in solution is exchanged for a similarly charged ion attached to an immobile solid particle — either a naturally occurring inorganic <strong>zeolite</strong> or a synthetically produced organic <strong>resin</strong></td>
+<td>Dissolved ionic contaminants; softening; polishing</td>
+</tr>
+<tr>
+<td><strong>Reverse osmosis</strong></td>
+<td>Purification through a <strong>semipermeable membrane</strong>; as a pre-treatment step for deionisation it removes feed-water <strong>bacteria, organics and silica</strong> and reduces the <strong>dissolved salt content by more than 95%</strong></td>
+<td>High-salinity effluent; pre-treatment before deionisation</td>
+</tr>
+<tr>
+<td><strong>Precipitation</strong></td>
+<td>Transforms <strong>dissolved</strong> contaminants into <strong>insoluble solids</strong>, so they can be removed from the liquid phase by sedimentation or filtration</td>
+<td>Heavy metals and other dissolved species</td>
+</tr>
+<tr>
+<td><strong>Coagulation</strong></td>
+<td>Chemically <strong>destabilises and precipitates colloidal particles</strong>, accumulating the precipitated material into larger <strong>floc</strong> particles removable by gravity settling or filtration</td>
+<td>Colloidal and suspended solids, turbidity, colour</td>
+</tr>
+</tbody>
+</table>
+<p><strong>(c) Cooling methods for thermal pollution</strong> (<code>sl 106</code>): cooling the wastewater effluent before discharge; <strong>cooling ponds</strong>; <strong>wet cooling towers</strong>; <strong>dry cooling towers</strong>; <strong>evaporation towers</strong>.</p>
+<p><strong>(d) The 4R concept</strong> (<code>sl 106</code>) — <strong>Recycling, Renovation, Recharge and Reuse</strong> of wastewater: domestic sewage, industrial effluents and thermal and radioactive pollutants receive some treatment before mixing into water bodies, and urban sewage and sludge may be recycled and reused to generate cheaper fuel, gas and electricity.</p>
+<p><strong>(e) Sanitation and sewage treatment</strong> (<code>sl 107</code>): municipal wastewater can be treated by <strong>centralised sewage treatment plants, decentralised wastewater systems, nature-based solutions, or onsite sewage facilities and septic tanks</strong>. Safely managed sanitation prevents the pollution caused by lack of access to sanitation. <strong>Well-designed and operated systems — with secondary treatment stages or more advanced tertiary treatment — can remove 90 per cent or more of the pollutant load.</strong></p>
+<p><strong>(f) Industrial wastewater treatment</strong> (<code>sl 107</code>): the processes used for treating wastewater produced by industries as an undesirable by-product; after treatment the effluent may be <strong>reused, released to a sanitary sewer, or released to surface water</strong>.</p>
+<p><strong>(g) Agricultural wastewater treatment</strong> (<code>sl 108</code>): a <strong>farm management agenda</strong> for controlling pollution from confined animal operations and from surface runoff contaminated by chemicals in fertiliser, pesticides, animal slurry, crop residues or irrigation water; performed in plants using mechanised treatment units similar to those for industrial wastewater.</p>
+<p><strong>(h) Erosion and sediment control, and toxic discharges</strong> (<code>sl 108</code>): sediment from construction sites is managed by <strong>erosion controls (mulching, hydroseeding)</strong> and <strong>sediment controls (sediment basins, silt fences)</strong>; discharges of toxic chemicals such as motor fuels and concrete washout are prevented by <strong>spill prevention and control plans</strong>, specially designed containers and structures such as <strong>overflow controls and diversion berms</strong>.</p>
+<p><strong>(i) Urban runoff (stormwater)</strong> (<code>sl 108</code>): effective control involves <strong>reducing the velocity and flow of stormwater</strong> as well as reducing pollutant discharges; local governments use a range of stormwater management techniques. <strong>(standard)</strong> Rainwater harvesting belongs at the same point in the chain: roof runoff collected for recharge or non-potable use never becomes polluted surface water at all.</p>
+<p><strong>(j) Legislation and enforcement</strong> supply the pressure that makes the chain operate — discharge standards, consent to discharge, monitoring and penalty. The technical methods exist; what decides whether they are used is whether the cost of not using them is real.</p>
+<p><strong>Trap:</strong> the deck's ion-exchange sentence reads "an <strong>iron</strong> from solution is exchanged"; it means <strong>ion</strong>. Write ion. Second trap: reverse osmosis here is described as a <strong>pre-treatment</strong> step reducing dissolved salt by &gt;95% — do not present it as total purification, and do not confuse it with the 90%-plus removal figure, which belongs to secondary/tertiary sewage treatment.</p>
+<h3 id="28-role-of-the-individual-in-prevention-of-pollution-79-sl-109114">2.8 Role of the individual in prevention of pollution (<code>ehs_5.txt</code> sl 109–114)<a class="anchor" href="#28-role-of-the-individual-in-prevention-of-pollution-79-sl-109114">#</a></h3>
+<p><strong>What:</strong> most pollution is decided long before it reaches a chimney or a drain — in what is bought, how it is used, and what is done with the remains. The deck splits the role into <strong>direct actions</strong> (what a person does with a battery, a bag, a vehicle) and <strong>indirect</strong> ones (spreading awareness, supporting environmental education, respecting and so helping enforce the law). The indirect role is the half students forget.</p>
+<p><strong>Direct role, by medium</strong> (<code>sl 109–113</code>):</p>
+<table>
+<thead>
+<tr>
+<th>Medium</th>
+<th>Individual actions named in the deck</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>General / resources</strong> (<code>sl 109</code>)</td>
+<td>Minimise wastage of electricity and other resources; prefer walking or cycling, especially for short distances; use mass transport (buses, trains) instead of a personal vehicle; pool vehicles with colleagues from nearby localities when going to work; take personal vehicles for <strong>periodic pollution checks at centres approved by the authorities</strong>; reuse items whenever possible; prefer products made of recycled material; use <strong>jute gunny bags</strong> instead of plastic bags; take part in tree-planting and conservation drives; use water efficiently</td>
+</tr>
+<tr>
+<td><strong>Air</strong> (<code>sl 111</code>)</td>
+<td>Establish or transfer factories and industries away from residential areas; reduce automobile use and use public transport; keep vehicle filters clean and use only quality fuel; <strong>switch the engine off while standing at a crossing</strong>; use <strong>CNG</strong> instead of liquid petroleum for auto engines; use low-noise horns and avoid blowing them unnecessarily; use an efficient silencer; avoid firecrackers; use <strong>LPG for cooking instead of wood or coal</strong>; do not burn plastics; quit smoking; reduce air-conditioner and refrigerator use; plant trees around the home and community</td>
+</tr>
+<tr>
+<td><strong>Water</strong> (<code>sl 112</code>)</td>
+<td>Sewage disposal is the main cause of water pollution in big cities — ensure proper disposal; release sewage to water <strong>only after treatment</strong>; release industrial effluents <strong>only after proper treatment</strong>; minimise chemical pesticides, weedicides and insecticides and promote bio-pesticides and organic fertilisers; check supertankers at sea to prevent oil spillage; use the <strong>minimum amount of detergent</strong>; use <strong>only phosphate-free soaps and detergents</strong></td>
+</tr>
+<tr>
+<td><strong>Solid waste</strong> (<code>sl 113</code>)</td>
+<td>Divide domestic waste into <strong>biodegradable and non-biodegradable</strong> components before discharging; biodegradable waste as fertiliser/compost; non-biodegradable waste collected for recycling; <strong>never allow scattering</strong> of domestic waste; <strong>recharge batteries</strong> rather than using disposable ones; give items to charity or sell them rather than throwing them away; cloth bags rather than plastic; buy environmentally friendly electronics; recycle and reuse rather than landfill; ensure proper disposal of solid waste</td>
+</tr>
+<tr>
+<td><strong>Noise and ozone</strong> (<code>sl 110</code>)</td>
+<td>Avoid noise-producing activities such as loud music; <strong>minimise refrigerators</strong>, the main source of the CFCs responsible for ozone-layer depletion; use renewable resources — solar heaters and solar cookers; dispose of cells, batteries and pesticide containers properly; use handkerchiefs instead of paper tissues; follow and promote family planning, since more population means more resources used and more pollution; organise drives to clean streets and drains with neighbours</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Indirect role</strong> (<code>sl 114</code>) — the heading is literally "Indirect role of an individual in prevention of pollution":
+- Support the <strong>expansion of environmental education</strong> by participating in or supporting the system.
+- Develop awareness of environmental pollution by <strong>publishing information</strong>, <strong>organising exhibitions or competitions</strong>, and <strong>sponsoring environment-related advertisements</strong>.
+- Make, encourage and help develop <strong>NGOs</strong> for social services against environmental pollution.
+- Celebrate <strong>environmental dates as festivals of society</strong>, as non-caste and non-religious occasions for all.
+- Organise special programmes and rallies on <strong>Tree Plantation Day (7 July)</strong> and <strong>World Environment Day</strong>, and raise slogans in society.
+- Encourage others to <strong>follow environmental laws</strong> by making them popular and helping people respect them.</p>
+<p><strong>Trap:</strong> two different questions hide here. "Role of an individual in <strong>conservation of natural resources</strong>" wants §2.6 (water, energy, minerals, food, forests). "Role of an individual in <strong>prevention of pollution</strong>" wants §2.8 (air, water, solid waste, noise, plus the indirect role). Overlap exists, but the headings and the examples differ — and the syllabus asks for both.</p>
+<hr />
+<h2 id="3-answer-bank">3. Answer bank<a class="anchor" href="#3-answer-bank">#</a></h2>
+<p>No past-paper questions exist for this module, so these are written to the syllabus wording and to the internal papers' verb style (<em>describe, explain, elaborate, outline, enlist, state</em>).</p>
+<h3 id="31-three-mark-answers">3.1 Three-mark answers<a class="anchor" href="#31-three-mark-answers">#</a></h3>
+<p><strong>A — Define safety inspection.</strong> 1. <strong>Definition</strong> — the process of critically examining the workplace to identify and investigate hazards and to ensure action reducing their severity, so that standards are met and the workplace is safe and free from risk. 2. <strong>Scope</strong> — an ongoing process, not a one-off certification; it discovers unsafe equipment, conditions, processes and work practice. 3. <strong>Areas</strong> — people, plant, premises, procedures.</p>
+<p><strong>B — Enlist the benefits of safety inspection.</strong> 1. <strong>Human</strong> — employee satisfaction and an increased sense of safety; a high-performance safety culture. 2. <strong>Financial</strong> — early repair instead of a larger one; prevention of injury-related lawsuits and lost time. 3. <strong>Systems</strong> — regulatory and management-system compliance (OHSAS 18001), and a record that a hazard was known and managed.</p>
+<p><strong>C — State the purpose of workplace inspection.</strong> Seven, as a list: listen to workers' and supervisors' concerns; understand jobs and tasks; identify existing and potential hazards; determine their underlying causes; recommend corrective action; monitor the controls applied (engineering, administrative, PPE); meet regulatory and management-system requirements.</p>
+<p><strong>D — Types of HSE inspection.</strong> 1. <strong>Informal</strong> — continuous, by safety officers, supervisors and employees; no documentation. 2. <strong>Formal</strong> — scheduled walk-through, documented with the specific hazard and its correction date. 3. <strong>Special</strong> — reactive to a report, new substance/process/equipment or an accident; documented <strong>and</strong> followed up.</p>
+<p><strong>E — Define first aid / state what Section 45 requires.</strong> 1. <strong>Definition</strong> — first and immediate assistance to preserve life, prevent worsening, promote recovery until medical services arrive. 2. <strong>Boxes</strong> — proper first-aid boxes in every workroom, not less than one for every 100 or 50 workers, prescribed contents, nothing else inside. 3. <strong>Control and escalation</strong> — a trained first-aid in-charge per box; an ambulance room with all necessary equipment above 500 workers.</p>
+<p><strong>F — State the welfare facilities under the Factories Act, 1948.</strong> Sections and triggers: <strong>42</strong> washing (every factory, separate screened facilities for women); <strong>43</strong> storing and drying clothes; <strong>44</strong> sitting; <strong>45</strong> first aid (ambulance room above 500); <strong>46</strong> canteen (<strong>above 250</strong>); <strong>47</strong> shelters, rest-rooms and lunch-rooms (<strong>above 150</strong>).</p>
+<p><strong>G — Define PPE and give its place in the hierarchy.</strong> 1. <strong>Definition</strong> — equipment worn or held by the worker protecting against one or more hazards, used where the hazard cannot be eliminated or controlled at source. 2. <strong>Hierarchy</strong> — eliminate/substitute, enclose, ventilate, and only then protect the person. 3. <strong>Groups</strong> — head, eye and face, respiratory, hearing, hand, foot–leg–body.</p>
+<p><strong>H — Classes of hard hat.</strong> <strong>G</strong> general — impact and penetration, low-voltage protection proof-tested to <strong>2,200 V</strong>; <strong>E</strong> electrical — falling objects and impact, high-voltage proof-tested to <strong>20,000 V</strong>; <strong>C</strong> conductive — bump protection only, <strong>no</strong> protection from falling objects or electrical hazards.</p>
+<p><strong>I — Role of an individual in conserving water.</strong> Repair leaks; adopt minimum-use patterns; water-saving toilets at the optimum volume per flush; collect household wastewater for the kitchen garden; join beach clean-ups; protect wetlands, lakes, ponds and wells.</p>
+<p><strong>J — Methods of controlling water pollution (overview).</strong> Source control and stabilisation of the ecosystem → chemical methods (ion exchange, reverse osmosis, precipitation, coagulation) → cooling for thermal pollution → the 4R concept → sewage, industrial and agricultural treatment → erosion, sediment and runoff control → legislation and enforcement.</p>
+<h3 id="32-five-mark-answers">3.2 Five-mark answers<a class="anchor" href="#32-five-mark-answers">#</a></h3>
+<p><strong>A — Purpose and benefits of safety inspection (5).</strong> <em>Shape:</em> definition (1) + four discoveries or four areas (1) + purposes as a list (1.5) + benefits split human/financial with culture named (1.5). Close on: an inspection record is often the only contemporaneous evidence that a hazard was known and managed.</p>
+<p><strong>B — Procedure for conducting a safety inspection (5).</strong> Prepare (diagram, equipment inventory, hazardous-product inventory with SDS, management documents, checklist, past records, team) → huddle on route and wear PPE → inspect one area at a time with a supervisor and the workers → record on the spot with exact location → classify A/B/C, assign owner and date → report and distribute → verify. <strong>The marks are in the sequence, not the enthusiasm.</strong></p>
+<p><strong>C — First-aid appliances under Section 45 (5).</strong> Four limbs in order — boxes at one per 100 or 50 workers in every workroom with prescribed contents and nothing else; a trained in-charge per box; ambulance room above 500 — plus the three verbs of the definition, plus one line on why the ratio of boxes is not a ratio of trained first-aiders.</p>
+<p><strong>D — Welfare facilities and the threshold ladder (5).</strong> Sections 42–47 with triggers, emphasising <strong>150 / 250 / 500</strong>, one line on the State Government's power to prescribe or direct, then the strongest single mechanism: section 47's no-eating-in-the-work-room rule exists because eating at the workstation means ingesting the hazard.</p>
+<p><strong>E — PPE: selection, use and limitations (5).</strong> Hierarchy first (eliminate → substitute → enclose → ventilate → PPE); then the six groups with one hazard and one device each; then the limitation sentence: it protects only the wearer, only while correctly worn, only if fitted and maintained, and it adds heat, weight and restricted vision and hearing, and it fails silently.</p>
+<p><strong>F — Individual's role in conservation of natural resources (5).</strong> Three moves — use less, use again, use better — then one action with its mechanism per resource: water (repair leaks, greywater to garden), energy (daylight, solar cooker, public transport, tuned vehicle), minerals (durability, recycling), food (local and seasonal, no waste), forests (plant and tag, protect existing trees). One closing line on the limit of individual action.</p>
+<p><strong>G — Chemical methods of water-pollution control (5).</strong> Ion exchange (reversible exchange on zeolite or resin) · reverse osmosis (semipermeable membrane; removes bacteria, organics, silica; &gt;95% salt reduction as pre-treatment) · precipitation (dissolved → insoluble, removed by sedimentation or filtration) · coagulation (destabilise and precipitate colloids into floc, removed by settling or filtration) · plus one line placing them: treatment of industrial effluent <strong>before</strong> discharge into a water body.</p>
+<h3 id="33-seven-and-eight-mark-answers">3.3 Seven- and eight-mark answers<a class="anchor" href="#33-seven-and-eight-mark-answers">#</a></h3>
+<p><strong>A — Purpose and benefits of safety inspection (7/8).</strong> <em>Structure (3 + 2 + 3).</em>
+1. Definition and status as an ongoing process; the four discoveries (equipment, conditions, processes, practice) with one example each.
+2. The four areas (people, plant, premises, procedures) and the seven purposes as a numbered list.
+3. Benefits split human (sense of safety, culture) and financial (early repair, no litigation) + types table (informal/formal/special, with documentation and follow-up) + one line on frequency factors. Close on documentation as evidence.</p>
+<p><strong>B — Conducting an inspection: preparation to report (7/8).</strong> <em>Structure (2 + 4 + 2).</em>
+1. Why preparation sets the ceiling; the five information types; team selection criteria.
+2. The walk-through: huddle, PPE-or-do-not-enter, one area at a time, ask the workers, immediate danger first, lock out, do not operate equipment, look up/down/around/inside, record on the spot with exact location, do not rely on senses, photograph what you cannot describe.
+3. The report: five required contents, the Introduction–Observation–Classification–Follow-Up–Distribution structure, A/B/C severity with the correction rules, and the interim measures (change procedure, take machine out of service, stop operation). Add the disciplinary prohibition and say why it protects the system.</p>
+<p><strong>C — PPE: selection, use and limitations (8).</strong> <em>Structure (2 + 4 + 2).</em>
+1. Definition and hierarchy placement, quoting the deck's order (eliminate/substitute, enclose, ventilate, only then respirators).
+2. Six groups in a table: body part → hazard → device; then the specials — hard hat G/E/C with 2,200 V and 20,000 V; goggle vent types; APR vs atmosphere-supplying with the oxygen-deficiency/unknown-concentration limit; 85/90/140 dB with the duration table; glove selection from the SDS; body-protection materials.
+3. Limitations: six failure stages (wrong device, fit, discomfort, incompatibility, storage, training) and the cultural point — where PPE is the only control, a lapse in wearing it is an exposure, not a near miss.</p>
+<p><strong>D — Welfare facilities and why they matter (7/8).</strong> <em>Structure (4 + 3).</em>
+1. Concept of welfare; sections 42–47 in a table with triggers <strong>150 / 250 / 500</strong>; the State Government's prescribing power and the Chief Inspector's direction under 44.
+2. Five mechanisms — heat and hydration, fatigue, hygiene and absorption, ingestion, take-home contamination — each tied to the section that answers it; then provision vs availability, and the culture sentence (a plant with blocked toilets, no shade and a lunch room used as a store returns unreported hazards and turnover).</p>
+<p><strong>E — First aid and the emergency response (7/8).</strong> <em>Structure (3 + 2 + 3).</em>
+1. Definition with the three verbs; section 45's four limbs with the numbers 100/50 and 500.
+2. Contents by function (bleeding and wounds, cleaning, flushing, burns, rescuer protection) with the note that the deck gives no quantities; the in-charge requirement; the two records.
+3. The emergency sequence, the two prohibitions (no movement of a suspected spinal injury, nothing by mouth), and the limits of first aid — it stabilises, it does not treat; the damaging errors are delays, not missed diagnoses.</p>
+<p><strong>F — Role of an individual in conservation and in pollution prevention (7/8).</strong> <em>Structure (4 + 4).</em>
+1. Conservation: three moves, then water, energy, minerals, food, forests — one action plus its mechanism each.
+2. Prevention: direct role by medium (air, water, solid waste, noise), then the indirect role (education, exhibitions, NGOs, environmental dates — 7 July Tree Plantation Day, World Environment Day, respect for environmental law), and the closing limit: individual action supports but does not replace regulation.</p>
+<p><strong>G — Methods for controlling water pollution (8).</strong> <em>Structure (2 + 5 + 1).</em>
+1. The chain, not the plant: source control → treatment → reuse → disposal; name the sources.
+2. Stabilisation of the ecosystem (four practices + water hyacinth) → chemical methods table (ion exchange, reverse osmosis &gt;95% salt, precipitation, coagulation) → cooling methods for thermal pollution → 4R (recycling, renovation, recharge, reuse) → sanitation and sewage treatment (90% or more of pollutant load with secondary/tertiary) → industrial and agricultural treatment → erosion and sediment control (mulching, hydroseeding, basins, silt fences) → urban runoff → legislation.
+3. Close on: the cheapest unit of pollution is the one never produced.</p>
+<h3 id="34-fourteen-mark-skeletons">3.4 Fourteen-mark skeletons<a class="anchor" href="#34-fourteen-mark-skeletons">#</a></h3>
+<p><strong>A — "Describe the welfare facilities and personal protective equipment required at a construction site." (14)</strong>
+<em>Allocation: opening 2 + welfare 5 + PPE 5 + limitations 2.</em></p>
+<ol>
+<li><strong>Opening (2 marks)</strong> — the two duties: welfare under sections 42–47 of the Factories Act, 1948, and PPE as the <strong>last</strong> line of defence where the hazard cannot be eliminated or controlled at source. One sentence each, no history.</li>
+<li><strong>Welfare (5 marks)</strong> — table of section → facility → trigger → requirement (42 washing with separate screened facilities; 43 storing and drying clothes; 44 sitting; 45 first aid; 46 canteen above 250; 47 shelters, rest-rooms and lunch-rooms above 150, no eating in the work-room). Then the mechanisms that make it safety rather than comfort: hydration and heat strain, fatigue and the short cut it causes, skin absorption, ingestion of dust at the workstation, take-home contamination. On a construction site add the site-specific reading: drinking water at accessible points, shade, a rest room that actually cools, washing before eating, and lockers so contaminated clothing does not go home.</li>
+<li><strong>PPE (5 marks)</strong> — the hierarchy first (eliminate, substitute, enclose, ventilate, then protect), then a body-part → hazard → device table for a site: hard hat (Class G or E where overhead or live work — <strong>not</strong> Class C), eye protection against dust, chips and chemical splash with a face shield only <em>over</em> goggles, respirators for silica dust and welding fume with APR versus SCBA and the oxygen-deficiency limit, hearing protection above 85 dB with 90 dB the requirement and 140 dB the impact ceiling, gloves chosen from the SDS, steel-toe boots with penetration-resistant soles, high-visibility and weatherproof body protection.</li>
+<li><strong>Limitations and close (2 marks)</strong> — six failure stages (selection, fit, inspection, care, storage, training) and the culture point; finish with the sentence that an engineering control protects every worker every shift while PPE protects one worker for as long as they tolerate it.</li>
+</ol>
+<p><strong>B — "Explain the purpose and benefits of safety inspection and the procedure for conducting one." (14)</strong>
+<em>Allocation: purpose and benefits 5, procedure 6, reporting and closure 3.</em></p>
+<ol>
+<li><strong>Purpose (3)</strong> — definition; the four discoveries; the four areas; the seven purposes as a numbered list.</li>
+<li><strong>Benefits (2)</strong> — human (sense of safety, high-performance culture), financial (small repair instead of large, no litigation), systemic (regulatory and OHSAS 18001 compliance, contemporaneous evidence).</li>
+<li><strong>Procedure (6)</strong> — preparation (five information types, team, huddle, PPE rule) → walk-through (one area at a time, immediate danger, lock out, do not operate, look up/down/around/inside, record on the spot, do not rely on senses) → observation recorded as deviation, never for discipline → classification A/B/C → owner and date → report → distribution → verification. Types of inspection (informal/formal/special) can sit inside this block or as a labelled sub-heading.</li>
+<li><strong>Closure (3)</strong> — the five report contents, the correction rules and interim measures (change procedure, take out of service, stop operation), the four reasons inspections decay into paperwork, and the one-line fix: a named owner, a date, and a verification pass.</li>
+</ol>
+<p><strong>C — "Discuss the methods of controlling water pollution and the role of the individual in preventing pollution." (14)</strong>
+<em>Allocation: methods 8, individual role 4, closing 2.</em></p>
+<ol>
+<li><strong>Sources (1)</strong> — domestic sewage, industrial effluent, agricultural runoff, thermal discharges, radioactive waste, oil spillage, construction sediment.</li>
+<li><strong>Methods (7)</strong> — the chain in order: stabilisation of the ecosystem (four practices + water hyacinth) → chemical methods (ion exchange, reverse osmosis, precipitation, coagulation) → cooling methods → 4R → sewage treatment with 90%-plus removal → industrial and agricultural treatment → erosion/sediment control and spill prevention on site → urban runoff → legislation and enforcement.</li>
+<li><strong>Individual role (4)</strong> — direct: air (public transport, tuned engine, engine off at crossings, CNG, LPG, no plastic burning), water (treatment before discharge, phosphate-free detergent, minimum pesticide), solid waste (segregate at source, rechargeable batteries, cloth bags, never scatter), noise (no loud music, efficient silencer); indirect: environmental education, exhibitions, NGOs, environmental dates (7 July Tree Plantation Day, World Environment Day), respect for environmental law.</li>
+<li><strong>Close (2)</strong> — the cheapest unit of pollution is the one never produced, and individual action supports but does not replace regulation; the largest individual lever is the specification held at work.</li>
+</ol>
+<hr />
+<h2 id="4-definitions-and-numbers-to-memorise">4. Definitions and numbers to memorise<a class="anchor" href="#4-definitions-and-numbers-to-memorise">#</a></h2>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Value / wording</th>
+<th>Source</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Safety inspection</td>
+<td>Critical examination of the workplace to identify and investigate hazards, ensure standards are met and initiate action reducing severity, so the workplace is safe and free from risk</td>
+<td>sl 4</td>
+</tr>
+<tr>
+<td>Four discoveries</td>
+<td>Unsafe <strong>equipment</strong>, <strong>conditions</strong>, <strong>processes</strong>, <strong>work practice</strong></td>
+<td>sl 3</td>
+</tr>
+<tr>
+<td>Four areas</td>
+<td><strong>People, plant, premises, procedures</strong></td>
+<td>sl 5</td>
+</tr>
+<tr>
+<td>Inspection purposes</td>
+<td>Seven (listen, understand jobs, identify hazards, find causes, recommend action, monitor controls, meet requirements)</td>
+<td>sl 7</td>
+</tr>
+<tr>
+<td>Inspection benefits</td>
+<td>Four — two human (satisfaction, safety culture), two financial (early repair, no lawsuits)</td>
+<td>sl 8</td>
+</tr>
+<tr>
+<td>Inspection types</td>
+<td><strong>Informal</strong> (no documentation) · <strong>Formal</strong> (documented: hazard + correction date) · <strong>Special</strong> (documented + follow-up)</td>
+<td>sl 24–26</td>
+</tr>
+<tr>
+<td>Severity grades</td>
+<td><strong>A</strong> major/high = immediate · <strong>B</strong> serious/medium = short-term · <strong>C</strong> minor/low = long-term</td>
+<td>sl 36</td>
+</tr>
+<tr>
+<td>OHSAS 18001</td>
+<td>Occupational Health and Safety Assessment Series — OHS management-system standard</td>
+<td>sl 3</td>
+</tr>
+<tr>
+<td>First aid</td>
+<td>First and immediate assistance to <strong>preserve life, prevent worsening, promote recovery</strong></td>
+<td>sl 39</td>
+</tr>
+<tr>
+<td>First-aid boxes</td>
+<td>Not less than <strong>one for every 100 or 50 workers</strong>, in every workroom</td>
+<td>sl 39</td>
+</tr>
+<tr>
+<td>Ambulance room</td>
+<td>Required where workers <strong>exceed 500</strong></td>
+<td>sl 39</td>
+</tr>
+<tr>
+<td>Canteen</td>
+<td><strong>Above 250 workers</strong> (section 46)</td>
+<td>sl 44</td>
+</tr>
+<tr>
+<td>Shelters, rest-rooms, lunch-rooms</td>
+<td><strong>Above 150 workers</strong> (section 47); no eating in the work-room where a lunch-room exists</td>
+<td>sl 45</td>
+</tr>
+<tr>
+<td>Washing / clothing / sitting</td>
+<td>Sections <strong>42 / 43 / 44</strong>; separate adequately screened facilities for men and women</td>
+<td>sl 41–43</td>
+</tr>
+<tr>
+<td>Hard hat Class G</td>
+<td>Impact and penetration; proof-tested to <strong>2,200 V</strong></td>
+<td>sl 48</td>
+</tr>
+<tr>
+<td>Hard hat Class E</td>
+<td>Electrical/utility work; <strong>20,000 V</strong></td>
+<td>sl 49</td>
+</tr>
+<tr>
+<td>Hard hat Class C</td>
+<td>Conductive; bump protection only; <strong>no</strong> falling-object or electrical protection</td>
+<td>sl 50</td>
+</tr>
+<tr>
+<td>Eye-protection selection</td>
+<td>Five elements: protects against the hazard, fits, unrestricted vision and movement, durable and cleanable, allows other PPE to function</td>
+<td>sl 53</td>
+</tr>
+<tr>
+<td>Noise numbers</td>
+<td>Loss possible above <strong>85 dB</strong>; protection <strong>required at 90 dB</strong>; impact noise <strong>not to exceed 140 dB</strong></td>
+<td>sl 69–70</td>
+</tr>
+<tr>
+<td>Permissible noise</td>
+<td>90 dBA/8 h · 92/6 · 95/4 · 97/3 · 100/2 · 105/1 · 110/½ · 115/¼ (29 CFR 1910.95(b)(1))</td>
+<td>sl 70</td>
+</tr>
+<tr>
+<td>Reverse osmosis</td>
+<td>Removes bacteria, organics, silica; reduces dissolved salt by <strong>more than 95%</strong> (as deionisation pre-treatment)</td>
+<td>sl 103</td>
+</tr>
+<tr>
+<td>Sewage treatment</td>
+<td>Secondary or advanced tertiary systems remove <strong>90% or more</strong> of the pollutant load</td>
+<td>sl 107</td>
+</tr>
+<tr>
+<td>4R concept</td>
+<td><strong>Recycling, renovation, recharge, reuse</strong></td>
+<td>sl 106</td>
+</tr>
+<tr>
+<td>Environmental dates</td>
+<td><strong>Tree Plantation Day, 7 July</strong>; World Environment Day</td>
+<td>sl 114</td>
+</tr>
+<tr>
+<td>EPA PPE levels</td>
+<td><strong>A</strong> highest (encapsulating suit + SCBA) · <strong>B</strong> highest respiratory, lesser skin · <strong>C</strong> known concentration, APR criteria met · <strong>D</strong> minimum</td>
+<td>sl 82–85</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="5-diagrams-to-be-able-to-draw">5. Diagrams to be able to draw<a class="anchor" href="#5-diagrams-to-be-able-to-draw">#</a></h2>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Diagram</th>
+<th>What must be on it</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><strong>Inspection cycle</strong> (notes §5.1)</td>
+<td>Plan → Inspect → Record → Prioritise → Correct → <strong>Verify</strong>, drawn as a closed loop; label verification as the step that turns an inspection into a control</td>
+</tr>
+<tr>
+<td>2</td>
+<td><strong>Four targets / four areas grid</strong> (sl 3, 5)</td>
+<td>Left column: equipment, conditions, processes, practice. Right column: people, plant, premises, procedures. Show them as two different axes, with one example in each cell</td>
+</tr>
+<tr>
+<td>3</td>
+<td><strong>Welfare threshold ladder</strong> (sl 44–45, 39)</td>
+<td>A rising bar: 150 → shelter, rest-room, lunch-room; 250 → canteen; 500 → ambulance room. Add first aid at every level</td>
+</tr>
+<tr>
+<td>4</td>
+<td><strong>PPE head to toe</strong> (notes §5.5 figure)</td>
+<td>Six labels on a body outline: head (hard hat G/E/C), eye and face (glasses, goggles, shield), respiratory (APR / SCBA), hearing (plugs, muffs), hand (gloves per SDS), foot–leg–body (toe-cap, shin guard, coverall)</td>
+</tr>
+<tr>
+<td>5</td>
+<td><strong>PPE's place in the hierarchy</strong> (sl 62)</td>
+<td>Five descending steps — eliminate/substitute, enclose, general or local exhaust ventilation, administrative, PPE — with "only when engineering controls are not feasible" written against PPE</td>
+</tr>
+<tr>
+<td>6</td>
+<td><strong>Water-pollution control chain</strong> (sl 102–108)</td>
+<td>Source control → treatment (chemical, cooling, biological) → reuse (4R) → disposal to standard, with erosion/sediment control and legislation drawn as the two rails around it</td>
+</tr>
+<tr>
+<td>7</td>
+<td><strong>Stabilisation of the ecosystem</strong> (sl 102)</td>
+<td>A water body with four arrows in: waste reduction at source, biomass harvesting, nutrient trapping, fish management; water hyacinth pond at the margin</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="6-say-this-if-grilled">6. Say-this-if-grilled<a class="anchor" href="#6-say-this-if-grilled">#</a></h2>
+<ol>
+<li>"An inspection is not an audit and not a fault-finding walk — it is a scheduled, recorded, closed and repeated examination of the workplace."</li>
+<li>"Four things are found — equipment, conditions, processes, practice — and four areas are searched — people, plant, premises, procedures. They are different lists."</li>
+<li>"The benefit that earns the last mark is culture, not 'prevents accidents'."</li>
+<li>"An inspection without a named owner and a correction date is an opinion."</li>
+<li>"Inspections must not feed disciplinary action; the moment they do, workers stop being honest and the inspection measures appearance instead of condition."</li>
+<li>"Your senses are not instruments — noise, chemicals, radiation and bioaerosols have to be measured."</li>
+<li>"Section 45 has four limbs: boxes at one per 100 or 50 workers, prescribed contents only, a trained in-charge per box, and an ambulance room above 500."</li>
+<li>"The Act fixes the number of boxes, not the number of first-aiders — I won't invent a ratio the statute doesn't state."</li>
+<li>"Welfare is safety: the washbasin, the shade and the lunch room are what stop the hazard entering the body."</li>
+<li>"150 for shelter, rest and lunch rooms, 250 for a canteen, 500 for an ambulance room — and the State Government prescribes the standard, so the Act is a floor, not a specification."</li>
+<li>"No eating in the work-room is an exposure control, not a housekeeping rule — eating at the workstation means eating the dust."</li>
+<li>"PPE is last because it protects one worker, only while worn, only if fitted, and it fails silently."</li>
+<li>"Class C hard hat is a bump cap — no protection from falling objects and none from electrical contact."</li>
+<li>"A face shield is face protection; without glasses or goggles underneath, the eyes are still bare."</li>
+<li>"An air-purifying respirator cannot be used in an oxygen-deficient atmosphere or where the concentration is unknown — that is what SCBA is for."</li>
+<li>"85 dB is where loss begins, 90 dB is where protection is required, 140 dB is the impact ceiling."</li>
+<li>"Water pollution control is a chain — source, treatment, reuse, disposal — and the cheapest unit of pollution is the one never produced."</li>
+<li>"The individual's role in prevention has two halves: the direct one at the tap and the bin, and the indirect one — education, NGOs, environmental law — which is the half that scales."</li>
+<li>"Individual action supports regulation; it does not replace it. The biggest lever an individual holds is usually a specification at work."</li>
+<li>"This module has never been examined internally, which is exactly why it is the cheapest twenty per cent in the paper — nobody else revises it."</li>
+</ol>
+  </main>
+</div>
+<button id="chat-btn" title="Ask about this page (select text first)">✳</button>
+<div id="sel-chip">Ask about this</div>
+<div id="chat-panel" role="dialog" aria-label="Ask about this page">
+  <div id="chat-head"><span>Ask this page</span><span class="sp"></span><button id="chat-close" title="Close">✕</button></div>
+  <div id="chat-quote"></div>
+  <div id="chat-log"></div>
+  <form id="chat-form" autocomplete="off">
+    <textarea id="chat-input" rows="1" placeholder="Ask about the selection or the section…"></textarea>
+    <button id="chat-send" title="Send">↑</button>
+  </form>
+  <div id="chat-foot">Select text → “Ask about this”. Enter sends, Shift+Enter newline.</div>
+</div>
+<div class="tools">
+  <button id="theme" title="Toggle light / dark">☾</button>
+  <button id="top" title="Back to top">↑</button>
+</div>
+<script>
+(function(){
+  var root=document.documentElement, key='minotes-theme';
+  var saved=localStorage.getItem(key);
+  var prefers=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';
+  root.setAttribute('data-theme', saved || prefers);
+
+  var btn=document.getElementById('theme');
+  function sync(){ if(btn) btn.textContent = root.getAttribute('data-theme')==='dark' ? '\u2600' : '\u263E'; }
+  sync();
+  if(btn) btn.addEventListener('click',function(){
+    var next = root.getAttribute('data-theme')==='dark' ? 'light' : 'dark';
+    root.setAttribute('data-theme', next); localStorage.setItem(key,next); sync();
+  });
+
+  var bar=document.getElementById('progress');
+  if(bar) addEventListener('scroll',function(){
+    var h=document.documentElement.scrollHeight-innerHeight;
+    bar.style.width=(h>0?(scrollY/h*100):0)+'%';
+  },{passive:true});
+
+  document.querySelectorAll('pre').forEach(function(pre){
+    var b=document.createElement('button');
+    b.className='copy'; b.textContent='copy';
+    b.addEventListener('click',function(){
+      var t=pre.querySelector('code'); var txt=t?t.innerText:pre.innerText;
+      navigator.clipboard.writeText(txt).then(function(){
+        b.textContent='copied'; setTimeout(function(){b.textContent='copy';},1200);
+      });
+    });
+    pre.appendChild(b);
+  });
+
+  document.querySelectorAll('main table').forEach(function(t){
+    if(t.parentElement.classList.contains('table-scroll')) return;
+    var w=document.createElement('div'); w.className='table-scroll';
+    t.parentNode.insertBefore(w,t); w.appendChild(t);
+  });
+
+  var links=[].slice.call(document.querySelectorAll('.sidebar a[href^="#"]'));
+  var map={}; links.forEach(function(a){ map[a.getAttribute('href').slice(1)]=a; });
+  var heads=[].slice.call(document.querySelectorAll('main h2[id], main h3[id]'));
+  if('IntersectionObserver' in window && heads.length){
+    var obs=new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if(!e.isIntersecting) return;
+        links.forEach(function(a){a.classList.remove('active');});
+        var a=map[e.target.id]; if(a){a.classList.add('active');}
+      });
+    },{rootMargin:'-10% 0px -75% 0px'});
+    heads.forEach(function(h){obs.observe(h);});
+  }
+
+  var top=document.getElementById('top');
+  if(top) top.addEventListener('click',function(){ scrollTo({top:0,behavior:'smooth'}); });
+})();
+
+(function(){
+  var API="/api/chat";
+  var panel=document.getElementById("chat-panel"),
+      btn=document.getElementById("chat-btn"),
+      chip=document.getElementById("sel-chip"),
+      quote=document.getElementById("chat-quote"),
+      log=document.getElementById("chat-log"),
+      input=document.getElementById("chat-input"),
+      send=document.getElementById("chat-send"),
+      form=document.getElementById("chat-form");
+
+  if(!panel) return;
+  var pendingSelection="", busy=false, lastSelection="";
+
+  function esc(s){return s.replace(/[&<>]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;"}[c];});}
+
+  // minimal markdown: fenced code, inline code, bold, bullets, numbered lists
+  function md(src){
+    var parts=src.split(/```/), out="";
+    for(var i=0;i<parts.length;i++){
+      if(i%2){ out+="<pre><code>"+esc(parts[i].replace(/^\w*\n/,""))+"</code></pre>"; continue; }
+      var t=esc(parts[i]);
+      t=t.replace(/`([^`\n]+)`/g,"<code>$1</code>").replace(/\*\*([^*]+)\*\*/g,"<b>$1</b>");
+      var lines=t.split(/\n/), html="", inUl=false, inOl=false;
+      for(var j=0;j<lines.length;j++){
+        var line=lines[j];
+        if(/^\s*[-*]\s+/.test(line)){
+          if(inOl){html+="</ol>";inOl=false;}
+          if(!inUl){html+="<ul>";inUl=true;}
+          html+="<li>"+line.replace(/^\s*[-*]\s+/,"")+"</li>"; continue;
+        }
+        if(/^\s*\d+[.)]\s+/.test(line)){
+          if(inUl){html+="</ul>";inUl=false;}
+          if(!inOl){html+="<ol>";inOl=true;}
+          html+="<li>"+line.replace(/^\s*\d+[.)]\s+/,"")+"</li>"; continue;
+        }
+        if(inUl){html+="</ul>";inUl=false;}
+        if(inOl){html+="</ol>";inOl=false;}
+        if(line.trim()==="") continue;
+        html+="<p>"+line+"</p>";
+      }
+      if(inUl)html+="</ul>";
+      if(inOl)html+="</ol>";
+      out+=html;
+    }
+    return out;
+  }
+
+  function outline(){
+    return [].slice.call(document.querySelectorAll("main h2, main h3")).slice(0,40)
+      .map(function(h){return (h.tagName==="H3"?"  - ":"- ")+h.textContent.replace(/#$/,"").trim();}).join("\n");
+  }
+
+  function sectionFor(node){
+    var el = node && (node.nodeType===1?node:node.parentElement);
+    if(!el || !el.closest) return "";
+    el = el.closest("main") ? el : null;
+    if(!el) return "";
+    var heads=[].slice.call(document.querySelectorAll("main h2, main h3"));
+    var cur=null, idx=-1;
+    for(var i=0;i<heads.length;i++){
+      if(heads[i].compareDocumentPosition(el) & Node.DOCUMENT_POSITION_FOLLOWING) { cur=heads[i]; idx=i; }
+    }
+    if(!cur) return "";
+    var stop = heads[idx+1] || null, txt=[], n=cur;
+    while((n=n.nextSibling) && n!==stop){ if(n.textContent) txt.push(n.textContent); }
+    return (cur.textContent+"\n"+txt.join("\n")).replace(/\s+\n/g,"\n").slice(0,3000);
+  }
+
+  function placeChip(x,y){
+    chip.style.left=x+"px"; chip.style.top=(y+window.scrollY-8)+"px"; chip.style.display="block";
+  }
+  function hideChip(){ chip.style.display="none"; }
+
+  document.addEventListener("mouseup",function(e){
+    setTimeout(function(){
+      var s=window.getSelection(), text=s?s.toString().trim():"";
+      if(!text || text.length<3 || !s.anchorNode || !(s.anchorNode.parentElement||s.anchorNode).closest("main")){hideChip();return;}
+      lastSelection=text;
+      var r=s.getRangeAt(0).getBoundingClientRect();
+      placeChip(r.left+r.width/2, Math.max(r.top,8));
+    },10);
+  });
+  document.addEventListener("mousedown",function(e){ if(e.target!==chip) hideChip(); });
+
+  chip.addEventListener("mousedown",function(e){ e.preventDefault(); });
+  chip.addEventListener("click",function(e){
+    e.stopPropagation();
+    pendingSelection=lastSelection; hideChip(); open(pendingSelection);
+  });
+
+  function open(sel){
+    panel.classList.add("open");
+    if(sel){ quote.style.display="block"; quote.textContent=sel; pendingSelection=sel; }
+    else { quote.style.display="none"; quote.textContent=""; pendingSelection=""; }
+    setTimeout(function(){input.focus();},60);
+  }
+  function close(){ panel.classList.remove("open"); }
+
+  btn.addEventListener("click",function(){ panel.classList.contains("open")?close():open(lastSelection||""); });
+  document.getElementById("chat-close").addEventListener("click",close);
+  document.addEventListener("keydown",function(e){ if(e.key==="Escape") close(); });
+
+  function addMsg(cls,html){
+    var d=document.createElement("div"); d.className="msg "+cls; d.innerHTML=html; log.appendChild(d);
+    log.scrollTop=log.scrollHeight; return d;
+  }
+
+  async function ask(q){
+    if(busy||!q.trim()) return;
+    busy=true; send.disabled=true;
+    addMsg("user",esc(q));
+    var bot=addMsg("bot",'<span class="cursor"></span>');
+    var acc="";
+    var sid=sessionStorage.getItem("mn-sid");
+    if(!sid){ sid=(crypto.randomUUID?crypto.randomUUID():String(Date.now())+Math.random().toString(16).slice(2)); sessionStorage.setItem("mn-sid",sid); }
+    var payload={q:q, sid:sid, sel:pendingSelection||"", page:document.querySelector("h1")?document.querySelector("h1").textContent.trim():document.title,
+                 section:sectionFor(window.getSelection()&&window.getSelection().anchorNode?"":document.querySelector("main h2"))||"",
+                 outline:outline()};
+    // section: prefer the one containing the selection, else the first heading on screen
+    try{
+      var sel=window.getSelection();
+      if(pendingSelection && sel && sel.anchorNode){ payload.section=sectionFor(sel.anchorNode); }
+      if(!payload.section){
+        var vis=[].slice.call(document.querySelectorAll("main h2, main h3")).filter(function(h){
+          var r=h.getBoundingClientRect(); return r.top>-80 && r.top<window.innerHeight*0.6; }).pop();
+        if(vis) payload.section=sectionFor(vis);
+      }
+    }catch(_){}
+
+    try{
+      var res=await fetch(API,{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify(payload)});
+      if(!res.ok){
+        var j=await res.json().catch(function(){return{};});
+        throw new Error(j.error||("HTTP "+res.status));
+      }
+      var reader=res.body.getReader(), dec=new TextDecoder(), buf="";
+      for(;;){
+        var r=await reader.read(); if(r.done) break;
+        buf+=dec.decode(r.value,{stream:true});
+        var lines=buf.split("\n"); buf=lines.pop()||"";
+        for(var i=0;i<lines.length;i++){
+          var l=lines[i].trim(); if(l.indexOf("data:")!==0) continue;
+          var d=l.slice(5).trim(); if(d==="[DONE]") continue;
+          try{ var o=JSON.parse(d); if(o.d){acc+=o.d; bot.innerHTML=md(acc)+'<span class="cursor"></span>'; log.scrollTop=log.scrollHeight;} if(o.error) throw new Error(o.error);}catch(_){}
+        }
+      }
+      bot.innerHTML=md(acc||"_no answer_");
+    }catch(err){
+      bot.className="msg err";
+      bot.textContent = String(err.message).indexOf("Failed to fetch")>-1 || String(err.message).indexOf("HTTP 5")>-1
+        ? "Assistant unavailable — it only works on the deployed site (needs the /api/chat function)."
+        : "Error: "+err.message;
+    }finally{
+      busy=false; send.disabled=false; input.value=""; input.focus();
+      pendingSelection=""; quote.style.display="none";
+    }
+  }
+
+  form.addEventListener("submit",function(e){ e.preventDefault(); ask(input.value); });
+  input.addEventListener("keydown",function(e){
+    if(e.key==="Enter"&&!e.shiftKey){ e.preventDefault(); ask(input.value); }
+  });
+  input.addEventListener("input",function(){ input.style.height="auto"; input.style.height=Math.min(input.scrollHeight,110)+"px"; });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,1748 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Module 3 — Safety in Construction, Electrical and Radiation Hazards · Environmental Health &amp; Safety</title>
+<style>
+:root{
+  --bg:#fbfaf8; --panel:#ffffff; --ink:#232120; --muted:#5f5a53; --line:#e6e1da;
+  --accent:#7a4fd0; --accent-soft:#f1ecfb; --code-bg:#f5f2ee; --code-ink:#2b2a28;
+  --warn-bg:#fff8e6; --warn-line:#f0d9a0;
+  --sans:"Inter","Segoe UI",system-ui,-apple-system,"Noto Sans",sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,"SF Mono",Menlo,Consolas,"Fira Code",monospace;
+}
+html[data-theme="dark"]{
+  --bg:#141317; --panel:#1b1a20; --ink:#e8e4de; --muted:#a8a199; --line:#2f2c36;
+  --accent:#b79cf5; --accent-soft:#241f33; --code-bg:#22202a; --code-ink:#e8e4de;
+  --warn-bg:#2a2417; --warn-line:#4a3d22;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0; background:var(--bg); color:var(--ink); font-family:var(--sans);
+  font-size:16.5px; line-height:1.72; -webkit-font-smoothing:antialiased;
+}
+#progress{position:fixed;top:0;left:0;height:3px;width:0;background:var(--accent);z-index:50;transition:width .1s linear}
+
+.wrap{display:flex;align-items:flex-start;min-height:100vh}
+.sidebar{
+  position:sticky;top:0;height:100vh;width:300px;flex:0 0 300px;overflow-y:auto;
+  padding:26px 20px 60px;border-right:1px solid var(--line);background:var(--panel);
+}
+.sidebar h1{font-size:15px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);
+  margin:0 0 4px;font-weight:600}
+.sidebar .sub{font-size:12.5px;color:var(--muted);margin:0 0 18px}
+.sidebar nav{font-size:14px}
+.sidebar .toc>ul{padding-left:0}
+.sidebar ul{list-style:none;margin:0;padding-left:12px}
+.sidebar ul ul{border-left:1px solid var(--line);margin-left:4px;padding-left:10px}
+.sidebar li{margin:3px 0}
+.sidebar a{color:var(--ink);text-decoration:none;display:block;padding:3px 8px;border-radius:8px;
+  line-height:1.35;transition:background .12s,color .12s}
+.sidebar a:hover{background:var(--accent-soft);color:var(--accent)}
+.sidebar a.active{background:var(--accent-soft);color:var(--accent);font-weight:600}
+.sidebar .home{display:inline-flex;align-items:center;gap:6px;margin-bottom:16px;font-size:13.5px;
+  color:var(--muted);text-decoration:none;border:1px solid var(--line);padding:5px 10px;border-radius:999px}
+.sidebar .home:hover{color:var(--accent);border-color:var(--accent)}
+
+main{flex:1;min-width:0;padding:46px 56px 120px;max-width:980px;margin:0 auto}
+.doc-head{border-bottom:1px solid var(--line);padding-bottom:18px;margin-bottom:34px}
+.doc-head .kicker{font-size:12.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);
+  font-weight:700;margin-bottom:8px}
+.doc-head .meta{font-size:13.5px;color:var(--muted)}
+
+h1,h2,h3,h4{line-height:1.25;font-weight:700;letter-spacing:-.01em}
+h1{font-size:2.05rem;margin:.2em 0 .5em}
+h2{font-size:1.55rem;margin:2.4em 0 .7em;padding-bottom:.35em;border-bottom:1px solid var(--line)}
+h3{font-size:1.2rem;margin:1.9em 0 .55em}
+h4{font-size:1.03rem;margin:1.5em 0 .45em;color:var(--muted)}
+h2 .anchor,h3 .anchor{opacity:0;margin-left:.35em;font-size:.8em;color:var(--muted);text-decoration:none}
+h2:hover .anchor,h3:hover .anchor{opacity:1}
+p{margin:.75em 0}
+a{color:var(--accent);text-underline-offset:2px}
+strong{font-weight:650}
+hr{border:0;border-top:1px solid var(--line);margin:2.6em 0}
+ul,ol{margin:.7em 0;padding-left:1.4em}
+li{margin:.3em 0}
+li>ul,li>ol{margin:.25em 0}
+blockquote{
+  margin:1.3em 0;padding:12px 18px;background:var(--warn-bg);border-left:3px solid var(--warn-line);
+  border-radius:0 10px 10px 0;color:var(--ink)
+}
+blockquote p{margin:.3em 0}
+
+code{font-family:var(--mono);font-size:.87em;background:var(--code-bg);color:var(--code-ink);
+  padding:.15em .38em;border-radius:6px;border:1px solid var(--line);
+  box-decoration-break:clone;-webkit-box-decoration-break:clone;overflow-wrap:anywhere}
+pre{position:relative;background:var(--code-bg);border:1px solid var(--line);border-radius:12px;
+  padding:16px 18px;overflow-x:auto;margin:1.1em 0}
+pre code{background:none;border:0;padding:0;font-size:13.6px;line-height:1.62;white-space:pre}
+.copy{position:absolute;top:8px;right:8px;font:600 11px/1 var(--sans);color:var(--muted);
+  background:var(--panel);border:1px solid var(--line);border-radius:7px;padding:5px 8px;cursor:pointer;
+  opacity:0;transition:opacity .15s}
+pre:hover .copy{opacity:1}
+.copy:hover{color:var(--accent);border-color:var(--accent)}
+
+.table-scroll{overflow-x:auto;margin:1.3em 0;border:1px solid var(--line);border-radius:12px;background:var(--panel)}
+table{border-collapse:collapse;width:100%;font-size:14.6px}
+th,td{padding:9px 13px;text-align:left;vertical-align:top;border-bottom:1px solid var(--line)}
+th{background:var(--accent-soft);font-weight:650;font-size:13px;letter-spacing:.02em;
+  position:sticky;top:0;backdrop-filter:blur(4px)}
+tr:last-child td{border-bottom:0}
+tbody tr:nth-child(even){background:color-mix(in srgb,var(--panel) 60%,var(--bg))}
+tbody tr:hover{background:var(--accent-soft)}
+
+.tools{position:fixed;right:22px;bottom:22px;display:flex;flex-direction:column;gap:8px;z-index:40}
+.tools button{width:42px;height:42px;border-radius:12px;border:1px solid var(--line);background:var(--panel);
+  color:var(--ink);cursor:pointer;font-size:16px;box-shadow:0 4px 14px rgba(0,0,0,.10)}
+.tools button:hover{color:var(--accent);border-color:var(--accent)}
+@media (max-width:1000px){
+  .wrap{display:block}
+  .sidebar{position:static;width:auto;height:auto;border-right:0;border-bottom:1px solid var(--line)}
+  .sidebar nav{max-height:40vh;overflow:auto}
+  main{padding:28px 20px 100px}
+}
+@media print{
+  .sidebar,.tools,#progress,.copy{display:none!important}
+  body{background:#fff;color:#000;font-size:11pt}
+  main{padding:0;max-width:none}
+  h2{break-after:avoid} pre,table,blockquote{break-inside:avoid}
+  a{color:#000;text-decoration:none}
+}
+
+/* ---- ask-about-this ---- */
+#chat-btn{position:fixed;right:20px;bottom:112px;width:44px;height:44px;border-radius:50%;
+  border:1px solid var(--line);background:var(--panel);color:var(--accent);cursor:pointer;font-size:17px;
+  box-shadow:0 6px 18px rgba(0,0,0,.12);z-index:45;display:grid;place-items:center}
+#chat-btn:hover{border-color:var(--accent)}
+#sel-chip{position:absolute;z-index:46;transform:translate(-50%,-100%);background:var(--ink);color:var(--bg);
+  font:600 12px/1 var(--sans);padding:7px 11px;border-radius:999px;cursor:pointer;white-space:nowrap;
+  box-shadow:0 6px 18px rgba(0,0,0,.25);display:none}
+#sel-chip:hover{background:var(--accent);color:#fff}
+#chat-panel{position:fixed;right:20px;bottom:164px;width:min(420px,calc(100vw - 40px));max-height:min(70vh,620px);
+  background:var(--panel);border:1px solid var(--line);border-radius:14px;z-index:47;display:none;
+  flex-direction:column;box-shadow:0 18px 50px rgba(0,0,0,.18);overflow:hidden}
+#chat-panel.open{display:flex}
+#chat-head{display:flex;align-items:center;gap:8px;padding:11px 13px;border-bottom:1px solid var(--line);
+  font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:700}
+#chat-head .sp{flex:1}
+#chat-head button{background:none;border:0;color:var(--muted);cursor:pointer;font-size:15px;padding:2px 4px}
+#chat-head button:hover{color:var(--accent)}
+#chat-quote{display:none;margin:10px 13px 0;padding:8px 10px;border-left:2px solid var(--accent);
+  background:var(--accent-soft);color:var(--muted);font-size:12.5px;border-radius:0 8px 8px 0;
+  max-height:84px;overflow:auto;white-space:pre-wrap}
+#chat-log{flex:1;overflow-y:auto;padding:12px 13px;display:flex;flex-direction:column;gap:10px;font-size:13.6px;line-height:1.55}
+.msg{max-width:100%}
+.msg.user{align-self:flex-end;background:var(--accent-soft);color:var(--ink);padding:7px 11px;border-radius:11px 11px 2px 11px;
+  max-width:86%;white-space:pre-wrap}
+.msg.bot{color:var(--ink)}
+.msg.bot p{margin:.3em 0}
+.msg.bot ul{margin:.3em 0;padding-left:1.15em}
+.msg.bot code{font-size:.9em}
+.msg.bot pre{background:var(--code-bg);border-radius:8px;padding:9px 11px;overflow-x:auto;font-size:12px;margin:.4em 0}
+.msg.err{color:#b3261e;font-size:12.5px}
+.msg .cursor:after{content:"▍";color:var(--accent);animation:blink 1s steps(2) infinite}
+@keyframes blink{50%{opacity:0}}
+#chat-form{display:flex;gap:8px;padding:10px 13px;border-top:1px solid var(--line)}
+#chat-input{flex:1;resize:none;border:1px solid var(--line);border-radius:9px;background:var(--bg);color:var(--ink);
+  font:inherit;font-size:13.5px;padding:8px 10px;max-height:110px;min-height:38px}
+#chat-input:focus{outline:2px solid var(--accent);outline-offset:0}
+#chat-send{border:1px solid var(--accent);background:var(--accent);color:#fff;border-radius:9px;
+  width:38px;cursor:pointer;font-size:15px}
+#chat-send:disabled{opacity:.45;cursor:default}
+#chat-foot{font-size:11px;color:var(--muted);padding:0 13px 9px}
+@media (max-width:640px){
+  #chat-panel{right:8px;left:8px;width:auto;bottom:150px;max-height:66vh}
+  #chat-btn{bottom:104px;right:16px}
+}
+@media print{#chat-btn,#chat-panel,#sel-chip{display:none!important}}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+<div class="wrap">
+  <aside class="sidebar">
+    <a class="home" href="index.html">← Environmental Health &amp; Safety</a>
+    <a class="home" href="practice.html">Practice drills</a>
+    <h1>M3 · Construction hazards</h1>
+    <p class="sub">20% ESE · CO3</p>
+    <nav class="toc"><div class="toc">
+<ul>
+<li><a href="#1-coverage-syllabus-line-hrs-answered-at">1. Coverage — syllabus line | hrs | answered at</a><ul>
+<li><a href="#internal-questions-for-this-module">Internal questions for this module</a></li>
+</ul>
+</li>
+<li><a href="#2-concepts">2. Concepts</a><ul>
+<li><a href="#21-the-construction-industry-and-its-accident-profile-4">2.1 The construction industry and its accident profile (<code>p3–7</code>)</a></li>
+<li><a href="#22-working-at-height-and-ladder-safety-10">2.2 Working at height and ladder safety (<code>p8–10</code>)</a></li>
+<li><a href="#23-scaffolding-and-working-platforms-16">2.3 Scaffolding and working platforms (<code>p11–17</code>)</a></li>
+<li><a href="#24-welding-and-cutting-28">2.4 Welding and cutting (<code>p18–22</code>)</a></li>
+<li><a href="#25-excavation-work-32">2.5 Excavation work (<code>p23–26</code>)</a></li>
+<li><a href="#26-concreting-41">2.6 Concreting (<code>p27–32</code>)</a></li>
+<li><a href="#27-control-measures-to-reduce-the-risk-46-47-hierarchy-is-standard">2.7 Control measures to reduce the risk (<code>p6</code>, <code>p33</code>; hierarchy is standard)</a></li>
+<li><a href="#28-electrical-hazards-50-51">2.8 Electrical hazards (<code>p34–49</code>, <code>p58</code>)</a></li>
+<li><a href="#29-protection-against-electrical-hazards-68">2.9 Protection against electrical hazards (<code>p50–74</code>)</a></li>
+<li><a href="#210-protection-against-voltage-fluctuations-no-deck-page-standard">2.10 Protection against voltage fluctuations (no deck page — standard)</a></li>
+<li><a href="#211-effects-of-shock-on-the-human-body-84-85">2.11 Effects of shock on the human body (<code>p41–46</code>, <code>p43</code>)</a></li>
+<li><a href="#212-radiation-types-92">2.12 Radiation — types (<code>p75–88</code>)</a></li>
+<li><a href="#213-radiation-units-and-effects-on-the-body-105">2.13 Radiation — units and effects on the body (<code>p91–111</code>)</a></li>
+<li><a href="#214-radioactive-waste-classification-and-management-116">2.14 Radioactive waste — classification and management (<code>p112–122</code>)</a></li>
+<li><a href="#215-disposal-of-radioactive-waste-127">2.15 Disposal of radioactive waste (<code>p123–127</code>)</a></li>
+</ul>
+</li>
+<li><a href="#3-answer-bank">3. Answer bank</a><ul>
+<li><a href="#31-3-mark-answers-part-a">3.1 3-mark answers (Part A)</a></li>
+<li><a href="#32-5-mark-answers">3.2 5-mark answers</a></li>
+<li><a href="#33-7-8-mark-answers">3.3 7 / 8-mark answers</a></li>
+<li><a href="#34-14-mark-skeletons-part-b-ese">3.4 14-mark skeletons (Part B, ESE)</a></li>
+</ul>
+</li>
+<li><a href="#4-definitions-and-numbers-to-memorise">4. Definitions and numbers to memorise</a></li>
+<li><a href="#5-diagrams-to-be-able-to-draw">5. Diagrams to be able to draw</a></li>
+<li><a href="#6-say-this-if-grilled">6. Say-this-if-grilled</a></li>
+</ul>
+</div>
+</nav>
+  </aside>
+  <main>
+    <div class="doc-head">
+      <div class="kicker">20CET453 · Environmental Health &amp; Safety</div>
+      <div class="meta">20% ESE · CO3 · rendered from KIT_M3_CONSTRUCTION_ELECTRICAL_RADIATION.md</div>
+    </div>
+    <h1 id="module-3-safety-in-construction-electrical-and-radiation-hazards">Module 3 — Safety in Construction, Electrical and Radiation Hazards</h1>
+<blockquote>
+<p>20CET453 Environmental Health and Safety · CO3 · 20% of ESE · Part A = 3 marks (2 questions), Part B = 14 marks (1 question) · internal papers use 5 / 7 / 8 marks for the same topics</p>
+</blockquote>
+<p><strong>Citation convention.</strong> <code>p43</code> = page 43 of <code>ehs_3.txt</code> (the 131-page Module III deck — the primary source for every fact here). <code>FN</code> = <code>friend_notes.md</code>, used only where the deck is silent (those items are also marked <strong>(standard)</strong>). <strong>(standard)</strong> = correct, examinable practice that appears in <em>neither</em> source — use it, but never claim the slide said it. Where the deck gives no number, the answer says "deck gives no value" rather than inventing one.</p>
+<p><strong>The module in one line:</strong> construction kills in a short, repeatable list — falls 56%, collapse 21%, vehicles 10%, electricity 5% — so every trade in this module is answered the same way: hazard → mechanism of injury → control measure.</p>
+<hr />
+<h2 id="1-coverage-syllabus-line-hrs-answered-at">1. Coverage — syllabus line | hrs | answered at<a class="anchor" href="#1-coverage-syllabus-line-hrs-answered-at">#</a></h2>
+<p>Syllabus hrs for this module total <strong>6</strong> (2 + 2 + 2) — three of the densest lines in the course, each covering several trades at once.</p>
+<table>
+<thead>
+<tr>
+<th>Syllabus line (verbatim)</th>
+<th>Hrs</th>
+<th>Answered at</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Scaffolding and working platform</td>
+<td>2 (one line, five topics)</td>
+<td>§2.2, §2.3 · A1–A4 · B3 · C1 · <strong>D1</strong></td>
+</tr>
+<tr>
+<td>Welding and cutting</td>
+<td>↑ same 2 hrs</td>
+<td>§2.4 · A7, A8 · B6 · C5 · <strong>D4</strong></td>
+</tr>
+<tr>
+<td>Excavation work</td>
+<td>↑ same 2 hrs</td>
+<td>§2.5 · A5, A6 · B2 · C6 · <strong>D4</strong></td>
+</tr>
+<tr>
+<td>Concreting</td>
+<td>↑ same 2 hrs</td>
+<td>§2.6 · A9, A10 · B7 · C7 · <strong>D4</strong></td>
+</tr>
+<tr>
+<td>Control measures to reduce the risk</td>
+<td>↑ same 2 hrs</td>
+<td>§2.7 · B10 · C10 · D1–D4 (the "controls" half of every answer)</td>
+</tr>
+<tr>
+<td>Electrical hazards</td>
+<td>2</td>
+<td>§2.8 · A11–A16 · B1, B8 · C2 · <strong>D2</strong></td>
+</tr>
+<tr>
+<td>Protection against voltage fluctuations</td>
+<td>↑ same 2 hrs</td>
+<td>§2.10 · B5 · C9 · <strong>D2</strong></td>
+</tr>
+<tr>
+<td>Effects of shock on the human body</td>
+<td>↑ same 2 hrs</td>
+<td>§2.11 · A16 · B4 · C4 · <strong>D2</strong></td>
+</tr>
+<tr>
+<td>Radiation hazards — types and effects on the human body</td>
+<td>2</td>
+<td>§2.12, §2.13 · A17–A19 · B9, B12 · C8, C11 · <strong>D3</strong></td>
+</tr>
+<tr>
+<td>Disposal of radioactive waste</td>
+<td>↑ same 2 hrs</td>
+<td>§2.14, §2.15 · A20, A21 · B11 · C3 · <strong>D3</strong></td>
+</tr>
+</tbody>
+</table>
+<h3 id="internal-questions-for-this-module">Internal questions for this module<a class="anchor" href="#internal-questions-for-this-module">#</a></h3>
+<table>
+<thead>
+<tr>
+<th>Question (verbatim)</th>
+<th>Paper</th>
+<th>Marks</th>
+<th>Answered at</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Explain the common electrical hazards seen on construction sites.</td>
+<td>Oct 2025 A1 · Oct 2026 B6</td>
+<td>5 <strong>and 8</strong></td>
+<td>§3.2 B1 · §3.3 C2</td>
+</tr>
+<tr>
+<td>Formulate safety precautions for scaffolding and working platforms.</td>
+<td>Oct 2026 A3</td>
+<td>5</td>
+<td>§3.2 B3</td>
+</tr>
+<tr>
+<td>Outline the features and applications of scaffolding; specify safety precautions when working on scaffolding and platforms.</td>
+<td>Oct 2025 B5</td>
+<td>7</td>
+<td>§3.3 C1</td>
+</tr>
+<tr>
+<td>Identify three key safety precautions that must be taken during excavation work to prevent accidents.</td>
+<td>Oct 2025 A2</td>
+<td>5</td>
+<td>§3.2 B2</td>
+</tr>
+<tr>
+<td>Describe various methods for the disposal of radioactive waste.</td>
+<td>Oct 2025 B6</td>
+<td>8</td>
+<td>§3.3 C3</td>
+</tr>
+</tbody>
+</table>
+<p><strong>What the pattern says.</strong> Two of the six internal Module III questions are <em>electrical hazards</em> and two are <em>scaffolding</em> — that pair is the module's centre of gravity, and electrical hazards has already been asked at both 5 and 8 marks. Excavation has been asked only as "three precautions", and radioactive-waste disposal once, at 8. <strong>Never examined internally but fully in the syllabus: welding and cutting, concreting, voltage fluctuation, effects of shock on the body, radiation types.</strong> All five have a Part A/B answer here, because the ESE scope is the syllabus, not the internal papers.</p>
+<p><strong>ESE shape to plan for:</strong> Part A 10 × 3 (two per module) + Part B 5 × 14 (one per module). For this module expect one Part-A question on a definition or a list (scaffold, working platform, excavation hazards, radiation types, earthing) and one on shock effects or waste classes; the Part-B question is most likely scaffolding-plus-precautions or electrical-hazards-plus-protection, and radiation-with-disposal is the dark horse at 14 marks.</p>
+<hr />
+<h2 id="2-concepts">2. Concepts<a class="anchor" href="#2-concepts">#</a></h2>
+<h3 id="21-the-construction-industry-and-its-accident-profile-4">2.1 The construction industry and its accident profile (<code>p3–7</code>)<a class="anchor" href="#21-the-construction-industry-and-its-accident-profile-4">#</a></h3>
+<p><strong>What:</strong> the second largest industry in the country after agriculture (<code>p3</code>), organised into three sectors, and it kills people in a short list of repeatable ways.</p>
+<ul>
+<li><strong>Three sectors</strong> (<code>p4</code>): building construction; heavy and civil engineering (utility systems, land sub-division, highways, bridges); speciality trades producing one component of a project — masonry, painting, electrical work.</li>
+<li><strong>Why the hazard profile is odd</strong> (standard, and the deck's own emphasis on small jobs): a factory has one workforce, one gate, one safety department; a site assembles a new organisation for each project, from several employers, for a few months, then dissolves it. Trades follow one another into the same space, so the hazard changes weekly and the person exposed to it is often not the person who created it.</li>
+<li><strong>The seven fatality shares</strong> (<code>p7</code>) — the most quotable numbers in the module:</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Accident type</th>
+<th>Share</th>
+<th>Control it implies</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Falls from height</td>
+<td><strong>56%</strong></td>
+<td>Edge protection, hole covers, scaffold inspection, harness and running line</td>
+</tr>
+<tr>
+<td>Trapped by something collapsing or overturning</td>
+<td><strong>21%</strong></td>
+<td>Excavation support, propped formwork, stable plant and stacks</td>
+</tr>
+<tr>
+<td>Struck by a moving vehicle</td>
+<td><strong>10%</strong></td>
+<td>Segregated routes, banksman, reversing controls</td>
+</tr>
+<tr>
+<td>Contact with electricity or electrical discharge</td>
+<td><strong>5%</strong></td>
+<td>Isolation, earthing, GFCI, clearance from overhead lines</td>
+</tr>
+<tr>
+<td>Struck by flying/falling objects during machine lifting</td>
+<td><strong>4%</strong></td>
+<td>Exclusion zones, inspected slings, nobody under a load</td>
+</tr>
+<tr>
+<td>Contact with moving machinery or material being machined</td>
+<td><strong>3%</strong></td>
+<td>Guarding, interlocks, lock-out/tag-out</td>
+</tr>
+<tr>
+<td>Exposure to a hot or harmful substance</td>
+<td><strong>1%</strong></td>
+<td>Substitution, ventilation, PPE, burns first aid</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>Behavioural peaks</strong> (<code>p5</code>): small building jobs are the most risky; <strong>the first week on each new site is the most dangerous</strong>; <strong>accidents are more frequent at the end of the day</strong>; lightweight shoes (trainers, runners) are not suitable on site; helmets, hi-viz jackets and safety boots do prevent injury and death — but only on top of physical measures.</li>
+<li><strong>What a properly organised site looks like</strong> (<code>p6</code>) — six items, each a design decision taken before work starts: safe access to every workplace; <strong>double guard rails</strong> or equivalent at every edge from which a person could fall; holes protected by <strong>clearly marked and fixed covers</strong>; a tidy site; good lighting; the site fenced off from the public.</li>
+</ul>
+<p><strong>Trap:</strong> the percentages are shares of <em>fatalities</em>, not of all accidents, and the deck calls the small job the most dangerous — not the high-rise. Both are examinable one-liners.</p>
+<hr />
+<h3 id="22-working-at-height-and-ladder-safety-10">2.2 Working at height and ladder safety (<code>p8–10</code>)<a class="anchor" href="#22-working-at-height-and-ladder-safety-10">#</a></h3>
+<p><strong>What:</strong> the mechanism behind the 56% — four openings the industry keeps failing to close, plus the ladder used where a scaffold was needed.</p>
+<ul>
+<li><strong>The four standing risks</strong> (<code>p8</code>): holes in floors; gaps in working platforms; shafts; stair walls — any of them not adequately covered, barricaded or fenced off.</li>
+<li><strong>Deck rules</strong> (<code>p8</code>): never use a ladder or scaffolding that is not properly fixed; never use incomplete scaffolding; handrails and toe boards at all edges; wear a helmet because things fall on sites; before working at height, <strong>check clearance from overhead power lines</strong>.</li>
+<li><strong>Ladder conditions</strong> (<code>p10</code>) — the five-item list an examiner wants: right for the job (or would scaffolding be better?); in good shape; <strong>secured near the top</strong>; on a firm base and footing; <strong>rising at least 1 m beyond the landing place</strong> or with a proper hand hold.</li>
+<li><strong>On the ladder</strong> (<code>p9</code>): firm grip and good balance; <strong>one person at a time</strong>; tools in a belt or on a hand line; never lean out; nobody working underneath a ladder in use; if you fear heights, don't climb.</li>
+<li><strong>Roofs</strong> (<code>p16</code>): <strong>50% of fatal roof injuries are falls through fragile materials, 30% falls from edges and openings</strong> → inspect the roof before walking on it, protect the edge, and use harnesses and running cables.</li>
+</ul>
+<p><strong>Trap:</strong> a ladder is access equipment, not a working platform — the 1 m extension and the "would a scaffold be better?" test are the marks. A roof in use is a working platform and needs the same edge protection.</p>
+<hr />
+<h3 id="23-scaffolding-and-working-platforms-16">2.3 Scaffolding and working platforms (<code>p11–17</code>)<a class="anchor" href="#23-scaffolding-and-working-platforms-16">#</a></h3>
+<p><strong>What:</strong> a scaffold is a <strong>temporary structure erected to support access or working platforms</strong> (<code>p11</code>), formed from individual tubes and joints or proprietary components (<code>p12</code>), used where work cannot be done at ground level or on a finished floor.</p>
+<ul>
+<li><strong>Purpose</strong> (<code>p11</code>): gives workers a safe, stable platform for <strong>maintenance, construction, repair, access, inspection</strong>.</li>
+<li><strong>Working platform is the wider term</strong> (<code>p13</code>): <em>any</em> surface from which work can be carried out, or which is a means of access to a place of work — it includes a scaffold, suspended scaffold, cradles, roofs, floors, mobile elevator work platform, step ladders and stairways. The duty follows the platform, not the tube.</li>
+<li><strong>Two main types in the deck</strong> (<code>p12</code>): free-standing scaffolds such as an independent tower; independent <strong>tied</strong> scaffolds — towers tied to an adjacent structure.</li>
+<li><strong>Five hazards</strong> (<code>p14–15</code>): falling from the scaffold; struck by falling objects; electrocution (welding/cutting from the scaffold, or a tube near a line); collapse (not built to specification, weak ropes, uninspected tiebacks, wire rope clips, counterweights, hoists, locking system); overloading (planks crack, overhanging material tips and slides the platform).</li>
+<li><strong>A platform is suitable only if</strong> (<code>p17</code>): big enough for safe passage plus equipment and materials; free of trip hazards and gaps; clean and tidy; fitted with handrails and toe boards where necessary; <strong>not overloaded</strong>; erected on firm level ground — and <strong>inspected before use</strong> to confirm it is fit for purpose and properly assembled.</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>How it stands up</th>
+<th>Where used</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Independent tied (deck, <code>p12</code>)</td>
+<td>Two rows of standards, tied to the permanent structure</td>
+<td>General façade work; the normal choice</td>
+</tr>
+<tr>
+<td>Free-standing independent tower (deck, <code>p12</code>)</td>
+<td>Own base, no ties</td>
+<td>Work clear of a structure, low heights</td>
+</tr>
+<tr>
+<td>Putlog <strong>(standard)</strong></td>
+<td>One row of standards; putlogs built into the brickwork</td>
+<td>Traditional masonry that can carry the inner end</td>
+</tr>
+<tr>
+<td>Mobile / tower <strong>(standard)</strong></td>
+<td>Prefabricated tower on castors, braced</td>
+<td>Short work indoors; never moved with a person or load on it</td>
+</tr>
+<tr>
+<td>Suspended / cradle <strong>(standard)</strong></td>
+<td>Hung from overhead outriggers on wire ropes, raised by hoists — the deck's "suspended scaffold" (<code>p13</code>, <code>p15</code>)</td>
+<td>High-rise façade work</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>Components to name (standard — the deck says "tubes and joints" but does not list them)</strong>: standard (vertical), ledger (along the face), transom (across, carries the boards), board/deck, base plate and sole board, tie, guard rail (top + mid), toe board, bracing, putlog. Function line for each: standards carry the load down; ledgers tie standards and carry transoms; transoms carry the boards; <strong>ties hold it in, bracing stops it racking</strong>; the toe board stops tools being kicked onto people below.</li>
+</ul>
+<p><strong>Trap:</strong> two types in the deck, five in standard practice — if the question says "types of scaffolding", give the deck's two first (free-standing tower, independent tied), then add putlog/mobile/suspended as "other site types". Never claim the deck listed five.</p>
+<hr />
+<h3 id="24-welding-and-cutting-28">2.4 Welding and cutting (<code>p18–22</code>)<a class="anchor" href="#24-welding-and-cutting-28">#</a></h3>
+<p><strong>What:</strong> welding joins metal parts by the application of heat, with or without pressure and with or without filler material (<code>p18</code>) — a complex process of heat and liquid-metal transfer and chemical reactions, the joint forming by liquid-metal deposition and then transforming on cooling to the solid state.</p>
+<ul>
+<li><strong>Why it is the densest hazard trade:</strong> heat, ultraviolet light, metal fume, compressed gas and mains electricity all arrive in one small workplace.</li>
+<li><strong>Four hazard families</strong> (<code>p19–20</code>):</li>
+<li><em>Fume and gases</em> → respiratory illness, cancer, and <strong>impaired speech and movement</strong>.</li>
+<li><em>Physical</em> → burns, eye damage, cuts, crushed toes and fingers.</li>
+<li><em>Electric shock</em> → <strong>"the most immediate and serious risk for a welder"</strong>, sudden discharge through the body, injury or death.</li>
+<li><em>Fire and explosion</em> → <strong>flammable materials around the working area are the number one cause of fire</strong>.</li>
+<li><strong>Controls</strong> (<code>p21–22</code>): adequate ventilation and local exhaust to keep fume and gas out of the breathing zone; report concerns to a supervisor; fire- and electricity-resistant clothing, hand shield, welding gloves, apron, boots; <strong>flame-retardant treatment weakens with repeated laundering</strong>; <strong>no cuffs on trousers, legs over the boot tops — cuffs collect sparks</strong>; earmuffs or earplugs against noise; <strong>lock-out/tag-out</strong> before repairs, only qualified technicians service the set; <strong>Class ABC extinguisher nearby, gauge full</strong> (else fire hoses or sand buckets); <strong>within 35 feet of flammable material — cover it with sheet metal or a fire-resistant blanket and post a fire watcher</strong>; know where alarms, exits and extinguishers are.</li>
+<li><strong>Cylinder discipline (standard, high-yield)</strong>: oxygen and fuel gas stored separately, upright and secured; <strong>no oil or grease on oxygen fittings</strong> (oxygen at pressure turns a smear of oil into an explosive mixture); flashback arrestors at regulator and torch; hot work in a tank or pit is also a confined-space entry.</li>
+</ul>
+<p><strong>Trap:</strong> the quotable details examiners use to see whether you read the source are the <strong>35-foot rule with a fire watcher</strong>, the <strong>Class ABC extinguisher with a full gauge</strong>, and <strong>uncuffed trousers</strong> — not "wear PPE".</p>
+<hr />
+<h3 id="25-excavation-work-32">2.5 Excavation work (<code>p23–26</code>)<a class="anchor" href="#25-excavation-work-32">#</a></h3>
+<p><strong>What:</strong> work involving the removal of soil or rock from a site to form an open face, hole or cavity, using tools, machinery or explosives (<code>p23</code>); includes earthwork, trenching, wall shafts and tunnelling.</p>
+<ul>
+<li><strong>Scope</strong> (<code>p23</code>): applications include exploration, environmental restoration, mining and construction; in construction it makes foundations, reservoirs and roads, by trenching, digging, dredging and site development.</li>
+<li><strong>The whole process</strong> (<code>p24</code>): setting out corner benchmarks → surveying ground and top levels → excavation to approved depth → dressing loose soil → making up to cut-off level → dewatering wells and interconnecting trenches → boundaries of the building → protection bunds and drains.</li>
+<li><strong>Five dangers</strong> (<code>p25</code>): collapse of the sides; materials falling onto people; falls of people or vehicles; nearby structures collapsing into the excavation; electrocution, explosion, blast, gas leak or flooding from <strong>damage to underground services</strong>.</li>
+<li><strong>The two threshold figures</strong> (<code>p26</code>): <strong>all excavations deeper than 1.25 m must be shored or battered</strong>; <strong>excavations deeper than 2 m must have a guard rail or barrier</strong>.</li>
+<li><strong>Other deck rules</strong> (<code>p26</code>): inspect daily; know where pipes and cables are before you hit them; <strong>"there is no safe ground that will not collapse"</strong> and trench sides can collapse without warning; vehicles working too close, or rubble piled at the sides, may cause the collapse; vehicles tipping into the excavation must use <strong>stop blocks</strong>.</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Method of holding the face</th>
+<th>What it does</th>
+<th>Limitation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Battering / sloping (<code>p26</code>)</td>
+<td>Cuts the face back to an angle at which the soil stands alone</td>
+<td>Needs width at the top</td>
+</tr>
+<tr>
+<td>Shoring (<code>p26</code>)</td>
+<td>Sheeting against the face held by walers and struts</td>
+<td>Slow, needs design, struts obstruct the work</td>
+</tr>
+<tr>
+<td>Benching <strong>(standard)</strong></td>
+<td>Steps the face so each vertical drop is short</td>
+<td>Only in firm soil, not running sand</td>
+</tr>
+<tr>
+<td>Trench box <strong>(standard)</strong></td>
+<td>Steel box lowered in; ground outside may fail freely</td>
+<td>Must match the trench, placed by plant</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Trap:</strong> 1.25 m (shore or batter) and 2 m (guard rail) are two different numbers for two different risks — the face killing you, and the fall into the hole. Candidates lose marks by quoting one. They are minimums, not guarantees: in running sand or made ground, support earlier.</p>
+<hr />
+<h3 id="26-concreting-41">2.6 Concreting (<code>p27–32</code>)<a class="anchor" href="#26-concreting-41">#</a></h3>
+<p><strong>What:</strong> concrete (usually Portland cement concrete) is a composite of fine and coarse aggregate bonded by a fluid cement paste that hardens over time — durable, long-lasting, cost-effective, and the reason buildings, bridges and roads exist (<code>p27</code>).</p>
+<ul>
+<li><strong>Five process steps</strong> (<code>p28</code>), each introducing its own hazard:</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Step</th>
+<th>What happens</th>
+<th>Hazard introduced</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Batching</td>
+<td>Cement, coarse aggregate, sand and water measured out</td>
+<td>Cement and aggregate dust; bag handling</td>
+</tr>
+<tr>
+<td>Mixing</td>
+<td>Mixed until the paste is uniform in colour and consistency</td>
+<td>Dust, noise, rotating plant, alkaline splash</td>
+</tr>
+<tr>
+<td>Transporting</td>
+<td>Fresh concrete moved to site and placed in formwork</td>
+<td>Vehicle movement, pump lines, spillage</td>
+</tr>
+<tr>
+<td>Compaction</td>
+<td>Air bubbles eliminated to raise strength</td>
+<td>Hand-arm vibration, noise, electric shock from the vibrator</td>
+</tr>
+<tr>
+<td>Curing</td>
+<td>Moisture retained so hydration completes</td>
+<td>Wet slippery surfaces, water at open edges</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>Deck's three risk groups</strong> (<code>p30</code>): <em>mixing</em> — concrete dust from aggregate particles dispersed and inhaled, causing breathing problems; <em>pouring</em> — wet concrete is slippery until it dries (slips) and its <strong>alkaline properties are caustic, so a splash left on skin can cause third-degree burns</strong>; <em>drying</em> — <strong>slabs can weigh more than 800 pounds</strong> and are at risk of tipping, shifting and falling on people nearby.</li>
+<li><strong>Controls</strong> (<code>p31–32</code>): waterproof gloves, long-sleeved shirt, full-length trousers, eye protection; approved hard hat; shatterproof eye protection at all times — <strong>no contact lenses on the job</strong>; <strong>self-fitting earplugs of waxed cotton, foam or glass-fibre wool — there is no cure for noise-induced hearing loss</strong>; steel-toed boots against falling objects, crushing and punctures from rebar and tie wire; <strong>lift correctly — back straight, knees bent, load close to the body, don't lift too much</strong>; employer to provide <strong>face masks or respirators</strong> where cement dust threatens air quality, plus <strong>warning signs and guards</strong> wherever cement hazards are present.</li>
+<li><strong>Add (standard, earns the "control measures" half)</strong>: wash skin promptly and change soaked clothing (the classic burn is concrete inside a boot for a shift); control dust with wet methods and enclosed silos; design, erect and inspect formwork and falsework as a structure — liquid concrete weighs about as much as dense stone, and a missing prop puts the pour on the people below.</li>
+</ul>
+<p><strong>Trap:</strong> name the two distinct mechanisms — <strong>caustic alkali → third-degree burns</strong>, and <strong>respirable silica dust → lung disease</strong>. "Wear gloves" answers neither.</p>
+<hr />
+<h3 id="27-control-measures-to-reduce-the-risk-46-47-hierarchy-is-standard">2.7 Control measures to reduce the risk (<code>p6</code>, <code>p33</code>; hierarchy is standard)<a class="anchor" href="#27-control-measures-to-reduce-the-risk-46-47-hierarchy-is-standard">#</a></h3>
+<p><strong>What:</strong> the syllabus line that asks you to generalise — what a site does, across every trade, to stop the 56/21/10/5 profile from happening.</p>
+<ul>
+<li><strong>The deck's site-level controls</strong> (<code>p6</code>): safe access everywhere; double guard rails at edges; marked and fixed hole covers; tidiness; good lighting; fencing off from the public.</li>
+<li><strong>The deck's safety philosophy</strong> (<code>p33</code>) — quotable as a list: all accidents are preventable; no job is worth getting hurt for; every job will be done safely; incidents can be managed; safety is everyone's responsibility; continuous improvement; safety as a way of life 24 hours a day. Plus: everyone has the responsibility and accountability to identify, eliminate or manage risks; <strong>legal obligations are the minimum standard, not the target</strong>; individuals are trained and equipped to ensure an accident-free workplace.</li>
+<li><strong>The hierarchy (standard)</strong> — apply it to any trade and the answer writes itself:
+  1. <strong>Eliminate</strong> — don't work at height, prefabricate at ground level, don't dig where you can bore.
+  2. <strong>Substitute</strong> — water-based paint, lower-voltage tools, mechanical lifting for manual.
+  3. <strong>Engineering</strong> — guard rails, toe boards, hole covers, shoring, local exhaust, GFCI, edge protection, interlocked guards.
+  4. <strong>Administrative</strong> — method statements, permits (hot work, dig, confined space), inspection and tagging, training, supervision at the first day and last hour.
+  5. <strong>PPE</strong> — helmet, boots, hi-viz, gloves, harness, eye and hearing protection: the last line, never the only one.</li>
+<li><strong>Cross-trade control set worth memorising</strong>: competent persons and design for temporary works; daily inspection and tagging; housekeeping; exclusion zones and banksmen; isolation/LOTO before work on plant or circuits; the permit system for hot work, digging and confined spaces; first aid and emergency arrangements; monitoring (fume, noise, dose) because an exposure that isn't measured can't be controlled.</li>
+</ul>
+<p><strong>Trap:</strong> a "control measures" question with no trade named wants the hierarchy <em>plus</em> the deck's site items — not a PPE list. PPE-only answers score in the bottom third.</p>
+<hr />
+<h3 id="28-electrical-hazards-50-51">2.8 Electrical hazards (<code>p34–49</code>, <code>p58</code>)<a class="anchor" href="#28-electrical-hazards-50-51">#</a></h3>
+<p><strong>What:</strong> electricity is the movement of free electrons between atoms; current is the movement of electrical charge; resistance opposes current flow; voltage is a measure of electrical force (<code>p35</code>). Conductors (metals) have little resistance; insulators (dry wood, rubber, glass, Bakelite) have high resistance; grounding is a conductive connection to earth acting as a protective measure.</p>
+<ul>
+<li><strong>BESAFE — the six hazard types</strong> (<code>p36</code>, <code>p38</code>, <code>p44</code>, <code>p45</code>): <strong>B</strong>urns, <strong>E</strong>lectrocution, <strong>S</strong>hock, <strong>A</strong>rc flash/arc blast, <strong>F</strong>ire, <strong>E</strong>xplosions — plus a seventh consequence the deck adds, <strong>falls</strong> (<code>p46</code>).</li>
+<li><strong>Three types of electrical burn</strong> (<code>p39</code>, "the most common shock-related injury"): electrical (direct contact), arc flash (current through the air across a gap between conductors), thermal contact (electricity ignites combustible material).</li>
+<li><strong>Electrocution</strong> (<code>p40</code>): fatal; "to kill with electrical shock"; results from exposure to a lethal amount of electrical energy — and the deck's capitalised warning: <strong>LOW VOLTAGE DOES NOT MEAN LOW HAZARD</strong>.</li>
+<li><strong>Shock</strong> (<code>p41</code>): the body becomes part of the circuit; the reflex response to current passing through the body.</li>
+<li><strong>Arc flash / arc blast</strong> (<code>p44</code>): sudden release of electrical energy through air across a high-voltage gap; thermal radiation and intense light at temperatures <strong>as high as 35,000 °F</strong>; the arc blast is the pressure wave from air heated almost instantly.</li>
+<li><strong>Fire and explosion</strong> (<code>p45</code>): most electrical fires result from problems with <strong>fixed wiring</strong>; cords, plugs, receptacles and switches also cause them; explosions occur when electricity ignites an explosive mixture in the air. All hazards are of equal importance.</li>
+<li><strong>The eight common site hazards</strong> (<code>p49</code>) — this is the internal question's list: improper grounding; exposed electrical parts; inadequate wiring; <strong>overhead power lines</strong>; damaged insulation; overloaded circuits; wet conditions; damaged tools and equipment.</li>
+<li><strong>Scale</strong> (<code>p38</code>, <code>p48</code>): electrocution is the cause of <strong>12% of all workplace deaths among young workers</strong>, and the <strong>third leading cause of work-related deaths among 16- and 17-year-olds</strong>; US BLS recorded <strong>156 electrocutions in 2014, up from 141 in 2013</strong>.</li>
+<li><strong>Overhead lines</strong> (<code>p58</code>): cranes are not the only equipment that reaches them — ladders and man-baskets do too; risks are electrocution (main), burns and falls; <strong>the covering on an overhead line is for weather protection only — touch a power line, covered or bare, and death is probable</strong>.</li>
+</ul>
+<p><strong>Trap:</strong> the eight-item list at <code>p49</code> is what "common electrical hazards on construction sites" means. Answer with those eight, not with BESAFE — BESAFE is the injury <em>types</em>, which is a different question. Give both, labelled.</p>
+<hr />
+<h3 id="29-protection-against-electrical-hazards-68">2.9 Protection against electrical hazards (<code>p50–74</code>)<a class="anchor" href="#29-protection-against-electrical-hazards-68">#</a></h3>
+<p><strong>What:</strong> keep current away from the body, give it a harmless path if it escapes, disconnect it fast when it does, and know the distance at which it can jump.</p>
+<ul>
+<li><strong>Grounding / earthing</strong> (<code>p50</code>): eliminates unwanted voltage; a physical connection to earth; the <strong>ground pin safely returns leakage current to earth</strong>; <strong>never remove the ground pin — removing it removes an important safety feature and you can get shocked</strong>.</li>
+<li><strong>Exposed parts and insulation</strong> (<code>p51–54</code>): report exposed wires and terminals; never use a panel with missing breakers or exposed wires; all openings closed; cord insulation intact; temporary lighting guarded against broken bulbs; <strong>never repair a damaged cord with tape</strong>; never hang cords on nails or sharp objects; never run them through doors or windows.</li>
+<li><strong>Overloads</strong> (<code>p55</code>): use proper circuit breakers; never overload an outlet; <strong>do not use power strips or surge protectors on construction sites — use a three-way extension with a GFCI instead</strong>.</li>
+<li><strong>Tools</strong> (<code>p56</code>, <code>p64–67</code>): double-insulated tools are marked "Double Insulated" with the square-within-a-square symbol; inspect cords for cuts and abrasion before use; correctly rated extension cords; never carry a tool by the cord, never yank it, keep cords from heat, oil and sharp edges, disconnect when changing blades or bits, no fingers on the trigger while carrying, store dry, don't use in wet or damp, keep areas lit, cords not a trip hazard, remove damaged tools from use.</li>
+<li><strong>Wet conditions</strong> (<code>p57</code>): water is a great conductor; it lets current flow more easily through wet skin — the same shock that a dry calloused hand resists becomes lethal.</li>
+<li><strong>Clearance from lines</strong> (<code>p59–62</code>): survey the site for overhead lines; never store materials or equipment under them; maintain <strong>at least 10 feet</strong> between tools/equipment and the lines; maintain safe distances between scaffolding and lines; physical barriers where contact is possible. The clearance table (<code>p62</code>):</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Nominal voltage (kV AC)</th>
+<th>Minimum clearance (feet)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Up to 50</td>
+<td><strong>10</strong></td>
+</tr>
+<tr>
+<td>Over 50 to 200</td>
+<td>15</td>
+</tr>
+<tr>
+<td>Over 200 to 350</td>
+<td>20</td>
+</tr>
+<tr>
+<td>Over 350 to 500</td>
+<td>25</td>
+</tr>
+<tr>
+<td>Over 500 to 750</td>
+<td>35</td>
+</tr>
+<tr>
+<td>Over 750 to 1,000</td>
+<td>45</td>
+</tr>
+<tr>
+<td>Over 1,000</td>
+<td>As established by the line owner/operator or a registered professional engineer qualified in transmission and distribution</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>GFCI</strong> (<code>p63</code>): protects <strong>people</strong> from shock; detects ground faults and interrupts the current, <strong>limiting the duration of the shock</strong>; three types — receptacle GFCI, temporary/portable GFCI, circuit-breaker GFCI.</li>
+<li><strong>LOTO</strong> (<code>p67–68</code>): prevents unexpected energisation while working on or near circuits and equipment; prevents contact with operating parts (blades, gears, shafts); prevents the unexpected release of hazardous gases, fluids or solid matter.</li>
+<li><strong>Identification</strong> (<code>p69</code>): mark every breaker for the circuit it protects, every disconnect means for the equipment it serves, and label all voltages.</li>
+<li><strong>Employer duties</strong> (<code>p70</code>): ensure overhead-line safety; isolate electrical parts; supply GFCI protection; establish and implement an <strong>AEGCP</strong> (assured equipment grounding conductor programme); maintain tools; ensure guarding; provide training; enforce LOTO; control flexible cords and power strips; identify power sources.</li>
+<li><strong>PPE</strong> (<code>p74</code>): hard hats, rubber insulating gloves, insulating clothing; never damaged PPE; glove rating must match the work; <strong>metal hard hats should not be used when working close to electrical lines</strong>.</li>
+</ul>
+<p><strong>Trap:</strong> a fuse or MCB protects the <strong>cable</strong>, a GFCI/RCD protects the <strong>person</strong> — 50 mA through a body will never blow a 16 A fuse. That single sentence is the mark in every protection question.</p>
+<hr />
+<h3 id="210-protection-against-voltage-fluctuations-no-deck-page-standard">2.10 Protection against voltage fluctuations (no deck page — <strong>standard</strong>)<a class="anchor" href="#210-protection-against-voltage-fluctuations-no-deck-page-standard">#</a></h3>
+<p><strong>What:</strong> no supply is perfectly steady; voltage fluctuation is any departure from the nominal value. <strong>The deck has no slide on this</strong> — the syllabus asks for it, and the only deck line that touches it is the ban on power strips and plug-in surge protectors on site (<code>p55</code>). Everything below is standard practice; the deck gives no value for any threshold, so quote none.</p>
+<ul>
+<li><strong>Four forms</strong>: <strong>dip/sag</strong> (voltage falls for a few cycles to seconds — a heavy load starting, a fault, a loose connection); <strong>swell</strong> (voltage rises — load rejection, neutral fault); <strong>transient/surge</strong> (a very short spike — switching, lightning, capacitor banks); <strong>sustained over- or under-voltage</strong> (wrong tap setting, undersized conductor, long temporary run). Harmonic distortion and phase imbalance change the voltage the equipment actually sees and belong to the same family.</li>
+<li><strong>Effect on equipment</strong>: an induction motor at reduced voltage draws <strong>more current</strong> to produce the same torque, so it runs hotter and its insulation ages faster; contactors and relays chatter or drop out, stopping a hoist or pump without warning; electronic controls in drives, weighing systems and chargers reset or fail; a surge stresses insulation until it punctures, which is how a transient becomes a short circuit.</li>
+<li><strong>Effect on the protection — the dangerous half</strong>: a fuse and the thermal element of an MCB respond to <strong>current over time, not to voltage</strong>, so a sustained over-voltage heats the cable while the device sees a normal current; a transient can weld contactor contacts or degrade a breaker so it no longer trips; an electronically-sensed RCD/RCBO can be left by a dip holding closed but no longer responding. <strong>Protection present on the board and absent in fact.</strong></li>
+<li><strong>Controls</strong>: size cables for <strong>voltage drop as well as current</strong>; feed sensitive equipment through a <strong>voltage stabiliser</strong>; protect the installation with <strong>surge protection at the distribution board</strong>, not at the socket; specify motor protection that senses current and temperature, not voltage alone; keep the earthing sound and re-test it; maintain the supply and record faults; <strong>no daisy-chained power strips or plug-in surge protectors on site — use a three-way extension with a GFCI</strong> (the deck's own rule, <code>p55</code>).</li>
+</ul>
+<p><strong>Trap:</strong> the examinable idea is that fluctuation is not only an equipment problem — it can leave protective devices installed but inoperative. Say that sentence and you have the difference between a 5 and an 8.</p>
+<hr />
+<h3 id="211-effects-of-shock-on-the-human-body-84-85">2.11 Effects of shock on the human body (<code>p41–46</code>, <code>p43</code>)<a class="anchor" href="#211-effects-of-shock-on-the-human-body-84-85">#</a></h3>
+<p><strong>What:</strong> a shock needs a circuit, and the body supplies the missing link — hand to trunk to feet to earth.</p>
+<ul>
+<li><strong>Four factors decide severity</strong> (<code>p42</code>): the <strong>pathway</strong> through the body; the <strong>amount of current</strong>; the <strong>length of time</strong> of exposure; whether the <strong>skin is wet or dry</strong> (water is a great conductor, so wet skin lets current flow more easily).</li>
+<li><strong>The current–reaction table</strong> (<code>p43</code>, OSHA — memorise three rows, quote all seven):</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Current</th>
+<th>Reaction</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Below 1 mA</td>
+<td>Generally not perceptible</td>
+</tr>
+<tr>
+<td>1 mA</td>
+<td>Faint tingle</td>
+</tr>
+<tr>
+<td>5 mA</td>
+<td>Slight shock felt; not painful but disturbing; average individual can let go; strong involuntary reactions can cause other injuries</td>
+</tr>
+<tr>
+<td><strong>6–25 mA (women), 9–30 mA (men)</strong></td>
+<td>Painful shock, loss of muscular control — the freezing current or <strong>"let-go" range</strong>: cannot let go, may be thrown from the circuit if extensor muscles are stimulated</td>
+</tr>
+<tr>
+<td><strong>50–150 mA</strong></td>
+<td>Extreme pain, <strong>respiratory arrest</strong>, severe muscular contractions; death possible</td>
+</tr>
+<tr>
+<td><strong>1,000–4,300 mA</strong></td>
+<td>Rhythmic pumping action of the heart ceases; muscular contraction and nerve damage; <strong>death likely</strong></td>
+</tr>
+<tr>
+<td><strong>10,000 mA</strong></td>
+<td>Cardiac arrest, severe burns; <strong>death probable</strong></td>
+</tr>
+</tbody>
+</table>
+<p>The deck's own conversion, printed above the table: <strong>1,000 milliamperes = 1 amp</strong>, so 15,000 mA = a 15 A circuit.
+- <strong>Mechanism</strong>, in one paragraph: current overrides the body's own electrical signalling — the diaphragm tetanises (respiratory arrest), cardiac muscle loses coordinated rhythm and fibrillates, and tissue along the path is heated and killed. At the let-go threshold the forearm flexors contract harder than the extensors can oppose, so the hand closes on the conductor and the exposure continues until something else breaks the circuit; that is why duration, not voltage, decides the outcome.
+- <strong>Burns</strong> (<code>p39</code>): the most common shock-related injury — electrical, arc flash (up to 35,000 °F, <code>p44</code>), thermal contact.
+- <strong>Falls</strong> (<code>p46</code>): a shock on a platform, ladder or scaffold throws the worker off it; the fall, not the current, is often what kills.
+- <strong>Why low voltage is not low hazard</strong> (<code>p40</code>): 230 V drives tens of milliamperes through a wet hand with ease — past let-go and into the range where breathing stops. Most fatalities are at mains voltage, not transmission voltage.</p>
+<p><strong>Trap:</strong> the numbers are <em>milliamperes</em>, and the let-go band differs by sex (6–25 women, 9–30 men) — quoting "10 mA" for everybody is the commonest slip. The deck gives no voltage threshold for lethality; don't invent one.</p>
+<hr />
+<h3 id="212-radiation-types-92">2.12 Radiation — types (<code>p75–88</code>)<a class="anchor" href="#212-radiation-types-92">#</a></h3>
+<p><strong>What:</strong> radiation is the emission of energy as electromagnetic waves or moving subatomic particles (<code>p75</code>). <strong>Ionizing radiation</strong> is any electromagnetic or particulate radiation capable of producing ion pairs by interaction with matter (<code>p81</code>) — the spontaneous disintegration of atoms is radioactivity, and the excess energy emitted is a form of ionizing radiation.</p>
+<ul>
+<li><strong>The dividing line is energy</strong> (<code>p78</code>, <code>p81</code>, <code>p83</code>): ionizing (high energy) removes electrons from atoms — alpha, beta, gamma, X-ray, neutrons; non-ionizing (low energy) only excites them — UV, visible light, infrared, radio waves, microwaves.</li>
+<li><strong>Particulate vs electromagnetic</strong> (<code>p76</code>): particulate radiations are sub-atomic particles <strong>with mass</strong> (alpha, beta, electrons, neutrons); electromagnetic radiations (X-rays, gamma) have <strong>no mass and no charge</strong>. That single difference explains the shielding behaviour: a particle with mass and charge interacts constantly and loses energy quickly; a photon with neither passes through until it happens to collide.</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>What it is (deck)</th>
+<th>Penetration / hazard</th>
+<th>Protection</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Alpha</strong> (<code>p85</code>)</td>
+<td>Cluster of 2 neutrons + 2 protons, identical to a helium nucleus, <strong>~7,500× the mass of an electron</strong>; examples radium and plutonium</td>
+<td><strong>Cannot penetrate a piece of paper or the dead layer of skin</strong> — harmless outside, extremely dangerous if released inside a cell</td>
+<td>Paper, clothing, the dead skin layer <strong>(standard: no shielding needed externally; the control is containment — no inhalation or ingestion)</strong></td>
+</tr>
+<tr>
+<td><strong>Beta</strong> (<code>p86</code>)</td>
+<td>Electrons travelling at very high energy, faster than alpha</td>
+<td>Causes <strong>severe skin burns — "beta burns"</strong>; from fission products of reactors and nuclear explosions; iodine-131 given internally for diagnosis and treatment</td>
+<td>A few millimetres of aluminium or plastic <strong>(standard)</strong></td>
+</tr>
+<tr>
+<td><strong>X-ray</strong> (<code>p87</code>)</td>
+<td>Photons emitted from <strong>electron orbits</strong>, when an excited orbital electron falls to a lower energy orbit</td>
+<td>Penetrating EM radiation</td>
+<td>Dense shielding — lead, thick concrete <strong>(standard)</strong></td>
+</tr>
+<tr>
+<td><strong>Gamma</strong> (<code>p88</code>)</td>
+<td>Photons emitted from the <strong>nucleus</strong>, often in radioactive decay; no mass or charge; travel in straight lines; <strong>typically &gt;100 keV per photon, more than 200,000× the energy of visible light</strong></td>
+<td>Penetrating; "can permeate through many materials" (<code>p81</code>)</td>
+<td>Thick lead or concrete — reduced, not stopped <strong>(standard)</strong></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>Non-ionizing radiation</strong> (<code>p78–80</code>): lower frequency; not enough energy to pull an electron from orbit but enough to excite it. Types and site sources: UV (welding arcs, lasers), visible light (lamps, welding arcs, lasers), infrared (heat lamps, electric heaters, welding), radio waves (heating, signal transfer, plastic sealing), microwaves. <strong>High exposure levels heat body tissue; prolonged low-level exposure can inflame the eye, burn skin, cause tumours or melanomas and reduce fertility</strong> — depending on wavelength, energy content and depth of penetration. Lasers operate in UV, visible and IR.</li>
+</ul>
+<p><strong>Trap:</strong> X-rays come from <strong>electron orbits</strong>, gamma rays from the <strong>nucleus</strong> — that is the only distinction the deck draws, and it is a favourite one-mark. Alpha's danger is internal, not external.</p>
+<hr />
+<h3 id="213-radiation-units-and-effects-on-the-body-105">2.13 Radiation — units and effects on the body (<code>p91–111</code>)<a class="anchor" href="#213-radiation-units-and-effects-on-the-body-105">#</a></h3>
+<p><strong>What:</strong> biological damage begins with ionization — the radiation removes electrons from the atoms of tissue, and the resulting ions and free radicals break bonds, including DNA (<code>p98</code>).</p>
+<ul>
+<li><strong>Units</strong> (<code>p91–92</code>):</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Quantity</th>
+<th>Unit</th>
+<th>Relationship</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Exposure</td>
+<td>Roentgen (R)</td>
+<td>amount of X- or gamma radiation producing 1 esu of charge in 1 cm³ of dry air; <strong>1 R = 2.58 × 10⁻⁴ C/kg</strong>; exposure to 1 R ≈ 0.9 rad in air</td>
+</tr>
+<tr>
+<td>Absorbed dose</td>
+<td>rad / gray (Gy)</td>
+<td>rad = <strong>100 ergs absorbed per gram</strong> of any material; <strong>1 Gy = 100 rad = 1 J/kg</strong></td>
+</tr>
+<tr>
+<td>Equivalent (biologically effective) dose</td>
+<td>rem / sievert (Sv)</td>
+<td><strong>rem = dose in rad × QF</strong> (quality factor); <strong>1 Sv = 100 rem</strong></td>
+</tr>
+<tr>
+<td>Activity</td>
+<td>becquerel (Bq) / curie (Ci)</td>
+<td><strong>1 Bq = 1 disintegration/second</strong>; <strong>1 Ci = 3.7 × 10¹⁰ disintegrations/second</strong></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>Three possible fates of an irradiated cell</strong> (<code>p96</code>, <code>p100–101</code>): it repairs itself and operates normally (no residual damage); it <strong>dies</strong> and is replaced through normal biological processes; it <strong>repairs incorrectly</strong> and reproduces at an uncontrolled rate — the origin of cancer.</li>
+<li><strong>Chronic vs acute dose</strong> (<code>p97</code>, <code>p103–104</code>): a <strong>chronic dose</strong> is a small amount over a long period — the body tolerates it because only a small fraction of cells need repair at once and dead cells can be replaced; <strong>this is the dose received as occupational exposure</strong>. An <strong>acute dose</strong> is a large dose in a short time — <strong>1 rad or greater to the whole body</strong> within a few days at most — producing effects visible in hours to weeks. <strong>Less than 10,000 mrem (100 mSv) spread over years causes no immediate problem to any organ; its effects appear after many years.</strong></li>
+<li><strong>Acute effects, by threshold</strong> (<code>p104–107</code>):</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Dose (whole body unless stated)</th>
+<th>Effect</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>&gt; <strong>100 rad</strong></td>
+<td>Radiation sickness; <strong>blood-forming organ (bone marrow) syndrome</strong> — internal bleeding, fatigue, bacterial infection, fever</td>
+</tr>
+<tr>
+<td>&gt; <strong>450 rad</strong></td>
+<td>Statistical expectation that <strong>50% of those exposed die within 60 days</strong> without medical attention</td>
+</tr>
+<tr>
+<td>&gt; <strong>1,000 rad</strong></td>
+<td><strong>Gastrointestinal syndrome</strong> — nausea, vomiting, diarrhoea, dehydration, electrolyte imbalance, loss of digestion, bleeding ulcers</td>
+</tr>
+<tr>
+<td>&gt; <strong>5,000 rad</strong></td>
+<td><strong>Central nervous system syndrome</strong> — loss of coordination, confusion, coma, convulsions, shock</td>
+</tr>
+<tr>
+<td>200–300 rad to skin</td>
+<td>Reddening (erythema), like mild sunburn; hair loss from follicle damage</td>
+</tr>
+<tr>
+<td>125–200 rad to ovaries</td>
+<td>Prolonged or permanent suppression of menstruation in ~50% of women</td>
+</tr>
+<tr>
+<td>600 rad to ovaries or testicles</td>
+<td>Permanent sterilization</td>
+</tr>
+<tr>
+<td>50 rad to thyroid</td>
+<td>Benign (non-cancerous) tumours</td>
+</tr>
+<tr>
+<td>400 rad to scalp</td>
+<td>Prompt somatic effect: temporary hair loss ~3 weeks later; regrowth within 2 months, possibly different colour and texture</td>
+</tr>
+</tbody>
+</table>
+<p>The ordering is anatomical: <strong>the fastest-dividing cells fail first</strong> (bone marrow, spleen, lymphatics), then the gut lining, and nerve cells — which do not reproduce — only at the highest doses. High doses kill cells; low doses damage or alter the genetic code (<code>p97</code>).
+- <strong>Somatic vs genetic</strong> (<code>p108–110</code>): <strong>somatic</strong> effects appear in the exposed person — <em>prompt</em> (soon after an acute dose, typically ≥10 rad whole body) and <em>delayed</em> (years later: <strong>increased cancer and cataracts</strong>). <strong>Genetic/heritable</strong> effects appear in future generations through damage to reproductive cells — which is why the limits that protect the worker also protect their children.
+- <strong>The embryo/fetus</strong> (<code>p111</code>): the most radiosensitive stage of human development, <strong>particularly the first 20 weeks</strong>; prenatal doses can cause growth retardation, small head/brain size, mental retardation and childhood cancer — hence special consideration for pregnant workers.</p>
+<p><strong>Trap:</strong> 100 / 450 / 1,000 / 5,000 rad is an ascending ladder of syndromes, not alternatives. Learning the ladder in order (marrow → gut → CNS) means you can never get the order wrong under pressure.</p>
+<hr />
+<h3 id="214-radioactive-waste-classification-and-management-116">2.14 Radioactive waste — classification and management (<code>p112–122</code>)<a class="anchor" href="#214-radioactive-waste-classification-and-management-116">#</a></h3>
+<p><strong>What:</strong> nuclear waste is composed of radionuclides and is segregated into <strong>low, medium (intermediate) and high</strong> level (<code>p112</code>); high-level waste comes from reactors and consists of fission products (short half-lives) and actinides (long half-lives).</p>
+<table>
+<thead>
+<tr>
+<th>Class</th>
+<th>Description (deck)</th>
+<th>Share of volume</th>
+<th>Activity</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Low level (LLW)</strong> (<code>p115</code>)</td>
+<td>Very low concentration; <strong>needs no shielding during normal handling and transport</strong>; typically material used to handle the highly radioactive parts of reactors</td>
+<td><strong>~90%</strong></td>
+<td>small</td>
+</tr>
+<tr>
+<td><strong>Intermediate (ILW)</strong> (<code>p116</code>)</td>
+<td><strong>Requires shielding but little or no provision for heat dissipation</strong>; chemical sludge, resins, metal fuel cladding and other reactor products</td>
+<td><strong>~7%</strong></td>
+<td>moderate</td>
+</tr>
+<tr>
+<td><strong>High level (HLW)</strong> (<code>p117</code>)</td>
+<td>Large amount of radioactivity and <strong>thermally hot</strong>; fissionable elements from reactor cores and transuranic waste — mostly Pu-238, 239, 240, 241, 242, Np-237, U-236; spent fuel if declared a waste</td>
+<td><strong>~3%</strong></td>
+<td><strong>95% of the radioactivity</strong>; growing ~<strong>12,000 metric tons/year</strong></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>Transuranic waste</strong> (<code>p113</code>): any waste with transuranic <strong>alpha-emitting</strong> radionuclides whose <strong>half-lives exceed 20 years</strong> — the two properties that decide the route (dangerous if dispersed as dust and inhaled; isolation must last geological time).</li>
+<li><strong>Where it comes from</strong> (<code>p119</code>): hospitals and nuclear medical centres produce mainly low-level <strong>solid</strong> (used Mo-Tc generators, empty vessels, swabs, syringes, gloves, lab clothing, bench covers, absorbents), <strong>liquid</strong> (washings from active labs, excreta of injected patients — biological waste counts as liquid) and <strong>gaseous</strong> (tritium and tritiated water, iodine, xenon-133) waste. Reactor/fuel-cycle LILW (<code>p120</code>) divides into <strong>primary</strong> (contaminated equipment, spent sources) and <strong>secondary</strong> (protective wear, cellulosic and fibrous material, ion-exchange resins, filter cartridges).</li>
+<li><strong>India's management philosophy</strong> (<code>p121</code>) — four phrases, quotable: <strong>delay and delay; dilute and disperse; concentrate and contain; recycle and reuse.</strong> No waste is released to the environment unless cleared, exempted or excluded from regulation; the emphasis is on <strong>minimisation and volume reduction</strong>. Management sequence: <strong>segregation → characterisation → handling → treatment → conditioning → monitoring</strong>, then final disposal.</li>
+<li><strong>HLW in three stages</strong> (<code>p122</code>): <strong>vitrification</strong> — immobilisation of liquid HLW in inert <strong>borosilicate glass</strong>; <strong>engineered interim storage</strong> for passive cooling and surveillance until it qualifies for disposal; <strong>disposal in a deep geological repository</strong>. HLW liquor from reprocessing carries ~<strong>99% of the radioactivity in the entire fuel cycle</strong>, and its isolation needs multiple barriers — waste form, container, backfill, rock — to stop radionuclides returning to the human environment (<code>p118</code>).</li>
+</ul>
+<p><strong>Trap:</strong> the 90/7/3 volume split with 95% of the activity in 3% is the opening line of every waste answer — it demonstrates that volume and hazard are inversely related, which is the whole reason classification exists.</p>
+<hr />
+<h3 id="215-disposal-of-radioactive-waste-127">2.15 Disposal of radioactive waste (<code>p123–127</code>)<a class="anchor" href="#215-disposal-of-radioactive-waste-127">#</a></h3>
+<p><strong>What:</strong> disposal is the <strong>final step</strong> in waste management, aiming at safety through emplacement in facilities designed for the appropriate level of containment and isolation, using <strong>natural and engineered barriers</strong> to protect people and the environment over long periods (<code>p123</code>).</p>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>What it is (deck)</th>
+<th>Suits</th>
+<th>Limitation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Near-surface disposal</strong> (<code>p124</code>)</td>
+<td>Engineered channels or vaults on the ground surface or <strong>up to a few metres below</strong></td>
+<td><strong>LLW</strong></td>
+<td>Institutional control must outlast the hazard</td>
+</tr>
+<tr>
+<td><strong>Caves, vaults, silos</strong> (<code>p125</code>)</td>
+<td>At least a few tens of metres below ground, up to a few hundred metres</td>
+<td><strong>ILW</strong></td>
+<td>Depends on the host rock and on retrievability policy</td>
+</tr>
+<tr>
+<td><strong>Geological repository</strong> (<code>p126</code>)</td>
+<td>Tunnels, vaults or silos in a chosen geological formation <strong>at least a few hundred metres</strong> down; <strong>first used in 1999 in the US</strong></td>
+<td><strong>HLW</strong></td>
+<td>Needs geology predictable for ~10⁵ years and a site that politics will accept</td>
+</tr>
+<tr>
+<td><strong>Deep boreholes</strong> (<code>p126</code>)</td>
+<td>The geological concept taken <strong>kilometres</strong> deep instead of hundreds of metres, with further isolation from groundwater; can be sited near power plants; one being created in <strong>Finland</strong></td>
+<td><strong>HLW</strong></td>
+<td>Drilling and emplacement technology; unproven at scale</td>
+</tr>
+<tr>
+<td><strong>Launch into space</strong> (<code>p127</code>)</td>
+<td>Removes waste from the biosphere entirely — "infinite storage space"</td>
+<td>any, in principle</td>
+<td><strong>High risk of launch failure, limited volume per launch, high energy cost — about $20,000 per kg to orbit</strong>; the costliest option</td>
+</tr>
+<tr>
+<td>Sea disposal <strong>(standard / historic)</strong></td>
+<td>Packaged waste dumped in the deep ocean</td>
+<td>formerly LLW/ILW</td>
+<td>Now prohibited under the international conventions on dumping at sea; packages corrode and marine organisms take up radionuclides</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>Why the hierarchy exists</strong>: the class decides the containment time. LLW decays to harmless in decades (institutional control suffices); ILW in centuries; HLW needs geological time — hence the depth progression from a few metres to hundreds of metres to kilometres.</li>
+<li><strong>Monitoring runs through every stage</strong>: characterisation before treatment, the facility and its groundwater after emplacement, the interim store until the waste moves (<code>p122</code>, standard).</li>
+</ul>
+<p><strong>Trap:</strong> "disposal" ≠ "storage". Vitrification and interim storage are <em>management steps before</em> disposal (<code>p122</code>); the 8-mark answer wants them named in sequence, then the five disposal routes with the class each suits and one limitation each.</p>
+<hr />
+<h2 id="3-answer-bank">3. Answer bank<a class="anchor" href="#3-answer-bank">#</a></h2>
+<h3 id="31-3-mark-answers-part-a">3.1 3-mark answers (Part A)<a class="anchor" href="#31-3-mark-answers-part-a">#</a></h3>
+<p>Three marks = three facts. Say the definition, then two consequences or two examples; never write a paragraph.</p>
+<p><strong>A1 — Scaffold (<code>p11</code>)</strong>
+1. <strong>Definition</strong> — a temporary structure erected to support access or working platforms, from tubes and joints or proprietary components.
+2. <strong>Purpose</strong> — gives a safe, stable platform where work cannot be done at ground level or on a finished floor.
+3. <strong>Uses</strong> — maintenance, construction, repair, access, inspection.</p>
+<p><strong>A2 — Working platform (<code>p13</code>)</strong>
+1. <strong>Definition</strong> — any surface from which work can be carried out, or which is a means of access to a place of work.
+2. <strong>Includes</strong> — scaffold, suspended scaffold, cradles, roofs, floors, mobile elevator work platform, step ladders, stairways.
+3. <strong>Consequence</strong> — the duty follows the surface, not the structure: a roof used as a workplace needs the same edge protection as a scaffold deck.</p>
+<p><strong>A3 — Types of scaffolding (<code>p12</code>)</strong>
+1. <strong>Free-standing</strong> — independent tower standing on its own base.
+2. <strong>Independent tied</strong> — tower tied to an adjacent structure, so it cannot pull away or overturn.
+3. <strong>Material</strong> — individual tubes and joints, or proprietary system components.</p>
+<p><strong>A4 — Hazards of scaffolding (<code>p14–15</code>)</strong>
+1. <strong>Fall from the platform</strong> — missing guard rails, slipping on oil or offcuts, wrong footwear, wet or windy weather.
+2. <strong>Struck by falling objects</strong> — tools, paint cans, bricks onto workers below and passers-by.
+3. <strong>Collapse, electrocution, overloading</strong> — not built to specification or uninspected tiebacks/ropes on suspended scaffolds; welding from the deck or a tube near a line; planks cracked and platforms tipped by excess or overhanging material.</p>
+<p><strong>A5 — Excavation (<code>p23</code>)</strong>
+1. <strong>Definition</strong> — removal of soil or rock to form an open face, hole or cavity, using tools, machinery or explosives.
+2. <strong>Includes</strong> — earthwork, trenching, wall shafts, tunnelling.
+3. <strong>Construction uses</strong> — foundations, reservoirs, roads; by trenching, digging, dredging, site development.</p>
+<p><strong>A6 — Excavation hazards (<code>p25</code>)</strong>
+1. <strong>Collapse of the sides</strong> — the dominant hazard; no ground is safe.
+2. <strong>Falling materials, and falls of people or vehicles</strong> — over the open edge.
+3. <strong>Nearby structures collapsing; damage to underground services</strong> — causing electrocution, explosion, blast, gas leak or flooding.</p>
+<p><strong>A7 — Welding (<code>p18</code>)</strong>
+1. <strong>Definition</strong> — joining metal parts by application of heat, with or without pressure and with or without filler material.
+2. <strong>Nature of the process</strong> — heat and liquid-metal transfer plus chemical reactions; the joint forms by deposition and transforms on cooling to the solid state.
+3. <strong>Why it is hazardous</strong> — one small workplace holds heat, UV light, metal fume, compressed gas and mains electricity.</p>
+<p><strong>A8 — Health hazards of welding (<code>p19–20</code>)</strong>
+1. <strong>Fume and gases</strong> — respiratory illness, cancer, impaired speech and movement.
+2. <strong>Physical</strong> — burns, eye damage, cuts, crushed toes and fingers.
+3. <strong>Electric shock and fire/explosion</strong> — electrocution is the most immediate and serious risk; flammable material nearby is the number-one cause of fire.</p>
+<p><strong>A9 — Five steps of concreting (<code>p28</code>)</strong>
+1. <strong>Batching</strong> — measuring cement, coarse aggregate, sand, water.
+2. <strong>Mixing</strong> — until the paste is uniform in colour and consistency; then <strong>transporting</strong> to site and placing in formwork.
+3. <strong>Compaction</strong> — removing air bubbles to raise strength; then <strong>curing</strong> — retaining moisture so hydration completes.</p>
+<p><strong>A10 — Concreting hazards (<code>p30</code>)</strong>
+1. <strong>Mixing</strong> — aggregate and cement dust dispersed and inhaled, causing breathing problems.
+2. <strong>Pouring</strong> — wet concrete is slippery (slips) and its alkalinity is caustic (third-degree burns); also dermatitis and manual handling.
+3. <strong>Drying</strong> — slabs can weigh <strong>more than 800 pounds</strong> and tip, shift or fall on people nearby.</p>
+<p><strong>A11 — Common electrical hazards on site (<code>p49</code>)</strong> — the internal question's list, learn all eight:
+improper grounding; exposed electrical parts; inadequate wiring; <strong>overhead power lines</strong>; damaged insulation; overloaded circuits; wet conditions; damaged tools and equipment.</p>
+<p><strong>A12 — BESAFE (<code>p38</code>, <code>p44–46</code>)</strong>
+1. <strong>B</strong>urns, <strong>E</strong>lectrocution, <strong>S</strong>hock.
+2. <strong>A</strong>rc flash / arc blast (up to 35,000 °F, plus a pressure wave), <strong>F</strong>ire, <strong>E</strong>xplosions.
+3. <strong>Falls</strong> — a shock on a ladder, platform or scaffold throws the worker off; the fall often kills.</p>
+<p><strong>A13 — Three types of electrical burn (<code>p39</code>)</strong>
+1. <strong>Electrical</strong> — direct contact with electricity.
+2. <strong>Arc flash</strong> — current travels through the air across a gap between conductors.
+3. <strong>Thermal contact</strong> — electricity ignites combustible material and the flame burns.</p>
+<p><strong>A14 — Grounding / earthing (<code>p50</code>)</strong>
+1. <strong>Definition</strong> — a physical, conductive connection to the earth, used to eliminate unwanted voltage.
+2. <strong>Function</strong> — the ground pin returns leakage current safely to earth, so the casing never sits at line potential.
+3. <strong>Rule</strong> — never remove the ground pin; doing so removes an important safety feature and you can be shocked.</p>
+<p><strong>A15 — GFCI (<code>p63</code>)</strong>
+1. <strong>Purpose</strong> — protects <strong>people</strong> from electric shock (a fuse protects the cable).
+2. <strong>Action</strong> — detects a ground fault and interrupts the current, <strong>limiting the duration</strong> of the shock.
+3. <strong>Three types</strong> — receptacle, temporary/portable, circuit-breaker GFCI.</p>
+<p><strong>A16 — Four factors deciding shock severity (<code>p42</code>)</strong>
+1. <strong>Pathway</strong> through the body (hand–trunk–feet is the lethal one).
+2. <strong>Amount of current</strong>, and <strong>duration</strong> of exposure.
+3. <strong>Wet or dry skin</strong> — water is a great conductor, so wet skin lets far more current through.</p>
+<p><strong>A17 — Ionizing vs non-ionizing radiation (<code>p78</code>, <code>p81</code>)</strong>
+1. <strong>Ionizing (high energy)</strong> — enough energy to remove electrons, producing ions and free radicals: alpha, beta, gamma, X-rays, neutrons.
+2. <strong>Non-ionizing (low energy)</strong> — only excites electrons: UV, visible light, infrared, radio waves, microwaves.
+3. <strong>Consequence</strong> — ionizing alters DNA (cell death or mutation); non-ionizing heats tissue and, prolonged, inflames the eye, burns skin, causes tumours or melanomas and reduces fertility.</p>
+<p><strong>A18 — Alpha, beta, gamma, X-ray (<code>p85–88</code>)</strong>
+1. <strong>Alpha</strong> — 2 neutrons + 2 protons (helium nucleus), ~7,500× electron mass; stopped by paper or dead skin; dangerous only if inhaled or swallowed; radium and plutonium.
+2. <strong>Beta</strong> — high-energy electrons, faster than alpha; cause <strong>beta burns</strong> of the skin; iodine-131 used medically.
+3. <strong>X-ray</strong> — photons from <strong>electron orbits</strong>; <strong>gamma</strong> — photons from the <strong>nucleus</strong>, no mass or charge, typically &gt;100 keV, &gt;200,000× the energy of visible light.</p>
+<p><strong>A19 — Radiation units (<code>p91–92</code>)</strong>
+1. <strong>Exposure</strong> — roentgen (R); 1 R = 2.58 × 10⁻⁴ C/kg.
+2. <strong>Absorbed dose</strong> — rad = 100 ergs/g; <strong>1 Gy = 100 rad = 1 J/kg</strong>.
+3. <strong>Equivalent dose and activity</strong> — rem = rad × QF, <strong>1 Sv = 100 rem</strong>; <strong>1 Bq = 1 disintegration/s</strong>, 1 Ci = 3.7 × 10¹⁰ Bq.</p>
+<p><strong>A20 — LLW, ILW, HLW (<code>p113–117</code>)</strong>
+1. <strong>LLW</strong> — very low activity, no shielding needed in normal handling; <strong>~90% of the volume</strong>.
+2. <strong>ILW</strong> — needs shielding but little heat dissipation; chemical sludge, resins, cladding; <strong>~7%</strong>.
+3. <strong>HLW</strong> — large activity, thermally hot, fissionable elements and transuranics; <strong>~3% of volume but 95% of the radioactivity</strong>; growth ~12,000 t/year.</p>
+<p><strong>A21 — Transuranic waste (<code>p113</code>)</strong>
+1. <strong>Definition</strong> — waste containing transuranic <strong>alpha-emitting</strong> radionuclides.
+2. <strong>Threshold</strong> — <strong>half-lives longer than 20 years</strong>.
+3. <strong>Why it matters</strong> — alpha is harmless outside the body but dangerous if dispersed as dust and inhaled, and the long half-life forces isolation over geological time.</p>
+<p><strong>A22 — Arc flash and arc blast (<code>p44</code>)</strong>
+1. <strong>Arc flash</strong> — sudden release of electrical energy through air when a high-voltage gap breaks down between conductors.
+2. <strong>Products</strong> — thermal radiation and intense light, temperatures <strong>up to 35,000 °F</strong>, causing severe burns.
+3. <strong>Arc blast</strong> — the pressure wave produced when the arc heats air almost instantly.</p>
+<hr />
+<h3 id="32-5-mark-answers">3.2 5-mark answers<a class="anchor" href="#32-5-mark-answers">#</a></h3>
+<p>Five marks = a definition or a list of five, each with a half-line of explanation. Roughly a page and a half; 6–8 minutes.</p>
+<p><strong>B1 — Common electrical hazards on construction sites (<code>p42–58</code>) ⭐ asked twice</strong></p>
+<ol>
+<li><strong>Improper grounding</strong> — equipment not connected to earth, or the ground pin removed, so leakage current has no path home and the casing sits at line potential (<code>p50</code>).</li>
+<li><strong>Exposed electrical parts / damaged insulation</strong> — open panels, missing breakers, cut or taped cord insulation; never repair a cord with tape (<code>p51</code>, <code>p54</code>).</li>
+<li><strong>Inadequate wiring and overloaded circuits</strong> — undersized or wrongly rated extension cords; too many loads on one outlet; fires start in fixed wiring and in cords, plugs and switches (<code>p45</code>, <code>p53</code>, <code>p55</code>).</li>
+<li><strong>Overhead and buried power lines</strong> — contact by ladders, scaffolds, cranes and man-baskets; the covering is weather protection only, so touching a line, covered or bare, makes death probable; keep at least 10 feet (<code>p58–60</code>).</li>
+<li><strong>Wet conditions and damaged tools</strong> — water is a great conductor and lets current flow easily through wet skin; damaged, old or misused tools may have damaged internal insulation (<code>p56</code>, <code>p57</code>).</li>
+<li><em>(consequence to close on)</em> <strong>The injuries</strong> — burns, electrocution, shock, arc flash/blast, fire, explosion, and falls from the shock (<code>p38</code>, <code>p46</code>).</li>
+</ol>
+<p><strong>B2 — Three key safety precautions during excavation (<code>p26</code>) ⭐ asked</strong></p>
+<ol>
+<li><strong>Support the face</strong> — every excavation <strong>deeper than 1.25 m</strong> must be <strong>shored or battered</strong>; support goes in before anyone enters, because "there is no safe ground that will not collapse" and trench sides can collapse without warning.</li>
+<li><strong>Guard the edge</strong> — every excavation <strong>deeper than 2 m</strong> must have a <strong>guard rail or barrier</strong>, with toe boards so material is not kicked in; this is the fall-into-the-hole control, distinct from the face-support control.</li>
+<li><strong>Keep loads off the lip, and know what is buried</strong> — vehicles working too close or rubble piled at the sides can cause the collapse themselves, and vehicles tipping in must use <strong>stop blocks</strong>; locate and mark underground pipes and cables before digging, since striking them causes electrocution, explosion, gas leak or flooding.</li>
+<li><em>(add for a 5-mark answer)</em> inspect <strong>daily</strong>; secure a ladder in the trench; dewater with pumps, bunds and drains; light and fence at night; support adjacent structures before digging below their foundations.</li>
+</ol>
+<p><strong>B3 — Safety precautions for scaffolding and working platforms (<code>p16–17</code>, <code>p6</code>) ⭐ asked</strong></p>
+<ol>
+<li><strong>Erect properly</strong> — to a design, by trained scaffolders, on <strong>firm level ground</strong> with base plates, fully braced and tied to the structure; never use incomplete scaffolding (<code>p17</code>, <code>p8</code>).</li>
+<li><strong>Close every edge</strong> — <strong>double guard rails</strong> (top and mid) plus <strong>toe boards</strong> at every exposed edge, including returns and lift ends (<code>p6</code>, <code>p8</code>, <code>p17</code>).</li>
+<li><strong>Board the platform fully</strong> — no gaps, no trip hazards, no unsupported overhang; clean and tidy, free of offcuts, cables, oil and mud (<code>p17</code>).</li>
+<li><strong>Respect the load</strong> — never overload; material must not overhang and tip the platform; planks crack under excess weight (<code>p15</code>, <code>p17</code>).</li>
+<li><strong>Inspect before use</strong> — the platform must be inspected to confirm it is fit for purpose and properly assembled or installed, and again after alteration or bad weather (<code>p17</code>); for suspended scaffolds, inspect <strong>ropes, tiebacks, wire rope clips, counterweights, hoists and locking system</strong> (<code>p15</code>).</li>
+<li><strong>Separate the hazards above and below</strong> — safe access by tied ladder or stair tower, never climbing the standards; nothing stored under the scaffold; <strong>clearance from overhead power lines</strong>, re-checked before adding a lift (<code>p8</code>, <code>p15</code>).</li>
+</ol>
+<p><strong>B4 — Effects of shock on the human body (<code>p41–46</code>)</strong></p>
+<ol>
+<li><strong>The circuit</strong> — the body becomes part of the circuit, from the live part through hand and trunk to the feet and earth; the reflex response to that current is the shock.</li>
+<li><strong>Four factors decide severity</strong> — pathway, current, duration, wet or dry skin.</li>
+<li><strong>The current ladder</strong> — 1 mA faint tingle; <strong>5 mA</strong> the average person can still let go; <strong>6–30 mA the let-go range</strong> — cannot release, muscular control lost; <strong>50–150 mA respiratory arrest</strong>; <strong>1,000–4,300 mA the heart stops pumping, death likely</strong>; 10,000 mA cardiac arrest and severe burns.</li>
+<li><strong>Tissue and burn injury</strong> — electrical, arc-flash and thermal-contact burns; the most common shock-related injury; arc flash reaches 35,000 °F.</li>
+<li><strong>The indirect kill</strong> — a shock on a ladder, platform or scaffold throws the worker off; the fall, not the current, is often fatal. And low voltage is not low hazard: mains voltage through wet skin passes the let-go threshold easily.</li>
+</ol>
+<p><strong>B5 — Protection against voltage fluctuations</strong> — no deck page; all standard practice except the deck's one power-strip rule (<code>p55</code>)</p>
+<ol>
+<li><strong>Know the four forms</strong> — dip/sag, swell, transient/surge, sustained over- or under-voltage; harmonics and phase imbalance change the voltage the equipment sees.</li>
+<li><strong>Protect the equipment</strong> — size cables for voltage drop as well as current; feed sensitive equipment through a <strong>voltage stabiliser</strong>; use motor protection that senses current and temperature, because a motor at low voltage draws more current and overheats.</li>
+<li><strong>Protect the installation</strong> — <strong>surge protection at the distribution board</strong>, not at the socket; sound earthing, re-tested.</li>
+<li><strong>Understand the hidden failure</strong> — fuses and MCB thermal elements respond to current over time, not voltage, so a sustained over-voltage heats the cable while the device reads normal; a transient can weld contacts or leave an electronically-sensed RCD holding closed but not responding.</li>
+<li><strong>Site discipline</strong> — no daisy-chained power strips or plug-in surge protectors; <strong>use a three-way extension with a GFCI</strong> (<code>p55</code>); inspect and maintain the temporary supply; record and report fluctuations.</li>
+</ol>
+<p><strong>B6 — Welding and cutting — safety precautions (<code>p21–22</code>)</strong></p>
+<ol>
+<li><strong>Ventilate and extract</strong> — adequate ventilation plus local exhaust to keep fume and gases out of the breathing zone and the general area; report concerns so exposure can be assessed.</li>
+<li><strong>Dress for heat, fire and electricity</strong> — fire- and electricity-resistant clothing, hand shield or helmet, welding gloves, apron, boots; <strong>no cuffs — they collect sparks</strong>; legs over the boot tops; note flame-retardant treatment weakens with repeated laundering.</li>
+<li><strong>Control the fire risk</strong> — clean the area first (flammable material is the number-one cause of fire); <strong>Class ABC extinguisher with a full gauge</strong> nearby; <strong>within 35 feet of flammables, cover them with sheet metal or a fire-resistant blanket and post a fire watcher</strong>; know the alarms, exits and extinguishers.</li>
+<li><strong>Control the electrical risk</strong> — dry gloves, sound cables and holder, never weld in wet conditions; <strong>lock-out/tag-out before repairs, only qualified technicians service the set</strong>.</li>
+<li><strong>Control the remaining hazards</strong> — earmuffs or earplugs for noise; screen the work so others are not exposed to arc radiation; cylinder discipline (upright, secured, fuel gas and oxygen separated, no oil near oxygen fittings) <em>(standard)</em>; hot work permit and a re-check after finishing, because smouldering starts late <em>(standard)</em>.</li>
+</ol>
+<p><strong>B7 — Concreting — hazards and control measures (<code>p30–32</code>)</strong></p>
+<ol>
+<li><strong>Dust</strong> — aggregate and cement particles dispersed at batching and mixing and inhaled; control with wet methods, enclosed silos, local exhaust, and <strong>face masks or respirators provided by the employer</strong>.</li>
+<li><strong>Caustic burns and dermatitis</strong> — wet cement is strongly alkaline; a splash left on skin causes <strong>third-degree burns</strong>, classically inside a boot; control with waterproof gloves, long sleeves, full-length trousers, prompt washing, and no slurry left against the skin.</li>
+<li><strong>Slips and falls</strong> — wet concrete is slippery until it dries; clear spillage, keep walkways and platform decks clean.</li>
+<li><strong>Eyes and ears</strong> — shatterproof eye protection at all times, <strong>no contact lenses</strong>; self-fitting earplugs (waxed cotton, foam, glass-fibre wool) because <strong>there is no cure for noise-induced hearing loss</strong>.</li>
+<li><strong>Weight and handling</strong> — steel-toed boots against falling objects and rebar punctures; lift with back straight, knees bent, load close; <strong>slabs over 800 pounds</strong> can tip and fall; formwork and falsework must be designed and propped to carry liquid concrete <em>(standard)</em>; warning signs and guards wherever cement hazards are present.</li>
+</ol>
+<p><strong>B8 — Protection against electrical hazards (<code>p50–74</code>)</strong></p>
+<ol>
+<li><strong>Insulate and double-insulate</strong> — intact insulation, no taped repairs, no cords on nails or through doors; double-insulated tools marked with the square-within-a-square symbol.</li>
+<li><strong>Earth</strong> — a conductive connection to earth returns leakage current; <strong>never remove the ground pin</strong>.</li>
+<li><strong>GFCI</strong> — detects ground faults and interrupts the current, limiting shock duration; three types (receptacle, portable, circuit-breaker).</li>
+<li><strong>Distance from lines</strong> — survey the site, never store under lines, <strong>at least 10 feet</strong> for tools and equipment; 15/20/25/35/45 ft as voltage rises (<code>p62</code>).</li>
+<li><strong>Isolate and identify</strong> — lock-out/tag-out before work on circuits; mark breakers, disconnects and voltages; inspect cords and tools and remove damaged ones from use; PPE — hard hat, rubber insulating gloves, insulating clothing, <strong>no metal hard hats near lines</strong>.</li>
+</ol>
+<p><strong>B9 — Radiation types and their penetrating power (<code>p85–88</code>)</strong></p>
+<ol>
+<li><strong>Alpha</strong> — heavy, charged (helium nucleus, ~7,500× electron mass); stopped by <strong>paper or the dead layer of skin</strong>; harmless outside, lethal if inhaled or swallowed (radium, plutonium).</li>
+<li><strong>Beta</strong> — high-energy electrons; penetrates further than alpha and causes <strong>beta burns</strong> of the skin; stopped by a few millimetres of aluminium or plastic <em>(standard)</em>.</li>
+<li><strong>X-rays</strong> — photons from electron orbits; penetrate tissue, stopped by dense material such as lead or thick concrete <em>(standard)</em>.</li>
+<li><strong>Gamma</strong> — photons from the nucleus, no mass or charge, &gt;100 keV, &gt;200,000× visible light; "permeate through many materials" (<code>p81</code>); <strong>reduced, not stopped</strong>, by thick lead or concrete.</li>
+<li><strong>The principle</strong> — a particle with mass and charge loses energy in many small collisions; a neutral photon travels until it happens to interact. Protection: <strong>time, distance, shielding</strong>, plus monitoring <em>(standard)</em>.</li>
+</ol>
+<p><strong>B10 — Control measures to reduce risk in construction (<code>p6</code>, <code>p33</code>)</strong></p>
+<ol>
+<li><strong>Design the site, not the behaviour</strong> — safe access everywhere, double guard rails, marked and fixed hole covers, tidiness, good lighting, fencing from the public (<code>p6</code>).</li>
+<li><strong>Apply the hierarchy</strong> — eliminate the hazard (prefabricate at ground level), substitute, engineer it out (guards, shoring, exhaust, GFCI), then administrate (permits, method statements, training, inspection), and only then PPE <em>(standard)</em>.</li>
+<li><strong>Manage the temporary works</strong> — design, erect by competent persons, inspect and tag scaffolding, formwork and excavation support before use and after alteration or weather.</li>
+<li><strong>Isolate energy</strong> — LOTO for plant and circuits; permits for hot work, digging and confined spaces; banksmen and exclusion zones for plant.</li>
+<li><strong>Supervise the peaks and institutionalise safety</strong> — the first week on a new site and the last hour of the day are the danger windows (<code>p5</code>); "all accidents are preventable… safety is everyone's responsibility… legal obligations are the minimum" (<code>p33</code>).</li>
+</ol>
+<p><strong>B11 — Classification of radioactive waste (<code>p112–117</code>)</strong></p>
+<ol>
+<li><strong>Basis</strong> — radionuclide content, activity concentration, heat output and half-life; segregated into low, intermediate and high level.</li>
+<li><strong>LLW</strong> — very low concentration, no shielding in normal handling and transport, ~90% of the volume.</li>
+<li><strong>ILW</strong> — needs shielding but little or no heat dissipation; chemical sludge, resins, metal fuel cladding; ~7%.</li>
+<li><strong>HLW</strong> — large activity and thermally hot; fission products and actinides, Pu-238/239/240/241/242, Np-237, U-236; spent fuel if declared waste; ~3% of volume, <strong>95% of the radioactivity</strong>.</li>
+<li><strong>Transuranic</strong> — alpha-emitting, half-life <strong>&gt;20 years</strong>; and LILW further split into <strong>short-lived and long-lived</strong> and into <strong>primary</strong> (contaminated equipment, spent sources) and <strong>secondary</strong> (protective wear, resins, filters) (<code>p120</code>).</li>
+</ol>
+<p><strong>B12 — Non-ionizing radiation — sources and effects (<code>p78–80</code>)</strong></p>
+<ol>
+<li><strong>What it is</strong> — oscillating electric and magnetic fields travelling at the speed of light, at lower frequency than ionizing; not enough energy to remove an electron, but enough to excite it.</li>
+<li><strong>Types and sources</strong> — UV (welding arcs, lasers), visible light (lamps, arcs, lasers), infrared (heat lamps, electric heaters, welding), radio waves (heating, signal transfer, plastic sealing), microwaves; plus ELF; lasers operate in UV, visible and IR.</li>
+<li><strong>Acute effect</strong> — high exposure levels heat body tissue: eye inflammation ("arc eye") and skin burns.</li>
+<li><strong>Chronic effect</strong> — prolonged low-level exposure can cause eye inflammation, skin burns, tumours or melanomas and reduced fertility, depending on wavelength, energy content and depth of penetration.</li>
+<li><strong>Control</strong> <em>(standard)</em> — screening of welding arcs, filtered eye protection matched to the process, distance, interlocks and warning signs for lasers, and time limitation.</li>
+</ol>
+<hr />
+<h3 id="33-7-8-mark-answers">3.3 7 / 8-mark answers<a class="anchor" href="#33-7-8-mark-answers">#</a></h3>
+<p><strong>C1 — Scaffolding: features, applications and precautions (7) ⭐ asked Oct 2025</strong></p>
+<p><strong>Structure (3 + 2 + 2/3).</strong> (a) definition + features/working-platform scope. (b) applications. (c) numbered precautions, each with the hazard it removes.</p>
+<p><strong>Answer.</strong>
+(a) A scaffold is a temporary structure erected to support access or working platforms, formed from individual tubes and joints or proprietary components (<code>p11</code>). Its features: it is erected where work cannot be done at ground level or on a finished floor; it carries a boarded platform at the height of the work; it is tied to the permanent structure or stands on its own base (<code>p12</code>); every platform is expected to be of sufficient size, free of gaps and trip hazards, clean, fitted with handrails and toe boards, not overloaded, and erected on firm level ground (<code>p17</code>). The wider term, <strong>working platform</strong> (<code>p13</code>), is any surface from which work is carried out or which gives access to a place of work — scaffold, suspended scaffold, cradles, roofs, floors, mobile elevating work platforms, step ladders, stairways.
+(b) Applications (<code>p11</code>): maintenance, construction, repair, access and inspection — in practice façade work, masonry and finishing, plastering and painting, structural repair, cladding and glazing, and inspection of the works.
+(c) Precautions (<code>p17</code>, <code>p6</code>, <code>p15</code>): erect to a design by trained scaffolders on firm level ground with base plates and sole boards; tie to the structure as it rises and brace the face before loading; board every platform fully with no gaps or unsupported overhang; double guard rails and toe boards at every exposed edge; keep the deck clear and respect the load class — no overhanging material; provide a tied ladder or stair tower and never climb the standards; keep the scaffold clear of overhead power lines; inspect and tag before first use, after alteration and after bad weather; for suspended scaffolds inspect ropes, tiebacks, rope clips, counterweights, hoists and locking systems before every use.
+Add the five hazards as a closing line (<code>p14–15</code>): fall from the lift, struck by falling material, electrocution, collapse, overloading.</p>
+<p><strong>Traps.</strong> Don't spend the 7 marks on the definition — the marks are in (c) with a hazard attached to each measure. "Never use incomplete scaffolding" and "never use a ladder or scaffold that is not properly fixed" are the deck's own sentences (<code>p8</code>) and worth quoting.</p>
+<p><strong>C2 — Common electrical hazards on construction sites (8) ⭐ asked twice</strong></p>
+<p><strong>Structure (2 + 4 + 2).</strong> (a) why electricity is different. (b) the eight hazards with mechanism. (c) the injury types and one control line.</p>
+<p><strong>Answer.</strong>
+(a) Electricity is invisible and silent, and the current that stops a heart is smaller than the current that lights a lamp; contact with electricity accounts for 5% of construction fatalities (<code>p7</code>) and electrocution is the cause of 12% of all workplace deaths among young workers (<code>p38</code>).
+(b) The eight (<code>p49</code>): <strong>improper grounding</strong> — no earth path, ground pin removed, casing at line potential (<code>p50</code>); <strong>exposed electrical parts</strong> — open panels, missing breakers, live terminals (<code>p51</code>); <strong>inadequate wiring</strong> — undersized or wrongly rated cords and extensions (<code>p53</code>); <strong>overhead power lines</strong> — ladders, scaffolds, cranes and man-baskets reach them, and the covering is only weather protection (<code>p58</code>); <strong>damaged insulation</strong> — cuts and abrasion, taped repairs, cords on nails or through doors (<code>p54</code>); <strong>overloaded circuits</strong> — fires start in fixed wiring and in cords, plugs and switches (<code>p45</code>, <code>p55</code>); <strong>wet conditions</strong> — water is a great conductor and lets current flow easily through wet skin (<code>p57</code>); <strong>damaged tools and equipment</strong> — old, misused or damaged tools with internal insulation failure (<code>p56</code>).
+(c) The injuries, BESAFE (<code>p38</code>, <code>p44</code>): burns (electrical, arc flash, thermal contact), electrocution, shock, arc flash/blast at up to 35,000 °F, fire, explosion — plus falls, where the shock throws the worker off a ladder or platform (<code>p46</code>). Close with the control that fits the list: earth and double-insulate, GFCI on temporary supplies, <strong>10 feet minimum from lines</strong>, LOTO before work on circuits, inspect and remove damaged tools, and PPE — with <strong>no metal hard hats near lines</strong> (<code>p74</code>).</p>
+<p><strong>Traps.</strong> The question asks for <em>hazards</em>, not injuries — lead with the eight, then label the injury list separately. Quote "low voltage does not mean low hazard" (<code>p40</code>); it is the deck's own capitalised warning and examiners look for it.</p>
+<p><strong>C3 — Methods for the disposal of radioactive waste (8) ⭐ asked Oct 2025</strong></p>
+<p><strong>Structure (2 + 5 + 1).</strong> (a) what disposal is and why the class decides the route. (b) five routes, each with the class it suits and one limitation. (c) the barrier principle as a closing line.</p>
+<p><strong>Answer.</strong>
+(a) Disposal is the <strong>final step</strong> in radioactive-waste management; its aim is safety through emplacement in facilities designed for the appropriate level of containment and isolation, using <strong>natural and engineered barriers</strong> over long periods (<code>p123</code>). The class decides the route, and the split is 90% LLW / 7% ILW / 3% HLW by volume, with HLW carrying 95% of the radioactivity (<code>p115–117</code>).
+(b) <strong>Near-surface disposal</strong> (<code>p124</code>) — engineered channels or vaults on the surface or up to a few metres below; for <strong>LLW</strong>; depends on institutional control outlasting the hazard. <strong>Caves, vaults or silos</strong> (<code>p125</code>) — a few tens of metres to a few hundred metres down; for <strong>ILW</strong>; needs a suitable host rock. <strong>Geological repository</strong> (<code>p126</code>) — tunnels, vaults or silos in a chosen formation at least a few hundred metres down; for <strong>HLW</strong>; first used in <strong>1999 in the US</strong>; needs geology predictable over geological time and a site politics will accept. <strong>Deep boreholes</strong> (<code>p126</code>) — the same concept kilometres deep, with further isolation from groundwater, sitable near power plants, one being created in <strong>Finland</strong>; technology unproven at scale. <strong>Launch into space</strong> (<code>p127</code>) — removes waste from the biosphere ("infinite storage space"); but high risk of vehicle failure, limited volume per launch and high energy cost, about <strong>$20,000 per kg</strong> to orbit.
+(c) Before any of these, HLW is <strong>vitrified</strong> into inert borosilicate glass, held in engineered interim storage for passive cooling and surveillance, and only then sent to a deep repository (<code>p122</code>) — the multi-barrier principle: waste form, container, backfill, rock (<code>p118</code>). Management philosophy behind it: <strong>delay and delay, dilute and disperse, concentrate and contain, recycle and reuse</strong> (<code>p121</code>).</p>
+<p><strong>Traps.</strong> Storage is not disposal — vitrification and interim storage are steps <em>before</em> disposal. Give the class for each route (LLW near-surface, ILW vaults, HLW geological/borehole); a list of five methods with no class allocation loses half the marks.</p>
+<p><strong>C4 — Effects of electric shock on the human body (8)</strong></p>
+<p><strong>Structure (2 + 3 + 3).</strong> (a) mechanism. (b) the current ladder. (c) burns, falls, and the low-voltage warning.</p>
+<p><strong>Answer.</strong>
+(a) A shock needs a circuit and the body supplies the missing link: touching a live part while earthed, the current runs hand → trunk → feet → earth (<code>p41</code>). Severity depends on four things — <strong>pathway, current, duration, wet or dry skin</strong> (<code>p42</code>); water is a great conductor and lets current flow more easily through wet skin (<code>p57</code>).
+(b) The ladder (<code>p43</code>): below 1 mA imperceptible; 1 mA a faint tingle; <strong>5 mA</strong> a slight shock, disturbing but the average person can let go; <strong>6–25 mA (women) / 9–30 mA (men)</strong> painful shock and loss of muscular control — the <strong>let-go range</strong>, where the hand cannot release and the body may be thrown from the circuit; <strong>50–150 mA</strong> extreme pain, <strong>respiratory arrest</strong>, severe contractions, death possible; <strong>1,000–4,300 mA</strong> the heart's pumping ceases, nerve damage, death likely; <strong>10,000 mA</strong> cardiac arrest and severe burns, death probable.
+(c) The injuries are not only the current: <strong>burns</strong> — electrical, arc flash (up to 35,000 °F) and thermal contact, the most common shock-related injury (<code>p39</code>, <code>p44</code>); <strong>falls</strong> — a shock on a ladder, platform or scaffold throws the worker off, and the fall is often what kills (<code>p46</code>); and the deck's warning, <strong>low voltage does not mean low hazard</strong> (<code>p40</code>), because 230 V drives tens of milliamperes through a wet hand — past let-go, into respiratory arrest. Control follows the mechanism: earth the casing, GFCI to cut the duration, dry conditions, insulated tools and gloves, and never work live where isolation is possible.</p>
+<p><strong>Traps.</strong> Milliamperes, not amperes; the let-go band differs by sex; the deck gives no voltage threshold — don't invent one. If asked to "state the effects at 1, 5, 10, 50 and 100 mA", interpolate honestly: at 100 mA you are in the 50–150 mA band (respiratory arrest, death possible).</p>
+<p><strong>C5 — Welding and cutting: hazards and precautions (7 / 8)</strong></p>
+<p><strong>Structure (1 + 4 + 4).</strong> (a) definition and why the trade is hazard-dense. (b) four hazard families with mechanism. (c) numbered precautions.</p>
+<p><strong>Answer.</strong>
+(a) Welding joins metal by heat, with or without pressure and filler; the joint forms by liquid-metal deposition and solidifies on cooling (<code>p18</code>). Heat, UV light, metal fume, compressed gas and mains electricity occupy one small workplace.
+(b) <strong>Fume and gases</strong> — respiratory illness, cancer and <strong>impaired speech and movement</strong>; the breathing zone sits in the plume whenever the head is bent to the work (<code>p19</code>). <strong>Physical</strong> — burns, eye damage (arc eye from UV, retinal damage from IR — <em>standard</em> terms for the deck's "eye damage"), cuts, crushed toes and fingers (<code>p19</code>). <strong>Electric shock</strong> — "the most immediate and serious risk for a welder": sudden discharge through the body, injury or death (<code>p20</code>). <strong>Fire and explosion</strong> — flammable material around the work is the <strong>number-one cause of fire</strong>; fuel gas and oxygen cylinders add explosion (<code>p20</code>).
+(c) Adequate ventilation and local exhaust so fume stays out of the breathing zone; report concerns for exposure assessment; fire- and electricity-resistant clothing, hand shield/helmet, gloves, apron, boots; <strong>no cuffs</strong> and legs over the boot tops; earmuffs or earplugs; screen the work from others; <strong>LOTO before repairs, qualified technicians only</strong>; <strong>Class ABC extinguisher with a full gauge</strong> nearby; <strong>within 35 feet of flammables — cover them with sheet metal or a fire-resistant blanket and post a fire watcher</strong>; know the alarms, exits and extinguishers; never weld wet or with damaged cables, holders or return clamps; cylinder discipline and a hot work permit, with a re-check after finishing <em>(standard)</em>.</p>
+<p><strong>Traps.</strong> Name the 35-foot rule, the Class ABC extinguisher and the cuff rule — they separate a read answer from a recited one. Note the deck's own framing: electrocution is the most <em>immediate</em> risk, but flammable material is the most <em>common</em> cause of fire; both are quotable.</p>
+<p><strong>C6 — Excavation: hazards and precautions (8)</strong></p>
+<p><strong>Structure (1 + 3 + 4).</strong> (a) definition and scope. (b) five dangers with mechanism. (c) numbered controls including the two threshold figures.</p>
+<p><strong>Answer.</strong>
+(a) Excavation is the removal of soil or rock to form an open face, hole or cavity by tools, machinery or explosives; it includes earthwork, trenching, wall shafts and tunnelling, and in construction makes foundations, reservoirs and roads (<code>p23</code>). Its process runs from setting out corner benchmarks, surveying levels, excavating to depth, dressing loose soil, making up to cut-off level, dewatering wells and interconnecting trenches, to boundaries, protection bunds and drains (<code>p24</code>).
+(b) The five dangers (<code>p25</code>): <strong>collapse of the sides</strong>; <strong>materials falling onto people</strong>; <strong>falls of people or vehicles</strong>; <strong>nearby structures collapsing into the excavation</strong>; <strong>electrocution, explosion, blast, gas leak or flooding</strong> from damage to underground services. The mechanism is that soil has almost no tensile strength — only friction between particles and the lateral support of the ground that has been removed hold a face up, and both disappear when it dries, when it rains, when a lorry passes or when spoil is heaped at the lip <em>(standard, and the reason for the deck's "no safe ground that will not collapse")</em>.
+(c) Controls (<code>p26</code>): inspect the excavation <strong>daily</strong>; locate and mark underground pipes and cables before digging; <strong>shore or batter every excavation deeper than 1.25 m</strong>; <strong>guard rail or barrier around every excavation deeper than 2 m</strong>, with toe boards; keep spoil, materials and plant back from the lip, and use <strong>stop blocks</strong> for vehicles tipping in; treat the ground as capable of collapsing without warning; then <em>(standard)</em> a permit to dig, a secured ladder for access, dewatering with pumps, bunds and drains, gas testing before entry, support to adjacent structures, and lighting and fencing at night.</p>
+<p><strong>Traps.</strong> 1.25 m and 2 m answer two different questions — face support and edge protection. Quote both, then explain one method properly (battering, benching, shoring or a trench box) rather than listing four badly.</p>
+<p><strong>C7 — Concreting: hazards and control (7)</strong></p>
+<p><strong>Structure (2 + 3 + 2).</strong> (a) the material and the five steps. (b) three hazard groups. (c) controls by mechanism.</p>
+<p><strong>Answer.</strong>
+(a) Concrete is a composite of fine and coarse aggregate bonded by a fluid cement paste that hardens over time (<code>p27</code>), placed in five steps — <strong>batching, mixing, transporting, compaction, curing</strong> (<code>p28</code>) — each of which introduces its own hazard.
+(b) The deck's three groups (<code>p30</code>): <strong>mixing</strong> — aggregate and cement dust dispersed into the air and inhaled, causing breathing problems; <strong>pouring</strong> — wet concrete is slippery until it dries, so slips and falls, and the <strong>alkaline properties are caustic</strong>, so a splash left on the skin can cause <strong>third-degree burns</strong>; <strong>drying</strong> — slabs can weigh <strong>more than 800 pounds</strong> and tip, shift or fall on people nearby. Add <em>(standard)</em>: dermatitis from prolonged wet-cement contact, back injury from handling bags and rebar, hand-arm vibration from the poker, and formwork/falsework collapse under the weight of liquid concrete.
+(c) Controls (<code>p31–32</code>): waterproof gloves, long sleeves, full-length trousers and eye protection; approved hard hat; shatterproof eye protection at all times and <strong>no contact lenses</strong>; self-fitting earplugs because <strong>there is no cure for noise-induced hearing loss</strong>; steel-toed boots against falling objects and rebar punctures; lift with a straight back, bent knees, load close — don't lift too much; <strong>face masks or respirators provided by the employer</strong> where cement dust threatens the air; <strong>warning signs and guards</strong> wherever cement hazards are present. Add: wash skin promptly and change soaked clothing, wet methods and enclosed silos for dust, sound pump lines, and formwork designed and not struck early.</p>
+<p><strong>Traps.</strong> The two mechanisms — caustic alkali burn and respirable silica dust — must both appear. "Wear PPE" answers neither; the marks are in the mechanism.</p>
+<p><strong>C8 — Radiation: types and effects on the human body (8)</strong></p>
+<p><strong>Structure (3 + 3 + 2).</strong> (a) definition and the ionizing/non-ionizing split. (b) the four ionizing types with penetration. (c) the effects, acute and chronic, with the threshold ladder.</p>
+<p><strong>Answer.</strong>
+(a) Radiation is the emission of energy as electromagnetic waves or moving subatomic particles (<code>p75</code>). <strong>Ionizing</strong> radiation has enough energy to remove electrons from atoms, producing ions and free radicals that can alter DNA (<code>p81</code>); <strong>non-ionizing</strong> only excites electrons — UV, visible, IR, radio, microwaves (<code>p78</code>). Particulate radiations carry mass (alpha, beta, neutrons); electromagnetic ones (X-ray, gamma) have neither mass nor charge (<code>p76</code>) — which is why the particles lose energy fast and the photons penetrate.
+(b) <strong>Alpha</strong> — helium nucleus, ~7,500× electron mass; stopped by paper or the dead skin layer; dangerous only if inhaled or swallowed (radium, plutonium) (<code>p85</code>). <strong>Beta</strong> — high-energy electrons, faster than alpha; cause <strong>beta burns</strong>; iodine-131 used medically (<code>p86</code>). <strong>X-rays</strong> — photons from electron orbits (<code>p87</code>). <strong>Gamma</strong> — photons from the nucleus, &gt;100 keV, &gt;200,000× visible light, permeate many materials (<code>p88</code>).
+(c) The effects (<code>p96–107</code>): damage begins with ionization; a cell repairs, dies, or repairs incorrectly and reproduces uncontrolled — the origin of cancer. <strong>Chronic</strong> (small dose over long time, the occupational case) is tolerated because few cells need repair at once; <strong>acute</strong> (≥1 rad whole body in days) gives effects in hours to weeks: bone-marrow syndrome <strong>&gt;100 rad</strong>, 50% mortality in 60 days <strong>&gt;450 rad</strong>, gastrointestinal syndrome <strong>&gt;1,000 rad</strong>, CNS syndrome <strong>&gt;5,000 rad</strong>; skin erythema at 200–300 rad, permanent sterilization at 600 rad to gonads, benign thyroid tumours at 50 rad. Late and heritable effects: cancer, cataracts, and genetic damage in future generations; the embryo/fetus is most sensitive in the <strong>first 20 weeks</strong> (<code>p111</code>). Protection: <strong>time, distance, shielding</strong>, plus monitoring <em>(standard)</em>.</p>
+<p><strong>Traps.</strong> Learn the threshold ladder in anatomical order (marrow → gut → CNS) so it can't invert under pressure. Alpha's hazard is internal; give the shielding material for each type, marking beta/gamma materials as standard practice.</p>
+<p><strong>C9 — Protection against voltage fluctuations (8)</strong> — all <strong>standard</strong> except the deck's power-strip rule</p>
+<p><strong>Structure (2 + 3 + 3).</strong> (a) what fluctuation is. (b) effects on equipment. (c) effects on protection, and the controls.</p>
+<p><strong>Answer.</strong>
+(a) No supply is perfectly steady. Voltage fluctuation is any departure from nominal, in four forms: <strong>dip or sag</strong> (falls for cycles to seconds), <strong>swell</strong> (rises), <strong>transient or surge</strong> (a very short spike), and <strong>sustained over- or under-voltage</strong>; harmonic distortion and phase imbalance change the voltage the equipment actually sees.
+(b) Equipment: an induction motor at reduced voltage draws more current for the same torque, so it runs hotter and its insulation ages; contactors and relays chatter or drop out, stopping a hoist or pump without warning; electronic controls in drives, weighing systems and chargers reset or fail; a surge stresses insulation until it punctures — which is how a transient becomes a short circuit.
+(c) Protection: a fuse and the thermal element of an MCB respond to <strong>current over time, not voltage</strong>, so a sustained over-voltage heats the cable while the device reads normal; a transient can weld contactor contacts or degrade a breaker so it no longer trips; an electronically-sensed RCD can be left holding closed but unresponsive — <strong>protection present on the board and absent in fact</strong>. Controls: size cables for voltage drop as well as current; <strong>voltage stabilisers</strong> for sensitive equipment; <strong>surge protection at the distribution board</strong>, not at the socket; motor protection sensing current and temperature; sound, tested earthing; and the deck's site rule — no daisy-chained power strips or plug-in surge protectors, <strong>use a three-way extension with a GFCI</strong> (<code>p55</code>).</p>
+<p><strong>Traps.</strong> The deck has no slide on this. Say so in one line if the examiner presses ("the deck covers protection methods generally; fluctuation protection is standard practice") and then give the mechanism — the hidden failure of protection devices is what distinguishes a good answer.</p>
+<p><strong>C10 — Control measures to reduce risk in the construction industry (8)</strong></p>
+<p><strong>Structure (2 + 5 + 1).</strong> (a) the accident profile that justifies the controls. (b) the five-level hierarchy with a construction example each. (c) the deck's philosophy as the closing paragraph.</p>
+<p><strong>Answer.</strong>
+(a) Construction is the second largest industry after agriculture (<code>p3</code>) and its fatalities fall in seven shares — falls 56%, collapse/overturning 21%, moving vehicles 10%, electricity 5%, falling objects 4%, machinery 3%, hot or harmful substance 1% (<code>p7</code>). Each share implies a control.
+(b) <strong>Eliminate</strong> — prefabricate at ground level so the work is not at height; backfill openings that are not needed. <strong>Substitute</strong> — lower-voltage tools, water-based finishes, mechanical lifting instead of manual. <strong>Engineering</strong> — double guard rails, marked and fixed hole covers, toe boards, shoring and battering, local exhaust at the arc, GFCI and earthing, guarding and interlocks (<code>p6</code>, <code>p26</code>, <code>p63</code>). <strong>Administrative</strong> — method statements, permits to dig, hot work and confined-space permits, inspection and tagging of scaffolds and excavations, training, and supervision concentrated on <strong>the first week on a new site and the last hour of the day</strong> (<code>p5</code>). <strong>PPE</strong> — helmet, safety boots, hi-viz, gloves, harness, eye and hearing protection: the deck is explicit that these prevent injury <strong>only in combination with</strong> the physical measures (<code>p5</code>).
+(c) The philosophy that makes the hierarchy stick (<code>p33</code>): all accidents are preventable; no job is worth getting hurt for; incidents can be managed; safety is everyone's responsibility; continuous improvement; safety as a way of life 24 hours a day. Everyone is accountable for identifying, eliminating or managing the risks of their workplace, and <strong>legal obligations are the minimum requirement, not the standard</strong>.</p>
+<p><strong>Traps.</strong> A generic "control measures" question wants the hierarchy, not a trade list. Anchor each level to a construction example and close with the deck's philosophy — that is the difference between a 5 and an 8.</p>
+<p><strong>C11 — Acute vs chronic exposure; radiation syndromes (7)</strong></p>
+<p><strong>Structure (2 + 3 + 2).</strong> (a) dose rate decides the outcome. (b) the two dose types. (c) the syndrome ladder.</p>
+<p><strong>Answer.</strong>
+(a) The same total dose does different things at different rates: high doses tend to <strong>kill cells</strong>, low doses tend to <strong>damage or alter the genetic code</strong> (<code>p97</code>). Below 10,000 mrem (100 mSv) spread over years there is no immediate problem to any organ; the effects appear after many years.
+(b) <strong>Chronic</strong> — a small amount over a long period; the body tolerates it because only a small percentage of cells need repair at any one time, and dead cells can be replaced; <strong>this is the occupational dose</strong> (<code>p103</code>). <strong>Acute</strong> — a large dose in a short time, <strong>1 rad or greater to the whole body</strong> within a few days at most, with effects observable in hours to weeks (<code>p104</code>).
+(c) The ladder (<code>p105–106</code>): <strong>&gt;100 rad</strong> blood-forming organ (bone marrow) syndrome — internal bleeding, fatigue, infection, fever; <strong>&gt;450 rad</strong> a 50% statistical expectation of death within 60 days without medical attention; <strong>&gt;1,000 rad</strong> gastrointestinal syndrome — nausea, vomiting, diarrhoea, dehydration, electrolyte imbalance, bleeding ulcers; <strong>&gt;5,000 rad</strong> CNS syndrome — loss of coordination, confusion, coma, convulsions, shock. Plus skin erythema at 200–300 rad, prompt hair loss about three weeks after 400 rad to the scalp, and delayed cancer and cataracts years later (<code>p107–109</code>).</p>
+<p><strong>Traps.</strong> The syndromes are cumulative and ordered by cell-division rate, not alternatives. 450 rad is a <em>statistical</em> 50% mortality figure, not a threshold at which everyone dies — quote it as the deck does.</p>
+<hr />
+<h3 id="34-14-mark-skeletons-part-b-ese">3.4 14-mark skeletons (Part B, ESE)<a class="anchor" href="#34-14-mark-skeletons-part-b-ese">#</a></h3>
+<p>One 14-mark question per module. Write <strong>Structure (marks)</strong> → headings → content, 3–4 pages, 15–18 minutes.</p>
+<p><strong>D1 — Safety in construction: scaffolding, working platforms and the control of fall risk</strong></p>
+<p><em>Structure (3 + 5 + 6).</em>
+1. <strong>Context (3)</strong> — construction as the second largest industry, three sectors (<code>p3–4</code>); the fatality split, with falls at 56% (<code>p7</code>); the organisational reason small jobs are the most dangerous and the two time peaks (<code>p5</code>).
+2. <strong>Working at height (5)</strong> — the four openings (floor holes, platform gaps, shafts, stair walls) and their fixes (<code>p8</code>); ladder conditions — right for the job, sound, secured near the top, firm base, <strong>1 m beyond the landing</strong> (<code>p10</code>); ladder conduct (<code>p9</code>); roofs — 50% through fragile materials, 30% from edges, so inspect, protect the edge, harness and running cable (<code>p16</code>).
+3. <strong>Scaffolding (6)</strong> — definition and the working-platform definition with its full list (<code>p11</code>, <code>p13</code>); two deck types (<code>p12</code>); five hazards (<code>p14–15</code>); the suitability checklist (<code>p17</code>); then 8–10 numbered precautions, each tied to a hazard. Close with the hierarchy: eliminate the height, prevent the fall, arrest the fall, control access.</p>
+<p><strong>D2 — Electrical hazards, the effects of shock, and protection (including voltage fluctuation)</strong></p>
+<p><em>Structure (4 + 4 + 6).</em>
+1. <strong>Hazards (4)</strong> — definitions of current, voltage, resistance, conductor, insulator, grounding (<code>p35</code>); BESAFE plus falls (<code>p38–46</code>); the eight common site hazards (<code>p49</code>); the scale — 5% of construction deaths, 12% of young-worker deaths (<code>p7</code>, <code>p38</code>).
+2. <strong>Effects of shock (4)</strong> — the circuit through the body; four factors (<code>p42</code>); the current table with three anchors (5 mA let-go, 50–150 mA respiratory arrest, 1,000 mA+ death likely) (<code>p43</code>); burns and falls; "low voltage does not mean low hazard" (<code>p40</code>).
+3. <strong>Protection (6)</strong> — insulation and double insulation (<code>p54</code>, <code>p56</code>); earthing and the ground pin (<code>p50</code>); GFCI and its three types (<code>p63</code>); clearance — 10 ft up to 50 kV rising to 45 ft at 750–1,000 kV (<code>p59–62</code>); LOTO (<code>p67</code>); identification and employer duties (<code>p69–70</code>); PPE (<code>p74</code>); then <strong>voltage fluctuation</strong> — four forms, equipment heating, the hidden failure of fuses/MCBs/RCDs, and the controls (stabiliser, board-level surge protection, voltage-drop sizing, no power strips) — flag it as standard practice where the deck is silent.</p>
+<p><strong>D3 — Radiation hazards: types, effects on the human body, and disposal of radioactive waste</strong></p>
+<p><em>Structure (4 + 5 + 5).</em>
+1. <strong>Types (4)</strong> — definition of ionizing radiation (<code>p75</code>, <code>p81</code>); particulate vs electromagnetic (<code>p76</code>); ionizing vs non-ionizing with examples (<code>p78</code>); alpha, beta, X-ray, gamma with penetration and source (<code>p85–88</code>).
+2. <strong>Effects (5)</strong> — ionization → DNA damage → repair / death / faulty repair (<code>p96–101</code>); chronic vs acute dose (<code>p103–104</code>); the syndrome ladder 100 / 450 / 1,000 / 5,000 rad (<code>p105–106</code>); organ-specific figures (skin, gonads, thyroid) (<code>p107</code>); somatic vs genetic, and the embryo/fetus in the first 20 weeks (<code>p108–111</code>); units — Gy, rad, Sv, rem, Bq, Ci (<code>p91–92</code>); protection — time, distance, shielding, monitoring.
+3. <strong>Waste and disposal (5)</strong> — classification 90/7/3% and 95% of activity (<code>p113–117</code>); transuranic definition (<code>p113</code>); management philosophy and sequence (<code>p121</code>); HLW's three stages with vitrification (<code>p122</code>); five disposal routes with their class and one limitation each (<code>p124–127</code>); close on barriers and monitoring.</p>
+<p><strong>D4 — Construction trades: welding, excavation and concreting, and the control measures that reduce the risk</strong></p>
+<p><em>Structure (4 + 4 + 3 + 3).</em>
+1. <strong>Welding and cutting (4)</strong> — definition (<code>p18</code>); the four hazard families (<code>p19–20</code>); precautions including <strong>35 feet + fire watcher</strong> and the <strong>Class ABC extinguisher</strong> (<code>p21–22</code>); cylinder discipline <em>(standard)</em>.
+2. <strong>Excavation (4)</strong> — definition and process (<code>p23–24</code>); five dangers (<code>p25</code>); <strong>1.25 m shore or batter / 2 m guard rail</strong> (<code>p26</code>); controls — daily inspection, services located, stop blocks, ladder, dewatering, gas testing.
+3. <strong>Concreting (3)</strong> — five steps (<code>p28</code>); the three risk groups (<code>p30</code>); controls (<code>p31–32</code>) with the two mechanisms (caustic burn, silica dust).
+4. <strong>Control measures (3)</strong> — the hierarchy with a construction example per level <em>(standard)</em>; the deck's site items (<code>p6</code>); the safety philosophy and "legal obligations are the minimum" (<code>p33</code>).</p>
+<hr />
+<h2 id="4-definitions-and-numbers-to-memorise">4. Definitions and numbers to memorise<a class="anchor" href="#4-definitions-and-numbers-to-memorise">#</a></h2>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Value / definition</th>
+<th>Source</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Construction's rank</td>
+<td>second largest industry after agriculture</td>
+<td><code>p3</code></td>
+</tr>
+<tr>
+<td>Fatality shares</td>
+<td>falls 56, collapse 21, vehicle 10, electricity 5, falling objects 4, machinery 3, hot/harmful substance 1 (%)</td>
+<td><code>p7</code></td>
+</tr>
+<tr>
+<td>Small jobs</td>
+<td>the most risky; first week on a new site; end of the day</td>
+<td><code>p5</code></td>
+</tr>
+<tr>
+<td>Scaffold</td>
+<td>temporary structure erected to support access or working platforms</td>
+<td><code>p11</code></td>
+</tr>
+<tr>
+<td>Working platform</td>
+<td>any surface from which work can be carried out or giving access to a place of work</td>
+<td><code>p13</code></td>
+</tr>
+<tr>
+<td>Scaffold types (deck)</td>
+<td>free-standing independent tower; independent tied</td>
+<td><code>p12</code></td>
+</tr>
+<tr>
+<td>Ladder extension</td>
+<td>at least <strong>1 m</strong> beyond the landing place</td>
+<td><code>p10</code></td>
+</tr>
+<tr>
+<td>Roof fatalities</td>
+<td>50% through fragile materials, 30% from edges and openings</td>
+<td><code>p16</code></td>
+</tr>
+<tr>
+<td>Welding fire rule</td>
+<td>within <strong>35 feet</strong> of flammables — cover + fire watcher</td>
+<td><code>p22</code></td>
+</tr>
+<tr>
+<td>Extinguisher</td>
+<td><strong>Class ABC</strong>, gauge full</td>
+<td><code>p22</code></td>
+</tr>
+<tr>
+<td>Excavation support</td>
+<td><strong>&gt;1.25 m</strong> shored or battered; <strong>&gt;2 m</strong> guard rail or barrier</td>
+<td><code>p26</code></td>
+</tr>
+<tr>
+<td>Concrete slab weight</td>
+<td>more than <strong>800 pounds</strong></td>
+<td><code>p30</code></td>
+</tr>
+<tr>
+<td>Arc flash temperature</td>
+<td>up to <strong>35,000 °F</strong></td>
+<td><code>p44</code></td>
+</tr>
+<tr>
+<td>Overhead line clearance</td>
+<td><strong>10 ft</strong> up to 50 kV; 15 / 20 / 25 / 35 / 45 ft to 1,000 kV</td>
+<td><code>p62</code></td>
+</tr>
+<tr>
+<td>First shock thresholds</td>
+<td>1 mA tingle; 5 mA can let go; 6–25 (women) / 9–30 (men) mA let-go; 50–150 mA respiratory arrest; 1,000–4,300 mA heart ceases; 10,000 mA cardiac arrest</td>
+<td><code>p43</code></td>
+</tr>
+<tr>
+<td>Electrocution share</td>
+<td>12% of workplace deaths among young workers; 5% of construction fatalities</td>
+<td><code>p38</code>, <code>p7</code></td>
+</tr>
+<tr>
+<td>Alpha mass</td>
+<td>~7,500 × the mass of an electron; 2n + 2p</td>
+<td><code>p85</code></td>
+</tr>
+<tr>
+<td>Gamma energy</td>
+<td>&gt;100 keV per photon; &gt;200,000 × visible light</td>
+<td><code>p88</code></td>
+</tr>
+<tr>
+<td>Dose units</td>
+<td>1 Gy = 100 rad = 1 J/kg; 1 Sv = 100 rem; rem = rad × QF</td>
+<td><code>p91</code></td>
+</tr>
+<tr>
+<td>Exposure / activity units</td>
+<td>1 R = 2.58 × 10⁻⁴ C/kg; 1 Bq = 1 disintegration/s; 1 Ci = 3.7 × 10¹⁰ Bq</td>
+<td><code>p92</code></td>
+</tr>
+<tr>
+<td>Low-dose line</td>
+<td>&lt;10,000 mrem (100 mSv) over years — no immediate organ effect</td>
+<td><code>p97</code></td>
+</tr>
+<tr>
+<td>Acute dose definition</td>
+<td>≥1 rad to the whole body in a few days at most</td>
+<td><code>p104</code></td>
+</tr>
+<tr>
+<td>Syndrome thresholds</td>
+<td>&gt;100 rad marrow; &gt;450 rad 50% death in 60 days; &gt;1,000 rad GI; &gt;5,000 rad CNS</td>
+<td><code>p104–106</code></td>
+</tr>
+<tr>
+<td>Organ figures</td>
+<td>200–300 rad skin erythema; 125–200 rad ovaries; 600 rad permanent sterilization; 50 rad thyroid benign tumour; 400 rad scalp hair loss at 3 weeks</td>
+<td><code>p107–108</code></td>
+</tr>
+<tr>
+<td>Fetal sensitivity</td>
+<td>first <strong>20 weeks</strong> of pregnancy</td>
+<td><code>p111</code></td>
+</tr>
+<tr>
+<td>Waste split</td>
+<td>LLW ~90%, ILW ~7%, HLW ~3% of volume; HLW 95% of activity; +12,000 t/year</td>
+<td><code>p115–117</code></td>
+</tr>
+<tr>
+<td>Transuranic waste</td>
+<td>alpha-emitting, half-life <strong>&gt;20 years</strong></td>
+<td><code>p113</code></td>
+</tr>
+<tr>
+<td>HLW in the fuel cycle</td>
+<td>~99% of the radioactivity, from reprocessing</td>
+<td><code>p118</code></td>
+</tr>
+<tr>
+<td>Management philosophy</td>
+<td>delay and delay; dilute and disperse; concentrate and contain; recycle and reuse</td>
+<td><code>p121</code></td>
+</tr>
+<tr>
+<td>Vitrification</td>
+<td>HLW immobilised in inert <strong>borosilicate glass</strong></td>
+<td><code>p122</code></td>
+</tr>
+<tr>
+<td>Geological disposal</td>
+<td>first used <strong>1999</strong> in the US; <strong>a few hundred metres</strong> deep</td>
+<td><code>p126</code></td>
+</tr>
+<tr>
+<td>Deep boreholes</td>
+<td><strong>kilometres</strong> deep; facility being created in <strong>Finland</strong></td>
+<td><code>p126</code></td>
+</tr>
+<tr>
+<td>Space disposal cost</td>
+<td>about <strong>$20,000 per kg</strong> to orbit</td>
+<td><code>p127</code></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="5-diagrams-to-be-able-to-draw">5. Diagrams to be able to draw<a class="anchor" href="#5-diagrams-to-be-able-to-draw">#</a></h2>
+<p>Eleven slides in this deck are photographs or diagrams with no explanatory text in the conversion — <code>p29</code>, <code>p36–37</code>, <code>p52</code>, <code>p65</code>, <code>p71–72</code>, <code>p77</code>, <code>p89–90</code>, <code>p94–95</code>, <code>p99</code>, <code>p114</code>, <code>p128–129</code> — so nothing here claims what they show. Draw instead from the pages that state their content in words:</p>
+<table>
+<thead>
+<tr>
+<th>Diagram</th>
+<th>What to draw</th>
+<th>Source</th>
+<th>For</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Scaffold elevation</strong></td>
+<td>Vertical standards, ledgers along the face, transoms across, deck boards on the transoms, base plates on firm ground, and at the working edge a <strong>top rail, mid rail and toe board</strong></td>
+<td><code>p8</code>, <code>p17</code> for rails and toe boards; component names <strong>(standard)</strong></td>
+<td>C1, D1</td>
+</tr>
+<tr>
+<td><strong>Fatality pie / bar</strong></td>
+<td>Seven bars with percentages in order: 56, 21, 10, 5, 4, 3, 1</td>
+<td><code>p7</code></td>
+<td>D1, C10</td>
+</tr>
+<tr>
+<td><strong>Excavation depth section</strong></td>
+<td>Ground line; at <strong>1.25 m</strong> the face marked "shore or batter"; at <strong>2 m</strong> the guard rail and toe board; spoil and plant set back, stop block at the vehicle</td>
+<td><code>p26</code></td>
+<td>C6, B2</td>
+</tr>
+<tr>
+<td><strong>Face support methods</strong></td>
+<td>Three small sections — battered slope, benched steps, shored face with sheeting and struts (a fourth: trench box)</td>
+<td><code>p26</code> (batter/shore); benching and box <strong>(standard)</strong></td>
+<td>C6</td>
+</tr>
+<tr>
+<td><strong>Current-effect ladder</strong></td>
+<td>A vertical bar with the bands labelled 1, 5, 6–30, 50–150, 1,000–4,300, 10,000 mA and the reaction against each</td>
+<td><code>p43</code></td>
+<td>C4, B4, D2</td>
+</tr>
+<tr>
+<td><strong>Shock circuit + earthing</strong></td>
+<td>Left: live part → hand → trunk → feet → earth. Right: the same fault with the casing earthed and a <strong>GFCI in the supply</strong>, tripping on the imbalance between outgoing and returning current</td>
+<td><code>p41</code>, <code>p50</code>, <code>p63</code></td>
+<td>B8, C2</td>
+</tr>
+<tr>
+<td><strong>Overhead-line clearance</strong></td>
+<td>A line on poles with a vertical dimension "10 ft minimum" for &lt;50 kV, and a small table of the rising distances</td>
+<td><code>p59–62</code></td>
+<td>B8, C2</td>
+</tr>
+<tr>
+<td><strong>Radiation penetration</strong></td>
+<td>Three arrows through barriers: alpha stopped by paper/dead skin; beta by a few mm of aluminium; gamma reduced only by thick lead or concrete</td>
+<td>alpha per <code>p85</code>; beta/gamma materials <strong>(standard)</strong></td>
+<td>C8, B9</td>
+</tr>
+<tr>
+<td><strong>Waste classification</strong></td>
+<td>A pie or stacked bar: 90% LLW, 7% ILW, 3% HLW by volume, with a second bar showing 95% of activity in the 3%</td>
+<td><code>p115–117</code></td>
+<td>C3, B11, D3</td>
+</tr>
+<tr>
+<td><strong>Disposal depth section</strong></td>
+<td>One vertical section with depth bands: near-surface (a few metres, LLW) → vaults and silos (tens to hundreds of metres, ILW) → geological repository (a few hundred metres, HLW) → deep borehole (kilometres)</td>
+<td><code>p124–126</code></td>
+<td>C3, D3</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Also worth sketching, one line each:</strong> the five concreting steps as a flow (<code>p28</code>); the hierarchy of control as a pyramid (<code>standard</code>); the BESAFE six around "electricity" (<code>p38</code>).</p>
+<hr />
+<h2 id="6-say-this-if-grilled">6. Say-this-if-grilled<a class="anchor" href="#6-say-this-if-grilled">#</a></h2>
+<ol>
+<li><strong>On why falls dominate:</strong> "Falls are 56% of construction deaths because the workplace is at height and the edge is a design decision, not an accident. Guard rails, fixed and marked hole covers and inspected scaffolding remove most of it; the harness only catches what the edge protection misses."</li>
+<li><strong>On small jobs:</strong> "The deck says small building jobs are the most risky, and the reason is organisational — no induction, no scaffold, a borrowed ladder, no supervisor. The same fall from the same height kills whether the job cost ten lakh or ten crore."</li>
+<li><strong>On the two time peaks:</strong> "The first week on a new site and the last hour of the day. Both are boundaries, so both take supervision: induction before the first task, and a check before the shift breaks."</li>
+<li><strong>On 1.25 m and 2 m:</strong> "Two different risks, two different numbers. At 1.25 m the face can kill you, so it is shored or battered. At 2 m a fall into the hole becomes a fall from height, so it gets a guard rail. They are minimums — in running sand or made ground, support earlier."</li>
+<li><strong>On the deck's bluntest line:</strong> "'There is no safe ground that will not collapse.' Soil has almost no tensile strength; what holds a face is friction and the ground you removed. Support goes in before entry, not after a crack appears."</li>
+<li><strong>On welding's ranked risks:</strong> "Electrocution is the most immediate and serious risk for a welder, but flammable material around the work is the number-one cause of fire. That is why the answer has both a dry-glove rule and a 35-foot rule with a fire watcher."</li>
+<li><strong>On concreting:</strong> "Two mechanisms, not one. Wet cement is strongly alkaline, so a splash left inside a boot causes third-degree burns. Cement and aggregate dust are respirable, and the silica is the same hazard as in any other trade."</li>
+<li><strong>On the fuse-versus-GFCI distinction:</strong> "A fuse or MCB protects the cable — 50 milliamps through a person will never blow a 16 amp fuse. A GFCI protects the person: it senses current going somewhere other than back through the return conductor and cuts the duration of the shock."</li>
+<li><strong>On low voltage:</strong> "The deck puts it in capitals: low voltage does not mean low hazard. 230 volts drives tens of milliamperes through a wet hand — past the let-go threshold and into respiratory arrest. Most fatalities are at mains voltage, not transmission voltage."</li>
+<li><strong>On the let-go band:</strong> "6 to 25 milliamperes for women, 9 to 30 for men. The forearm flexors contract harder than the extensors can oppose, the hand closes on the conductor, and the exposure continues until something else breaks the circuit. That is why duration matters more than voltage."</li>
+<li><strong>On voltage fluctuation:</strong> "It is not only an equipment problem. A fuse and an MCB's thermal element respond to current over time, not to voltage, so a sustained over-voltage heats the cable while the device reads normal — and a transient can leave an RCD installed but no longer responding. Protection present on the board and absent in fact."</li>
+<li><strong>On the ionizing line:</strong> "Energy is the dividing line. Ionizing radiation removes electrons and produces ions and free radicals that can alter DNA; non-ionizing only excites the electron, so it heats tissue and, prolonged, inflames the eye, burns skin, and can cause tumours or reduced fertility."</li>
+<li><strong>On alpha:</strong> "Harmless outside, lethal inside. It cannot cross paper or the dead layer of skin, which means the control is containment — no inhalation, no ingestion — not a thicker apron."</li>
+<li><strong>On the syndrome ladder:</strong> "It is anatomical, not arbitrary: the fastest-dividing cells fail first. Marrow above 100 rad, gut above 1,000, CNS above 5,000 — and 450 rad whole body is the dose at which half an exposed population dies within 60 days without medical attention."</li>
+<li><strong>On why waste is classified:</strong> "Volume and hazard are inversely related — 3% of the waste carries 95% of the radioactivity. That is why HLW is vitrified into borosilicate glass, held for cooling and surveillance, and buried hundreds of metres down, while 90% of the volume needs no shielding at all."</li>
+<li><strong>On disposal versus storage:</strong> "Vitrification and interim storage are management steps; disposal is the final emplacement in a facility designed for containment and isolation with natural and engineered barriers. Called 'storage', the answer is wrong before it starts."</li>
+<li><strong>On space disposal:</strong> "It removes the waste from the biosphere entirely, which is its only advantage — and it fails on launch risk, on volume per launch, and on cost at about 20,000 dollars a kilogram to orbit. It is the answer to 'why not', not to 'how'."</li>
+<li><strong>If asked something the deck doesn't cover</strong> (voltage fluctuation, scaffold component names, beta shielding, sea disposal): "The deck treats this generally; the standard practice is…" — then give the mechanism. Never invent a number and attribute it to the slide.</li>
+</ol>
+  </main>
+</div>
+<button id="chat-btn" title="Ask about this page (select text first)">✳</button>
+<div id="sel-chip">Ask about this</div>
+<div id="chat-panel" role="dialog" aria-label="Ask about this page">
+  <div id="chat-head"><span>Ask this page</span><span class="sp"></span><button id="chat-close" title="Close">✕</button></div>
+  <div id="chat-quote"></div>
+  <div id="chat-log"></div>
+  <form id="chat-form" autocomplete="off">
+    <textarea id="chat-input" rows="1" placeholder="Ask about the selection or the section…"></textarea>
+    <button id="chat-send" title="Send">↑</button>
+  </form>
+  <div id="chat-foot">Select text → “Ask about this”. Enter sends, Shift+Enter newline.</div>
+</div>
+<div class="tools">
+  <button id="theme" title="Toggle light / dark">☾</button>
+  <button id="top" title="Back to top">↑</button>
+</div>
+<script>
+(function(){
+  var root=document.documentElement, key='minotes-theme';
+  var saved=localStorage.getItem(key);
+  var prefers=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';
+  root.setAttribute('data-theme', saved || prefers);
+
+  var btn=document.getElementById('theme');
+  function sync(){ if(btn) btn.textContent = root.getAttribute('data-theme')==='dark' ? '\u2600' : '\u263E'; }
+  sync();
+  if(btn) btn.addEventListener('click',function(){
+    var next = root.getAttribute('data-theme')==='dark' ? 'light' : 'dark';
+    root.setAttribute('data-theme', next); localStorage.setItem(key,next); sync();
+  });
+
+  var bar=document.getElementById('progress');
+  if(bar) addEventListener('scroll',function(){
+    var h=document.documentElement.scrollHeight-innerHeight;
+    bar.style.width=(h>0?(scrollY/h*100):0)+'%';
+  },{passive:true});
+
+  document.querySelectorAll('pre').forEach(function(pre){
+    var b=document.createElement('button');
+    b.className='copy'; b.textContent='copy';
+    b.addEventListener('click',function(){
+      var t=pre.querySelector('code'); var txt=t?t.innerText:pre.innerText;
+      navigator.clipboard.writeText(txt).then(function(){
+        b.textContent='copied'; setTimeout(function(){b.textContent='copy';},1200);
+      });
+    });
+    pre.appendChild(b);
+  });
+
+  document.querySelectorAll('main table').forEach(function(t){
+    if(t.parentElement.classList.contains('table-scroll')) return;
+    var w=document.createElement('div'); w.className='table-scroll';
+    t.parentNode.insertBefore(w,t); w.appendChild(t);
+  });
+
+  var links=[].slice.call(document.querySelectorAll('.sidebar a[href^="#"]'));
+  var map={}; links.forEach(function(a){ map[a.getAttribute('href').slice(1)]=a; });
+  var heads=[].slice.call(document.querySelectorAll('main h2[id], main h3[id]'));
+  if('IntersectionObserver' in window && heads.length){
+    var obs=new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if(!e.isIntersecting) return;
+        links.forEach(function(a){a.classList.remove('active');});
+        var a=map[e.target.id]; if(a){a.classList.add('active');}
+      });
+    },{rootMargin:'-10% 0px -75% 0px'});
+    heads.forEach(function(h){obs.observe(h);});
+  }
+
+  var top=document.getElementById('top');
+  if(top) top.addEventListener('click',function(){ scrollTo({top:0,behavior:'smooth'}); });
+})();
+
+(function(){
+  var API="/api/chat";
+  var panel=document.getElementById("chat-panel"),
+      btn=document.getElementById("chat-btn"),
+      chip=document.getElementById("sel-chip"),
+      quote=document.getElementById("chat-quote"),
+      log=document.getElementById("chat-log"),
+      input=document.getElementById("chat-input"),
+      send=document.getElementById("chat-send"),
+      form=document.getElementById("chat-form");
+
+  if(!panel) return;
+  var pendingSelection="", busy=false, lastSelection="";
+
+  function esc(s){return s.replace(/[&<>]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;"}[c];});}
+
+  // minimal markdown: fenced code, inline code, bold, bullets, numbered lists
+  function md(src){
+    var parts=src.split(/```/), out="";
+    for(var i=0;i<parts.length;i++){
+      if(i%2){ out+="<pre><code>"+esc(parts[i].replace(/^\w*\n/,""))+"</code></pre>"; continue; }
+      var t=esc(parts[i]);
+      t=t.replace(/`([^`\n]+)`/g,"<code>$1</code>").replace(/\*\*([^*]+)\*\*/g,"<b>$1</b>");
+      var lines=t.split(/\n/), html="", inUl=false, inOl=false;
+      for(var j=0;j<lines.length;j++){
+        var line=lines[j];
+        if(/^\s*[-*]\s+/.test(line)){
+          if(inOl){html+="</ol>";inOl=false;}
+          if(!inUl){html+="<ul>";inUl=true;}
+          html+="<li>"+line.replace(/^\s*[-*]\s+/,"")+"</li>"; continue;
+        }
+        if(/^\s*\d+[.)]\s+/.test(line)){
+          if(inUl){html+="</ul>";inUl=false;}
+          if(!inOl){html+="<ol>";inOl=true;}
+          html+="<li>"+line.replace(/^\s*\d+[.)]\s+/,"")+"</li>"; continue;
+        }
+        if(inUl){html+="</ul>";inUl=false;}
+        if(inOl){html+="</ol>";inOl=false;}
+        if(line.trim()==="") continue;
+        html+="<p>"+line+"</p>";
+      }
+      if(inUl)html+="</ul>";
+      if(inOl)html+="</ol>";
+      out+=html;
+    }
+    return out;
+  }
+
+  function outline(){
+    return [].slice.call(document.querySelectorAll("main h2, main h3")).slice(0,40)
+      .map(function(h){return (h.tagName==="H3"?"  - ":"- ")+h.textContent.replace(/#$/,"").trim();}).join("\n");
+  }
+
+  function sectionFor(node){
+    var el = node && (node.nodeType===1?node:node.parentElement);
+    if(!el || !el.closest) return "";
+    el = el.closest("main") ? el : null;
+    if(!el) return "";
+    var heads=[].slice.call(document.querySelectorAll("main h2, main h3"));
+    var cur=null, idx=-1;
+    for(var i=0;i<heads.length;i++){
+      if(heads[i].compareDocumentPosition(el) & Node.DOCUMENT_POSITION_FOLLOWING) { cur=heads[i]; idx=i; }
+    }
+    if(!cur) return "";
+    var stop = heads[idx+1] || null, txt=[], n=cur;
+    while((n=n.nextSibling) && n!==stop){ if(n.textContent) txt.push(n.textContent); }
+    return (cur.textContent+"\n"+txt.join("\n")).replace(/\s+\n/g,"\n").slice(0,3000);
+  }
+
+  function placeChip(x,y){
+    chip.style.left=x+"px"; chip.style.top=(y+window.scrollY-8)+"px"; chip.style.display="block";
+  }
+  function hideChip(){ chip.style.display="none"; }
+
+  document.addEventListener("mouseup",function(e){
+    setTimeout(function(){
+      var s=window.getSelection(), text=s?s.toString().trim():"";
+      if(!text || text.length<3 || !s.anchorNode || !(s.anchorNode.parentElement||s.anchorNode).closest("main")){hideChip();return;}
+      lastSelection=text;
+      var r=s.getRangeAt(0).getBoundingClientRect();
+      placeChip(r.left+r.width/2, Math.max(r.top,8));
+    },10);
+  });
+  document.addEventListener("mousedown",function(e){ if(e.target!==chip) hideChip(); });
+
+  chip.addEventListener("mousedown",function(e){ e.preventDefault(); });
+  chip.addEventListener("click",function(e){
+    e.stopPropagation();
+    pendingSelection=lastSelection; hideChip(); open(pendingSelection);
+  });
+
+  function open(sel){
+    panel.classList.add("open");
+    if(sel){ quote.style.display="block"; quote.textContent=sel; pendingSelection=sel; }
+    else { quote.style.display="none"; quote.textContent=""; pendingSelection=""; }
+    setTimeout(function(){input.focus();},60);
+  }
+  function close(){ panel.classList.remove("open"); }
+
+  btn.addEventListener("click",function(){ panel.classList.contains("open")?close():open(lastSelection||""); });
+  document.getElementById("chat-close").addEventListener("click",close);
+  document.addEventListener("keydown",function(e){ if(e.key==="Escape") close(); });
+
+  function addMsg(cls,html){
+    var d=document.createElement("div"); d.className="msg "+cls; d.innerHTML=html; log.appendChild(d);
+    log.scrollTop=log.scrollHeight; return d;
+  }
+
+  async function ask(q){
+    if(busy||!q.trim()) return;
+    busy=true; send.disabled=true;
+    addMsg("user",esc(q));
+    var bot=addMsg("bot",'<span class="cursor"></span>');
+    var acc="";
+    var sid=sessionStorage.getItem("mn-sid");
+    if(!sid){ sid=(crypto.randomUUID?crypto.randomUUID():String(Date.now())+Math.random().toString(16).slice(2)); sessionStorage.setItem("mn-sid",sid); }
+    var payload={q:q, sid:sid, sel:pendingSelection||"", page:document.querySelector("h1")?document.querySelector("h1").textContent.trim():document.title,
+                 section:sectionFor(window.getSelection()&&window.getSelection().anchorNode?"":document.querySelector("main h2"))||"",
+                 outline:outline()};
+    // section: prefer the one containing the selection, else the first heading on screen
+    try{
+      var sel=window.getSelection();
+      if(pendingSelection && sel && sel.anchorNode){ payload.section=sectionFor(sel.anchorNode); }
+      if(!payload.section){
+        var vis=[].slice.call(document.querySelectorAll("main h2, main h3")).filter(function(h){
+          var r=h.getBoundingClientRect(); return r.top>-80 && r.top<window.innerHeight*0.6; }).pop();
+        if(vis) payload.section=sectionFor(vis);
+      }
+    }catch(_){}
+
+    try{
+      var res=await fetch(API,{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify(payload)});
+      if(!res.ok){
+        var j=await res.json().catch(function(){return{};});
+        throw new Error(j.error||("HTTP "+res.status));
+      }
+      var reader=res.body.getReader(), dec=new TextDecoder(), buf="";
+      for(;;){
+        var r=await reader.read(); if(r.done) break;
+        buf+=dec.decode(r.value,{stream:true});
+        var lines=buf.split("\n"); buf=lines.pop()||"";
+        for(var i=0;i<lines.length;i++){
+          var l=lines[i].trim(); if(l.indexOf("data:")!==0) continue;
+          var d=l.slice(5).trim(); if(d==="[DONE]") continue;
+          try{ var o=JSON.parse(d); if(o.d){acc+=o.d; bot.innerHTML=md(acc)+'<span class="cursor"></span>'; log.scrollTop=log.scrollHeight;} if(o.error) throw new Error(o.error);}catch(_){}
+        }
+      }
+      bot.innerHTML=md(acc||"_no answer_");
+    }catch(err){
+      bot.className="msg err";
+      bot.textContent = String(err.message).indexOf("Failed to fetch")>-1 || String(err.message).indexOf("HTTP 5")>-1
+        ? "Assistant unavailable — it only works on the deployed site (needs the /api/chat function)."
+        : "Error: "+err.message;
+    }finally{
+      busy=false; send.disabled=false; input.value=""; input.focus();
+      pendingSelection=""; quote.style.display="none";
+    }
+  }
+
+  form.addEventListener("submit",function(e){ e.preventDefault(); ask(input.value); });
+  input.addEventListener("keydown",function(e){
+    if(e.key==="Enter"&&!e.shiftKey){ e.preventDefault(); ask(input.value); }
+  });
+  input.addEventListener("input",function(){ input.style.height="auto"; input.style.height=Math.min(input.scrollHeight,110)+"px"; });
+})();
+</script>
+</body>
+</html>

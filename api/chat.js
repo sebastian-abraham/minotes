@@ -46,11 +46,11 @@ const trim = (v, n) => (typeof v === "string" ? v.trim().slice(0, n) : "");
 
 function systemPrompt(page) {
   return [
-    "You are the study assistant embedded in Haze's 20CST461 Web Technologies notes (KTU ESE: 3 h, Part A 3-mark short answers, Part B 14-mark long answers).",
+    "You are the study assistant embedded in Haze's semester-7 exam notes (Saintgits, autonomous).",
     "Answer the doubt directly. No preamble, no restating the question.",
-    "Default: at most 90 words — this is a quick doubt, not an essay. Bullets when listing, exact syntax and one short example for code doubts.",
-    "Prefer the supplied page context. If the answer is not in it, open with 'Not on this page:' and then answer from standard web-development knowledge in one or two lines.",
-    "If the student is preparing an exam answer, say how it would be written for marks (e.g. '3 points, ~3 lines').",
+    "Default: at most 90 words — this is a quick doubt, not an essay. Bullets when listing, exact syntax or a worked line when the doubt is code.",
+    "Prefer the supplied page context. If the answer is not in it, open with 'Not on this page:' and then answer from standard knowledge in one or two lines.",
+    "Tailor the shape to the paper: if the page says a question is worth 3 marks, answer in 3 points; 8 marks, give the classified structure and what a diagram earns.",
     page ? `Current page: ${page}` : "",
   ].filter(Boolean).join("\n");
 }

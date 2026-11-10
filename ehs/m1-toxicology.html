@@ -1,0 +1,1448 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Module 1 — Occupational Health and Toxicology · Environmental Health &amp; Safety</title>
+<style>
+:root{
+  --bg:#fbfaf8; --panel:#ffffff; --ink:#232120; --muted:#5f5a53; --line:#e6e1da;
+  --accent:#7a4fd0; --accent-soft:#f1ecfb; --code-bg:#f5f2ee; --code-ink:#2b2a28;
+  --warn-bg:#fff8e6; --warn-line:#f0d9a0;
+  --sans:"Inter","Segoe UI",system-ui,-apple-system,"Noto Sans",sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,"SF Mono",Menlo,Consolas,"Fira Code",monospace;
+}
+html[data-theme="dark"]{
+  --bg:#141317; --panel:#1b1a20; --ink:#e8e4de; --muted:#a8a199; --line:#2f2c36;
+  --accent:#b79cf5; --accent-soft:#241f33; --code-bg:#22202a; --code-ink:#e8e4de;
+  --warn-bg:#2a2417; --warn-line:#4a3d22;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0; background:var(--bg); color:var(--ink); font-family:var(--sans);
+  font-size:16.5px; line-height:1.72; -webkit-font-smoothing:antialiased;
+}
+#progress{position:fixed;top:0;left:0;height:3px;width:0;background:var(--accent);z-index:50;transition:width .1s linear}
+
+.wrap{display:flex;align-items:flex-start;min-height:100vh}
+.sidebar{
+  position:sticky;top:0;height:100vh;width:300px;flex:0 0 300px;overflow-y:auto;
+  padding:26px 20px 60px;border-right:1px solid var(--line);background:var(--panel);
+}
+.sidebar h1{font-size:15px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);
+  margin:0 0 4px;font-weight:600}
+.sidebar .sub{font-size:12.5px;color:var(--muted);margin:0 0 18px}
+.sidebar nav{font-size:14px}
+.sidebar .toc>ul{padding-left:0}
+.sidebar ul{list-style:none;margin:0;padding-left:12px}
+.sidebar ul ul{border-left:1px solid var(--line);margin-left:4px;padding-left:10px}
+.sidebar li{margin:3px 0}
+.sidebar a{color:var(--ink);text-decoration:none;display:block;padding:3px 8px;border-radius:8px;
+  line-height:1.35;transition:background .12s,color .12s}
+.sidebar a:hover{background:var(--accent-soft);color:var(--accent)}
+.sidebar a.active{background:var(--accent-soft);color:var(--accent);font-weight:600}
+.sidebar .home{display:inline-flex;align-items:center;gap:6px;margin-bottom:16px;font-size:13.5px;
+  color:var(--muted);text-decoration:none;border:1px solid var(--line);padding:5px 10px;border-radius:999px}
+.sidebar .home:hover{color:var(--accent);border-color:var(--accent)}
+
+main{flex:1;min-width:0;padding:46px 56px 120px;max-width:980px;margin:0 auto}
+.doc-head{border-bottom:1px solid var(--line);padding-bottom:18px;margin-bottom:34px}
+.doc-head .kicker{font-size:12.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);
+  font-weight:700;margin-bottom:8px}
+.doc-head .meta{font-size:13.5px;color:var(--muted)}
+
+h1,h2,h3,h4{line-height:1.25;font-weight:700;letter-spacing:-.01em}
+h1{font-size:2.05rem;margin:.2em 0 .5em}
+h2{font-size:1.55rem;margin:2.4em 0 .7em;padding-bottom:.35em;border-bottom:1px solid var(--line)}
+h3{font-size:1.2rem;margin:1.9em 0 .55em}
+h4{font-size:1.03rem;margin:1.5em 0 .45em;color:var(--muted)}
+h2 .anchor,h3 .anchor{opacity:0;margin-left:.35em;font-size:.8em;color:var(--muted);text-decoration:none}
+h2:hover .anchor,h3:hover .anchor{opacity:1}
+p{margin:.75em 0}
+a{color:var(--accent);text-underline-offset:2px}
+strong{font-weight:650}
+hr{border:0;border-top:1px solid var(--line);margin:2.6em 0}
+ul,ol{margin:.7em 0;padding-left:1.4em}
+li{margin:.3em 0}
+li>ul,li>ol{margin:.25em 0}
+blockquote{
+  margin:1.3em 0;padding:12px 18px;background:var(--warn-bg);border-left:3px solid var(--warn-line);
+  border-radius:0 10px 10px 0;color:var(--ink)
+}
+blockquote p{margin:.3em 0}
+
+code{font-family:var(--mono);font-size:.87em;background:var(--code-bg);color:var(--code-ink);
+  padding:.15em .38em;border-radius:6px;border:1px solid var(--line);
+  box-decoration-break:clone;-webkit-box-decoration-break:clone;overflow-wrap:anywhere}
+pre{position:relative;background:var(--code-bg);border:1px solid var(--line);border-radius:12px;
+  padding:16px 18px;overflow-x:auto;margin:1.1em 0}
+pre code{background:none;border:0;padding:0;font-size:13.6px;line-height:1.62;white-space:pre}
+.copy{position:absolute;top:8px;right:8px;font:600 11px/1 var(--sans);color:var(--muted);
+  background:var(--panel);border:1px solid var(--line);border-radius:7px;padding:5px 8px;cursor:pointer;
+  opacity:0;transition:opacity .15s}
+pre:hover .copy{opacity:1}
+.copy:hover{color:var(--accent);border-color:var(--accent)}
+
+.table-scroll{overflow-x:auto;margin:1.3em 0;border:1px solid var(--line);border-radius:12px;background:var(--panel)}
+table{border-collapse:collapse;width:100%;font-size:14.6px}
+th,td{padding:9px 13px;text-align:left;vertical-align:top;border-bottom:1px solid var(--line)}
+th{background:var(--accent-soft);font-weight:650;font-size:13px;letter-spacing:.02em;
+  position:sticky;top:0;backdrop-filter:blur(4px)}
+tr:last-child td{border-bottom:0}
+tbody tr:nth-child(even){background:color-mix(in srgb,var(--panel) 60%,var(--bg))}
+tbody tr:hover{background:var(--accent-soft)}
+
+.tools{position:fixed;right:22px;bottom:22px;display:flex;flex-direction:column;gap:8px;z-index:40}
+.tools button{width:42px;height:42px;border-radius:12px;border:1px solid var(--line);background:var(--panel);
+  color:var(--ink);cursor:pointer;font-size:16px;box-shadow:0 4px 14px rgba(0,0,0,.10)}
+.tools button:hover{color:var(--accent);border-color:var(--accent)}
+@media (max-width:1000px){
+  .wrap{display:block}
+  .sidebar{position:static;width:auto;height:auto;border-right:0;border-bottom:1px solid var(--line)}
+  .sidebar nav{max-height:40vh;overflow:auto}
+  main{padding:28px 20px 100px}
+}
+@media print{
+  .sidebar,.tools,#progress,.copy{display:none!important}
+  body{background:#fff;color:#000;font-size:11pt}
+  main{padding:0;max-width:none}
+  h2{break-after:avoid} pre,table,blockquote{break-inside:avoid}
+  a{color:#000;text-decoration:none}
+}
+
+/* ---- ask-about-this ---- */
+#chat-btn{position:fixed;right:20px;bottom:112px;width:44px;height:44px;border-radius:50%;
+  border:1px solid var(--line);background:var(--panel);color:var(--accent);cursor:pointer;font-size:17px;
+  box-shadow:0 6px 18px rgba(0,0,0,.12);z-index:45;display:grid;place-items:center}
+#chat-btn:hover{border-color:var(--accent)}
+#sel-chip{position:absolute;z-index:46;transform:translate(-50%,-100%);background:var(--ink);color:var(--bg);
+  font:600 12px/1 var(--sans);padding:7px 11px;border-radius:999px;cursor:pointer;white-space:nowrap;
+  box-shadow:0 6px 18px rgba(0,0,0,.25);display:none}
+#sel-chip:hover{background:var(--accent);color:#fff}
+#chat-panel{position:fixed;right:20px;bottom:164px;width:min(420px,calc(100vw - 40px));max-height:min(70vh,620px);
+  background:var(--panel);border:1px solid var(--line);border-radius:14px;z-index:47;display:none;
+  flex-direction:column;box-shadow:0 18px 50px rgba(0,0,0,.18);overflow:hidden}
+#chat-panel.open{display:flex}
+#chat-head{display:flex;align-items:center;gap:8px;padding:11px 13px;border-bottom:1px solid var(--line);
+  font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:700}
+#chat-head .sp{flex:1}
+#chat-head button{background:none;border:0;color:var(--muted);cursor:pointer;font-size:15px;padding:2px 4px}
+#chat-head button:hover{color:var(--accent)}
+#chat-quote{display:none;margin:10px 13px 0;padding:8px 10px;border-left:2px solid var(--accent);
+  background:var(--accent-soft);color:var(--muted);font-size:12.5px;border-radius:0 8px 8px 0;
+  max-height:84px;overflow:auto;white-space:pre-wrap}
+#chat-log{flex:1;overflow-y:auto;padding:12px 13px;display:flex;flex-direction:column;gap:10px;font-size:13.6px;line-height:1.55}
+.msg{max-width:100%}
+.msg.user{align-self:flex-end;background:var(--accent-soft);color:var(--ink);padding:7px 11px;border-radius:11px 11px 2px 11px;
+  max-width:86%;white-space:pre-wrap}
+.msg.bot{color:var(--ink)}
+.msg.bot p{margin:.3em 0}
+.msg.bot ul{margin:.3em 0;padding-left:1.15em}
+.msg.bot code{font-size:.9em}
+.msg.bot pre{background:var(--code-bg);border-radius:8px;padding:9px 11px;overflow-x:auto;font-size:12px;margin:.4em 0}
+.msg.err{color:#b3261e;font-size:12.5px}
+.msg .cursor:after{content:"▍";color:var(--accent);animation:blink 1s steps(2) infinite}
+@keyframes blink{50%{opacity:0}}
+#chat-form{display:flex;gap:8px;padding:10px 13px;border-top:1px solid var(--line)}
+#chat-input{flex:1;resize:none;border:1px solid var(--line);border-radius:9px;background:var(--bg);color:var(--ink);
+  font:inherit;font-size:13.5px;padding:8px 10px;max-height:110px;min-height:38px}
+#chat-input:focus{outline:2px solid var(--accent);outline-offset:0}
+#chat-send{border:1px solid var(--accent);background:var(--accent);color:#fff;border-radius:9px;
+  width:38px;cursor:pointer;font-size:15px}
+#chat-send:disabled{opacity:.45;cursor:default}
+#chat-foot{font-size:11px;color:var(--muted);padding:0 13px 9px}
+@media (max-width:640px){
+  #chat-panel{right:8px;left:8px;width:auto;bottom:150px;max-height:66vh}
+  #chat-btn{bottom:104px;right:16px}
+}
+@media print{#chat-btn,#chat-panel,#sel-chip{display:none!important}}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+<div class="wrap">
+  <aside class="sidebar">
+    <a class="home" href="index.html">← Environmental Health &amp; Safety</a>
+    <a class="home" href="practice.html">Practice drills</a>
+    <h1>M1 · Health &amp; toxicology</h1>
+    <p class="sub">20% ESE · CO1</p>
+    <nav class="toc"><div class="toc">
+<ul>
+<li><a href="#1-coverage-syllabus-bullet-section">1. Coverage — syllabus bullet → section</a></li>
+<li><a href="#2-concepts">2. Concepts</a><ul>
+<li><a href="#21-occupational-safety-and-health-4-5-6-7">2.1 Occupational safety and health (<code>slide 8</code>, <code>slide 12</code>, <code>slide 13</code>, <code>slide 14</code>)</a></li>
+<li><a href="#22-toxicology-the-vocabulary-16-17-18-19-20">2.2 Toxicology — the vocabulary (<code>slide 16</code>, <code>slide 18</code>, <code>slide 19</code>, <code>slide 101</code>, <code>slide 105</code>)</a></li>
+<li><a href="#23-safety-at-work-the-socio-economic-reasons-27-2829">2.3 Safety at work — the socio-economic reasons (<code>slide 15</code>, <code>slide 20</code>–<code>slide 27</code>)</a></li>
+<li><a href="#24-health-and-safety-in-various-industries-4546">2.4 Health and safety in various industries (<code>slide 28</code>–<code>slide 32</code>)</a></li>
+<li><a href="#25-occupational-disease-definition-and-time-frame-55-56-57">2.5 Occupational disease — definition and time frame (<code>slide 33</code>, <code>slide 35</code>, <code>slide 36</code>)</a></li>
+<li><a href="#26-musculoskeletal-disorders-6465">2.6 Musculoskeletal disorders (<code>slide 67</code>–<code>slide 72</code>)</a></li>
+<li><a href="#27-hearing-impairment-7677">2.7 Hearing impairment (<code>slide 73</code>–<code>slide 77</code>)</a></li>
+<li><a href="#28-carcinogens-86-87-88">2.8 Carcinogens (<code>slide 36</code>, <code>slide 105</code>, <code>notes §1.6</code>)</a></li>
+<li><a href="#29-silicosis-asbestosis-pneumoconiosis-94-95-name-them-9697-are-image-only-so-the-detail-below-is-98">2.9 Silicosis, asbestosis, pneumoconiosis (<code>slide 7</code>, <code>slide 33</code> name them; <code>slide 37</code>–<code>slide 66</code> are image-only, so the detail below is <code>notes §1.6</code>)</a></li>
+<li><a href="#210-toxic-materials-and-substances-used-in-work-99-100-101">2.10 Toxic materials and substances used in work (<code>slide 19</code>, <code>slide 101</code>, <code>notes §1.7</code>)</a></li>
+<li><a href="#211-exposure-limits-104-105-106">2.11 Exposure limits (<code>slide 102</code>, <code>slide 103</code>, <code>slide 104</code>)</a></li>
+<li><a href="#212-toxicological-investigation-113-vocabulary-from-114115">2.12 Toxicological investigation (<code>notes §1.7</code>; vocabulary from <code>slide 101</code>–<code>slide 105</code>)</a></li>
+<li><a href="#213-industrial-hygiene-116117">2.13 Industrial hygiene (<code>slide 106</code>–<code>slide 108</code>)</a></li>
+<li><a href="#214-organisational-arrangements-to-protect-workers-123124-125-126">2.14 Organisational arrangements to protect workers (<code>slide 80</code>–<code>slide 82</code>, <code>slide 109</code>; <code>notes §1.8</code>)</a></li>
+</ul>
+</li>
+<li><a href="#3-answer-bank">3. Answer bank</a><ul>
+<li><a href="#31-three-mark-answers">3.1 Three-mark answers</a></li>
+<li><a href="#32-five-mark-answers">3.2 Five-mark answers</a></li>
+<li><a href="#33-seven-and-eight-mark-answers">3.3 Seven- and eight-mark answers</a></li>
+<li><a href="#34-fourteen-mark-skeleton-ese-part-b-one-question-from-this-module">3.4 Fourteen-mark skeleton (ESE Part B, one question from this module)</a></li>
+</ul>
+</li>
+<li><a href="#4-definitions-and-numbers-to-memorise">4. Definitions and numbers to memorise</a></li>
+<li><a href="#5-diagrams-to-be-able-to-draw">5. Diagrams to be able to draw</a></li>
+<li><a href="#6-say-this-if-grilled">6. Say-this-if-grilled</a></li>
+</ul>
+</div>
+</nav>
+  </aside>
+  <main>
+    <div class="doc-head">
+      <div class="kicker">20CET453 · Environmental Health &amp; Safety</div>
+      <div class="meta">20% ESE · CO1 · rendered from KIT_M1_TOXICOLOGY.md</div>
+    </div>
+    <h1 id="module-1-occupational-health-and-toxicology">Module 1 — Occupational Health and Toxicology</h1>
+<p><strong>20CET453 Environmental Health and Safety · B.Tech Civil, Sem 7 (Saintgits, autonomous) · ESE: this module supplies 2 Part-A questions (3 marks each) and the first Part-B question (14 marks) — 20 of 100.</strong> Module I is the definition-and-list module: five one-hour syllabus lines, and every question ever asked on it is answerable as a definition, a classified list, a set of effects, or a set of controls. Sources: <code>ehs_1.txt</code> (<code>slide N</code>); <code>friend_notes.md</code> §1.1–1.8 (cited throughout as <code>notes §x</code>). Values marked <strong>(standard)</strong> are exam-standard but appear in neither the deck nor the notes.</p>
+<hr />
+<h2 id="1-coverage-syllabus-bullet-section">1. Coverage — syllabus bullet → section<a class="anchor" href="#1-coverage-syllabus-bullet-section">#</a></h2>
+<table>
+<thead>
+<tr>
+<th>Syllabus line (verbatim)</th>
+<th>Hrs</th>
+<th>Answered at</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Introduction to occupational health and toxicology; safety at work — socio-economic reasons</td>
+<td>1</td>
+<td>§2.1, §2.2, §2.3</td>
+</tr>
+<tr>
+<td>Introduction to health and safety at various industries</td>
+<td>1</td>
+<td>§2.4</td>
+</tr>
+<tr>
+<td>Occupational diseases — musculoskeletal disorders — hearing impairment — carcinogens — silicosis — asbestosis and pneumoconiosis</td>
+<td>1</td>
+<td>§2.5, §2.6, §2.7, §2.8, §2.9</td>
+</tr>
+<tr>
+<td>Toxic materials and substances used in work — exposure limits — toxicological investigation</td>
+<td>1</td>
+<td>§2.10, §2.11, §2.12</td>
+</tr>
+<tr>
+<td>Industrial hygiene — arrangements by organisations to protect workers</td>
+<td>1</td>
+<td>§2.13, §2.14</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>Internal question</th>
+<th>Paper</th>
+<th>Marks</th>
+<th>Answered at</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Describe silicosis.</td>
+<td>IT1, Sep 2024, A1</td>
+<td>3</td>
+<td>§3.1 B · §2.9</td>
+</tr>
+<tr>
+<td>Enlist the objectives of occupational health.</td>
+<td>IT1, Sep 2024, A3</td>
+<td>3</td>
+<td>§3.1 A · §2.1</td>
+</tr>
+<tr>
+<td>Summarize preventive measures of various occupational diseases.</td>
+<td>IT1, Sep 2024, B7</td>
+<td>8</td>
+<td>§3.3 A · §2.14</td>
+</tr>
+<tr>
+<td>Discuss the health and safety issues in any two industries.</td>
+<td>IT1, Sep 2024, B8</td>
+<td>8</td>
+<td>§3.3 B · §2.4</td>
+</tr>
+<tr>
+<td>Describe asbestosis.</td>
+<td>Retest I, Oct 2026, A1</td>
+<td>5</td>
+<td>§3.2 A · §2.9</td>
+</tr>
+<tr>
+<td>Explain preventive measures of various occupational diseases.</td>
+<td>Retest I, Oct 2026, B8</td>
+<td>8</td>
+<td>§3.3 A · §2.14</td>
+</tr>
+</tbody>
+</table>
+<p>Not this module, though the wording looks close: MSDS (§ Module II), routes of entry (§ Module II), aerosols and fumes (§ Module II), noise exposure regulation (§ Module II). Module I's hearing answer stops at the disease and its control; the regulation belongs to Module II.</p>
+<hr />
+<h2 id="2-concepts">2. Concepts<a class="anchor" href="#2-concepts">#</a></h2>
+<h3 id="21-occupational-safety-and-health-4-5-6-7">2.1 Occupational safety and health (<code>slide 8</code>, <code>slide 12</code>, <code>slide 13</code>, <code>slide 14</code>)<a class="anchor" href="#21-occupational-safety-and-health-4-5-6-7">#</a></h3>
+<p><strong>What:</strong> OSH protects the safety, health and welfare of people engaged in work or employment, and its goal is a safe and healthy work environment (<code>slide 8</code>).</p>
+<ul>
+<li>Scope deliberately reaches past the worker: co-workers, family members, employers, customers and others who might be affected by the workplace environment (<code>slide 8</code>).</li>
+<li>Definition is jointly owned — adopted by the Joint ILO/WHO Committee on Occupational Health at its first session, <strong>1950</strong>, revised at its twelfth session, <strong>1995</strong> (<code>slide 13</code>).</li>
+<li>The definition carries five separate aims, and listing them separately scores better than paraphrasing:</li>
+<li><strong>Promotion and maintenance</strong> of the highest degree of physical, mental and social well-being of workers in all occupations.</li>
+<li><strong>Prevention</strong> among workers of departures from health caused by their working conditions.</li>
+<li><strong>Protection</strong> of workers in employment from risks resulting from factors adverse to health.</li>
+<li><strong>Adaptation of the environment</strong> to the worker's physiological and psychological capabilities.</li>
+<li><strong>Adaptation of work to man and of each man to his job.</strong></li>
+<li>Three declared objectives (<code>slide 14</code>): maintain and promote workers' health and working capacity; improve working conditions and environment to be conducive to safety and health; develop work organisation and work cultures (managerial systems, personnel policy, principles of participation, voluntary quality-related management).</li>
+<li>Three justifications (<code>slide 12</code>): <strong>moral</strong> (protection of employees' lives and health), <strong>legal</strong> (preventive, punitive and compensatory effects of law), <strong>financial</strong> (reduces medical care, sick leave and disability benefit costs).</li>
+<li><strong>Duty of care</strong> = the common-law duty to take reasonable care of employees' safety; statute law may impose general duties, introduce specific duties, and create government bodies with powers to regulate occupational safety (<code>slide 12</code>, <code>slide 26</code>).</li>
+</ul>
+<p><strong>Trap:</strong> "aims" and "objectives" are different lists — five aims inside the ILO/WHO definition, three objectives on <code>slide 14</code>. A 3-mark "enlist the objectives" accepts either, but do not present three as if they were the definition.</p>
+<h3 id="22-toxicology-the-vocabulary-16-17-18-19-20">2.2 Toxicology — the vocabulary (<code>slide 16</code>, <code>slide 18</code>, <code>slide 19</code>, <code>slide 101</code>, <code>slide 105</code>)<a class="anchor" href="#22-toxicology-the-vocabulary-16-17-18-19-20">#</a></h3>
+<p><strong>What:</strong> Toxicology is the study of the adverse effects of chemicals or physical agents on living organisms (<code>slide 16</code>); industrial toxicology is the study of the harmful effects on humans of chemicals used in the workplace, the products produced by companies, and the wastes created in manufacturing (<code>slide 101</code>).</p>
+<table>
+<thead>
+<tr>
+<th>Term</th>
+<th>Deck's wording (<code>slide 18</code>, <code>slide 19</code>)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Poison</td>
+<td>Any substance that, when administered to a living organism, causes a harmful effect</td>
+</tr>
+<tr>
+<td>Poisoning</td>
+<td>The morbid condition produced by a poison; the systemic effects of toxic materials</td>
+</tr>
+<tr>
+<td>Toxic</td>
+<td>A chemical that has the ability to cause harmful or fatal effects upon exposure to humans, animals or plants</td>
+</tr>
+<tr>
+<td>Toxicity</td>
+<td>The capacity of a substance to induce damage to living tissue; may be acute, chronic, local or systemic</td>
+</tr>
+<tr>
+<td>Hazard</td>
+<td>Any source of potential damage, harm or adverse health effects on something or someone under certain conditions at work</td>
+</tr>
+<tr>
+<td>Risk</td>
+<td>The chance or probability that a person will be harmed or experience an adverse health effect if exposed to a hazard</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>Four families of common occupational toxic substance: <strong>heavy metals, pesticides, organic solvents, gases/vapours/particulates</strong> (<code>slide 19</code>).</li>
+<li>Classification of toxic effects (<code>slide 105</code>): <strong>local</strong> = occurs at the site of chemical contact; <strong>systemic</strong> = occurs distant from the point of contact, may involve many organ systems; <strong>acute</strong> = almost immediately (hours/days) after exposure; <strong>chronic</strong> = cumulative damage to specific organ systems, taking many months or years to produce recognisable clinical disease — <em>most carcinogens produce chronic effects</em>.</li>
+</ul>
+<p><strong>Trap:</strong> local/systemic answers <em>where</em>, acute/chronic answers <em>when</em> — two independent axes, not one severity scale. A substance can be acutely systemic or chronically local.</p>
+<h3 id="23-safety-at-work-the-socio-economic-reasons-27-2829">2.3 Safety at work — the socio-economic reasons (<code>slide 15</code>, <code>slide 20</code>–<code>slide 27</code>)<a class="anchor" href="#23-safety-at-work-the-socio-economic-reasons-27-2829">#</a></h3>
+<p><strong>What:</strong> Work-related injury and disease are a measurable drain on the employer, the household and the national product, which is why OSH is regulated rather than left to goodwill.</p>
+<table>
+<thead>
+<tr>
+<th>Indicator</th>
+<th>Figure in the deck</th>
+<th>What it counts</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Work-related deaths, global</td>
+<td><strong>more than 2.78 million a year; one death every fifteen seconds</strong></td>
+<td>Fatal accidents plus fatal occupational disease (<code>slide 25</code>)</td>
+</tr>
+<tr>
+<td>WHO estimate</td>
+<td><strong>almost 2 million a year</strong></td>
+<td>Deaths attributable to exposure to occupational risk factors (<code>slide 25</code>)</td>
+</tr>
+<tr>
+<td>Non-fatal work-related injuries, global</td>
+<td><strong>374 million a year</strong></td>
+<td>Reported injuries, all severities (<code>slide 25</code>)</td>
+</tr>
+<tr>
+<td>Economic burden</td>
+<td><strong>nearly 4 per cent of global GDP</strong> each year</td>
+<td>Lost output, treatment, compensation (<code>slide 26</code>)</td>
+</tr>
+<tr>
+<td>Cost of adverse occupational factors, national</td>
+<td><strong>2–14 per cent of gross national product</strong></td>
+<td>Country estimates (<code>slide 27</code>)</td>
+</tr>
+<tr>
+<td>India, non-fatal occupational injuries</td>
+<td><strong>17 million a year, 17 per cent of the world</strong></td>
+<td>Reported non-fatal injuries (<code>slide 27</code>)</td>
+</tr>
+<tr>
+<td>India, fatal occupational injuries</td>
+<td><strong>45,000 a year, 45 per cent of world occupational-injury deaths</strong></td>
+<td>Fatal injuries (<code>slide 27</code>)</td>
+</tr>
+<tr>
+<td>Occupational disease cases</td>
+<td><strong>11 million world; 1.9 million India (17 per cent)</strong></td>
+<td>Diagnosed occupational disease (<code>slide 27</code>)</td>
+</tr>
+<tr>
+<td>WHO injuries and deaths</td>
+<td><strong>100 million injuries, 0.1 million deaths</strong></td>
+<td>WHO's separate series (<code>slide 27</code>)</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>Six reasons OSH matters (<code>slide 15</code>): human resources are the most valuable resource; good practice improves productivity; accidents and disease lower morale; repeated accidents create fear and an uncomfortable working environment; accidents are costly; social responsibility.</li>
+<li>Work and health interact continuously and two-way: work is socially and economically important as the producer of goods and services, carries psychological weight in self-esteem, and the environment may influence health positively or negatively — when the interaction involves health hazards it produces occupational disease (<code>slide 20</code>, <code>slide 24</code>).</li>
+<li><strong>Healthy workplace (WHO, <code>slide 22</code>)</strong> = workers and managers collaborate in a continual improvement process to protect and promote health, safety and well-being, considering: health and safety in the physical work environment; health, safety and well-being in the psychosocial work environment (organisation of work, culture); personal health resources; and ways of participating in the community.</li>
+<li>Management — the governing board — frames and implements the systems and policies; a safe environment includes human relations, not only hazard-free equipment; women and children get emphasis as the most vulnerable (<code>slide 21</code>).</li>
+</ul>
+<p><strong>Trap:</strong> 2.78 million and "almost 2 million" are different estimates on different definitions — never add them. <code>slide 27</code>'s "of 0.7 million deaths in the world, 0.12 (17 per cent) from India" contradicts the 2.78 million slide, so quote one series consistently.</p>
+<h3 id="24-health-and-safety-in-various-industries-4546">2.4 Health and safety in various industries (<code>slide 28</code>–<code>slide 32</code>)<a class="anchor" href="#24-health-and-safety-in-various-industries-4546">#</a></h3>
+<p><strong>What:</strong> Specific OSH concerns vary greatly by sector, because each industry produces a characteristic agent, a characteristic route of exposure and therefore a characteristic injury pattern (<code>slide 28</code>).</p>
+<ul>
+<li>Deck's list of the more dangerous industries: <strong>fishing, aviation, lumber, metalworking, agriculture, mining, transportation</strong> (<code>slide 28</code>).</li>
+<li>The deck's own illustration of specificity: construction workers are particularly at risk of <strong>falls</strong>; fishermen of <strong>drowning</strong> (<code>slide 28</code>).</li>
+<li><strong>Construction</strong> — one of the most dangerous occupations in the world, incurring more occupational fatalities than any other sector; falls are among the most common causes of fatal and non-fatal injury; controls named are harnesses and guardrails, securing ladders, inspecting scaffolding, and compliance with HSE construction requirements (<code>slide 29</code>).</li>
+<li><strong>Agriculture</strong> — work-related injuries, lung disease, noise-induced hearing loss, skin disease, and cancers related to chemical use or prolonged sun exposure; on industrialised farms injuries come from machinery; pesticides may cause illness or <strong>birth defects</strong>; families including children work alongside each other, making it a common source of injury among young workers — drowning, machinery and motor-vehicle accidents (<code>slide 30</code>).</li>
+<li><strong>Service sector</strong> — jobs have become sedentary as the sector grew in developed countries, presenting a different array of health problems than manufacturing; obesity, stress and overwork complicate the work–health interaction (<code>slide 31</code>).</li>
+<li><strong>Mining and oil &amp; gas extraction</strong> (<code>slide 32</code>, 2010 figures): <strong>50 per cent worked more than 48 hours a week, 25 per cent more than 60</strong>; <strong>39 per cent had frequent skin contact with chemicals</strong>; among non-smokers, <strong>28 per cent</strong> had frequent exposure to second-hand smoke at work; about <strong>two-thirds</strong> were frequently exposed to vapours, gas, dust or fumes.</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Industry</th>
+<th>Characteristic hazard</th>
+<th>Signature injury or disease</th>
+<th>First-line control</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Construction</td>
+<td>Work at height, plant, excavation, silica dust</td>
+<td>Falls (fatal and non-fatal), struck-by, collapse; silicosis</td>
+<td>Harnesses, guardrails, secured ladders, scaffold inspection</td>
+</tr>
+<tr>
+<td>Agriculture</td>
+<td>Machinery, pesticides, sun, animals</td>
+<td>Machine trauma, pesticide illness and birth defects, skin cancer, hearing loss</td>
+<td>Machine guarding, PPE, reduced chemical exposure</td>
+</tr>
+<tr>
+<td>Service sector</td>
+<td>Static posture, repetition, workload, indoor environment</td>
+<td>Musculoskeletal disorder, stress, overwork, obesity</td>
+<td>Workstation design, task rotation, workload control</td>
+</tr>
+<tr>
+<td>Mining and oil/gas</td>
+<td>Dust, vapours and gas, long shifts, skin contact</td>
+<td>Pneumoconiosis, acute toxicity, fatigue-related accidents</td>
+<td>Ventilation, dust suppression, shift limits, monitoring</td>
+</tr>
+<tr>
+<td>Manufacturing (<code>notes §1.3</code>)</td>
+<td>Unguarded machinery, noise, solvent and metal fume</td>
+<td>Machine trauma, hearing loss, dermatitis, asthma</td>
+<td>Machine guarding, enclosure, local exhaust ventilation</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Trap:</strong> the sector label does not fix the hazard — the agent and the task do. Construction's burden is measured in falls before it is measured in silica, and that ordering is what the 8-mark answer rewards.</p>
+<h3 id="25-occupational-disease-definition-and-time-frame-55-56-57">2.5 Occupational disease — definition and time frame (<code>slide 33</code>, <code>slide 35</code>, <code>slide 36</code>)<a class="anchor" href="#25-occupational-disease-definition-and-time-frame-55-56-57">#</a></h3>
+<p><strong>What:</strong> An occupational disease is any disease that occurs primarily as a result of exposure to risk factors arising from work activity (<code>slide 33</code>).</p>
+<ul>
+<li>A chronic ailment occurring as a result of work or occupational activity counts as occupational when it is <strong>more prevalent in a given group of workers</strong>, and it must be distinguishable from injuries due to workplace hazards (<code>slide 35</code>).</li>
+<li><strong>Work-related diseases</strong> have multiple causes, in which factors in the work environment may play a role together with other risk factors (<code>slide 33</code>, <code>slide 35</code>).</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Latency</th>
+<th>Example (<code>slide 36</code>)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Instantaneous</td>
+<td>Exposure to chemicals such as <strong>chlorine or ammonia gas</strong></td>
+</tr>
+<tr>
+<td>Some <strong>six to twelve hours</strong></td>
+<td>Fumes of <strong>aerosolised zinc</strong> (metal fume fever)</td>
+</tr>
+<tr>
+<td><strong>Weeks to months</strong></td>
+<td><strong>Lead poisoning</strong></td>
+</tr>
+<tr>
+<td><strong>Decades</strong></td>
+<td>Occupational <strong>carcinogens</strong></td>
+</tr>
+<tr>
+<td>Transgenerational</td>
+<td>Congenital malformations in children whose parents were exposed to hazardous materials</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>Consequence stated in the deck: because disease occurs in varying time frames, <strong>deaths from such diseases are difficult to enumerate</strong> (<code>slide 36</code>).</li>
+</ul>
+<p><strong>Trap:</strong> an injury happens on a date, a disease has a latency. That single difference is why occupational disease is under-recorded, and it is the argument for controlling exposure before the harm is provable.</p>
+<h3 id="26-musculoskeletal-disorders-6465">2.6 Musculoskeletal disorders (<code>slide 67</code>–<code>slide 72</code>)<a class="anchor" href="#26-musculoskeletal-disorders-6465">#</a></h3>
+<p><strong>What:</strong> MSDs are conditions that affect the muscles, bones and joints (<code>slide 67</code>).</p>
+<ul>
+<li>Six named conditions: <strong>tendinitis, carpal tunnel syndrome, osteoarthritis, rheumatoid arthritis, fibromyalgia, bone fractures</strong> (<code>slide 67</code>).</li>
+<li>Symptoms: recurrent pain, stiff joints, swelling, dull aches. Sites: neck, shoulders, wrists, back, hips, legs, knees, feet; in some cases symptoms interfere with walking or typing and limit range of motion (<code>slide 68</code>).</li>
+<li>Risk is affected by <strong>age, occupation, activity level, lifestyle, family history</strong>; risk increases with age (<code>slide 67</code>, <code>slide 69</code>).</li>
+<li>Four work activities that cause wear and tear (<code>slide 69</code>): sitting in the same position at a computer every day; engaging in repetitive motions; lifting heavy weights; maintaining poor posture at work.</li>
+<li>Diagnosis (<code>slide 70</code>): physical examination for pain, redness, swelling, muscle weakness and atrophy; reflex testing, since unusual reflexes may indicate nerve damage; X-rays or MRI for bones and soft tissue; blood tests for rheumatic disease such as RA.</li>
+<li>Treatment (<code>slide 71</code>): moderate exercise and over-the-counter ibuprofen or acetaminophen for occasional pain; prescribed anti-inflammatory and analgesic medication for severe symptoms; physical therapy, occupational therapy or both.</li>
+<li>Prevention (<code>slide 72</code>): regular strengthening exercise and stretching; tall posture; care when picking up heavy objects; keeping repetitive motions to a minimum — the risk rises with age but the disorders are not inevitable.</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Work-caused (clear mechanism)</th>
+<th>Systemic or degenerative (exist independently of work)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Tendinitis, carpal tunnel syndrome, repetitive strain injury, stress fracture</td>
+<td>Osteoarthritis, rheumatoid arthritis, fibromyalgia (<code>notes §1.4</code>)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Trap:</strong> work aggravates osteoarthritis, RA and fibromyalgia but does not cause them. Present the six conditions as one list, then separate the three that carry an occupational mechanism.</p>
+<h3 id="27-hearing-impairment-7677">2.7 Hearing impairment (<code>slide 73</code>–<code>slide 77</code>)<a class="anchor" href="#27-hearing-impairment-7677">#</a></h3>
+<p><strong>What:</strong> Industrial deafness — industrial hearing loss, occupational hearing loss — is hearing loss occurring as a result of exposure to high levels of sound within the workplace; it may present as temporary hearing loss, permanent hearing loss or tinnitus (<code>slide 73</code>).</p>
+<ul>
+<li>Industries most commonly affected: <strong>construction, transport (including truck drivers), music and events, agriculture, manufacturing, mining</strong> (<code>slide 73</code>).</li>
+<li>Two causes (<code>slide 74</code>): working in a noisy environment for a prolonged period <strong>without adequate hearing protection</strong>, or <strong>acoustic trauma</strong> — a one-off exposure to extremely high noise.</li>
+<li>Mechanism as the deck states it: the delicate structures within the ear are damaged, preventing sound from travelling through the ear and being processed as usual; damage may occur gradually over months or years, or suddenly in acoustic trauma (<code>slide 74</code>). <code>notes §1.5</code> adds the detail: hair cells in the organ of Corti transduce sound, do not regenerate in mammals, and those tuned to high frequencies at the base of the cochlea die first.</li>
+<li>Symptoms (<code>slide 75</code>): temporary or permanently reduced hearing in one or both ears; difficulty understanding speech against background noise; constant ringing, whistling, hissing or buzzing; difficulty hearing the radio or television; missing portions of conversations despite paying attention; difficulty hearing higher-pitched sounds including women's and children's voices.</li>
+<li>Treatment (<code>slide 76</code>): temporary loss needs no treatment beyond avoiding loud sound and letting the hair cells rest — hearing should return within a day or so, and if it has not within a couple of days, seek medical attention; permanent loss may need hearing aids; tinnitus may be managed by meditation, hearing aids and lifestyle and diet changes, but <strong>cannot be cured</strong>.</li>
+<li>Prevention (<code>slide 77</code>): adequate hearing protection (earmuffs, earplugs) worn in loud environments; regularly checking protection is in good working order and used appropriately; reducing time exposed where possible; soundproofing and noise-reduction equipment; regular hearing testing so changes are monitored.</li>
+</ul>
+<p><strong>Trap:</strong> the deck gives <strong>no decibel limit</strong> — 85 dB(A) over eight hours and the 3 dB equal-energy exchange rate are <strong>(standard)</strong>, not from this course's slides. Do not present a number the deck does not have, and do not call a temporary threshold shift "fatigue" — it is injury that happens to recover.</p>
+<h3 id="28-carcinogens-86-87-88">2.8 Carcinogens (<code>slide 36</code>, <code>slide 105</code>, <code>notes §1.6</code>)<a class="anchor" href="#28-carcinogens-86-87-88">#</a></h3>
+<p><strong>What:</strong> A carcinogen is an agent capable of causing cancer in living tissue; most carcinogens produce <strong>chronic</strong> effects, appearing many months or years and usually decades after exposure (<code>slide 105</code>, <code>slide 36</code>).</p>
+<ul>
+<li>Latency is of the order of decades because cancer requires a series of mutations in one cell lineage (<code>slide 36</code>, <code>notes §1.6</code>).</li>
+<li><strong>Genotoxic</strong> carcinogens react with DNA and initiate the change, so no threshold can be assumed and any exposure carries some risk; <strong>non-genotoxic</strong> agents promote division or suppress repair, and for these a threshold may exist (<code>notes §1.6</code>).</li>
+<li>Named examples in the notes: asbestos, silica, benzene, diesel exhaust, radon, chromium and nickel compounds.</li>
+<li>Control consequence: where no threshold can be assumed, the "stay under the limit" argument fails and the control is elimination or substitution, with enclosure second.</li>
+</ul>
+<p><strong>Trap:</strong> for a carcinogen, compliance with an exposure limit is not a defence — the limit is set for the non-cancer end point <strong>(standard)</strong>, and the deck's own point is that the effect is chronic and delayed.</p>
+<h3 id="29-silicosis-asbestosis-pneumoconiosis-94-95-name-them-9697-are-image-only-so-the-detail-below-is-98">2.9 Silicosis, asbestosis, pneumoconiosis (<code>slide 7</code>, <code>slide 33</code> name them; <code>slide 37</code>–<code>slide 66</code> are image-only, so the detail below is <code>notes §1.6</code>)<a class="anchor" href="#29-silicosis-asbestosis-pneumoconiosis-94-95-name-them-9697-are-image-only-so-the-detail-below-is-98">#</a></h3>
+<p><strong>Silicosis</strong> — a fibrosing lung disease caused by inhaling respirable crystalline silica, chiefly quartz.
+- Mechanism: the particle is engulfed by an alveolar macrophage, which cannot digest it; the macrophage dies and releases the silica again, the inflammatory cycle repeats, and collagen is laid down around the dust foci.
+- Size decides the hazard: only the respirable fraction — roughly <strong>below 5 µm</strong> <strong>(standard)</strong> — bypasses the nose and the mucociliary escalator and reaches the alveoli, which is why the risk comes from cutting, grinding, drilling and blasting rather than from a heap of sand.
+- Lesion: a discrete, rounded <strong>hyaline nodule</strong> of concentric collagen, forming first in the <strong>upper lobes</strong> and coalescing into progressive massive fibrosis; hilar nodes may calcify in a rim (the "eggshell" pattern); because silica impairs the macrophage's ability to kill mycobacteria, silicosis carries an <strong>excess risk of tuberculosis</strong>.
+- Course: appears after years of exposure, is <strong>irreversible</strong>, and continues to progress after exposure stops — so prevention is entirely environmental: wet methods, local exhaust ventilation, enclosure of the working area, substitution of a less hazardous abrasive, respiratory protection last.</p>
+<p><strong>Asbestosis</strong> — diffuse interstitial pulmonary fibrosis caused by inhaling asbestos fibres, in which the retained fibre provokes chronic inflammation and collagen deposition in the alveolar walls rather than discrete nodules.
+- Geometry is the pathology: <strong>serpentine</strong> asbestos (chrysotile) forms curly fibres; <strong>amphibole</strong> asbestos (crocidolite, amosite) forms straight, stiff, needle-like fibres that penetrate deep and cannot be cleared or dissolved.
+- Mechanism: the fibre is too long for a macrophage to engulf completely — <strong>frustrated phagocytosis</strong> — so the cell spreads along it, releases oxidants and cytokines, dies, and leaves the fibre to the next cell.
+- Lesion and signs: diffuse thickening of the alveolar interstitium, worst at the <strong>lung bases and subpleural regions</strong>; fine crackles, finger clubbing, progressive breathlessness, and pleural thickening and plaques on the radiograph.
+- Latency is of the order of <strong>decades</strong> <strong>(standard)</strong>. Asbestos also causes pleural plaques and effusion, <strong>lung cancer</strong> (with a multiplicative interaction with smoking) and <strong>mesothelioma</strong>. Classical exposures: shipbreaking (Alang), insulation, roofing, brake linings, demolition. Control is substitution — ban and replace.</p>
+<p><strong>Pneumoconiosis</strong> — the general term for any lung disease produced by the accumulation of inhaled mineral dust and the tissue reaction to it; silicosis, asbestosis, coal workers' pneumoconiosis and byssinosis are its named forms.
+- <strong>Coal workers' pneumoconiosis:</strong> coal dust is less fibrogenic than silica, so the early lesion is a <strong>coal macule</strong> — dust-laden macrophages with a little reticulin, centred on the respiratory bronchiole — with focal emphysema; a sufficient dust burden coalesces the macules into progressive massive fibrosis.
+- <strong>Byssinosis:</strong> cotton, flax and hemp dust produce airway obstruction <strong>without fibrosis</strong>, with Monday-morning chest tightness that improves through the week.</p>
+<table>
+<thead>
+<tr>
+<th>Disease</th>
+<th>Agent</th>
+<th>Typical exposure</th>
+<th>Site and lesion</th>
+<th>Distinctive feature</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Silicosis</td>
+<td>Crystalline silica (quartz)</td>
+<td>Sandblasting, quarrying, stone cutting, foundry</td>
+<td>Upper lobes; rounded hyaline nodules → PMF</td>
+<td>Eggshell hilar calcification; excess tuberculosis risk</td>
+</tr>
+<tr>
+<td>Asbestosis</td>
+<td>Asbestos, amphiboles worst</td>
+<td>Insulation, shipbreaking, roofing, brake linings</td>
+<td>Lower lobes, subpleural; diffuse interstitial fibrosis</td>
+<td>Pleural plaques, mesothelioma, lung cancer; decades of latency</td>
+</tr>
+<tr>
+<td>Coal workers' pneumoconiosis</td>
+<td>Coal mine dust</td>
+<td>Underground coal mining</td>
+<td>Upper lobes; coal macules with focal emphysema → PMF</td>
+<td>Dust macules, not hyaline nodules</td>
+</tr>
+<tr>
+<td>Byssinosis</td>
+<td>Cotton, flax, hemp dust</td>
+<td>Textile spinning and carding</td>
+<td>Bronchi; obstruction, no fibrosis</td>
+<td>Monday-morning chest tightness</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Trap:</strong> silica gives upper-lobe nodules, asbestos gives lower-lobe diffuse fibrosis. Swapping the two loses the distinguishing mark in a 3-mark answer, which is the whole answer.</p>
+<h3 id="210-toxic-materials-and-substances-used-in-work-99-100-101">2.10 Toxic materials and substances used in work (<code>slide 19</code>, <code>slide 101</code>, <code>notes §1.7</code>)<a class="anchor" href="#210-toxic-materials-and-substances-used-in-work-99-100-101">#</a></h3>
+<p><strong>What:</strong> Workplace toxicants fall into four families, and each family's target organ and first control differ.</p>
+<table>
+<thead>
+<tr>
+<th>Family</th>
+<th>Examples</th>
+<th>Where it acts</th>
+<th>First control</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Heavy metals</td>
+<td>Lead, mercury, cadmium, chromium</td>
+<td>Nerve, kidney, bone marrow; retained for years</td>
+<td>Substitution; hygiene; biological monitoring</td>
+</tr>
+<tr>
+<td>Pesticides</td>
+<td>Organophosphates, carbamates, organochlorines</td>
+<td>Neurotransmission; acute poisoning</td>
+<td>Closed cab, PPE, re-entry interval</td>
+</tr>
+<tr>
+<td>Organic solvents</td>
+<td>Toluene, xylene, trichloroethylene</td>
+<td>CNS depression, skin defatting, nerve and liver</td>
+<td>LEV, enclosure, glove selection</td>
+</tr>
+<tr>
+<td>Gases, vapours, particulates</td>
+<td>Ammonia, phosgene, welding fume, dust</td>
+<td>Site set by water solubility: soluble attacks upper airway at once, insoluble reaches the alveoli</td>
+<td>Enclosure, LEV, respiratory protection</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>The same substance is more dangerous by one route than another: skin absorption enters venous blood without first-pass liver metabolism, so a small splash can give a systemic dose out of proportion to its apparent size (<code>notes §2.2</code>).</li>
+<li><strong>Route decides the control</strong> — a respirator does nothing for a solvent absorbed through the hands (<code>notes §1.7</code>).</li>
+</ul>
+<p><strong>Trap:</strong> the family name is not the hazard; the physical form and the route are. Answer "toxic materials" with the family, an example, the target organ and the control, not with a list of chemical names.</p>
+<h3 id="211-exposure-limits-104-105-106">2.11 Exposure limits (<code>slide 102</code>, <code>slide 103</code>, <code>slide 104</code>)<a class="anchor" href="#211-exposure-limits-104-105-106">#</a></h3>
+<p><strong>What:</strong> A limit turns dose–response reasoning into a concentration a workplace can be measured against.</p>
+<ul>
+<li><strong>TLV</strong> — the average concentration of an airborne substance to which most workers could be safely exposed over an <strong>eight-hour working day or forty-hour working week throughout a working lifetime</strong> (<code>slide 102</code>).</li>
+<li><strong>MAC</strong> — the <strong>peak or maximum</strong> concentration of an airborne substance to which most workers could be safely exposed (<code>slide 102</code>).</li>
+<li><strong>Threshold</strong> — the point at which toxicity first appears; it occurs where the body's ability to detoxify or repair toxic injury has been exceeded (<code>slide 103</code>).</li>
+<li><strong>LD50</strong> — the dose at which death occurs at <strong>50 per cent response</strong> (<code>slide 104</code>); the standard single number for acute lethality, and silent on chronic effects, carcinogenicity and sensitisation.</li>
+<li>Units: <strong>ppm</strong> for gases and vapours, because it is a volume fraction independent of molecular weight; <strong>mg/m³</strong> for dusts, fumes and mists, because a particle has no meaningful volume fraction <strong>(standard)</strong>.</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Limit</th>
+<th>Averaging period</th>
+<th>What it controls</th>
+<th>Source</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>TLV–TWA</td>
+<td>8-hour day, 40-hour week</td>
+<td>Chronic effects; the shift average</td>
+<td><code>slide 102</code></td>
+</tr>
+<tr>
+<td>MAC</td>
+<td>Peak</td>
+<td>The maximum permissible peak</td>
+<td><code>slide 102</code></td>
+</tr>
+<tr>
+<td>STEL</td>
+<td>15 minutes</td>
+<td>Acute effects from brief peaks</td>
+<td><strong>(standard)</strong> — deck gives no value</td>
+</tr>
+<tr>
+<td>Ceiling</td>
+<td>Instantaneous</td>
+<td>Fast-acting irritants and asphyxiants</td>
+<td><strong>(standard)</strong> — deck gives no limit</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Trap:</strong> a TLV is not a line between safe and unsafe — it is a guideline for average healthy adult workers, and it is meaningless without its averaging period. An eight-hour average can pass while a short peak is well over a ceiling.</p>
+<h3 id="212-toxicological-investigation-113-vocabulary-from-114115">2.12 Toxicological investigation (<code>notes §1.7</code>; vocabulary from <code>slide 101</code>–<code>slide 105</code>)<a class="anchor" href="#212-toxicological-investigation-113-vocabulary-from-114115">#</a></h3>
+<p><strong>What:</strong> The structured answer to "is this substance harming this workforce?" — six steps, in order.</p>
+<ol>
+<li><strong>Agent and toxicology</strong> — establish the substance from the safety data sheet and the literature.</li>
+<li><strong>Measure exposure</strong> — personal air sampling in the breathing zone, static sampling to characterise the source, direct-reading instruments where concentrations change quickly.</li>
+<li><strong>Reconstruct dose</strong> — including past exposure and non-occupational sources.</li>
+<li><strong>Find the health outcome</strong> — clinical examination, health surveillance, epidemiology, animal or in-vitro study.</li>
+<li><strong>Characterise risk</strong> — against the exposure limit or the dose–response data.</li>
+<li><strong>Specify control</strong> — by the hierarchy of controls.</li>
+</ol>
+<ul>
+<li><strong>Biological monitoring</strong> measures what has entered the body, by analysing blood, urine, exhaled breath or hair for the agent or its metabolite: blood lead, urinary mandelic acid after styrene, cholinesterase activity after organophosphate exposure.</li>
+<li>Its advantage is that it integrates all routes of entry and all the protection actually worn; its difficulty is that results depend on sampling time, on kidney and liver function and on non-occupational sources. It is used <strong>alongside</strong> air monitoring, never instead of it.</li>
+</ul>
+<p><strong>Trap:</strong> air sampling measures the source, biological monitoring measures the absorbed dose. A question on "toxicological investigation" wants the agent, the exposure measurement, the health outcome and the control — sampling alone is half an answer.</p>
+<h3 id="213-industrial-hygiene-116117">2.13 Industrial hygiene (<code>slide 106</code>–<code>slide 108</code>)<a class="anchor" href="#213-industrial-hygiene-116117">#</a></h3>
+<p><strong>What:</strong> Industrial hygiene is the art and science dedicated to the <strong>anticipation, recognition, evaluation, communication and control</strong> of environmental parameters in, or arising from, the workplace that may result in injury, illness, impairment, or affect the well-being of workers and members of the community (<code>slide 106</code>).</p>
+<ul>
+<li>The parameters are divided into five categories: <strong>biological, chemical, physical, ergonomic, psycho-social</strong> (<code>slide 106</code>).</li>
+<li>Three working steps (<code>slide 107</code>): <strong>identification</strong> of risks → <strong>evaluation</strong> (theoretical assessment of exposure, measurement strategy, monitoring, evaluation of results, report) → <strong>control</strong> by the respective hierarchy of controls.</li>
+<li>Physical hazards within the hygienist's scope (<code>slide 108</code>): noise, temperature extremes, illumination extremes, ionizing or non-ionizing radiation, and ergonomics; indoor air quality (IAQ) and safety are related areas.</li>
+<li>The profession uses strict and rigorous scientific methodology and often requires professional experience to determine the potential for hazards and to evaluate exposures or risks (<code>slide 106</code>).</li>
+</ul>
+<p><strong>Trap:</strong> industrial hygiene is not housekeeping. The examinable content is the five-verb definition and the three-step cycle; a script that answers it as "cleanliness of the factory" scores nothing.</p>
+<h3 id="214-organisational-arrangements-to-protect-workers-123124-125-126">2.14 Organisational arrangements to protect workers (<code>slide 80</code>–<code>slide 82</code>, <code>slide 109</code>; <code>notes §1.8</code>)<a class="anchor" href="#214-organisational-arrangements-to-protect-workers-123124-125-126">#</a></h3>
+<p><strong>What:</strong> Every arrangement sits on one hierarchy, ordered by how little it depends on the worker's own behaviour.</p>
+<table>
+<thead>
+<tr>
+<th>Rung</th>
+<th>Example</th>
+<th>Why it ranks there</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1 Elimination</td>
+<td>Stop the process; remove the solvent degreaser</td>
+<td>No agent, no exposure; nothing to maintain</td>
+</tr>
+<tr>
+<td>2 Substitution</td>
+<td>Water-based paint for solvent paint; washed sand for silica abrasive</td>
+<td>Same task, less hazardous agent</td>
+</tr>
+<tr>
+<td>3 Engineering</td>
+<td>Enclosure, isolation, local exhaust ventilation, guarding, soundproofing</td>
+<td>Protects every worker, every shift, without cooperation</td>
+</tr>
+<tr>
+<td>4 Administrative</td>
+<td>Job rotation, time limits, permit-to-work, training, monitoring</td>
+<td>Reduces dose by organising work; needs enforcement</td>
+</tr>
+<tr>
+<td>5 PPE</td>
+<td>Respirators, earplugs, gloves, goggles, harnesses</td>
+<td>Protects one wearer, only while correctly worn</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>Deck's ranking (<code>slide 109</code>): the preferred method of control is <strong>elimination</strong> of the chemical, sometimes achieved by substitution of a less hazardous material; then an <strong>engineering control</strong> such as a laboratory hood or other enclosure isolating the chemical from the worker; then <strong>administrative control</strong>, such as rotation of workers to minimise exposure to any single worker; then <strong>PPE</strong>, which is the least preferred method due to the diligence required to ensure effectiveness.</li>
+<li><strong>Engineering measures</strong> (<code>slide 81</code>, ten): designing of the buildings, good housekeeping, general ventilation, substitution, dusts — enclose, isolate — local exhaust ventilation, protective devices, environmental monitoring, research.</li>
+<li><strong>Medical measures</strong> (<code>slide 80</code>, seven): pre-placement examinations, periodic examinations, medical and health care services, notifications, supervision of the working environment, maintenance and analysis of records, health education and counselling.</li>
+<li><strong>Legislation</strong> (<code>slide 82</code>): policies and regulations for factories and workplaces covering the health of workers — insurance, sickness policies, disability benefits.</li>
+<li><strong>Organisational machinery</strong> (<code>notes §1.8</code>): a safety committee with worker representation; task-specific, repeated training; record keeping of exposure measurements, medical examinations, incidents and maintenance; a surveillance loop (pre-placement baseline → periodic examination → notification); audit and review after the plant, process or workforce changes.</li>
+</ul>
+<p><strong>Trap:</strong> the deck merges elimination and substitution into one rung, the notes split them into five. Either version scores, but the order is fixed and PPE is last in both — never open with PPE.</p>
+<hr />
+<h2 id="3-answer-bank">3. Answer bank<a class="anchor" href="#3-answer-bank">#</a></h2>
+<h3 id="31-three-mark-answers">3.1 Three-mark answers<a class="anchor" href="#31-three-mark-answers">#</a></h3>
+<p><strong>A — Objectives of occupational health (IT1 A3).</strong>
+1. <strong>Anchor</strong> — ILO/WHO definition, adopted 1950, revised 1995: the highest degree of physical, mental and social well-being of workers in all occupations.
+2. <strong>Three objectives</strong> — maintain and promote health and working capacity; improve working conditions and environment; develop work organisation and work culture.
+3. <strong>Five aims if asked to enlist</strong> — promotion and maintenance, prevention of work-caused departures from health, protection from adverse factors, adaptation of environment to worker, adaptation of work to man.</p>
+<p><strong>B — Silicosis (IT1 A1).</strong>
+1. <strong>Agent</strong> — respirable crystalline silica, chiefly quartz, from cutting, grinding, drilling and blasting.
+2. <strong>Mechanism and lesion</strong> — the macrophage engulfs the particle, cannot digest it and dies, releasing silica; the cycle repeats, collagen is laid around the foci, giving rounded hyaline nodules in the upper lobes with eggshell hilar calcification and excess tuberculosis risk.
+3. <strong>Prevention</strong> — wet methods, local exhaust ventilation, enclosure, substitution of the abrasive; irreversible and progressive after exposure stops.</p>
+<p><strong>C — Asbestosis (short form).</strong>
+1. <strong>Agent</strong> — asbestos fibres, the straight amphiboles (crocidolite, amosite) worst.
+2. <strong>Mechanism and lesion</strong> — frustrated phagocytosis releases oxidants and cytokines, giving diffuse interstitial fibrosis at the lung bases and subpleural regions, with pleural plaques on the radiograph.
+3. <strong>Stakes</strong> — also causes lung cancer and mesothelioma, latency of decades; control is substitution and ban, not a limit.</p>
+<p><strong>D — Occupational versus work-related disease.</strong>
+1. <strong>Occupational</strong> — any disease occurring primarily as a result of exposure to risk factors arising from work activity.
+2. <strong>Work-related</strong> — multiple causes, in which work-environment factors act together with other risk factors.
+3. <strong>Test</strong> — occupational disease is more prevalent in a given group of workers and must be distinguishable from injuries caused by workplace hazards.</p>
+<p><strong>E — Hazard versus risk.</strong>
+1. <strong>Hazard</strong> — any source of potential damage, harm or adverse health effects on something or someone under certain conditions at work.
+2. <strong>Risk</strong> — the chance or probability that a person will be harmed or experience an adverse health effect if exposed to that hazard.
+3. <strong>Use</strong> — the hazard is inherent in the agent and is removed by substitution; the risk depends on exposure and is reduced by any control, including PPE.</p>
+<p><strong>F — TLV versus MAC.</strong>
+1. <strong>TLV</strong> — the average concentration of an airborne substance to which most workers could be safely exposed over an eight-hour day or forty-hour week throughout a working lifetime.
+2. <strong>MAC</strong> — the peak or maximum concentration to which most workers could be safely exposed.
+3. <strong>Why both</strong> — an average hides peaks, so a substance with acute effects needs a ceiling as well as a shift average.</p>
+<p><strong>G — Industrial hygiene.</strong>
+1. <strong>Definition</strong> — the art and science of the anticipation, recognition, evaluation, communication and control of workplace environmental parameters that may cause injury, illness, impairment or affect well-being.
+2. <strong>Categories</strong> — biological, chemical, physical, ergonomic and psycho-social.
+3. <strong>Method</strong> — identification of risks, evaluation by measurement against a standard, control by the hierarchy.</p>
+<p><strong>H — Musculoskeletal disorders.</strong>
+1. <strong>Definition</strong> — conditions affecting the muscles, bones and joints.
+2. <strong>Types</strong> — tendinitis, carpal tunnel syndrome, osteoarthritis, rheumatoid arthritis, fibromyalgia, bone fractures.
+3. <strong>Occupational causes</strong> — sustained static posture at a computer, repetitive motion, lifting heavy weights, poor posture at work.</p>
+<p><strong>I — Industrial deafness.</strong>
+1. <strong>Definition</strong> — hearing loss from exposure to high sound levels at work, presenting as temporary loss, permanent loss or tinnitus.
+2. <strong>Causes</strong> — prolonged exposure in noise without adequate protection, or a single acoustic trauma.
+3. <strong>Limit of treatment</strong> — hearing aids help permanent loss, tinnitus cannot be cured, so control is protection, reduced exposure time, soundproofing and audiometry.</p>
+<p><strong>J — Pneumoconiosis.</strong>
+1. <strong>Definition</strong> — the general term for any lung disease produced by accumulation of inhaled mineral dust and the tissue reaction to it.
+2. <strong>Named forms</strong> — silicosis, asbestosis, coal workers' pneumoconiosis, byssinosis.
+3. <strong>Rule</strong> — the mineral decides the lesion: hyaline nodule for silica, diffuse fibrosis for asbestos, coal macule for coal, airway obstruction without fibrosis for cotton dust.</p>
+<p><strong>K — Hierarchy of controls.</strong>
+1. <strong>Order</strong> — elimination, substitution, engineering, administrative, PPE.
+2. <strong>Reason</strong> — effectiveness falls as the control moves from the design of the work towards the body of the worker.
+3. <strong>PPE last</strong> — it protects one wearer, only while correctly worn, and fails silently.</p>
+<h3 id="32-five-mark-answers">3.2 Five-mark answers<a class="anchor" href="#32-five-mark-answers">#</a></h3>
+<p><strong>A — Asbestosis (Retest I A1).</strong>
+1. <strong>Definition</strong> — diffuse interstitial pulmonary fibrosis caused by inhaling asbestos fibres, the retained fibre provoking chronic inflammation and collagen deposition in the alveolar walls rather than discrete nodules.
+2. <strong>Fibre geometry</strong> — serpentine chrysotile is curly; amphibole crocidolite and amosite are straight, stiff and needle-like, penetrate deep and cannot be cleared or dissolved.
+3. <strong>Mechanism</strong> — the fibre is too long to be engulfed completely, so the macrophage spreads along it (frustrated phagocytosis), releases oxidants and cytokines, dies, and passes the fibre to the next cell.
+4. <strong>Clinical and radiological</strong> — basal and subpleural diffuse fibrosis, fine crackles, finger clubbing, progressive breathlessness, pleural thickening and plaques.
+5. <strong>Beyond the lung</strong> — lung cancer with a multiplicative smoking interaction, and mesothelioma; latency of decades; therefore control by substitution and ban.</p>
+<p><strong>B — Musculoskeletal disorders: causes and prevention.</strong>
+1. <strong>Definition and types</strong> — muscle, bone and joint conditions: tendinitis, carpal tunnel syndrome, osteoarthritis, rheumatoid arthritis, fibromyalgia, fractures.
+2. <strong>Symptoms and sites</strong> — recurrent pain, stiff joints, swelling, dull aches, at neck, shoulders, wrists, back, hips, legs, knees and feet.
+3. <strong>Risk factors</strong> — age, occupation, activity level, lifestyle, family history; risk rises with age.
+4. <strong>Four work causes</strong> — same position at a computer daily, repetitive motions, lifting heavy weights, poor posture.
+5. <strong>Prevention</strong> — strengthening and stretching, tall posture, careful lifting, minimising repetition, plus workstation and task redesign and early reporting.</p>
+<p><strong>C — Industrial deafness: causes, symptoms, prevention.</strong>
+1. <strong>Definition</strong> — hearing loss from high sound levels at work; temporary loss, permanent loss or tinnitus.
+2. <strong>Causes</strong> — prolonged noisy work without adequate protection, or acoustic trauma from one-off extreme noise; hair cells in the ear are damaged and do not regenerate.
+3. <strong>Symptoms</strong> — reduced hearing, difficulty following speech against background noise, constant ringing or buzzing, difficulty with radio and television, missed conversation, loss of high-pitched sounds including women's and children's voices.
+4. <strong>Exposed trades</strong> — construction, transport including truck drivers, music and events, agriculture, manufacturing, mining.
+5. <strong>Prevention</strong> — hearing protection worn and checked, reduced exposure time, soundproofing and noise-reduction equipment, regular hearing tests.</p>
+<p><strong>D — TLV–TWA, STEL and ceiling; why a shift average can pass.</strong>
+1. <strong>TLV–TWA</strong> — the eight-hour, forty-hour-week average; controls chronic effects.
+2. <strong>STEL</strong> — a fifteen-minute limit for brief peaks <strong>(standard)</strong>; controls acute effects.
+3. <strong>Ceiling</strong> — an instantaneous limit for fast-acting irritants and asphyxiants <strong>(standard)</strong>.
+4. <strong>Averaging</strong> — a short high exposure can be diluted by hours of clean air, so the shift average passes while the peak that causes the acute effect is well over the ceiling.
+5. <strong>Consequence</strong> — the limit is meaningless without its averaging period, and a substance with acute effects needs a peak limit as well as a TWA.</p>
+<p><strong>E — Toxicological investigation.</strong>
+1. <strong>Agent</strong> — identify the substance and its toxicology from the safety data sheet and the literature.
+2. <strong>Exposure</strong> — personal air sampling in the breathing zone, static sampling, direct-reading instruments.
+3. <strong>Dose</strong> — reconstruct past and non-occupational exposure; add biological monitoring of blood, urine, breath or hair.
+4. <strong>Outcome</strong> — clinical examination, health surveillance, epidemiology, animal or in-vitro evidence.
+5. <strong>Risk and control</strong> — characterise against the limit or dose–response data, then specify control by the hierarchy.</p>
+<p><strong>F — Why occupational disease deaths are hard to enumerate.</strong>
+1. <strong>Latency</strong> — instantaneous for chlorine and ammonia, six to twelve hours for aerosolised zinc fume, weeks to months for lead, decades for carcinogens.
+2. <strong>Attribution</strong> — a death certificate written decades after exposure rarely records the workplace.
+3. <strong>Multiple causes</strong> — work-related disease shares causation with non-occupational factors, so it is under-attributed compared with injury.
+4. <strong>Congenital effects</strong> — malformations in the children of exposed parents are not counted as occupational deaths at all.
+5. <strong>Consequence</strong> — recorded totals are a lower bound, which is why prevention cannot wait for proof of harm.</p>
+<p><strong>G — Health and safety issues in construction (5).</strong>
+1. <strong>Scale</strong> — one of the most dangerous occupations in the world, with more occupational fatalities than any other sector.
+2. <strong>Signature event</strong> — falls, among the most common causes of fatal and non-fatal injury.
+3. <strong>Other exposures</strong> — work at height, excavation and collapse, scaffolding and ladders, temporary electricity, plant, silica dust, noise, manual handling.
+4. <strong>Controls</strong> — harnesses and guardrails, securing ladders, inspecting scaffolding.
+5. <strong>Compliance</strong> — HSE construction requirements are treated as contractual as well as legal, because accidents are disastrous for employer and employee alike.</p>
+<p><strong>H — Dose, threshold, LD50 and the dose–response curve.</strong>
+1. <strong>Principle</strong> — the dose makes the poison; response depends on the amount reaching the target organ over time.
+2. <strong>Threshold</strong> — the point at which toxicity first appears, where the body's ability to detoxify or repair injury has been exceeded.
+3. <strong>LD50</strong> — the dose producing death at 50 per cent response; comparable across substances for acute lethality only.
+4. <strong>Curve</strong> — flat no-effect region, threshold, rising response, steep segment as detoxification is overwhelmed.
+5. <strong>Draw</strong> — axes labelled dose (concentration × time) and response, with the four regions marked.</p>
+<h3 id="33-seven-and-eight-mark-answers">3.3 Seven- and eight-mark answers<a class="anchor" href="#33-seven-and-eight-mark-answers">#</a></h3>
+<h4 id="a-preventive-measures-of-various-occupational-diseases-8-asked-in-both-it1-b7-and-retest-i-b8">A — Preventive measures of various occupational diseases (8; asked in both IT1 B7 and Retest I B8)</h4>
+<p><strong>Structure (8):</strong> three headed groups — engineering (4), medical (2), legislation and organisation (2). One closing line on hierarchy.
+<strong>Answer</strong>
+- <strong>Engineering measures</strong> (<code>slide 81</code>): design of the buildings; good housekeeping; general ventilation; substitution; control of dusts by enclosure and isolation; local exhaust ventilation; protective devices; environmental monitoring; research. — This is the group that protects every worker on every shift without depending on behaviour.
+- <strong>Medical measures</strong> (<code>slide 80</code>): pre-placement examinations; periodic examinations; medical and health-care services; notifications; supervision of the working environment; maintenance and analysis of records; health education and counselling. — Surveillance detects change after exposure, and records make long-latency disease visible and compensable.
+- <strong>Legislation</strong> (<code>slide 82</code>): policies and regulations for factories and workplaces covering workers' health, including insurance, sickness policies and disability benefits.
+- <strong>Organisation</strong> (<code>notes §1.8</code>): safety committee with worker representation, task-specific training, permit-to-work and rotation, audit and review.
+- <strong>Closing line:</strong> the order is a hierarchy — elimination and substitution first, engineering next, administrative after, PPE last.
+<strong>Traps:</strong> (1) Do not organise the answer by disease — the question asks for measures, and a disease-by-disease list repeats itself and runs out of marks. (2) Medical measures are surveillance, not prevention; calling a periodic examination a control invites the counter-question.</p>
+<h4 id="b-health-and-safety-issues-in-any-two-industries-8">B — Health and safety issues in any two industries (8)</h4>
+<p><strong>Structure (8):</strong> two industries × (hazard profile 2 + signature injury/disease 1 + controls 1). Table at the end if time.
+<strong>Answer</strong> — pick construction and agriculture, or construction and mining; they contrast best.
+- <strong>Construction</strong> (<code>slide 29</code>): most occupational fatalities of any sector; falls the commonest cause of fatal and non-fatal injury; hazards are work at height, excavation, scaffolding and ladders, plant, temporary electricity, silica dust, noise, manual handling. Controls: harnesses, guardrails, secured ladders, scaffold inspection, HSE compliance as a contractual requirement.
+- <strong>Agriculture</strong> (<code>slide 30</code>): injuries, lung disease, noise-induced hearing loss, skin disease, cancers from chemical use or prolonged sun exposure; machinery on industrialised farms; pesticides causing illness and birth defects; families including children working alongside each other, so drowning, machinery and vehicle accidents kill young workers. Controls: machine guarding, reduced chemical exposure, supervision of child labour, PPE.
+- <strong>Mining and oil/gas</strong> (<code>slide 32</code>), if chosen instead: 50 per cent above 48 hours a week and 25 per cent above 60 in 2010; 39 per cent with frequent skin contact with chemicals; 28 per cent of non-smokers exposed to second-hand smoke; two-thirds exposed to vapours, gas, dust or fumes. Controls: ventilation, dust suppression, shift limits, monitoring.
+- <strong>Synthesis line:</strong> hazard follows the agent, the environment and the crew, not the sector label.
+<strong>Traps:</strong> (1) Two industries means two, developed — not four named. (2) Numbers are what separate a good answer here: use 50/25/39/28 per cent for mining, or the falls-first ordering for construction.</p>
+<h4 id="c-silicosis-asbestosis-and-pneumoconiosis-compared-8">C — Silicosis, asbestosis and pneumoconiosis compared (8)</h4>
+<p><strong>Structure (8):</strong> definition of pneumoconiosis as the umbrella (2), silicosis (2), asbestosis (2), tabulated comparison (2).
+<strong>Answer</strong>
+- <strong>Umbrella</strong> — pneumoconiosis is any lung disease from accumulation of inhaled mineral dust and the tissue reaction to it; named forms are silicosis, asbestosis, coal workers' pneumoconiosis and byssinosis.
+- <strong>Silicosis</strong> — respirable crystalline silica; macrophage cannot digest the particle and dies releasing it, so the cycle repeats; rounded hyaline nodules, upper lobes, coalescing to progressive massive fibrosis; eggshell hilar calcification; excess tuberculosis risk; irreversible and progressive after exposure stops.
+- <strong>Asbestosis</strong> — asbestos fibres, amphiboles worst; frustrated phagocytosis releases oxidants and cytokines; diffuse interstitial fibrosis, lower lobes and subpleural; plaques, clubbing, crackles; also lung cancer and mesothelioma; latency decades.
+- <strong>Draw the table</strong> — disease, agent, exposure, site and lesion, distinctive feature (§2.9). Add a simple lung outline with upper-lobe nodules for silica and basal shading for asbestos.
+<strong>Traps:</strong> (1) Pneumoconiosis is the genus, not a fourth disease — do not define it as "asbestosis of coal miners". (2) Keep the sites straight: upper lobes for silica and coal, bases for asbestos.</p>
+<h4 id="d-carcinogens-nature-latency-and-control-8">D — Carcinogens: nature, latency and control (8)</h4>
+<p><strong>Structure (8):</strong> definition and mechanism (3), latency and examples (2), control consequence (2), one line on why limits fail (1).
+<strong>Answer</strong>
+- <strong>Definition</strong> — an agent capable of causing cancer in living tissue; most produce chronic effects, with clinical disease many months or years and usually decades after exposure (<code>slide 105</code>).
+- <strong>Mechanism</strong> — cancer requires a series of mutations in one cell lineage, which is why latency is measured in decades; genotoxic agents react with DNA and initiate, non-genotoxic agents promote division or suppress repair.
+- <strong>Threshold logic</strong> — for a genotoxic carcinogen no threshold can be assumed and any exposure carries some risk; for a non-genotoxic agent a threshold may exist. This is the single most examinable sentence in the topic.
+- <strong>Examples</strong> — asbestos, silica, benzene, diesel exhaust, radon, chromium and nickel compounds; the classical occupational cancers are asbestos-related (lung cancer, mesothelioma).
+- <strong>Control</strong> — elimination and substitution first, since the limit argument fails; enclosure and local exhaust ventilation where the agent must stay; health surveillance and records because the effect appears after the worker has left.
+<strong>Traps:</strong> (1) Do not quote a "safe" concentration for a carcinogen. (2) Do not give an acute effect as the carcinogen's signature — the deck's point is that the effect is chronic and delayed.</p>
+<h4 id="e-industrial-hygiene-and-organisational-arrangements-8">E — Industrial hygiene and organisational arrangements (8)</h4>
+<p><strong>Structure (8):</strong> definition and five categories (3), three-step method (2), organisational arrangements and hierarchy (3).
+<strong>Answer</strong>
+- <strong>Definition</strong> — the art and science of anticipation, recognition, evaluation, communication and control of workplace environmental parameters that may cause injury, illness, impairment or affect well-being of workers and the community (<code>slide 106</code>).
+- <strong>Categories</strong> — biological, chemical, physical, ergonomic, psycho-social; physical hazards include noise, temperature and illumination extremes, ionizing and non-ionizing radiation, ergonomics, with indoor air quality as a related area (<code>slide 108</code>).
+- <strong>Method</strong> — identification of risks → evaluation (theoretical exposure assessment, measurement strategy, monitoring, evaluation of results, report) → control by the respective hierarchy (<code>slide 107</code>).
+- <strong>Arrangements</strong> — engineering measures (<code>slide 81</code>), medical measures (<code>slide 80</code>), legislation (<code>slide 82</code>), and the managerial machinery of committee, training, records, surveillance and audit.
+- <strong>Draw</strong> — the five-rung ladder with the note that effectiveness falls towards the worker.
+<strong>Traps:</strong> (1) Do not answer "industrial hygiene" as cleanliness. (2) Keep the five verbs in the definition; dropping "anticipation" and "communication" loses the definition mark.</p>
+<h4 id="f-musculoskeletal-disorders-as-an-occupational-disease-78">F — Musculoskeletal disorders as an occupational disease (7/8)</h4>
+<p><strong>Structure (8):</strong> definition and types (2), mechanism and causes (2), diagnosis (2), prevention (2).
+<strong>Answer</strong>
+- <strong>Definition</strong> — conditions affecting muscles, bones and joints; six named types.
+- <strong>Mechanism</strong> — static loading of the spine and shoulder girdle from sustained posture; microtrauma accumulating faster than repair in repetition; compressive and shear load in lifting; tissue held at end of range in poor posture.
+- <strong>Clinical signature</strong> — worse at work, better at weekends and on leave, progressive over months; pain worst on waking or symmetrical suggests inflammatory arthritis instead (<code>notes §1.4</code>).
+- <strong>Diagnosis</strong> — examination for pain, redness, swelling, weakness and atrophy; reflexes for nerve damage; X-ray or MRI; blood tests for rheumatic disease (<code>slide 70</code>).
+- <strong>Prevention</strong> — workstation and task redesign, mechanical aids, rotation and rest breaks, strengthening and stretching, tall posture, careful lifting, early reporting and modified duties.
+<strong>Traps:</strong> (1) Do not claim osteoarthritis, RA and fibromyalgia as work-caused. (2) Treatment is not prevention — an answer that ends at ibuprofen and therapy has answered the wrong half.</p>
+<h4 id="g-exposure-limits-and-exposure-monitoring-78">G — Exposure limits and exposure monitoring (7/8)</h4>
+<p><strong>Structure (8):</strong> TLV and MAC defined (2), the three averaging periods (3), units (1), monitoring and its limits (2).
+<strong>Answer</strong>
+- <strong>TLV</strong> — average concentration over an eight-hour day or forty-hour week throughout a working lifetime; <strong>MAC</strong> — the peak or maximum.
+- <strong>Averaging</strong> — TWA for chronic effects, STEL for fifteen-minute peaks, ceiling for instantaneous excursions; a limit without its averaging period is meaningless.
+- <strong>Units</strong> — ppm for gases and vapours, mg/m³ for dusts, fumes and mists; conversion needs the molecular weight <strong>(standard)</strong>.
+- <strong>Air monitoring</strong> — personal sampling in the breathing zone, static sampling, direct-reading instruments.
+- <strong>Biological monitoring</strong> — blood, urine, breath or hair for the agent or metabolite; integrates all routes and the protection actually worn, but depends on sampling time, organ function and non-occupational sources.
+- <strong>Closing</strong> — air monitoring measures the source, biological monitoring measures the absorbed dose; the two are complementary, never alternatives.
+<strong>Traps:</strong> (1) Never present a TLV as a safe/unsafe boundary. (2) Do not invent a numerical limit — the deck gives none, and a fabricated ppm value is worse than no value.</p>
+<h3 id="34-fourteen-mark-skeleton-ese-part-b-one-question-from-this-module">3.4 Fourteen-mark skeleton (ESE Part B, one question from this module)<a class="anchor" href="#34-fourteen-mark-skeleton-ese-part-b-one-question-from-this-module">#</a></h3>
+<p><strong>Likely shape:</strong> "Define occupational health and toxicology. Explain the socio-economic reasons for safety at work, the occupational diseases of Module I and the arrangements an organisation makes to protect its workers." — 14 marks, one page and a half, two diagrams.</p>
+<p><strong>Paragraph plan</strong>
+1. <strong>Definitions (2)</strong> — OSH protects safety, health and welfare of people in work; ILO/WHO definition with the 1950/1995 attribution; toxicology as the study of adverse effects of chemicals or physical agents on living organisms; industrial toxicology applied to workplace chemicals, products and wastes. <em>Half a page.</em>
+2. <strong>Socio-economic case (3)</strong> — 2.78 million deaths a year, one every fifteen seconds; 374 million non-fatal injuries; nearly 4 per cent of global GDP; 2–14 per cent of GNP; India 17 million non-fatal injuries (17 per cent) but 45,000 fatal (45 per cent), and 1.9 million of the world's 11 million occupational disease cases; moral, legal and financial justifications; duty of care versus statute law. Show the numbers as a small table. <em>Half a page.</em>
+3. <strong>Industries (2)</strong> — construction (falls, harnesses, guardrails, scaffold inspection), agriculture (machinery, pesticides, child workforce), service sector (sedentary, stress), mining and oil/gas (50 per cent above 48 hours, 39 per cent skin contact, two-thirds vapours/gas/dust/fume). One line each, then the synthesis: hazard follows the agent, not the sector label.
+4. <strong>Occupational disease (3)</strong> — definition and the occupational/work-related distinction; latency ladder (instantaneous chlorine and ammonia → 6–12 h zinc fume → weeks–months lead → decades carcinogens); MSDs; hearing impairment; carcinogens; then silicosis versus asbestosis versus pneumoconiosis, with the upper-lobe nodule against lower-lobe fibrosis contrast. <strong>Draw the lung comparison here.</strong>
+5. <strong>Toxicology and limits (2)</strong> — four families of toxicant; TLV as an eight-hour average and MAC as a peak; threshold and LD50; toxicological investigation in six steps with air plus biological monitoring.
+6. <strong>Industrial hygiene and control (2)</strong> — five-verb definition; identification → evaluation → control; engineering, medical and legislative measures; the closed line that the hierarchy runs elimination → substitution → engineering → administrative → PPE, and PPE is last because it protects one worker and depends on diligence. <strong>Draw the hierarchy ladder.</strong></p>
+<p><strong>Diagrams:</strong> homologated lung sketch (upper-lobe nodules vs basal diffuse fibrosis) in paragraph 4; the five-rung hierarchy ladder in paragraph 6. Both are in §5 — draw them small, label them, and refer to them in the text.</p>
+<p><strong>If the paper instead asks only "occupational diseases — causes, effects and prevention" (14):</strong> reallocate as definitions and latency (2) → MSD, hearing, carcinogens, dust diseases at 2 marks each, each with cause, effect and control (10) → prevention grouped as engineering, medical, legislative (2), closing on the hierarchy. Same content, disease-first ordering.</p>
+<hr />
+<h2 id="4-definitions-and-numbers-to-memorise">4. Definitions and numbers to memorise<a class="anchor" href="#4-definitions-and-numbers-to-memorise">#</a></h2>
+<table>
+<thead>
+<tr>
+<th>Term / number</th>
+<th>Exact definition or value</th>
+<th>Where it is used in an answer</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Occupational safety and health</td>
+<td>Protecting the safety, health and welfare of people engaged in work or employment; goal is a safe and healthy work environment</td>
+<td>Opening definition, any 14-mark answer (<code>slide 8</code>)</td>
+</tr>
+<tr>
+<td>Occupational health (ILO/WHO)</td>
+<td>Promotion and maintenance of the highest degree of physical, mental and social well-being; prevention of work-caused departures from health; protection from adverse factors; adaptation of environment to worker; adaptation of work to man and of each man to his job</td>
+<td>Defined 1950, revised 1995 — objectives and aims questions (<code>slide 13</code>)</td>
+</tr>
+<tr>
+<td>Three objectives</td>
+<td>Maintain and promote health and working capacity; improve working conditions and environment; develop work organisation and work cultures</td>
+<td>"Enlist the objectives" (<code>slide 14</code>)</td>
+</tr>
+<tr>
+<td>Duty of care</td>
+<td>Common-law duty to take reasonable care of employees' safety; statute law adds general and specific duties and creates regulators</td>
+<td>Moral/legal/financial answer (<code>slide 12</code>, <code>slide 26</code>)</td>
+</tr>
+<tr>
+<td>Toxicology</td>
+<td>The study of the adverse effects of chemicals or physical agents on living organisms</td>
+<td>Definition question (<code>slide 16</code>)</td>
+</tr>
+<tr>
+<td>Industrial toxicology</td>
+<td>Study of harmful effects on humans of chemicals used in the workplace, the products produced, and the wastes created in manufacturing</td>
+<td>Definition question (<code>slide 101</code>)</td>
+</tr>
+<tr>
+<td>Toxicity</td>
+<td>The capacity of a substance to induce damage to living tissue; acute, chronic, local or systemic</td>
+<td>Vocabulary question (<code>slide 18</code>)</td>
+</tr>
+<tr>
+<td>Hazard / risk</td>
+<td>Hazard = any source of potential damage or adverse health effect; risk = the chance a person will be harmed if exposed to it</td>
+<td>Distinguish-the-two question (<code>slide 19</code>)</td>
+</tr>
+<tr>
+<td>Occupational disease</td>
+<td>Any disease that occurs primarily as a result of exposure to risk factors arising from work activity</td>
+<td>Definition question (<code>slide 33</code>)</td>
+</tr>
+<tr>
+<td>Work-related disease</td>
+<td>Multiple causes, in which work-environment factors act together with other risk factors</td>
+<td>Contrast with occupational disease (<code>slide 35</code>)</td>
+</tr>
+<tr>
+<td>Musculoskeletal disorder</td>
+<td>Condition affecting muscles, bones and joints; tendinitis, carpal tunnel syndrome, osteoarthritis, RA, fibromyalgia, fractures</td>
+<td>Definition question (<code>slide 67</code>)</td>
+</tr>
+<tr>
+<td>Industrial deafness</td>
+<td>Hearing loss from exposure to high sound levels at work; temporary loss, permanent loss or tinnitus</td>
+<td>Definition question (<code>slide 73</code>)</td>
+</tr>
+<tr>
+<td>Silicosis</td>
+<td>Fibrosing lung disease from inhaling respirable crystalline silica, chiefly quartz</td>
+<td>3-mark and 8-mark answers (§2.9)</td>
+</tr>
+<tr>
+<td>Asbestosis</td>
+<td>Diffuse interstitial pulmonary fibrosis from inhaling asbestos fibres</td>
+<td>5-mark and 8-mark answers (§2.9)</td>
+</tr>
+<tr>
+<td>Pneumoconiosis</td>
+<td>Any lung disease from accumulation of inhaled mineral dust and the tissue reaction to it; named forms silicosis, asbestosis, CWP, byssinosis</td>
+<td>3-mark and comparison answers (§2.9)</td>
+</tr>
+<tr>
+<td>Carcinogen</td>
+<td>An agent capable of causing cancer in living tissue; most produce chronic effects</td>
+<td>Carcinogen answer (<code>slide 105</code>)</td>
+</tr>
+<tr>
+<td>TLV</td>
+<td>Average concentration to which most workers could be safely exposed over an eight-hour day or forty-hour week throughout a working lifetime</td>
+<td>Limits question (<code>slide 102</code>)</td>
+</tr>
+<tr>
+<td>MAC</td>
+<td>Peak or maximum concentration to which most workers could be safely exposed</td>
+<td>Limits question (<code>slide 102</code>)</td>
+</tr>
+<tr>
+<td>Threshold</td>
+<td>Point at which toxicity first appears, where detoxification or repair capacity is exceeded</td>
+<td>Dose–response answer (<code>slide 103</code>)</td>
+</tr>
+<tr>
+<td>LD50</td>
+<td>The dose at which death occurs at 50 per cent response</td>
+<td>Dose–response answer (<code>slide 104</code>)</td>
+</tr>
+<tr>
+<td>Industrial hygiene</td>
+<td>Anticipation, recognition, evaluation, communication and control of workplace environmental parameters; categories biological, chemical, physical, ergonomic, psycho-social</td>
+<td>Definition question (<code>slide 106</code>)</td>
+</tr>
+<tr>
+<td>Deaths, global</td>
+<td>More than <strong>2.78 million a year</strong>, one every <strong>fifteen seconds</strong></td>
+<td>Socio-economic answer (<code>slide 25</code>)</td>
+</tr>
+<tr>
+<td>Non-fatal injuries, global</td>
+<td><strong>374 million</strong> a year</td>
+<td>Socio-economic answer (<code>slide 25</code>)</td>
+</tr>
+<tr>
+<td>WHO estimate</td>
+<td>Almost <strong>2 million</strong> deaths a year from occupational risk-factor exposure</td>
+<td>Socio-economic answer — do not add to 2.78 million (<code>slide 25</code>)</td>
+</tr>
+<tr>
+<td>Economic burden</td>
+<td>Nearly <strong>4 per cent of global GDP</strong> each year</td>
+<td>Socio-economic answer (<code>slide 26</code>)</td>
+</tr>
+<tr>
+<td>National cost</td>
+<td><strong>2–14 per cent</strong> of gross national product</td>
+<td>Socio-economic answer (<code>slide 27</code>)</td>
+</tr>
+<tr>
+<td>India, non-fatal</td>
+<td><strong>17 million</strong> a year, <strong>17 per cent</strong> of the world</td>
+<td>Socio-economic answer (<code>slide 27</code>)</td>
+</tr>
+<tr>
+<td>India, fatal</td>
+<td><strong>45,000</strong> a year, <strong>45 per cent</strong> of world occupational-injury deaths</td>
+<td>Socio-economic answer (<code>slide 27</code>)</td>
+</tr>
+<tr>
+<td>Occupational disease cases</td>
+<td><strong>11 million</strong> world, <strong>1.9 million</strong> India (<strong>17 per cent</strong>)</td>
+<td>Socio-economic answer (<code>slide 27</code>)</td>
+</tr>
+<tr>
+<td>Mining hours, 2010</td>
+<td><strong>50 per cent</strong> above 48 hours a week, <strong>25 per cent</strong> above 60</td>
+<td>Industry answer (<code>slide 32</code>)</td>
+</tr>
+<tr>
+<td>Mining exposures, 2010</td>
+<td><strong>39 per cent</strong> frequent skin contact with chemicals; <strong>28 per cent</strong> of non-smokers exposed to second-hand smoke; about <strong>two-thirds</strong> to vapours, gas, dust or fume</td>
+<td>Industry answer (<code>slide 32</code>)</td>
+</tr>
+<tr>
+<td>Zinc fume delay</td>
+<td><strong>Six to twelve hours</strong> to metal fume fever symptoms</td>
+<td>Latency ladder (<code>slide 36</code>)</td>
+</tr>
+<tr>
+<td>Lead delay</td>
+<td><strong>Weeks to months</strong></td>
+<td>Latency ladder (<code>slide 36</code>)</td>
+</tr>
+<tr>
+<td>Carcinogen delay</td>
+<td><strong>Decades</strong></td>
+<td>Latency ladder (<code>slide 36</code>)</td>
+</tr>
+<tr>
+<td>Respirable fraction</td>
+<td>Roughly <strong>below 5 µm</strong> — reaches the alveoli <strong>(standard)</strong></td>
+<td>Silicosis and dust-disease answers</td>
+</tr>
+<tr>
+<td>Noise action level</td>
+<td><strong>85 dB(A) over 8 hours</strong>, 3 dB exchange rate — <strong>(standard); the deck gives no value</strong></td>
+<td>Hearing answer, only if marked standard</td>
+</tr>
+<tr>
+<td>STEL / ceiling</td>
+<td><strong>15 minutes</strong> / instantaneous — <strong>(standard); the deck gives no value</strong></td>
+<td>Limits answer</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="5-diagrams-to-be-able-to-draw">5. Diagrams to be able to draw<a class="anchor" href="#5-diagrams-to-be-able-to-draw">#</a></h2>
+<table>
+<thead>
+<tr>
+<th>Figure</th>
+<th>Deck ref</th>
+<th>What to draw</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Dose–response curve</td>
+<td><code>slide 103</code>, <code>slide 104</code>; <code>notes §1.7</code></td>
+<td>Axes: dose (concentration × time) against response. Flat no-observed-effect region → threshold marked → rising response → steep segment as detoxification is overwhelmed. Label LD50 at the 50 per cent line.</td>
+</tr>
+<tr>
+<td>Hierarchy of controls ladder</td>
+<td><code>slide 109</code>; <code>notes §1.8</code></td>
+<td>Five rungs top to bottom: elimination, substitution, engineering, administrative, PPE. Arrow on the left "most effective, protects everyone", on the right "least effective, depends on the individual".</td>
+</tr>
+<tr>
+<td>Industrial hygiene cycle</td>
+<td><code>slide 107</code></td>
+<td>Three boxes in series: identification of risks → evaluation (measurement strategy, monitoring, evaluation of results, report) → control by the hierarchy.</td>
+</tr>
+<tr>
+<td>Prevention tripod</td>
+<td><code>slide 80</code>–<code>slide 82</code></td>
+<td>Three legs under "prevention of occupational disease": engineering measures, medical measures, legislation. Label two examples on each leg.</td>
+</tr>
+<tr>
+<td>Exposure profile against limits</td>
+<td><code>slide 102</code></td>
+<td>Concentration against time over one shift: fluctuating line; horizontal TLV–TWA line at the shift average; a MAC/ceiling line above it. Show a peak crossing the ceiling while the average stays under the TWA.</td>
+</tr>
+<tr>
+<td>Lung comparison for the dust diseases</td>
+<td><code>notes §1.6</code> (prose; no deck figure)</td>
+<td>Two simple lung outlines: left with small rounded nodules in the upper zones (silica); right with basal and subpleural shading (asbestos). Caption the contrast in one line.</td>
+</tr>
+<tr>
+<td>Worker–work–environment triad</td>
+<td><code>notes §1.1</code> (prose; no figure)</td>
+<td>Three overlapping circles: worker (age, susceptibility, smoking, fitness); work (posture, pace, duration, shift); environment (physical, chemical, biological, psychosocial). Label the overlap "risk".</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="6-say-this-if-grilled">6. Say-this-if-grilled<a class="anchor" href="#6-say-this-if-grilled">#</a></h2>
+<ol>
+<li>"The ILO/WHO definition is from 1950 and was revised in 1995 — the date is worth a mark because it shows the definition is joint, not national."</li>
+<li>"Hazard is the source, risk is the probability of harm given exposure — which is why PPE reduces risk but never the hazard."</li>
+<li>"2.78 million and 'almost 2 million' are different estimates on different definitions; adding them is the commonest numerical error in this module."</li>
+<li>"India carries about 17 per cent of the world's occupational injuries and disease cases but 45 per cent of its fatal occupational injuries — the gap is severity, not reporting alone."</li>
+<li>"Occupational disease has a latency: instantaneous for chlorine, six to twelve hours for zinc fume, weeks for lead, decades for carcinogens — which is why deaths are hard to enumerate."</li>
+<li>"Silica gives an upper-lobe hyaline nodule; asbestos gives lower-lobe diffuse fibrosis — the mineral decides the lesion, and that one line separates the two 3-mark answers."</li>
+<li>"Tinnitus cannot be cured and hair cells do not regenerate, so the only successful treatment of industrial deafness is prevention."</li>
+<li>"A TLV is an eight-hour average for average healthy workers, not a safe/unsafe boundary — an average can pass while a peak exceeds the ceiling."</li>
+<li>"PPE is last because it protects one wearer, only while it fits and is worn, and it fails silently — an extraction hood that has stopped is visible, a leaking seal is not."</li>
+<li>"Industrial hygiene is anticipation, recognition, evaluation, communication and control — not housekeeping, and not the same thing as safety inspection."</li>
+</ol>
+  </main>
+</div>
+<button id="chat-btn" title="Ask about this page (select text first)">✳</button>
+<div id="sel-chip">Ask about this</div>
+<div id="chat-panel" role="dialog" aria-label="Ask about this page">
+  <div id="chat-head"><span>Ask this page</span><span class="sp"></span><button id="chat-close" title="Close">✕</button></div>
+  <div id="chat-quote"></div>
+  <div id="chat-log"></div>
+  <form id="chat-form" autocomplete="off">
+    <textarea id="chat-input" rows="1" placeholder="Ask about the selection or the section…"></textarea>
+    <button id="chat-send" title="Send">↑</button>
+  </form>
+  <div id="chat-foot">Select text → “Ask about this”. Enter sends, Shift+Enter newline.</div>
+</div>
+<div class="tools">
+  <button id="theme" title="Toggle light / dark">☾</button>
+  <button id="top" title="Back to top">↑</button>
+</div>
+<script>
+(function(){
+  var root=document.documentElement, key='minotes-theme';
+  var saved=localStorage.getItem(key);
+  var prefers=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';
+  root.setAttribute('data-theme', saved || prefers);
+
+  var btn=document.getElementById('theme');
+  function sync(){ if(btn) btn.textContent = root.getAttribute('data-theme')==='dark' ? '\u2600' : '\u263E'; }
+  sync();
+  if(btn) btn.addEventListener('click',function(){
+    var next = root.getAttribute('data-theme')==='dark' ? 'light' : 'dark';
+    root.setAttribute('data-theme', next); localStorage.setItem(key,next); sync();
+  });
+
+  var bar=document.getElementById('progress');
+  if(bar) addEventListener('scroll',function(){
+    var h=document.documentElement.scrollHeight-innerHeight;
+    bar.style.width=(h>0?(scrollY/h*100):0)+'%';
+  },{passive:true});
+
+  document.querySelectorAll('pre').forEach(function(pre){
+    var b=document.createElement('button');
+    b.className='copy'; b.textContent='copy';
+    b.addEventListener('click',function(){
+      var t=pre.querySelector('code'); var txt=t?t.innerText:pre.innerText;
+      navigator.clipboard.writeText(txt).then(function(){
+        b.textContent='copied'; setTimeout(function(){b.textContent='copy';},1200);
+      });
+    });
+    pre.appendChild(b);
+  });
+
+  document.querySelectorAll('main table').forEach(function(t){
+    if(t.parentElement.classList.contains('table-scroll')) return;
+    var w=document.createElement('div'); w.className='table-scroll';
+    t.parentNode.insertBefore(w,t); w.appendChild(t);
+  });
+
+  var links=[].slice.call(document.querySelectorAll('.sidebar a[href^="#"]'));
+  var map={}; links.forEach(function(a){ map[a.getAttribute('href').slice(1)]=a; });
+  var heads=[].slice.call(document.querySelectorAll('main h2[id], main h3[id]'));
+  if('IntersectionObserver' in window && heads.length){
+    var obs=new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if(!e.isIntersecting) return;
+        links.forEach(function(a){a.classList.remove('active');});
+        var a=map[e.target.id]; if(a){a.classList.add('active');}
+      });
+    },{rootMargin:'-10% 0px -75% 0px'});
+    heads.forEach(function(h){obs.observe(h);});
+  }
+
+  var top=document.getElementById('top');
+  if(top) top.addEventListener('click',function(){ scrollTo({top:0,behavior:'smooth'}); });
+})();
+
+(function(){
+  var API="/api/chat";
+  var panel=document.getElementById("chat-panel"),
+      btn=document.getElementById("chat-btn"),
+      chip=document.getElementById("sel-chip"),
+      quote=document.getElementById("chat-quote"),
+      log=document.getElementById("chat-log"),
+      input=document.getElementById("chat-input"),
+      send=document.getElementById("chat-send"),
+      form=document.getElementById("chat-form");
+
+  if(!panel) return;
+  var pendingSelection="", busy=false, lastSelection="";
+
+  function esc(s){return s.replace(/[&<>]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;"}[c];});}
+
+  // minimal markdown: fenced code, inline code, bold, bullets, numbered lists
+  function md(src){
+    var parts=src.split(/```/), out="";
+    for(var i=0;i<parts.length;i++){
+      if(i%2){ out+="<pre><code>"+esc(parts[i].replace(/^\w*\n/,""))+"</code></pre>"; continue; }
+      var t=esc(parts[i]);
+      t=t.replace(/`([^`\n]+)`/g,"<code>$1</code>").replace(/\*\*([^*]+)\*\*/g,"<b>$1</b>");
+      var lines=t.split(/\n/), html="", inUl=false, inOl=false;
+      for(var j=0;j<lines.length;j++){
+        var line=lines[j];
+        if(/^\s*[-*]\s+/.test(line)){
+          if(inOl){html+="</ol>";inOl=false;}
+          if(!inUl){html+="<ul>";inUl=true;}
+          html+="<li>"+line.replace(/^\s*[-*]\s+/,"")+"</li>"; continue;
+        }
+        if(/^\s*\d+[.)]\s+/.test(line)){
+          if(inUl){html+="</ul>";inUl=false;}
+          if(!inOl){html+="<ol>";inOl=true;}
+          html+="<li>"+line.replace(/^\s*\d+[.)]\s+/,"")+"</li>"; continue;
+        }
+        if(inUl){html+="</ul>";inUl=false;}
+        if(inOl){html+="</ol>";inOl=false;}
+        if(line.trim()==="") continue;
+        html+="<p>"+line+"</p>";
+      }
+      if(inUl)html+="</ul>";
+      if(inOl)html+="</ol>";
+      out+=html;
+    }
+    return out;
+  }
+
+  function outline(){
+    return [].slice.call(document.querySelectorAll("main h2, main h3")).slice(0,40)
+      .map(function(h){return (h.tagName==="H3"?"  - ":"- ")+h.textContent.replace(/#$/,"").trim();}).join("\n");
+  }
+
+  function sectionFor(node){
+    var el = node && (node.nodeType===1?node:node.parentElement);
+    if(!el || !el.closest) return "";
+    el = el.closest("main") ? el : null;
+    if(!el) return "";
+    var heads=[].slice.call(document.querySelectorAll("main h2, main h3"));
+    var cur=null, idx=-1;
+    for(var i=0;i<heads.length;i++){
+      if(heads[i].compareDocumentPosition(el) & Node.DOCUMENT_POSITION_FOLLOWING) { cur=heads[i]; idx=i; }
+    }
+    if(!cur) return "";
+    var stop = heads[idx+1] || null, txt=[], n=cur;
+    while((n=n.nextSibling) && n!==stop){ if(n.textContent) txt.push(n.textContent); }
+    return (cur.textContent+"\n"+txt.join("\n")).replace(/\s+\n/g,"\n").slice(0,3000);
+  }
+
+  function placeChip(x,y){
+    chip.style.left=x+"px"; chip.style.top=(y+window.scrollY-8)+"px"; chip.style.display="block";
+  }
+  function hideChip(){ chip.style.display="none"; }
+
+  document.addEventListener("mouseup",function(e){
+    setTimeout(function(){
+      var s=window.getSelection(), text=s?s.toString().trim():"";
+      if(!text || text.length<3 || !s.anchorNode || !(s.anchorNode.parentElement||s.anchorNode).closest("main")){hideChip();return;}
+      lastSelection=text;
+      var r=s.getRangeAt(0).getBoundingClientRect();
+      placeChip(r.left+r.width/2, Math.max(r.top,8));
+    },10);
+  });
+  document.addEventListener("mousedown",function(e){ if(e.target!==chip) hideChip(); });
+
+  chip.addEventListener("mousedown",function(e){ e.preventDefault(); });
+  chip.addEventListener("click",function(e){
+    e.stopPropagation();
+    pendingSelection=lastSelection; hideChip(); open(pendingSelection);
+  });
+
+  function open(sel){
+    panel.classList.add("open");
+    if(sel){ quote.style.display="block"; quote.textContent=sel; pendingSelection=sel; }
+    else { quote.style.display="none"; quote.textContent=""; pendingSelection=""; }
+    setTimeout(function(){input.focus();},60);
+  }
+  function close(){ panel.classList.remove("open"); }
+
+  btn.addEventListener("click",function(){ panel.classList.contains("open")?close():open(lastSelection||""); });
+  document.getElementById("chat-close").addEventListener("click",close);
+  document.addEventListener("keydown",function(e){ if(e.key==="Escape") close(); });
+
+  function addMsg(cls,html){
+    var d=document.createElement("div"); d.className="msg "+cls; d.innerHTML=html; log.appendChild(d);
+    log.scrollTop=log.scrollHeight; return d;
+  }
+
+  async function ask(q){
+    if(busy||!q.trim()) return;
+    busy=true; send.disabled=true;
+    addMsg("user",esc(q));
+    var bot=addMsg("bot",'<span class="cursor"></span>');
+    var acc="";
+    var sid=sessionStorage.getItem("mn-sid");
+    if(!sid){ sid=(crypto.randomUUID?crypto.randomUUID():String(Date.now())+Math.random().toString(16).slice(2)); sessionStorage.setItem("mn-sid",sid); }
+    var payload={q:q, sid:sid, sel:pendingSelection||"", page:document.querySelector("h1")?document.querySelector("h1").textContent.trim():document.title,
+                 section:sectionFor(window.getSelection()&&window.getSelection().anchorNode?"":document.querySelector("main h2"))||"",
+                 outline:outline()};
+    // section: prefer the one containing the selection, else the first heading on screen
+    try{
+      var sel=window.getSelection();
+      if(pendingSelection && sel && sel.anchorNode){ payload.section=sectionFor(sel.anchorNode); }
+      if(!payload.section){
+        var vis=[].slice.call(document.querySelectorAll("main h2, main h3")).filter(function(h){
+          var r=h.getBoundingClientRect(); return r.top>-80 && r.top<window.innerHeight*0.6; }).pop();
+        if(vis) payload.section=sectionFor(vis);
+      }
+    }catch(_){}
+
+    try{
+      var res=await fetch(API,{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify(payload)});
+      if(!res.ok){
+        var j=await res.json().catch(function(){return{};});
+        throw new Error(j.error||("HTTP "+res.status));
+      }
+      var reader=res.body.getReader(), dec=new TextDecoder(), buf="";
+      for(;;){
+        var r=await reader.read(); if(r.done) break;
+        buf+=dec.decode(r.value,{stream:true});
+        var lines=buf.split("\n"); buf=lines.pop()||"";
+        for(var i=0;i<lines.length;i++){
+          var l=lines[i].trim(); if(l.indexOf("data:")!==0) continue;
+          var d=l.slice(5).trim(); if(d==="[DONE]") continue;
+          try{ var o=JSON.parse(d); if(o.d){acc+=o.d; bot.innerHTML=md(acc)+'<span class="cursor"></span>'; log.scrollTop=log.scrollHeight;} if(o.error) throw new Error(o.error);}catch(_){}
+        }
+      }
+      bot.innerHTML=md(acc||"_no answer_");
+    }catch(err){
+      bot.className="msg err";
+      bot.textContent = String(err.message).indexOf("Failed to fetch")>-1 || String(err.message).indexOf("HTTP 5")>-1
+        ? "Assistant unavailable — it only works on the deployed site (needs the /api/chat function)."
+        : "Error: "+err.message;
+    }finally{
+      busy=false; send.disabled=false; input.value=""; input.focus();
+      pendingSelection=""; quote.style.display="none";
+    }
+  }
+
+  form.addEventListener("submit",function(e){ e.preventDefault(); ask(input.value); });
+  input.addEventListener("keydown",function(e){
+    if(e.key==="Enter"&&!e.shiftKey){ e.preventDefault(); ask(input.value); }
+  });
+  input.addEventListener("input",function(){ input.style.height="auto"; input.style.height=Math.min(input.scrollHeight,110)+"px"; });
+})();
+</script>
+</body>
+</html>

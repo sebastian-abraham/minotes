@@ -23,6 +23,7 @@ import markdown
 from markdown.extensions.toc import slugify_unicode
 
 import drills as drill_data
+import ehs_drills as ehs_drill_data
 import practice as practice_page
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -72,6 +73,35 @@ SUBJECTS = [
              "Session deep dives", "Revision log", "progress", "revision-log"),
             ("wp_code_drills.md", "Drill key", "Model answers to drills",
              "Drill answers", "Code drill answer key", "progress", "drill-key"),
+        ],
+    },
+    {
+        "slug": "ehs",
+        "title": "Environmental Health & Safety",
+        "code": "20CET453",
+        "tagline": "Semester 7 · Civil · ESE",
+        "blurb": "Five module kits built from the syllabus, because no ESE paper or question bank exists for this course. "
+                 "The three internal papers are here as style evidence — they never once asked Module 5.",
+        "drills": "ehs",
+        "docs": [
+            ("START_HERE.md", "Start here", "Scope, answer shapes, how to work",
+             "Syllabus-first plan and the Module 5 warning", "Start here — the plan", "start", "start-here"),
+            ("KIT_M1_TOXICOLOGY.md", "M1 · Health & toxicology", "20% ESE · CO1",
+             "Occupational diseases, toxicology, industrial hygiene", "Module 1 · Occupational health & toxicology", "kits", "m1-toxicology"),
+            ("KIT_M2_CHEMICAL_BIOLOGICAL_NOISE.md", "M2 · Chemical, bio, noise", "20% ESE · CO2",
+             "Dust to gases, bio-agents, noise", "Module 2 · Chemical & biological hazards, noise", "kits", "m2-chemical-bio-noise"),
+            ("KIT_M3_CONSTRUCTION_ELECTRICAL_RADIATION.md", "M3 · Construction hazards", "20% ESE · CO3",
+             "Scaffolding, welding, excavation, shock, radiation", "Module 3 · Construction, electrical & radiation", "kits", "m3-construction"),
+            ("KIT_M4_AIR_WATER_POLLUTION_WASTE.md", "M4 · Pollution & waste", "20% ESE · CO4",
+             "Air, water, ozone, clean coal, waste", "Module 4 · Air & water pollution, waste", "kits", "m4-pollution-waste"),
+            ("KIT_M5_SAFE_WORKING_ENVIRONMENT.md", "M5 · Safe environment", "20% ESE · CO5",
+             "Inspection, first aid, welfare, PPE — never examined internally", "Module 5 · Safe working environment", "kits", "m5-safe-environment"),
+            ("syllabus.md", "Syllabus", "All five modules, verbatim",
+             "The only reliable scope", "Syllabus (verbatim)", "source", "syllabus"),
+            ("internal_questions.md", "Internal papers", "3 papers · 2 formats",
+             "What was actually asked, and what never was", "Internal question papers", "source", "internal-papers"),
+            ("friend_notes_site.md", "Notes · friend's", "Long-form study notes",
+             "The HTML notes this subject started from", "Friend's notes (HTML → markdown)", "source", "notes-friend"),
         ],
     },
 ]
@@ -480,7 +510,7 @@ PAGE = """<!DOCTYPE html>
 <div class="wrap">
   <aside class="sidebar">
     <a class="home" href="index.html">← {{SUBJECT}}</a>
-    <a class="home" href="practice.html">Practice drills</a>
+    {{PRACTICE_LINK}}
     <h1>{{LABEL}}</h1>
     <p class="sub">{{SUB}}</p>
     <nav class="toc">{{TOC}}</nav>
@@ -720,6 +750,13 @@ def build_doc(subject, src_name, label, sub, slug):
     body, toc = render(md_text)
     title = first_h1(md_text, slug)
 
+    # drop in-page links whose anchor no longer exists (converted docs carry
+    # anchors from their original HTML); the link text stays as plain text.
+    def _dead_anchor(m):
+        target = m.group(1)
+        return m.group(2) if f'id="{target}"' not in body else m.group(0)
+    body = re.sub(r'<a href="#([^"]+)"[^>]*>(.*?)</a>', _dead_anchor, body, flags=re.S)
+
     body = re.sub(
         r'(<h([23]) id="([^"]+)">)(.*?)(</h\2>)',
         lambda m: f'{m.group(1)}{m.group(4)}<a class="anchor" href="#{m.group(3)}">#</a>{m.group(5)}',
@@ -733,6 +770,7 @@ def build_doc(subject, src_name, label, sub, slug):
             .replace("{{SRC}}", html_mod.escape(src_name))
             .replace("{{CODE}}", html_mod.escape(subject["code"]))
             .replace("{{SUBJECT}}", html_mod.escape(subject["title"]))
+            .replace("{{PRACTICE_LINK}}", '<a class="home" href="practice.html">Practice drills</a>' if subject.get("drills") else "")
             .replace("{{TOC}}", toc or "")
             .replace("{{BODY}}", body)
             .replace("{{CSS}}", CSS + CHAT_CSS)
@@ -761,7 +799,8 @@ def build_subject(subject):
                 .replace("{{TAGS}}", html_mod.escape(f"{label} {pretty} {blurb} {src_name}")))
         cards.setdefault(group, []).append(card)
 
-    cards.setdefault("practice", []).append(
+    if subject.get("drills"):
+      cards.setdefault("practice", []).append(
         DOC_CARD
         .replace("{{CLASS}}", " hero-card")
         .replace("{{FILE}}", "practice.html")
@@ -771,9 +810,10 @@ def build_subject(subject):
         .replace("{{SUB}}", "fill · output · write · checked in the browser")
         .replace("{{TAGS}}", "practice drills coding syntax fill output write"))
 
-    page = practice_page.build(drill_data.DRILLS, subject["title"], CSS + SHELL_CSS, JS)
+    drill_list = ehs_drill_data.EHS_DRILLS if subject.get("drills") == "ehs" else drill_data.DRILLS
+    page = practice_page.build(drill_list, subject["title"], CSS + SHELL_CSS, JS)
     write(os.path.join(ROOT, subject["slug"], "practice.html"), page)
-    print(f"  {subject['slug']}/practice.html      {os.path.getsize(os.path.join(ROOT, subject['slug'], 'practice.html')) // 1024:5d} KB  ({len(drill_data.DRILLS)} drills)")
+    print(f"  {subject['slug']}/practice.html      {os.path.getsize(os.path.join(ROOT, subject['slug'], 'practice.html')) // 1024:5d} KB  ({len(drill_list)} drills)")
 
     blocks = []
     for key, heading in GROUPS:
