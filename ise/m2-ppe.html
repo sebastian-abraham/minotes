@@ -198,8 +198,16 @@ tbody tr:hover{background:var(--accent-soft)}
 <li><a href="#42-terms-and-values-in-one-table">4.2 Terms and values, in one table</a></li>
 </ul>
 </li>
-<li><a href="#5-diagrams-to-be-able-to-draw">5. Diagrams to be able to draw</a><ul>
-<li><a href="#51-the-eight-figures-and-how-to-draw-each">5.1 The eight figures, and how to draw each</a></li>
+<li><a href="#5-diagrams-draw-these-then-the-ones-that-explain">5. Diagrams — draw these, then the ones that explain</a><ul>
+<li><a href="#51-rpe-selection-tree-exam-5-marks">5.1 RPE selection tree · exam, 5 marks</a></li>
+<li><a href="#52-confined-space-entry-ladder-exam-5-marks">5.2 Confined-space entry ladder · exam, 5 marks</a></li>
+<li><a href="#53-permit-decision-flow-exam-3-marks">5.3 Permit decision flow · exam, 3 marks</a></li>
+<li><a href="#54-rate-box-exam-3-marks">5.4 Rate box · exam, 3 marks</a></li>
+<li><a href="#55-5s-cycle-exam-3-marks">5.5 5S cycle · exam, 3 marks</a></li>
+<li><a href="#56-ppe-hierarchy-concept">5.6 PPE hierarchy · concept</a></li>
+<li><a href="#57-housekeeping-cause-path-concept">5.7 Housekeeping cause path · concept</a></li>
+<li><a href="#58-monitoring-loop-concept">5.8 Monitoring loop · concept</a></li>
+<li><a href="#59-drawing-notes-for-the-eight-figures">5.9 Drawing notes for the eight figures</a></li>
 </ul>
 </li>
 <li><a href="#6-say-this-if-grilled">6. Say-this-if-grilled</a><ul>
@@ -1776,8 +1784,78 @@ tbody tr:hover{background:var(--accent-soft)}
 </tbody>
 </table>
 <hr />
-<h2 id="5-diagrams-to-be-able-to-draw">5. Diagrams to be able to draw<a class="anchor" href="#5-diagrams-to-be-able-to-draw">#</a></h2>
-<h3 id="51-the-eight-figures-and-how-to-draw-each">5.1 The eight figures, and how to draw each<a class="anchor" href="#51-the-eight-figures-and-how-to-draw-each">#</a></h3>
+<h2 id="5-diagrams-draw-these-then-the-ones-that-explain">5. Diagrams — draw these, then the ones that explain<a class="anchor" href="#5-diagrams-draw-these-then-the-ones-that-explain">#</a></h2>
+<h3 id="51-rpe-selection-tree-exam-5-marks">5.1 RPE selection tree · <strong>exam, 5 marks</strong><a class="anchor" href="#51-rpe-selection-tree-exam-5-marks">#</a></h3>
+<p><div class="mermaid">flowchart TD
+  A{&quot;Oxygen below&lt;br/&gt;19.5 per cent?&quot;} --&gt;|&quot;yes&quot;| BA[&quot;Breathing apparatus only&lt;br/&gt;no filter can add oxygen&quot;]
+  A --&gt;|&quot;no&quot;| B{&quot;Contaminant identified&lt;br/&gt;and within filter limit?&quot;}
+  B --&gt;|&quot;no&quot;| BA
+  B --&gt;|&quot;yes&quot;| C{&quot;Particulate&lt;br/&gt;or gas and vapour?&quot;}
+  C --&gt;|&quot;particulate&quot;| D[&quot;Filtering facepiece&lt;br/&gt;or half mask + P1/P2/P3&quot;]
+  C --&gt;|&quot;gas and vapour&quot;| E{&quot;Powered or&lt;br/&gt;non-powered?&quot;}
+  E --&gt;|&quot;non-powered&quot;| F[&quot;Half or full mask&lt;br/&gt;+ A/B/E/K filter&quot;]
+  E --&gt;|&quot;powered&quot;| G[&quot;PAPR&lt;br/&gt;loose or tight fitting&quot;]
+</div></p>
+<p><strong>Labels that earn the mark:</strong> 19.5 per cent at the first diamond, and the phrase "no filter adds oxygen" beside the breathing-apparatus branch.</p>
+<h3 id="52-confined-space-entry-ladder-exam-5-marks">5.2 Confined-space entry ladder · <strong>exam, 5 marks</strong><a class="anchor" href="#52-confined-space-entry-ladder-exam-5-marks">#</a></h3>
+<p><div class="mermaid">flowchart TD
+  R1[&quot;1 · Assess the space&lt;br/&gt;and the task&quot;] --&gt; R2[&quot;2 · Test from outside&lt;br/&gt;21 per cent O2, 19.5 minimum&quot;]
+  R2 --&gt; R3[&quot;3 · Ventilate&lt;br/&gt;before and during&quot;]
+  R3 --&gt; R4[&quot;4 · Permit issued&lt;br/&gt;attendant posted&quot;]
+  R4 --&gt; R5[&quot;5 · Enter&lt;br/&gt;rescue equipment ready&quot;]
+  R5 --&gt; R6[&quot;6 · Re-test on any change&lt;br/&gt;10 per cent LEL alarm&quot;]
+  R6 -.-&gt;|&quot;change detected&quot;| R3
+</div></p>
+<p><strong>Note:</strong> the two numbers the marker looks for are <strong>19.5 per cent</strong> oxygen and <strong>10 per cent LEL</strong>. Write them on the rungs, not in the paragraph.</p>
+<h3 id="53-permit-decision-flow-exam-3-marks">5.3 Permit decision flow · <strong>exam, 3 marks</strong><a class="anchor" href="#53-permit-decision-flow-exam-3-marks">#</a></h3>
+<p><div class="mermaid">flowchart TD
+  A{&quot;Ignition source&lt;br/&gt;or hot work?&quot;} --&gt;|&quot;yes&quot;| RED[&quot;Hot work permit&lt;br/&gt;red&quot;]
+  A --&gt;|&quot;no&quot;| B{&quot;Confined space?&quot;}
+  B --&gt;|&quot;yes&quot;| YEL[&quot;Confined space entry permit&lt;br/&gt;yellow&quot;]
+  B --&gt;|&quot;no&quot;| C{&quot;Other hazard&lt;br/&gt;excavation, height, isolation?&quot;}
+  C --&gt;|&quot;yes&quot;| GRN[&quot;Cold work permit&lt;br/&gt;green, one month, renewable three&quot;]
+  C --&gt;|&quot;no&quot;| N[&quot;Normal work&lt;br/&gt;no permit&quot;]
+</div></p>
+<h3 id="54-rate-box-exam-3-marks">5.4 Rate box · <strong>exam, 3 marks</strong><a class="anchor" href="#54-rate-box-exam-3-marks">#</a></h3>
+<p><div class="mermaid">flowchart LR
+  A[&quot;Frequency rate&quot;] --&gt; F[&quot;injuries × 1,000,000&lt;br/&gt;————————————&lt;br/&gt;man-hours worked&quot;]
+  B[&quot;Severity rate&quot;] --&gt; S[&quot;days lost × 1,000,000&lt;br/&gt;————————————&lt;br/&gt;man-hours worked&quot;]
+</div></p>
+<p>Write the million on both. A rate box without the base mark is a picture, not an answer.</p>
+<h3 id="55-5s-cycle-exam-3-marks">5.5 5S cycle · <strong>exam, 3 marks</strong><a class="anchor" href="#55-5s-cycle-exam-3-marks">#</a></h3>
+<p><div class="mermaid">flowchart LR
+  S1[&quot;Seiri · sort&quot;] --&gt; S2[&quot;Seiton · set in order&quot;]
+  S2 --&gt; S3[&quot;Seiso · shine&quot;]
+  S3 --&gt; S4[&quot;Seiketsu · standardise&quot;]
+  S4 --&gt; S5[&quot;Shitsuke · sustain&quot;]
+  S5 -.-&gt;|&quot;audit restarts the cycle&quot;| S1
+</div></p>
+<p>Mark the first three as "change the workplace" and the last two as "keep the change". That split is worth a mark on its own.</p>
+<h3 id="56-ppe-hierarchy-concept">5.6 PPE hierarchy · <strong>concept</strong><a class="anchor" href="#56-ppe-hierarchy-concept">#</a></h3>
+<p><div class="mermaid">flowchart TD
+  E[&quot;Eliminate the hazard&quot;] --&gt; S[&quot;Substitute something safer&quot;]
+  S --&gt; T[&quot;Engineering control&lt;br/&gt;guard, ventilation&quot;]
+  T --&gt; A[&quot;Administrative control&lt;br/&gt;procedure, training, rotation&quot;]
+  A --&gt; P[&quot;PPE&lt;br/&gt;last line, protects one person&quot;]
+</div></p>
+<p>Read it downward and the sentence writes itself: PPE sits at the bottom because it protects one wearer, and only while it is worn.</p>
+<h3 id="57-housekeeping-cause-path-concept">5.7 Housekeeping cause path · <strong>concept</strong><a class="anchor" href="#57-housekeeping-cause-path-concept">#</a></h3>
+<p><div class="mermaid">flowchart LR
+  H[&quot;Poor housekeeping&quot;] --&gt; T[&quot;Trips, slips, blocked exits&quot;]
+  H --&gt; F[&quot;Fuel and ignition&lt;br/&gt;fire load&quot;]
+  H --&gt; C[&quot;Contamination&lt;br/&gt;product and skin&quot;]
+  T --&gt; I[&quot;Injury&quot;]
+  F --&gt; I
+  C --&gt; I
+</div></p>
+<h3 id="58-monitoring-loop-concept">5.8 Monitoring loop · <strong>concept</strong><a class="anchor" href="#58-monitoring-loop-concept">#</a></h3>
+<p><div class="mermaid">flowchart LR
+  M[&quot;Measure the rates&quot;] --&gt; C[&quot;Compare with target&quot;]
+  C --&gt; A[&quot;Act on the gap&quot;]
+  A --&gt; M
+</div></p>
+<p>Frequency and severity are lagging. Activity rate is the leading one, because it counts the work done before the injury.</p>
+<h3 id="59-drawing-notes-for-the-eight-figures">5.9 Drawing notes for the eight figures<a class="anchor" href="#59-drawing-notes-for-the-eight-figures">#</a></h3>
 <p>A diagram in this module earns marks for labels, not for artistry. Draw the box, name the parts, and write the number beside the part it applies to. Each figure below takes under two minutes.</p>
 <table>
 <thead>
@@ -1834,6 +1912,7 @@ tbody tr:hover{background:var(--accent-soft)}
 <p><strong>Deck caution.</strong> The <code>page 10</code> goggle table extracted with its columns out of order. Draw the three types from the logic, not from the slide's layout.</p>
 <p><strong>One idea per figure.</strong> If a drawing needs three captions it is two drawings, and the second one costs a minute.</p>
 <p>Three rules for all eight. Draw them small, about a third of a page each. Refer to them in the text by name, because an unmentioned diagram is marked as decoration.</p>
+<hr />
 <hr />
 <h2 id="6-say-this-if-grilled">6. Say-this-if-grilled<a class="anchor" href="#6-say-this-if-grilled">#</a></h2>
 <h3 id="61-seventeen-lines-to-have-ready">6.1 Seventeen lines to have ready<a class="anchor" href="#61-seventeen-lines-to-have-ready">#</a></h3>
@@ -2097,6 +2176,26 @@ tbody tr:hover{background:var(--accent-soft)}
     if(e.key==="Enter"&&!e.shiftKey){ e.preventDefault(); ask(input.value); }
   });
   input.addEventListener("input",function(){ input.style.height="auto"; input.style.height=Math.min(input.scrollHeight,110)+"px"; });
+})();
+</script>
+<script src="../assets/mermaid.min.js"></script>
+<script>
+(function(){
+  var nodes=[].slice.call(document.querySelectorAll('.mermaid'));
+  if(!nodes.length) return;
+  nodes.forEach(function(n){ n.dataset.src=n.textContent; });
+  function theme(){ return document.documentElement.getAttribute('data-theme')==='dark'?'dark':'default'; }
+  function run(){
+    mermaid.initialize({startOnLoad:false, theme:theme(), securityLevel:'loose',
+      flowchart:{htmlLabels:true, curve:'basis', nodeSpacing:38, rankSpacing:52, padding:12},
+      themeVariables:{fontFamily:'Inter,system-ui,sans-serif', fontSize:'15px'}});
+    nodes.forEach(function(n){ n.removeAttribute('data-processed'); n.innerHTML=n.dataset.src; });
+    mermaid.run({nodes:nodes, suppressErrors:true});
+  }
+  run();
+  new MutationObserver(function(m){
+    if(m.some(function(x){return x.attributeName==='data-theme';})) run();
+  }).observe(document.documentElement,{attributes:true});
 })();
 </script>
 </body>

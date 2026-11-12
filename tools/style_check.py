@@ -65,15 +65,24 @@ def sentences(text):
 
 
 def concept_sizes(raw):
-    sizes, cur = {}, None
+    """Words per concept section, for the uneven-depth check.
+
+    A section that carries a mermaid diagram is a *diagram* section: its prose is
+    a caption by design, so it is left out of the size statistics. Counting it
+    would punish a two-line caption for not being a 400-word explainer.
+    """
+    sizes, has_diagram, cur = {}, {}, None
     for line in raw.split("\n"):
         m = re.match(r"^### (\d+\.\d+[^\n]*)", line)
         if m:
             cur = m.group(1)[:70]
             sizes[cur] = 0
+            has_diagram[cur] = False
         elif cur:
             sizes[cur] += len(line.split())
-    return {k: v for k, v in sizes.items() if v > 20}
+            if line.strip().startswith("```mermaid"):
+                has_diagram[cur] = True
+    return {k: v for k, v in sizes.items() if v > 20 and not has_diagram.get(k)}
 
 
 def analyse(path):

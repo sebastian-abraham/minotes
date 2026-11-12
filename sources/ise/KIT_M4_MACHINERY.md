@@ -606,11 +606,95 @@ Worked once, with a four-tonne load. At 90 degrees the tension per leg is 0.71 �
 
 The arithmetic also explains the deck's rule on derated gear (`slide 142`). A sling that has lost 10 per cent of its strength, used at a wide angle, fails at a load nobody expected. Two small errors multiply.
 
-## 5. Diagrams to draw
+## 5. Diagrams — draw these, then the ones that explain
+
+### 5.1 The power train, and the two zones · **exam, 5 marks**
+
+```mermaid
+flowchart LR
+  M["Motor"] --> B["Belt"]
+  B --> FW["Flywheel"]
+  FW --> CL["Clutch"]
+  CL --> R["Ram"]
+  R --> PO["Point of operation<br/>between ram and die"]
+  subgraph T["Zone 2 · power transmission"]
+    B
+    FW
+  end
+  subgraph O["Zone 1 · point of operation"]
+    PO
+  end
+```
+
+**Labels that earn the mark:** *point of operation* and *power transmission apparatus*. A sketch that guards only the die has answered half the question.
+
+### 5.2 The four guards on one plate · **exam, 5 marks**
+
+```mermaid
+flowchart TD
+  G["Guards"] --> F["Fixed<br/>tool needed to remove"]
+  G --> I["Interlocked<br/>opens, power off"]
+  G --> A["Adjustable<br/>set by hand to stock"]
+  G --> S["Self-adjusting<br/>returns to rest"]
+  F --> U1["drive and belts"]
+  I --> U2["access doors"]
+  A --> U3["mixed stock"]
+  S --> U4["one product family"]
+```
+
+### 5.3 Press stroke and the two-hand control · **exam, 3 marks**
+
+```mermaid
+sequenceDiagram
+  participant O as Operator
+  participant C as Control
+  participant R as Ram
+  O->>C: Both buttons held
+  C->>R: Stroke starts
+  Note over O,R: hands are on the buttons, not in the die
+  O--xC: One button released
+  C->>R: Stroke stops
+```
+
+### 5.4 Sling angle · **exam, 5 marks**
+
+```mermaid
+flowchart LR
+  L["Load W"] --> S["Two legs at angle θ"]
+  S --> F["Leg tension = W ÷ (2 cos θ)"]
+  F --> R["θ 30° → 0.58 W per leg<br/>θ 60° → 1.0 W per leg<br/>θ 90° → 1.41 W per leg"]
+  R --> T["Wider angle = more tension<br/>keep under 90°"]
+```
+
+**The number to quote:** at 90° between the legs, each leg carries 71 per cent of the load, not 50. That surprises examiners and earns the mark.
+
+### 5.5 Manual or mechanical · **concept**
+
+```mermaid
+flowchart TD
+  A{"Weight, shape,<br/>distance, frequency?"} -->|"light, short,<br/>occasional"| M["Manual handling<br/>train the technique"]
+  A -->|"heavy, long,<br/>repetitive"| E["Mechanical<br/>crane, conveyor, truck"]
+  E --> B{"What is the load?"}
+  B -->|"bulk"| C["Conveyor or truck"]
+  B -->|"unit, lifting"| D["Crane with sling"]
+  B -->|"palletised"| P["Forklift<br/>and racking"]
+```
+
+### 5.6 Load path through a sling · **concept**
+
+```mermaid
+flowchart LR
+  H["Hook"] --> M["Master link"]
+  M --> S["Sling legs"]
+  S --> SH["Shackle"]
+  SH --> L["Load"]
+```
+
+Every link carries the whole load, so the weakest one sets the rating. That is why a 5 per cent elongation rule exists for chain.
 
 Three sketches cover every diagram mark in this module. Draw them small, label every part, and put the number next to the label.
 
-### 5.1 Four guards on one plate
+### 5.7 Drawing notes · four guards on one plate
 
 Draw one horizontal line as the machine frame, and four small panels above it. **Panel 1, fixed:** a belt and pulley inside a sheet-metal box, with a bolt and spanner shown at the corner. Label "tool needed to remove". **Panel 2, interlocked:** a hinged door with a switch at the hinge and a wire running to the motor contactor. Label "opens, power off". **Panel 3, adjustable:** a guard with a slotted bracket and a wing nut, the opening set to the stock thickness. Label "set by hand". **Panel 4, self-adjusting:** a pivoted flap resting on the stock, with a return spring and an arrow showing the flap opening only as wide as the stock.
 
@@ -620,7 +704,7 @@ Add one line under the plate: fixed for the drive, interlocked for access, adjus
 
 Draw it in five minutes and keep it crude. Four rectangles and one arrow each is enough. The marker is reading your labels, not your draughtsmanship, so label first and shade later.
 
-### 5.2 The point of operation and the two zones
+### 5.8 Drawing notes · the two zones
 
 Draw a press in section. The **bed** is a thick horizontal block at the bottom, the **ram** a block above it, and the **die** between them. Mark the gap as the **point of operation**. Draw a hand approaching the die with a crossed-out arrow, and a light curtain as two vertical posts with dashed beams across the front.
 
@@ -632,7 +716,7 @@ The common error is drawing the guard only at the die. That picture answers half
 
 Keep the scale honest enough to show the gap. If the die gap is drawn wider than the ram, the sketch stops making sense and the labels stop helping.
 
-### 5.3 The sling angle triangle
+### 5.9 Drawing notes · the sling triangle
 
 Draw a master link at the top, two legs going down and out, and a load block at the bottom joining them. Mark the **included angle** α between the legs. Put an arrow on each leg labelled T, and an arrow on the load labelled W.
 
@@ -645,6 +729,9 @@ Work the numbers once on the sketch. A four-tonne load at 90 degrees puts 2.84 t
 Label the angle as the **included** angle, not the angle to the horizontal. Most textbooks draw it one way and most riggers say it the other, and the examiner will mark the number you compute.
 
 **Mark anchor.** Every diagram in this module is worth more with one number on it than with three pretty labels. Put 1/8 inch on the grinder, 35 feet on the welding sketch, and 120 degrees on the sling.
+
+---
+
 
 ---
 

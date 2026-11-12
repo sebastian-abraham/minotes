@@ -202,8 +202,17 @@ tbody tr:hover{background:var(--accent-soft)}
 <li><a href="#41-the-table-to-memorise">4.1 The table to memorise</a></li>
 </ul>
 </li>
-<li><a href="#5-diagrams-to-draw">5. Diagrams to draw</a><ul>
-<li><a href="#51-the-six-figures">5.1 The six figures</a></li>
+<li><a href="#5-diagrams-draw-these-then-the-ones-that-explain">5. Diagrams — draw these, then the ones that explain</a><ul>
+<li><a href="#51-fire-tetrahedron-exam-3-marks">5.1 Fire tetrahedron · exam, 3 marks</a></li>
+<li><a href="#52-fire-classes-and-which-agent-exam-5-marks">5.2 Fire classes and which agent · exam, 5 marks</a></li>
+<li><a href="#53-dow-fire-and-explosion-index-exam-8-marks">5.3 Dow Fire and Explosion Index · exam, 8 marks</a></li>
+<li><a href="#54-hazop-the-node-loop-exam-5-marks">5.4 HAZOP — the node loop · exam, 5 marks</a></li>
+<li><a href="#55-hazop-node-schematic-exam-5-marks">5.5 HAZOP node schematic · exam, 5 marks</a></li>
+<li><a href="#56-hazard-bands-exam-3-marks">5.6 Hazard bands · exam, 3 marks</a></li>
+<li><a href="#57-hierarchy-of-controls-exam-3-marks">5.7 Hierarchy of controls · exam, 3 marks</a></li>
+<li><a href="#58-pha-four-steps-exam-3-marks">5.8 PHA four steps · exam, 3 marks</a></li>
+<li><a href="#59-chemical-hazard-to-control-concept">5.9 Chemical hazard to control · concept</a></li>
+<li><a href="#510-drawing-notes-the-nine-figures">5.10 Drawing notes · the nine figures</a></li>
 </ul>
 </li>
 <li><a href="#6-say-this-if-grilled">6. Say this if grilled</a><ul>
@@ -2105,8 +2114,175 @@ penalty magnitudes, damage factors or exposure radius. Every number in that list
 standard, and any script that offers a Dow penalty value should say it comes from the workbook
 table.</p>
 <hr />
-<h2 id="5-diagrams-to-draw">5. Diagrams to draw<a class="anchor" href="#5-diagrams-to-draw">#</a></h2>
-<h3 id="51-the-six-figures">5.1 The six figures<a class="anchor" href="#51-the-six-figures">#</a></h3>
+<h2 id="5-diagrams-draw-these-then-the-ones-that-explain">5. Diagrams — draw these, then the ones that explain<a class="anchor" href="#5-diagrams-draw-these-then-the-ones-that-explain">#</a></h2>
+<p>The Dow flow chart and the HAZOP node schematic are the two you will be asked to draw. The rest are for understanding, and they take sixty seconds each.</p>
+<h3 id="51-fire-tetrahedron-exam-3-marks">5.1 Fire tetrahedron · <strong>exam, 3 marks</strong><a class="anchor" href="#51-fire-tetrahedron-exam-3-marks">#</a></h3>
+<p><div class="mermaid">flowchart TD
+  F[&quot;FUEL&lt;br/&gt;what burns&quot;] --&gt; FIRE((&quot;FIRE&quot;))
+  O[&quot;OXYGEN&lt;br/&gt;21 per cent in air&quot;] --&gt; FIRE
+  H[&quot;HEAT&lt;br/&gt;ignition source&quot;] --&gt; FIRE
+  C[&quot;CHAIN REACTION&lt;br/&gt;the fourth side&quot;] --&gt; FIRE
+  FIRE -.-&gt; W[&quot;water cools&lt;br/&gt;removes heat&quot;]
+  FIRE -.-&gt; FM[&quot;foam blankets&lt;br/&gt;removes oxygen&quot;]
+  FIRE -.-&gt; DP[&quot;dry powder breaks&lt;br/&gt;the chain reaction&quot;]
+  FIRE -.-&gt; IS[&quot;isolation removes&lt;br/&gt;the fuel&quot;]
+</div></p>
+<p><strong>Labels that earn the mark:</strong> all four sides, and one extinguishing agent matched to the side it removes. Three sides and the word "triangle" is a half answer.</p>
+<h3 id="52-fire-classes-and-which-agent-exam-5-marks">5.2 Fire classes and which agent · <strong>exam, 5 marks</strong><a class="anchor" href="#52-fire-classes-and-which-agent-exam-5-marks">#</a></h3>
+<table>
+<thead>
+<tr>
+<th>Class</th>
+<th>Fuel</th>
+<th>Water</th>
+<th>Foam</th>
+<th>CO₂</th>
+<th>Dry powder</th>
+<th>Clean agent</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>A</strong></td>
+<td>wood, paper, cloth</td>
+<td>✔</td>
+<td>✔</td>
+<td>✘</td>
+<td>✔</td>
+<td>✔</td>
+</tr>
+<tr>
+<td><strong>B</strong></td>
+<td>petrol, oil, solvent</td>
+<td>✘ spreads</td>
+<td>✔</td>
+<td>✔</td>
+<td>✔</td>
+<td>✔</td>
+</tr>
+<tr>
+<td><strong>C</strong></td>
+<td>gas</td>
+<td>✘</td>
+<td>✘</td>
+<td>✔</td>
+<td>✔</td>
+<td>✔</td>
+</tr>
+<tr>
+<td><strong>D</strong></td>
+<td>metal</td>
+<td>✘ violent</td>
+<td>✘</td>
+<td>✘</td>
+<td>special only</td>
+<td>✘</td>
+</tr>
+<tr>
+<td><strong>E</strong></td>
+<td>electrical</td>
+<td>✘ shock</td>
+<td>✘</td>
+<td>✔</td>
+<td>✔</td>
+<td>✔</td>
+</tr>
+<tr>
+<td><strong>F</strong></td>
+<td>cooking oil</td>
+<td>✘</td>
+<td>✔ wet chemical</td>
+<td>✘</td>
+<td>✘</td>
+<td>✘</td>
+</tr>
+</tbody>
+</table>
+<p><div class="mermaid">flowchart TD
+  A{&quot;Is the power still on?&quot;} --&gt;|&quot;yes&quot;| E[&quot;Class E · CO2 or clean agent&lt;br/&gt;never water&quot;]
+  A --&gt;|&quot;no&quot;| B{&quot;What is burning?&quot;}
+  B --&gt;|&quot;solid, leaves ash&quot;| CA[&quot;Class A · water or foam&quot;]
+  B --&gt;|&quot;liquid fuel&quot;| CB[&quot;Class B · foam, CO2, powder&quot;]
+  B --&gt;|&quot;gas&quot;| CC[&quot;Class C · isolate, then powder&quot;]
+  B --&gt;|&quot;metal&quot;| CD[&quot;Class D · special dry powder&quot;]
+  B --&gt;|&quot;cooking oil&quot;| CF[&quot;Class F · wet chemical&quot;]
+</div></p>
+<h3 id="53-dow-fire-and-explosion-index-exam-8-marks">5.3 Dow Fire and Explosion Index · <strong>exam, 8 marks</strong><a class="anchor" href="#53-dow-fire-and-explosion-index-exam-8-marks">#</a></h3>
+<p><div class="mermaid">flowchart TD
+  U[&quot;Select the unit&quot;] --&gt; MF[&quot;Material factor MF&lt;br/&gt;from the NFPA reactivity and flammability&quot;]
+  MF --&gt; F1[&quot;F1 · general process hazards&quot;]
+  MF --&gt; F2[&quot;F2 · special process hazards&quot;]
+  F1 --&gt; F3[&quot;F3 = F1 × F2&quot;]
+  F2 --&gt; F3
+  F3 --&gt; FEI[&quot;F&amp;EI = F3 × MF&quot;]
+  FEI --&gt; BAND[&quot;Hazard band&lt;br/&gt;1-60 light&lt;br/&gt;61-96 moderate&lt;br/&gt;97-127 intermediate&lt;br/&gt;128-158 heavy&lt;br/&gt;159+ severe&quot;]
+  BAND --&gt; RAD[&quot;Exposure radius&lt;br/&gt;read from the curve&quot;]
+  RAD --&gt; AREA[&quot;Area = π r squared&quot;]
+  AREA --&gt; VAL[&quot;Value of equipment inside&quot;]
+  VAL --&gt; DF[&quot;Damage factor from the material&quot;]
+  DF --&gt; MPPD[&quot;Base MPPD = value × DF&quot;]
+  MPPD --&gt; CR[&quot;Apply loss control credits&quot;]
+  CR --&gt; AMPPD[&quot;Actual MPPD&quot;]
+  AMPPD --&gt; MPDO[&quot;MPDO = 0.7 × actual MPPD&quot;]
+  MPDO --&gt; BI[&quot;BI = 0.5 × MPDO&lt;br/&gt;plus 0.7 × fixed costs&quot;]
+  FEI -.-&gt;|&quot;144 or above&quot;| PHA[&quot;A PHA is triggered&quot;]
+  classDef key fill:#fde68a,stroke:#b45309,color:#111
+  class FEI,PHA key
+</div></p>
+<p>Worked check from the kit: MF 16, F1 2.50, F2 3.60, F3 9.00, <strong>F&amp;EI 144 → heavy → past the 128 trigger, so a PHA is mandatory.</strong></p>
+<h3 id="54-hazop-the-node-loop-exam-5-marks">5.4 HAZOP — the node loop · <strong>exam, 5 marks</strong><a class="anchor" href="#54-hazop-the-node-loop-exam-5-marks">#</a></h3>
+<p><div class="mermaid">flowchart LR
+  N[&quot;Take node 1&quot;] --&gt; P[&quot;Pick a parameter&lt;br/&gt;flow, pressure, temperature, level&quot;]
+  P --&gt; G[&quot;Apply a guide word&lt;br/&gt;no, more, less, as well as, part of, reverse, other than&quot;]
+  G --&gt; C[&quot;Cause · consequence · safeguards&quot;]
+  C --&gt; D{&quot;Acceptable?&quot;}
+  D --&gt;|&quot;yes&quot;| R[&quot;Record and move on&quot;]
+  D --&gt;|&quot;no&quot;| A[&quot;Action, owner, date&quot;]
+  R --&gt; P
+  A --&gt; P
+</div></p>
+<h3 id="55-hazop-node-schematic-exam-5-marks">5.5 HAZOP node schematic · <strong>exam, 5 marks</strong><a class="anchor" href="#55-hazop-node-schematic-exam-5-marks">#</a></h3>
+<p><div class="mermaid">flowchart LR
+  T[&quot;Tank T-1&quot;] --&gt; PU[&quot;Pump P-1&quot;]
+  PU --&gt; V[&quot;Control valve FCV-1&quot;]
+  V --&gt; RX[&quot;Reactor R-1&quot;]
+  subgraph ND[&quot;Node 1 · line T-1 to R-1 · intent: transfer at 10 m3 per hour&quot;]
+    PU
+    V
+  end
+</div></p>
+<p><strong>The mark:</strong> the bracket with a <strong>design intent</strong> written under it. A HAZOP without a stated intent has nothing to deviate from.</p>
+<h3 id="56-hazard-bands-exam-3-marks">5.6 Hazard bands · <strong>exam, 3 marks</strong><a class="anchor" href="#56-hazard-bands-exam-3-marks">#</a></h3>
+<p><div class="mermaid">flowchart LR
+  B1[&quot;1-60&lt;br/&gt;light&quot;] --&gt; B2[&quot;61-96&lt;br/&gt;moderate&quot;] --&gt; B3[&quot;97-127&lt;br/&gt;intermediate&quot;] --&gt; B4[&quot;128-158&lt;br/&gt;heavy&quot;] --&gt; B5[&quot;159+&lt;br/&gt;severe&quot;]
+  B4 -.-&gt; S[&quot;PHA mandatory&lt;br/&gt;star at 128&quot;]
+  classDef hot fill:#fecaca,stroke:#b91c1c,color:#111
+  class B4,B5 hot
+</div></p>
+<h3 id="57-hierarchy-of-controls-exam-3-marks">5.7 Hierarchy of controls · <strong>exam, 3 marks</strong><a class="anchor" href="#57-hierarchy-of-controls-exam-3-marks">#</a></h3>
+<p><div class="mermaid">flowchart TD
+  E[&quot;1 · Eliminate&quot;] --&gt; S[&quot;2 · Substitute&quot;]
+  S --&gt; EN[&quot;3 · Engineering&lt;br/&gt;guard, ventilate, isolate&quot;]
+  EN --&gt; AD[&quot;4 · Administrative&lt;br/&gt;procedure, training, permit&quot;]
+  AD --&gt; PP[&quot;5 · PPE&quot;]
+  E -.-&gt;|&quot;protects everyone,&lt;br/&gt;no behaviour needed&quot;| PP
+</div></p>
+<p>The arrow is the argument: controls at the top protect everyone all the time, and PPE protects one person while it is worn.</p>
+<h3 id="58-pha-four-steps-exam-3-marks">5.8 PHA four steps · <strong>exam, 3 marks</strong><a class="anchor" href="#58-pha-four-steps-exam-3-marks">#</a></h3>
+<p><div class="mermaid">flowchart TD
+  P1[&quot;Prerequisites&lt;br/&gt;drawings, data, team&quot;] --&gt; P2[&quot;Hazard identification&lt;br/&gt;no hazard too small to record&quot;]
+  P2 --&gt; P3[&quot;Consequence and frequency&lt;br/&gt;what if it happens, how often&quot;]
+  P3 --&gt; P4[&quot;Risk ranking&lt;br/&gt;and recommendations&quot;]
+</div></p>
+<h3 id="59-chemical-hazard-to-control-concept">5.9 Chemical hazard to control · <strong>concept</strong><a class="anchor" href="#59-chemical-hazard-to-control-concept">#</a></h3>
+<p><div class="mermaid">flowchart LR
+  MS[&quot;MSDS&lt;br/&gt;16 sections&quot;] --&gt; ID[&quot;Hazard identified&lt;br/&gt;GHS pictogram and H phrase&quot;]
+  ID --&gt; EX[&quot;Exposure route&lt;br/&gt;inhalation, skin, ingestion, injection&quot;]
+  EX --&gt; CT[&quot;Control&lt;br/&gt;eliminate, substitute, enclose, ventilate, PPE&quot;]
+  CT --&gt; MON[&quot;Monitor exposure&lt;br/&gt;and health surveillance&quot;]
+  MON -.-&gt;|&quot;reassess&quot;| ID
+</div></p>
+<h3 id="510-drawing-notes-the-nine-figures">5.10 Drawing notes · the nine figures<a class="anchor" href="#510-drawing-notes-the-nine-figures">#</a></h3>
 <table>
 <thead>
 <tr>
@@ -2166,6 +2342,7 @@ table.</p>
 <p>Draw all nine small, label them, and refer to each one in the text. A labelled sketch earns more
 than a neat one. Two of the nine are compulsory in practice: the Dow flow chart for a calculation
 question, and the node schematic for a HAZOP question.</p>
+<hr />
 <hr />
 <h2 id="6-say-this-if-grilled">6. Say this if grilled<a class="anchor" href="#6-say-this-if-grilled">#</a></h2>
 <h3 id="61-sixteen-lines-to-have-ready">6.1 Sixteen lines to have ready<a class="anchor" href="#61-sixteen-lines-to-have-ready">#</a></h3>
@@ -2437,6 +2614,26 @@ question, and the node schematic for a HAZOP question.</p>
     if(e.key==="Enter"&&!e.shiftKey){ e.preventDefault(); ask(input.value); }
   });
   input.addEventListener("input",function(){ input.style.height="auto"; input.style.height=Math.min(input.scrollHeight,110)+"px"; });
+})();
+</script>
+<script src="../assets/mermaid.min.js"></script>
+<script>
+(function(){
+  var nodes=[].slice.call(document.querySelectorAll('.mermaid'));
+  if(!nodes.length) return;
+  nodes.forEach(function(n){ n.dataset.src=n.textContent; });
+  function theme(){ return document.documentElement.getAttribute('data-theme')==='dark'?'dark':'default'; }
+  function run(){
+    mermaid.initialize({startOnLoad:false, theme:theme(), securityLevel:'loose',
+      flowchart:{htmlLabels:true, curve:'basis', nodeSpacing:38, rankSpacing:52, padding:12},
+      themeVariables:{fontFamily:'Inter,system-ui,sans-serif', fontSize:'15px'}});
+    nodes.forEach(function(n){ n.removeAttribute('data-processed'); n.innerHTML=n.dataset.src; });
+    mermaid.run({nodes:nodes, suppressErrors:true});
+  }
+  run();
+  new MutationObserver(function(m){
+    if(m.some(function(x){return x.attributeName==='data-theme';})) run();
+  }).observe(document.documentElement,{attributes:true});
 })();
 </script>
 </body>

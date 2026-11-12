@@ -202,7 +202,18 @@ tbody tr:hover{background:var(--accent-soft)}
 </ul>
 </li>
 <li><a href="#4-definitions-and-numbers-to-memorise">4. Definitions and numbers to memorise</a></li>
-<li><a href="#5-diagrams-to-draw">5. Diagrams to draw</a></li>
+<li><a href="#5-diagrams-draw-these-then-the-ones-that-explain">5. Diagrams — draw these, then the ones that explain</a><ul>
+<li><a href="#51-which-protection-for-an-excavation-exam-3-marks">5.1 Which protection for an excavation · exam, 3 marks</a></li>
+<li><a href="#52-raking-shore-vs-flying-shore-exam-5-marks">5.2 Raking shore vs flying shore · exam, 5 marks</a></li>
+<li><a href="#53-ladder-angle-exam-3-marks">5.3 Ladder angle · exam, 3 marks</a></li>
+<li><a href="#54-scaffold-members-exam-5-marks">5.4 Scaffold members · exam, 5 marks</a></li>
+<li><a href="#55-demolition-sequence-exam-5-marks">5.5 Demolition sequence · exam, 5 marks</a></li>
+<li><a href="#56-underpinning-sequence-exam-3-marks">5.6 Underpinning sequence · exam, 3 marks</a></li>
+<li><a href="#57-confined-space-entry-set-up-exam-5-marks">5.7 Confined-space entry set-up · exam, 5 marks</a></li>
+<li><a href="#58-ergonomics-injury-chain-concept">5.8 Ergonomics injury chain · concept</a></li>
+<li><a href="#59-fall-the-leading-cause-concept">5.9 Fall — the leading cause · concept</a></li>
+</ul>
+</li>
 <li><a href="#6-say-this-if-grilled">6. Say-this-if-grilled</a></li>
 </ul>
 </div>
@@ -1870,7 +1881,99 @@ tbody tr:hover{background:var(--accent-soft)}
 </table>
 <p><strong>The rule about numbers.</strong> Every value above marked <strong>(standard)</strong> is a code or textbook figure that is <strong>not in the deck</strong>. Quote it as such — "about five millimetres per second, as the usual residential limit" — rather than as an exact clause. An examiner forgives "about"; an examiner does not forgive a fabricated decimal place.</p>
 <hr />
-<h2 id="5-diagrams-to-draw">5. Diagrams to draw<a class="anchor" href="#5-diagrams-to-draw">#</a></h2>
+<h2 id="5-diagrams-draw-these-then-the-ones-that-explain">5. Diagrams — draw these, then the ones that explain<a class="anchor" href="#5-diagrams-draw-these-then-the-ones-that-explain">#</a></h2>
+<p>Construction diagrams are cross-sections, so draw them as sections. The mermaid versions below are the <em>structure</em> to copy: get the parts and the arrows right, then draw them by hand with a pencil.</p>
+<h3 id="51-which-protection-for-an-excavation-exam-3-marks">5.1 Which protection for an excavation · <strong>exam, 3 marks</strong><a class="anchor" href="#51-which-protection-for-an-excavation-exam-3-marks">#</a></h3>
+<p><div class="mermaid">flowchart TD
+  A{&quot;How deep, and&lt;br/&gt;what soil?&quot;} --&gt;|&quot;shallow, stable,&lt;br/&gt;room available&quot;| S[&quot;Slope or bench&lt;br/&gt;angle set by soil class&quot;]
+  A --&gt;|&quot;deep, no room,&lt;br/&gt;stable soil&quot;| SH[&quot;Shore&lt;br/&gt;sheeting + struts&quot;]
+  A --&gt;|&quot;deep, no room,&lt;br/&gt;moving soil&quot;| B[&quot;Shield or box&lt;br/&gt;moved with the work&quot;]
+  A --&gt;|&quot;water present&quot;| D[&quot;Dewater first&lt;br/&gt;then shore or shield&quot;]
+  S --&gt; X[&quot;Never enter an&lt;br/&gt;unprotected excavation&quot;]
+  SH --&gt; X
+  B --&gt; X
+  D --&gt; X
+</div></p>
+<h3 id="52-raking-shore-vs-flying-shore-exam-5-marks">5.2 Raking shore vs flying shore · <strong>exam, 5 marks</strong><a class="anchor" href="#52-raking-shore-vs-flying-shore-exam-5-marks">#</a></h3>
+<p><div class="mermaid">flowchart LR
+  subgraph R[&quot;Raking shore · ground available&quot;]
+    W1[&quot;Wall&quot;] --- N1[&quot;Needle through wall&quot;]
+    N1 --- RK[&quot;Raking member at 45 degrees&quot;]
+    RK --- SP[&quot;Sole plate on ground&quot;]
+  end
+  subgraph F[&quot;Flying shore · gap between two walls&quot;]
+    W2[&quot;Wall A&quot;] --- ST[&quot;Horizontal strut&quot;]
+    ST --- WB[&quot;Straining beam and wedges&quot;]
+    WB --- W3[&quot;Wall B&quot;]
+  end
+</div></p>
+<p><strong>The sentence that earns the mark:</strong> a rake needs ground to push against; a flying shore works when the two walls can push against each other.</p>
+<h3 id="53-ladder-angle-exam-3-marks">5.3 Ladder angle · <strong>exam, 3 marks</strong><a class="anchor" href="#53-ladder-angle-exam-3-marks">#</a></h3>
+<p><div class="mermaid">flowchart LR
+  G[&quot;4 up&quot;] --&gt; T[&quot;1 out&quot;]
+  T --&gt; A[&quot;Angle 75 degrees&quot;]
+  A --&gt; E[&quot;3 ft of ladder&lt;br/&gt;above the landing&quot;]
+</div></p>
+<p>Draw the right triangle: 4 vertical, 1 horizontal, ladder as the hypotenuse. Write 75° at the base and 3 ft at the top.</p>
+<h3 id="54-scaffold-members-exam-5-marks">5.4 Scaffold members · <strong>exam, 5 marks</strong><a class="anchor" href="#54-scaffold-members-exam-5-marks">#</a></h3>
+<p><div class="mermaid">flowchart TD
+  SO[&quot;Sole plate&quot;] --&gt; ST[&quot;Standard · vertical&quot;]
+  ST --&gt; L[&quot;Ledger · horizontal&quot;]
+  L --&gt; TR[&quot;Transom · across&quot;]
+  TR --&gt; D[&quot;Decking · fully boarded&quot;]
+  D --&gt; GR[&quot;Guardrail at 1 m&quot;]
+  D --&gt; TB[&quot;Toe board&quot;]
+  ST --&gt; BR[&quot;Diagonal brace&quot;]
+  ST --&gt; TI[&quot;Tie to the building&lt;br/&gt;every lift&quot;]
+</div></p>
+<p>Eight labels. The two that get forgotten are the <strong>sole plate</strong> and the <strong>tie</strong>.</p>
+<h3 id="55-demolition-sequence-exam-5-marks">5.5 Demolition sequence · <strong>exam, 5 marks</strong><a class="anchor" href="#55-demolition-sequence-exam-5-marks">#</a></h3>
+<p><div class="mermaid">flowchart TD
+  A[&quot;Survey and structural report&quot;] --&gt; B[&quot;Method statement approved&quot;]
+  B --&gt; C[&quot;Services isolated and proved dead&quot;]
+  C --&gt; D[&quot;Exclusion zone, hoarding, signage&quot;]
+  D --&gt; E[&quot;Top down, stage by stage&quot;]
+  E --&gt; F[&quot;Debris down chutes&lt;br/&gt;no throwing from height&quot;]
+  F --&gt; G[&quot;Dust suppression, vibration monitoring&quot;]
+  G --&gt; H[&quot;Final inspection and clearance&quot;]
+  E -.-&gt;|&quot;never&quot;| X[&quot;Undercut a wall&lt;br/&gt;or work beneath a load&quot;]
+</div></p>
+<h3 id="56-underpinning-sequence-exam-3-marks">5.6 Underpinning sequence · <strong>exam, 3 marks</strong><a class="anchor" href="#56-underpinning-sequence-exam-3-marks">#</a></h3>
+<p><div class="mermaid">flowchart LR
+  P1[&quot;Pits 1, 3, 5&lt;br/&gt;dug and concreted&quot;] --&gt; P2[&quot;Pits 2, 4, 6&lt;br/&gt;dug and concreted&quot;]
+  P2 --&gt; L[&quot;Load transferred&lt;br/&gt;by needles and props&quot;]
+  L --&gt; M[&quot;Monitor settlement&lt;br/&gt;tell-tales on the wall&quot;]
+</div></p>
+<p><strong>The mark:</strong> alternate bays, never adjacent pits open at the same time, 1.2–1.5 m maximum open length.</p>
+<h3 id="57-confined-space-entry-set-up-exam-5-marks">5.7 Confined-space entry set-up · <strong>exam, 5 marks</strong><a class="anchor" href="#57-confined-space-entry-set-up-exam-5-marks">#</a></h3>
+<p><div class="mermaid">sequenceDiagram
+  participant A as Attendant
+  participant E as Entrant
+  participant S as Space
+  A-&gt;&gt;S: Test from outside, 21 per cent O2
+  A-&gt;&gt;S: Ventilate
+  A-&gt;&gt;E: Permit signed, harness and line on
+  E-&gt;&gt;S: Enter, gas meter running
+  A-&gt;&gt;A: Log names, watch continuously
+  S--&gt;&gt;A: Alarm or change
+  A-&gt;&gt;E: Evacuate, do not enter to rescue
+</div></p>
+<p><strong>The trap:</strong> the attendant never enters. Write "call the rescue team" on the figure, not "attendant rescues".</p>
+<h3 id="58-ergonomics-injury-chain-concept">5.8 Ergonomics injury chain · <strong>concept</strong><a class="anchor" href="#58-ergonomics-injury-chain-concept">#</a></h3>
+<p><div class="mermaid">flowchart LR
+  H[&quot;Hazard&lt;br/&gt;repetition, force, posture&quot;] --&gt; E[&quot;Exposure&lt;br/&gt;hours per shift, years&quot;]
+  E --&gt; S[&quot;Strain&lt;br/&gt;muscle, tendon, nerve&quot;]
+  S --&gt; M[&quot;MSD&lt;br/&gt;pain, loss of function&quot;]
+  M --&gt; C[&quot;CTD&lt;br/&gt;chronic, irreversible&quot;]
+  C -.-&gt;|&quot;controls break the chain here&quot;| H
+</div></p>
+<h3 id="59-fall-the-leading-cause-concept">5.9 Fall — the leading cause · <strong>concept</strong><a class="anchor" href="#59-fall-the-leading-cause-concept">#</a></h3>
+<p><div class="mermaid">flowchart LR
+  F[&quot;Fall from height&quot;] --&gt; A[&quot;4 to 6 feet&lt;br/&gt;is enough&quot;]
+  A --&gt; D[&quot;Fatality table&lt;br/&gt;falls lead&quot;]
+  D --&gt; P[&quot;Guardrail, harness,&lt;br/&gt;hole cover, training&quot;]
+</div></p>
+<p>Four construction families sit behind it: falls, electrocution, struck by a falling object, trapped in an excavation.</p>
 <table>
 <thead>
 <tr>
@@ -1938,6 +2041,7 @@ tbody tr:hover{background:var(--accent-soft)}
 </tbody>
 </table>
 <p>Five of these are worth practising until they take ninety seconds: the excavation four, the ladder triangle, the scaffold elevation, the blast pattern and the demolition site plan.</p>
+<hr />
 <hr />
 <h2 id="6-say-this-if-grilled">6. Say-this-if-grilled<a class="anchor" href="#6-say-this-if-grilled">#</a></h2>
 <ol>
@@ -2195,6 +2299,26 @@ tbody tr:hover{background:var(--accent-soft)}
     if(e.key==="Enter"&&!e.shiftKey){ e.preventDefault(); ask(input.value); }
   });
   input.addEventListener("input",function(){ input.style.height="auto"; input.style.height=Math.min(input.scrollHeight,110)+"px"; });
+})();
+</script>
+<script src="../assets/mermaid.min.js"></script>
+<script>
+(function(){
+  var nodes=[].slice.call(document.querySelectorAll('.mermaid'));
+  if(!nodes.length) return;
+  nodes.forEach(function(n){ n.dataset.src=n.textContent; });
+  function theme(){ return document.documentElement.getAttribute('data-theme')==='dark'?'dark':'default'; }
+  function run(){
+    mermaid.initialize({startOnLoad:false, theme:theme(), securityLevel:'loose',
+      flowchart:{htmlLabels:true, curve:'basis', nodeSpacing:38, rankSpacing:52, padding:12},
+      themeVariables:{fontFamily:'Inter,system-ui,sans-serif', fontSize:'15px'}});
+    nodes.forEach(function(n){ n.removeAttribute('data-processed'); n.innerHTML=n.dataset.src; });
+    mermaid.run({nodes:nodes, suppressErrors:true});
+  }
+  run();
+  new MutationObserver(function(m){
+    if(m.some(function(x){return x.attributeName==='data-theme';})) run();
+  }).observe(document.documentElement,{attributes:true});
 })();
 </script>
 </body>

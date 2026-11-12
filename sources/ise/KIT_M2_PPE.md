@@ -980,9 +980,109 @@ These are the only calculations in the module. The base is part of the answer, s
 
 ---
 
-## 5. Diagrams to be able to draw
+## 5. Diagrams — draw these, then the ones that explain
 
-### 5.1 The eight figures, and how to draw each
+### 5.1 RPE selection tree · **exam, 5 marks**
+
+```mermaid
+flowchart TD
+  A{"Oxygen below<br/>19.5 per cent?"} -->|"yes"| BA["Breathing apparatus only<br/>no filter can add oxygen"]
+  A -->|"no"| B{"Contaminant identified<br/>and within filter limit?"}
+  B -->|"no"| BA
+  B -->|"yes"| C{"Particulate<br/>or gas and vapour?"}
+  C -->|"particulate"| D["Filtering facepiece<br/>or half mask + P1/P2/P3"]
+  C -->|"gas and vapour"| E{"Powered or<br/>non-powered?"}
+  E -->|"non-powered"| F["Half or full mask<br/>+ A/B/E/K filter"]
+  E -->|"powered"| G["PAPR<br/>loose or tight fitting"]
+```
+
+**Labels that earn the mark:** 19.5 per cent at the first diamond, and the phrase "no filter adds oxygen" beside the breathing-apparatus branch.
+
+### 5.2 Confined-space entry ladder · **exam, 5 marks**
+
+```mermaid
+flowchart TD
+  R1["1 · Assess the space<br/>and the task"] --> R2["2 · Test from outside<br/>21 per cent O2, 19.5 minimum"]
+  R2 --> R3["3 · Ventilate<br/>before and during"]
+  R3 --> R4["4 · Permit issued<br/>attendant posted"]
+  R4 --> R5["5 · Enter<br/>rescue equipment ready"]
+  R5 --> R6["6 · Re-test on any change<br/>10 per cent LEL alarm"]
+  R6 -.->|"change detected"| R3
+```
+
+**Note:** the two numbers the marker looks for are **19.5 per cent** oxygen and **10 per cent LEL**. Write them on the rungs, not in the paragraph.
+
+### 5.3 Permit decision flow · **exam, 3 marks**
+
+```mermaid
+flowchart TD
+  A{"Ignition source<br/>or hot work?"} -->|"yes"| RED["Hot work permit<br/>red"]
+  A -->|"no"| B{"Confined space?"}
+  B -->|"yes"| YEL["Confined space entry permit<br/>yellow"]
+  B -->|"no"| C{"Other hazard<br/>excavation, height, isolation?"}
+  C -->|"yes"| GRN["Cold work permit<br/>green, one month, renewable three"]
+  C -->|"no"| N["Normal work<br/>no permit"]
+```
+
+### 5.4 Rate box · **exam, 3 marks**
+
+```mermaid
+flowchart LR
+  A["Frequency rate"] --> F["injuries × 1,000,000<br/>————————————<br/>man-hours worked"]
+  B["Severity rate"] --> S["days lost × 1,000,000<br/>————————————<br/>man-hours worked"]
+```
+
+Write the million on both. A rate box without the base mark is a picture, not an answer.
+
+### 5.5 5S cycle · **exam, 3 marks**
+
+```mermaid
+flowchart LR
+  S1["Seiri · sort"] --> S2["Seiton · set in order"]
+  S2 --> S3["Seiso · shine"]
+  S3 --> S4["Seiketsu · standardise"]
+  S4 --> S5["Shitsuke · sustain"]
+  S5 -.->|"audit restarts the cycle"| S1
+```
+
+Mark the first three as "change the workplace" and the last two as "keep the change". That split is worth a mark on its own.
+
+### 5.6 PPE hierarchy · **concept**
+
+```mermaid
+flowchart TD
+  E["Eliminate the hazard"] --> S["Substitute something safer"]
+  S --> T["Engineering control<br/>guard, ventilation"]
+  T --> A["Administrative control<br/>procedure, training, rotation"]
+  A --> P["PPE<br/>last line, protects one person"]
+```
+
+Read it downward and the sentence writes itself: PPE sits at the bottom because it protects one wearer, and only while it is worn.
+
+### 5.7 Housekeeping cause path · **concept**
+
+```mermaid
+flowchart LR
+  H["Poor housekeeping"] --> T["Trips, slips, blocked exits"]
+  H --> F["Fuel and ignition<br/>fire load"]
+  H --> C["Contamination<br/>product and skin"]
+  T --> I["Injury"]
+  F --> I
+  C --> I
+```
+
+### 5.8 Monitoring loop · **concept**
+
+```mermaid
+flowchart LR
+  M["Measure the rates"] --> C["Compare with target"]
+  C --> A["Act on the gap"]
+  A --> M
+```
+
+Frequency and severity are lagging. Activity rate is the leading one, because it counts the work done before the injury.
+
+### 5.9 Drawing notes for the eight figures
 
 A diagram in this module earns marks for labels, not for artistry. Draw the box, name the parts, and write the number beside the part it applies to. Each figure below takes under two minutes.
 
@@ -1004,6 +1104,9 @@ A diagram in this module earns marks for labels, not for artistry. Draw the box,
 **One idea per figure.** If a drawing needs three captions it is two drawings, and the second one costs a minute.
 
 Three rules for all eight. Draw them small, about a third of a page each. Refer to them in the text by name, because an unmentioned diagram is marked as decoration.
+
+---
+
 
 ---
 

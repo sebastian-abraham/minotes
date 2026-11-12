@@ -559,13 +559,96 @@ Definitions in one line each, in the deck's own words where the deck gives them:
 
 ---
 
-## 5. Diagrams to draw (from the deck only)
+## 5. Diagrams — draw these, then the ones that explain
+
+Draw the exam ones by hand until each takes ninety seconds. The concept ones are for reading once, so the mechanism sticks.
+
+### 5.1 Domino chain · **exam, 2–3 marks**
+
+```mermaid
+flowchart LR
+  D1["1 · Ancestry and<br/>social environment"] --> D2["2 · Fault of<br/>the person"]
+  D2 --> D3["3 · Unsafe act or<br/>unsafe condition"]
+  D3 --> D4["4 · Accident"]
+  D4 --> D5["5 · Injury"]
+  D3 -.->|"remove this one"| X["sequence stops<br/>no accident"]
+  classDef cut fill:#fde68a,stroke:#b45309,color:#111
+  class D3,X cut
+```
+
+**Labels that earn the mark:** the five stages in order, and the words "remove one domino". Then one sentence: prevention targets domino 3 because the first two are outside a manager's control.
+
+### 5.2 Line organisation · **exam, 3 marks**
+
+```mermaid
+flowchart TD
+  CEO["Chief executive"] --> PM["Plant manager"]
+  PM --> SUP["Supervisors"]
+  SUP --> W["Workmen"]
+  SUP -.->|"safety duty at every level"| D["Guard, train, inspect"]
+```
+
+The line version has no safety specialist. Authority runs straight down, and the supervisor carries safety as one of the duties.
+
+### 5.3 Staff organisation · **exam, 3 marks**
+
+```mermaid
+flowchart TD
+  GM["General manager"] --> SD["Safety director"]
+  GM --> PM["Plant manager"]
+  SD -.->|"advice"| PM
+  PM --> SUP["Supervisors"]
+  SD -.->|"advice"| SUP
+  SUP --> W["Workmen"]
+  SD -.->|"advice"| W
+```
+
+The dotted lines are the answer: the safety director **advises**, and the line manager **commands**. Write that sentence under the sketch.
+
+### 5.4 Energy transfer · **exam, 3 marks**
+
+```mermaid
+flowchart LR
+  S["Source<br/>the energy"] -->|"path<br/>the transfer"| R["Receiver<br/>the worker"]
+  S -.-> C1["remove or substitute<br/>the source"]
+  S -.-> C2["barrier, guard, isolate<br/>on the path"]
+  R -.-> C3["PPE at the receiver"]
+```
+
+**The mark line:** "control at the source is best, on the path is next, at the receiver is last." That sentence turns a picture into an answer.
+
+### 5.5 Three pillars · **concept**
+
+```mermaid
+flowchart LR
+  S["Safety"] <--> Q["Quality"]
+  Q <--> P["Productivity"]
+  P <--> S
+```
+
+Use it to answer "does safety cost productivity?" The arrows run both ways because each one feeds the others.
+
+### 5.6 Control loop · **concept**
+
+```mermaid
+flowchart LR
+  A["Hazard found"] --> B["Risk assessed"]
+  B --> C["Control chosen"]
+  C --> D["Effect measured"]
+  D -->|"still not acceptable"| A
+  D -->|"acceptable"| E["Residual risk accepted<br/>and recorded"]
+```
+
+This is the loop the safety officer actually runs. Every "describe the role of the safety officer" answer is this loop with job titles attached.
 
 1. **Domino chain** (`slide 41`). Five upright dominoes in a row, labelled ancestry and environment, worker fault, unsafe act with hazard, accident, injury. Draw a hand removing the third.
 2. **Three pillars** (`slide 14`). Three columns labelled safety, quality and productivity, joined by arrows running both ways.
 3. **Line organisation** (`slide 61`). One vertical chain: chief executive to plant manager to supervisor to workman, with safety duties hanging off each supervisor.
 4. **Staff organisation** (`slide 65`). The same vertical chain, plus a safety director in a box beside it, with advisory arrows into every level and a reporting line to the general manager.
 5. **Energy transfer** (`slide 53`). Three boxes in a row: source, path, receiver, with the controls written under each, removal at the source, barriers and isolators on the path, PPE at the receiver.
+
+---
+
 
 ---
 

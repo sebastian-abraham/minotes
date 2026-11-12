@@ -1132,7 +1132,133 @@ Those signs matter because **Stage 1 is the only stage you can fully undo.** The
 
 ---
 
-## 5. Diagrams to draw
+## 5. Diagrams — draw these, then the ones that explain
+
+Construction diagrams are cross-sections, so draw them as sections. The mermaid versions below are the *structure* to copy: get the parts and the arrows right, then draw them by hand with a pencil.
+
+### 5.1 Which protection for an excavation · **exam, 3 marks**
+
+```mermaid
+flowchart TD
+  A{"How deep, and<br/>what soil?"} -->|"shallow, stable,<br/>room available"| S["Slope or bench<br/>angle set by soil class"]
+  A -->|"deep, no room,<br/>stable soil"| SH["Shore<br/>sheeting + struts"]
+  A -->|"deep, no room,<br/>moving soil"| B["Shield or box<br/>moved with the work"]
+  A -->|"water present"| D["Dewater first<br/>then shore or shield"]
+  S --> X["Never enter an<br/>unprotected excavation"]
+  SH --> X
+  B --> X
+  D --> X
+```
+
+### 5.2 Raking shore vs flying shore · **exam, 5 marks**
+
+```mermaid
+flowchart LR
+  subgraph R["Raking shore · ground available"]
+    W1["Wall"] --- N1["Needle through wall"]
+    N1 --- RK["Raking member at 45 degrees"]
+    RK --- SP["Sole plate on ground"]
+  end
+  subgraph F["Flying shore · gap between two walls"]
+    W2["Wall A"] --- ST["Horizontal strut"]
+    ST --- WB["Straining beam and wedges"]
+    WB --- W3["Wall B"]
+  end
+```
+
+**The sentence that earns the mark:** a rake needs ground to push against; a flying shore works when the two walls can push against each other.
+
+### 5.3 Ladder angle · **exam, 3 marks**
+
+```mermaid
+flowchart LR
+  G["4 up"] --> T["1 out"]
+  T --> A["Angle 75 degrees"]
+  A --> E["3 ft of ladder<br/>above the landing"]
+```
+
+Draw the right triangle: 4 vertical, 1 horizontal, ladder as the hypotenuse. Write 75° at the base and 3 ft at the top.
+
+### 5.4 Scaffold members · **exam, 5 marks**
+
+```mermaid
+flowchart TD
+  SO["Sole plate"] --> ST["Standard · vertical"]
+  ST --> L["Ledger · horizontal"]
+  L --> TR["Transom · across"]
+  TR --> D["Decking · fully boarded"]
+  D --> GR["Guardrail at 1 m"]
+  D --> TB["Toe board"]
+  ST --> BR["Diagonal brace"]
+  ST --> TI["Tie to the building<br/>every lift"]
+```
+
+Eight labels. The two that get forgotten are the **sole plate** and the **tie**.
+
+### 5.5 Demolition sequence · **exam, 5 marks**
+
+```mermaid
+flowchart TD
+  A["Survey and structural report"] --> B["Method statement approved"]
+  B --> C["Services isolated and proved dead"]
+  C --> D["Exclusion zone, hoarding, signage"]
+  D --> E["Top down, stage by stage"]
+  E --> F["Debris down chutes<br/>no throwing from height"]
+  F --> G["Dust suppression, vibration monitoring"]
+  G --> H["Final inspection and clearance"]
+  E -.->|"never"| X["Undercut a wall<br/>or work beneath a load"]
+```
+
+### 5.6 Underpinning sequence · **exam, 3 marks**
+
+```mermaid
+flowchart LR
+  P1["Pits 1, 3, 5<br/>dug and concreted"] --> P2["Pits 2, 4, 6<br/>dug and concreted"]
+  P2 --> L["Load transferred<br/>by needles and props"]
+  L --> M["Monitor settlement<br/>tell-tales on the wall"]
+```
+
+**The mark:** alternate bays, never adjacent pits open at the same time, 1.2–1.5 m maximum open length.
+
+### 5.7 Confined-space entry set-up · **exam, 5 marks**
+
+```mermaid
+sequenceDiagram
+  participant A as Attendant
+  participant E as Entrant
+  participant S as Space
+  A->>S: Test from outside, 21 per cent O2
+  A->>S: Ventilate
+  A->>E: Permit signed, harness and line on
+  E->>S: Enter, gas meter running
+  A->>A: Log names, watch continuously
+  S-->>A: Alarm or change
+  A->>E: Evacuate, do not enter to rescue
+```
+
+**The trap:** the attendant never enters. Write "call the rescue team" on the figure, not "attendant rescues".
+
+### 5.8 Ergonomics injury chain · **concept**
+
+```mermaid
+flowchart LR
+  H["Hazard<br/>repetition, force, posture"] --> E["Exposure<br/>hours per shift, years"]
+  E --> S["Strain<br/>muscle, tendon, nerve"]
+  S --> M["MSD<br/>pain, loss of function"]
+  M --> C["CTD<br/>chronic, irreversible"]
+  C -.->|"controls break the chain here"| H
+```
+
+### 5.9 Fall — the leading cause · **concept**
+
+```mermaid
+flowchart LR
+  F["Fall from height"] --> A["4 to 6 feet<br/>is enough"]
+  A --> D["Fatality table<br/>falls lead"]
+  D --> P["Guardrail, harness,<br/>hole cover, training"]
+```
+
+Four construction families sit behind it: falls, electrocution, struck by a falling object, trapped in an excavation.
 
 | Figure | Source | What to draw |
 |---|---|---|
@@ -1149,6 +1275,9 @@ Those signs matter because **Stage 1 is the only stage you can fully undo.** The
 | **MSD body map** | `slide 109`, `slide 110` | Simple figure with the sites marked: neck and shoulder, elbow, wrist, thumb, lower back, knee. Label three conditions beside their site. |
 
 Five of these are worth practising until they take ninety seconds: the excavation four, the ladder triangle, the scaffold elevation, the blast pattern and the demolition site plan.
+
+---
+
 
 ---
 

@@ -1212,9 +1212,148 @@ table.
 
 ---
 
-## 5. Diagrams to draw
+## 5. Diagrams — draw these, then the ones that explain
 
-### 5.1 The six figures
+The Dow flow chart and the HAZOP node schematic are the two you will be asked to draw. The rest are for understanding, and they take sixty seconds each.
+
+### 5.1 Fire tetrahedron · **exam, 3 marks**
+
+```mermaid
+flowchart TD
+  F["FUEL<br/>what burns"] --> FIRE(("FIRE"))
+  O["OXYGEN<br/>21 per cent in air"] --> FIRE
+  H["HEAT<br/>ignition source"] --> FIRE
+  C["CHAIN REACTION<br/>the fourth side"] --> FIRE
+  FIRE -.-> W["water cools<br/>removes heat"]
+  FIRE -.-> FM["foam blankets<br/>removes oxygen"]
+  FIRE -.-> DP["dry powder breaks<br/>the chain reaction"]
+  FIRE -.-> IS["isolation removes<br/>the fuel"]
+```
+
+**Labels that earn the mark:** all four sides, and one extinguishing agent matched to the side it removes. Three sides and the word "triangle" is a half answer.
+
+### 5.2 Fire classes and which agent · **exam, 5 marks**
+
+| Class | Fuel | Water | Foam | CO₂ | Dry powder | Clean agent |
+|---|---|---|---|---|---|---|
+| **A** | wood, paper, cloth | ✔ | ✔ | ✘ | ✔ | ✔ |
+| **B** | petrol, oil, solvent | ✘ spreads | ✔ | ✔ | ✔ | ✔ |
+| **C** | gas | ✘ | ✘ | ✔ | ✔ | ✔ |
+| **D** | metal | ✘ violent | ✘ | ✘ | special only | ✘ |
+| **E** | electrical | ✘ shock | ✘ | ✔ | ✔ | ✔ |
+| **F** | cooking oil | ✘ | ✔ wet chemical | ✘ | ✘ | ✘ |
+
+```mermaid
+flowchart TD
+  A{"Is the power still on?"} -->|"yes"| E["Class E · CO2 or clean agent<br/>never water"]
+  A -->|"no"| B{"What is burning?"}
+  B -->|"solid, leaves ash"| CA["Class A · water or foam"]
+  B -->|"liquid fuel"| CB["Class B · foam, CO2, powder"]
+  B -->|"gas"| CC["Class C · isolate, then powder"]
+  B -->|"metal"| CD["Class D · special dry powder"]
+  B -->|"cooking oil"| CF["Class F · wet chemical"]
+```
+
+### 5.3 Dow Fire and Explosion Index · **exam, 8 marks**
+
+```mermaid
+flowchart TD
+  U["Select the unit"] --> MF["Material factor MF<br/>from the NFPA reactivity and flammability"]
+  MF --> F1["F1 · general process hazards"]
+  MF --> F2["F2 · special process hazards"]
+  F1 --> F3["F3 = F1 × F2"]
+  F2 --> F3
+  F3 --> FEI["F&EI = F3 × MF"]
+  FEI --> BAND["Hazard band<br/>1-60 light<br/>61-96 moderate<br/>97-127 intermediate<br/>128-158 heavy<br/>159+ severe"]
+  BAND --> RAD["Exposure radius<br/>read from the curve"]
+  RAD --> AREA["Area = π r squared"]
+  AREA --> VAL["Value of equipment inside"]
+  VAL --> DF["Damage factor from the material"]
+  DF --> MPPD["Base MPPD = value × DF"]
+  MPPD --> CR["Apply loss control credits"]
+  CR --> AMPPD["Actual MPPD"]
+  AMPPD --> MPDO["MPDO = 0.7 × actual MPPD"]
+  MPDO --> BI["BI = 0.5 × MPDO<br/>plus 0.7 × fixed costs"]
+  FEI -.->|"144 or above"| PHA["A PHA is triggered"]
+  classDef key fill:#fde68a,stroke:#b45309,color:#111
+  class FEI,PHA key
+```
+
+Worked check from the kit: MF 16, F1 2.50, F2 3.60, F3 9.00, **F&EI 144 → heavy → past the 128 trigger, so a PHA is mandatory.**
+
+### 5.4 HAZOP — the node loop · **exam, 5 marks**
+
+```mermaid
+flowchart LR
+  N["Take node 1"] --> P["Pick a parameter<br/>flow, pressure, temperature, level"]
+  P --> G["Apply a guide word<br/>no, more, less, as well as, part of, reverse, other than"]
+  G --> C["Cause · consequence · safeguards"]
+  C --> D{"Acceptable?"}
+  D -->|"yes"| R["Record and move on"]
+  D -->|"no"| A["Action, owner, date"]
+  R --> P
+  A --> P
+```
+
+### 5.5 HAZOP node schematic · **exam, 5 marks**
+
+```mermaid
+flowchart LR
+  T["Tank T-1"] --> PU["Pump P-1"]
+  PU --> V["Control valve FCV-1"]
+  V --> RX["Reactor R-1"]
+  subgraph ND["Node 1 · line T-1 to R-1 · intent: transfer at 10 m3 per hour"]
+    PU
+    V
+  end
+```
+
+**The mark:** the bracket with a **design intent** written under it. A HAZOP without a stated intent has nothing to deviate from.
+
+### 5.6 Hazard bands · **exam, 3 marks**
+
+```mermaid
+flowchart LR
+  B1["1-60<br/>light"] --> B2["61-96<br/>moderate"] --> B3["97-127<br/>intermediate"] --> B4["128-158<br/>heavy"] --> B5["159+<br/>severe"]
+  B4 -.-> S["PHA mandatory<br/>star at 128"]
+  classDef hot fill:#fecaca,stroke:#b91c1c,color:#111
+  class B4,B5 hot
+```
+
+### 5.7 Hierarchy of controls · **exam, 3 marks**
+
+```mermaid
+flowchart TD
+  E["1 · Eliminate"] --> S["2 · Substitute"]
+  S --> EN["3 · Engineering<br/>guard, ventilate, isolate"]
+  EN --> AD["4 · Administrative<br/>procedure, training, permit"]
+  AD --> PP["5 · PPE"]
+  E -.->|"protects everyone,<br/>no behaviour needed"| PP
+```
+
+The arrow is the argument: controls at the top protect everyone all the time, and PPE protects one person while it is worn.
+
+### 5.8 PHA four steps · **exam, 3 marks**
+
+```mermaid
+flowchart TD
+  P1["Prerequisites<br/>drawings, data, team"] --> P2["Hazard identification<br/>no hazard too small to record"]
+  P2 --> P3["Consequence and frequency<br/>what if it happens, how often"]
+  P3 --> P4["Risk ranking<br/>and recommendations"]
+```
+
+### 5.9 Chemical hazard to control · **concept**
+
+```mermaid
+flowchart LR
+  MS["MSDS<br/>16 sections"] --> ID["Hazard identified<br/>GHS pictogram and H phrase"]
+  ID --> EX["Exposure route<br/>inhalation, skin, ingestion, injection"]
+  EX --> CT["Control<br/>eliminate, substitute, enclose, ventilate, PPE"]
+  CT --> MON["Monitor exposure<br/>and health surveillance"]
+  MON -.->|"reassess"| ID
+```
+
+### 5.10 Drawing notes · the nine figures
 
 | Figure | Where | What to draw |
 |---|---|---|
@@ -1231,6 +1370,9 @@ table.
 Draw all nine small, label them, and refer to each one in the text. A labelled sketch earns more
 than a neat one. Two of the nine are compulsory in practice: the Dow flow chart for a calculation
 question, and the node schematic for a HAZOP question.
+
+---
+
 
 ---
 

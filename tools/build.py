@@ -523,6 +523,27 @@ JS = """
 })();
 """
 
+MERMAID_SCRIPTS = """<script src="../assets/mermaid.min.js"></script>
+<script>
+(function(){
+  var nodes=[].slice.call(document.querySelectorAll('.mermaid'));
+  if(!nodes.length) return;
+  nodes.forEach(function(n){ n.dataset.src=n.textContent; });
+  function theme(){ return document.documentElement.getAttribute('data-theme')==='dark'?'dark':'default'; }
+  function run(){
+    mermaid.initialize({startOnLoad:false, theme:theme(), securityLevel:'loose',
+      flowchart:{htmlLabels:true, curve:'basis', nodeSpacing:38, rankSpacing:52, padding:12},
+      themeVariables:{fontFamily:'Inter,system-ui,sans-serif', fontSize:'15px'}});
+    nodes.forEach(function(n){ n.removeAttribute('data-processed'); n.innerHTML=n.dataset.src; });
+    mermaid.run({nodes:nodes, suppressErrors:true});
+  }
+  run();
+  new MutationObserver(function(m){
+    if(m.some(function(x){return x.attributeName==='data-theme';})) run();
+  }).observe(document.documentElement,{attributes:true});
+})();
+</script>"""
+
 PAGE = """<!DOCTYPE html>
 <html lang="en" data-theme="light">
 <head>
@@ -566,6 +587,7 @@ PAGE = """<!DOCTYPE html>
   <button id="top" title="Back to top">↑</button>
 </div>
 <script>{{JS}}</script>
+{{MERMAID}}
 </body>
 </html>
 """
@@ -685,6 +707,7 @@ HUB_PAGE = """<!DOCTYPE html>
 <p class="hint">Add a subject by dropping Markdown into <code>sources/&lt;subject&gt;/</code> and running <code>tools/build.py</code>.</p>
 <div class="tools"><button id="theme" title="Toggle light / dark">☾</button></div>
 <script>{{JS}}</script>
+{{MERMAID}}
 </body>
 </html>
 """
@@ -726,6 +749,8 @@ def protect(md_text):
 
     def fence(m):
         lang, body = m.group(2), m.group(3)
+        if lang == "mermaid":
+            return keep(f'<div class="mermaid">{html_mod.escape(body)}</div>')
         cls = f' class="language-{html_mod.escape(lang)}"' if lang else ""
         return keep(f"<pre><code{cls}>{html_mod.escape(body)}</code></pre>")
 
@@ -800,6 +825,7 @@ def build_doc(subject, src_name, label, sub, slug):
             .replace("{{TOC}}", toc or "")
             .replace("{{BODY}}", body)
             .replace("{{CSS}}", CSS + CHAT_CSS)
+            .replace("{{MERMAID}}", MERMAID_SCRIPTS if 'class="mermaid"' in body else "")
             .replace("{{JS}}", JS + CHAT_JS))
     out = os.path.join(ROOT, subject["slug"], f"{slug}.html")
     write(out, page)
@@ -858,6 +884,7 @@ def build_subject(subject):
             .replace("{{BLURB}}", html_mod.escape(subject["blurb"]))
             .replace("{{CARDS}}", "\n".join(blocks))
             .replace("{{CSS}}", CSS + SHELL_CSS)
+            .replace("{{MERMAID}}", "")
             .replace("{{JS}}", JS))
     path = os.path.join(ROOT, subject["slug"], "index.html")
     write(path, page)
@@ -883,6 +910,7 @@ def build_hub():
             .replace("{{KICKER}}", "markdown → html · static")
             .replace("{{CARDS}}", blocks)
             .replace("{{CSS}}", CSS + SHELL_CSS)
+            .replace("{{MERMAID}}", "")
             .replace("{{JS}}", JS))
     write(os.path.join(ROOT, "index.html"), page)
     print(f"\n  index.html                  hub, {len(SUBJECTS)} subject(s)")
