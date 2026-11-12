@@ -1,0 +1,2443 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Module 5 — Hazard Identification and Control · Industrial Safety Engineering</title>
+<style>
+:root{
+  --bg:#fbfaf8; --panel:#ffffff; --ink:#232120; --muted:#5f5a53; --line:#e6e1da;
+  --accent:#7a4fd0; --accent-soft:#f1ecfb; --code-bg:#f5f2ee; --code-ink:#2b2a28;
+  --warn-bg:#fff8e6; --warn-line:#f0d9a0;
+  --sans:"Inter","Segoe UI",system-ui,-apple-system,"Noto Sans",sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,"SF Mono",Menlo,Consolas,"Fira Code",monospace;
+}
+html[data-theme="dark"]{
+  --bg:#141317; --panel:#1b1a20; --ink:#e8e4de; --muted:#a8a199; --line:#2f2c36;
+  --accent:#b79cf5; --accent-soft:#241f33; --code-bg:#22202a; --code-ink:#e8e4de;
+  --warn-bg:#2a2417; --warn-line:#4a3d22;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0; background:var(--bg); color:var(--ink); font-family:var(--sans);
+  font-size:16.5px; line-height:1.72; -webkit-font-smoothing:antialiased;
+}
+#progress{position:fixed;top:0;left:0;height:3px;width:0;background:var(--accent);z-index:50;transition:width .1s linear}
+
+.wrap{display:flex;align-items:flex-start;min-height:100vh}
+.sidebar{
+  position:sticky;top:0;height:100vh;width:300px;flex:0 0 300px;overflow-y:auto;
+  padding:26px 20px 60px;border-right:1px solid var(--line);background:var(--panel);
+}
+.sidebar h1{font-size:15px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);
+  margin:0 0 4px;font-weight:600}
+.sidebar .sub{font-size:12.5px;color:var(--muted);margin:0 0 18px}
+.sidebar nav{font-size:14px}
+.sidebar .toc>ul{padding-left:0}
+.sidebar ul{list-style:none;margin:0;padding-left:12px}
+.sidebar ul ul{border-left:1px solid var(--line);margin-left:4px;padding-left:10px}
+.sidebar li{margin:3px 0}
+.sidebar a{color:var(--ink);text-decoration:none;display:block;padding:3px 8px;border-radius:8px;
+  line-height:1.35;transition:background .12s,color .12s}
+.sidebar a:hover{background:var(--accent-soft);color:var(--accent)}
+.sidebar a.active{background:var(--accent-soft);color:var(--accent);font-weight:600}
+.sidebar .home{display:inline-flex;align-items:center;gap:6px;margin-bottom:16px;font-size:13.5px;
+  color:var(--muted);text-decoration:none;border:1px solid var(--line);padding:5px 10px;border-radius:999px}
+.sidebar .home:hover{color:var(--accent);border-color:var(--accent)}
+
+main{flex:1;min-width:0;padding:46px 56px 120px;max-width:980px;margin:0 auto}
+.doc-head{border-bottom:1px solid var(--line);padding-bottom:18px;margin-bottom:34px}
+.doc-head .kicker{font-size:12.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);
+  font-weight:700;margin-bottom:8px}
+.doc-head .meta{font-size:13.5px;color:var(--muted)}
+
+h1,h2,h3,h4{line-height:1.25;font-weight:700;letter-spacing:-.01em}
+h1{font-size:2.05rem;margin:.2em 0 .5em}
+h2{font-size:1.55rem;margin:2.4em 0 .7em;padding-bottom:.35em;border-bottom:1px solid var(--line)}
+h3{font-size:1.2rem;margin:1.9em 0 .55em}
+h4{font-size:1.03rem;margin:1.5em 0 .45em;color:var(--muted)}
+h2 .anchor,h3 .anchor{opacity:0;margin-left:.35em;font-size:.8em;color:var(--muted);text-decoration:none}
+h2:hover .anchor,h3:hover .anchor{opacity:1}
+p{margin:.75em 0}
+a{color:var(--accent);text-underline-offset:2px}
+strong{font-weight:650}
+hr{border:0;border-top:1px solid var(--line);margin:2.6em 0}
+ul,ol{margin:.7em 0;padding-left:1.4em}
+li{margin:.3em 0}
+li>ul,li>ol{margin:.25em 0}
+blockquote{
+  margin:1.3em 0;padding:12px 18px;background:var(--warn-bg);border-left:3px solid var(--warn-line);
+  border-radius:0 10px 10px 0;color:var(--ink)
+}
+blockquote p{margin:.3em 0}
+
+code{font-family:var(--mono);font-size:.87em;background:var(--code-bg);color:var(--code-ink);
+  padding:.15em .38em;border-radius:6px;border:1px solid var(--line);
+  box-decoration-break:clone;-webkit-box-decoration-break:clone;overflow-wrap:anywhere}
+pre{position:relative;background:var(--code-bg);border:1px solid var(--line);border-radius:12px;
+  padding:16px 18px;overflow-x:auto;margin:1.1em 0}
+pre code{background:none;border:0;padding:0;font-size:13.6px;line-height:1.62;white-space:pre}
+.copy{position:absolute;top:8px;right:8px;font:600 11px/1 var(--sans);color:var(--muted);
+  background:var(--panel);border:1px solid var(--line);border-radius:7px;padding:5px 8px;cursor:pointer;
+  opacity:0;transition:opacity .15s}
+pre:hover .copy{opacity:1}
+.copy:hover{color:var(--accent);border-color:var(--accent)}
+
+.table-scroll{overflow-x:auto;margin:1.3em 0;border:1px solid var(--line);border-radius:12px;background:var(--panel)}
+table{border-collapse:collapse;width:100%;font-size:14.6px}
+th,td{padding:9px 13px;text-align:left;vertical-align:top;border-bottom:1px solid var(--line)}
+th{background:var(--accent-soft);font-weight:650;font-size:13px;letter-spacing:.02em;
+  position:sticky;top:0;backdrop-filter:blur(4px)}
+tr:last-child td{border-bottom:0}
+tbody tr:nth-child(even){background:color-mix(in srgb,var(--panel) 60%,var(--bg))}
+tbody tr:hover{background:var(--accent-soft)}
+
+.tools{position:fixed;right:22px;bottom:22px;display:flex;flex-direction:column;gap:8px;z-index:40}
+.tools button{width:42px;height:42px;border-radius:12px;border:1px solid var(--line);background:var(--panel);
+  color:var(--ink);cursor:pointer;font-size:16px;box-shadow:0 4px 14px rgba(0,0,0,.10)}
+.tools button:hover{color:var(--accent);border-color:var(--accent)}
+@media (max-width:1000px){
+  .wrap{display:block}
+  .sidebar{position:static;width:auto;height:auto;border-right:0;border-bottom:1px solid var(--line)}
+  .sidebar nav{max-height:40vh;overflow:auto}
+  main{padding:28px 20px 100px}
+}
+@media print{
+  .sidebar,.tools,#progress,.copy{display:none!important}
+  body{background:#fff;color:#000;font-size:11pt}
+  main{padding:0;max-width:none}
+  h2{break-after:avoid} pre,table,blockquote{break-inside:avoid}
+  a{color:#000;text-decoration:none}
+}
+
+/* ---- ask-about-this ---- */
+#chat-btn{position:fixed;right:20px;bottom:112px;width:44px;height:44px;border-radius:50%;
+  border:1px solid var(--line);background:var(--panel);color:var(--accent);cursor:pointer;font-size:17px;
+  box-shadow:0 6px 18px rgba(0,0,0,.12);z-index:45;display:grid;place-items:center}
+#chat-btn:hover{border-color:var(--accent)}
+#sel-chip{position:absolute;z-index:46;transform:translate(-50%,-100%);background:var(--ink);color:var(--bg);
+  font:600 12px/1 var(--sans);padding:7px 11px;border-radius:999px;cursor:pointer;white-space:nowrap;
+  box-shadow:0 6px 18px rgba(0,0,0,.25);display:none}
+#sel-chip:hover{background:var(--accent);color:#fff}
+#chat-panel{position:fixed;right:20px;bottom:164px;width:min(420px,calc(100vw - 40px));max-height:min(70vh,620px);
+  background:var(--panel);border:1px solid var(--line);border-radius:14px;z-index:47;display:none;
+  flex-direction:column;box-shadow:0 18px 50px rgba(0,0,0,.18);overflow:hidden}
+#chat-panel.open{display:flex}
+#chat-head{display:flex;align-items:center;gap:8px;padding:11px 13px;border-bottom:1px solid var(--line);
+  font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:700}
+#chat-head .sp{flex:1}
+#chat-head button{background:none;border:0;color:var(--muted);cursor:pointer;font-size:15px;padding:2px 4px}
+#chat-head button:hover{color:var(--accent)}
+#chat-quote{display:none;margin:10px 13px 0;padding:8px 10px;border-left:2px solid var(--accent);
+  background:var(--accent-soft);color:var(--muted);font-size:12.5px;border-radius:0 8px 8px 0;
+  max-height:84px;overflow:auto;white-space:pre-wrap}
+#chat-log{flex:1;overflow-y:auto;padding:12px 13px;display:flex;flex-direction:column;gap:10px;font-size:13.6px;line-height:1.55}
+.msg{max-width:100%}
+.msg.user{align-self:flex-end;background:var(--accent-soft);color:var(--ink);padding:7px 11px;border-radius:11px 11px 2px 11px;
+  max-width:86%;white-space:pre-wrap}
+.msg.bot{color:var(--ink)}
+.msg.bot p{margin:.3em 0}
+.msg.bot ul{margin:.3em 0;padding-left:1.15em}
+.msg.bot code{font-size:.9em}
+.msg.bot pre{background:var(--code-bg);border-radius:8px;padding:9px 11px;overflow-x:auto;font-size:12px;margin:.4em 0}
+.msg.err{color:#b3261e;font-size:12.5px}
+.msg .cursor:after{content:"▍";color:var(--accent);animation:blink 1s steps(2) infinite}
+@keyframes blink{50%{opacity:0}}
+#chat-form{display:flex;gap:8px;padding:10px 13px;border-top:1px solid var(--line)}
+#chat-input{flex:1;resize:none;border:1px solid var(--line);border-radius:9px;background:var(--bg);color:var(--ink);
+  font:inherit;font-size:13.5px;padding:8px 10px;max-height:110px;min-height:38px}
+#chat-input:focus{outline:2px solid var(--accent);outline-offset:0}
+#chat-send{border:1px solid var(--accent);background:var(--accent);color:#fff;border-radius:9px;
+  width:38px;cursor:pointer;font-size:15px}
+#chat-send:disabled{opacity:.45;cursor:default}
+#chat-foot{font-size:11px;color:var(--muted);padding:0 13px 9px}
+@media (max-width:640px){
+  #chat-panel{right:8px;left:8px;width:auto;bottom:150px;max-height:66vh}
+  #chat-btn{bottom:104px;right:16px}
+}
+@media print{#chat-btn,#chat-panel,#sel-chip{display:none!important}}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+<div class="wrap">
+  <aside class="sidebar">
+    <a class="home" href="index.html">← Industrial Safety Engineering</a>
+    <a class="home" href="practice.html">Practice drills</a>
+    <h1>M5 · Hazard identification</h1>
+    <p class="sub">20% ESE · 47 questions</p>
+    <nav class="toc"><div class="toc">
+<ul>
+<li><a href="#1-coverage-syllabus-line-and-question-number">1. Coverage — syllabus line and question number</a><ul>
+<li><a href="#table-a-the-eight-syllabus-lines">Table A — the eight syllabus lines</a></li>
+<li><a href="#table-b-all-47-questions">Table B — all 47 questions</a></li>
+</ul>
+</li>
+<li><a href="#2-concepts">2. Concepts</a><ul>
+<li><a href="#21-hazard-and-risk">2.1 Hazard and risk</a></li>
+<li><a href="#22-types-of-hazards">2.2 Types of hazards</a></li>
+<li><a href="#23-fire-the-tetrahedron-the-five-classes-and-what-escapes">2.3 Fire — the tetrahedron, the five classes, and what escapes</a></li>
+<li><a href="#24-extinguishers-and-their-selection">2.4 Extinguishers and their selection</a></li>
+<li><a href="#25-inventory-analysis-and-hazard-rating">2.5 Inventory analysis and hazard rating</a></li>
+<li><a href="#26-the-dow-fire-and-explosion-index-what-it-is">2.6 The Dow Fire and Explosion Index — what it is</a></li>
+<li><a href="#27-the-dow-calculation-step-by-step">2.7 The Dow calculation, step by step</a></li>
+<li><a href="#28-preliminary-hazard-analysis">2.8 Preliminary Hazard Analysis</a></li>
+<li><a href="#29-hazop">2.9 HAZOP</a></li>
+<li><a href="#210-choosing-between-pha-and-hazop">2.10 Choosing between PHA and HAZOP</a></li>
+<li><a href="#211-chemical-hazards-and-how-they-are-classified">2.11 Chemical hazards and how they are classified</a></li>
+<li><a href="#212-controlling-chemical-hazards">2.12 Controlling chemical hazards</a></li>
+<li><a href="#213-hazardous-properties-of-chemicals">2.13 Hazardous properties of chemicals</a></li>
+<li><a href="#214-material-safety-data-sheets">2.14 Material Safety Data Sheets</a></li>
+</ul>
+</li>
+<li><a href="#3-answer-bank">3. Answer bank</a><ul>
+<li><a href="#31-three-mark-answers">3.1 Three-mark answers</a></li>
+<li><a href="#32-five-mark-answers">3.2 Five-mark answers</a></li>
+<li><a href="#33-eight-mark-answers">3.3 Eight-mark answers</a></li>
+<li><a href="#34-fourteen-mark-skeleton-ese-part-b">3.4 Fourteen-mark skeleton (ESE Part B)</a></li>
+</ul>
+</li>
+<li><a href="#4-definitions-and-numbers">4. Definitions and numbers</a><ul>
+<li><a href="#41-the-table-to-memorise">4.1 The table to memorise</a></li>
+</ul>
+</li>
+<li><a href="#5-diagrams-to-draw">5. Diagrams to draw</a><ul>
+<li><a href="#51-the-six-figures">5.1 The six figures</a></li>
+</ul>
+</li>
+<li><a href="#6-say-this-if-grilled">6. Say this if grilled</a><ul>
+<li><a href="#61-sixteen-lines-to-have-ready">6.1 Sixteen lines to have ready</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</nav>
+  </aside>
+  <main>
+    <div class="doc-head">
+      <div class="kicker">20MCN401 · Industrial Safety Engineering</div>
+      <div class="meta">20% ESE · 47 questions · rendered from KIT_M5_HAZARD_ID.md</div>
+    </div>
+    <h1 id="module-5-hazard-identification-and-control">Module 5 — Hazard Identification and Control</h1>
+<blockquote>
+<p>20MCN401 Industrial Safety Engineering · B.Tech CSE Sem 7 (Saintgits, autonomous) · CO5 · 20% of ESE.
+This module owns <strong>47 of the 172 questions</strong> — the largest set in the paper. Fire, extinguishers, inventory rating, the Dow Index, PHA, HAZOP, chemical control and MSDS all sit here.
+Source: <code>m5.txt</code> (<code>slide N</code>). Anything the deck does not give is marked <strong>(standard)</strong>.
+Values the deck supplies are quoted as the deck writes them; nothing is invented to fill a gap.</p>
+</blockquote>
+<hr />
+<h2 id="1-coverage-syllabus-line-and-question-number">1. Coverage — syllabus line and question number<a class="anchor" href="#1-coverage-syllabus-line-and-question-number">#</a></h2>
+<h3 id="table-a-the-eight-syllabus-lines">Table A — the eight syllabus lines<a class="anchor" href="#table-a-the-eight-syllabus-lines">#</a></h3>
+<table>
+<thead>
+<tr>
+<th>Syllabus line (verbatim)</th>
+<th>Hrs</th>
+<th>Answered at</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Hazard and risk — types of hazards — classification of fire</td>
+<td>5</td>
+<td>§2.1, §2.2, §2.3</td>
+</tr>
+<tr>
+<td>Types of fire extinguishers — fire, explosion and toxic gas release</td>
+<td>5</td>
+<td>§2.4, §2.3</td>
+</tr>
+<tr>
+<td>Inventory analysis — fire and explosion hazard rating of process plants</td>
+<td>5</td>
+<td>§2.5</td>
+</tr>
+<tr>
+<td>The Dow Fire and Explosion Hazard Index</td>
+<td>5</td>
+<td>§2.6, §2.7</td>
+</tr>
+<tr>
+<td>Preliminary hazard analysis — hazard and operability study (HAZOP)</td>
+<td>5</td>
+<td>§2.8, §2.9, §2.10</td>
+</tr>
+<tr>
+<td>Chemical hazard — classifications, control of chemical hazards</td>
+<td>5</td>
+<td>§2.11, §2.12</td>
+</tr>
+<tr>
+<td>Hazardous properties of chemicals</td>
+<td>5</td>
+<td>§2.13</td>
+</tr>
+<tr>
+<td>Material Safety Data Sheets (MSDS)</td>
+<td>5</td>
+<td>§2.14</td>
+</tr>
+</tbody>
+</table>
+<p>Nothing in this module is a one-line topic. Three lines are methods you must apply — inventory
+rating, the Dow Index, and PHA with HAZOP. The exam asks you to run those, not describe them.</p>
+<h3 id="table-b-all-47-questions">Table B — all 47 questions<a class="anchor" href="#table-b-all-47-questions">#</a></h3>
+<table>
+<thead>
+<tr>
+<th>Q</th>
+<th>Question, shortened</th>
+<th>Answered at</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Q7</td>
+<td>Define hazard and risk</td>
+<td>§3.1 A · §2.1</td>
+</tr>
+<tr>
+<td>Q8</td>
+<td>List the types of hazards</td>
+<td>§3.1 B · §2.2</td>
+</tr>
+<tr>
+<td>Q9</td>
+<td>List the types of fire hazards</td>
+<td>§3.1 C · §2.3</td>
+</tr>
+<tr>
+<td>Q10</td>
+<td>What is a fire extinguisher</td>
+<td>§3.1 D · §2.4</td>
+</tr>
+<tr>
+<td>Q11</td>
+<td>What to remember before installing an extinguisher</td>
+<td>§3.1 E · §2.4</td>
+</tr>
+<tr>
+<td>Q12, Q42</td>
+<td>Items required to develop the Dow F&amp;EI</td>
+<td>§3.1 F · §2.6</td>
+</tr>
+<tr>
+<td>Q51</td>
+<td>Key objectives of a HAZOP study</td>
+<td>§3.1 G · §2.9</td>
+</tr>
+<tr>
+<td>Q52, Q128</td>
+<td>Steps in conducting a HAZOP</td>
+<td>§3.1 H · §3.2 G · §2.9</td>
+</tr>
+<tr>
+<td>Q53</td>
+<td>Key objectives of a PHA</td>
+<td>§3.1 I · §2.8</td>
+</tr>
+<tr>
+<td>Q54</td>
+<td>Advantages and disadvantages of PHA</td>
+<td>§3.2 A · §2.8</td>
+</tr>
+<tr>
+<td>Q55</td>
+<td>Common hazards considered in a PHA</td>
+<td>§3.1 J · §2.8</td>
+</tr>
+<tr>
+<td>Q56</td>
+<td>Define MSDS and its purpose</td>
+<td>§3.1 K · §2.14</td>
+</tr>
+<tr>
+<td>Q57</td>
+<td>Types of chemical hazards</td>
+<td>§3.1 L · §2.11</td>
+</tr>
+<tr>
+<td>Q58, Q123, Q127, Q172</td>
+<td>Control measures for chemical hazards</td>
+<td>§3.3 C · §3.2 H · §2.12</td>
+</tr>
+<tr>
+<td>Q59, Q124</td>
+<td>Toxicity, flammability, reactivity and environmental safety</td>
+<td>§3.2 I · §2.13</td>
+</tr>
+<tr>
+<td>Q60</td>
+<td>Role of PPE in controlling chemical hazards</td>
+<td>§3.2 J · §2.12</td>
+</tr>
+<tr>
+<td>Q61</td>
+<td>Administrative controls versus PPE, Indian automotive</td>
+<td>§3.3 D · §2.12</td>
+</tr>
+<tr>
+<td>Q62, Q126</td>
+<td>Three common control measures in a plant</td>
+<td>§3.1 M · §3.2 H</td>
+</tr>
+<tr>
+<td>Q63</td>
+<td>Major GHS hazard symbols</td>
+<td>§3.1 N · §2.11</td>
+</tr>
+<tr>
+<td>Q64</td>
+<td>Importance of HAZOP analysis</td>
+<td>§3.1 O · §2.9</td>
+</tr>
+<tr>
+<td>Q65</td>
+<td>Results of a HAZOP study</td>
+<td>§3.2 B · §2.9</td>
+</tr>
+<tr>
+<td>Q90</td>
+<td>Classify fires</td>
+<td>§3.1 P · §2.3</td>
+</tr>
+<tr>
+<td>Q91</td>
+<td>Types of extinguishers used in industry</td>
+<td>§3.2 C · §2.4</td>
+</tr>
+<tr>
+<td>Q92</td>
+<td>Four risk assessment tools</td>
+<td>§3.1 Q · §2.10</td>
+</tr>
+<tr>
+<td>Q93, Q169</td>
+<td>Dow F&amp;EI and its objectives</td>
+<td>§3.1 R · §2.6</td>
+</tr>
+<tr>
+<td>Q94</td>
+<td>Steps to calculate the Dow F&amp;EI</td>
+<td>§3.3 A · §2.7</td>
+</tr>
+<tr>
+<td>Q105</td>
+<td>Flow chart for the Dow calculation</td>
+<td>§3.2 E · §2.7</td>
+</tr>
+<tr>
+<td>Q106</td>
+<td>Hazard factors contributing to the index</td>
+<td>§3.2 F · §2.6</td>
+</tr>
+<tr>
+<td>Q115</td>
+<td>Role of government in safety</td>
+<td>§3.1 S (Module I owns the long form)</td>
+</tr>
+<tr>
+<td>Q119</td>
+<td>Need and importance of a safety committee</td>
+<td>§3.1 T (Module I owns the long form)</td>
+</tr>
+<tr>
+<td>Q121, Q171</td>
+<td>PHA versus HAZOP, and when to choose each</td>
+<td>§3.3 B · §2.10</td>
+</tr>
+<tr>
+<td>Q122</td>
+<td>(a) PHA's role (b) implementation criteria and plans</td>
+<td>§3.1 U · §3.2 M</td>
+</tr>
+<tr>
+<td>Q131</td>
+<td>Precautions in lifting and carrying</td>
+<td>§3.1 V</td>
+</tr>
+<tr>
+<td>Q132</td>
+<td>Precautions in pulling and pushing</td>
+<td>§3.1 W</td>
+</tr>
+<tr>
+<td>Q145</td>
+<td>Fourteen PPE with a figure</td>
+<td>§3.3 F</td>
+</tr>
+<tr>
+<td>Q165</td>
+<td>How handling aids cut lifting injuries</td>
+<td>§3.2 L</td>
+</tr>
+<tr>
+<td>Q168</td>
+<td>Fire safety plan from the fire classification</td>
+<td>§3.3 E · §2.4</td>
+</tr>
+<tr>
+<td>Q170</td>
+<td>Identify fire class and pick the extinguisher</td>
+<td>§3.2 K · §2.4</td>
+</tr>
+</tbody>
+</table>
+<p>Q115, Q119, Q131, Q132, Q145 and Q165 are Module I and Module IV topics that the paper files
+here. They are answered here in short form, and the Module I and Module IV kits carry the long
+versions.</p>
+<hr />
+<h2 id="2-concepts">2. Concepts<a class="anchor" href="#2-concepts">#</a></h2>
+<h3 id="21-hazard-and-risk">2.1 Hazard and risk<a class="anchor" href="#21-hazard-and-risk">#</a></h3>
+<p><em>In plain English.</em> A hazard is a live wire lying on the floor. The wire is dangerous whether
+or not anyone is in the room. Risk is the chance that somebody touches it before lunch. Standing
+further back does not make the wire safe. It makes the risk small.</p>
+<p><em>The detail.</em>
+- <strong>Hazard</strong> — a source with the potential to cause injury or ill health (ISO 45001 wording).
+- <strong>Risk</strong> — the combination of how likely harm is and how bad it would be.
+- Risk therefore needs exposure. Remove the exposure and the risk falls.
+- The hazard stays exactly where it was. That is the sentence this topic turns on.
+- <strong>Residual risk</strong> — what remains after controls; the number a safety officer signs off.
+- <strong>Risk assessment</strong> runs in four moves: identify, analyse, evaluate, treat.
+- <strong>Individual risk</strong> is one person's chance of harm. <strong>Societal risk</strong> is the chance of many
+  people harmed in one event.
+- The <strong>F–N curve</strong> plots frequency against the number of fatalities (standard).
+- <strong>ALARP</strong> means the risk has been cut as low as is reasonably practicable (standard).
+- A <strong>5 × 5 matrix</strong> scores likelihood against severity and lands in low, medium, high or
+  extreme (standard).</p>
+<table>
+<thead>
+<tr>
+<th>Question</th>
+<th>Hazard</th>
+<th>Risk</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>What is it?</td>
+<td>A source of harm</td>
+<td>The chance of harm from that source</td>
+</tr>
+<tr>
+<td>Can it be removed?</td>
+<td>Only by removing or replacing the agent</td>
+<td>Yes, by any control at all</td>
+</tr>
+<tr>
+<td>Depends on</td>
+<td>The material, the energy, the design</td>
+<td>Exposure, duration, frequency, safeguards</td>
+</tr>
+<tr>
+<td>Reduced by PPE?</td>
+<td>No</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Example</td>
+<td>Petrol in a tank</td>
+<td>Welding beside that tank</td>
+</tr>
+</tbody>
+</table>
+<p><em>What to write (3 marks).</em> Two definitions, one line of contrast, one consequence. Say that
+the hazard is inherent and the risk is conditional. Close with the point that substitution kills
+the hazard while PPE only lowers the risk.</p>
+<p><strong>Mark anchor.</strong> "The hazard is inherent; the risk is conditional." A script with that sentence
+has understood the pair rather than memorised two definitions.</p>
+<p><strong>Exam trap.</strong> Do not write "eliminate the risk" when you mean "eliminate the hazard". A risk
+is a probability and cannot be eliminated. It can only be reduced, and the leftover is residual
+risk.</p>
+<h3 id="22-types-of-hazards">2.2 Types of hazards<a class="anchor" href="#22-types-of-hazards">#</a></h3>
+<p><em>In plain English.</em> Factories hurt people in a small number of recognisable ways. Someone is
+struck, crushed, burned, poisoned, infected, deafened, or worn down slowly. Sorting hazards into
+families is how an inspector knows what to look for first.</p>
+<p><em>The detail.</em>
+- The standard split is seven families: physical, mechanical, electrical, chemical, biological,
+  ergonomic and psychosocial.
+- Fire and explosion are usually carried as a separate family in process plants.
+- Every family has a signature harm. The signature is what the mark scheme wants beside the name.
+- Hazards also split by <strong>energy source</strong>: gravity, motion, electricity, pressure, heat, chemical
+  reaction, radiation (standard).
+- They split again by <strong>mode of contact</strong>: struck-by, caught-in, contact, inhalation, ingestion,
+  absorption (standard).
+- In a process plant the chemical family dominates, because the inventory is large and the harm
+  is delayed.
+- In construction the mechanical and physical families dominate, because the work is at height
+  and in motion.</p>
+<table>
+<thead>
+<tr>
+<th>Family</th>
+<th>Examples</th>
+<th>Signature harm</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Physical</td>
+<td>Noise, vibration, heat, cold, radiation, pressure</td>
+<td>Deafness, heat stress, burns</td>
+</tr>
+<tr>
+<td>Mechanical</td>
+<td>Unguarded shafts, moving parts, falling loads</td>
+<td>Cut, crush, amputation, fracture</td>
+</tr>
+<tr>
+<td>Electrical</td>
+<td>Live parts, arc flash, static discharge</td>
+<td>Shock, burns, ignition</td>
+</tr>
+<tr>
+<td>Chemical</td>
+<td>Solvents, acids, dusts, gases, fumes</td>
+<td>Burns, poisoning, fire, sensitisation</td>
+</tr>
+<tr>
+<td>Biological</td>
+<td>Bacteria, viruses, moulds, insects</td>
+<td>Infection, allergy</td>
+</tr>
+<tr>
+<td>Ergonomic</td>
+<td>Repetition, posture, manual handling</td>
+<td>Musculoskeletal disorder</td>
+</tr>
+<tr>
+<td>Psychosocial</td>
+<td>Shift work, workload, harassment</td>
+<td>Stress, fatigue, error</td>
+</tr>
+<tr>
+<td>Fire and explosion</td>
+<td>Flammable inventory, dust clouds</td>
+<td>Burns, blast, collapse</td>
+</tr>
+</tbody>
+</table>
+<p><em>What to write (3 marks).</em> Name the families in one line each, with one example and one harm
+per family. A table is faster than prose and scores the same.</p>
+<p><strong>Mark anchor.</strong> Seven families with a signature harm each. The harm is worth more than the
+example, because it proves you know why the family exists.</p>
+<p><strong>Exam trap.</strong> "Physical" and "mechanical" are not interchangeable. Noise and heat are physical.
+A rotating shaft is mechanical. Putting noise under mechanical signals a list copied without
+understanding.</p>
+<h3 id="23-fire-the-tetrahedron-the-five-classes-and-what-escapes">2.3 Fire — the tetrahedron, the five classes, and what escapes<a class="anchor" href="#23-fire-the-tetrahedron-the-five-classes-and-what-escapes">#</a></h3>
+<p><em>In plain English.</em> Fire needs four things at once: something to burn, air, heat, and a
+runaway chain reaction. Take any one away and the fire stops. Every extinguisher in the
+catalogue is just a device for taking one of those four away quickly.</p>
+<p><em>The detail.</em>
+- The <strong>fire triangle</strong> has three sides: fuel, oxygen, heat.
+- The <strong>fire tetrahedron</strong> adds a fourth: the self-sustaining chain reaction.
+- That fourth side is why dry chemical powder works on a fire it cannot cool or smother well.
+- Four extinguishing methods map onto the four sides: starvation, smothering, cooling,
+  chemical inhibition.
+- <strong>Flash point</strong> — the lowest temperature at which a liquid gives off enough vapour to ignite.
+- <strong>Fire point</strong> — the slightly higher temperature at which the vapour keeps burning.
+- <strong>Autoignition temperature</strong> — the temperature at which a material ignites with no spark.
+- Fire classes follow the Indian and European convention, running A to E (<code>slide 18</code>).</p>
+<table>
+<thead>
+<tr>
+<th>Class</th>
+<th>Fuel</th>
+<th>Everyday examples</th>
+<th>Extinguish by</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A</td>
+<td>Solid combustibles</td>
+<td>Wood, paper, cloth, rubber, plastics</td>
+<td>Cooling — water, foam</td>
+</tr>
+<tr>
+<td>B</td>
+<td>Flammable liquids</td>
+<td>Petrol, kerosene, diesel, paint, solvents</td>
+<td>Smothering — foam, CO₂, powder</td>
+</tr>
+<tr>
+<td>C</td>
+<td>Flammable gases</td>
+<td>LPG, acetylene, hydrogen, methane</td>
+<td>Shut the supply off, then cool</td>
+</tr>
+<tr>
+<td>D</td>
+<td>Combustible metals</td>
+<td>Sodium, potassium, magnesium, aluminium powder</td>
+<td>Dry powder for metal, dry sand</td>
+</tr>
+<tr>
+<td>E</td>
+<td>Live electrical equipment</td>
+<td>Panels, motors, wiring, switchgear</td>
+<td>Isolate, then CO₂ or clean agent</td>
+</tr>
+</tbody>
+</table>
+<p><strong>What escapes.</strong> A fire is only one of three outcomes from the same inventory.
+- <strong>Pool fire</strong> — a burning puddle of liquid, radiating heat onto its neighbours.
+- <strong>Jet fire</strong> — pressurised gas burning as a torch flame from a failed flange.
+- <strong>Flash fire</strong> — a vapour cloud ignites and burns back through it in seconds.
+- <strong>Vapour cloud explosion</strong> — a confined or congested cloud deflagrates and produces a blast.
+- <strong>BLEVE</strong> — a vessel heated until the liquid boils and the shell bursts (standard).
+- <strong>Dust explosion</strong> — a suspended dust cloud ignites; the first blast shakes loose more dust.
+- <strong>Toxic gas release</strong> — the fire itself makes the poison: carbon monoxide, hydrogen cyanide,
+  hydrogen chloride, sulphur dioxide (standard).</p>
+<p><em>What to write (3 marks, Q90).</em> The five classes with fuel and one example each. For Q9, add
+the three escape routes: fire, explosion, toxic release.</p>
+<p><strong>Mark anchor.</strong> Five classes, and in the Indian scheme <strong>C is gas and E is electrical</strong>. Add
+that E fires are attacked only after isolation.</p>
+<p><strong>Exam trap.</strong> The American NFPA scheme uses A, B, C, D with <strong>C for electrical</strong> and a separate
+K for cooking oil. Writing NFPA letters under an Indian question loses the classification mark.</p>
+<h3 id="24-extinguishers-and-their-selection">2.4 Extinguishers and their selection<a class="anchor" href="#24-extinguishers-and-their-selection">#</a></h3>
+<p><em>In plain English.</em> An extinguisher is a pressure bottle of something that removes one side of
+the fire tetrahedron. Pick the wrong bottle and you either do nothing or make it worse. Water on
+burning petrol spreads the fire. Water on a live panel electrocutes the user.</p>
+<p><em>The detail.</em>
+- <strong>Definition</strong> — a portable, pressurised first-aid device that discharges an agent onto a
+  small fire (<code>slide 18</code>, <code>slide 19</code>).
+- <strong>Water</strong> is the primary agent, sometimes with wetting agents added (<code>slide 18</code>).
+- Water freezes, so unheated sites need antifreeze or a different agent (<code>slide 18</code>).
+- <strong>Water mist</strong> sprays distilled water as a fine fog, for rooms where residue ruins equipment.
+- The deck names operating rooms, museums and book collections as water-mist sites (<code>slide 18</code>).
+- <strong>CO₂</strong> leaves no residue, so it suits delicate and costly electronics (<code>slide 19</code>).
+- The deck lists CO₂ for <strong>Class B and Class C</strong> fires (<code>slide 19</code>).
+- CO₂ fails outdoors in wind, because the gas blows away before it smothers (<code>slide 19</code>).
+- CO₂ in a confined space displaces oxygen and needs caution (<code>slide 19</code>).
+- <strong>Foam</strong> blankets a liquid surface and seals the vapour.
+- <strong>Dry chemical powder</strong> interrupts the chain reaction; ABC powder covers A, B, C and E.
+- <strong>Wet chemical</strong> saponifies hot cooking oil, the class F or K fire (standard).
+- <strong>Clean agents</strong> such as FM-200 leave no residue and are safe in occupied rooms (standard).
+- <strong>Dry sand or graphite</strong> is used on metal fires, where water reacts violently (standard).</p>
+<table>
+<thead>
+<tr>
+<th>Agent</th>
+<th>Classes</th>
+<th>Works by</th>
+<th>Never use on</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Water</td>
+<td>A</td>
+<td>Cooling</td>
+<td>Live electrical, burning liquids, metals</td>
+</tr>
+<tr>
+<td>Foam</td>
+<td>A, B</td>
+<td>Smothering and sealing</td>
+<td>Live electrical</td>
+</tr>
+<tr>
+<td>CO₂</td>
+<td>B, C, E</td>
+<td>Smothering, some cooling</td>
+<td>Confined spaces without caution</td>
+</tr>
+<tr>
+<td>Dry powder ABC</td>
+<td>A, B, C, E</td>
+<td>Chain inhibition</td>
+<td>Delicate electronics (residue)</td>
+</tr>
+<tr>
+<td>Wet chemical</td>
+<td>F (cooking oil)</td>
+<td>Saponification</td>
+<td>Most other classes</td>
+</tr>
+<tr>
+<td>Clean agent</td>
+<td>A, B, C, E</td>
+<td>Smothering and inhibition</td>
+<td>Cost-critical sites only</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Choosing and siting.</strong> Selection runs class first, agent second, size third, position last.
+- The extinguisher must match the class of fuel present in that room.
+- Siting follows IS 2190: one water-type unit per 100 m², travel distance under 15 m (standard).
+- Mount the unit on a bracket with the handle about 1.5 m from the floor (standard).
+- Keep the unit visible, signed, and clear of stock and forklift routes.
+- Check the pressure gauge and the service tag monthly, and refill after any use.
+- A freezing or corroding location needs a different agent or a cabinet.
+- Staff must be trained to use it, or the unit is furniture.</p>
+<p><em>What to write (3 marks, Q10 and Q11).</em> Define the extinguisher in one line. Then list the pre-installation checks: class match, right number for the area, unobstructed siting, temperature, service date, signage, training.</p>
+<p><strong>Mark anchor.</strong> CO₂ for electrical equipment and for Class B, because it leaves no residue. The
+residue point is the reason, and the reason is the mark.</p>
+<p><strong>Exam trap.</strong> Water is not "the general extinguisher". On Class B it spreads the fuel. On
+Class E it conducts. On Class D it can react and explode. Water is a Class A answer only.</p>
+<h3 id="25-inventory-analysis-and-hazard-rating">2.5 Inventory analysis and hazard rating<a class="anchor" href="#25-inventory-analysis-and-hazard-rating">#</a></h3>
+<p><em>In plain English.</em> The size of a fire is set by how much fuel is sitting there, not by what
+lit it. So the first question in a process plant is boring and powerful: what is on site, where
+is it, and how much of it is there at once?</p>
+<p><em>The detail.</em>
+- <strong>Inventory</strong> — the mass of hazardous material held in a unit, a tank, or a pipeline at any
+  moment.
+- <strong>Inventory analysis</strong> lists every hazardous material, its quantity, its location and its
+  properties.
+- The aim is a <strong>fire and explosion hazard rating</strong> for each part of the plant.
+- Hold-up inside pipework counts. A long line holds more than the vessel it feeds.
+- <strong>Capital density</strong> — the value of equipment packed into a given area. Dense plants lose more
+  per event.
+- The Dow method uses the spill of a flammable liquid <strong>3 inches deep</strong> as its reference event
+  (<code>slide 48</code>).
+- <strong>NFPA 704</strong> rates a material from 0 to 4 on health, flammability and instability (standard).
+- The diamond reads blue for health, red for flammability, yellow for instability, white for
+  special hazards (standard).
+- <strong>Mond</strong> extends Dow by adding a toxicity index (standard).
+- Indian law sets threshold quantities in the MSIHC Rules, 1989, Schedules 1 to 3 (standard).
+- Above the threshold, the site must prepare an on-site emergency plan and notify the authority.</p>
+<table>
+<thead>
+<tr>
+<th>Rating tool</th>
+<th>What it scores</th>
+<th>Scale</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>NFPA 704</td>
+<td>One material's health, fire, reactivity</td>
+<td>0–4 per quadrant</td>
+</tr>
+<tr>
+<td>Dow F&amp;EI</td>
+<td>One process unit's fire and explosion exposure</td>
+<td>1 to 159+</td>
+</tr>
+<tr>
+<td>Mond</td>
+<td>Dow plus toxicity</td>
+<td>Index plus toxicity rating</td>
+</tr>
+<tr>
+<td>MSIHC threshold</td>
+<td>Whether the site is a major accident hazard site</td>
+<td>Quantity against schedule</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Why inventory matters more than ignition.</strong> Ignition sources are countless and cheap to
+control one at a time. Inventory is one number, and it can be cut deliberately.
+- Buy in smaller lots and hold less in the plant.
+- Remove intermediate storage tanks between process steps.
+- Shorten pipe runs and reduce line diameter where hold-up is large.
+- Move storage away from process units to increase separation.
+- A smaller inventory makes every downstream number smaller: fire size, exposure radius, loss.</p>
+<p><em>What to write (5 marks).</em> Define inventory, list what is counted, name the rating tools, and
+close on inventory reduction as the cheapest real control.</p>
+<p><strong>Mark anchor.</strong> The <strong>3-inch spill</strong> as Dow's reference event, and <strong>capital density</strong> as one
+of the five screening criteria for choosing a unit.</p>
+<p><strong>Exam trap.</strong> Inventory analysis is not a stock audit. The output is a hazard rating per unit,
+not a stores list. A script that counts drums but never rates a unit has answered the wrong
+question.</p>
+<h3 id="26-the-dow-fire-and-explosion-index-what-it-is">2.6 The Dow Fire and Explosion Index — what it is<a class="anchor" href="#26-the-dow-fire-and-explosion-index-what-it-is">#</a></h3>
+<p><em>In plain English.</em> The Dow Index turns a process unit into a single number that says how much
+fire and explosion damage it could do. You fill in a form, add up penalties, multiply, and read
+a score. It began because the chemical industry's loss record in the 1960s was bad enough to
+demand a scoreboard.</p>
+<p><em>The detail.</em>
+- The method originated in <strong>1966</strong>, from a poor accident record in the chemical industry
+  (<code>slide 26</code>).
+- It was one of the first hazard analysis systems built for chemical plants (<code>slide 26</code>).
+- Its selling point is that it puts damage in <strong>money and days</strong>, not adjectives (<code>slide 26</code>).
+- The deck's own description of the paperwork is that you fill it out <strong>like a tax form</strong>
+  (<code>slide 26</code>).
+- Three verbs: <strong>quantify</strong> the damage, <strong>identify</strong> the equipment that can escalate, and
+  <strong>communicate</strong> the potential to designers and operators (<code>slide 28</code>).
+- The method needs engineering judgement and is not perfect (<code>slide 26</code>, <code>slide 27</code>).
+- It is still upgraded and still used (<code>slide 26</code>).</p>
+<p><strong>Five items are needed to build one</strong> (<code>slide 33</code>) — this is the answer to Q12 and Q42.
+1. An accurate plot plan, for an existing plant.
+2. A preliminary plot plan, for a new plant.
+3. A process flow sheet.
+4. The F&amp;EI hazard classification guide.
+5. The F&amp;EI form itself.</p>
+<p><strong>Choosing the unit.</strong> Not every vessel is analysed (<code>slide 34</code>). Screen on five things:
+- The chemical energy potential, which becomes the material factor.
+- The quantity of hazardous material in the unit.
+- The capital density of the area.
+- The process pressure and temperature.
+- The past history of problems in that unit.</p>
+<p><strong>The four numbers.</strong> The index is a chain of multiplications (<code>slide 29</code>, <code>slide 45</code>).
+- <strong>Material Factor (MF)</strong> measures flammability and reactivity, adjusted for flash point and
+  boiling point (<code>slide 35</code>).
+- <strong>F1, general process hazards</strong>, set the magnitude of a loss (<code>slide 40</code>).
+- <strong>F2, special process hazards</strong>, set the probability of a loss (<code>slide 41</code>).
+- <strong>Unit hazard factor F3 = F1 × F2</strong>, and <strong>F&amp;EI = MF × F3</strong> (<code>slide 45</code>).</p>
+<table>
+<thead>
+<tr>
+<th>F1 — general process hazards</th>
+<th>F2 — special process hazards</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Exothermic or endothermic reaction</td>
+<td>Toxic material, at 0.2 × NH</td>
+</tr>
+<tr>
+<td>Material handling and transfer</td>
+<td>Sub-atmospheric pressure, 0.5</td>
+</tr>
+<tr>
+<td>Enclosed or indoor process unit</td>
+<td>Dust explosion</td>
+</tr>
+<tr>
+<td>Access</td>
+<td>Operating in the flammable range</td>
+</tr>
+<tr>
+<td>Drainage and spill control</td>
+<td>Low-temperature operation</td>
+</tr>
+<tr>
+<td></td>
+<td>Corrosion and erosion</td>
+</tr>
+<tr>
+<td></td>
+<td>Leakage at joints and packing</td>
+</tr>
+<tr>
+<td></td>
+<td>Rotating equipment</td>
+</tr>
+<tr>
+<td></td>
+<td>Pressure penalty</td>
+</tr>
+<tr>
+<td></td>
+<td>Quantity of flammable material</td>
+</tr>
+<tr>
+<td></td>
+<td>Fired equipment</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Loss control credits</strong> are features that prevent a serious incident or shrink it, grouped as
+process control, material isolation and fire protection (<code>slide 30</code>).</p>
+<p><strong>Reading the score</strong> (<code>slide 47</code>).</p>
+<table>
+<thead>
+<tr>
+<th>F&amp;EI</th>
+<th>Degree of hazard</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1–60</td>
+<td>Light</td>
+</tr>
+<tr>
+<td>61–96</td>
+<td>Moderate</td>
+</tr>
+<tr>
+<td>97–127</td>
+<td>Intermediate</td>
+</tr>
+<tr>
+<td>128–158</td>
+<td>Heavy</td>
+</tr>
+<tr>
+<td>159+</td>
+<td>Severe</td>
+</tr>
+</tbody>
+</table>
+<p><em>What to write (5 marks, Q93 and Q169).</em> Definition and origin in 1966. Then the three verbs, the MF × F1 × F2 structure, the hazard bands, and one line on the credits.</p>
+<p><strong>Mark anchor.</strong> <strong>128 is the trigger for a more detailed PHA</strong> (<code>slide 47</code>). That single number
+is the most useful fact in the topic, because it links the index to the next chapter.</p>
+<p><strong>Exam trap.</strong> MF is not the NFPA rating. MF is a number from about 1 to 40 built from the
+flammability rating NF and the reactivity rating NR, then adjusted. Quoting "MF = 3" from a
+0-to-4 scale is the commonest error in the whole module.</p>
+<h3 id="27-the-dow-calculation-step-by-step">2.7 The Dow calculation, step by step<a class="anchor" href="#27-the-dow-calculation-step-by-step">#</a></h3>
+<p><em>In plain English.</em> The calculation is a recipe with fifteen steps and no cleverness in it. Each
+step produces a number that the next step needs. What earns marks is the order, and knowing what
+each number means when you arrive at it.</p>
+<p><em>The detail.</em> The chain is fixed and runs in this order.
+1. Select the pertinent process unit and state why.
+2. Assign the material factor MF from the classification guide.
+3. Add the F1 penalties for the general process hazards.
+4. Add the F2 penalties for the special process hazards.
+5. Compute <strong>F3 = F1 × F2</strong>.
+6. Compute <strong>F&amp;EI = MF × F3</strong> and read the hazard band.
+7. Take the exposure radius from the empirical curve, then compute the area.
+8. Treat the volume of exposure as a cylinder with height equal to radius (<code>slide 49</code>).
+9. Value the equipment inside that volume at replacement cost.
+10. Read the damage factor from the F3 and MF curves (<code>slide 50</code>).
+11. <strong>Base MPPD = value of exposure × damage factor</strong> (<code>slide 51</code>).
+12. <strong>Actual MPPD = base MPPD × credit factor</strong> (<code>slide 53</code>).
+13. Read <strong>MPDO</strong> from the actual MPPD curve (<code>slide 54</code>).
+14. <strong>BI = MPDO × (lost profit per day + fixed cost per day)</strong> (<code>slide 55</code>).
+15. Act: cut the hazard first, add credits second, increase spacing third (<code>slide 57</code>).</p>
+<p><strong>Worked example.</strong> A solvent recovery unit, illustrative numbers throughout.
+- Material factor <strong>MF = 16</strong>, a toluene-class flammable solvent.
+- F1 penalties: exothermic 0.30, handling 0.50, enclosed 0.25, access 0.20, drainage 0.25.
+- F1 = 1.00 + 1.50 = <strong>2.50</strong>.
+- F2 penalties: toxic 0.40, flammable range 0.50, corrosion 0.20, leakage 0.30, rotating 0.50,
+  pressure 0.30, quantity 0.40.
+- F2 = 1.00 + 2.60 = <strong>3.60</strong>.
+- F3 = 2.50 × 3.60 = <strong>9.00</strong>.
+- F&amp;EI = 16 × 9.00 = <strong>144</strong>, which is <strong>Heavy</strong> (128–158) and past the 128 trigger.
+- Equipment value inside the exposure area is taken as ₹40 crore.
+- Damage factor off the curve is 0.62, so base MPPD = 40 × 0.62 = <strong>₹24.8 crore</strong>.
+- Credit factor 0.75, so actual MPPD = 24.8 × 0.75 = <strong>₹18.6 crore</strong>.
+- MPDO is read as 60 days, and lost profit plus fixed cost is ₹12 lakh a day.
+- BI = 60 × 12 lakh = <strong>₹7.2 crore</strong>, so the event costs about <strong>₹25.8 crore</strong> in total.</p>
+<p><strong>What the result means.</strong> The number is not a prediction. It is a ranking and a budget.
+- It ranks this unit against every other unit on the same site.
+- It sets the exposure radius, which decides plant layout and separation.
+- It prices the loss in property damage and in days of production.
+- It tells you where a credit is worth buying and where it is waste.
+- The deck's own conclusion is that reducing the hazard early beats adding credits late
+  (<code>slide 57</code>).</p>
+<p><em>What to write (8 marks, Q94).</em> The step list, then the worked chain, then three lines on what
+the answer means. Show the arithmetic. An examiner cannot award method marks for an unshown
+product.</p>
+<p><strong>Mark anchor.</strong> <strong>F3 = F1 × F2 and F&amp;EI = MF × F3.</strong> Two multiplications carry the entire
+method. Write them as equations, not as sentences.</p>
+<p><strong>Exam trap.</strong> The exposure radius comes from an empirical curve, and the deck gives <strong>no
+equation</strong> (<code>slide 48</code>). Do not invent a formula with a constant in it. Say "from the empirical
+curve" and move on to the damage factor.</p>
+<h3 id="28-preliminary-hazard-analysis">2.8 Preliminary Hazard Analysis<a class="anchor" href="#28-preliminary-hazard-analysis">#</a></h3>
+<p><em>In plain English.</em> PHA is the first pass. Before there is a drawing, a small team sits down and
+asks what could go wrong with this idea. It is cheap because it happens before anything is
+built, and rough because nothing is designed yet.</p>
+<p><em>The detail.</em>
+- PHA is usually the <strong>first attempt</strong> in the system safety process (<code>slide 59</code>).
+- It is used in the <strong>early stages of system design</strong> (<code>slide 59</code>).
+- It is <strong>semi-quantitative</strong>: it ranks hazards rather than measuring them (<code>slide 59</code>).
+- It identifies potential hazards and the accidental events that could follow (<code>slide 59</code>).
+- It ranks those events by severity and names the controls and follow-up actions (<code>slide 59</code>).
+- It also travels under the names <strong>Rapid Risk Ranking</strong> and <strong>HAZID</strong> (<code>slide 59</code>).
+- It leans on <strong>brainstorming and expert judgement</strong> (<code>slide 60</code>).
+- One or two knowledgeable people usually carry it out (<code>slide 60</code>).
+- It applies to any activity or system, at any level (<code>slide 60</code>).
+- Its quality depends on documentation, leader training and team experience (<code>slide 60</code>).</p>
+<p><strong>The four steps</strong> (<code>slide 62</code>, <code>slide 63</code>).
+1. <strong>Prerequisites</strong> — form the team, describe the system, collect risk information from similar
+   systems.
+2. <strong>Hazard identification</strong> — consider every part of the system and record every finding. The
+   deck's rule is that no hazard is too insignificant to record (<code>slide 62</code>).
+3. <strong>Consequence and frequency estimation</strong> — for each event, estimate how often and how bad.
+4. <strong>Risk ranking and follow-up</strong> — place each event on a risk matrix and let the ranking set the
+   action.</p>
+<p><strong>Advantages</strong> (<code>slide 61</code>): it helps ensure the system is safe; changes are cheaper and easier
+early in design; it shortens design time by reducing surprises.
+<strong>Disadvantages</strong> (<code>slide 61</code>): hazards must be foreseen by the analysts; interactions between
+hazards are not easily recognised.</p>
+<p><strong>Output.</strong> A hazard register with severity ranking and recommendations, produced before the
+P&amp;ID exists.</p>
+<p><em>What to write (3 marks, Q53).</em> Definition, the early-design timing, the semi-quantitative
+nature, and the four steps in one line each. For Q54, swap the last item for the two advantages
+and two disadvantages.</p>
+<p><strong>Mark anchor.</strong> "<strong>No hazards are too insignificant to be recorded</strong>" (<code>slide 62</code>). Also worth
+a mark: PHA is also called <strong>HAZID</strong> and <strong>Rapid Risk Ranking</strong>.</p>
+<p><strong>Exam trap.</strong> PHA is not a small HAZOP. HAZOP examines deviations from a defined design intent,
+node by node. PHA has no design intent to deviate from yet, so it works from experience and
+imagination instead.</p>
+<h3 id="29-hazop">2.9 HAZOP<a class="anchor" href="#29-hazop">#</a></h3>
+<p><em>In plain English.</em> HAZOP assumes the plant is designed correctly. Then it asks a rude question about every pipe: what if this flow is more, or less, or backwards? The team walks
+the plant line by line with a fixed list of rude questions, so nothing depends on somebody
+having a bright idea that afternoon.</p>
+<p><em>The detail.</em>
+- HAZOP is a <strong>structured and systematic</strong> technique for system examination and risk management
+  (<code>slide 64</code>).
+- It finds hazards and also <strong>operability problems</strong> that would spoil the product (<code>slide 64</code>).
+- Its founding assumption: risk events come from <strong>deviations from design intent</strong> (<code>slide 64</code>).
+- Deviations are generated with <strong>guide words</strong>, the method's unique feature (<code>slide 64</code>).
+- A <strong>node</strong> is a section of the plant with stated boundaries and one stated design intent.
+- The node is normally bounded by isolation points such as valves or flanges.
+- A <strong>deviation</strong> is one guide word applied to one parameter. The pair is the unit of work.</p>
+<table>
+<thead>
+<tr>
+<th>Guide word</th>
+<th>Meaning</th>
+<th>Example with flow</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>NO or NOT</td>
+<td>None of the intent is achieved</td>
+<td>No flow through the line</td>
+</tr>
+<tr>
+<td>MORE</td>
+<td>Quantitative increase</td>
+<td>Higher flow than design</td>
+</tr>
+<tr>
+<td>LESS</td>
+<td>Quantitative decrease</td>
+<td>Lower flow than design</td>
+</tr>
+<tr>
+<td>AS WELL AS</td>
+<td>Intent plus an extra component</td>
+<td>Solvent plus water ingress</td>
+</tr>
+<tr>
+<td>PART OF</td>
+<td>Only some of the intent</td>
+<td>Only one phase arrives</td>
+</tr>
+<tr>
+<td>REVERSE</td>
+<td>The opposite of the intent</td>
+<td>Backflow into the feed tank</td>
+</tr>
+<tr>
+<td>OTHER THAN</td>
+<td>Something entirely different</td>
+<td>Wrong chemical transferred</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>Parameters</strong> are the second axis: flow, pressure, temperature, level, composition, time, pH,
+  sequence.</li>
+<li>Batch plant HAZOP adds <strong>early</strong>, <strong>late</strong>, <strong>before</strong> and <strong>after</strong> as guide words (standard).</li>
+<li>Not every cell of the matrix is credible. The deck says so explicitly (<code>slide 70</code>).</li>
+<li>Non-credible combinations do not need to be documented (<code>slide 70</code>).</li>
+<li><strong>Four phases</strong> carry the study (<code>slide 65</code>).</li>
+</ul>
+<ol>
+<li><strong>Definition</strong> — pick a cross-functional team of subject specialists, fix the scope,
+   boundaries, interfaces and assumptions (<code>slide 66</code>).</li>
+<li><strong>Preparation</strong> — gather data, identify the audience, schedule meetings, agree the recording
+   template and the guide-word set (<code>slide 67</code>).</li>
+<li><strong>Examination</strong> — split the system into elements or steps, then apply the guide words to each
+   element (<code>slide 69</code>, <code>slide 70</code>).</li>
+<li><strong>Documentation and follow-up</strong> — record on the IEC 61882 template; the deck names that
+   standard (<code>slide 71</code>).</li>
+</ol>
+<ul>
+<li>Documentation then feeds <strong>risk review</strong> and <strong>risk communication</strong> (<code>slide 72</code>, <code>slide 73</code>).</li>
+<li>The team climate matters: positive thinking and frank discussion are named requirements
+  (<code>slide 66</code>).</li>
+</ul>
+<p><strong>A worked node.</strong> Node one: the feed line from tank T-1 to reactor R-1.
+Intent: transfer 5 m³/h of solvent at 2 bar and 30 °C.</p>
+<table>
+<thead>
+<tr>
+<th>Guide word + parameter</th>
+<th>Deviation</th>
+<th>Cause</th>
+<th>Consequence</th>
+<th>Safeguard</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>NO + flow</td>
+<td>Pump stops</td>
+<td>Power loss, pump failure</td>
+<td>Reactor starves, batch spoils</td>
+<td>Low-flow alarm, standby pump</td>
+</tr>
+<tr>
+<td>MORE + flow</td>
+<td>Over-transfer</td>
+<td>Valve stuck open, controller fail</td>
+<td>Vessel overfills, spill, fire</td>
+<td>High-level trip, bund</td>
+</tr>
+<tr>
+<td>LESS + flow</td>
+<td>Restricted flow</td>
+<td>Blockage, cavitation</td>
+<td>Poor mixing, hot spot</td>
+<td>Flow indicator, strainer</td>
+</tr>
+<tr>
+<td>MORE + temperature</td>
+<td>Overheat</td>
+<td>Cooling failure, runaway reaction</td>
+<td>Pressure rise, relief lifts</td>
+<td>High-temperature trip</td>
+</tr>
+<tr>
+<td>AS WELL AS + composition</td>
+<td>Water ingress</td>
+<td>Leaking jacket</td>
+<td>Corrosion, off-spec batch</td>
+<td>Conductivity check, drain</td>
+</tr>
+<tr>
+<td>REVERSE + flow</td>
+<td>Backflow</td>
+<td>Check valve fails</td>
+<td>Contamination of feed tank</td>
+<td>Non-return valve, interlock</td>
+</tr>
+<tr>
+<td>OTHER THAN + composition</td>
+<td>Wrong solvent</td>
+<td>Coupling error at unloading</td>
+<td>Wrong reaction, possible runaway</td>
+<td>Keyed couplings, labelling</td>
+</tr>
+</tbody>
+</table>
+<p><strong>What results</strong> (<code>Q65</code>). The study produces a document, not an opinion.
+- A deviation table: node, guide word, cause, consequence, existing safeguard, risk rank.
+- A recommendation for each unacceptable risk, with an owner and a date.
+- A ranked action list, which is what management actually reads.
+- Input to management of change, inspection plans, operating procedures and training.
+- Evidence for the regulator that the risks were examined systematically.</p>
+<p><em>What to write (8 marks, Q128).</em> Theory in one line, then the four phases. Then the seven guide words, the matrix against parameters, one worked deviation, and the output table.</p>
+<p><strong>Mark anchor.</strong> <strong>Seven guide words, and deviation = guide word × parameter.</strong> Add IEC 61882 as
+the documentation standard; it shows the method is a standard, not a habit.</p>
+<p><strong>Exam trap.</strong> "MORE" on its own is not a deviation. "MORE pressure" is. A script that lists
+guide words without pairing each to a parameter has listed vocabulary, not a method.</p>
+<h3 id="210-choosing-between-pha-and-hazop">2.10 Choosing between PHA and HAZOP<a class="anchor" href="#210-choosing-between-pha-and-hazop">#</a></h3>
+<p><em>In plain English.</em> PHA is a wide, shallow sweep early. HAZOP is a narrow, deep sweep late.
+Neither replaces the other, and the exam question is almost always about which to reach for.</p>
+<p><em>The detail.</em></p>
+<table>
+<thead>
+<tr>
+<th>Point</th>
+<th>PHA</th>
+<th>HAZOP</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Timing</td>
+<td>Concept and early design</td>
+<td>Detailed design and modification</td>
+</tr>
+<tr>
+<td>Input needed</td>
+<td>System description, experience</td>
+<td>P&amp;ID, design intent, node boundaries</td>
+</tr>
+<tr>
+<td>Team</td>
+<td>One or two knowledgeable people</td>
+<td>Cross-functional specialists</td>
+</tr>
+<tr>
+<td>Method</td>
+<td>Brainstorm against a hazard list</td>
+<td>Guide words applied to parameters</td>
+</tr>
+<tr>
+<td>Output</td>
+<td>Ranked hazard register</td>
+<td>Deviation table with causes and safeguards</td>
+</tr>
+<tr>
+<td>Coverage</td>
+<td>Whole system, coarse</td>
+<td>One node at a time, fine</td>
+</tr>
+<tr>
+<td>Cost</td>
+<td>Low</td>
+<td>High, in engineer-hours</td>
+</tr>
+<tr>
+<td>Best at</td>
+<td>Novel systems with no drawings</td>
+<td>Complex continuous processes</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>Use PHA</strong> when the design is still fluid and changes are cheap (<code>slide 61</code>).</li>
+<li><strong>Use HAZOP</strong> when the P&amp;ID is fixed and a deviation has real consequences (<code>slide 64</code>).</li>
+<li><strong>Use both</strong> on a major project: PHA at concept, HAZOP at detailed design.</li>
+<li><strong>Dow F&amp;EI at 128 or above</strong> is the standard trigger for the detailed study (<code>slide 47</code>).</li>
+<li><strong>FMEA</strong> suits equipment failures and single-component reliability (standard).</li>
+<li><strong>LOPA</strong> follows HAZOP to check whether the safeguards are enough (standard).</li>
+</ul>
+<p><strong>Industry examples.</strong> A new paint shop gets a PHA at layout stage. A solvent recovery column
+gets a HAZOP on its P&amp;ID. A warehouse of packaged goods gets a PHA and a fire risk assessment.
+A pharma reactor gets a HAZOP, then a LOPA on the exothermic reaction.</p>
+<p><em>What to write (8 marks, Q121).</em> The comparison table first, then two paragraphs on when each
+wins, then two named industry examples. Finish with the sequencing rule: PHA early, HAZOP late,
+both on anything large.</p>
+<p><strong>Mark anchor.</strong> <strong>PHA is wide and shallow and early; HAZOP is narrow and deep and late.</strong> The
+sentence is the answer to the whole comparison.</p>
+<p><strong>Exam trap.</strong> Do not claim HAZOP is "more accurate". HAZOP is more <em>detailed</em>, and detail is
+wasted on a design that will change next week. Timing, not accuracy, is the discriminator.</p>
+<h3 id="211-chemical-hazards-and-how-they-are-classified">2.11 Chemical hazards and how they are classified<a class="anchor" href="#211-chemical-hazards-and-how-they-are-classified">#</a></h3>
+<p><em>In plain English.</em> A chemical can hurt you in three separate ways. It can burn you, poison you,
+or catch fire. It can also damage the river rather than the worker. Classification systems exist
+so that the same symbol means the same thing on a drum in Kochi and a drum in Rotterdam.</p>
+<p><em>The detail.</em>
+- <strong>Physical hazards</strong> — flammable, explosive, oxidising, pyrophoric, self-reactive,
+  water-reactive, compressed gas, organic peroxide (standard).
+- <strong>Health hazards</strong> — toxic, harmful, corrosive, irritant, sensitising, carcinogenic,
+  mutagenic, toxic to reproduction (standard).
+- <strong>Environmental hazards</strong> — toxic to aquatic life, harmful to the ozone layer (standard).
+- <strong>Asphyxiants</strong> replace oxygen without being toxic themselves (standard).
+- The <strong>GHS</strong> is the Globally Harmonised System for classifying and labelling chemicals
+  (standard).
+- GHS uses <strong>nine hazard pictograms</strong>, a red diamond border, and two signal words (standard).
+- The signal words are <strong>DANGER</strong>, for the more severe, and <strong>WARNING</strong> (standard).
+- Indian industry meets GHS through the <strong>MSIHC Rules, 1989</strong> and the Factories Act (standard).</p>
+<table>
+<thead>
+<tr>
+<th>Pictogram</th>
+<th>Means</th>
+<th>Typical substance</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Flame</td>
+<td>Flammable</td>
+<td>Petrol, acetone</td>
+</tr>
+<tr>
+<td>Flame over circle</td>
+<td>Oxidiser</td>
+<td>Nitric acid, peroxides</td>
+</tr>
+<tr>
+<td>Exploding bomb</td>
+<td>Explosive, self-reactive</td>
+<td>Ammonium nitrate</td>
+</tr>
+<tr>
+<td>Gas cylinder</td>
+<td>Compressed gas</td>
+<td>LPG, oxygen</td>
+</tr>
+<tr>
+<td>Corrosion</td>
+<td>Burns skin, attacks metal</td>
+<td>Sulphuric acid, caustic soda</td>
+</tr>
+<tr>
+<td>Skull and crossbones</td>
+<td>Acute toxicity</td>
+<td>Cyanide salts</td>
+</tr>
+<tr>
+<td>Health hazard</td>
+<td>Chronic disease, cancer</td>
+<td>Benzene, silica</td>
+</tr>
+<tr>
+<td>Exclamation mark</td>
+<td>Irritant, harmful, sensitising</td>
+<td>Kerosene, resin</td>
+</tr>
+<tr>
+<td>Environment</td>
+<td>Aquatic toxicity</td>
+<td>Chlorinated solvent</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Routes of entry.</strong> A chemical hazard reaches the body by four roads, and the road decides the
+PPE (standard).
+- <strong>Inhalation</strong> — the fastest route in industry, because the lung has a huge surface and no
+  barrier worth the name.
+- <strong>Skin absorption</strong> — solvents and pesticides pass through intact skin, so gloves matter as
+  much as respirators.
+- <strong>Ingestion</strong> — from hands, food and cigarettes at the workbench.
+- <strong>Injection</strong> — from high-pressure leaks and sharps, rare but severe.
+- <strong>Target organs</strong> follow the chemical: solvents attack the nervous system and liver, metals the
+  kidney and nerve, dusts the lung.</p>
+<p><em>What to write (3 marks, Q57 and Q63).</em> For Q57, the three groups with two examples each. For
+Q63, name the nine pictograms and give one substance per pictogram.</p>
+<p><strong>Mark anchor.</strong> <strong>Nine GHS pictograms and two signal words.</strong> The count is checkable, and an
+examiner can mark it in two seconds.</p>
+<p><strong>Exam trap.</strong> The skull and crossbones is <em>acute</em> toxicity. The "health hazard" pictogram with
+the chest is <em>chronic</em> harm, including cancer. Swapping them is a wrong answer, not a slip.</p>
+<h3 id="212-controlling-chemical-hazards">2.12 Controlling chemical hazards<a class="anchor" href="#212-controlling-chemical-hazards">#</a></h3>
+<p><em>In plain English.</em> The best way to stop a chemical reaching a worker is to not have the chemical.
+The second best is to keep it inside a box. Everything after that depends on people behaving
+correctly, which is why the order is not a matter of taste.</p>
+<p><em>The detail.</em>
+- Controlling exposure is the fundamental method of protecting workers (<code>slide 84</code>).
+- The deck uses a <strong>hierarchy of controls</strong> to choose between options (<code>slide 84</code>).
+- <strong>Elimination or substitution</strong> is the most desirable (<code>slide 84</code>).
+- <strong>Engineering controls</strong> come next, and must be the primary means (<code>slide 84</code>).
+- <strong>Administrative and work-practice controls</strong> suit cases engineering cannot reach (<code>slide 84</code>).
+- <strong>PPE is the least desirable but may still be effective</strong> (<code>slide 84</code>).
+- Respirators are required when engineering controls are infeasible, or while they are being
+  installed (<code>slide 84</code>).
+- Engineering options: enclosure, closed transfer, local exhaust ventilation, general
+  ventilation, scrubbers, gas detection, deluge (standard).
+- Administrative options: job rotation, exposure time limits, permits, training, housekeeping,
+  health surveillance (standard).
+- Emergency options: spill kit, eye wash, safety shower, evacuation alarm, on-site plan.</p>
+<p><strong>Indian legal frame.</strong> Bhopal in 1984 produced Chapter IV-A of the Factories Act, inserted in
+1987 (standard).
+- Section 41B requires the occupier to disclose information on the hazardous processes
+  listed in the First Schedule (standard).
+- Section 41G requires a safety committee for factories in the hazardous list (standard).
+- The MSIHC Rules, 1989, cover manufacture, storage and import of hazardous chemicals (standard).
+- The Chemical Accidents Rules, 1996, require on-site and off-site emergency plans (standard).
+- The Factories Act also requires disclosure of information to workers (standard).</p>
+<p><strong>What to write (8 marks, Q58).</strong> Draw the hierarchy, then take three rungs and give one concrete
+measure for each. Close with the Indian statute that compels the control.</p>
+<p><strong>Mark anchor.</strong> "Engineering and work-practice controls must be the primary means; PPE is the
+least desirable <strong>but may still be effective</strong>" (<code>slide 84</code>). The second half stops you sounding
+as though PPE is forbidden.</p>
+<p><strong>Exam trap.</strong> PPE is not "the easy option that works". It protects one wearer, only while it
+fits and is worn correctly, and it fails silently. A leaking respirator seal looks exactly like
+a good one.</p>
+<h3 id="213-hazardous-properties-of-chemicals">2.13 Hazardous properties of chemicals<a class="anchor" href="#213-hazardous-properties-of-chemicals">#</a></h3>
+<p><em>In plain English.</em> A safety data sheet answers a short list of physical questions. How easily
+does it catch fire? How heavy is the vapour? How low can the air be before it will not burn? The
+answers decide where you store it and what you do when it leaks.</p>
+<p><em>The detail.</em> The deck's properties slide is a heading with no table under it (<code>slide 86</code>), so
+every value below is <strong>(standard)</strong>.
+- <strong>Flash point</strong> — lowest temperature at which a liquid gives off ignitable vapour.
+- <strong>Fire point</strong> — the temperature at which the vapour keeps burning once lit.
+- <strong>Autoignition temperature</strong> — the temperature at which it ignites without a spark.
+- <strong>Vapour density</strong> — weight of the vapour relative to air. Above 1, it sinks.
+- <strong>Vapour pressure</strong> — how readily a liquid evaporates at a given temperature.
+- <strong>Boiling point</strong> — sets how fast a spilled liquid produces vapour.
+- <strong>LFL and UFL</strong> — the lean and rich limits of flammability in air.
+- <strong>Specific gravity</strong> — decides whether a spilled liquid floats on water.
+- <strong>pH</strong> — below 2 or above 12.5 signals a corrosive (standard).
+- <strong>LD50</strong> — the dose killing 50 per cent of test animals, the standard acute toxicity figure.
+- <strong>Dust explosivity</strong> — measured as Kst, which sizes a dust explosion hazard (standard).</p>
+<table>
+<thead>
+<tr>
+<th>Substance</th>
+<th>Flash point</th>
+<th>Vapour density</th>
+<th>Flammable range</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Petrol</td>
+<td>−43 °C</td>
+<td>About 3 to 4</td>
+<td>1.4 to 7.6 per cent</td>
+</tr>
+<tr>
+<td>Kerosene</td>
+<td>38 to 74 °C</td>
+<td>About 5</td>
+<td>0.7 to 5 per cent</td>
+</tr>
+<tr>
+<td>Diesel</td>
+<td>52 to 96 °C</td>
+<td>About 5</td>
+<td>0.6 to 6.5 per cent</td>
+</tr>
+<tr>
+<td>Methane</td>
+<td>Gas</td>
+<td>0.55, rises</td>
+<td>5 to 15 per cent</td>
+</tr>
+<tr>
+<td>Hydrogen</td>
+<td>Gas</td>
+<td>0.07, rises fast</td>
+<td>4 to 75 per cent</td>
+</tr>
+<tr>
+<td>Carbon monoxide</td>
+<td>Gas</td>
+<td>0.97, mixes</td>
+<td>12.5 to 74 per cent</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Indian classification of petroleum</strong> follows flash point (standard).
+- <strong>Class A</strong> — flash point below 23 °C. Petrol and solvents.
+- <strong>Class B</strong> — flash point from 23 °C to 65 °C. Kerosene and high-speed diesel.
+- <strong>Class C</strong> — flash point from 65 °C to 93 °C. Heavy fuel oils.</p>
+<p><strong>How the three headline properties hurt the environment.</strong>
+- <strong>Toxicity</strong> kills beyond the fence. A release reaches water, soil and the food chain.
+- <strong>Flammability</strong> turns a spill into a fire, and the smoke carries the toxin downwind.
+- <strong>Reactivity</strong> makes the release unpredictable: heat, gas, or a runaway in a stored drum.
+- A substance that is toxic <em>and</em> flammable gives the responder no safe approach.
+- A substance that reacts with water cannot be fought with the obvious extinguisher.</p>
+<p><em>What to write (5 marks, Q59).</em> Define the three properties, give one number for each, then one
+consequence each for worker, plant and environment. Close on the combined case.</p>
+<p><strong>Mark anchor.</strong> <strong>Flash point below 23 °C is Class A petroleum; the bands break at 23, 65 and
+93 °C.</strong> Indian-specific numbers beat generic ones in an Indian paper.</p>
+<p><strong>Exam trap.</strong> Flash point and autoignition temperature are different numbers with different
+meanings. Petrol has a flash point well below zero and an autoignition temperature around
+250 °C. Confusing them suggests you have memorised a word, not a property.</p>
+<h3 id="214-material-safety-data-sheets">2.14 Material Safety Data Sheets<a class="anchor" href="#214-material-safety-data-sheets">#</a></h3>
+<p><em>In plain English.</em> An MSDS is the instruction sheet that comes with a hazardous chemical. It
+tells the worker what the stuff does, how to handle it, what to wear, and what to do when it
+spills or catches fire. If it is missing, the risk assessment for that area is guesswork.</p>
+<p><em>The detail.</em>
+- <strong>Definition</strong> — a document supplied by the manufacturer that states the properties, hazards,
+  safe handling, emergency action and disposal for a chemical product.
+- The modern format has <strong>16 sections</strong>, fixed by GHS and ISO 11014 (standard).
+- The order matters, because a responder reads section 5 while the fire is burning.</p>
+<table>
+<thead>
+<tr>
+<th>Section</th>
+<th>Content</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Identification of the substance and supplier</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Hazard identification, including GHS pictograms and signal word</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Composition and ingredient information</td>
+</tr>
+<tr>
+<td>4</td>
+<td>First-aid measures</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Firefighting measures</td>
+</tr>
+<tr>
+<td>6</td>
+<td>Accidental release measures</td>
+</tr>
+<tr>
+<td>7</td>
+<td>Handling and storage</td>
+</tr>
+<tr>
+<td>8</td>
+<td>Exposure controls and personal protection</td>
+</tr>
+<tr>
+<td>9</td>
+<td>Physical and chemical properties</td>
+</tr>
+<tr>
+<td>10</td>
+<td>Stability and reactivity</td>
+</tr>
+<tr>
+<td>11</td>
+<td>Toxicological information</td>
+</tr>
+<tr>
+<td>12</td>
+<td>Ecological information</td>
+</tr>
+<tr>
+<td>13</td>
+<td>Disposal considerations</td>
+</tr>
+<tr>
+<td>14</td>
+<td>Transport information</td>
+</tr>
+<tr>
+<td>15</td>
+<td>Regulatory information</td>
+</tr>
+<tr>
+<td>16</td>
+<td>Other information, including revision date</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>Section 8</strong> is the one supervisors actually use, because it names the PPE.</li>
+<li><strong>Section 9</strong> carries flash point, boiling point and vapour pressure.</li>
+<li><strong>Section 2</strong> must match the label on the drum exactly (standard).</li>
+<li>The sheet must be <strong>accessible at the point of use</strong>, not locked in an office (standard).</li>
+<li>It must be in a language the workers read (standard).</li>
+<li>It must be <strong>current</strong>: check the revision date in section 16.</li>
+<li>Training must cover the sheet, or its presence is decoration.</li>
+</ul>
+<p><em>What to write (3 marks, Q56).</em> Definition, purpose in one line, the 16-section structure named,
+and the accessibility and training requirement. For 5 marks, add the table of the sections a
+supervisor uses most.</p>
+<p><strong>Mark anchor.</strong> <strong>16 sections</strong>, with section 8 for exposure controls and PPE and section 9 for
+physical properties. The count proves you have seen a real sheet.</p>
+<p><strong>Exam trap.</strong> An MSDS is not a label. The label carries six elements: identifier, pictograms,
+signal word, hazard statements, precautionary statements and supplier. The sheet is the long
+document behind the label.</p>
+<hr />
+<h2 id="3-answer-bank">3. Answer bank<a class="anchor" href="#3-answer-bank">#</a></h2>
+<h3 id="31-three-mark-answers">3.1 Three-mark answers<a class="anchor" href="#31-three-mark-answers">#</a></h3>
+<p><strong>A — Hazard and risk (Q7).</strong>
+1. <strong>Hazard</strong> — a source with the potential to cause injury or ill health.
+2. <strong>Risk</strong> — the combination of the likelihood of harm and its severity.
+3. <strong>Contrast</strong> — the hazard is inherent in the agent; the risk depends on exposure.</p>
+<p><strong>B — Types of hazards (Q8).</strong>
+1. <strong>Physical</strong> — noise, heat, radiation, pressure; deafness, heat stress, burns.
+2. <strong>Mechanical</strong> — unguarded machinery, falling loads; cut, crush, fracture.
+3. <strong>Chemical</strong> — solvents, acids, dusts; burns, poisoning, fire.
+4. <strong>Add</strong> — biological, ergonomic, psychosocial, and fire and explosion.</p>
+<p><strong>C — Types of fire hazards (Q9).</strong>
+1. <strong>By fuel class</strong> — A solids, B liquids, C gases, D metals, E electrical.
+2. <strong>By outcome</strong> — fire, explosion, toxic gas release from the same inventory.
+3. <strong>By mechanism</strong> — pool fire, jet fire, flash fire, vapour cloud explosion, BLEVE.</p>
+<p><strong>D — What a fire extinguisher is (Q10).</strong>
+1. <strong>Definition</strong> — a portable pressurised device that discharges an agent onto a small fire.
+2. <strong>Principle</strong> — it removes one side of the fire tetrahedron.
+3. <strong>Limit</strong> — first-aid only; it is not a substitute for fixed protection or evacuation.</p>
+<p><strong>E — Before installing an extinguisher (Q11).</strong>
+1. <strong>Class match</strong> — the agent must suit the fuel in that room.
+2. <strong>Siting</strong> — visible, signed, unobstructed, handle about 1.5 m up, travel under 15 m.
+3. <strong>Conditions</strong> — temperature range, corrosion, and a valid service tag; staff trained.</p>
+<p><strong>F — Items needed for the Dow F&amp;EI (Q12, Q42).</strong>
+1. <strong>Plans</strong> — an accurate plot plan for an existing plant, or a preliminary one for a new plant.
+2. <strong>Process</strong> — the process flow sheet.
+3. <strong>Reference</strong> — the F&amp;EI hazard classification guide and the F&amp;EI form.</p>
+<p><strong>G — Objectives of a HAZOP (Q51).</strong>
+1. <strong>Find hazards</strong> — identify hazards arising from deviations from the design intent.
+2. <strong>Find operability problems</strong> — catch the deviations that spoil product or stop the plant.
+3. <strong>Decide</strong> — rank each deviation and recommend safeguards with owners.</p>
+<p><strong>H — Steps in a HAZOP (Q52).</strong>
+1. <strong>Define</strong> — team, scope, boundaries, interfaces and assumptions.
+2. <strong>Prepare</strong> — data, schedule, recording template, agreed guide words.
+3. <strong>Examine</strong> — nodes, then guide word against parameter, then record credible deviations.
+4. <strong>Follow up</strong> — document on the IEC 61882 template and track actions to closure.</p>
+<p><strong>I — Objectives of a PHA (Q53).</strong>
+1. <strong>Identify</strong> — all potential hazards and the accidental events that could follow.
+2. <strong>Rank</strong> — order those events by severity using a risk matrix.
+3. <strong>Control</strong> — name the required controls and the follow-up actions, early in design.</p>
+<p><strong>J — Hazards considered in a PHA (Q55).</strong>
+1. <strong>Energy</strong> — fire, explosion, pressure, electrical, stored mechanical energy.
+2. <strong>Materials</strong> — toxic, corrosive, flammable and reactive substances.
+3. <strong>People and place</strong> — ergonomic, access, environmental and interface hazards.</p>
+<p><strong>K — MSDS, definition and purpose (Q56).</strong>
+1. <strong>Definition</strong> — a manufacturer's document on a chemical's properties, hazards and safe use.
+2. <strong>Purpose</strong> — it feeds the risk assessment, the PPE choice and the emergency plan.
+3. <strong>Form</strong> — 16 sections under GHS; kept accessible at the point of use and trained on.</p>
+<p><strong>L — Types of chemical hazards (Q57).</strong>
+1. <strong>Physical</strong> — flammable, explosive, oxidising, pyrophoric, compressed gas.
+2. <strong>Health</strong> — toxic, corrosive, irritant, sensitising, carcinogenic, mutagenic.
+3. <strong>Environmental</strong> — aquatic toxicity, ozone depletion; plus asphyxiants.</p>
+<p><strong>M — Three control measures in a plant (Q62).</strong>
+1. <strong>Substitution</strong> — replace the solvent or process with a less hazardous one.
+2. <strong>Engineering</strong> — enclose the transfer and extract at source with local exhaust.
+3. <strong>Administrative and PPE</strong> — rotation, permits, training, then gloves and respirators.</p>
+<p><strong>N — GHS hazard symbols (Q63).</strong>
+1. <strong>Physical</strong> — flame, flame over circle, exploding bomb, gas cylinder.
+2. <strong>Health</strong> — corrosion, skull and crossbones, health hazard, exclamation mark.
+3. <strong>Environment</strong> — the dead tree and fish; with the signal words DANGER and WARNING.</p>
+<p><strong>O — Importance of HAZOP (Q64).</strong>
+1. <strong>Systematic</strong> — it finds deviations that experience alone would miss.
+2. <strong>Documented</strong> — it leaves a traceable record for the regulator and for change control.
+3. <strong>Cheap</strong> — a study costs far less than the modification it prevents.</p>
+<p><strong>P — Classification of fires (Q90).</strong>
+1. <strong>A</strong> — solids such as wood and paper; extinguish by cooling with water.
+2. <strong>B</strong> — flammable liquids such as petrol; smother with foam, CO₂ or powder.
+3. <strong>C, D, E</strong> — gases, combustible metals, live electrical equipment.</p>
+<p><strong>Q — Four risk assessment tools (Q92).</strong>
+1. <strong>PHA</strong> — early, coarse, ranked hazard list for a new system.
+2. <strong>HAZOP</strong> — node-by-node deviation study on a detailed design.
+3. <strong>FMEA</strong> — component failure modes and their effects.
+4. <strong>LOPA or QRA</strong> — layer counting, or full frequency and consequence modelling.</p>
+<p><strong>R — Dow F&amp;EI and its objectives (Q93, Q169).</strong>
+1. <strong>Definition</strong> — an index that rates a process unit's fire and explosion hazard from 1 upward.
+2. <strong>Quantify</strong> — express damage as property loss in money and outage in days.
+3. <strong>Aim</strong> — identify escalating equipment, compare layout options, and communicate risk.</p>
+<p><strong>S — Role of government in safety (Q115).</strong>
+1. <strong>Legislate</strong> — the Factories Act, MSIHC Rules and state factory rules set duties.
+2. <strong>Enforce</strong> — the factory inspectorate inspects, prohibits and prosecutes.
+3. <strong>Support</strong> — DGFASLI, the National Safety Council and ISI standards guide industry.</p>
+<p><strong>T — Need for a safety committee (Q119).</strong>
+1. <strong>Legal</strong> — Section 41G of the Factories Act requires one in hazardous factories.
+2. <strong>Tripartite</strong> — management, supervisors and workers meet and agree actions.
+3. <strong>Effect</strong> — it reviews incidents, inspections and training, and gives workers a voice.</p>
+<p><strong>U — Role of PHA in modern safety management (Q122a).</strong>
+1. <strong>Early</strong> — it is the first structured look, taken while design changes are still cheap.
+2. <strong>Ranking</strong> — it sorts hazards by severity so money goes to the worst first.
+3. <strong>Record</strong> — it creates the hazard register that later studies build on.</p>
+<p><strong>V — Lifting and carrying (Q131).</strong>
+1. <strong>Assess</strong> — check the weight, the route and the grip before lifting.
+2. <strong>Posture</strong> — feet apart, back straight, load close, lift with the legs, no twisting.
+3. <strong>Limit</strong> — use a trolley or two people above the safe manual limit.</p>
+<p><strong>W — Pulling and pushing (Q132).</strong>
+1. <strong>Push, do not pull</strong> — pushing keeps the load visible and the spine in compression.
+2. <strong>Height</strong> — hands between hip and shoulder, body weight doing the work.
+3. <strong>Surface</strong> — good floor, good wheels, and no slope or threshold on the route.</p>
+<h3 id="32-five-mark-answers">3.2 Five-mark answers<a class="anchor" href="#32-five-mark-answers">#</a></h3>
+<p><strong>A — Advantages and disadvantages of PHA (Q54).</strong>
+1. <strong>Advantage, safety</strong> — it helps ensure the system is safe before it is built (<code>slide 61</code>).
+2. <strong>Advantage, cost</strong> — modifications are cheaper and easier in the earlier design stages.
+3. <strong>Advantage, schedule</strong> — it shortens design time by reducing the number of surprises.
+4. <strong>Disadvantage, imagination</strong> — hazards must be foreseen by the analysts.
+5. <strong>Disadvantage, interaction</strong> — the effects of interactions between hazards are not easily
+   recognised. Add that quality depends on documentation and team experience (<code>slide 60</code>).</p>
+<p><strong>B — Results of a HAZOP study (Q65).</strong>
+1. <strong>The table</strong> — node, guide word, deviation, cause, consequence, safeguard, risk rank.
+2. <strong>The recommendations</strong> — one per unacceptable risk, with an owner and a due date.
+3. <strong>The ranking</strong> — actions ordered so the worst deviations are fixed first.
+4. <strong>The record</strong> — documentation on the IEC 61882 template, retained for audit.
+5. <strong>The follow-on</strong> — input to change control, inspection, procedures and training.</p>
+<p><strong>C — Types of fire extinguishers (Q91).</strong>
+1. <strong>Water</strong> — Class A only; cooling; freezes, so cold sites need antifreeze (<code>slide 18</code>).
+2. <strong>Water mist</strong> — distilled water as a fog, for museums, operating rooms and book stores.
+3. <strong>CO₂</strong> — Classes B and C, no residue, poor in wind, risky in confined spaces (<code>slide 19</code>).
+4. <strong>Foam and dry powder</strong> — foam blankets liquids; ABC powder covers A, B, C and E.
+5. <strong>Special agents</strong> — wet chemical for cooking oil, dry powder or sand for metals.</p>
+<p><strong>D — Dow hazard factors (Q106).</strong>
+1. <strong>Material factor</strong> — flammability and reactivity, adjusted for flash and boiling point.
+2. <strong>F1 general</strong> — reaction, handling and transfer, enclosure, access, drainage.
+3. <strong>F2 special</strong> — toxicity at 0.2 × NH, sub-atmospheric 0.5, dust, flammable range, pressure.
+4. <strong>F2 continued</strong> — low temperature, corrosion, leakage, rotating equipment, quantity, fired
+   heaters.
+5. <strong>Combination</strong> — F3 = F1 × F2, then F&amp;EI = MF × F3, then read the hazard band.</p>
+<p><strong>E — Dow flow chart (Q105).</strong> Draw the chain and label each box.
+1. Select unit → assign MF → add F1 penalties → add F2 penalties.
+2. F3 = F1 × F2 → F&amp;EI = MF × F3 → hazard band.
+3. Exposure radius → area → value of equipment → damage factor → base MPPD.
+4. Credit factor → actual MPPD → MPDO → business interruption.
+5. Report: property damage in money, outage in days, and the ranked list of ways to cut it.</p>
+<p><strong>F — Hazard factors contributing to the index (Q106, extended).</strong>
+1. <strong>Material</strong> — the chemical energy potential of what is inside the unit.
+2. <strong>General</strong> — how the process is run and laid out: reaction, transfer, enclosure, access,
+   drainage.
+3. <strong>Special</strong> — what makes loss likely: toxicity, pressure, vacuum, corrosion, leakage, rotating
+   equipment.
+4. <strong>Quantity</strong> — the mass of flammable or unstable material, with separate curves for process,
+   storage and solids (<code>slide 43</code>).
+5. <strong>Fired equipment</strong> — heaters and furnaces, on curve A-1 above flash point or A-2 above
+   boiling point (<code>slide 44</code>).</p>
+<p><strong>G — HAZOP steps in detail (Q128).</strong>
+1. <strong>Definition</strong> — cross-functional team of specialists, scope, boundaries, interfaces,
+   assumptions, and a climate of frank discussion (<code>slide 66</code>).
+2. <strong>Preparation</strong> — supporting data, audience, meeting schedule, recording template, agreed
+   guide words (<code>slide 67</code>).
+3. <strong>Examination</strong> — split into elements, apply guide words, discard non-credible combinations
+   without documenting them (<code>slide 69</code>, <code>slide 70</code>).
+4. <strong>Documentation</strong> — record on the IEC 61882 form, modified for company policy and audit needs
+   (<code>slide 71</code>).
+5. <strong>Review and communicate</strong> — check the controls still work, watch for new risks created by the
+   controls, and report at the right level for each audience (<code>slide 72</code>, <code>slide 73</code>).</p>
+<p><strong>H — Control measures for chemical hazards (Q126).</strong>
+1. <strong>Eliminate or substitute</strong> — the most desirable option, and the only one that removes the
+   hazard (<code>slide 84</code>).
+2. <strong>Engineer</strong> — enclosure, closed transfer, local exhaust ventilation, scrubber, gas detection.
+3. <strong>Administer</strong> — rotation, exposure time limits, permit to work, training, housekeeping.
+4. <strong>Protect</strong> — respirators, gloves, goggles, aprons; the least desirable but still effective.
+5. <strong>Prepare</strong> — spill kit, eyewash, shower, alarm, on-site emergency plan under the 1996 Rules.</p>
+<p><strong>I — Toxicity, flammability, reactivity and environmental safety (Q59, Q124).</strong>
+1. <strong>Toxicity</strong> — kills beyond the fence; a release enters water, soil and the food chain.
+2. <strong>Flammability</strong> — turns a spill into a fire, and the smoke carries the toxin downwind.
+3. <strong>Reactivity</strong> — makes the release unpredictable: heat, gas, polymerisation or runaway.
+4. <strong>Combination</strong> — toxic and flammable together leaves the responder no safe approach.
+5. <strong>Consequence</strong> — the properties decide storage segregation, separation distance and the
+   emergency plan.</p>
+<p><strong>J — Role of PPE in controlling chemical hazards (Q60).</strong>
+1. <strong>Place</strong> — last in the hierarchy, because it protects one wearer and depends on fit.
+2. <strong>Selection</strong> — by the chemical's own data: gloves by polymer and permeation, not by colour.
+3. <strong>Respiratory</strong> — air-purifying for known contaminants with enough oxygen; SCBA otherwise.
+4. <strong>Limits</strong> — no PPE is safe in an oxygen-deficient or immediately dangerous atmosphere.
+5. <strong>Support</strong> — fit testing, training, cleaning, storage and replacement schedules.</p>
+<p><strong>K — Identify the fire class and pick the extinguisher (Q170).</strong>
+1. <strong>Look at the fuel</strong> — solid, liquid, gas, metal or live electrical equipment.
+2. <strong>Solid</strong> — Class A, water or foam.
+3. <strong>Liquid</strong> — Class B, foam, CO₂ or dry powder; never water.
+4. <strong>Gas</strong> — Class C, shut the supply off first, then cool and smother.
+5. <strong>Electrical</strong> — Class E, isolate the supply, then CO₂ or clean agent.</p>
+<p><strong>L — How handling aids cut injury (Q165).</strong>
+1. <strong>Load</strong> — a trolley or pallet truck removes the lift entirely.
+2. <strong>Reach</strong> — vacuum lifters and hoists keep the load inside the safe zone.
+3. <strong>Distance</strong> — conveyors and roller tracks remove carrying and turning.
+4. <strong>Repetition</strong> — balancers and spring arms cut the number of lifts per shift.
+5. <strong>Result</strong> — the aid removes the force, so the injury mechanism disappears rather than being
+   tolerated.</p>
+<p><strong>M — Implementation criteria and plans (Q122b).</strong>
+1. <strong>Criteria</strong> — set the risk level above which action is compulsory, using the matrix.
+2. <strong>Owner</strong> — one named person per action, with authority and a budget.
+3. <strong>Date</strong> — a completion date, and a review date for the residual risk.
+4. <strong>Verification</strong> — the evidence that proves the control works, such as a test record.
+5. <strong>Plan</strong> — fold the actions into the maintenance, training and capital plans, then re-audit.</p>
+<h3 id="33-eight-mark-answers">3.3 Eight-mark answers<a class="anchor" href="#33-eight-mark-answers">#</a></h3>
+<h4 id="a-steps-to-calculate-the-dow-fei-q94">A — Steps to calculate the Dow F&amp;EI (Q94)</h4>
+<p><strong>Structure (8):</strong> the input list (1), the five-step factor build (3), the consequence chain (3),
+what the answer means (1). Show arithmetic on every line.</p>
+<p><strong>Answer</strong>
+- <strong>Inputs</strong> (<code>slide 33</code>): plot plan, flow sheet, classification guide, F&amp;EI form.
+- <strong>Unit</strong> (<code>slide 34</code>): screen on chemical energy, quantity, capital density, pressure and
+  temperature, and past history.
+- <strong>MF</strong> (<code>slide 35</code>): flammability and reactivity, adjusted for flash point and boiling point.
+- <strong>F1</strong> (<code>slide 40</code>): exothermic reaction, handling and transfer, enclosure, access, drainage.
+- <strong>F2</strong> (<code>slide 41</code>): toxic at 0.2 × NH, vacuum at 0.5, dust, flammable range, pressure,
+  low temperature, corrosion, leakage, rotating equipment, quantity, fired heaters.
+- <strong>F3 and F&amp;EI</strong> (<code>slide 45</code>): F3 = F1 × F2 and F&amp;EI = MF × F3. Worked: 2.50 × 3.60 = 9.00,
+  then 16 × 9.00 = 144, which is Heavy.
+- <strong>Consequence</strong> (<code>slide 48</code> to <code>slide 55</code>): radius from the curve, area, cylinder volume,
+  equipment value, damage factor, base MPPD, credit factor, actual MPPD, MPDO, BI.
+- <strong>Meaning</strong> (<code>slide 57</code>): reduce the hazard first, add credits second, increase spacing third.
+<strong>Traps:</strong> (1) Do not skip the credits — they turn base MPPD into actual MPPD, and an answer
+without them stops halfway. (2) Do not invent a radius formula; the deck gives a curve, not an
+equation.</p>
+<h4 id="b-pha-compared-with-hazop-and-when-to-choose-each-q121-q171">B — PHA compared with HAZOP, and when to choose each (Q121, Q171)</h4>
+<p><strong>Structure (8):</strong> definitions (2), comparison table (3), when to choose (2), industry examples
+(1).</p>
+<p><strong>Answer</strong>
+- <strong>PHA</strong> — first structured look, early design, semi-quantitative, ranked hazard list, also
+  called HAZID (<code>slide 59</code>). Four steps: prerequisites, identification, consequence and
+  frequency, ranking and follow-up (<code>slide 62</code>).
+- <strong>HAZOP</strong> — structured examination of deviations from design intent, node by node, using guide
+  words (<code>slide 64</code>). Four phases: definition, preparation, examination, documentation (<code>slide
+  65</code>).
+- <strong>Table</strong> — timing, input, team, method, output, coverage, cost (see §2.10).
+- <strong>Choose PHA</strong> — fluid design, novel system, no P&amp;ID yet, or a whole-site first sweep.
+- <strong>Choose HAZOP</strong> — fixed P&amp;ID, continuous process, hazardous inventory, or a modification.
+- <strong>Sequence both</strong> — PHA at concept, HAZOP at detailed design, LOPA after HAZOP.
+- <strong>Examples</strong> — PHA for a new paint shop layout; HAZOP for a solvent recovery column; PHA for a
+  warehouse; HAZOP then LOPA for an exothermic reactor.
+<strong>Traps:</strong> (1) HAZOP is more detailed, not more accurate — do not claim it as the "better" method.
+(2) PHA without the ranking step is only a hazard list, and it loses half the marks.</p>
+<h4 id="c-control-measures-for-chemical-hazards-q58-q123-q127-q172">C — Control measures for chemical hazards (Q58, Q123, Q127, Q172)</h4>
+<p><strong>Structure (8):</strong> hierarchy in order (3), three rungs developed (3), Indian law and emergency
+preparedness (2).</p>
+<p><strong>Answer</strong>
+- <strong>Hierarchy</strong> — elimination, substitution, engineering, administrative, PPE (<code>slide 84</code>).
+- <strong>Substitution</strong> — water-based paint for solvent paint; a less toxic solvent in extraction.
+- <strong>Engineering</strong> — enclosure, closed transfer, local exhaust ventilation, scrubber, gas
+  detection and alarm, deluge, bunding.
+- <strong>Administrative</strong> — rotation, exposure time limits, permit to work, training, housekeeping,
+  health surveillance, exposure monitoring.
+- <strong>PPE</strong> — gloves by polymer, respirators with fit testing, goggles, aprons; last and least
+  reliable.
+- <strong>Law</strong> — Chapter IV-A of the Factories Act, 1987, after Bhopal; MSIHC Rules 1989; Chemical
+  Accidents Rules 1996 for on-site and off-site plans.
+- <strong>Emergency</strong> — spill kit, eyewash, shower, evacuation alarm, mutual aid.
+<strong>Traps:</strong> (1) Do not open with PPE. (2) Do not offer "training" as the answer to a design
+problem — it belongs on the fourth rung, and the examiner knows it.</p>
+<h4 id="d-administrative-controls-versus-ppe-indian-automotive-plant-q61">D — Administrative controls versus PPE, Indian automotive plant (Q61)</h4>
+<p><strong>Structure (8):</strong> the comparison (3), the Indian context (2), the verdict with reasons (2), one
+closing recommendation (1).</p>
+<p><strong>Answer</strong>
+- <strong>Administrative controls</strong> change how the work is organised: rotation, time limits, permits,
+  training, procedures, monitoring.
+- <strong>PPE</strong> puts a barrier on the worker: gloves, respirators, goggles, aprons.
+- <strong>Effectiveness</strong> — administrative controls cut exposure for the whole shift; PPE protects one
+  wearer while it is worn correctly.
+- <strong>Failure mode</strong> — an administrative control fails visibly; a PPE barrier fails silently.
+- <strong>Cost</strong> — PPE is cheap to buy and expensive to sustain, through fit testing and replacement.
+- <strong>Indian context</strong> — paint shops, foundries and battery plants run Chapter IV-A duties, MSIHC
+  thresholds and Factories Act disclosure obligations.
+- <strong>Verdict</strong> — administrative controls first, PPE to close the residual gap, never as the plan.
+- <strong>Recommendation</strong> — enclose the paint booth and extract at source, then use PPE for the tasks
+  that remain.
+<strong>Traps:</strong> (1) The question asks for a comparison, not two lists — give the criterion for each
+row. (2) Contract labour and shift work are the Indian specifics worth naming.</p>
+<h4 id="e-fire-safety-plan-from-the-fire-classification-q168">E — Fire safety plan from the fire classification (Q168)</h4>
+<p><strong>Structure (8):</strong> survey the fuels (2), map the classes to zones (2), place the equipment (3),
+support with training and maintenance (1).</p>
+<p><strong>Answer</strong>
+- <strong>Survey</strong> — walk the plant and list every fuel by class, room by room.
+- <strong>Class A zones</strong> — stores, packing, offices: water or ABC powder, one per 100 m² (standard).
+- <strong>Class B zones</strong> — solvent store, paint shop, fuel point: foam or CO₂, with bunding and
+  drainage.
+- <strong>Class C zones</strong> — LPG bank, acetylene: isolation valves, gas detection, dry powder.
+- <strong>Class D zones</strong> — magnesium or aluminium powder: dry sand or special powder, never water.
+- <strong>Class E zones</strong> — MCC rooms, panels: CO₂ or clean agent, and no water units at all.
+- <strong>Placement</strong> — visible, signed, unobstructed, travel under 15 m, handle about 1.5 m up.
+- <strong>Support</strong> — monthly checks, annual refill, drills, and a named person per zone.
+<strong>Traps:</strong> (1) The plan follows the fuel, not the floor plan symmetry. (2) Do not put a water
+unit in a switch room because the corridor is convenient.</p>
+<h4 id="f-fourteen-ppe-with-a-figure-q145">F — Fourteen PPE with a figure (Q145)</h4>
+<p><strong>Structure (8):</strong> a labelled worker sketch (3), the list grouped head to foot (4), one line on
+selection (1).</p>
+<p><strong>Answer</strong>
+- <strong>Head and face</strong> — safety helmet, safety goggles, face shield, welding helmet.
+- <strong>Ears</strong> — ear plugs, ear muffs.
+- <strong>Respiratory</strong> — filtering half mask, full-face respirator, SCBA.
+- <strong>Hands and arms</strong> — leather gloves, chemical gloves, arm sleeve.
+- <strong>Body</strong> — coverall or apron, high-visibility vest, full-body harness.
+- <strong>Feet</strong> — safety shoes, gum boots.
+- <strong>Figure</strong> — one worker outline, labels on leaders, numbered 1 to 17 down one side. The question asks for at least fourteen.
+- <strong>Selection</strong> — by the hazard, not by availability: a glove is chosen by polymer and permeation
+  data.
+<strong>Traps:</strong> (1) Fourteen is a minimum and a count, so number every label on the figure. (2) A
+harness is fall protection, not general PPE; say so in the label.</p>
+<h3 id="34-fourteen-mark-skeleton-ese-part-b">3.4 Fourteen-mark skeleton (ESE Part B)<a class="anchor" href="#34-fourteen-mark-skeleton-ese-part-b">#</a></h3>
+<p><strong>Likely shape.</strong> Either "explain the Dow Fire and Explosion Index and calculate it for a given
+unit" or "explain PHA and HAZOP and compare them". Prepare both; they share the first page.</p>
+<p><strong>Paragraph plan — the Dow version</strong>
+1. <strong>Purpose (2)</strong> — 1966 origin, one of the first chemical plant systems, quantify, identify,
+   communicate; damage in money and days (<code>slide 26</code>, <code>slide 28</code>). <em>One third of a page.</em>
+2. <strong>Inputs and unit selection (2)</strong> — the five items (<code>slide 33</code>), the five screening criteria
+   (<code>slide 34</code>), and why not every vessel is analysed.
+3. <strong>The factors (3)</strong> — MF from NF and NR; F1 with its five penalties; F2 with its eleven;
+   F3 = F1 × F2; F&amp;EI = MF × F3. <strong>Draw the flow chart here</strong> (§5). <em>Half a page.</em>
+4. <strong>Worked calculation (4)</strong> — the fifteen-step chain with numbers. MF 16, F1 2.50, F2 3.60, F3 9.00, F&amp;EI 144, Heavy, past the 128 trigger. Then MPPD, credits, MPDO and BI.
+5. <strong>Interpretation (2)</strong> — hazard bands, exposure radius, layout and separation, and the deck's
+   order of remedy: reduce hazard, add credits, increase spacing (<code>slide 57</code>).
+6. <strong>Limits (1)</strong> — needs engineering judgement, is not perfect, is not a substitute for HAZOP on
+   a detailed design (<code>slide 27</code>).</p>
+<p><strong>Paragraph plan — the HAZOP version</strong>
+1. <strong>Definition and theory (2)</strong> — deviations from design intent; structured and systematic; also
+   finds operability problems (<code>slide 64</code>).
+2. <strong>Team and phases (3)</strong> — cross-functional specialists, frank discussion; definition,
+   preparation, examination, documentation (<code>slide 66</code> to <code>slide 71</code>). <strong>Draw the node schematic</strong>
+   (§5).
+3. <strong>Nodes and guide words (3)</strong> — node boundaries at isolation points; the seven guide words;
+   the parameter axis; deviation = guide word × parameter. Give the worked node table (§2.9).
+4. <strong>Results (3)</strong> — cause, consequence, safeguard, risk rank, recommendation, owner, date;
+   IEC 61882 documentation; review and communication (<code>slide 72</code>, <code>slide 73</code>).
+5. <strong>PHA contrast (2)</strong> — early, coarse, ranked; the four steps; when each wins (§2.10).
+6. <strong>Closing (1)</strong> — HAZOP is expensive per node and cheap per prevented modification.</p>
+<hr />
+<h2 id="4-definitions-and-numbers">4. Definitions and numbers<a class="anchor" href="#4-definitions-and-numbers">#</a></h2>
+<h3 id="41-the-table-to-memorise">4.1 The table to memorise<a class="anchor" href="#41-the-table-to-memorise">#</a></h3>
+<table>
+<thead>
+<tr>
+<th>Term or number</th>
+<th>Exact value or definition</th>
+<th>Used in</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Hazard</td>
+<td>A source with the potential to cause injury or ill health</td>
+<td>Q7, any 14-mark opener</td>
+</tr>
+<tr>
+<td>Risk</td>
+<td>The combination of likelihood of harm and its severity</td>
+<td>Q7</td>
+</tr>
+<tr>
+<td>Fire tetrahedron</td>
+<td>Fuel, oxygen, heat, chain reaction</td>
+<td>Q9, Q90, Q170</td>
+</tr>
+<tr>
+<td>Fire classes</td>
+<td>A solids, B liquids, C gases, D metals, E electrical (Indian scheme)</td>
+<td>Q9, Q90, Q168, Q170</td>
+</tr>
+<tr>
+<td>Water</td>
+<td>Class A only; freezes, so antifreeze is used (<code>slide 18</code>)</td>
+<td>Q91</td>
+</tr>
+<tr>
+<td>CO₂</td>
+<td>Classes B and C; no residue; poor in wind; asphyxiation risk (<code>slide 19</code>)</td>
+<td>Q91, Q170</td>
+</tr>
+<tr>
+<td>Water mist</td>
+<td>Distilled water as fog; operating rooms, museums, book collections (<code>slide 18</code>)</td>
+<td>Q91</td>
+</tr>
+<tr>
+<td>Extinguisher siting</td>
+<td>One water unit per 100 m², travel under 15 m <strong>(standard; deck silent)</strong></td>
+<td>Q11, Q168</td>
+</tr>
+<tr>
+<td>Dow origin</td>
+<td><strong>1966</strong>, from a poor accident record (<code>slide 26</code>)</td>
+<td>Q93, Q169</td>
+</tr>
+<tr>
+<td>Dow inputs</td>
+<td>Plot plan, flow sheet, classification guide, F&amp;EI form (<code>slide 33</code>)</td>
+<td>Q12, Q42</td>
+</tr>
+<tr>
+<td>Material factor</td>
+<td>Flammability NF plus reactivity NR, adjusted for flash and boiling point</td>
+<td>Q106</td>
+</tr>
+<tr>
+<td>F1 penalties</td>
+<td>5 groups: reaction, handling, enclosure, access, drainage (<code>slide 40</code>)</td>
+<td>Q106</td>
+</tr>
+<tr>
+<td>F2 penalties</td>
+<td>11 groups, incl. toxic at <strong>0.2 × NH</strong> and vacuum at <strong>0.5</strong> (<code>slide 41</code>)</td>
+<td>Q106</td>
+</tr>
+<tr>
+<td>F3</td>
+<td>F1 × F2 (<code>slide 45</code>)</td>
+<td>Q94</td>
+</tr>
+<tr>
+<td>F&amp;EI</td>
+<td>MF × F3 (<code>slide 45</code>)</td>
+<td>Q94, Q105</td>
+</tr>
+<tr>
+<td>Hazard bands</td>
+<td>1–60 light, 61–96 moderate, 97–127 intermediate, 128–158 heavy, 159+ severe (<code>slide 47</code>)</td>
+<td>Q93, Q169</td>
+</tr>
+<tr>
+<td>PHA trigger</td>
+<td><strong>128</strong> is the trigger for a more detailed PHA (<code>slide 47</code>)</td>
+<td>Q94, Q121</td>
+</tr>
+<tr>
+<td>Exposure radius</td>
+<td>Empirical curve; deck gives <strong>no equation</strong>, only the 3-inch spill basis (<code>slide 48</code>)</td>
+<td>Q94</td>
+</tr>
+<tr>
+<td>Volume of exposure</td>
+<td>Cylinder with height equal to radius (<code>slide 49</code>)</td>
+<td>Q94</td>
+</tr>
+<tr>
+<td>Base MPPD</td>
+<td>Value of exposure area × damage factor (<code>slide 51</code>)</td>
+<td>Q94</td>
+</tr>
+<tr>
+<td>Actual MPPD</td>
+<td>Base MPPD × credit factor (<code>slide 53</code>)</td>
+<td>Q94</td>
+</tr>
+<tr>
+<td>MPDO</td>
+<td>Days to rebuild the plant to original capacity (<code>slide 31</code>, <code>slide 54</code>)</td>
+<td>Q94</td>
+</tr>
+<tr>
+<td>Business interruption</td>
+<td>MPDO × (lost profit per day + fixed cost per day) (<code>slide 55</code>)</td>
+<td>Q94</td>
+</tr>
+<tr>
+<td>Credits</td>
+<td>Process control, material isolation, fire protection (<code>slide 30</code>)</td>
+<td>Q94</td>
+</tr>
+<tr>
+<td>PHA alias</td>
+<td>Rapid Risk Ranking, HAZID (<code>slide 59</code>)</td>
+<td>Q53, Q121</td>
+</tr>
+<tr>
+<td>PHA steps</td>
+<td>Prerequisites, identification, consequence and frequency, ranking (<code>slide 62</code>)</td>
+<td>Q53, Q122</td>
+</tr>
+<tr>
+<td>PHA rule</td>
+<td>No hazards are too insignificant to be recorded (<code>slide 62</code>)</td>
+<td>Q55</td>
+</tr>
+<tr>
+<td>HAZOP basis</td>
+<td>Risk events come from deviations from design intent (<code>slide 64</code>)</td>
+<td>Q51, Q128</td>
+</tr>
+<tr>
+<td>Guide words</td>
+<td>NO, MORE, LESS, AS WELL AS, PART OF, REVERSE, OTHER THAN (<code>slide 68</code>)</td>
+<td>Q52, Q128</td>
+</tr>
+<tr>
+<td>HAZOP standard</td>
+<td>IEC 61882 recording template (<code>slide 71</code>)</td>
+<td>Q65</td>
+</tr>
+<tr>
+<td>HAZOP phases</td>
+<td>Definition, preparation, examination, documentation (<code>slide 65</code>)</td>
+<td>Q52, Q128</td>
+</tr>
+<tr>
+<td>GHS pictograms</td>
+<td>Nine, with signal words DANGER and WARNING <strong>(standard)</strong></td>
+<td>Q63</td>
+</tr>
+<tr>
+<td>MSDS</td>
+<td>16 sections; section 8 PPE, section 9 physical properties <strong>(standard)</strong></td>
+<td>Q56</td>
+</tr>
+<tr>
+<td>Petroleum classes</td>
+<td>A below 23 °C, B 23–65 °C, C 65–93 °C <strong>(standard)</strong></td>
+<td>Q59, Q124</td>
+</tr>
+<tr>
+<td>Control hierarchy</td>
+<td>Elimination, substitution, engineering, administrative, PPE (<code>slide 84</code>)</td>
+<td>Q58, Q61, Q122</td>
+</tr>
+</tbody>
+</table>
+<p>The deck gives <strong>no numerical values</strong> for flash point, vapour density, flammable range, Dow
+penalty magnitudes, damage factors or exposure radius. Every number in that list above is marked
+standard, and any script that offers a Dow penalty value should say it comes from the workbook
+table.</p>
+<hr />
+<h2 id="5-diagrams-to-draw">5. Diagrams to draw<a class="anchor" href="#5-diagrams-to-draw">#</a></h2>
+<h3 id="51-the-six-figures">5.1 The six figures<a class="anchor" href="#51-the-six-figures">#</a></h3>
+<table>
+<thead>
+<tr>
+<th>Figure</th>
+<th>Where</th>
+<th>What to draw</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Fire tetrahedron</td>
+<td>§2.3, Q9, Q90</td>
+<td>Four-sided shape: fuel, oxygen, heat, chain reaction. Four arrows out labelled water, foam, isolation, dry powder.</td>
+</tr>
+<tr>
+<td>Dow flow chart</td>
+<td>§2.7, Q94, Q105</td>
+<td>Vertical chain of boxes: unit → MF → F1 and F2 → F3 → F&amp;EI → band → radius → area → value → damage factor → MPPD → credits → MPDO → BI. Two side boxes for credits and for "reduce hazard first".</td>
+</tr>
+<tr>
+<td>HAZOP node schematic</td>
+<td>§2.9, Q128</td>
+<td>Tank T-1 → pump → control valve → reactor R-1. Bracket the line, mark "Node 1", and write the design intent under the bracket. Arrows for the seven guide words entering the node.</td>
+</tr>
+<tr>
+<td>Hazard bands strip</td>
+<td>§2.6</td>
+<td>One horizontal bar split 1–60, 61–96, 97–127, 128–158, 159+, with light to severe under each and a star at 128.</td>
+</tr>
+<tr>
+<td>Hierarchy ladder</td>
+<td>§2.12, Q58</td>
+<td>Five rungs, elimination at the top. Left arrow "protects everyone, no behaviour needed". Right arrow "protects one wearer, while worn".</td>
+</tr>
+<tr>
+<td>Extinguisher selection grid</td>
+<td>§2.4, Q170</td>
+<td>Rows A to E, columns water, foam, CO₂, powder, clean agent. Tick the valid cells and cross the dangerous ones.</td>
+</tr>
+<tr>
+<td>PHA four-step flow</td>
+<td>§2.8, Q53</td>
+<td>Four boxes in series: prerequisites, hazard identification, consequence and frequency, risk ranking. Under box two write "no hazard too small to record".</td>
+</tr>
+<tr>
+<td>Exposure circle on a plot plan</td>
+<td>§2.5, §2.7</td>
+<td>Plan view with the unit at the centre and a circle for the exposure radius. Shade and value the equipment inside. Caption it "value × damage factor = base MPPD".</td>
+</tr>
+<tr>
+<td>Node walk for a HAZOP</td>
+<td>§2.9</td>
+<td>One line drawing split into four bracketed nodes, numbered, with the design intent written under each bracket. It shows the plant is never studied as one object.</td>
+</tr>
+</tbody>
+</table>
+<p>Draw all nine small, label them, and refer to each one in the text. A labelled sketch earns more
+than a neat one. Two of the nine are compulsory in practice: the Dow flow chart for a calculation
+question, and the node schematic for a HAZOP question.</p>
+<hr />
+<h2 id="6-say-this-if-grilled">6. Say this if grilled<a class="anchor" href="#6-say-this-if-grilled">#</a></h2>
+<h3 id="61-sixteen-lines-to-have-ready">6.1 Sixteen lines to have ready<a class="anchor" href="#61-sixteen-lines-to-have-ready">#</a></h3>
+<ol>
+<li>A hazard is inherent and a risk is conditional. Substitution removes the hazard. PPE only
+   lowers the risk.</li>
+<li>Dow started in 1966, because the chemical industry's loss record was bad enough to need a
+   scoreboard. Its output is money and days, not adjectives.</li>
+<li>F&amp;EI = MF × F1 × F2. Two multiplications carry the method, so show them as equations.</li>
+<li>128 is the number that matters most. It is the trigger for a detailed PHA.</li>
+<li>The exposure radius comes off an empirical curve built on a 3-inch spill. The deck gives no
+   equation, so quote the curve rather than invent a constant.</li>
+<li>Reducing the hazard early beats adding loss control credits late. The deck says so on its
+   last summary slide.</li>
+<li>PHA is wide, shallow and early. HAZOP is narrow, deep and late. Detail is wasted on a design
+   that changes next week.</li>
+<li>Deviation equals guide word times parameter. MORE alone is a word; MORE pressure is a
+   deviation.</li>
+<li>In the Indian scheme C is gas and E is electrical. The NFPA letters are a different scheme.</li>
+<li>CO₂ is the electrical answer because it leaves no residue. The residue is the reason.</li>
+<li>PPE is last because it protects one wearer, only while it fits, and it fails silently. A dead
+    extraction hood is visible; a leaking respirator seal is not.</li>
+<li>An MSDS has sixteen sections. Section 8 is the one the supervisor actually reads.</li>
+<li>A PHA without a ranking is only a hazard list. The ranking is the step that turns it into a
+    decision.</li>
+<li>MSIHC came after Bhopal, and Chapter IV-A of the Factories Act is the same response written
+    into factory law. Both arrive in 1987 and 1989, so the dates are close for a reason.</li>
+<li>A fire plan follows the fuel, not the floor plan. A water unit in a switch room is a hazard,
+    not a control.</li>
+<li>The Dow number is not a prediction. It is a ranking and a budget, and it is meant to be
+    argued with. A unit scoring 144 says "look here first", not "this will burn on Tuesday".</li>
+</ol>
+  </main>
+</div>
+<button id="chat-btn" title="Ask about this page (select text first)">✳</button>
+<div id="sel-chip">Ask about this</div>
+<div id="chat-panel" role="dialog" aria-label="Ask about this page">
+  <div id="chat-head"><span>Ask this page</span><span class="sp"></span><button id="chat-close" title="Close">✕</button></div>
+  <div id="chat-quote"></div>
+  <div id="chat-log"></div>
+  <form id="chat-form" autocomplete="off">
+    <textarea id="chat-input" rows="1" placeholder="Ask about the selection or the section…"></textarea>
+    <button id="chat-send" title="Send">↑</button>
+  </form>
+  <div id="chat-foot">Select text → “Ask about this”. Enter sends, Shift+Enter newline.</div>
+</div>
+<div class="tools">
+  <button id="theme" title="Toggle light / dark">☾</button>
+  <button id="top" title="Back to top">↑</button>
+</div>
+<script>
+(function(){
+  var root=document.documentElement, key='minotes-theme';
+  var saved=localStorage.getItem(key);
+  var prefers=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';
+  root.setAttribute('data-theme', saved || prefers);
+
+  var btn=document.getElementById('theme');
+  function sync(){ if(btn) btn.textContent = root.getAttribute('data-theme')==='dark' ? '\u2600' : '\u263E'; }
+  sync();
+  if(btn) btn.addEventListener('click',function(){
+    var next = root.getAttribute('data-theme')==='dark' ? 'light' : 'dark';
+    root.setAttribute('data-theme', next); localStorage.setItem(key,next); sync();
+  });
+
+  var bar=document.getElementById('progress');
+  if(bar) addEventListener('scroll',function(){
+    var h=document.documentElement.scrollHeight-innerHeight;
+    bar.style.width=(h>0?(scrollY/h*100):0)+'%';
+  },{passive:true});
+
+  document.querySelectorAll('pre').forEach(function(pre){
+    var b=document.createElement('button');
+    b.className='copy'; b.textContent='copy';
+    b.addEventListener('click',function(){
+      var t=pre.querySelector('code'); var txt=t?t.innerText:pre.innerText;
+      navigator.clipboard.writeText(txt).then(function(){
+        b.textContent='copied'; setTimeout(function(){b.textContent='copy';},1200);
+      });
+    });
+    pre.appendChild(b);
+  });
+
+  document.querySelectorAll('main table').forEach(function(t){
+    if(t.parentElement.classList.contains('table-scroll')) return;
+    var w=document.createElement('div'); w.className='table-scroll';
+    t.parentNode.insertBefore(w,t); w.appendChild(t);
+  });
+
+  var links=[].slice.call(document.querySelectorAll('.sidebar a[href^="#"]'));
+  var map={}; links.forEach(function(a){ map[a.getAttribute('href').slice(1)]=a; });
+  var heads=[].slice.call(document.querySelectorAll('main h2[id], main h3[id]'));
+  if('IntersectionObserver' in window && heads.length){
+    var obs=new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if(!e.isIntersecting) return;
+        links.forEach(function(a){a.classList.remove('active');});
+        var a=map[e.target.id]; if(a){a.classList.add('active');}
+      });
+    },{rootMargin:'-10% 0px -75% 0px'});
+    heads.forEach(function(h){obs.observe(h);});
+  }
+
+  var top=document.getElementById('top');
+  if(top) top.addEventListener('click',function(){ scrollTo({top:0,behavior:'smooth'}); });
+})();
+
+(function(){
+  var API="/api/chat";
+  var panel=document.getElementById("chat-panel"),
+      btn=document.getElementById("chat-btn"),
+      chip=document.getElementById("sel-chip"),
+      quote=document.getElementById("chat-quote"),
+      log=document.getElementById("chat-log"),
+      input=document.getElementById("chat-input"),
+      send=document.getElementById("chat-send"),
+      form=document.getElementById("chat-form");
+
+  if(!panel) return;
+  var pendingSelection="", busy=false, lastSelection="";
+
+  function esc(s){return s.replace(/[&<>]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;"}[c];});}
+
+  // minimal markdown: fenced code, inline code, bold, bullets, numbered lists
+  function md(src){
+    var parts=src.split(/```/), out="";
+    for(var i=0;i<parts.length;i++){
+      if(i%2){ out+="<pre><code>"+esc(parts[i].replace(/^\w*\n/,""))+"</code></pre>"; continue; }
+      var t=esc(parts[i]);
+      t=t.replace(/`([^`\n]+)`/g,"<code>$1</code>").replace(/\*\*([^*]+)\*\*/g,"<b>$1</b>");
+      var lines=t.split(/\n/), html="", inUl=false, inOl=false;
+      for(var j=0;j<lines.length;j++){
+        var line=lines[j];
+        if(/^\s*[-*]\s+/.test(line)){
+          if(inOl){html+="</ol>";inOl=false;}
+          if(!inUl){html+="<ul>";inUl=true;}
+          html+="<li>"+line.replace(/^\s*[-*]\s+/,"")+"</li>"; continue;
+        }
+        if(/^\s*\d+[.)]\s+/.test(line)){
+          if(inUl){html+="</ul>";inUl=false;}
+          if(!inOl){html+="<ol>";inOl=true;}
+          html+="<li>"+line.replace(/^\s*\d+[.)]\s+/,"")+"</li>"; continue;
+        }
+        if(inUl){html+="</ul>";inUl=false;}
+        if(inOl){html+="</ol>";inOl=false;}
+        if(line.trim()==="") continue;
+        html+="<p>"+line+"</p>";
+      }
+      if(inUl)html+="</ul>";
+      if(inOl)html+="</ol>";
+      out+=html;
+    }
+    return out;
+  }
+
+  function outline(){
+    return [].slice.call(document.querySelectorAll("main h2, main h3")).slice(0,40)
+      .map(function(h){return (h.tagName==="H3"?"  - ":"- ")+h.textContent.replace(/#$/,"").trim();}).join("\n");
+  }
+
+  function sectionFor(node){
+    var el = node && (node.nodeType===1?node:node.parentElement);
+    if(!el || !el.closest) return "";
+    el = el.closest("main") ? el : null;
+    if(!el) return "";
+    var heads=[].slice.call(document.querySelectorAll("main h2, main h3"));
+    var cur=null, idx=-1;
+    for(var i=0;i<heads.length;i++){
+      if(heads[i].compareDocumentPosition(el) & Node.DOCUMENT_POSITION_FOLLOWING) { cur=heads[i]; idx=i; }
+    }
+    if(!cur) return "";
+    var stop = heads[idx+1] || null, txt=[], n=cur;
+    while((n=n.nextSibling) && n!==stop){ if(n.textContent) txt.push(n.textContent); }
+    return (cur.textContent+"\n"+txt.join("\n")).replace(/\s+\n/g,"\n").slice(0,3000);
+  }
+
+  function placeChip(x,y){
+    chip.style.left=x+"px"; chip.style.top=(y+window.scrollY-8)+"px"; chip.style.display="block";
+  }
+  function hideChip(){ chip.style.display="none"; }
+
+  document.addEventListener("mouseup",function(e){
+    setTimeout(function(){
+      var s=window.getSelection(), text=s?s.toString().trim():"";
+      if(!text || text.length<3 || !s.anchorNode || !(s.anchorNode.parentElement||s.anchorNode).closest("main")){hideChip();return;}
+      lastSelection=text;
+      var r=s.getRangeAt(0).getBoundingClientRect();
+      placeChip(r.left+r.width/2, Math.max(r.top,8));
+    },10);
+  });
+  document.addEventListener("mousedown",function(e){ if(e.target!==chip) hideChip(); });
+
+  chip.addEventListener("mousedown",function(e){ e.preventDefault(); });
+  chip.addEventListener("click",function(e){
+    e.stopPropagation();
+    pendingSelection=lastSelection; hideChip(); open(pendingSelection);
+  });
+
+  function open(sel){
+    panel.classList.add("open");
+    if(sel){ quote.style.display="block"; quote.textContent=sel; pendingSelection=sel; }
+    else { quote.style.display="none"; quote.textContent=""; pendingSelection=""; }
+    setTimeout(function(){input.focus();},60);
+  }
+  function close(){ panel.classList.remove("open"); }
+
+  btn.addEventListener("click",function(){ panel.classList.contains("open")?close():open(lastSelection||""); });
+  document.getElementById("chat-close").addEventListener("click",close);
+  document.addEventListener("keydown",function(e){ if(e.key==="Escape") close(); });
+
+  function addMsg(cls,html){
+    var d=document.createElement("div"); d.className="msg "+cls; d.innerHTML=html; log.appendChild(d);
+    log.scrollTop=log.scrollHeight; return d;
+  }
+
+  async function ask(q){
+    if(busy||!q.trim()) return;
+    busy=true; send.disabled=true;
+    addMsg("user",esc(q));
+    var bot=addMsg("bot",'<span class="cursor"></span>');
+    var acc="";
+    var sid=sessionStorage.getItem("mn-sid");
+    if(!sid){ sid=(crypto.randomUUID?crypto.randomUUID():String(Date.now())+Math.random().toString(16).slice(2)); sessionStorage.setItem("mn-sid",sid); }
+    var payload={q:q, sid:sid, sel:pendingSelection||"", page:document.querySelector("h1")?document.querySelector("h1").textContent.trim():document.title,
+                 section:sectionFor(window.getSelection()&&window.getSelection().anchorNode?"":document.querySelector("main h2"))||"",
+                 outline:outline()};
+    // section: prefer the one containing the selection, else the first heading on screen
+    try{
+      var sel=window.getSelection();
+      if(pendingSelection && sel && sel.anchorNode){ payload.section=sectionFor(sel.anchorNode); }
+      if(!payload.section){
+        var vis=[].slice.call(document.querySelectorAll("main h2, main h3")).filter(function(h){
+          var r=h.getBoundingClientRect(); return r.top>-80 && r.top<window.innerHeight*0.6; }).pop();
+        if(vis) payload.section=sectionFor(vis);
+      }
+    }catch(_){}
+
+    try{
+      var res=await fetch(API,{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify(payload)});
+      if(!res.ok){
+        var j=await res.json().catch(function(){return{};});
+        throw new Error(j.error||("HTTP "+res.status));
+      }
+      var reader=res.body.getReader(), dec=new TextDecoder(), buf="";
+      for(;;){
+        var r=await reader.read(); if(r.done) break;
+        buf+=dec.decode(r.value,{stream:true});
+        var lines=buf.split("\n"); buf=lines.pop()||"";
+        for(var i=0;i<lines.length;i++){
+          var l=lines[i].trim(); if(l.indexOf("data:")!==0) continue;
+          var d=l.slice(5).trim(); if(d==="[DONE]") continue;
+          try{ var o=JSON.parse(d); if(o.d){acc+=o.d; bot.innerHTML=md(acc)+'<span class="cursor"></span>'; log.scrollTop=log.scrollHeight;} if(o.error) throw new Error(o.error);}catch(_){}
+        }
+      }
+      bot.innerHTML=md(acc||"_no answer_");
+    }catch(err){
+      bot.className="msg err";
+      bot.textContent = String(err.message).indexOf("Failed to fetch")>-1 || String(err.message).indexOf("HTTP 5")>-1
+        ? "Assistant unavailable — it only works on the deployed site (needs the /api/chat function)."
+        : "Error: "+err.message;
+    }finally{
+      busy=false; send.disabled=false; input.value=""; input.focus();
+      pendingSelection=""; quote.style.display="none";
+    }
+  }
+
+  form.addEventListener("submit",function(e){ e.preventDefault(); ask(input.value); });
+  input.addEventListener("keydown",function(e){
+    if(e.key==="Enter"&&!e.shiftKey){ e.preventDefault(); ask(input.value); }
+  });
+  input.addEventListener("input",function(){ input.style.height="auto"; input.style.height=Math.min(input.scrollHeight,110)+"px"; });
+})();
+</script>
+</body>
+</html>

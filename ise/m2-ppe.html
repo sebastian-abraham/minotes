@@ -1,0 +1,2103 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Module 2 — Personal Protection in the Work Environment · Industrial Safety Engineering</title>
+<style>
+:root{
+  --bg:#fbfaf8; --panel:#ffffff; --ink:#232120; --muted:#5f5a53; --line:#e6e1da;
+  --accent:#7a4fd0; --accent-soft:#f1ecfb; --code-bg:#f5f2ee; --code-ink:#2b2a28;
+  --warn-bg:#fff8e6; --warn-line:#f0d9a0;
+  --sans:"Inter","Segoe UI",system-ui,-apple-system,"Noto Sans",sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,"SF Mono",Menlo,Consolas,"Fira Code",monospace;
+}
+html[data-theme="dark"]{
+  --bg:#141317; --panel:#1b1a20; --ink:#e8e4de; --muted:#a8a199; --line:#2f2c36;
+  --accent:#b79cf5; --accent-soft:#241f33; --code-bg:#22202a; --code-ink:#e8e4de;
+  --warn-bg:#2a2417; --warn-line:#4a3d22;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0; background:var(--bg); color:var(--ink); font-family:var(--sans);
+  font-size:16.5px; line-height:1.72; -webkit-font-smoothing:antialiased;
+}
+#progress{position:fixed;top:0;left:0;height:3px;width:0;background:var(--accent);z-index:50;transition:width .1s linear}
+
+.wrap{display:flex;align-items:flex-start;min-height:100vh}
+.sidebar{
+  position:sticky;top:0;height:100vh;width:300px;flex:0 0 300px;overflow-y:auto;
+  padding:26px 20px 60px;border-right:1px solid var(--line);background:var(--panel);
+}
+.sidebar h1{font-size:15px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);
+  margin:0 0 4px;font-weight:600}
+.sidebar .sub{font-size:12.5px;color:var(--muted);margin:0 0 18px}
+.sidebar nav{font-size:14px}
+.sidebar .toc>ul{padding-left:0}
+.sidebar ul{list-style:none;margin:0;padding-left:12px}
+.sidebar ul ul{border-left:1px solid var(--line);margin-left:4px;padding-left:10px}
+.sidebar li{margin:3px 0}
+.sidebar a{color:var(--ink);text-decoration:none;display:block;padding:3px 8px;border-radius:8px;
+  line-height:1.35;transition:background .12s,color .12s}
+.sidebar a:hover{background:var(--accent-soft);color:var(--accent)}
+.sidebar a.active{background:var(--accent-soft);color:var(--accent);font-weight:600}
+.sidebar .home{display:inline-flex;align-items:center;gap:6px;margin-bottom:16px;font-size:13.5px;
+  color:var(--muted);text-decoration:none;border:1px solid var(--line);padding:5px 10px;border-radius:999px}
+.sidebar .home:hover{color:var(--accent);border-color:var(--accent)}
+
+main{flex:1;min-width:0;padding:46px 56px 120px;max-width:980px;margin:0 auto}
+.doc-head{border-bottom:1px solid var(--line);padding-bottom:18px;margin-bottom:34px}
+.doc-head .kicker{font-size:12.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);
+  font-weight:700;margin-bottom:8px}
+.doc-head .meta{font-size:13.5px;color:var(--muted)}
+
+h1,h2,h3,h4{line-height:1.25;font-weight:700;letter-spacing:-.01em}
+h1{font-size:2.05rem;margin:.2em 0 .5em}
+h2{font-size:1.55rem;margin:2.4em 0 .7em;padding-bottom:.35em;border-bottom:1px solid var(--line)}
+h3{font-size:1.2rem;margin:1.9em 0 .55em}
+h4{font-size:1.03rem;margin:1.5em 0 .45em;color:var(--muted)}
+h2 .anchor,h3 .anchor{opacity:0;margin-left:.35em;font-size:.8em;color:var(--muted);text-decoration:none}
+h2:hover .anchor,h3:hover .anchor{opacity:1}
+p{margin:.75em 0}
+a{color:var(--accent);text-underline-offset:2px}
+strong{font-weight:650}
+hr{border:0;border-top:1px solid var(--line);margin:2.6em 0}
+ul,ol{margin:.7em 0;padding-left:1.4em}
+li{margin:.3em 0}
+li>ul,li>ol{margin:.25em 0}
+blockquote{
+  margin:1.3em 0;padding:12px 18px;background:var(--warn-bg);border-left:3px solid var(--warn-line);
+  border-radius:0 10px 10px 0;color:var(--ink)
+}
+blockquote p{margin:.3em 0}
+
+code{font-family:var(--mono);font-size:.87em;background:var(--code-bg);color:var(--code-ink);
+  padding:.15em .38em;border-radius:6px;border:1px solid var(--line);
+  box-decoration-break:clone;-webkit-box-decoration-break:clone;overflow-wrap:anywhere}
+pre{position:relative;background:var(--code-bg);border:1px solid var(--line);border-radius:12px;
+  padding:16px 18px;overflow-x:auto;margin:1.1em 0}
+pre code{background:none;border:0;padding:0;font-size:13.6px;line-height:1.62;white-space:pre}
+.copy{position:absolute;top:8px;right:8px;font:600 11px/1 var(--sans);color:var(--muted);
+  background:var(--panel);border:1px solid var(--line);border-radius:7px;padding:5px 8px;cursor:pointer;
+  opacity:0;transition:opacity .15s}
+pre:hover .copy{opacity:1}
+.copy:hover{color:var(--accent);border-color:var(--accent)}
+
+.table-scroll{overflow-x:auto;margin:1.3em 0;border:1px solid var(--line);border-radius:12px;background:var(--panel)}
+table{border-collapse:collapse;width:100%;font-size:14.6px}
+th,td{padding:9px 13px;text-align:left;vertical-align:top;border-bottom:1px solid var(--line)}
+th{background:var(--accent-soft);font-weight:650;font-size:13px;letter-spacing:.02em;
+  position:sticky;top:0;backdrop-filter:blur(4px)}
+tr:last-child td{border-bottom:0}
+tbody tr:nth-child(even){background:color-mix(in srgb,var(--panel) 60%,var(--bg))}
+tbody tr:hover{background:var(--accent-soft)}
+
+.tools{position:fixed;right:22px;bottom:22px;display:flex;flex-direction:column;gap:8px;z-index:40}
+.tools button{width:42px;height:42px;border-radius:12px;border:1px solid var(--line);background:var(--panel);
+  color:var(--ink);cursor:pointer;font-size:16px;box-shadow:0 4px 14px rgba(0,0,0,.10)}
+.tools button:hover{color:var(--accent);border-color:var(--accent)}
+@media (max-width:1000px){
+  .wrap{display:block}
+  .sidebar{position:static;width:auto;height:auto;border-right:0;border-bottom:1px solid var(--line)}
+  .sidebar nav{max-height:40vh;overflow:auto}
+  main{padding:28px 20px 100px}
+}
+@media print{
+  .sidebar,.tools,#progress,.copy{display:none!important}
+  body{background:#fff;color:#000;font-size:11pt}
+  main{padding:0;max-width:none}
+  h2{break-after:avoid} pre,table,blockquote{break-inside:avoid}
+  a{color:#000;text-decoration:none}
+}
+
+/* ---- ask-about-this ---- */
+#chat-btn{position:fixed;right:20px;bottom:112px;width:44px;height:44px;border-radius:50%;
+  border:1px solid var(--line);background:var(--panel);color:var(--accent);cursor:pointer;font-size:17px;
+  box-shadow:0 6px 18px rgba(0,0,0,.12);z-index:45;display:grid;place-items:center}
+#chat-btn:hover{border-color:var(--accent)}
+#sel-chip{position:absolute;z-index:46;transform:translate(-50%,-100%);background:var(--ink);color:var(--bg);
+  font:600 12px/1 var(--sans);padding:7px 11px;border-radius:999px;cursor:pointer;white-space:nowrap;
+  box-shadow:0 6px 18px rgba(0,0,0,.25);display:none}
+#sel-chip:hover{background:var(--accent);color:#fff}
+#chat-panel{position:fixed;right:20px;bottom:164px;width:min(420px,calc(100vw - 40px));max-height:min(70vh,620px);
+  background:var(--panel);border:1px solid var(--line);border-radius:14px;z-index:47;display:none;
+  flex-direction:column;box-shadow:0 18px 50px rgba(0,0,0,.18);overflow:hidden}
+#chat-panel.open{display:flex}
+#chat-head{display:flex;align-items:center;gap:8px;padding:11px 13px;border-bottom:1px solid var(--line);
+  font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:700}
+#chat-head .sp{flex:1}
+#chat-head button{background:none;border:0;color:var(--muted);cursor:pointer;font-size:15px;padding:2px 4px}
+#chat-head button:hover{color:var(--accent)}
+#chat-quote{display:none;margin:10px 13px 0;padding:8px 10px;border-left:2px solid var(--accent);
+  background:var(--accent-soft);color:var(--muted);font-size:12.5px;border-radius:0 8px 8px 0;
+  max-height:84px;overflow:auto;white-space:pre-wrap}
+#chat-log{flex:1;overflow-y:auto;padding:12px 13px;display:flex;flex-direction:column;gap:10px;font-size:13.6px;line-height:1.55}
+.msg{max-width:100%}
+.msg.user{align-self:flex-end;background:var(--accent-soft);color:var(--ink);padding:7px 11px;border-radius:11px 11px 2px 11px;
+  max-width:86%;white-space:pre-wrap}
+.msg.bot{color:var(--ink)}
+.msg.bot p{margin:.3em 0}
+.msg.bot ul{margin:.3em 0;padding-left:1.15em}
+.msg.bot code{font-size:.9em}
+.msg.bot pre{background:var(--code-bg);border-radius:8px;padding:9px 11px;overflow-x:auto;font-size:12px;margin:.4em 0}
+.msg.err{color:#b3261e;font-size:12.5px}
+.msg .cursor:after{content:"▍";color:var(--accent);animation:blink 1s steps(2) infinite}
+@keyframes blink{50%{opacity:0}}
+#chat-form{display:flex;gap:8px;padding:10px 13px;border-top:1px solid var(--line)}
+#chat-input{flex:1;resize:none;border:1px solid var(--line);border-radius:9px;background:var(--bg);color:var(--ink);
+  font:inherit;font-size:13.5px;padding:8px 10px;max-height:110px;min-height:38px}
+#chat-input:focus{outline:2px solid var(--accent);outline-offset:0}
+#chat-send{border:1px solid var(--accent);background:var(--accent);color:#fff;border-radius:9px;
+  width:38px;cursor:pointer;font-size:15px}
+#chat-send:disabled{opacity:.45;cursor:default}
+#chat-foot{font-size:11px;color:var(--muted);padding:0 13px 9px}
+@media (max-width:640px){
+  #chat-panel{right:8px;left:8px;width:auto;bottom:150px;max-height:66vh}
+  #chat-btn{bottom:104px;right:16px}
+}
+@media print{#chat-btn,#chat-panel,#sel-chip{display:none!important}}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+<div class="wrap">
+  <aside class="sidebar">
+    <a class="home" href="index.html">← Industrial Safety Engineering</a>
+    <a class="home" href="practice.html">Practice drills</a>
+    <h1>M2 · PPE &amp; monitoring</h1>
+    <p class="sub">20% ESE · 32 questions</p>
+    <nav class="toc"><div class="toc">
+<ul>
+<li><a href="#1-coverage-syllabus-bullet-section">1. Coverage — syllabus bullet → section</a></li>
+<li><a href="#2-concepts">2. Concepts</a><ul>
+<li><a href="#21-what-ppe-is-and-the-two-classes">2.1 What PPE is, and the two classes</a></li>
+<li><a href="#22-non-respiratory-ppe-head-eye-ear-body-hand-foot">2.2 Non-respiratory PPE — head, eye, ear, body, hand, foot</a></li>
+<li><a href="#23-respiratory-protective-equipment">2.3 Respiratory protective equipment</a></li>
+<li><a href="#24-hearing-protection-and-the-conservation-programme">2.4 Hearing protection and the conservation programme</a></li>
+<li><a href="#25-standards-the-deck-quotes">2.5 Standards the deck quotes</a></li>
+<li><a href="#26-monitoring-safety-performance-the-inputs-and-the-four-rates">2.6 Monitoring safety performance — the inputs and the four rates</a></li>
+<li><a href="#27-housekeeping-elements-advantages-responsibility">2.7 Housekeeping — elements, advantages, responsibility</a></li>
+<li><a href="#28-5s">2.8 5S</a></li>
+<li><a href="#29-work-permit-system-purpose-and-objectives">2.9 Work permit system — purpose and objectives</a></li>
+<li><a href="#210-hot-work-and-cold-work-permits">2.10 Hot work and cold work permits</a></li>
+<li><a href="#211-confined-spaces-definition-and-hazards">2.11 Confined spaces — definition and hazards</a></li>
+<li><a href="#212-entering-a-confined-space-procedure-and-controls">2.12 Entering a confined space — procedure and controls</a></li>
+<li><a href="#213-industrial-models-and-methodologies">2.13 Industrial models and methodologies</a></li>
+</ul>
+</li>
+<li><a href="#3-answer-bank">3. Answer bank</a><ul>
+<li><a href="#31-three-mark-answers">3.1 Three-mark answers</a></li>
+<li><a href="#32-five-mark-answers">3.2 Five-mark answers</a></li>
+<li><a href="#33-eight-mark-answers">3.3 Eight-mark answers</a></li>
+<li><a href="#34-fourteen-mark-skeleton-ese-part-b">3.4 Fourteen-mark skeleton (ESE Part B)</a></li>
+</ul>
+</li>
+<li><a href="#4-definitions-and-numbers-to-memorise">4. Definitions and numbers to memorise</a><ul>
+<li><a href="#41-the-four-formulas-and-the-two-worked-examples">4.1 The four formulas and the two worked examples</a></li>
+<li><a href="#42-terms-and-values-in-one-table">4.2 Terms and values, in one table</a></li>
+</ul>
+</li>
+<li><a href="#5-diagrams-to-be-able-to-draw">5. Diagrams to be able to draw</a><ul>
+<li><a href="#51-the-eight-figures-and-how-to-draw-each">5.1 The eight figures, and how to draw each</a></li>
+</ul>
+</li>
+<li><a href="#6-say-this-if-grilled">6. Say-this-if-grilled</a><ul>
+<li><a href="#61-seventeen-lines-to-have-ready">6.1 Seventeen lines to have ready</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</nav>
+  </aside>
+  <main>
+    <div class="doc-head">
+      <div class="kicker">20MCN401 · Industrial Safety Engineering</div>
+      <div class="meta">20% ESE · 32 questions · rendered from KIT_M2_PPE.md</div>
+    </div>
+    <h1 id="module-2-personal-protection-in-the-work-environment">Module 2 — Personal Protection in the Work Environment</h1>
+<p><strong>20MCN401 Industrial Safety Engineering · B.Tech CSE Sem 7 · Saintgits (autonomous) · this module carries 20 marks of the ESE.</strong></p>
+<p>Module II is the second of five equal modules. It is almost entirely definition, list and formula work. <strong>Sources:</strong> <code>m2.txt</code>, cited throughout as <code>page N</code>, and <code>syllabus.md</code>. Values marked <strong>(standard)</strong> are exam-standard but do not appear in the deck. Nothing here is invented: every quoted figure is either on a named page or labelled standard.</p>
+<hr />
+<h2 id="1-coverage-syllabus-bullet-section">1. Coverage — syllabus bullet → section<a class="anchor" href="#1-coverage-syllabus-bullet-section">#</a></h2>
+<table>
+<thead>
+<tr>
+<th>Syllabus line (verbatim)</th>
+<th>Hrs</th>
+<th>Answered at</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Types of PPEs — respiratory and non-respiratory equipment</td>
+<td>2</td>
+<td>§2.1, §2.2, §2.3, §2.4, §2.5</td>
+</tr>
+<tr>
+<td>Standards related to PPEs</td>
+<td>2</td>
+<td>§2.5</td>
+</tr>
+<tr>
+<td>Monitoring safety performance — frequency rate, severity rate</td>
+<td>2</td>
+<td>§2.6</td>
+</tr>
+<tr>
+<td>Monitoring safety performance — incidence rate, activity rate</td>
+<td>2</td>
+<td>§2.6</td>
+</tr>
+<tr>
+<td>Housekeeping — responsibility of management and employees, advantages, 5S</td>
+<td>2</td>
+<td>§2.7, §2.8</td>
+</tr>
+<tr>
+<td>Work permit system — objectives, hot work and cold work permits</td>
+<td>2</td>
+<td>§2.9, §2.10</td>
+</tr>
+<tr>
+<td>Typical industrial models and methodology — entry into confined spaces</td>
+<td>2</td>
+<td>§2.11, §2.12, §2.13</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Table B — the 32 assigned questions and where each is answered.</strong></p>
+<table>
+<thead>
+<tr>
+<th>Q</th>
+<th>Asked</th>
+<th>Answered at</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Q1</td>
+<td>Explain the term PPE</td>
+<td>3.1 · §2.1</td>
+</tr>
+<tr>
+<td>Q2</td>
+<td>Assessing and choosing PPE</td>
+<td>3.2 · §2.1</td>
+</tr>
+<tr>
+<td>Q3</td>
+<td>Respiratory vs non-respiratory equipment</td>
+<td>3.1 · §2.3</td>
+</tr>
+<tr>
+<td>Q4</td>
+<td>Making employees comfortable with PPE</td>
+<td>3.2 · §2.1</td>
+</tr>
+<tr>
+<td>Q5</td>
+<td>Classify hearing protection devices</td>
+<td>3.1 · §2.4</td>
+</tr>
+<tr>
+<td>Q6</td>
+<td>Define severity, incident and activity rate</td>
+<td>3.1 · §2.6</td>
+</tr>
+<tr>
+<td>Q16</td>
+<td>Six good housekeeping practices on site</td>
+<td>3.1 · §2.7</td>
+</tr>
+<tr>
+<td>Q26</td>
+<td>Three advantages of good housekeeping</td>
+<td>3.1 · §2.7</td>
+</tr>
+<tr>
+<td>Q27</td>
+<td>Three management responsibilities for housekeeping</td>
+<td>3.1 · §2.7</td>
+</tr>
+<tr>
+<td>Q28</td>
+<td>Work permit system and its importance</td>
+<td>3.2 · §2.9</td>
+</tr>
+<tr>
+<td>Q29</td>
+<td>Hot work permit vs cold work permit</td>
+<td>3.1 · §2.10</td>
+</tr>
+<tr>
+<td>Q30</td>
+<td>Six hazards of confined spaces</td>
+<td>3.1 · §2.11</td>
+</tr>
+<tr>
+<td>Q31</td>
+<td>FMEA vs JSA</td>
+<td>3.2 · §2.13</td>
+</tr>
+<tr>
+<td>Q72</td>
+<td>Need for hearing protection and its classification</td>
+<td>3.2 · §2.4</td>
+</tr>
+<tr>
+<td>Q73</td>
+<td>Four respiratory protective devices</td>
+<td>3.3 · §2.3</td>
+</tr>
+<tr>
+<td>Q74</td>
+<td>Health hazard monitoring and the OSHA hearing programme</td>
+<td>3.3 · §2.4</td>
+</tr>
+<tr>
+<td>Q75</td>
+<td>Importance and types of eye protection</td>
+<td>3.2 · §2.2</td>
+</tr>
+<tr>
+<td>Q76</td>
+<td>Different types of PPE</td>
+<td>3.3 · §2.2</td>
+</tr>
+<tr>
+<td>Q77</td>
+<td>Four ways to prevent inhalation of contaminated air</td>
+<td>3.3 · §2.3</td>
+</tr>
+<tr>
+<td>Q81</td>
+<td>Precautions before entering a confined space</td>
+<td>3.2 · §2.12</td>
+</tr>
+<tr>
+<td>Q95</td>
+<td>The 5S of housekeeping</td>
+<td>3.1 · §2.8</td>
+</tr>
+<tr>
+<td>Q96</td>
+<td>The five S principles</td>
+<td>3.1 · §2.8</td>
+</tr>
+<tr>
+<td>Q97</td>
+<td>Preventing air quality, fire and explosion hazards in confined space</td>
+<td>3.2 · §2.12</td>
+</tr>
+<tr>
+<td>Q98</td>
+<td>Measures against air quality, fire and explosion risk</td>
+<td>3.2 · §2.12</td>
+</tr>
+<tr>
+<td>Q99</td>
+<td>Purpose and five industrial models</td>
+<td>3.3 · §2.13</td>
+</tr>
+<tr>
+<td>Q100</td>
+<td>Goals and five adopted industrial models</td>
+<td>3.3 · §2.13</td>
+</tr>
+<tr>
+<td>Q146</td>
+<td>Define frequency, severity, incidence, activity rate</td>
+<td>3.2 · §2.6</td>
+</tr>
+<tr>
+<td>Q147</td>
+<td>Same four definitions, second wording</td>
+<td>3.2 · §2.6</td>
+</tr>
+<tr>
+<td>Q148</td>
+<td>Using frequency and severity as indicators</td>
+<td>3.2 · §2.6</td>
+</tr>
+<tr>
+<td>Q149</td>
+<td>5S, with advantages and disadvantages</td>
+<td>3.3 · §2.8</td>
+</tr>
+<tr>
+<td>Q150</td>
+<td>What 5S is and its benefits</td>
+<td>3.1 · §2.8</td>
+</tr>
+<tr>
+<td>Q151</td>
+<td>Hot work permit and cold work permit explained</td>
+<td>3.3 · §2.10</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Not this module, though the wording looks close:</strong> Q125 (PPE and chemical hazards) and Q60 (PPE in chemical control) belong to Module V. Module II answers PPE as equipment and selection. Module V answers it as one rung in the chemical control hierarchy.</p>
+<hr />
+<h2 id="2-concepts">2. Concepts<a class="anchor" href="#2-concepts">#</a></h2>
+<h3 id="21-what-ppe-is-and-the-two-classes">2.1 What PPE is, and the two classes<a class="anchor" href="#21-what-ppe-is-and-the-two-classes">#</a></h3>
+<p><em>In plain English.</em> PPE is the last line of defence. It does not remove the hazard. It puts something between the hazard and your body. Think of an umbrella in a storm: the rain still falls, and you stay dry only while the umbrella holds. A hole in the fabric is invisible from underneath.</p>
+<p><em>The detail.</em>
+- <strong>PPE</strong> = protective clothing, helmets, goggles or other equipment designed to protect the wearer's body from injury or infection (<code>page 3</code>).
+- The <strong>hazards addressed</strong> are physical, electrical, heat, chemical, biohazard and airborne particulate matter (<code>page 3</code>).
+- The same kit is worn for sport and recreation, so PPE is not only an industrial word (<code>page 3</code>).
+- <strong>Simple PPE</strong> has a basic design and guards against lower-risk hazards (<code>page 4</code>).
+- With simple PPE the user can reasonably be assumed to know the hazard exists (<code>page 4</code>).
+- <strong>Complex PPE</strong> has a technical design and guards against fatal or serious risk (<code>page 4</code>).
+- With complex PPE the user cannot identify the hazard well enough on their own (<code>page 4</code>).
+- So the class decides who assesses the risk: for complex kit, the employer does.
+- Complex kit therefore puts type-examination and marking duties on the supplier <strong>(standard)</strong>.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Simple PPE</th>
+<th>Complex PPE</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Design</td>
+<td>Basic model</td>
+<td>Technical design</td>
+</tr>
+<tr>
+<td>Hazard</td>
+<td>Lower risk</td>
+<td>Fatal or serious risk</td>
+</tr>
+<tr>
+<td>User's knowledge</td>
+<td>Assumed to know the hazard</td>
+<td>Cannot identify the hazard alone</td>
+</tr>
+<tr>
+<td>Who assesses</td>
+<td>User or supervisor</td>
+<td>Employer, by formal assessment</td>
+</tr>
+<tr>
+<td>Examples</td>
+<td>Safety glasses, cotton gloves, bump cap</td>
+<td>Full-face respirator, breathing apparatus, harness</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>Nine requisite characteristics</strong> (<code>page 14</code>): adequate protection, minimum weight, minimum discomfort, flexible attachment, free movement, durable and attractive, conforms to IS specifications, easy to clean and repair, spares available.</li>
+<li>Read those nine as a procurement checklist, not as a wish list. Each one is testable.</li>
+<li><strong>Why PPE is last.</strong> It protects one wearer, only while correctly fitted and worn.</li>
+<li>It fails without a sound: a leaking seal looks exactly like a good one.</li>
+<li>It protects nobody else in the area, and nothing at all once it is removed.</li>
+<li><strong>The employer's side</strong> <strong>(standard)</strong>: issue without charge, train the wearer, keep records, replace on damage.</li>
+<li><strong>The limits</strong>: a shelf life, a fit range, and a stated protection factor that a beard or a bent nose bridge destroys.</li>
+<li><strong>Selection runs in five steps</strong> <strong>(standard)</strong>: assess the agent and route, select to the hazard class, fit, train, maintain and review.</li>
+<li>The assessment asks what the agent is, how it enters the body, how severe the harm is, and how long exposure lasts.</li>
+<li><strong>Comfort is a control issue.</strong> Kit that rubs, fogs or overheats comes off at the first unsupervised minute.</li>
+<li>Comfort levers: the lightest compliant item, several sizes, fit-testing, venting and cooling, shorter wear periods <strong>(standard)</strong>.</li>
+<li>Let the crew trial two compliant products before purchase, and explain the injury each one prevents.</li>
+<li>A supervisor without the kit teaches the crew that it is optional <strong>(standard)</strong>.</li>
+</ul>
+<p><em>What to write.</em> For 3 marks: definition, the six hazard types, the two classes. For 5 marks: the five selection steps, or the table with one example per class. For 8 marks add the four reasons PPE ranks last.</p>
+<p><strong>Mark anchor.</strong> "PPE protects the body; it does not change the hazard." Then the split: simple for lower risk, complex for fatal or serious risk.</p>
+<p><strong>Exam trap.</strong> Do not define PPE as a control that removes exposure. If the question asks why PPE ranks last, the answer is that it protects one wearer and fails silently — not that it is expensive.</p>
+<h3 id="22-non-respiratory-ppe-head-eye-ear-body-hand-foot">2.2 Non-respiratory PPE — head, eye, ear, body, hand, foot<a class="anchor" href="#22-non-respiratory-ppe-head-eye-ear-body-hand-foot">#</a></h3>
+<p><em>In plain English.</em> Non-respiratory PPE keeps things off the outside of your body. Each part of the body has its own short list of what actually hits it. Learn the lists, and the answer writes itself.</p>
+<p><em>The detail.</em>
+- The deck splits PPE by <strong>nature of hazard</strong> (<code>page 5</code>). Non-respiratory guards against injury from outside the body.
+- Respiratory guards against inhaling contaminated air. That is the other class, and it gets §2.3.
+- <strong>Head.</strong> Four frequent causes (<code>page 7</code>): falling objects from above; bumping fixed objects such as exposed pipes or beams; accidental contact with electrical hazards; chemical splashes.
+- <strong>Ear.</strong> Earplugs, earmuffs, and helmets fitted with earmuffs (<code>page 8</code>). Detail in §2.4.
+- <strong>Eye.</strong> Five hazards (<code>page 9</code>): glare and radiation in welding, chemical splashes, intense light, dust and flying particles in carpentry and foundry work, molten metal splashes.
+- <strong>Body.</strong> Aprons, asbestos suits and boiler suits against minor mishaps, fire and chemicals (<code>page 11</code>).
+- <strong>Hand.</strong> Gloves, arm shields and wrist bands; barrier creams and hand cleansers for skin (<code>page 12</code>).
+- <strong>Foot.</strong> Safety shoes against molten metal and falling objects from height (<code>page 13</code>).</p>
+<table>
+<thead>
+<tr>
+<th>Body part</th>
+<th>What hits it</th>
+<th>Device</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Head</td>
+<td>Falling object, fixed pipe, live contact, splash</td>
+<td>Helmet to IS 2925</td>
+</tr>
+<tr>
+<td>Eye and face</td>
+<td>Glare, arc radiation, dust, molten metal</td>
+<td>Goggles, face shield, welding filter</td>
+</tr>
+<tr>
+<td>Ear</td>
+<td>Continuous noise, impact noise</td>
+<td>Plug, muff, helmet-mounted muff</td>
+</tr>
+<tr>
+<td>Body</td>
+<td>Fire, chemical, minor mishap</td>
+<td>Apron, boiler suit, asbestos suit</td>
+</tr>
+<tr>
+<td>Hand and arm</td>
+<td>Cut, abrasion, chemical, heat</td>
+<td>Glove, arm shield, wrist band, barrier cream</td>
+</tr>
+<tr>
+<td>Foot</td>
+<td>Falling object, molten metal, puncture</td>
+<td>Safety shoe or boot to IS 1989</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>Goggle ventilation decides the job</strong> (<code>page 10</code>). Non-ventilated goggles pass no air, so splash cannot enter, and they fog.</li>
+<li>Indirect-ventilated goggles use baffled vents, which block large particles and splash while air circulates (<code>page 10</code>).</li>
+<li>Direct-ventilated goggles have open vents: best airflow, least fogging, and no splash protection (<code>page 10</code>).</li>
+<li><strong>The employer also provides the surroundings</strong> (<code>page 13</code>): suitable containers for flammable liquids, safety nets, non-slippery floors, safety signs, gas detectors, firefighting and warning equipment.</li>
+<li>That last bullet is the exam's real point: PPE is issued <strong>with</strong> engineering provision, never instead of it.</li>
+</ul>
+<p><em>What to write.</em> For 5 marks: eye hazards, then the three goggle types. For 8 marks: six body blocks with the hazard each defeats, plus one product name and one standard.</p>
+<p><strong>Mark anchor.</strong> Head, eye, ear, body, hand, foot — six blocks in that order, each with its hazard. That structure alone earns half the marks.</p>
+<p><strong>Exam trap.</strong> Do not answer "types of PPE" with a list of product names. The marking scheme pairs each item with the hazard it defeats, and an unpaired name scores nothing.</p>
+<h3 id="23-respiratory-protective-equipment">2.3 Respiratory protective equipment<a class="anchor" href="#23-respiratory-protective-equipment">#</a></h3>
+<p><em>In plain English.</em> A respirator does not give you air. It cleans the air you are standing in, or it brings air from somewhere else. That distinction is the whole classification. It is also the reason a filter mask kills people in a tank.</p>
+<p><em>The detail.</em>
+- RPE protects the individual wearer against inhaling hazardous substances in workplace air (<code>page 15</code>).
+- It is used <strong>only</strong> where adequate control cannot be achieved by other means (<code>page 15</code>).
+- In the hierarchy it is the last resort: elimination, substitution, engineering, administrative, then PPE (<code>page 15</code>).
+- <strong>Two families</strong> (<code>page 17</code>):
+  - <strong>Respirator (filtering device)</strong> — filters remove contaminants from the surrounding air.
+  - <strong>Breathing apparatus</strong> — supplies breathing-quality air from an independent source such as a cylinder or compressor.
+- <strong>Non-powered respirators</strong> rely on the wearer's breathing to pull air through the filter (<code>page 17</code>).
+- <strong>Powered respirators</strong> use a motor to push air through the filter (<code>page 17</code>).
+- <strong>Breathing apparatus is the only option in an oxygen-deficient atmosphere</strong> (<code>page 17</code>).
+- <strong>Two face-piece groups</strong> (<code>page 19</code>): tight-fitting masks, and loose-fitting hoods, helmets, visors, blouses and suits.
+- Tight-fitting types are filtering face pieces, half masks and full face masks (<code>page 19</code>).
+- Loose-fitting types exist only as powered respirators or breathing apparatus (<code>page 19</code>).</p>
+<table>
+<thead>
+<tr>
+<th>Device</th>
+<th>Drive</th>
+<th>Face seal</th>
+<th>Use where</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Filtering face piece</td>
+<td>Wearer's breath</td>
+<td>Tight</td>
+<td>Dust, low concentration, short task</td>
+</tr>
+<tr>
+<td>Half mask</td>
+<td>Breath or motor</td>
+<td>Tight</td>
+<td>Dust, vapour, replaceable cartridge</td>
+</tr>
+<tr>
+<td>Full face mask</td>
+<td>Breath or motor</td>
+<td>Tight</td>
+<td>Also needs eye protection</td>
+</tr>
+<tr>
+<td>Powered hood or helmet</td>
+<td>Motor</td>
+<td>Loose</td>
+<td>Long shifts, heat, beard or fit problems</td>
+</tr>
+<tr>
+<td>Breathing apparatus</td>
+<td>Cylinder or compressor</td>
+<td>Tight or loose</td>
+<td>Oxygen deficiency, IDLH atmosphere</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>Filter classes</strong> <strong>(standard)</strong>: particulate filters P1, P2 and P3 in rising efficiency; gas filters lettered by type — A organic vapour, B acid gas, E sulphur dioxide, K ammonia.</li>
+<li>A filter has a <strong>capacity</strong>. Once saturated, a gas filter passes the contaminant without warning.</li>
+<li>So the replacement schedule is a control, not housekeeping <strong>(standard)</strong>.</li>
+<li><strong>Fit-testing precedes issue</strong>, because a leaking seal delivers the wearer's estimate of protection, not the label's <strong>(standard)</strong>.</li>
+</ul>
+<p><em>What to write.</em> For 3 marks: the two families, one line each. For 8 marks: definition, hierarchy position, two families, two face-piece groups, oxygen-deficiency rule, filter classes.</p>
+<p><strong>Mark anchor.</strong> "A filter removes contamination; breathing apparatus supplies air." Add "oxygen deficiency rules out every filter" and the answer is complete.</p>
+<p><strong>Exam trap.</strong> Never write "respirator" as a synonym for breathing apparatus. The 8-mark answer is graded on that split, and the safety consequence is a death in a tank.</p>
+<h3 id="24-hearing-protection-and-the-conservation-programme">2.4 Hearing protection and the conservation programme<a class="anchor" href="#24-hearing-protection-and-the-conservation-programme">#</a></h3>
+<p><em>In plain English.</em> Noise damages a structure that does not grow back. Earplugs and earmuffs lower the dose reaching that structure, so they buy time rather than repair. Everything else in a hearing programme exists to check that the plugs are actually working.</p>
+<p><em>The detail.</em>
+- <strong>Three device families</strong> in the deck (<code>page 8</code>): earplugs, earmuffs, and helmets with earmuffs fitted.
+- <strong>Earplugs</strong> sit in the canal: disposable foam, premoulded, and banded canal caps <strong>(standard)</strong>.
+- Foam plugs need rolling and a full minute to expand. Poor insertion loses most of the rating <strong>(standard)</strong>.
+- <strong>Earmuffs</strong> seal around the pinna. They are easier to fit correctly and uncomfortable in heat <strong>(standard)</strong>.
+- Helmet-mounted muffs suit sites where a hard hat is already worn (<code>page 8</code>).
+- <strong>Attenuation is rated, not assumed.</strong> The NRR is printed on the package <strong>(standard)</strong>.
+- <strong>OSHA programme triggers</strong> <strong>(standard, 29 CFR 1910.95)</strong>: hearing conservation at an 85 dB(A) eight-hour average, and a permissible exposure limit of 90 dB(A).
+- <strong>Exchange rate 3 dB</strong> — every 3 dB rise halves the permitted exposure time <strong>(standard)</strong>.
+- <strong>Audiometric testing</strong>: a baseline audiogram, then annual tests <strong>(standard)</strong>.
+- A standard threshold shift is 10 dB averaged at 2000, 3000 and 4000 Hz <strong>(standard)</strong>.
+- Protectors must bring exposure below 85 dB(A), or below 90 for a worker already shifted <strong>(standard)</strong>.
+- NIOSH recommends 85 dB(A) for a full shift <strong>(standard)</strong>.
+- The programme also covers noise measurement, training, recordkeeping and evaluation <strong>(standard)</strong>.
+- Engineering and administrative control come first: buy the quiet machine, then protect the ear <strong>(standard)</strong>.
+- The deck gives <strong>no decibel value anywhere</strong>. Every number in this list is OSHA or NIOSH.
+- <strong>Double protection adds little.</strong> Muffs worn over plugs gain a few dB, not double <strong>(standard)</strong>.
+- A plug that is half inserted gives about the protection of a fingertip <strong>(standard)</strong>.
+- <strong>Custom-moulded plugs</strong> suit a worker who cannot get a seal, and cost more than muffs <strong>(standard)</strong>.</p>
+<p><strong>The mistake to avoid.</strong> A worker in muffs inside 105 dB(A) believes he is protected. The label claims 25 dB, the fit delivers less, and the exposure still causes harm <strong>(standard)</strong>. Protection is a calculated reduction, not a switch.</p>
+<p><em>What to write.</em> For 3 marks: three families, one line each. For 5 marks: add why the loss is permanent and painless. For 8 marks: add the 85 and 90 triggers, the 3 dB exchange and the audiogram.</p>
+<p><strong>Mark anchor.</strong> "85 dB(A) triggers the programme, 90 dB(A) is the limit, 3 dB exchange." Three numbers separate a good answer from a list.</p>
+<p><strong>Exam trap.</strong> The slide deck quotes no dB value at all. If you write 85 and 90 you must know they are OSHA, and you must not cite the page for them.</p>
+<h3 id="25-standards-the-deck-quotes">2.5 Standards the deck quotes<a class="anchor" href="#25-standards-the-deck-quotes">#</a></h3>
+<p><em>In plain English.</em> A standard is the promise that the helmet you were issued was tested the same way as the one in the catalogue. The numbers below are test conditions, and examiners ask for them because they cannot be guessed or derived.</p>
+<p><em>The detail.</em>
+- <strong>Safety helmets, IS 2925: 1984</strong> (<code>page 20</code>). Shell of non-metallic material.
+- Headband circumference: <strong>small 500–540 mm, medium 540–590 mm, large 590–640 mm</strong> (<code>page 20</code>).
+- Parts: shell, peak, ventilation holes, headband harness, anti-concussion tapes, chin strap (<code>page 21</code>).
+- Marking: maker's trade mark, size, ISI mark, year of manufacture (<code>page 21</code>).
+- Mass: <strong>400 g maximum</strong> (<code>page 21</code>).
+- Shock absorption: a <strong>3 kg</strong> wooden block dropped from <strong>1.5 m</strong> (<code>page 22</code>).
+- Penetration: a <strong>500 g</strong> plumb with a conical steel point, dropped from <strong>3 m</strong> (<code>page 22</code>).
+- Electrical: <strong>2000 V at 50 Hz for one minute</strong> (<code>page 22</code>).
+- Water absorption: <strong>under 5 per cent</strong> after 24 hours at 25 °C (<code>page 22</code>).
+- Heat: <strong>15 minutes</strong> in an oven at 93 °C, as the deck prints it (<code>page 22</code>).
+- Flame: a Barthel burner flame (IS 4355: 1977) on the shell for <strong>10 seconds</strong>, with no visible damage (<code>page 22</code>).
+- <strong>Gloves, IS 6994 (Part 1): 1973</strong> (<code>page 23</code>): eleven types; chrome-tanned cow or young buffalo leather.
+- Cotton drill: unbleached, <strong>315 g/m² with a tolerance of 19 g/m²</strong>; cuffs 2/20 all cotton; thread to IS 1720: 1969 (<code>page 23</code>).
+- Glove marking, inside the cuff: type and nominal size, light or heavy mass, maker's name, year (<code>page 24</code>).
+- <strong>Boots, IS 1989 (Parts 1 and 2): 1986</strong> (<code>page 25</code>): ankle high, six eyelets, steel toe cap, padded tongue.
+- Sole of vegetable-tanned leather or moulded rubber; eyelets aluminium or brass-coated steel, <strong>10 mm</strong> (<code>page 25</code>).
+- Boot mass: <strong>1750 g per pair</strong> at size 8 with hob nails, <strong>1650 g</strong> without (<code>page 26</code>).
+- Mass changes by <strong>75 g per pair</strong> for each size step (<code>page 26</code>).
+- Toe cap to <strong>IS 5852: 1996</strong>, withstanding a blow of <strong>14.2 kgf·m</strong> (<code>page 26</code>).</p>
+<table>
+<thead>
+<tr>
+<th>Standard</th>
+<th>Covers</th>
+<th>Figures to quote</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>IS 2925: 1984</td>
+<td>Industrial safety helmets</td>
+<td>400 g; 3 kg from 1.5 m; 500 g from 3 m; 2000 V for 1 min; 5 per cent absorption</td>
+</tr>
+<tr>
+<td>IS 6994 (Part 1): 1973</td>
+<td>Leather and cotton gloves</td>
+<td>Eleven types; 315 g/m² ±19; thread to IS 1720</td>
+</tr>
+<tr>
+<td>IS 1989 (Parts 1 and 2): 1986</td>
+<td>Leather safety boots and shoes</td>
+<td>Six eyelets; 1750 g or 1650 g per pair; 75 g per size</td>
+</tr>
+<tr>
+<td>IS 5852: 1996</td>
+<td>Steel toe caps</td>
+<td>14.2 kgf·m blow</td>
+</tr>
+<tr>
+<td>IS 4355: 1977</td>
+<td>Barthel burner</td>
+<td>The 10-second flame test method</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>Why the tests exist</strong>: each one mimics a real event — a dropped tool, a falling bolt, a live cable, a hot surface, a splash.</li>
+<li>Quote the test, then the event it stands for. That pairing is what a 5-mark answer rewards.</li>
+</ul>
+<p><em>What to write.</em> For 3 marks: one standard and three of its numbers. For 5 marks: helmets and boots. For 8 marks: add gloves, the marking requirements and the table.</p>
+<p><strong>Mark anchor.</strong> IS 2925, 400 g, 3 kg from 1.5 m, 500 g from 3 m, 2000 V for a minute. Five facts that can only be remembered.</p>
+<p><strong>Exam trap.</strong> The deck prints the oven test as "93° ± 50 °C", which is almost certainly a mis-transcription of ±5. Quote 93 °C and 15 minutes, and do not defend the tolerance.</p>
+<h3 id="26-monitoring-safety-performance-the-inputs-and-the-four-rates">2.6 Monitoring safety performance — the inputs and the four rates<a class="anchor" href="#26-monitoring-safety-performance-the-inputs-and-the-four-rates">#</a></h3>
+<p><em>In plain English.</em> Every rate in this module is a fraction. The top counts the harm; the bottom counts how much work was done. Get the bottom wrong and every number after it is wrong. Get the top wrong and you have compared injuries with days.</p>
+<p><em>The detail.</em>
+- <strong>Man-hours worked</strong> = total employee-hours worked by all employees on the premises (<code>page 29</code>).
+- It includes managerial, supervisory, professional, technical and clerical staff, plus contractor labour (<code>page 29</code>).
+- It is taken from the payroll or time clock, overtime included (<code>page 29</code>).
+- Where that is not feasible, estimate it as man-days worked × hours worked per day (<code>page 29</code>).
+- Total man-days is the sum of the number of men at work on each day (<code>page 29</code>).
+- <strong>Disabling injury</strong> = an injury causing disablement beyond the day or shift of the accident (<code>page 30</code>).
+- <strong>Reportable disabling injury</strong> = an injury causing death or disablement to the extent a statute prescribes (<code>page 30</code>).
+- <strong>Man-days lost</strong> = days of earning capacity lost through permanent disability, death, or partial disablement as IS 3786 specifies (<code>page 30</code>).
+- <strong>A death is charged as 6000 days</strong> under IS 3786 (<code>page 30</code>).
+- That charge is a bookkeeping convention, so that a fatality can enter an arithmetic average.
+- <strong>Frequency rate</strong> = disabling injuries per million man-hours worked (<code>page 32</code>).
+- <strong>FR = (disabling injuries × 1,000,000) ÷ man-hours worked</strong> (<code>page 33</code>).
+- <strong>Severity rate</strong> = days lost or charged per million man-hours worked (<code>page 34</code>).
+- <strong>SR = (days lost or charged × 1,000,000) ÷ man-hours worked</strong> (<code>page 34</code>).
+- <strong>Incidence rate</strong> = injuries per thousand workers <strong>(standard; the deck has the heading only, <code>page 37</code>)</strong>.
+- <strong>IR = (injuries × 1000) ÷ average number of workers</strong>.
+- <strong>Activity rate</strong> = safety training and inspection activity against employees and man-hours (<code>page 38</code>).
+- <strong>Why one million</strong> (<code>page 32</code>): 500 workers × 40 hours × 50 weeks = 1,000,000 hours.</p>
+<table>
+<thead>
+<tr>
+<th>Rate</th>
+<th>Numerator</th>
+<th>Base</th>
+<th>What it reveals</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Frequency</td>
+<td>Disabling injuries</td>
+<td>1,000,000 man-hours</td>
+<td>How often, size-adjusted</td>
+</tr>
+<tr>
+<td>Severity</td>
+<td>Days lost or charged</td>
+<td>1,000,000 man-hours</td>
+<td>How much working time is destroyed</td>
+</tr>
+<tr>
+<td>Incidence</td>
+<td>Injuries</td>
+<td>1000 workers</td>
+<td>How many people, needing no clock data</td>
+</tr>
+<tr>
+<td>Activity</td>
+<td>Training and inspection events</td>
+<td>1000 workers or million hours</td>
+<td>How much prevention was attempted</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Worked example, frequency.</strong> 500 workers, 2000 hours each, 5 disabling injuries. Man-hours = 1,000,000. FR = 5 × 1,000,000 ÷ 1,000,000 = <strong>5</strong> (<code>page 33</code>).</p>
+<p><strong>Worked example, severity.</strong> 2000 workers, 2000 hours each, 100 days lost and one death. Man-hours = 4,000,000. Days = 100 + 6000 = 6100. SR = 6100 × 1,000,000 ÷ 4,000,000 = <strong>1525</strong> (<code>page 36</code>).</p>
+<ul>
+<li>A cut fingertip costing 35 days, on top of 100 days lost, gives 135 days in the deck's other example (<code>page 35</code>).</li>
+<li><strong>What the rates are for</strong> (<code>page 27</code>): they show the most and least unsafe work between consecutive years.</li>
+<li>They expose deficiency in the safety management system (<code>page 27</code>).</li>
+<li>They direct improvement money to where the rate is worst (<code>page 27</code>).</li>
+<li><strong>What produces bad rates</strong> (<code>page 28</code>): no accident reporting system, no management review, no enforcement of safety law, no commitment on deficiencies.</li>
+<li>Contributing factors: lack of training, knowledge and skill, poor physical or mental condition, weak enforcement (<code>page 28</code>).</li>
+<li><strong>Read the pair.</strong> Frequency alone hides severity; severity alone hides how often it happens.</li>
+</ul>
+<p><em>What to write.</em> For 3 marks: the definitions in one line each. For 5 marks: two formulas and one worked example. For 8 marks: all four rates, the million-hour base, both examples, and the uses on <code>page 27</code>.</p>
+<p><strong>Mark anchor.</strong> Write each formula with its base: "× 1,000,000 ÷ man-hours worked". A rate without a base is a fraction, and a fraction earns no mark.</p>
+<p><strong>Exam trap.</strong> Frequency counts <strong>injuries</strong>; severity counts <strong>days</strong>. Swapping the numerators is the commonest arithmetic error here, and it is fatal because the 6000-day charge only enters severity.</p>
+<h3 id="27-housekeeping-elements-advantages-responsibility">2.7 Housekeeping — elements, advantages, responsibility<a class="anchor" href="#27-housekeeping-elements-advantages-responsibility">#</a></h3>
+<p><em>In plain English.</em> Housekeeping is not cleaning. It is the state of the workplace between operations: what is on the floor, what is in the aisle, what is stacked how high. A clear floor is a safety control, and it is the cheapest one a site owns.</p>
+<p><em>The detail.</em>
+- <strong>Twelve elements</strong> (<code>page 63</code>–<code>page 66</code>): dust and dirt removal, employee facilities, flooring, lighting, aisles and stairways, spill control, waste disposal, tools and equipment, maintenance, storage, clutter control, individual workspace.
+- <strong>Dust and dirt</strong> irritate the airway, and a layer on the floor is a slip hazard once it is wet (<code>page 63</code>).
+- <strong>Compressed air must never</strong> be used to blow dust off people or equipment. It drives particles under the skin or into the eye (<code>page 63</code>).
+- <strong>Flooring</strong>: clean spills at once, mat entranceways, replace worn or ripped flooring (<code>page 63</code>).
+- <strong>Lighting</strong>: repair dead fixtures and clean dirty ones, so the design level is actually delivered (<code>page 64</code>).
+- <strong>Aisles and stairways</strong>: kept clear, never used for storage, with railings on stairs (<code>page 64</code>).
+- <strong>Spill control</strong>: prevent by maintenance and drip pans; clean with the right absorbent; dispose properly (<code>page 64</code>).
+- <strong>Waste</strong>: containers near where the waste is produced, so disposal is easier than dropping (<code>page 65</code>).
+- <strong>Tools</strong>: inspect before use, remove damaged items at once, clean and return after use (<code>page 65</code>).
+- <strong>Maintenance</strong>: broken windows, defective plumbing and damaged floors signal a neglected workplace (<code>page 65</code>).
+- <strong>Storage</strong>: marked areas, approved containers for flammables, every container labelled, nothing blocking exits, eyewash or fire equipment (<code>page 66</code>).
+- <strong>Clutter</strong>: return tools, chemicals, cords and containers to their place when not in use (<code>page 66</code>).
+- <strong>Individual workspace</strong>: kept clear, with a checklist the worker uses on their own area (<code>page 66</code>).
+- <strong>Twelve advantages</strong> (<code>page 61</code>) — quote any six. A cleaner, safer and better organised workplace.
+- Improved use of floor space, and a smoother workflow with less non-value-added activity.
+- Better inventory control, and less handling to ease material flow.
+- Less waste, and lower breakdowns from better equipment care.
+- Fewer errors, and a safer environment with lower exposure to dust and vapour.
+- More hygienic conditions, better appearance, and better morale (<code>page 61</code>).
+- <strong>Poor housekeeping causes six accident types</strong> (<code>page 62</code>): slips, trips and falls; caught in between objects; struck by falling objects; struck by moving objects; cut or stabbed by objects; struck against objects.
+- It also raises fire risk, because clutter and residue are fuel (<code>page 62</code>).
+- <strong>Management's duty</strong> <strong>(standard, from the element list)</strong>: provide the facilities, storage, containers, lighting, repairs and schedule.
+- Management also writes the checklist and funds the replacement programme (<code>page 65</code>, <code>page 66</code>).
+- <strong>The employee's duty</strong> (<code>page 72</code>): clean your own workspace, ideally daily, and return what you borrow.
+- Employees report damaged tools and spills rather than working around them (<code>page 65</code>).
+- The split is therefore <strong>means versus behaviour</strong>, and both halves are examinable.</p>
+<p><em>What to write.</em> For 3 marks: three advantages, or three management duties. For 5 marks: three elements plus the accident each prevents. For 8 marks: elements, advantages, duty split, and the closing line that ownership is what makes it hold.</p>
+<p><strong>Mark anchor.</strong> The six accident types on <code>page 62</code> are the cost side of the argument. Naming slips, trips and falls plus struck-by turns "it looks nice" into a safety answer.</p>
+<p><strong>Exam trap.</strong> Do not answer housekeeping with 5S. 5S is the <strong>system</strong> that delivers housekeeping; housekeeping is the <strong>condition</strong>. Q26 and Q149 are different questions.</p>
+<h3 id="28-5s">2.8 5S<a class="anchor" href="#28-5s">#</a></h3>
+<p><em>In plain English.</em> 5S is housekeeping turned into a habit. The first three S's change the workplace, the fourth writes the change down, and the fifth keeps everyone doing it after the novelty dies.</p>
+<p><em>The detail.</em>
+- <strong>5S</strong> is a system for organising spaces so work is performed efficiently, effectively and safely (<code>page 67</code>).
+- It puts everything where it belongs and keeps the place clean, so nobody wastes time or risks injury (<code>page 67</code>).
+- The five Japanese words (<code>page 68</code>): <strong>seiri, seiton, seiso, seiketsu, shitsuke</strong>.
+- In English (<code>page 69</code>): <strong>sort, set in order, shine, standardise, sustain</strong>.
+- <strong>Sort</strong> — go through tools, furniture, materials and equipment, and keep only what is needed (<code>page 70</code>).
+- Removed items go to another department, or are recycled, sold, thrown away or stored (<code>page 70</code>).
+- <strong>Set in order</strong> — place what remains by who uses it, when, and how often (<code>page 71</code>).
+- Placement should cut unnecessary motion and suit the worker's reach (<code>page 71</code>).
+- <strong>Shine</strong> — sweep, mop, dust, wipe, put away, and maintain equipment on a plan (<code>page 72</code>).
+- Cleaning is not left to the janitorial staff; everyone cleans their own area, ideally daily (<code>page 72</code>).
+- <strong>Standardise</strong> — assign tasks, set schedules, post instructions, write the 5S procedure (<code>page 73</code>).
+- This is what separates 5S from spring cleaning: it turns one effort into a routine (<code>page 73</code>).
+- <strong>Sustain</strong> — keep the procedures running, and keep everybody involved (<code>page 74</code>).
+- Managers and floor staff both take part, so 5S becomes culture rather than an event (<code>page 74</code>).</p>
+<table>
+<thead>
+<tr>
+<th>S</th>
+<th>Japanese</th>
+<th>Action</th>
+<th>What fails without it</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Seiri</td>
+<td>Remove what is not needed</td>
+<td>Aisles and benches fill up again</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Seiton</td>
+<td>Place by frequency of use</td>
+<td>Time lost hunting for tools</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Seiso</td>
+<td>Clean and maintain</td>
+<td>Dust and leaks hide defects</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Seiketsu</td>
+<td>Schedule and post instructions</td>
+<td>The gains decay within weeks</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Shitsuke</td>
+<td>Audit and keep everyone involved</td>
+<td>5S becomes a past campaign</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>Advantages</strong>: less wasted motion, fewer injuries, earlier fault detection, lower breakdowns, better morale (<code>page 61</code>, <code>page 74</code>).</li>
+<li><strong>Disadvantages</strong> <strong>(standard)</strong>: time and labour cost, initial disruption, and relapse without the last two S's.</li>
+</ul>
+<p><em>What to write.</em> For 3 marks: five names with a short gloss each. For 8 marks: a definition line, one line per S, and the standardise versus spring-cleaning point, then two advantages and one disadvantage.</p>
+<p><strong>Mark anchor.</strong> Name all five in Japanese <strong>and</strong> English, in order: seiri sort, seiton set in order, seiso shine, seiketsu standardise, shitsuke sustain.</p>
+<p><strong>Exam trap.</strong> Do not translate seiketsu as "cleanliness" or shitsuke as "discipline" alone. The deck's own pairings are standardise and sustain, and the exam follows the deck.</p>
+<h3 id="29-work-permit-system-purpose-and-objectives">2.9 Work permit system — purpose and objectives<a class="anchor" href="#29-work-permit-system-purpose-and-objectives">#</a></h3>
+<p><em>In plain English.</em> A permit is a signed conversation. Before a hazardous job starts, the people who own the area and the people who will do the work agree in writing on what will be done, what could go wrong, and who has checked what.</p>
+<p><em>The detail.</em>
+- A <strong>work permit system</strong> is a formal written system to control and execute certain jobs safely, where those jobs are identified as potentially hazardous (<code>page 39</code>).
+- It is a means of communication between departments, plant supervisors, operators and agencies (<code>page 39</code>).
+- It exists so that no work starts before safe conditions are confirmed (<code>page 39</code>).
+- <strong>Eight objectives</strong> (<code>page 40</code>):
+  - Give written permission to carry out the task.
+  - Ensure every aspect of the work is planned.
+  - Make sure every aspect of the work is checked.
+  - Put risk assessments and method statements into action.
+  - Communicate health and safety information.
+  - Provide a procedure that keeps essential controls in place.
+  - Provide a procedure to return the area to a safe state on completion.
+  - Give a means of communication between the parties.
+- <strong>Work not requiring a permit</strong> (<code>page 41</code>): routine workshop and yard work within boundaries; routine material handling in warehouses and lay-down areas; routine office work.
+- Also exempt: visual inspection without tools, and operators' daily start-up and shut-down (<code>page 41</code>).
+- Also exempt: an area the client has declared permit-free, and work the client approves on special request (<code>page 41</code>).
+- Those exemptions matter because they define the boundary of the system, and an over-wide system gets bypassed <strong>(standard)</strong>.
+- <strong>A permit is not competence.</strong> It records that named people checked named conditions (<code>page 40</code>).
+- <strong>A permit is not a transfer of duty.</strong> The employer's legal responsibility stays with the employer <strong>(standard)</strong>.
+- <strong>A permit expires.</strong> If the conditions change, the permit is void and must be reissued <strong>(standard)</strong>.
+- <strong>Who signs.</strong> The area authority issues and the performing authority accepts, on the same sheet <strong>(standard)</strong>.
+- <strong>The register</strong> logs every permit, so two jobs in one area become visible to each other <strong>(standard)</strong>.
+- <strong>Handover</strong> at a shift change needs a fresh signature, not a verbal briefing <strong>(standard)</strong>.</p>
+<p><strong>Why systems decay.</strong> A permit that takes an hour to obtain is a permit written after the job starts. Speed of issue is a design requirement <strong>(standard)</strong>.</p>
+<p><em>What to write.</em> For 5 marks: definition, four objectives, and two exemptions. For 8 marks: definition, six objectives, exemptions, and the two closing lines on competence and expiry.</p>
+<p><strong>Mark anchor.</strong> "No work starts before safe conditions are confirmed." That sentence is why the system exists, and it is worth a mark alone.</p>
+<p><strong>Exam trap.</strong> A permit does not make a job safe. It records a check. If the isolation is removed or the crew changes, the paper still looks valid, and that is how permit systems fail.</p>
+<h3 id="210-hot-work-and-cold-work-permits">2.10 Hot work and cold work permits<a class="anchor" href="#210-hot-work-and-cold-work-permits">#</a></h3>
+<p><em>In plain English.</em> The split is one question: can this job start a fire? If yes, it is hot work. If no, it is cold work. Everything else — the colour, the checks, the fire watch — follows from that answer.</p>
+<p><em>The detail.</em>
+- <strong>Colour code</strong> (<code>page 42</code>): cold work <strong>green</strong>, hot work <strong>red</strong>, confined space entry <strong>yellow</strong>.
+- <strong>Excavation authorisation</strong> is separate: valid <strong>one month</strong>, renewable for <strong>three months</strong>, applied for at least <strong>three days</strong> before expiry (<code>page 42</code>).
+- <strong>Hot work</strong> covers any job that involves or uses a source of ignition, spark or flame (<code>page 42</code>).
+- Welding, soldering, cutting and brazing are hot work (<code>page 43</code>).
+- Grinding and drilling count as hot work when flammable material is present (<code>page 43</code>).
+- <strong>Five risks hot work triggers</strong> (<code>page 46</code>): flying sparks lodging in pipes, gaps and cracks; flammable residues and hot debris; hot surfaces igniting nearby goods; heat conducted along a pipe; an explosive vapour or gas atmosphere.
+- <strong>Before hot work</strong> (<code>page 44</code>): test the fitness of all equipment; provide task-specific PPE and check the wearers can use, clean and store it.
+- Then examine the workplace and remove visible hazards; clear all combustibles from the area (<code>page 44</code>).
+- Have extinguishers and first aid accessible, and comply with the local regulation (<code>page 44</code>).
+- <strong>After hot work</strong>, re-examine the area for heated wall surfaces and wiring (<code>page 44</code>).
+- That last check is the one most often skipped, and smouldering starts hours later.
+- <strong>Cold work</strong> is a green permit for hazardous maintenance with no ignition hazard (<code>page 47</code>).
+- The classification comes from a risk assessment of the task and the working environment (<code>page 47</code>).
+- If no flammable or explosive risk is found, a cold work permit is sufficient (<code>page 47</code>).
+- <strong>Cold work examples</strong> (<code>page 48</code>): resin repairs, painting, heavy lifts, erecting or dismantling scaffolds, any non-routine hazardous activity.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Hot work permit</th>
+<th>Cold work permit</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Colour</td>
+<td>Red</td>
+<td>Green</td>
+</tr>
+<tr>
+<td>Test</td>
+<td>Ignition, spark or flame present</td>
+<td>No ignition source, after assessment</td>
+</tr>
+<tr>
+<td>Examples</td>
+<td>Welding, cutting, brazing, grinding near fuel</td>
+<td>Painting, resin, heavy lift, scaffold</td>
+</tr>
+<tr>
+<td>Main risks</td>
+<td>Fire, explosion, conducted heat</td>
+<td>Fall, crush, chemical, structural</td>
+</tr>
+<tr>
+<td>Extra control</td>
+<td>Fire watch, combustibles cleared, re-check after</td>
+<td>Isolation, PPE, method statement</td>
+</tr>
+</tbody>
+</table>
+<p><em>What to write.</em> For 3 marks: one line each with the colour and one example. For 8 marks: add the five hot-work risks and the four pre-work checks, then the comparison table.</p>
+<p><strong>Mark anchor.</strong> Red hot, green cold, yellow confined space, and one month for excavation. Four facts, four marks' worth of certainty.</p>
+<p><strong>Exam trap.</strong> "Cold work" does not mean safe work. Painting and scaffold erection are cold work and both can kill; the permit only certifies that ignition is not the hazard.</p>
+<h3 id="211-confined-spaces-definition-and-hazards">2.11 Confined spaces — definition and hazards<a class="anchor" href="#211-confined-spaces-definition-and-hazards">#</a></h3>
+<p><em>In plain English.</em> A confined space is a place built for something that is not you. A tank is built to hold liquid, a sewer to carry flow. You go in as a visitor, and the air does not care that you are only staying ten minutes.</p>
+<p><em>The detail.</em>
+- <strong>Definition, three tests</strong> (<code>page 49</code>): fully or partially enclosed; not designed or intended for continuous human occupancy; limited or restricted entry or exit.
+- It must also be able to harm whoever enters, through its design, construction, location or atmosphere (<code>page 49</code>).
+- Harm can also come from the materials or substances in it, or from the work being done inside (<code>page 49</code>).
+- <strong>Examples</strong> (<code>page 50</code>): silos, vats, hoppers, utility vaults, tanks, water towers, sewers, pipes, access shafts.
+- Also tank cars, aircraft wings, boilers, manholes and pump stations (<code>page 50</code>).
+- Ditches, wells and trenches count when access or egress is limited, even with open sky above (<code>page 50</code>).
+- Barges, shipping containers and fish holds are possible confined spaces (<code>page 50</code>).
+- <strong>Air quality hazards</strong> (<code>page 51</code>): too little oxygen, toxic gas, and loss of consciousness.
+- <strong>Simple asphyxiants</strong> displace oxygen; normal air is about <strong>21 per cent</strong> oxygen (<code>page 51</code>).
+- At <strong>19.5 per cent or less</strong> expect rapid breathing, rapid pulse, clumsiness, emotional upset and fatigue (<code>page 51</code>).
+- Lower still gives nausea, vomiting, collapse, coma and death, sometimes within minutes (<code>page 51</code>).
+- Named asphyxiants: <strong>argon, nitrogen, carbon monoxide</strong> (<code>page 51</code>).
+- <strong>Chemical</strong> exposure by skin contact or ingestion, and <strong>fire or explosion</strong> from flammable liquid and gas (<code>page 52</code>).
+- <strong>Process hazards</strong>: residual chemicals, or release of the contents of a supply line (<code>page 52</code>).
+- <strong>Physical</strong>: noise, heat or cold, radiation, vibration, electricity and inadequate lighting (<code>page 52</code>).
+- <strong>Safety</strong>: moving parts, structural hazards, slips and falls, and vehicular or pedestrian traffic (<code>page 52</code>).
+- Also shifting or collapsing bulk material, and barrier failure causing a flood or release (<code>page 52</code>).
+- Also restricted visibility, and biological hazards such as viruses, sludge, fungi and mould (<code>page 52</code>).</p>
+<table>
+<thead>
+<tr>
+<th>Hazard group</th>
+<th>Example</th>
+<th>First control</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Oxygen deficiency</td>
+<td>Nitrogen purge, rusting, combustion</td>
+<td>Test, ventilate, no entry without BA</td>
+</tr>
+<tr>
+<td>Toxic gas</td>
+<td>Hydrogen sulphide in a sewer</td>
+<td>Test, ventilate, respirator, rescue plan</td>
+</tr>
+<tr>
+<td>Flammable atmosphere</td>
+<td>Solvent vapour in a tank</td>
+<td>Purge, test against LEL, no ignition</td>
+</tr>
+<tr>
+<td>Physical</td>
+<td>Heat, noise, poor light</td>
+<td>Cool, protect, light, rotate</td>
+</tr>
+<tr>
+<td>Engulfment</td>
+<td>Grain or sludge collapse</td>
+<td>Isolation, harness, lifeline</td>
+</tr>
+</tbody>
+</table>
+<p><em>What to write.</em> For 3 marks: the three tests plus three hazards. For 8 marks: definition, examples, air-quality hazards with 21 and 19.5 per cent, then the hazard groups.</p>
+<p><strong>Mark anchor.</strong> "21 per cent normal, 19.5 per cent is the floor." Those two numbers, with 6000 days and 10 per cent LEL, are the arithmetic of this module.</p>
+<p><strong>Exam trap.</strong> Oxygen deficiency is not the only way the air kills. An atmosphere can carry a fatal dose of carbon monoxide at a perfectly normal 20.9 per cent oxygen.</p>
+<h3 id="212-entering-a-confined-space-procedure-and-controls">2.12 Entering a confined space — procedure and controls<a class="anchor" href="#212-entering-a-confined-space-procedure-and-controls">#</a></h3>
+<p><em>In plain English.</em> The order is fixed. Test the air from outside, ventilate, then enter with a permit, an attendant and a way out. Anything that changes the order is an emergency waiting for a date.</p>
+<p><em>The detail.</em>
+- A trained and experienced person identifies and evaluates all existing and potential hazards first (<code>page 53</code>).
+- <strong>Air testing is done from outside</strong>, before entry, with remote probes and sampling lines (<code>page 53</code>).
+- The equipment must be calibrated and maintained before it is trusted (<code>page 53</code>).
+- The test must show three things (<code>page 53</code>): oxygen within safe limits, no hazardous atmosphere, ventilation operating properly.
+- Controls available are the usual three: engineering, administrative and PPE (<code>page 54</code>).
+- Engineering controls remove the hazard; administrative controls and PPE only reduce contact with it (<code>page 54</code>).
+- <strong>Mechanical ventilation is the standard engineering control</strong> inside a confined space (<code>page 54</code>).
+- <strong>The entry permit is the administrative control</strong>, and PPE is respirators, gloves and hearing protection (<code>page 54</code>).
+- Natural ventilation is unreliable and usually insufficient (<code>page 55</code>).
+- Mechanical ventilation needs a warning system that tells the worker at once if it fails (<code>page 55</code>).
+- The air supplied must be clean throughout the entire space, not only at the inlet (<code>page 55</code>).
+- <strong>Never substitute oxygen for fresh air.</strong> It sharply raises fire and explosion risk (<code>page 56</code>).
+- Ventilation use is recorded on the entry permit (<code>page 56</code>).
+- Air removed from the space is exhausted away from workers outside (<code>page 56</code>).
+- <strong>Hot work in a confined space</strong> requires all flammable gas, liquid and vapour removed first (<code>page 57</code>).
+- Ventilation then holds any flammable substance <strong>below 10 per cent of its lower explosive limit</strong> (<code>page 57</code>).
+- Oxygen is kept <strong>below 23 per cent and above 19.5 per cent</strong> (<code>page 57</code>).
+- Combustible coatings are cleaned or shielded, and no fuel or fuel container goes inside (<code>page 57</code>).</p>
+<table>
+<thead>
+<tr>
+<th>Step</th>
+<th>Action</th>
+<th>Number to remember</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Hazard identification by a trained person</td>
+<td>—</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Test from outside with remote probes</td>
+<td>21 per cent normal, 19.5 floor</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Mechanical ventilation with failure alarm</td>
+<td>Never oxygen</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Entry permit and attendant outside</td>
+<td>Yellow authorisation</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Hot work only after purging</td>
+<td>Under 10 per cent LEL</td>
+</tr>
+<tr>
+<td>6</td>
+<td>Re-test on any change of condition</td>
+<td>19.5 to 23 per cent band</td>
+</tr>
+</tbody>
+</table>
+<p><em>What to write.</em> For 5 marks: test from outside, the three results, ventilation, permit, attendant. For 8 marks: add the 10 per cent LEL and the 19.5 to 23 per cent band, plus the discharge direction.</p>
+<p><strong>Mark anchor.</strong> "Test outside, ventilate mechanically, permit the entry, never add oxygen." Plus 10 per cent LEL and the 19.5 to 23 per cent band.</p>
+<p><strong>Exam trap.</strong> Raising the oxygen to "help" a worker is the classic fatal error, and it is examinable in both directions: too little suffocates, too much turns a spark into a fire.</p>
+<h3 id="213-industrial-models-and-methodologies">2.13 Industrial models and methodologies<a class="anchor" href="#213-industrial-models-and-methodologies">#</a></h3>
+<p><em>In plain English.</em> These are the named procedures a company points to when asked how it manages safety. Each answers a different question. None replaces another, and the exam wants the difference rather than the list.</p>
+<p><em>The detail.</em>
+- The deck names <strong>seven</strong> (<code>page 58</code>, <code>page 59</code>).
+- <strong>Hierarchy of control</strong> — five levels from elimination at the top, then substitution, engineering, administrative and PPE (<code>page 58</code>).
+- <strong>Five steps of risk assessment</strong> — identify hazards, evaluate risks, assess feasibility of controls, implement, then monitor and review (<code>page 58</code>).
+- <strong>FMEA</strong> — a systematic approach that identifies potential failures in a process, their effects, and their likelihood (<code>page 59</code>).
+- <strong>JSA</strong> — break the job into individual tasks and evaluate the hazards of each task (<code>page 59</code>).
+- <strong>Incident investigation</strong> — determine the causes of an incident and identify how to prevent repeats (<code>page 59</code>).
+- <strong>Safety management system</strong> — goals and objectives, policies and procedures, programmes, then monitoring and evaluation (<code>page 59</code>).
+- <strong>Human factors engineering</strong> — design equipment, systems and environments around how people actually behave and think (<code>page 59</code>).</p>
+<table>
+<thead>
+<tr>
+<th>Model</th>
+<th>Question it answers</th>
+<th>When it is used</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Hierarchy of control</td>
+<td>What should we do first?</td>
+<td>Choosing any control</td>
+</tr>
+<tr>
+<td>Five-step risk assessment</td>
+<td>How do we decide?</td>
+<td>Before the job or the design</td>
+</tr>
+<tr>
+<td>JSA</td>
+<td>How can this job hurt someone?</td>
+<td>Task briefing, before work</td>
+</tr>
+<tr>
+<td>FMEA</td>
+<td>How can this part or step fail?</td>
+<td>Design and modification</td>
+</tr>
+<tr>
+<td>Incident investigation</td>
+<td>Why did it happen, and how do we stop a repeat?</td>
+<td>After an event</td>
+</tr>
+<tr>
+<td>Safety management system</td>
+<td>Who owns safety, and how is it checked?</td>
+<td>Always, at company level</td>
+</tr>
+<tr>
+<td>Human factors engineering</td>
+<td>Why did a competent person err?</td>
+<td>Design, procedures, interfaces</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>FMEA looks at a component or step failing</strong>; JSA looks at a person doing a task <strong>(standard)</strong>.</li>
+<li>FMEA is predictive and hardware-centred; JSA is task-centred and used before the job starts <strong>(standard)</strong>.</li>
+<li><strong>Choose by question</strong>: "how can this part fail?" is FMEA; "how can this job hurt someone?" is JSA <strong>(standard)</strong>.</li>
+<li><strong>The five-step assessment is a process, and the hierarchy is an order of preference</strong> (<code>page 58</code>).</li>
+<li>Merging them is the commonest conceptual error in this topic.</li>
+<li><strong>Why models matter</strong> — they make safety repeatable when the shift changes (<code>page 58</code>).</li>
+</ul>
+<p><em>What to write.</em> For 5 marks: FMEA against JSA, one paragraph each plus a contrast line. For 8 marks: five models with a one-line purpose each, then the FMEA and JSA contrast.</p>
+<p><strong>Mark anchor.</strong> "FMEA asks how the part fails; JSA asks how the person gets hurt." That single sentence is the whole of Q31.</p>
+<p><strong>Exam trap.</strong> A model's name without its question earns nothing. Each of the seven answers a different question, so write the question before the name.</p>
+<hr />
+<h2 id="3-answer-bank">3. Answer bank<a class="anchor" href="#3-answer-bank">#</a></h2>
+<p>Marks follow the module's weighting, not a guess: three for a list or a definition, five for a comparison or a procedure, eight for a developed explanation, and a 14-mark skeleton for the ESE Part B question.</p>
+<h3 id="31-three-mark-answers">3.1 Three-mark answers<a class="anchor" href="#31-three-mark-answers">#</a></h3>
+<p>Write three numbered lines. No introduction and no closing sentence. Every line below is under eighteen words and carries its own mark.</p>
+<p><strong>Q1 — Explain the term PPE.</strong>
+1. <strong>Definition</strong> — protective clothing, helmets, goggles or equipment shielding the body from injury or infection.
+2. <strong>Hazards</strong> — physical, electrical, heat, chemical, biohazard and airborne particulate matter.
+3. <strong>Two classes</strong> — simple for lower-risk hazards, complex for fatal or serious risk.</p>
+<p><strong>Q3 — Differentiate respiratory and non-respiratory equipment.</strong>
+1. <strong>Non-respiratory</strong> — guards head, eye, face, hand, arm, foot and leg against outside injury.
+2. <strong>Respiratory</strong> — protects the wearer against inhaling contaminated air in the workplace.
+3. <strong>The test</strong> — does the harm enter through the lungs, or strike the body?</p>
+<p><strong>Q5 — Classify personal hearing protection devices.</strong>
+1. <strong>Earplugs</strong> — sealed into the canal; disposable foam, premoulded, or banded canal caps.
+2. <strong>Earmuffs</strong> — seal around the outer ear; easier to fit correctly, hot to wear.
+3. <strong>Helmet-mounted muffs</strong> — the site version, where a hard hat is already worn.</p>
+<p><strong>Q6 — Define severity rate, incident rate and activity rate.</strong>
+1. <strong>Severity rate</strong> — days lost or charged per million man-hours worked.
+2. <strong>Incidence rate</strong> — injuries per thousand workers in the same period.
+3. <strong>Activity rate</strong> — training and inspection activity set against employees and man-hours.</p>
+<p><strong>Q16 — Six good housekeeping practices on a construction site.</strong>
+1. <strong>Access</strong> — walkways, stairs and egress kept clear of material, offcuts and cable.
+2. <strong>Storage</strong> — timber, rebar and pipe stacked in marked areas, never in an aisle.
+3. <strong>Waste</strong> — skips at the work face, spills cleaned at once, tools returned to store.</p>
+<p><em>Three lines, six practices: clear access, marked storage, skips, spill response, tool return, serviceable lighting.</em></p>
+<p><strong>Q26 — Three advantages of good housekeeping.</strong>
+1. <strong>Safety</strong> — fewer slips, trips, falls, struck-by and caught-in-between injuries.
+2. <strong>Flow</strong> — better use of floor space and less handling of material.
+3. <strong>Cost</strong> — less waste, fewer errors, lower breakdowns and better morale.</p>
+<p><strong>Q27 — Three management responsibilities for housekeeping.</strong>
+1. <strong>Provide</strong> — storage areas, containers, lighting, welfare facilities and prompt repairs.
+2. <strong>Schedule</strong> — cleaning rotas and a workspace checklist that is actually used.
+3. <strong>Enforce</strong> — inspect, correct and resource; an unchecked rule is not a rule.</p>
+<p><strong>Q29 — Hot work permit versus cold work permit.</strong>
+1. <strong>Hot work</strong> — red permit; any job with ignition, spark or flame, such as welding.
+2. <strong>Cold work</strong> — green permit; hazardous maintenance with no ignition source, such as painting.
+3. <strong>The test</strong> — a risk assessment of task and surroundings decides the colour.</p>
+<p><strong>Q30 — Six hazards associated with confined spaces.</strong>
+1. <strong>Air</strong> — oxygen deficiency, toxic gas, and displacement by a simple asphyxiant.
+2. <strong>Fire</strong> — flammable vapour or liquid, residues, and a live process supply line.
+3. <strong>Physical</strong> — noise, heat, electricity, poor light, moving parts, slips and falls.</p>
+<p><strong>Q95 — Enlist and explain the 5S.</strong>
+1. <strong>Seiri, sort; seiton, set in order</strong> — remove the unneeded, then place the rest by use.
+2. <strong>Seiso, shine; seiketsu, standardise</strong> — clean and maintain, then write the routine down.
+3. <strong>Shitsuke, sustain</strong> — keep the routine running until it becomes the culture.</p>
+<p><strong>Q96 — The five S principles for effective housekeeping.</strong>
+1. <strong>Sort</strong> — decide what belongs in the area at all.
+2. <strong>Set in order, then shine</strong> — position by frequency of use, then clean and maintain.
+3. <strong>Standardise, then sustain</strong> — make it a schedule, then make it a habit.</p>
+<p><strong>Q150 — What is 5S, and what are its benefits?</strong>
+1. <strong>What</strong> — a system for organising space so work is efficient, effective and safe.
+2. <strong>How</strong> — sort, set in order, shine, standardise, sustain; each worker cleans their area.
+3. <strong>Benefits</strong> — less wasted motion, fewer injuries, earlier fault detection, better morale.</p>
+<h3 id="32-five-mark-answers">3.2 Five-mark answers<a class="anchor" href="#32-five-mark-answers">#</a></h3>
+<p>Five numbered points, each a sentence or two. The fifth is usually the one that separates a pass from a credit.</p>
+<p><strong>Q2 — Assessing and choosing PPE.</strong>
+1. <strong>Assess the hazard</strong> — agent, route into the body, severity, and how long exposure lasts.
+2. <strong>Select to standard</strong> — certified for that hazard class, not merely available in stores.
+3. <strong>Fit and train</strong> — a respirator leaks at the seal, so fit-testing precedes issue.
+4. <strong>Nine characteristics</strong> (<code>page 14</code>) — adequate protection, minimum weight, minimum discomfort, flexible attachment, free movement, durable, conforms to IS, easy to clean, spares available.
+5. <strong>Maintain and review</strong> — inspect, replace, and re-assess when the process or agent changes.</p>
+<p><strong>Q4 — Strategies to make employees comfortable with PPE.</strong>
+1. <strong>Explain the harm</strong> — the wearer must know which specific injury the item prevents.
+2. <strong>Fit and size</strong> — several sizes, fit-testing, and adjustment that needs no tool.
+3. <strong>Reduce the burden</strong> — choose the lightest compliant item, and vent or cool where possible.
+4. <strong>Share the choice</strong> — trial two products and let the crew pick; ownership beats instruction.
+5. <strong>Supervisor example</strong> — a supervisor without the kit teaches that it is optional.</p>
+<p><strong>Q28 — Work permit system, and why it matters.</strong>
+1. <strong>Definition</strong> — a formal written system controlling jobs identified as potentially hazardous (<code>page 39</code>).
+2. <strong>Communication</strong> — it links departments, plant supervisors, operators and contracting agencies (<code>page 39</code>).
+3. <strong>Planning</strong> — the task, its hazards and its controls are written before work starts (<code>page 40</code>).
+4. <strong>Control</strong> — it keeps essential isolations and conditions in place for the duration (<code>page 40</code>).
+5. <strong>Closure</strong> — it returns the area to a safe state and hands it back formally (<code>page 40</code>).</p>
+<p><strong>Q31 — FMEA versus JSA.</strong>
+1. <strong>FMEA</strong> — a systematic look at how a process or component can fail, and what each failure causes (<code>page 59</code>).
+2. <strong>FMEA output</strong> — failure modes ranked by effect and likelihood, used to design the failure out.
+3. <strong>JSA</strong> — break the job into tasks, then evaluate the hazards of each task (<code>page 59</code>).
+4. <strong>JSA output</strong> — a safe method per step, used to brief the crew before work starts.
+5. <strong>The contrast</strong> — FMEA asks how the part fails; JSA asks how the person gets hurt.</p>
+<p><strong>Q72 — Need for hearing protection, and its classification.</strong>
+1. <strong>Why</strong> — noise damages hair cells that never regenerate, so the loss is permanent and painless.
+2. <strong>Earplugs</strong> — in the canal; foam, premoulded or banded; work under a helmet, hard to fit.
+3. <strong>Earmuffs</strong> — around the pinna; consistent seal, but uncomfortable in heat.
+4. <strong>Helmet-mounted muffs</strong> — for sites where a hard hat is already worn (<code>page 8</code>).
+5. <strong>Rated, not guessed</strong> — the NRR on the package must bring exposure under the limit <strong>(standard)</strong>.</p>
+<p><strong>Q75 — Importance and types of eye protection.</strong>
+1. <strong>Why</strong> — the eye has no spare, and a particle that scratches an arm can blind.
+2. <strong>Five hazards</strong> (<code>page 9</code>) — welding glare, chemical splash, intense light, dust and flying particles, molten metal.
+3. <strong>Non-ventilated goggles</strong> — no air passage, so splash cannot enter; they fog (<code>page 10</code>).
+4. <strong>Indirect-ventilated</strong> — baffled vents block large particles and splash, and limit fogging (<code>page 10</code>).
+5. <strong>Direct-ventilated and shields</strong> — best airflow, no splash protection; shields go over goggles (<code>page 10</code>).</p>
+<p><strong>Q81 — Precautions before entering a confined space.</strong>
+1. <strong>Assess</strong> — a trained person identifies every existing and potential hazard inside (<code>page 53</code>).
+2. <strong>Test from outside</strong> — remote probes and sampling lines, with calibrated equipment (<code>page 53</code>).
+3. <strong>Three results</strong> — oxygen safe, no hazardous atmosphere, ventilation working (<code>page 53</code>).
+4. <strong>Ventilate mechanically</strong> — blowers or fans, with a warning system if they fail (<code>page 55</code>).
+5. <strong>Authorise</strong> — a yellow entry permit, an attendant outside, and a rescue plan.</p>
+<p><strong>Q97 — Preventing air quality, fire and explosion hazards in confined spaces.</strong>
+1. <strong>Air</strong> — test from outside, then mechanical ventilation, with a failure alarm (<code>page 53</code>, <code>page 55</code>).
+2. <strong>Oxygen discipline</strong> — keep it within limits, and never substitute oxygen for fresh air (<code>page 56</code>).
+3. <strong>Hot work precondition</strong> — all flammable gas, liquid and vapour removed before ignition (<code>page 57</code>).
+4. <strong>Flammable limit</strong> — hold any flammable substance below 10 per cent of its lower explosive limit (<code>page 57</code>).
+5. <strong>Band and housekeeping</strong> — 19.5 to 23 per cent oxygen, coatings cleaned, no fuel inside (<code>page 57</code>).</p>
+<p><strong>Q98 — Measures against air quality issues, fire hazard and explosion risk.</strong>
+1. <strong>Before entry</strong> — hazard identification, outside air testing, calibrated instruments (<code>page 53</code>).
+2. <strong>Continuous ventilation</strong> — mechanical, clean throughout, exhausted away from outside workers (<code>page 55</code>, <code>page 56</code>).
+3. <strong>Permit</strong> — the entry authorisation records the ventilation and the conditions (<code>page 54</code>, <code>page 56</code>).
+4. <strong>Ignition control</strong> — no fuel or containers inside, welding equipment inspected (<code>page 57</code>).
+5. <strong>Fire and explosion limits</strong> — under 10 per cent LEL, oxygen 19.5 to 23 per cent (<code>page 57</code>).</p>
+<p><strong>Q146 — Define frequency, severity, incidence and activity rate.</strong>
+1. <strong>Frequency rate</strong> — disabling injuries per million man-hours worked (<code>page 32</code>).
+2. <strong>Severity rate</strong> — days lost or charged per million man-hours worked (<code>page 34</code>).
+3. <strong>Incidence rate</strong> — injuries per thousand workers <strong>(standard; heading only, <code>page 37</code>)</strong>.
+4. <strong>Activity rate</strong> — safety training and inspection activity against employees and man-hours (<code>page 38</code>).
+5. <strong>Base</strong> — every rate needs its base named, or it is only a fraction.</p>
+<p><strong>Q147 — The same four definitions, second wording.</strong>
+1. <strong>Frequency</strong> — how often a disabling injury occurs, normalised to one million hours.
+2. <strong>Severity</strong> — how much working time is lost, normalised to the same million hours.
+3. <strong>Incidence</strong> — how many workers per thousand are injured, needing no clock data.
+4. <strong>Activity</strong> — how much prevention work was done, per worker or per million hours.
+5. <strong>Use</strong> — frequency and incidence count events; severity counts cost; activity counts effort.</p>
+<p><strong>Q148 — Frequency and severity as safety performance indicators.</strong>
+1. <strong>Comparison</strong> — they show the most and least unsafe work between consecutive years (<code>page 27</code>).
+2. <strong>Diagnosis</strong> — they expose deficiency in the safety management system (<code>page 27</code>).
+3. <strong>Allocation</strong> — they direct improvement money to where the rate is worst (<code>page 27</code>).
+4. <strong>The pair</strong> — frequency alone hides severity; severity alone hides how often.
+5. <strong>Reading them</strong> — falling frequency with rising severity means fewer, worse accidents.</p>
+<h3 id="33-eight-mark-answers">3.3 Eight-mark answers<a class="anchor" href="#33-eight-mark-answers">#</a></h3>
+<p>Eight marks means three developed blocks plus a closing line, or four plus a table. Structure first, content second, then the two traps that cost marks.</p>
+<p><strong>Q73 — Four respiratory protective devices.</strong></p>
+<p><strong>Structure (8):</strong> position (2), four devices at one mark each (4), oxygen rule (2).</p>
+<p><strong>Answer</strong></p>
+<ul>
+<li><strong>Position</strong> — RPE protects the individual wearer from inhaling hazardous substances, and only where other controls cannot achieve adequate control (<code>page 15</code>).</li>
+<li><strong>Filtering face piece</strong> — non-powered, the wearer's breathing draws air through the filter (<code>page 17</code>).</li>
+<li><strong>Half mask</strong> — tight-fitting with replaceable cartridges, non-powered or powered (<code>page 17</code>).</li>
+<li><strong>Full-face respirator</strong> — tight-fitting and covers the eyes, so it doubles as eye protection (<code>page 19</code>).</li>
+<li><strong>Powered hood or helmet</strong> — loose-fitting, motor-driven, so there is no face-seal fit test (<code>page 19</code>).</li>
+<li><strong>Breathing apparatus</strong> — independent supply from cylinder or compressor, and the only option in oxygen deficiency (<code>page 17</code>).</li>
+<li><strong>Closing</strong> — a filter removes contamination; it cannot create oxygen.</li>
+</ul>
+<p><strong>Traps:</strong> A filtering device is not breathing apparatus, and that distinction decides whether entry is legal. "Loose-fitting filter mask" is a contradiction, because loose types exist only as powered respirators or BA.</p>
+<p><strong>Q74 — Health hazard monitoring and the OSHA hearing conservation programme.</strong></p>
+<p><strong>Structure (8):</strong> what monitoring means (2), the numbers (2), programme elements (3), the limitation (1).</p>
+<p><strong>Answer</strong></p>
+<ul>
+<li><strong>Monitoring</strong> measures both the hazard and the harm: noise survey and audiometry <strong>(standard)</strong>.</li>
+<li><strong>Exposure numbers</strong> — 90 dB(A) eight-hour limit, 85 dB(A) action level <strong>(standard, 29 CFR 1910.95)</strong>.</li>
+<li><strong>Exchange rate</strong> — 3 dB, so every 3 dB rise halves the permitted duration <strong>(standard)</strong>.</li>
+<li><strong>Elements</strong> — measurement, engineering and administrative control, protectors, audiometry, training, records <strong>(standard)</strong>.</li>
+<li><strong>Audiometry</strong> — baseline then annual; a threshold shift is 10 dB at 2000, 3000 and 4000 Hz <strong>(standard)</strong>.</li>
+<li><strong>Protection</strong> — must bring exposure below 85 dB(A), or below 90 for a shifted worker <strong>(standard)</strong>.</li>
+<li><strong>The deck's own content</strong> is only the device list: plugs, muffs, helmet-mounted muffs (<code>page 8</code>).</li>
+</ul>
+<p><strong>Traps:</strong> The deck quotes no decibel value, so do not attribute 85 or 90 to a page. Monitoring is not a control, because it detects harm after exposure.</p>
+<p><strong>Q76 — Different types of PPE.</strong></p>
+<p><strong>Structure (8):</strong> two axes (2), non-respiratory by body part (4), respiratory (1), hierarchy line (1).</p>
+<p><strong>Answer</strong></p>
+<ul>
+<li><strong>Two axes</strong> — by hazard nature, respiratory and non-respiratory; by design, simple and complex (<code>page 4</code>, <code>page 5</code>).</li>
+<li><strong>Head</strong> — helmets against falling objects, fixed-object impact, live contact and splash (<code>page 7</code>).</li>
+<li><strong>Eye and face</strong> — goggles and shields against glare, splash, light, dust and molten metal (<code>page 9</code>).</li>
+<li><strong>Ear</strong> — earplugs, earmuffs, helmet-mounted muffs (<code>page 8</code>).</li>
+<li><strong>Body</strong> — aprons, boiler suits and asbestos suits against fire, chemical and minor mishap (<code>page 11</code>).</li>
+<li><strong>Hand and foot</strong> — gloves, arm shields, barrier creams; safety shoes against molten metal and falling objects (<code>page 12</code>, <code>page 13</code>).</li>
+<li><strong>Respiratory</strong> — filtering respirators and breathing apparatus (<code>page 17</code>).</li>
+<li><strong>Closing</strong> — PPE protects the wearer and sits last in the hierarchy (<code>page 15</code>).</li>
+</ul>
+<p><strong>Traps:</strong> Six body parts with their hazards, never six product names. Do not omit the simple and complex split, which is the deck's own first classification.</p>
+<p><strong>Q77 — Four approaches to preventing inhalation of contaminated air.</strong></p>
+<p><strong>Structure (8):</strong> the hierarchy once (2), four approaches (4), why order matters (2).</p>
+<p><strong>Answer</strong></p>
+<ul>
+<li><strong>The order</strong> — elimination, substitution, engineering, administrative, then PPE (<code>page 15</code>).</li>
+<li><strong>Elimination</strong> — stop using the agent or stop the process that releases it.</li>
+<li><strong>Substitution</strong> — a less hazardous solvent, a water-based paint, a pellet instead of a powder <strong>(standard)</strong>.</li>
+<li><strong>Engineering</strong> — enclosure, isolation, and local exhaust ventilation at the source.</li>
+<li><strong>Administrative</strong> — rotate the crew, limit time in the area, permit the job (<code>page 54</code>).</li>
+<li><strong>PPE last</strong> — a respirator or breathing apparatus, where the four above cannot achieve control (<code>page 15</code>).</li>
+<li><strong>Selection</strong> — non-powered, powered, tight or loose fitting, chosen for the atmosphere (<code>page 17</code>, <code>page 19</code>).</li>
+<li><strong>Closing</strong> — the first four protect everyone in the area; the fifth protects one wearer.</li>
+</ul>
+<p><strong>Traps:</strong> Four approaches does not mean four respirators, because the question asks how to prevent inhalation. Oxygen deficiency admits no filter at all, so say that before recommending a device.</p>
+<p><strong>Q99 — Purpose and five industrial models.</strong></p>
+<p><strong>Structure (8):</strong> purpose (1), five models with a purpose each (5), the choice rule (2).</p>
+<p><strong>Answer</strong></p>
+<ul>
+<li><strong>Purpose</strong> — to give a company a repeatable method, so safety does not depend on who is on shift (<code>page 58</code>).</li>
+<li><strong>Hierarchy of control</strong> — five levels from elimination to PPE, used to choose the control (<code>page 58</code>).</li>
+<li><strong>Five-step risk assessment</strong> — identify, evaluate, assess feasibility, implement, monitor and review (<code>page 58</code>).</li>
+<li><strong>JSA</strong> — break the job into tasks and evaluate the hazard of each, before work (<code>page 59</code>).</li>
+<li><strong>FMEA</strong> — identify potential failures, their effects and their likelihood (<code>page 59</code>).</li>
+<li><strong>Incident investigation</strong> — find the causes and prevent the repeat (<code>page 59</code>).</li>
+<li><strong>Safety management system</strong> — goals, policy, procedures, programmes, then monitoring and evaluation (<code>page 59</code>).</li>
+<li><strong>Choice rule</strong> — the hierarchy picks a control; the assessment and JSA pick a method; FMEA predicts failure.</li>
+</ul>
+<p><strong>Traps:</strong> The deck lists seven, including human factors engineering (<code>page 59</code>), so five is a selection. A model's name without its purpose earns nothing, because each needs a verb.</p>
+<p><strong>Q100 — Goals and five widely adopted industrial models.</strong></p>
+<p><strong>Structure (8):</strong> the goal (2), five models (5), the closing link to culture (1).</p>
+<p><strong>Answer</strong></p>
+<ul>
+<li><strong>Goal</strong> — fewer injuries, compliant work, and a method that survives a change of staff (<code>page 58</code>).</li>
+<li><strong>Hierarchy of control</strong> — the shared answer to what to do first (<code>page 58</code>).</li>
+<li><strong>Five-step risk assessment</strong> — the shared answer to how to decide (<code>page 58</code>).</li>
+<li><strong>JSA and FMEA</strong> — task-level and component-level prediction, before and during design (<code>page 59</code>).</li>
+<li><strong>Incident investigation</strong> — the feedback loop that converts an event into a correction (<code>page 59</code>).</li>
+<li><strong>Safety management system</strong> — the framework holding goals, procedures and monitoring (<code>page 59</code>).</li>
+<li><strong>Human factors engineering</strong> — designing for how people actually behave (<code>page 59</code>).</li>
+<li><strong>Closing</strong> — models pay only when sustained, which is the deck's 5S lesson applied to safety (<code>page 74</code>).</li>
+</ul>
+<p><strong>Traps:</strong> The models are not alternatives, so give the set and what each answers. Naming seven when five are asked costs time, not marks.</p>
+<p><strong>Q149 — 5S in housekeeping, with advantages and disadvantages.</strong></p>
+<p><strong>Structure (8):</strong> the five S's (3), advantages (3), disadvantages (2).</p>
+<p><strong>Answer</strong></p>
+<ul>
+<li><strong>Seiri, sort</strong> — clear the area of everything not needed for the job (<code>page 70</code>).</li>
+<li><strong>Seiton, set in order</strong> — place what remains by who uses it and how often (<code>page 71</code>).</li>
+<li><strong>Seiso, shine</strong> — clean, and maintain equipment on a plan (<code>page 72</code>).</li>
+<li><strong>Seiketsu, standardise</strong> — assign tasks, set schedules, post instructions (<code>page 73</code>).</li>
+<li><strong>Shitsuke, sustain</strong> — keep it running, and keep everybody involved (<code>page 74</code>).</li>
+<li><strong>Advantages</strong> — cleaner and safer work, better floor use, smoother flow, less waste, lower breakdowns, fewer errors, better morale (<code>page 61</code>).</li>
+<li><strong>Disadvantages</strong> — time and labour cost, initial disruption, and relapse without the last two S's <strong>(standard)</strong>.</li>
+<li><strong>Cost of skipping it</strong> — slips, trips, falls, struck-by and caught-in-between injuries, and higher fire risk (<code>page 62</code>).</li>
+</ul>
+<p><strong>Traps:</strong> The deck gives advantages of housekeeping and disadvantages of poor housekeeping, so label the 5S disadvantages standard. Five S's alone is a 3-mark answer, because the evaluation carries half of these 8 marks.</p>
+<p><strong>Q151 — Hot work permit and cold work permit explained.</strong></p>
+<p><strong>Structure (8):</strong> hot work and its risks (3), cold work and examples (3), comparison (2).</p>
+<p><strong>Answer</strong></p>
+<ul>
+<li><strong>Hot work</strong> — a permit for work with a source of ignition where flammable material is nearby (<code>page 43</code>).</li>
+<li><strong>Examples</strong> — welding, soldering, cutting, brazing, and grinding or drilling near flammables (<code>page 43</code>).</li>
+<li><strong>Five risks</strong> — sparks in cracks, flammable residues, hot surfaces, conducted heat, explosive atmosphere (<code>page 46</code>).</li>
+<li><strong>Before hot work</strong> — test equipment, task PPE, clear combustibles, extinguishers ready, re-check after (<code>page 44</code>).</li>
+<li><strong>Cold work</strong> — a green permit for hazardous maintenance with no ignition hazard (<code>page 47</code>).</li>
+<li><strong>Classification</strong> — by risk assessment of task and environment, not by trade (<code>page 47</code>).</li>
+<li><strong>Examples</strong> — resin repairs, painting, heavy lifts, scaffold erection and dismantling (<code>page 48</code>).</li>
+<li><strong>Comparison</strong> — red is fire risk, green is no fire risk, yellow is confined space; neither colour means safe (<code>page 42</code>).</li>
+</ul>
+<p><strong>Traps:</strong> Cold work is not low-risk work, because painting and heavy lifts are both cold work. A hot work permit records the checks; it does not replace clearing the combustibles.</p>
+<h3 id="34-fourteen-mark-skeleton-ese-part-b">3.4 Fourteen-mark skeleton (ESE Part B)<a class="anchor" href="#34-fourteen-mark-skeleton-ese-part-b">#</a></h3>
+<p><strong>Likely shape:</strong> explain the types of PPE and their standards, then monitoring of safety performance, housekeeping and the work permit system, including entry into confined spaces. One and a half pages, two diagrams.</p>
+<p><strong>Paragraph plan</strong></p>
+<ol>
+<li><strong>PPE, defined and classified (2).</strong> Definition from <code>page 3</code>; the six hazard types; simple versus complex and who then assesses risk; PPE last in the hierarchy (<code>page 15</code>). <em>Quarter page.</em></li>
+<li><strong>Non-respiratory and respiratory equipment (3).</strong> Head, eye, ear, body, hand, foot, each with its hazard (<code>page 7</code>–<code>page 13</code>). Then respirators versus breathing apparatus, tight versus loose fitting, and the oxygen rule (<code>page 17</code>, <code>page 19</code>). <strong>Draw the RPE tree here.</strong> <em>Half page.</em></li>
+<li><strong>Standards (2).</strong> IS 2925 with 400 g, 3 kg from 1.5 m, 500 g from 3 m and 2000 V for a minute; IS 6994 gloves; IS 1989 boots with 1750 g and the 14.2 kgf·m toe cap. Show as a four-row table. <em>Quarter page.</em></li>
+<li><strong>Monitoring (3).</strong> Man-hours and the million-hour base; frequency and severity formulas with one worked example each; incidence and activity rates and what each is blind to; then the uses on <code>page 27</code>. <strong>Draw the rate box.</strong> <em>Half page.</em></li>
+<li><strong>Housekeeping and 5S (2).</strong> Elements compressed to six; three advantages; the six accident types from poor housekeeping (<code>page 62</code>); 5S with seiketsu and shitsuke named as the two that make it last (<code>page 73</code>, <code>page 74</code>). <em>Quarter page.</em></li>
+<li><strong>Permits and confined spaces (2).</strong> Eight objectives in six lines; red, green, yellow; excavation one month; then the entry sequence with 10 per cent LEL and the 19.5 to 23 per cent band (<code>page 53</code>–<code>page 57</code>). <em>Half page.</em></li>
+</ol>
+<table>
+<thead>
+<tr>
+<th>Paragraph</th>
+<th>Content</th>
+<th>Marks</th>
+<th>Minutes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>PPE defined and classified</td>
+<td>2</td>
+<td>3</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Non-respiratory and respiratory equipment</td>
+<td>3</td>
+<td>5</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Standards, as a four-row table</td>
+<td>2</td>
+<td>3</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Monitoring and the four rates</td>
+<td>3</td>
+<td>5</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Housekeeping and 5S</td>
+<td>2</td>
+<td>3</td>
+</tr>
+<tr>
+<td>6</td>
+<td>Permits and confined spaces</td>
+<td>2</td>
+<td>5</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Opening sentence to memorise.</strong> Personal protection fails at the last inch, so it is planned first and worn last.</p>
+<p><strong>Closing sentence.</strong> Every control above PPE is cheaper than an injury, and none of them depends on a worker remembering.</p>
+<p><strong>Diagrams:</strong> the RPE tree in paragraph 2, the rate box in paragraph 4. Both are in §5. Draw them small, label them, and refer to them in the text.</p>
+<p><strong>If the paper instead asks only about personal protection in the work environment (14):</strong> reallocate as types and standards (6), monitoring formulas and their use (4), then housekeeping, permits and confined-space entry as three compact blocks (4). Same content, equipment-first ordering.</p>
+<hr />
+<h2 id="4-definitions-and-numbers-to-memorise">4. Definitions and numbers to memorise<a class="anchor" href="#4-definitions-and-numbers-to-memorise">#</a></h2>
+<h3 id="41-the-four-formulas-and-the-two-worked-examples">4.1 The four formulas and the two worked examples<a class="anchor" href="#41-the-four-formulas-and-the-two-worked-examples">#</a></h3>
+<p>These are the only calculations in the module. The base is part of the answer, so write it every time.</p>
+<table>
+<thead>
+<tr>
+<th>Rate</th>
+<th>Formula</th>
+<th>Base</th>
+<th>Source</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Frequency rate</td>
+<td>FR = (disabling injuries × 1,000,000) ÷ man-hours worked</td>
+<td>million hours</td>
+<td><code>page 32</code>, <code>page 33</code></td>
+</tr>
+<tr>
+<td>Severity rate</td>
+<td>SR = (days lost or charged × 1,000,000) ÷ man-hours worked</td>
+<td>million hours</td>
+<td><code>page 34</code>, <code>page 36</code></td>
+</tr>
+<tr>
+<td>Incidence rate</td>
+<td>IR = (injuries × 1000) ÷ average number of workers</td>
+<td>thousand workers</td>
+<td><strong>(standard)</strong> — heading only, <code>page 37</code></td>
+</tr>
+<tr>
+<td>Activity rate</td>
+<td>activities conducted ÷ employees or man-hours, scaled to 1000 or a million</td>
+<td>thousand workers or million hours</td>
+<td><strong>(standard)</strong> — prose only, <code>page 38</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Frequency, worked.</strong> 500 workers, 2000 hours each, 5 disabling injuries. Man-hours = 500 × 2000 = 1,000,000. FR = 5 × 1,000,000 ÷ 1,000,000 = <strong>5</strong> (<code>page 33</code>).</p>
+<p><strong>Severity, worked.</strong> 2000 workers, 2000 hours each, 100 days lost and one death. Man-hours = 4,000,000. Days = 100 + 6000 = 6100. SR = 6100 × 1,000,000 ÷ 4,000,000 = <strong>1525</strong> (<code>page 36</code>).</p>
+<p><strong>Severity, partial disablement.</strong> The same plant, 100 days lost plus 35 days for a cut fingertip, gives 135 days (<code>page 35</code>). Setting 135 against 4,000,000 hours gives about 34.</p>
+<p><strong>Incidence, worked.</strong> 500 workers and 8 injuries give IR = 8 × 1000 ÷ 500 = <strong>16</strong> per thousand workers <strong>(standard)</strong>.</p>
+<p><strong>Units.</strong> Man-hours counts hours, not people. Days lost counts days, not shifts. Mixing them is the error that survives to the final answer.</p>
+<p><strong>Rounding.</strong> Report frequency to one decimal, severity to a whole number, and state the base every time.</p>
+<p><strong>If the hours are unknown,</strong> estimate man-days worked × hours per day, and say in the answer that it is an estimate (<code>page 29</code>).</p>
+<p><strong>What a rising severity rate means.</strong> Same injury count, longer absences: either the work got more dangerous or the return-to-work process got slower. The rate cannot tell you which, so say so.</p>
+<p><strong>What the examiner checks.</strong> That the numerator matches the rate's name, and that the denominator is man-hours for both frequency and severity. Most lost marks here are arithmetic, not theory.</p>
+<p><strong>Why the base is a million</strong> (<code>page 32</code>). 500 workers, 40 hours a week, 50 weeks a year, is exactly 1,000,000 hours. It is a round comparability base, not a threshold.</p>
+<p><strong>The two charges to remember.</strong> A death is charged as <strong>6000 days</strong> under IS 3786 (<code>page 30</code>). A disabling injury is one that lasts beyond the day or shift of the accident (<code>page 30</code>).</p>
+<p><strong>Numbers that are not in the deck, and must be labelled when used.</strong> Every decibel value, the NRR concept, the incidence-rate formula, the 5S disadvantages, and the filter classes. The deck's silence on noise limits is itself worth a sentence, because it shows which source you are quoting.</p>
+<h3 id="42-terms-and-values-in-one-table">4.2 Terms and values, in one table<a class="anchor" href="#42-terms-and-values-in-one-table">#</a></h3>
+<table>
+<thead>
+<tr>
+<th>Term or number</th>
+<th>Exact value or definition</th>
+<th>Used in</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PPE</td>
+<td>Protective clothing, helmets, goggles or equipment protecting the body from injury or infection</td>
+<td>Q1, Q76 (<code>page 3</code>)</td>
+</tr>
+<tr>
+<td>Simple PPE</td>
+<td>Basic design, lower-risk hazards, user assumed to know the hazard</td>
+<td>Q1, Q76 (<code>page 4</code>)</td>
+</tr>
+<tr>
+<td>Complex PPE</td>
+<td>Technical design, fatal or serious risk, user cannot identify the hazard</td>
+<td>Q1, Q76 (<code>page 4</code>)</td>
+</tr>
+<tr>
+<td>Requisite characteristics</td>
+<td>Nine: adequate protection, minimum weight, minimum discomfort, flexible attachment, free movement, durable, conforms to IS, easy to clean and repair, spares available</td>
+<td>Q2 (<code>page 14</code>)</td>
+</tr>
+<tr>
+<td>RPE rule</td>
+<td>Used only where adequate control cannot be achieved by other means</td>
+<td>Q2, Q77 (<code>page 15</code>)</td>
+</tr>
+<tr>
+<td>Respirator</td>
+<td>Filtering device removing contaminants from workplace air</td>
+<td>Q73 (<code>page 17</code>)</td>
+</tr>
+<tr>
+<td>Breathing apparatus</td>
+<td>Independent supply of breathing-quality air; required in oxygen deficiency</td>
+<td>Q73 (<code>page 17</code>)</td>
+</tr>
+<tr>
+<td>Man-hours worked</td>
+<td>Total employee-hours of all employees, contractors included, from payroll or clock</td>
+<td>Q146 (<code>page 29</code>)</td>
+</tr>
+<tr>
+<td>Disabling injury</td>
+<td>Injury causing disablement beyond the day or shift of the accident</td>
+<td>Q146 (<code>page 30</code>)</td>
+</tr>
+<tr>
+<td>Reportable disabling injury</td>
+<td>Injury causing death or disablement to the extent a statute prescribes</td>
+<td>Q146 (<code>page 30</code>)</td>
+</tr>
+<tr>
+<td>Man-days lost</td>
+<td>Days of earning capacity lost; death charged at <strong>6000 days</strong> under IS 3786</td>
+<td>Q146, Q148 (<code>page 30</code>)</td>
+</tr>
+<tr>
+<td>Million-hour base</td>
+<td>500 workers × 40 hours × 50 weeks = 1,000,000 hours</td>
+<td>Q148 (<code>page 32</code>)</td>
+</tr>
+<tr>
+<td>Incidence rate</td>
+<td>Injuries per <strong>1000</strong> workers</td>
+<td>Q146, Q147 (standard, <code>page 37</code>)</td>
+</tr>
+<tr>
+<td>Activity rate</td>
+<td>Safety training and inspection activity against employees and man-hours</td>
+<td>Q146 (<code>page 38</code>)</td>
+</tr>
+<tr>
+<td>Housekeeping elements</td>
+<td>Twelve: dust, facilities, flooring, lighting, aisles, spills, waste, tools, maintenance, storage, clutter, workspace</td>
+<td>Q16, Q26 (<code>page 63</code>–<code>page 66</code>)</td>
+</tr>
+<tr>
+<td>Accidents from poor housekeeping</td>
+<td>Six: slips, trips and falls; caught in between; struck by falling; struck by moving; cut or stabbed; struck against</td>
+<td>Q26 (<code>page 62</code>)</td>
+</tr>
+<tr>
+<td>Compressed air rule</td>
+<td>Never used on people or equipment; it drives particles under the skin or into the eye</td>
+<td>Q16 (<code>page 63</code>)</td>
+</tr>
+<tr>
+<td>5S</td>
+<td>Seiri sort, seiton set in order, seiso shine, seiketsu standardise, shitsuke sustain</td>
+<td>Q95, Q96, Q149, Q150 (<code>page 68</code>, <code>page 69</code>)</td>
+</tr>
+<tr>
+<td>Work permit</td>
+<td>Formal written system controlling jobs identified as potentially hazardous</td>
+<td>Q28 (<code>page 39</code>)</td>
+</tr>
+<tr>
+<td>Permit objectives</td>
+<td>Eight, from written permission to returning the area to a safe state</td>
+<td>Q28 (<code>page 40</code>)</td>
+</tr>
+<tr>
+<td>Hot work permit</td>
+<td><strong>Red</strong>; any job involving ignition, spark or flame</td>
+<td>Q29, Q151 (<code>page 42</code>)</td>
+</tr>
+<tr>
+<td>Cold work permit</td>
+<td><strong>Green</strong>; hazardous maintenance with no ignition hazard</td>
+<td>Q29, Q151 (<code>page 42</code>)</td>
+</tr>
+<tr>
+<td>Confined space entry</td>
+<td><strong>Yellow</strong> authorisation</td>
+<td>Q81, Q151 (<code>page 42</code>)</td>
+</tr>
+<tr>
+<td>Excavation authorisation</td>
+<td>Valid <strong>1 month</strong>, renewable for <strong>3 months</strong>, applied <strong>3 days</strong> before expiry</td>
+<td>Q151 (<code>page 42</code>)</td>
+</tr>
+<tr>
+<td>Confined space</td>
+<td>Fully or partially enclosed, not for continuous occupancy, limited entry or exit, able to harm</td>
+<td>Q30 (<code>page 49</code>)</td>
+</tr>
+<tr>
+<td>Normal oxygen</td>
+<td>About <strong>21 per cent</strong></td>
+<td>Q30, Q97 (<code>page 51</code>)</td>
+</tr>
+<tr>
+<td>Oxygen deficiency</td>
+<td><strong>19.5 per cent or less</strong>: rapid breathing, rapid pulse, clumsiness, fatigue, then collapse</td>
+<td>Q30, Q97 (<code>page 51</code>)</td>
+</tr>
+<tr>
+<td>Asphyxiants named</td>
+<td>Argon, nitrogen, carbon monoxide</td>
+<td>Q30 (<code>page 51</code>)</td>
+</tr>
+<tr>
+<td>Hot work in confined space</td>
+<td>Flammable substance below <strong>10 per cent of the lower explosive limit</strong></td>
+<td>Q97, Q98 (<code>page 57</code>)</td>
+</tr>
+<tr>
+<td>Oxygen band for hot work</td>
+<td>Below <strong>23 per cent</strong>, above <strong>19.5 per cent</strong></td>
+<td>Q97, Q98 (<code>page 57</code>)</td>
+</tr>
+<tr>
+<td>Oxygen substitution</td>
+<td>Never, because it sharply raises fire and explosion risk</td>
+<td>Q98 (<code>page 56</code>)</td>
+</tr>
+<tr>
+<td>Helmet standard</td>
+<td>IS 2925: 1984, non-metallic shell</td>
+<td>§2.5 (<code>page 20</code>)</td>
+</tr>
+<tr>
+<td>Helmet sizes</td>
+<td>Small 500–540 mm, medium 540–590 mm, large 590–640 mm headband</td>
+<td>§2.5 (<code>page 20</code>)</td>
+</tr>
+<tr>
+<td>Helmet mass</td>
+<td><strong>400 g maximum</strong></td>
+<td>§2.5 (<code>page 21</code>)</td>
+</tr>
+<tr>
+<td>Helmet shock test</td>
+<td><strong>3 kg</strong> wooden block from <strong>1.5 m</strong></td>
+<td>§2.5 (<code>page 22</code>)</td>
+</tr>
+<tr>
+<td>Helmet penetration test</td>
+<td><strong>500 g</strong> plumb, conical steel point, from <strong>3 m</strong></td>
+<td>§2.5 (<code>page 22</code>)</td>
+</tr>
+<tr>
+<td>Helmet electrical test</td>
+<td><strong>2000 V, 50 Hz, one minute</strong></td>
+<td>§2.5 (<code>page 22</code>)</td>
+</tr>
+<tr>
+<td>Helmet water absorption</td>
+<td>Under <strong>5 per cent</strong> after 24 hours at 25 °C</td>
+<td>§2.5 (<code>page 22</code>)</td>
+</tr>
+<tr>
+<td>Helmet heat test</td>
+<td><strong>15 minutes</strong> in an oven at 93 °C; the deck prints 93° ± 50 °C</td>
+<td>§2.5 (<code>page 22</code>)</td>
+</tr>
+<tr>
+<td>Helmet flame test</td>
+<td>Barthel burner, IS 4355: 1977, <strong>10 seconds</strong>, no visible damage</td>
+<td>§2.5 (<code>page 22</code>)</td>
+</tr>
+<tr>
+<td>Glove standard</td>
+<td>IS 6994 (Part 1): 1973, eleven types; cotton drill 315 g/m², tolerance 19 g/m²</td>
+<td>§2.5 (<code>page 23</code>)</td>
+</tr>
+<tr>
+<td>Boot standard</td>
+<td>IS 1989 (Parts 1 and 2): 1986; ankle high, six eyelets, steel toe cap</td>
+<td>§2.5 (<code>page 25</code>)</td>
+</tr>
+<tr>
+<td>Boot mass</td>
+<td><strong>1750 g</strong> per pair at size 8 with hob nails, <strong>1650 g</strong> without, <strong>75 g</strong> per size step</td>
+<td>§2.5 (<code>page 26</code>)</td>
+</tr>
+<tr>
+<td>Toe cap standard</td>
+<td>IS 5852: 1996, resisting <strong>14.2 kgf·m</strong></td>
+<td>§2.5 (<code>page 26</code>)</td>
+</tr>
+<tr>
+<td>Noise limit</td>
+<td><strong>90 dB(A)</strong> eight-hour average; <strong>85 dB(A)</strong> action level; <strong>3 dB</strong> exchange</td>
+<td>Q74 (<strong>standard, OSHA 29 CFR 1910.95</strong>)</td>
+</tr>
+<tr>
+<td>Threshold shift</td>
+<td><strong>10 dB</strong> averaged at 2000, 3000 and 4000 Hz</td>
+<td>Q74 (<strong>standard</strong>)</td>
+</tr>
+<tr>
+<td>NIOSH recommended limit</td>
+<td><strong>85 dB(A)</strong> for a full shift</td>
+<td>Q74 (<strong>standard</strong>)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="5-diagrams-to-be-able-to-draw">5. Diagrams to be able to draw<a class="anchor" href="#5-diagrams-to-be-able-to-draw">#</a></h2>
+<h3 id="51-the-eight-figures-and-how-to-draw-each">5.1 The eight figures, and how to draw each<a class="anchor" href="#51-the-eight-figures-and-how-to-draw-each">#</a></h3>
+<p>A diagram in this module earns marks for labels, not for artistry. Draw the box, name the parts, and write the number beside the part it applies to. Each figure below takes under two minutes.</p>
+<table>
+<thead>
+<tr>
+<th>Figure</th>
+<th>Source</th>
+<th>What to draw</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>RPE selection tree</strong></td>
+<td><code>page 15</code>, <code>page 17</code>, <code>page 19</code></td>
+<td>Top box: is the atmosphere oxygen-deficient? Yes leads to breathing apparatus only. No leads to respirator, then split non-powered and powered, tight and loose fitting, with one example at each leaf.</td>
+</tr>
+<tr>
+<td><strong>Helmet components</strong></td>
+<td><code>page 21</code></td>
+<td>Side view: peak at the front, ventilation holes on the crown, headband harness inside, anti-concussion tapes crossing, chin strap below. Label 400 g, and the four marking items.</td>
+</tr>
+<tr>
+<td><strong>Goggle ventilation</strong></td>
+<td><code>page 10</code></td>
+<td>Three outlines. Left: sealed body, vent crossed out, caption "no splash, fogs". Centre: baffled vent, caption "splash resistant, less fog". Right: open vent, caption "no fog, no splash protection".</td>
+</tr>
+<tr>
+<td><strong>Rate box</strong></td>
+<td><code>page 32</code>–<code>page 36</code></td>
+<td>Two stacked fractions. Top: injuries × 1,000,000 over man-hours. Bottom: days × 1,000,000 over man-hours. Write 5 and 1525 beside them, and the word "base" against the million.</td>
+</tr>
+<tr>
+<td><strong>5S cycle</strong></td>
+<td><code>page 67</code>–<code>page 74</code></td>
+<td>Five boxes clockwise, Japanese word above the English. Mark the first three "change the workplace" and the last two "keep the change".</td>
+</tr>
+<tr>
+<td><strong>Permit decision flow</strong></td>
+<td><code>page 42</code>, <code>page 47</code>, <code>page 49</code></td>
+<td>Diamonds: ignition source? then red. Confined space? then yellow. Neither, but hazardous? then green. Box under it: excavation, one month, renewable three.</td>
+</tr>
+<tr>
+<td><strong>Confined-space entry ladder</strong></td>
+<td><code>page 53</code>–<code>page 57</code></td>
+<td>Six rungs down: assess, test outside, ventilate, permit and attendant, enter with rescue ready, re-test on change. Write 21 and 19.5 per cent on rung two, 10 per cent LEL on rung five.</td>
+</tr>
+<tr>
+<td><strong>Housekeeping contrast</strong></td>
+<td><code>page 61</code>, <code>page 62</code></td>
+<td>Left column: clean, marked, stored, maintained, with an arrow to fewer slips and less fire risk. Right column: the same words struck through, with an arrow to the six accident types.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Label discipline.</strong> Put the number on the figure, not in the paragraph beside it. A rate box without the million mark, or an entry ladder without 19.5 per cent, is a picture rather than an answer.</p>
+<p><strong>Deck caution.</strong> The <code>page 10</code> goggle table extracted with its columns out of order. Draw the three types from the logic, not from the slide's layout.</p>
+<p><strong>One idea per figure.</strong> If a drawing needs three captions it is two drawings, and the second one costs a minute.</p>
+<p>Three rules for all eight. Draw them small, about a third of a page each. Refer to them in the text by name, because an unmentioned diagram is marked as decoration.</p>
+<hr />
+<h2 id="6-say-this-if-grilled">6. Say-this-if-grilled<a class="anchor" href="#6-say-this-if-grilled">#</a></h2>
+<h3 id="61-seventeen-lines-to-have-ready">6.1 Seventeen lines to have ready<a class="anchor" href="#61-seventeen-lines-to-have-ready">#</a></h3>
+<p>Say these in a viva, an internal, or the two minutes before the paper is collected. Each one is short enough to repeat from memory.</p>
+<ol>
+<li>PPE is the last line of defence, not the first. It protects one wearer, only while it fits and is worn, and it fails without a sound.</li>
+<li>Simple PPE guards low-risk hazards and assumes the user knows them. Complex PPE guards fatal risk and assumes the user cannot identify it.</li>
+<li>A filter removes contamination from the air around you, and it cannot make oxygen. That is why every filter is banned in an oxygen-deficient space.</li>
+<li>Frequency counts injuries per million hours; severity counts days per million hours. The 6000-day charge for a death is what makes severity bite.</li>
+<li>One million hours is 500 workers at 40 hours for 50 weeks. It is a comparability base, not a safety target.</li>
+<li>The deck has the incidence-rate heading and nothing under it, and defines activity rate in words only. I quote the standard formula and say so.</li>
+<li>The deck quotes no decibel values at all. 85 and 90 dB(A) are OSHA, and I label them as OSHA in the answer.</li>
+<li>Housekeeping is a condition; 5S is the system that produces it. Standardise and sustain are the two S's that stop it decaying back.</li>
+<li>Cold work is not safe work. Painting a tank and erecting a scaffold are both cold work, and the permit only certifies that ignition is not the hazard.</li>
+<li>In a confined space the oxygen band for hot work is 19.5 to 23 per cent, and the flammable limit is 10 per cent of the LEL. Adding oxygen to help the worker is the classic fatal error.</li>
+<li>The four rates are one idea in four costumes. Ask what is counted on top and underneath, and the formula writes itself.</li>
+<li>A permit expires, and a changed condition voids it. That is why the signature is dated and the isolation is tagged.</li>
+<li>Excavation is the only authorisation with a stated life: one month, renewable for three, applied three days early.</li>
+<li>The helmet standard is a list of events: a dropped tool, a falling bolt, a live cable, a hot surface, a flame.</li>
+<li>Six thousand days is how the bookkeeping prices a death. Call it a convention, and you have shown you understand it.</li>
+<li>The compressed air rule is a two-second mark: never blow dust off a person, because it embeds the particle under the skin.</li>
+<li>The nine characteristics are a procurement list. Adequate for the hazard, light, comfortable, easy to clean, spares available: that is five of them.</li>
+</ol>
+<p><strong>If an examiner pushes on any one of these,</strong> give the number first and the consequence second. "Ten per cent of the LEL, because above that a spark is enough" beats a paragraph of definition.</p>
+  </main>
+</div>
+<button id="chat-btn" title="Ask about this page (select text first)">✳</button>
+<div id="sel-chip">Ask about this</div>
+<div id="chat-panel" role="dialog" aria-label="Ask about this page">
+  <div id="chat-head"><span>Ask this page</span><span class="sp"></span><button id="chat-close" title="Close">✕</button></div>
+  <div id="chat-quote"></div>
+  <div id="chat-log"></div>
+  <form id="chat-form" autocomplete="off">
+    <textarea id="chat-input" rows="1" placeholder="Ask about the selection or the section…"></textarea>
+    <button id="chat-send" title="Send">↑</button>
+  </form>
+  <div id="chat-foot">Select text → “Ask about this”. Enter sends, Shift+Enter newline.</div>
+</div>
+<div class="tools">
+  <button id="theme" title="Toggle light / dark">☾</button>
+  <button id="top" title="Back to top">↑</button>
+</div>
+<script>
+(function(){
+  var root=document.documentElement, key='minotes-theme';
+  var saved=localStorage.getItem(key);
+  var prefers=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';
+  root.setAttribute('data-theme', saved || prefers);
+
+  var btn=document.getElementById('theme');
+  function sync(){ if(btn) btn.textContent = root.getAttribute('data-theme')==='dark' ? '\u2600' : '\u263E'; }
+  sync();
+  if(btn) btn.addEventListener('click',function(){
+    var next = root.getAttribute('data-theme')==='dark' ? 'light' : 'dark';
+    root.setAttribute('data-theme', next); localStorage.setItem(key,next); sync();
+  });
+
+  var bar=document.getElementById('progress');
+  if(bar) addEventListener('scroll',function(){
+    var h=document.documentElement.scrollHeight-innerHeight;
+    bar.style.width=(h>0?(scrollY/h*100):0)+'%';
+  },{passive:true});
+
+  document.querySelectorAll('pre').forEach(function(pre){
+    var b=document.createElement('button');
+    b.className='copy'; b.textContent='copy';
+    b.addEventListener('click',function(){
+      var t=pre.querySelector('code'); var txt=t?t.innerText:pre.innerText;
+      navigator.clipboard.writeText(txt).then(function(){
+        b.textContent='copied'; setTimeout(function(){b.textContent='copy';},1200);
+      });
+    });
+    pre.appendChild(b);
+  });
+
+  document.querySelectorAll('main table').forEach(function(t){
+    if(t.parentElement.classList.contains('table-scroll')) return;
+    var w=document.createElement('div'); w.className='table-scroll';
+    t.parentNode.insertBefore(w,t); w.appendChild(t);
+  });
+
+  var links=[].slice.call(document.querySelectorAll('.sidebar a[href^="#"]'));
+  var map={}; links.forEach(function(a){ map[a.getAttribute('href').slice(1)]=a; });
+  var heads=[].slice.call(document.querySelectorAll('main h2[id], main h3[id]'));
+  if('IntersectionObserver' in window && heads.length){
+    var obs=new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if(!e.isIntersecting) return;
+        links.forEach(function(a){a.classList.remove('active');});
+        var a=map[e.target.id]; if(a){a.classList.add('active');}
+      });
+    },{rootMargin:'-10% 0px -75% 0px'});
+    heads.forEach(function(h){obs.observe(h);});
+  }
+
+  var top=document.getElementById('top');
+  if(top) top.addEventListener('click',function(){ scrollTo({top:0,behavior:'smooth'}); });
+})();
+
+(function(){
+  var API="/api/chat";
+  var panel=document.getElementById("chat-panel"),
+      btn=document.getElementById("chat-btn"),
+      chip=document.getElementById("sel-chip"),
+      quote=document.getElementById("chat-quote"),
+      log=document.getElementById("chat-log"),
+      input=document.getElementById("chat-input"),
+      send=document.getElementById("chat-send"),
+      form=document.getElementById("chat-form");
+
+  if(!panel) return;
+  var pendingSelection="", busy=false, lastSelection="";
+
+  function esc(s){return s.replace(/[&<>]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;"}[c];});}
+
+  // minimal markdown: fenced code, inline code, bold, bullets, numbered lists
+  function md(src){
+    var parts=src.split(/```/), out="";
+    for(var i=0;i<parts.length;i++){
+      if(i%2){ out+="<pre><code>"+esc(parts[i].replace(/^\w*\n/,""))+"</code></pre>"; continue; }
+      var t=esc(parts[i]);
+      t=t.replace(/`([^`\n]+)`/g,"<code>$1</code>").replace(/\*\*([^*]+)\*\*/g,"<b>$1</b>");
+      var lines=t.split(/\n/), html="", inUl=false, inOl=false;
+      for(var j=0;j<lines.length;j++){
+        var line=lines[j];
+        if(/^\s*[-*]\s+/.test(line)){
+          if(inOl){html+="</ol>";inOl=false;}
+          if(!inUl){html+="<ul>";inUl=true;}
+          html+="<li>"+line.replace(/^\s*[-*]\s+/,"")+"</li>"; continue;
+        }
+        if(/^\s*\d+[.)]\s+/.test(line)){
+          if(inUl){html+="</ul>";inUl=false;}
+          if(!inOl){html+="<ol>";inOl=true;}
+          html+="<li>"+line.replace(/^\s*\d+[.)]\s+/,"")+"</li>"; continue;
+        }
+        if(inUl){html+="</ul>";inUl=false;}
+        if(inOl){html+="</ol>";inOl=false;}
+        if(line.trim()==="") continue;
+        html+="<p>"+line+"</p>";
+      }
+      if(inUl)html+="</ul>";
+      if(inOl)html+="</ol>";
+      out+=html;
+    }
+    return out;
+  }
+
+  function outline(){
+    return [].slice.call(document.querySelectorAll("main h2, main h3")).slice(0,40)
+      .map(function(h){return (h.tagName==="H3"?"  - ":"- ")+h.textContent.replace(/#$/,"").trim();}).join("\n");
+  }
+
+  function sectionFor(node){
+    var el = node && (node.nodeType===1?node:node.parentElement);
+    if(!el || !el.closest) return "";
+    el = el.closest("main") ? el : null;
+    if(!el) return "";
+    var heads=[].slice.call(document.querySelectorAll("main h2, main h3"));
+    var cur=null, idx=-1;
+    for(var i=0;i<heads.length;i++){
+      if(heads[i].compareDocumentPosition(el) & Node.DOCUMENT_POSITION_FOLLOWING) { cur=heads[i]; idx=i; }
+    }
+    if(!cur) return "";
+    var stop = heads[idx+1] || null, txt=[], n=cur;
+    while((n=n.nextSibling) && n!==stop){ if(n.textContent) txt.push(n.textContent); }
+    return (cur.textContent+"\n"+txt.join("\n")).replace(/\s+\n/g,"\n").slice(0,3000);
+  }
+
+  function placeChip(x,y){
+    chip.style.left=x+"px"; chip.style.top=(y+window.scrollY-8)+"px"; chip.style.display="block";
+  }
+  function hideChip(){ chip.style.display="none"; }
+
+  document.addEventListener("mouseup",function(e){
+    setTimeout(function(){
+      var s=window.getSelection(), text=s?s.toString().trim():"";
+      if(!text || text.length<3 || !s.anchorNode || !(s.anchorNode.parentElement||s.anchorNode).closest("main")){hideChip();return;}
+      lastSelection=text;
+      var r=s.getRangeAt(0).getBoundingClientRect();
+      placeChip(r.left+r.width/2, Math.max(r.top,8));
+    },10);
+  });
+  document.addEventListener("mousedown",function(e){ if(e.target!==chip) hideChip(); });
+
+  chip.addEventListener("mousedown",function(e){ e.preventDefault(); });
+  chip.addEventListener("click",function(e){
+    e.stopPropagation();
+    pendingSelection=lastSelection; hideChip(); open(pendingSelection);
+  });
+
+  function open(sel){
+    panel.classList.add("open");
+    if(sel){ quote.style.display="block"; quote.textContent=sel; pendingSelection=sel; }
+    else { quote.style.display="none"; quote.textContent=""; pendingSelection=""; }
+    setTimeout(function(){input.focus();},60);
+  }
+  function close(){ panel.classList.remove("open"); }
+
+  btn.addEventListener("click",function(){ panel.classList.contains("open")?close():open(lastSelection||""); });
+  document.getElementById("chat-close").addEventListener("click",close);
+  document.addEventListener("keydown",function(e){ if(e.key==="Escape") close(); });
+
+  function addMsg(cls,html){
+    var d=document.createElement("div"); d.className="msg "+cls; d.innerHTML=html; log.appendChild(d);
+    log.scrollTop=log.scrollHeight; return d;
+  }
+
+  async function ask(q){
+    if(busy||!q.trim()) return;
+    busy=true; send.disabled=true;
+    addMsg("user",esc(q));
+    var bot=addMsg("bot",'<span class="cursor"></span>');
+    var acc="";
+    var sid=sessionStorage.getItem("mn-sid");
+    if(!sid){ sid=(crypto.randomUUID?crypto.randomUUID():String(Date.now())+Math.random().toString(16).slice(2)); sessionStorage.setItem("mn-sid",sid); }
+    var payload={q:q, sid:sid, sel:pendingSelection||"", page:document.querySelector("h1")?document.querySelector("h1").textContent.trim():document.title,
+                 section:sectionFor(window.getSelection()&&window.getSelection().anchorNode?"":document.querySelector("main h2"))||"",
+                 outline:outline()};
+    // section: prefer the one containing the selection, else the first heading on screen
+    try{
+      var sel=window.getSelection();
+      if(pendingSelection && sel && sel.anchorNode){ payload.section=sectionFor(sel.anchorNode); }
+      if(!payload.section){
+        var vis=[].slice.call(document.querySelectorAll("main h2, main h3")).filter(function(h){
+          var r=h.getBoundingClientRect(); return r.top>-80 && r.top<window.innerHeight*0.6; }).pop();
+        if(vis) payload.section=sectionFor(vis);
+      }
+    }catch(_){}
+
+    try{
+      var res=await fetch(API,{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify(payload)});
+      if(!res.ok){
+        var j=await res.json().catch(function(){return{};});
+        throw new Error(j.error||("HTTP "+res.status));
+      }
+      var reader=res.body.getReader(), dec=new TextDecoder(), buf="";
+      for(;;){
+        var r=await reader.read(); if(r.done) break;
+        buf+=dec.decode(r.value,{stream:true});
+        var lines=buf.split("\n"); buf=lines.pop()||"";
+        for(var i=0;i<lines.length;i++){
+          var l=lines[i].trim(); if(l.indexOf("data:")!==0) continue;
+          var d=l.slice(5).trim(); if(d==="[DONE]") continue;
+          try{ var o=JSON.parse(d); if(o.d){acc+=o.d; bot.innerHTML=md(acc)+'<span class="cursor"></span>'; log.scrollTop=log.scrollHeight;} if(o.error) throw new Error(o.error);}catch(_){}
+        }
+      }
+      bot.innerHTML=md(acc||"_no answer_");
+    }catch(err){
+      bot.className="msg err";
+      bot.textContent = String(err.message).indexOf("Failed to fetch")>-1 || String(err.message).indexOf("HTTP 5")>-1
+        ? "Assistant unavailable — it only works on the deployed site (needs the /api/chat function)."
+        : "Error: "+err.message;
+    }finally{
+      busy=false; send.disabled=false; input.value=""; input.focus();
+      pendingSelection=""; quote.style.display="none";
+    }
+  }
+
+  form.addEventListener("submit",function(e){ e.preventDefault(); ask(input.value); });
+  input.addEventListener("keydown",function(e){
+    if(e.key==="Enter"&&!e.shiftKey){ e.preventDefault(); ask(input.value); }
+  });
+  input.addEventListener("input",function(){ input.style.height="auto"; input.style.height=Math.min(input.scrollHeight,110)+"px"; });
+})();
+</script>
+</body>
+</html>

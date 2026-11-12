@@ -1,0 +1,1309 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Module 1 — Introduction to Industrial Safety Engineering · Industrial Safety Engineering</title>
+<style>
+:root{
+  --bg:#fbfaf8; --panel:#ffffff; --ink:#232120; --muted:#5f5a53; --line:#e6e1da;
+  --accent:#7a4fd0; --accent-soft:#f1ecfb; --code-bg:#f5f2ee; --code-ink:#2b2a28;
+  --warn-bg:#fff8e6; --warn-line:#f0d9a0;
+  --sans:"Inter","Segoe UI",system-ui,-apple-system,"Noto Sans",sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,"SF Mono",Menlo,Consolas,"Fira Code",monospace;
+}
+html[data-theme="dark"]{
+  --bg:#141317; --panel:#1b1a20; --ink:#e8e4de; --muted:#a8a199; --line:#2f2c36;
+  --accent:#b79cf5; --accent-soft:#241f33; --code-bg:#22202a; --code-ink:#e8e4de;
+  --warn-bg:#2a2417; --warn-line:#4a3d22;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0; background:var(--bg); color:var(--ink); font-family:var(--sans);
+  font-size:16.5px; line-height:1.72; -webkit-font-smoothing:antialiased;
+}
+#progress{position:fixed;top:0;left:0;height:3px;width:0;background:var(--accent);z-index:50;transition:width .1s linear}
+
+.wrap{display:flex;align-items:flex-start;min-height:100vh}
+.sidebar{
+  position:sticky;top:0;height:100vh;width:300px;flex:0 0 300px;overflow-y:auto;
+  padding:26px 20px 60px;border-right:1px solid var(--line);background:var(--panel);
+}
+.sidebar h1{font-size:15px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);
+  margin:0 0 4px;font-weight:600}
+.sidebar .sub{font-size:12.5px;color:var(--muted);margin:0 0 18px}
+.sidebar nav{font-size:14px}
+.sidebar .toc>ul{padding-left:0}
+.sidebar ul{list-style:none;margin:0;padding-left:12px}
+.sidebar ul ul{border-left:1px solid var(--line);margin-left:4px;padding-left:10px}
+.sidebar li{margin:3px 0}
+.sidebar a{color:var(--ink);text-decoration:none;display:block;padding:3px 8px;border-radius:8px;
+  line-height:1.35;transition:background .12s,color .12s}
+.sidebar a:hover{background:var(--accent-soft);color:var(--accent)}
+.sidebar a.active{background:var(--accent-soft);color:var(--accent);font-weight:600}
+.sidebar .home{display:inline-flex;align-items:center;gap:6px;margin-bottom:16px;font-size:13.5px;
+  color:var(--muted);text-decoration:none;border:1px solid var(--line);padding:5px 10px;border-radius:999px}
+.sidebar .home:hover{color:var(--accent);border-color:var(--accent)}
+
+main{flex:1;min-width:0;padding:46px 56px 120px;max-width:980px;margin:0 auto}
+.doc-head{border-bottom:1px solid var(--line);padding-bottom:18px;margin-bottom:34px}
+.doc-head .kicker{font-size:12.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);
+  font-weight:700;margin-bottom:8px}
+.doc-head .meta{font-size:13.5px;color:var(--muted)}
+
+h1,h2,h3,h4{line-height:1.25;font-weight:700;letter-spacing:-.01em}
+h1{font-size:2.05rem;margin:.2em 0 .5em}
+h2{font-size:1.55rem;margin:2.4em 0 .7em;padding-bottom:.35em;border-bottom:1px solid var(--line)}
+h3{font-size:1.2rem;margin:1.9em 0 .55em}
+h4{font-size:1.03rem;margin:1.5em 0 .45em;color:var(--muted)}
+h2 .anchor,h3 .anchor{opacity:0;margin-left:.35em;font-size:.8em;color:var(--muted);text-decoration:none}
+h2:hover .anchor,h3:hover .anchor{opacity:1}
+p{margin:.75em 0}
+a{color:var(--accent);text-underline-offset:2px}
+strong{font-weight:650}
+hr{border:0;border-top:1px solid var(--line);margin:2.6em 0}
+ul,ol{margin:.7em 0;padding-left:1.4em}
+li{margin:.3em 0}
+li>ul,li>ol{margin:.25em 0}
+blockquote{
+  margin:1.3em 0;padding:12px 18px;background:var(--warn-bg);border-left:3px solid var(--warn-line);
+  border-radius:0 10px 10px 0;color:var(--ink)
+}
+blockquote p{margin:.3em 0}
+
+code{font-family:var(--mono);font-size:.87em;background:var(--code-bg);color:var(--code-ink);
+  padding:.15em .38em;border-radius:6px;border:1px solid var(--line);
+  box-decoration-break:clone;-webkit-box-decoration-break:clone;overflow-wrap:anywhere}
+pre{position:relative;background:var(--code-bg);border:1px solid var(--line);border-radius:12px;
+  padding:16px 18px;overflow-x:auto;margin:1.1em 0}
+pre code{background:none;border:0;padding:0;font-size:13.6px;line-height:1.62;white-space:pre}
+.copy{position:absolute;top:8px;right:8px;font:600 11px/1 var(--sans);color:var(--muted);
+  background:var(--panel);border:1px solid var(--line);border-radius:7px;padding:5px 8px;cursor:pointer;
+  opacity:0;transition:opacity .15s}
+pre:hover .copy{opacity:1}
+.copy:hover{color:var(--accent);border-color:var(--accent)}
+
+.table-scroll{overflow-x:auto;margin:1.3em 0;border:1px solid var(--line);border-radius:12px;background:var(--panel)}
+table{border-collapse:collapse;width:100%;font-size:14.6px}
+th,td{padding:9px 13px;text-align:left;vertical-align:top;border-bottom:1px solid var(--line)}
+th{background:var(--accent-soft);font-weight:650;font-size:13px;letter-spacing:.02em;
+  position:sticky;top:0;backdrop-filter:blur(4px)}
+tr:last-child td{border-bottom:0}
+tbody tr:nth-child(even){background:color-mix(in srgb,var(--panel) 60%,var(--bg))}
+tbody tr:hover{background:var(--accent-soft)}
+
+.tools{position:fixed;right:22px;bottom:22px;display:flex;flex-direction:column;gap:8px;z-index:40}
+.tools button{width:42px;height:42px;border-radius:12px;border:1px solid var(--line);background:var(--panel);
+  color:var(--ink);cursor:pointer;font-size:16px;box-shadow:0 4px 14px rgba(0,0,0,.10)}
+.tools button:hover{color:var(--accent);border-color:var(--accent)}
+@media (max-width:1000px){
+  .wrap{display:block}
+  .sidebar{position:static;width:auto;height:auto;border-right:0;border-bottom:1px solid var(--line)}
+  .sidebar nav{max-height:40vh;overflow:auto}
+  main{padding:28px 20px 100px}
+}
+@media print{
+  .sidebar,.tools,#progress,.copy{display:none!important}
+  body{background:#fff;color:#000;font-size:11pt}
+  main{padding:0;max-width:none}
+  h2{break-after:avoid} pre,table,blockquote{break-inside:avoid}
+  a{color:#000;text-decoration:none}
+}
+
+/* ---- ask-about-this ---- */
+#chat-btn{position:fixed;right:20px;bottom:112px;width:44px;height:44px;border-radius:50%;
+  border:1px solid var(--line);background:var(--panel);color:var(--accent);cursor:pointer;font-size:17px;
+  box-shadow:0 6px 18px rgba(0,0,0,.12);z-index:45;display:grid;place-items:center}
+#chat-btn:hover{border-color:var(--accent)}
+#sel-chip{position:absolute;z-index:46;transform:translate(-50%,-100%);background:var(--ink);color:var(--bg);
+  font:600 12px/1 var(--sans);padding:7px 11px;border-radius:999px;cursor:pointer;white-space:nowrap;
+  box-shadow:0 6px 18px rgba(0,0,0,.25);display:none}
+#sel-chip:hover{background:var(--accent);color:#fff}
+#chat-panel{position:fixed;right:20px;bottom:164px;width:min(420px,calc(100vw - 40px));max-height:min(70vh,620px);
+  background:var(--panel);border:1px solid var(--line);border-radius:14px;z-index:47;display:none;
+  flex-direction:column;box-shadow:0 18px 50px rgba(0,0,0,.18);overflow:hidden}
+#chat-panel.open{display:flex}
+#chat-head{display:flex;align-items:center;gap:8px;padding:11px 13px;border-bottom:1px solid var(--line);
+  font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:700}
+#chat-head .sp{flex:1}
+#chat-head button{background:none;border:0;color:var(--muted);cursor:pointer;font-size:15px;padding:2px 4px}
+#chat-head button:hover{color:var(--accent)}
+#chat-quote{display:none;margin:10px 13px 0;padding:8px 10px;border-left:2px solid var(--accent);
+  background:var(--accent-soft);color:var(--muted);font-size:12.5px;border-radius:0 8px 8px 0;
+  max-height:84px;overflow:auto;white-space:pre-wrap}
+#chat-log{flex:1;overflow-y:auto;padding:12px 13px;display:flex;flex-direction:column;gap:10px;font-size:13.6px;line-height:1.55}
+.msg{max-width:100%}
+.msg.user{align-self:flex-end;background:var(--accent-soft);color:var(--ink);padding:7px 11px;border-radius:11px 11px 2px 11px;
+  max-width:86%;white-space:pre-wrap}
+.msg.bot{color:var(--ink)}
+.msg.bot p{margin:.3em 0}
+.msg.bot ul{margin:.3em 0;padding-left:1.15em}
+.msg.bot code{font-size:.9em}
+.msg.bot pre{background:var(--code-bg);border-radius:8px;padding:9px 11px;overflow-x:auto;font-size:12px;margin:.4em 0}
+.msg.err{color:#b3261e;font-size:12.5px}
+.msg .cursor:after{content:"▍";color:var(--accent);animation:blink 1s steps(2) infinite}
+@keyframes blink{50%{opacity:0}}
+#chat-form{display:flex;gap:8px;padding:10px 13px;border-top:1px solid var(--line)}
+#chat-input{flex:1;resize:none;border:1px solid var(--line);border-radius:9px;background:var(--bg);color:var(--ink);
+  font:inherit;font-size:13.5px;padding:8px 10px;max-height:110px;min-height:38px}
+#chat-input:focus{outline:2px solid var(--accent);outline-offset:0}
+#chat-send{border:1px solid var(--accent);background:var(--accent);color:#fff;border-radius:9px;
+  width:38px;cursor:pointer;font-size:15px}
+#chat-send:disabled{opacity:.45;cursor:default}
+#chat-foot{font-size:11px;color:var(--muted);padding:0 13px 9px}
+@media (max-width:640px){
+  #chat-panel{right:8px;left:8px;width:auto;bottom:150px;max-height:66vh}
+  #chat-btn{bottom:104px;right:16px}
+}
+@media print{#chat-btn,#chat-panel,#sel-chip{display:none!important}}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+<div class="wrap">
+  <aside class="sidebar">
+    <a class="home" href="index.html">← Industrial Safety Engineering</a>
+    <a class="home" href="practice.html">Practice drills</a>
+    <h1>M1 · Intro &amp; accident theory</h1>
+    <p class="sub">20% ESE · 32 questions</p>
+    <nav class="toc"><div class="toc">
+<ul>
+<li><a href="#1-coverage">1. Coverage</a></li>
+<li><a href="#2-concepts">2. Concepts</a><ul>
+<li><a href="#21-need-for-safety-2-3-4">2.1 Need for safety (<code>slide 10</code>, <code>slide 11</code>, <code>slide 12</code>)</a></li>
+<li><a href="#22-safety-and-productivity-11-to-12">2.2 Safety and productivity (<code>slide 13</code> to <code>slide 20</code>)</a></li>
+<li><a href="#23-definitions-the-six-terms-26-to-27">2.3 Definitions — the six terms (<code>slide 21</code> to <code>slide 26</code>)</a></li>
+<li><a href="#24-theories-of-accident-causation-35-to-36">2.4 Theories of accident causation (<code>slide 39</code> to <code>slide 54</code>)</a></li>
+<li><a href="#25-safety-organisation-53-to-54">2.5 Safety organisation (<code>slide 59</code> to <code>slide 68</code>)</a></li>
+<li><a href="#26-role-of-management-and-supervisors-65-to-66">2.6 Role of management and supervisors (<code>slide 69</code> to <code>slide 71</code>)</a></li>
+<li><a href="#27-role-of-workmen-and-unions-73-to-74">2.7 Role of workmen and unions (<code>slide 72</code> to <code>slide 74</code>)</a></li>
+<li><a href="#28-role-of-government-and-voluntary-agencies-83-to-84">2.8 Role of government and voluntary agencies (<code>slide 75</code> to <code>slide 77</code>)</a></li>
+<li><a href="#29-safety-officer-91-92">2.9 Safety officer (<code>slide 81</code>, <code>slide 82</code>)</a></li>
+<li><a href="#210-safety-committee-98-to-99">2.10 Safety committee (<code>slide 83</code> to <code>slide 88</code>)</a></li>
+</ul>
+</li>
+<li><a href="#3-answer-bank">3. Answer bank</a><ul>
+<li><a href="#31-three-mark-answers">3.1 Three-mark answers</a></li>
+<li><a href="#32-five-mark-answers">3.2 Five-mark answers</a></li>
+<li><a href="#33-eight-mark-answers">3.3 Eight-mark answers</a></li>
+<li><a href="#34-fourteen-mark-skeleton">3.4 Fourteen-mark skeleton</a></li>
+</ul>
+</li>
+<li><a href="#4-definitions-and-numbers-to-memorise">4. Definitions and numbers to memorise</a></li>
+<li><a href="#5-diagrams-to-draw-from-the-deck-only">5. Diagrams to draw (from the deck only)</a></li>
+<li><a href="#6-say-this-if-grilled">6. Say-this-if-grilled</a></li>
+</ul>
+</div>
+</nav>
+  </aside>
+  <main>
+    <div class="doc-head">
+      <div class="kicker">20MCN401 · Industrial Safety Engineering</div>
+      <div class="meta">20% ESE · 32 questions · rendered from KIT_M1_INTRO.md</div>
+    </div>
+    <h1 id="module-1-introduction-to-industrial-safety-engineering">Module 1 — Introduction to Industrial Safety Engineering</h1>
+<blockquote>
+<p>20MCN401 · B.Tech CSE Sem 7 (Saintgits, autonomous) · 0-credit, mandatory · this module carries 20% of the ESE — assume two Part-A questions (3 marks) and one Part-B (14 marks). Source: <code>m1.txt</code>, cited as (<code>slide N</code>). Anything marked <strong>(standard)</strong> is exam-standard content that the deck does not carry.</p>
+</blockquote>
+<hr />
+<h2 id="1-coverage">1. Coverage<a class="anchor" href="#1-coverage">#</a></h2>
+<p><strong>Table A — syllabus line to section.</strong></p>
+<table>
+<thead>
+<tr>
+<th>Syllabus line (verbatim)</th>
+<th>Hrs</th>
+<th>Answered at §</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Need for safety — safety and productivity</td>
+<td>1</td>
+<td>§2.1, §2.2</td>
+</tr>
+<tr>
+<td>Definitions: accident, injury, unsafe act, unsafe condition, dangerous occurrence, reportable accidents</td>
+<td>1</td>
+<td>§2.3</td>
+</tr>
+<tr>
+<td>Theories of accident causation — safety organisation</td>
+<td>1</td>
+<td>§2.4, §2.5</td>
+</tr>
+<tr>
+<td>Role of management, supervisors, workmen, unions, government and voluntary agencies in safety</td>
+<td>1</td>
+<td>§2.6, §2.7, §2.8</td>
+</tr>
+<tr>
+<td>Safety officer — responsibilities, authority</td>
+<td>1</td>
+<td>§2.9</td>
+</tr>
+<tr>
+<td>Safety committee — need, types, advantages</td>
+<td>1</td>
+<td>§2.10</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Table B — the 32 Module I questions.</strong> Marks are the weight I would give each one; the bank did not record them.</p>
+<table>
+<thead>
+<tr>
+<th>Q#</th>
+<th>Asked</th>
+<th>Marks</th>
+<th>Answered at §</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Q19</td>
+<td>State the objectives of safety in an industry</td>
+<td>3</td>
+<td>§3.1 · §2.1</td>
+</tr>
+<tr>
+<td>Q20</td>
+<td>Enlist the functions of safety committee</td>
+<td>3</td>
+<td>§3.1 · §2.10</td>
+</tr>
+<tr>
+<td>Q21</td>
+<td>How do unions play an important role in safety? Give an example</td>
+<td>5</td>
+<td>§3.2 · §2.7</td>
+</tr>
+<tr>
+<td>Q22</td>
+<td>Describe the need for safety in an industry</td>
+<td>3</td>
+<td>§3.1 · §2.1</td>
+</tr>
+<tr>
+<td>Q23</td>
+<td>List the major theories of accident causation</td>
+<td>3</td>
+<td>§3.1 · §2.4</td>
+</tr>
+<tr>
+<td>Q24</td>
+<td>Discuss the importance of the Domino theory</td>
+<td>5</td>
+<td>§3.2 · §2.4</td>
+</tr>
+<tr>
+<td>Q25</td>
+<td>Define safety organisation</td>
+<td>3</td>
+<td>§3.1 · §2.5</td>
+</tr>
+<tr>
+<td>Q45</td>
+<td>Explain the role of management in safety</td>
+<td>5</td>
+<td>§3.2 · §2.6</td>
+</tr>
+<tr>
+<td>Q46</td>
+<td>Explain the role of the union in safety</td>
+<td>5</td>
+<td>§3.2 · §2.7</td>
+</tr>
+<tr>
+<td>Q47</td>
+<td>Explain the responsibilities of management and unions in safety</td>
+<td>8</td>
+<td>§3.3 · §2.6, §2.7</td>
+</tr>
+<tr>
+<td>Q48</td>
+<td>Explain the role of the safety officer</td>
+<td>5</td>
+<td>§3.2 · §2.9</td>
+</tr>
+<tr>
+<td>Q49</td>
+<td>Explain safety committee</td>
+<td>3</td>
+<td>§3.1 · §2.10</td>
+</tr>
+<tr>
+<td>Q50</td>
+<td>Explain the types of safety committee</td>
+<td>3</td>
+<td>§3.1 · §2.10</td>
+</tr>
+<tr>
+<td>Q84</td>
+<td>Discuss the relation between safety and productivity</td>
+<td>8</td>
+<td>§3.3 · §2.2</td>
+</tr>
+<tr>
+<td>Q85</td>
+<td>Describe (a) dangerous occurrence, (b) unsafe condition</td>
+<td>5</td>
+<td>§3.2 · §2.3</td>
+</tr>
+<tr>
+<td>Q86</td>
+<td>Describe (a) accident, (b) reportable accidents</td>
+<td>5</td>
+<td>§3.2 · §2.3</td>
+</tr>
+<tr>
+<td>Q87</td>
+<td>Major theories; Domino and human factors in detail</td>
+<td>8</td>
+<td>§3.3 · §2.4</td>
+</tr>
+<tr>
+<td>Q88</td>
+<td>Major theories; systems theory and human factors in detail</td>
+<td>8</td>
+<td>§3.3 · §2.4</td>
+</tr>
+<tr>
+<td>Q89</td>
+<td>Describe safety organisation and its major benefits</td>
+<td>8</td>
+<td>§3.3 · §2.5</td>
+</tr>
+<tr>
+<td>Q116</td>
+<td>Explain the role of workmen in safety</td>
+<td>5</td>
+<td>§3.2 · §2.7</td>
+</tr>
+<tr>
+<td>Q117</td>
+<td>Explain the role of supervisors in safety</td>
+<td>5</td>
+<td>§3.2 · §2.6</td>
+</tr>
+<tr>
+<td>Q118</td>
+<td>Explain the responsibility of the safety officer</td>
+<td>8</td>
+<td>§3.3 · §2.9</td>
+</tr>
+<tr>
+<td>Q120</td>
+<td>What are the functions and duties of a safety committee</td>
+<td>8</td>
+<td>§3.3 · §2.10</td>
+</tr>
+<tr>
+<td>Q136</td>
+<td>Describe with examples (a) accident, (b) injury, (c) unsafe act</td>
+<td>5</td>
+<td>§3.2 · §2.3</td>
+</tr>
+<tr>
+<td>Q137</td>
+<td>Enumerate any five needs of ensuring safety</td>
+<td>5</td>
+<td>§3.2 · §2.1</td>
+</tr>
+<tr>
+<td>Q138</td>
+<td>Describe any three theories that explain accident causes</td>
+<td>8</td>
+<td>§3.3 · §2.4</td>
+</tr>
+<tr>
+<td>Q139</td>
+<td>Explain any three major theories of accident causation</td>
+<td>8</td>
+<td>§3.3 · §2.4</td>
+</tr>
+<tr>
+<td>Q140</td>
+<td>Discuss three major theories of how accidents occur</td>
+<td>8</td>
+<td>§3.3 · §2.4</td>
+</tr>
+<tr>
+<td>Q141</td>
+<td>Roles of management, supervisors, workmen and unions</td>
+<td>14</td>
+<td>§3.4 · §2.6, §2.7</td>
+</tr>
+<tr>
+<td>Q142</td>
+<td>How management, supervisors, workers and unions maintain safety</td>
+<td>14</td>
+<td>§3.4 · §2.6, §2.7</td>
+</tr>
+<tr>
+<td>Q143</td>
+<td>Responsibilities and authorities of a safety officer</td>
+<td>8</td>
+<td>§3.3 · §2.9</td>
+</tr>
+<tr>
+<td>Q144</td>
+<td>What is the need for a safety committee</td>
+<td>3</td>
+<td>§3.1 · §2.10</td>
+</tr>
+</tbody>
+</table>
+<p>Not this module, though the wording looks close. Rates, PPE standards, housekeeping and 5S, and work permits belong to Module II. Fire classes belong to Module V.</p>
+<hr />
+<h2 id="2-concepts">2. Concepts<a class="anchor" href="#2-concepts">#</a></h2>
+<h3 id="21-need-for-safety-2-3-4">2.1 Need for safety (<code>slide 10</code>, <code>slide 11</code>, <code>slide 12</code>)<a class="anchor" href="#21-need-for-safety-2-3-4">#</a></h3>
+<p><em>In plain English.</em> A plant that hurts people is a plant that loses money. The loss arrives twice: once as the accident, and again as the slow drag on output afterwards. So safety spending is not charity and it is not paperwork. Think of servicing a machine before it seizes, not after.</p>
+<p><em>The detail.</em>
+- <strong>Two benefit columns on the deck.</strong> Seven benefits to the organisation (<code>slide 11</code>), seven to the employee (<code>slide 12</code>).
+- <strong>Organisation side, money.</strong> Lower costs, less waste, better use of resources, no fine for breaking the rules.
+- <strong>Organisation side, output.</strong> Efficiency rises, because workers stop worrying and start producing.
+- <strong>Employee side.</strong> Higher earnings, better morale, less worry, more motivation, more time on quality.
+- <strong>The name to quote.</strong> The ILO observes <strong>28 April</strong> as the World Safety and Health Day (<code>slide 10</code>).
+- <strong>The trade-off in one line.</strong> Prevention costs a little; an emergency costs a great deal (<code>slide 18</code>).
+- <strong>What an accident costs.</strong> Wages, downtime, repair and the fine. Every one is avoidable (<code>slide 11</code>).
+- <strong>Why the deck splits the list.</strong> An employer hears the money argument, and a worker hears the safety argument (<code>slide 10</code>).
+- <strong>Objectives are a different list (standard).</strong> Prevent injury, prevent damage, meet the legal duty, keep production running, build a safety culture.</p>
+<p>The deck's seven organisation benefits collapse into four pairs. Write the pairs and you have covered the list.</p>
+<table>
+<thead>
+<tr>
+<th>Benefit to the organisation</th>
+<th>Benefit to the employee</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Lower costs, less waste, better use of resources</td>
+<td>Higher earnings when the company earns more</td>
+</tr>
+<tr>
+<td>Fewer financial losses when accidents are avoided</td>
+<td>Better morale and stronger motivation</td>
+</tr>
+<tr>
+<td>No penalty for breaking a safety rule</td>
+<td>Less worry about personal safety</td>
+</tr>
+<tr>
+<td>Productivity and efficiency both rise</td>
+<td>More time on the quality and quantity of output</td>
+</tr>
+</tbody>
+</table>
+<p><em>What to write (3 marks).</em> One line for the organisation's gains. One line for the employee's gains. One line carrying the ILO date. Do not narrate a single accident.</p>
+<p><strong>Mark anchor.</strong> "28 April — the ILO World Safety and Health Day", paired with "seven benefits to the organisation, seven to the employee".</p>
+<p><strong>Exam trap.</strong> "Need for safety" asks <strong>why spend the money</strong>. "Objectives of safety" asks <strong>what the money aims at</strong>. Handing the seven benefits to an objectives question earns half marks at best, and the reverse fails the same way.</p>
+<h3 id="22-safety-and-productivity-11-to-12">2.2 Safety and productivity (<code>slide 13</code> to <code>slide 20</code>)<a class="anchor" href="#22-safety-and-productivity-11-to-12">#</a></h3>
+<p><em>In plain English.</em> Most managers treat safety as a brake on output. The deck argues the opposite: safety, quality and productivity are three legs of one stool. Pull one leg and the stool falls, whichever leg you pulled. A safe plant is simply a plant that is not being interrupted.</p>
+<p><em>The detail.</em>
+- <strong>Three pillars</strong> (<code>slide 14</code>): safety, quality and productivity. The deck says they "operate in concert", not in competition.
+- <strong>The sentence to quote.</strong> The deck calls the three "inextricably linked" (<code>slide 13</code>).
+- <strong>Safety drives the other two.</strong> Unsafe operations are badly managed operations. Stressed workers produce poor work (<code>slide 15</code>).
+- <strong>Quality drives the other two.</strong> High quality means fewer reworks, so output rises. High standards in one area predict high standards in safety (<code>slide 16</code>).
+- <strong>Productivity drives the other two.</strong> Carelessness causes accidents. Productive workers have less reason to cut corners (<code>slide 17</code>).
+- <strong>The first barrier.</strong> Managers fear that safety costs time and money (<code>slide 18</code>).
+- <strong>The second barrier.</strong> Managers think they must choose fast, cheap or good. Cheap and fast forces quality down (<code>slide 19</code>).
+- <strong>The cost of that choice.</strong> Rework after a lost customer can reach <strong>three times the original budget</strong> (<code>slide 19</code>).
+- <strong>The third barrier.</strong> Safety and productivity are assumed to be mutually exclusive (<code>slide 20</code>).
+- <strong>The deck's own line.</strong> Spend a small amount on preventative care, not a large amount on an emergency (<code>slide 18</code>).
+- <strong>Who holds which view.</strong> The floor treats safety as an inspector's visit; the board treats it as a cost line (<code>slide 18</code>).
+- <strong>Why the argument keeps returning.</strong> A good safety year looks like money that was never needed (<code>slide 18</code>).</p>
+<p>The chain to remember, in four links: unsafe work interrupts production, interruption costs money, money buys less safety, and the plant spirals down.</p>
+<p><em>What to write (8 marks).</em> Define the three pillars. Give one mechanism for each direction of influence. Name the three barriers and answer each. Close with the three-times rework figure as evidence.</p>
+<p><strong>Mark anchor.</strong> "Rework can reach three times the original budget" (<code>slide 19</code>). It converts a soft claim into a number.</p>
+<p><strong>Exam trap.</strong> If the question asks whether safety <strong>reduces</strong> productivity, the deck's answer is <strong>no</strong>. Safety is a precondition for productivity, not a tax on it. Conceding the premise loses the argument marks even if every example is right.</p>
+<h3 id="23-definitions-the-six-terms-26-to-27">2.3 Definitions — the six terms (<code>slide 21</code> to <code>slide 26</code>)<a class="anchor" href="#23-definitions-the-six-terms-26-to-27">#</a></h3>
+<p><em>In plain English.</em> These six words are the vocabulary the rest of the course runs on. An accident is the event. An injury is the damage to a person. An unsafe act is something a person did. An unsafe condition is something the workplace was. A dangerous occurrence is the accident that nearly happened. A reportable accident is the one the law makes you report. Get the order right and half the paper answers itself.</p>
+<p><em>The detail.</em>
+- <strong>Accident, ordinary sense.</strong> An unforeseen and unexpected event (<code>slide 21</code>).
+- <strong>Accident, Heinrich's wording.</strong> "An unplanned and uncontrolled event in which the action or reaction on an object, substance, person or radiation results in personal injury" (<code>slide 21</code>). The deck credits this to Heinrich.
+- <strong>Accident, council wording.</strong> The deck attributes a second definition to the American Safety Council: an occurrence in a sequence of events producing unintended injury, death or property damage (<code>slide 21</code>).
+- <strong>Injury.</strong> An abnormal condition or disorder. Cuts, fractures, sprains, amputations, plus acute and chronic illness (<code>slide 24</code>).
+- <strong>Injury, legal sense.</strong> Mental or physical harm caused by accident or disease, including damage to artificial limbs, teeth, hearing aids and glasses (<code>slide 25</code>).
+- <strong>Industrial injury.</strong> Injury or occupational disease arising out of employment, and so compensable under the <strong>Workmen's Compensation Act, 1923</strong> (<code>slide 26</code>).
+- <strong>Unsafe act (standard).</strong> A human action that breaks a safe procedure and creates a hazard, such as removing a guard.
+- <strong>Unsafe condition (standard).</strong> A physical state of the workplace that departs from the safe standard, such as an unguarded belt.
+- <strong>Dangerous occurrence (standard).</strong> A listed near-miss that harmed nobody but could have. The Factories Act, 1948 requires notice of these.
+- <strong>Reportable accident (standard).</strong> One the law says you must notify. Under the Factories Act that means death, or injury stopping work for <strong>48 hours</strong> or more.</p>
+<p><em>What to write (5 marks).</em> One line per term, each with the plain sense first. Add one example per term. Name the Act only where the question asks for the legal meaning.</p>
+<p><strong>Mark anchor.</strong> "88% unsafe acts, 10% unsafe conditions, 2% acts of God — Heinrich, 1932" (<code>slide 41</code>). It separates act from condition with a number.</p>
+<p><strong>Exam trap.</strong> <strong>Unsafe act</strong> is a behaviour; <strong>unsafe condition</strong> is a state. A missing guard is a condition. Reaching past the guard is an act. The two are reported separately, and swapping them changes who gets blamed, so the marker notices.</p>
+<h3 id="24-theories-of-accident-causation-35-to-36">2.4 Theories of accident causation (<code>slide 39</code> to <code>slide 54</code>)<a class="anchor" href="#24-theories-of-accident-causation-35-to-36">#</a></h3>
+<p><em>In plain English.</em> A theory of causation is a story about why the accident happened. Each story tells you where to push to stop the next one. Push on the worker and you get training. Push on the machine and you get guarding. Push on the system and you get procedures. Nine stories are on the menu, and the paper asks for two or three of them by name.</p>
+<p><em>The detail.</em>
+- <strong>The deck's framing.</strong> No theory is universally accepted. Prediction is hard, so the search continues (<code>slide 39</code>).
+- <strong>Eight theories are listed</strong> (<code>slide 40</code>). Systems theory is the ninth, and it is not on the deck at all.
+- <strong>Domino</strong> (<code>slide 41</code>): Heinrich, <strong>1932</strong>. Five factors topple in sequence, each pushing the next.
+- <strong>The five factors.</strong> Ancestry and social environment, worker fault, unsafe act with a hazard, the accident, then damage or injury.
+- <strong>Where to cut the chain.</strong> Remove <strong>factor three</strong>, the unsafe act or condition. That is Heinrich's key domino (<code>slide 44</code>).
+- <strong>The split.</strong> 88% unsafe acts, 10% unsafe conditions, 2% acts of God (<code>slide 41</code>).
+- <strong>Multiple causation</strong> (<code>slide 48</code>): grows out of Domino. Many contributory causes combine, in behavioural and environmental groups.
+- <strong>Pure chance</strong> (<code>slide 49</code>): every worker has an equal chance. No pattern, so no intervention is possible.
+- <strong>Biased liability</strong> (<code>slide 50</code>): after one accident, that worker's odds shift up or down. Contributes little to prevention.
+- <strong>Accident proneness</strong> (<code>slide 51</code>): a subset of workers is more liable. Unproven, and not generally accepted.
+- <strong>Energy transfer</strong> (<code>slide 52</code>): injury happens when energy changes form. Every change has a source, a path and a receiver.
+- <strong>Energy controls</strong> (<code>slide 53</code>): remove the source; at the path use barriers, enclosures, absorbers, isolators; at the receiver limit exposure and issue PPE.
+- <strong>Symptoms versus causes</strong> (<code>slide 54</code>): unsafe acts and conditions are symptoms, the proximate causes. The root cause sits further back.
+- <strong>Human factors (standard).</strong> Overload, then a wrong decision, then a wrong action. The worker is overloaded by workload, stress or environment.
+- <strong>Systems theory (standard).</strong> Person, machine, environment and management interact. A fault in one part propagates, so you fix the system.</p>
+<table>
+<thead>
+<tr>
+<th>Theory</th>
+<th>Core claim</th>
+<th>Attribution</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Domino</td>
+<td>Five factors topple in sequence; cut one and the chain stops</td>
+<td>Heinrich, 1932</td>
+</tr>
+<tr>
+<td>Human factors</td>
+<td>Overload leads to a bad decision, then to a bad action</td>
+<td>(standard)</td>
+</tr>
+<tr>
+<td>Multiple causation</td>
+<td>Many causes combine, behavioural and environmental</td>
+<td>Outgrowth of Domino</td>
+</tr>
+<tr>
+<td>Pure chance</td>
+<td>Equal odds for everyone; no pattern to find</td>
+<td><code>slide 49</code></td>
+</tr>
+<tr>
+<td>Biased liability</td>
+<td>One accident changes that worker's future odds</td>
+<td><code>slide 50</code></td>
+</tr>
+<tr>
+<td>Accident proneness</td>
+<td>A subset of workers is inherently more liable</td>
+<td>Unproven</td>
+</tr>
+<tr>
+<td>Energy transfer</td>
+<td>Injury is a change of energy, from source to receiver</td>
+<td><code>slide 52</code></td>
+</tr>
+<tr>
+<td>Symptoms versus causes</td>
+<td>Acts and conditions are symptoms, not root causes</td>
+<td><code>slide 54</code></td>
+</tr>
+<tr>
+<td>Systems (standard)</td>
+<td>Accidents emerge from interaction between system parts</td>
+<td>(standard)</td>
+</tr>
+</tbody>
+</table>
+<p><em>What to write (8 marks).</em> Name the theory and its author. State the mechanism in one line. Give one control that follows from it. Repeat for the second theory. Finish with one line on why no theory is accepted universally.</p>
+<p><strong>Mark anchor.</strong> "Heinrich, 1932 — five factors, and factor three is the one to remove." The number and the year prove you read a primary source. A summary would not carry both.</p>
+<p><strong>Exam trap.</strong> <strong>Domino</strong> says the chain is linear, so removing one link stops it. <strong>Multiple causation</strong> says many links act together, so removing one link may change nothing. If the answer to "how do you prevent it" is a single fix, you are writing Domino whether you meant to or not.</p>
+<h3 id="25-safety-organisation-53-to-54">2.5 Safety organisation (<code>slide 59</code> to <code>slide 68</code>)<a class="anchor" href="#25-safety-organisation-53-to-54">#</a></h3>
+<p><em>In plain English.</em> A safety organisation is the group of people whose job is to keep the plant safe, plus the lines of authority that let them do it. The question is always the same: does the safety person give orders, or give advice? Give orders and you have a line organisation. Give advice and you have a staff organisation. The whole topic is that one fork in the road.</p>
+<p><em>The detail.</em>
+- <strong>Purpose</strong> (<code>slide 59</code>): assist management to run a programme that protects employees and raises production. It touches manpower, material, machinery, equipment and time.
+- <strong>Four bodies the deck names</strong> (<code>slide 59</code>): World Safety Organization, the Occupational Safety and Health Administration, National Safety Council, American Society of Safety Professionals.
+- <strong>Line organisation</strong> (<code>slide 61</code>): authority runs from the top down, supervisor over subordinate. Also called military or scalar.
+- <strong>Line in practice.</strong> Safety duties are handed out beside production duties. One person controls both people and physical conditions.
+- <strong>Line advantages</strong> (<code>slide 63</code>): clear chain of command, quick decisions, clear accountability, direct control of the work area.
+- <strong>Line disadvantages</strong> (<code>slide 64</code>): no specialist keeps up with new safety practice, training is rare, the chief executive is too busy, supervisors correct causes only after the accident.
+- <strong>Staff organisation</strong> (<code>slide 65</code>): a line structure plus specialists who advise every level. A safety director reports to the general manager.
+- <strong>Staff advantages</strong> (<code>slide 67</code>): the director has specialist experience, can stop a hazardous operation at once, represents the firm outside, keeps executives informed, and can run training.
+- <strong>Staff disadvantages</strong> (<code>slide 68</code>): it costs extra staff, does not suit a small plant, and tempts managers to dump safety on the director.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Line organisation</th>
+<th>Staff organisation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Authority</td>
+<td>Direct, top to bottom</td>
+<td>Advice to every level</td>
+</tr>
+<tr>
+<td>Who owns safety</td>
+<td>The supervisor, beside production</td>
+<td>The safety director, advising</td>
+</tr>
+<tr>
+<td>Strength</td>
+<td>Fast, unambiguous, accountable</td>
+<td>Expert, trained, current</td>
+</tr>
+<tr>
+<td>Weakness</td>
+<td>No specialist, fixes after the event</td>
+<td>Costly, invites buck-passing</td>
+</tr>
+</tbody>
+</table>
+<p><em>What to write (8 marks).</em> Define the purpose in one line. Name the two types. Give two advantages and two disadvantages for each. Close with one line on which suits a small plant.</p>
+<p><strong>Mark anchor.</strong> "Line = authority, staff = advice; the staff model adds a safety director reporting to the general manager" (<code>slide 65</code>).</p>
+<p><strong>Exam trap.</strong> A staff organisation does <strong>not</strong> remove the supervisor's duty. It adds expert help and leaves accountability where it was. Writing "in a staff organisation safety is the safety director's responsibility" is the classic lost mark, because that is exactly the weakness <code>slide 68</code> warns about.</p>
+<h3 id="26-role-of-management-and-supervisors-65-to-66">2.6 Role of management and supervisors (<code>slide 69</code> to <code>slide 71</code>)<a class="anchor" href="#26-role-of-management-and-supervisors-65-to-66">#</a></h3>
+<p><em>In plain English.</em> Management decides what the plant is willing to spend on safety, so management sets the ceiling. The supervisor works under that ceiling, at the point where the job actually happens. Management writes the rule. The supervisor makes sure the rule survives contact with a bad Tuesday. If management only talks and the supervisor only walks past, nothing changes.</p>
+<p><em>The detail.</em>
+- <strong>Six management duties</strong> (<code>slide 69</code>): design safer systems of work, show commitment, inspect the workplace, set procedures and controls, run training, set up the safety committee.
+- <strong>Design comes first.</strong> A safer system of work removes the hazard before anyone needs protecting from it.
+- <strong>Commitment is visible or it is absent.</strong> Workers copy what managers do, not what the policy says.
+- <strong>Inspection finds drift.</strong> Guards get removed, aisles get blocked, and only a walk finds it (<code>slide 70</code>).
+- <strong>Supervisor duty one.</strong> Resolve safety issues raised by the crew, and resolve them promptly (<code>slide 70</code>).
+- <strong>Supervisor duty two.</strong> Walk the area routinely and ask the crew what is wrong.
+- <strong>Supervisor duty three.</strong> Report back: inspection results, investigation findings, trends, fixes.
+- <strong>Supervisor duty four.</strong> Put resources behind safety, so it is part of the task and not an add-on.
+- <strong>Supervisor duty five.</strong> Set unit safety goals with the crew and attend the safety team meeting.
+- <strong>Supervisor duty six.</strong> Make sure every worker knows the physical and chemical hazards and their controls.
+- <strong>Supervisor duty seven.</strong> Let workers join inspections, investigations and hazard assessments.
+- <strong>Supervisor duty eight.</strong> Hold monthly safety meetings, in person (<code>slide 71</code>).
+- <strong>Supervisor duty nine.</strong> Make sure workers can explain stop-work authority, the discipline policy and the safety policy.
+- <strong>Supervisor duty ten.</strong> Hold people accountable, with constructive feedback through the year.
+- <strong>The employer's side of the deal.</strong> The supervisor needs training, information and backup to be effective (<code>slide 71</code>).</p>
+<p><em>What to write (5 marks).</em> Split the page into two columns, management and supervisor. Give three duties under each. Add one line on why the supervisor cannot do the job without employer backup.</p>
+<p><strong>Mark anchor.</strong> "Stop-work authority" (<code>slide 71</code>). It is the supervisor's sharpest tool and the marker looks for it.</p>
+<p><strong>Exam trap.</strong> Management <strong>designs</strong> the system; the supervisor <strong>operates</strong> it. If the question says "role of management" and you list walking the floor and holding toolbox talks, you have described the supervisor and lost half the marks.</p>
+<h3 id="27-role-of-workmen-and-unions-73-to-74">2.7 Role of workmen and unions (<code>slide 72</code> to <code>slide 74</code>)<a class="anchor" href="#27-role-of-workmen-and-unions-73-to-74">#</a></h3>
+<p><em>In plain English.</em> The worker is the last person standing between the hazard and the injury, so the worker carries duties that cannot be delegated upwards. The union is the organised version of that voice. Where a union runs a safety committee, the crew has a body that can raise a hazard without any one worker risking his job. One worker alone is a complaint. A union committee is a process.</p>
+<p><em>The detail.</em>
+- <strong>The worker owns his own safety</strong> (<code>slide 72</code>). That is the deck's first line and the one to quote.
+- <strong>The right to refuse.</strong> A worker may refuse an act or a tool when he has reasonable cause to believe it would endanger him.
+- <strong>Dress and equipment.</strong> Wear clothing suited to the site. Use the PPE the employer provides or the job demands.
+- <strong>The limit on refusal.</strong> The belief must be reasonable, not a dislike of the task (<code>slide 72</code>).
+- <strong>Never strip a guard.</strong> Do not remove a shield from a grinder, mixer or similar machine (<code>slide 72</code>).
+- <strong>Be trained first.</strong> Get adequate instruction on a machine before using it.
+- <strong>Protect the next person.</strong> Never use a tool in a way that could injure somebody else (<code>slide 73</code>).
+- <strong>Keep the routes clear.</strong> Safe entrances, exits and movement paths for people, equipment and materials.
+- <strong>Eye protection.</strong> Wear it on grinders and on any job that threatens the eyes.
+- <strong>Six union duties</strong> (<code>slide 74</code>): survey members on safety concerns, investigate injuries and near-misses, monitor conditions, educate members, plan how to get issues fixed, file and follow up complaints.
+- <strong>Why unions do it.</strong> A union committee signals commitment to both workers and employers, and acts as a watchdog.
+- <strong>The deck's caution.</strong> Employers often feel safety is theirs alone. Unions still have the right to form independent committees (<code>slide 74</code>).</p>
+<p><em>What to write (5 marks).</em> Three worker duties with the right to refuse named first. Two union duties. One closing line on the watchdog role.</p>
+<p><strong>Mark anchor.</strong> "The right to refuse unsafe work" plus "union health and safety committees investigate injuries and near-misses" (<code>slide 72</code>, <code>slide 74</code>).</p>
+<p><strong>Exam trap.</strong> The union's job is <strong>represent and monitor</strong>, not <strong>manage</strong>. If your union answer has the committee issuing work permits or buying guards, you have handed it management's authority, and the marker will mark it wrong.</p>
+<h3 id="28-role-of-government-and-voluntary-agencies-83-to-84">2.8 Role of government and voluntary agencies (<code>slide 75</code> to <code>slide 77</code>)<a class="anchor" href="#28-role-of-government-and-voluntary-agencies-83-to-84">#</a></h3>
+<p><em>In plain English.</em> The government sets the floor. It passes laws, writes standards and sends inspectors, so a bad employer cannot win by cutting safety. Voluntary agencies raise the ceiling. They publish guidance, run training and share good practice, with no power to fine anyone. Law without education is resisted. Education without law is ignored. You need both.</p>
+<p><em>The detail.</em>
+- <strong>Six statutes the deck lists</strong> (<code>slide 75</code>): Factories Act 1948, Mines Act 1952, Indian Boilers Act 1923, Workmen's Compensation Act, Petroleum Act 1934, Indian Electricity Act.
+- <strong>The deck gives two Electricity Act years</strong>, 1884 and 1910. Quote the pair rather than picking one (<code>slide 75</code>).
+- <strong>The limit of law.</strong> Legislation alone cannot deliver safety (<code>slide 75</code>).
+- <strong>What else is needed.</strong> Safe design, protection devices, PPE, and procedures that people actually follow.
+- <strong>The standards body.</strong> The Indian Standards Institute lays down safety precautions for manufacturing (<code>slide 76</code>).
+- <strong>Standards, part two.</strong> Maintenance of tools, layout, lighting and ventilation of factory buildings.
+- <strong>Standards, part three.</strong> Safe welding and cutting, powered trucks, conveyors, fire-fighting equipment.
+- <strong>Standards, part four</strong> (<code>slide 77</code>): classification and labelling of hazardous chemicals, handling codes for acids.
+- <strong>Standards, part five.</strong> PPE specifications for eyes, ears, lungs, hands, feet and legs, plus fire safety in industrial buildings.
+- <strong>Voluntary agencies (standard).</strong> Professional bodies and councils publish codes, run training and campaign. They advise; they do not prosecute.
+- <strong>The bodies the deck names</strong> (<code>slide 59</code>): World Safety Organization, National Safety Council, American Society of Safety Professionals.
+- <strong>The exception in that list.</strong> OSHA is a regulator, not a voluntary body, so do not file it with the other three.
+- <strong>What a voluntary body adds.</strong> Guidance reaches places an inspector never visits, and it is updated faster than a statute.</p>
+<p><em>What to write (5 marks).</em> Three lines on government: legislation, standards, enforcement. Two lines on voluntary agencies: guidance and training. Close with the deck's line that law alone is not enough.</p>
+<p><strong>Mark anchor.</strong> "Factories Act 1948" is the statute to name first, and "legislation alone cannot ensure safety" is the sentence that earns the analysis mark.</p>
+<p><strong>Exam trap.</strong> The <strong>government</strong> can prosecute; a <strong>voluntary agency</strong> can only persuade. Do not credit the National Safety Council with statutory power, and do not credit a factory inspector with running training campaigns.</p>
+<h3 id="29-safety-officer-91-92">2.9 Safety officer (<code>slide 81</code>, <code>slide 82</code>)<a class="anchor" href="#29-safety-officer-91-92">#</a></h3>
+<p><em>In plain English.</em> The safety officer is the company's in-house professional worrier. He looks for what could hurt someone, works out how likely it is, and gets it fixed before it does. He is the head of the safety department and usually reports to the Chief Operations Officer. He has advice, persuasion and one hard power: stopping a job that is about to kill somebody.</p>
+<p><em>The detail.</em>
+- <strong>Definition</strong> (<code>slide 81</code>): an internal employee assigned to prevent accidents, respond to emergencies, and test whether safety programmes work.
+- <strong>The core loop.</strong> Identify the hazard, investigate it, control it, and do all that before someone is hurt.
+- <strong>Place in the structure.</strong> Head of the safety department, reporting to the Chief Operations Officer in most firms.
+- <strong>Duty one.</strong> Write the safety procedure, the safety policy, the requirements and the company standard (<code>slide 82</code>).
+- <strong>Duty two.</strong> Promote schemes that keep the company inside the law.
+- <strong>Duty three.</strong> Chair the works safety committee, serve as its secretary, or sit on it.
+- <strong>Duty four.</strong> Run the safety suggestion scheme.
+- <strong>Duty five.</strong> Organise safety education, training and publicity at every level.
+- <strong>Duty six.</strong> Investigate the causes of injuries and the circumstances behind accidents.
+- <strong>Duty seven.</strong> Keep close contact with government and non-government agencies.
+- <strong>Duty eight.</strong> Coordinate the company's safety effort in every possible way.
+- <strong>Duty nine.</strong> Assess safety performance critically, and run training and feedback sessions continuously.
+- <strong>Duty ten.</strong> Sell safety to the top executives, and act as technician, planner, organiser and stimulator.
+- <strong>Authority.</strong> The safety director may take immediate corrective action in an extremely hazardous operation (<code>slide 67</code>).
+- <strong>The test of the post.</strong> An officer who only writes reports is a clerk. One who stops a job is doing the job.</p>
+<p><em>What to write (8 marks).</em> One line of definition with the reporting line. Six duties, each in under twelve words. Two lines on authority, naming the power to stop a hazardous operation.</p>
+<p><strong>Mark anchor.</strong> "Reports to the Chief Operations Officer" and "may take immediate corrective action in extremely hazardous operations" (<code>slide 81</code>, <code>slide 67</code>).</p>
+<p><strong>Exam trap.</strong> The safety officer <strong>advises and coordinates</strong>; the supervisor <strong>commands</strong>. If your answer has the safety officer disciplining workers or ordering production changes, you have merged the two roles and lost the authority marks.</p>
+<h3 id="210-safety-committee-98-to-99">2.10 Safety committee (<code>slide 83</code> to <code>slide 88</code>)<a class="anchor" href="#210-safety-committee-98-to-99">#</a></h3>
+<p><em>In plain English.</em> A safety committee is a standing group where management and workers sit at the same table and talk about safety. It exists because a complaint shouted across a noisy floor goes nowhere, while the same complaint minuted in a monthly meeting gets an owner and a date. It is the one place where the person who knows the hazard and the person who can pay for the fix are in the same room.</p>
+<p><em>The detail.</em>
+- <strong>Definition</strong> (<code>slide 83</code>): a workplace group drawn from management, frontline workers and office staff.
+- <strong>Purpose.</strong> Cut the risk of workplace injury and illness.
+- <strong>Also its job.</strong> Inform and educate workers, set achievable safety goals, and grow a safety culture.
+- <strong>Rhythm.</strong> Formal, with regular meetings, weekly or monthly. Small firms may gather all staff quarterly.
+- <strong>Nine functions</strong> (<code>slide 84</code>): written programmes, safe practices, training, inspections, investigations, liaison, record review, awareness, hazard identification with recommended controls.
+- <strong>Why it is needed, reason one</strong> (<code>slide 86</code>): <strong>financial</strong>. Fewer injuries mean lower workers' compensation premiums.
+- <strong>Why it is needed, reason two</strong> (<code>slide 86</code>): <strong>concern for employee safety</strong>. Injury rates fall even when the total never reaches zero.
+- <strong>Advantage one</strong> (<code>slide 85</code>): it gives an overall picture of the plant's safety status.
+- <strong>Advantage two.</strong> It is a visible body that any worker can approach with a complaint or a suggestion.
+- <strong>Advantage three.</strong> It guarantees that somebody is actually coordinating safety, all the time.
+- <strong>Advantage four.</strong> It shows workers the organisation is protecting them, which motivates them to follow the rules.
+- <strong>Five types</strong> (<code>slide 87</code>, <code>slide 88</code>): labour-management, management, management-supervisors, technical, special.</p>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Who sits on it</th>
+<th>When it is used</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Labour-management</td>
+<td>Management plus union nominees, union appoints its own</td>
+<td>Union contract carries safety clauses</td>
+</tr>
+<tr>
+<td>Management</td>
+<td>Management appointees, union members optional</td>
+<td>Policy is set and run by management</td>
+</tr>
+<tr>
+<td>Management-supervisors</td>
+<td>Supervisors only</td>
+<td>To supplement a committee that includes workers</td>
+</tr>
+<tr>
+<td>Technical</td>
+<td>Engineers, safety engineer, chief electrician, master mechanic</td>
+<td>A problem needs specialist knowledge, such as guard design</td>
+</tr>
+<tr>
+<td>Special</td>
+<td>Whoever the task needs</td>
+<td>Contests, celebrations, one investigation, then dissolved</td>
+</tr>
+</tbody>
+</table>
+<p><em>What to write (8 marks).</em> Definition and composition. Five functions. Two advantages. Two reasons it is needed, financial and humanitarian. Name the five types in one line each if the question asks for types.</p>
+<p><strong>Mark anchor.</strong> The two reasons on <code>slide 86</code> — financial and concern for employee safety. They are the shortest route to the "need" marks.</p>
+<p><strong>Exam trap.</strong> <strong>Need</strong> is why the committee should exist; <strong>functions</strong> are what it does. "Need" wants the two reasons from <code>slide 86</code>. "Functions" wants the nine items from <code>slide 84</code>. Answering one with the other is the most common swap in this module.</p>
+<hr />
+<h2 id="3-answer-bank">3. Answer bank<a class="anchor" href="#3-answer-bank">#</a></h2>
+<p>Marks are mine; the bank recorded none. Where two questions ask the same thing, they share one entry and both numbers appear in the heading.</p>
+<h3 id="31-three-mark-answers">3.1 Three-mark answers<a class="anchor" href="#31-three-mark-answers">#</a></h3>
+<p>Three marks buys three facts. Write three numbered lines, one idea each, then stop. A fourth line earns nothing and costs time. Bold the lead word, so the marker can find each mark. Group a long list under three headings, never nine half-lines.</p>
+<p><strong>Q19 · Objectives of safety (3 marks).</strong>
+1. <strong>Prevent harm.</strong> Stop injury, death and occupational disease before the event.
+2. <strong>Protect assets.</strong> Stop damage to plant, materials and the environment.
+3. <strong>Sustain output.</strong> Keep production running, legal, and free of penalty.</p>
+<p><strong>Q20 · Functions of a safety committee (3 marks).</strong>
+1. <strong>Programme and training.</strong> Write the programme, promote safe practice, arrange training.
+2. <strong>Inspect and investigate.</strong> Inspect the workplace, investigate accidents, review injury records.
+3. <strong>Voice.</strong> Link workers to management, raise awareness, recommend controls for hazards.</p>
+<p><strong>Q22 · Need for safety (3 marks).</strong>
+1. <strong>Money.</strong> Accidents cost far more than prevention does.
+2. <strong>People.</strong> Workers have a moral and legal right to a safe workplace.
+3. <strong>Output.</strong> Safe plants waste less and produce more per hour.</p>
+<p><strong>Q23 · Major theories of accident causation (3 marks).</strong>
+1. <strong>Chain theories.</strong> Domino and multiple causation, where causes line up.
+2. <strong>Chance theories.</strong> Pure chance, biased liability, accident proneness.
+3. <strong>Mechanism theories.</strong> Energy transfer, symptoms versus causes, human factors.</p>
+<p><strong>Q25 · Safety organisation (3 marks).</strong>
+1. <strong>Definition.</strong> The group and the authority that keeps the plant safe.
+2. <strong>Purpose.</strong> Help management protect employees and raise production.
+3. <strong>Two types.</strong> Line organisation, which commands, and staff organisation, which advises.</p>
+<p><strong>Q49 · Safety committee (3 marks).</strong>
+1. <strong>What it is.</strong> A workplace group of management, frontline workers and office staff.
+2. <strong>Why it exists.</strong> To cut the risk of workplace injury and illness.
+3. <strong>How it runs.</strong> Formal meetings, weekly or monthly, minuted, with named members.</p>
+<p><strong>Q50 · Types of safety committee (3 marks).</strong>
+1. <strong>Joint.</strong> Labour-management, with the union appointing its own members.
+2. <strong>Management-led.</strong> Management alone, or supervisors alone in a management-supervisors committee.
+3. <strong>Task-specific.</strong> Technical for specialist problems, special for a contest or one investigation.</p>
+<p><strong>Q144 · Need for a safety committee (3 marks).</strong>
+1. <strong>Financial.</strong> Fewer injuries mean lower workers' compensation premiums.
+2. <strong>Humanitarian.</strong> The firm shows it cares about employee safety.
+3. <strong>Practical.</strong> Injury rates fall, even where zero is never reached.</p>
+<p>Watch the near-twins. Q19 and Q22 sit next to each other in the bank and want different things. Objectives are what safety aims at. Need is why you fund it. The paper sets one, not both.</p>
+<h3 id="32-five-mark-answers">3.2 Five-mark answers<a class="anchor" href="#32-five-mark-answers">#</a></h3>
+<p><strong>Q21 · Unions in safety, with an example (5 marks).</strong>
+1. <strong>Standing.</strong> A union makes worker health a priority and gives the crew a collective voice.
+2. <strong>Committee.</strong> Union members form joint health and safety committees with management.
+3. <strong>Investigation.</strong> The committee investigates injuries, illness and near-misses.
+4. <strong>Monitoring.</strong> It surveys members, monitors conditions and educates them.
+5. <strong>Example.</strong> A union committee stops a press until its guard is refitted, then follows the fix up.</p>
+<p><strong>Q24 · Importance of the Domino theory (5 marks).</strong>
+1. <strong>Starting point.</strong> It is the base theory the others grow from (Heinrich, 1932).
+2. <strong>Five factors.</strong> Ancestry and environment, worker fault, unsafe act with hazard, accident, injury.
+3. <strong>Prevention logic.</strong> Remove one factor and the chain stops toppling.
+4. <strong>Key domino.</strong> Factor three, the unsafe act or condition, is the one to remove.
+5. <strong>Honest limit.</strong> Heinrich gave no data, so it guides discussion rather than predicting accidents.</p>
+<p><strong>Q45 · Role of management in safety (5 marks).</strong>
+1. <strong>Design.</strong> Build safer systems of work, so the hazard is designed out.
+2. <strong>Commitment.</strong> Show it visibly, because workers copy behaviour and ignore slogans.
+3. <strong>Inspection.</strong> Inspect the workplace and set procedures and controls.
+4. <strong>Training.</strong> Develop training programmes for every level of the plant.
+5. <strong>Structure.</strong> Set up the health and safety committee and staff it properly.</p>
+<p><strong>Q46 · Role of the union in safety (5 marks).</strong>
+1. <strong>Priority.</strong> Treat worker health and safety as a bargaining priority.
+2. <strong>Committee.</strong> Form a health and safety committee to identify and report hazards.
+3. <strong>Survey.</strong> Survey members on their safety concerns each year.
+4. <strong>Investigate.</strong> Investigate injuries, illnesses and near-misses, and monitor conditions.
+5. <strong>Escalate.</strong> Educate members, plan strategy, and file and follow up complaints.</p>
+<p><strong>Q48 · Role of the safety officer (5 marks).</strong>
+1. <strong>Find.</strong> Identify hazards, then investigate and control them before injury.
+2. <strong>Write.</strong> Draft procedure, policy, requirements and company safety standard.
+3. <strong>Train.</strong> Organise safety education, training and publicity at all levels.
+4. <strong>Investigate.</strong> Establish the causes of injuries and the circumstances of accidents.
+5. <strong>Coordinate.</strong> Liaise with agencies, assess performance, and sell safety to executives.</p>
+<p><strong>Q85 · (a) Dangerous occurrence, (b) unsafe condition (5 marks).</strong>
+1. <strong>Dangerous occurrence.</strong> A listed near-miss that harmed nobody but could have, notifiable under the Factories Act.
+2. <strong>Examples.</strong> A crane dropping its load, a boiler collapse, a fire with no injury.
+3. <strong>Unsafe condition.</strong> A physical state of the workplace that departs from the safe standard.
+4. <strong>Examples.</strong> An unguarded belt, a frayed cable, a blocked emergency exit.
+5. <strong>Why split them.</strong> Conditions are fixed by engineering, acts by training and supervision.</p>
+<p><strong>Q86 · (a) Accident, (b) reportable accident (5 marks).</strong>
+1. <strong>Accident.</strong> An unplanned and uncontrolled event that may cause injury, death or damage.
+2. <strong>Heinrich's wording.</strong> Action or reaction on an object, substance, person or radiation causing personal injury.
+3. <strong>Reportable.</strong> An accident the law requires the occupier to notify to the inspector.
+4. <strong>Threshold.</strong> Death, or injury that keeps a worker off work for 48 hours or more.
+5. <strong>Purpose of reporting.</strong> It builds the statistics that frequency and severity rates need.</p>
+<p><strong>Q116 · Role of workmen in safety (5 marks).</strong>
+1. <strong>Own safety.</strong> Each worker is responsible for his own safety on the job.
+2. <strong>Refusal.</strong> He may refuse an act or tool he reasonably believes would endanger him.
+3. <strong>Equipment.</strong> Wear suitable clothing and the PPE supplied for the task.
+4. <strong>Guards.</strong> Never remove a machine guard, and be instructed before using a machine.
+5. <strong>Others.</strong> Keep routes clear and never use a tool so that it endangers someone else.</p>
+<p><strong>Q117 · Role of supervisors in safety (5 marks).</strong>
+1. <strong>Resolve.</strong> Settle safety issues the crew raises, and settle them quickly.
+2. <strong>Walk.</strong> Patrol the area routinely, asking workers what is wrong.
+3. <strong>Inform.</strong> Report inspection results, investigation findings and fixes back to the crew.
+4. <strong>Enable.</strong> Supply resources and let workers join inspections and hazard assessments.
+5. <strong>Enforce.</strong> Run monthly meetings and hold people accountable for their safety contribution.</p>
+<p><strong>Q136 · (a) Accident, (b) injury, (c) unsafe act (5 marks).</strong>
+1. <strong>Accident.</strong> An unforeseen, unplanned event, such as a fall from a scaffold.
+2. <strong>Injury.</strong> Harm to a person from that event, such as a fractured wrist.
+3. <strong>Unsafe act.</strong> A behaviour that breaks safe procedure, such as climbing without a harness.
+4. <strong>Link.</strong> The act raises the chance of the accident, and the accident delivers the injury.
+5. <strong>Why it matters.</strong> Only the act is available to management before the event.</p>
+<p><strong>Q137 · Five needs of ensuring safety (5 marks).</strong>
+1. <strong>Cost.</strong> Accidents drain money that prevention would have saved.
+2. <strong>Legal duty.</strong> Statutes and compensation law oblige the employer to protect workers.
+3. <strong>Morality.</strong> No worker should trade health for a wage.
+4. <strong>Productivity.</strong> Safe plants suffer fewer interruptions and fewer reworks.
+5. <strong>Morale.</strong> Workers who feel protected stay, and they work better.</p>
+<h3 id="33-eight-mark-answers">3.3 Eight-mark answers<a class="anchor" href="#33-eight-mark-answers">#</a></h3>
+<p><strong>Q84 · Safety and productivity (8 marks).</strong>
+- <strong>Structure.</strong> Three pillars → each one feeds the other two → three barriers → the cost of ignoring them → close.
+- <strong>Answer.</strong> Safety, quality and productivity operate in concert (<code>slide 14</code>). Safety raises the other two, because unsafe work is badly managed and stressed workers produce poor work. Quality raises them, because fewer reworks mean more output and high standards predict high safety standards. Productivity raises them, because careless workers cause accidents and productive ones do not cut corners. Three barriers explain the resistance. Safety is feared as slow and costly. Quality is sacrificed for fast and cheap, and rework then reaches three times the budget. Safety and productivity are wrongly treated as exclusive.
+- <strong>Traps.</strong> Never concede that safety reduces output. Never list the pillars without a mechanism.</p>
+<p><strong>Q87 · Domino and human factors theory (8 marks).</strong>
+- <strong>Structure.</strong> Domino: author, five factors, the key cut, the split, the limit. Human factors: overload, decision, action, control. Close with the contrast.
+- <strong>Answer.</strong> Domino: Heinrich, 1932. Five factors topple in sequence: ancestry and social environment, worker fault, unsafe act with a mechanical or physical hazard, the accident, then damage or injury. Each depends on the one before. Remove one and the chain stops, so factor three is the key domino. The split is 88% unsafe acts, 10% unsafe conditions, 2% acts of God. Heinrich gave no data, so it starts discussion rather than predicting events. Human factors theory puts the fault inside the worker's processing. Overload comes from workload, stress or environment. The overloaded worker makes an errant decision, then acts, and the accident follows. The control is to reduce overload and train the decision, not to blame the worker.
+- <strong>Traps.</strong> Domino's factor three is the act or the condition, never the accident itself. Human factors is not accident proneness, since it describes a mechanism, not a personality.</p>
+<p><strong>Q88 · Systems theory and human factors theory (8 marks).</strong>
+- <strong>Structure.</strong> Systems theory (standard): parts, interaction, propagation, control. Human factors: overload, decision, action. Then the contrast: system versus person.
+- <strong>Answer.</strong> Systems theory (standard) treats the workplace as a set of interacting parts: person, machine, environment and management. Accidents emerge from the interaction, not from one faulty part. A fault in one part propagates until another part fails, so the fix is to redesign the system and its interfaces. Human factors theory (standard) narrows to the worker's processing. Overload from workload, stress or environment leads to a wrong decision, which leads to a wrong action. Control the overload and train the decision. The two are complements. Systems theory explains why safe parts make an unsafe whole. Human factors explains what the person does inside it.
+- <strong>Traps.</strong> Do not present systems theory as "many causes", which is multiple causation. Do not blame the worker in a human factors answer; the theory locates the cause in the load, not the character.</p>
+<p><strong>Q89 · Safety organisation and its benefits (8 marks).</strong>
+- <strong>Structure.</strong> Definition → purpose → two types → benefits of each → one line on choosing.
+- <strong>Answer.</strong> A safety organisation is the group and the authority that keeps the plant safe. Its purpose is to help management protect employees and raise production (<code>slide 59</code>). In a line organisation, authority runs top to bottom and the supervisor owns safety beside production. Benefits are a clear chain of command, fast decisions and clear accountability. In a staff organisation, specialists advise every level and a safety director reports to the general manager. Benefits: specialist experience, power to stop a hazardous operation, outside representation, informed executives, in-service training. Line suits a small plant. Staff suits a large one, at the cost of extra staff and buck-passing.
+- <strong>Traps.</strong> Staff organisation adds advice, not accountability. A safety organisation is not the same thing as a safety committee.</p>
+<p><strong>Q47 · Responsibilities of management and unions (8 marks).</strong>
+- <strong>Structure.</strong> Four lines for management, four for unions, one line on how they meet.
+- <strong>Answer.</strong> Management designs safer systems of work, shows commitment, inspects the workplace, sets procedures and controls, runs training and sets up the safety committee (<code>slide 69</code>). It also carries the legal duty and pays for the controls. Unions make health a priority, form joint health and safety committees, survey members, investigate injuries and near-misses, monitor conditions, educate members, plan strategy and follow up complaints (<code>slide 74</code>). The two meet in the labour-management committee, where the union appoints its members (<code>slide 87</code>). Management holds the authority and the budget. The union holds the collective voice and the right to escalate.
+- <strong>Traps.</strong> The union does not manage, and management does not bargain collectively. Both belong on one page but must not merge.</p>
+<p><strong>Q118 · Q143 · Responsibility and authority of the safety officer (8 marks).</strong>
+- <strong>Structure.</strong> Definition and place → six duties → authority → one line on limits.
+- <strong>Answer.</strong> The safety officer is an internal employee who prevents accidents and tests whether safety programmes work (<code>slide 81</code>). He heads the safety department and reports to the Chief Operations Officer. His duties: write the safety procedure, policy and company standard. Promote schemes that keep the firm legal. Chair the works safety committee, or serve as its secretary. Run the suggestion scheme. Organise education, training and publicity. Investigate injuries and accident circumstances. Liaise with government and other agencies. Coordinate the safety effort. Assess performance and run feedback sessions. Sell safety to the executive. Authority: he may take immediate corrective action in an extremely hazardous operation (<code>slide 67</code>). He advises and coordinates, and the line still commands.
+- <strong>Traps.</strong> Do not give the safety officer power to discipline workers. Do not confuse his committee role with the committee's own function.</p>
+<p><strong>Q120 · Functions and duties of a safety committee (8 marks).</strong>
+- <strong>Structure.</strong> Definition → five functions → two more duties → two advantages → close on need.
+- <strong>Answer.</strong> A safety committee is a workplace group of management, frontline workers and office staff (<code>slide 83</code>). Its functions: develop written safety programmes, promote safe work practices, facilitate training. It inspects the workplace and investigates accidents. It reviews injury and illness records and raises awareness. It links employees to management and recommends controls for hazards found (<code>slide 84</code>). It also sets achievable goals and builds a safety culture. Its advantages: an overall view of safety status, a visible body for complaints, dedicated coordination, and visible protection (<code>slide 85</code>). The need is financial, through lower compensation premiums, and humanitarian.
+- <strong>Traps.</strong> Functions are the nine items on <code>slide 84</code>; need is the two reasons on <code>slide 86</code>. Keep them apart.</p>
+<p><strong>Q138 · Q139 · Q140 · Any three theories of accident causation (8 marks).</strong>
+- <strong>Structure.</strong> Three theories, each as author, mechanism, control. Close with one line on why none is accepted universally.
+- <strong>Answer.</strong> Domino (Heinrich, 1932): five factors topple in sequence, and each depends on the one before. Removing factor three, the unsafe act or condition, breaks the chain (<code>slide 41</code>, <code>slide 44</code>). Control: remove the act and the condition. Multiple causation: an outgrowth of Domino, holding that many contributory causes combine, grouped as behavioural and environmental (<code>slide 48</code>). Control: attack several causes at once, since one fix rarely holds. Energy transfer: injury is a change of energy, and every change has a source, a path and a receiver (<code>slide 52</code>). Control: remove the source, barrier the path, limit exposure at the receiver. No theory is universally accepted, so give the mechanism, not a verdict.
+- <strong>Traps.</strong> Do not answer with three names and no mechanism. Do not present pure chance as a usable theory, since it denies that prevention can work.</p>
+<h3 id="34-fourteen-mark-skeleton">3.4 Fourteen-mark skeleton<a class="anchor" href="#34-fourteen-mark-skeleton">#</a></h3>
+<p><strong>Q141 · Q142 · Roles of management, supervisors, workmen and unions (14 marks).</strong></p>
+<p><strong>Shape.</strong> Four bodies, unequal weight, one closing synthesis. Not four equal paragraphs; the supervisor carries most of the deck. Marks split as management 3, supervisor 4, workman 3, union 3, synthesis 1.</p>
+<p><strong>Answer.</strong></p>
+<p>Safety needs four hands: management sets the system, the supervisor runs it, the workman lives inside it, the union guards it.</p>
+<ol>
+<li><strong>Management, 3 marks.</strong> Design safer systems of work, show commitment, inspect, set procedures and controls, train, and set up the safety committee (<code>slide 69</code>). Management also holds the budget and the legal duty.</li>
+<li><strong>Supervisor, 4 marks.</strong> Resolve crew concerns quickly and walk the area routinely. Report results back, resource the task, and set unit goals. Ensure hazard awareness, let workers join inspections, and hold monthly meetings. Enforce stop-work authority (<code>slide 70</code>, <code>slide 71</code>). The employer must train and back him.</li>
+<li><strong>Workman, 3 marks.</strong> Own his safety, refuse unsafe work, and wear the PPE. Never strip a guard, and be instructed before use. Protect the next person and keep routes clear (<code>slide 72</code>, <code>slide 73</code>).</li>
+<li><strong>Union, 3 marks.</strong> Survey members, investigate injuries and near-misses, monitor conditions, educate, plan strategy, file and follow complaints, and sit on the joint committee (<code>slide 74</code>).</li>
+<li><strong>Synthesis, 1 mark.</strong> Authority sits with management and the supervisor. Duty sits with everyone. The union converts individual complaint into process.</li>
+</ol>
+<p><strong>Traps (max two).</strong> First, do not merge supervisor and management; the split is command versus design. Second, do not let the union manage, or the workman delegate his duty upward.</p>
+<hr />
+<h2 id="4-definitions-and-numbers-to-memorise">4. Definitions and numbers to memorise<a class="anchor" href="#4-definitions-and-numbers-to-memorise">#</a></h2>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Value</th>
+<th>Where from</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>World Safety and Health Day</td>
+<td>28 April, observed by the ILO</td>
+<td><code>slide 10</code></td>
+</tr>
+<tr>
+<td>Domino theory</td>
+<td>Heinrich, 1932, five factors</td>
+<td><code>slide 41</code></td>
+</tr>
+<tr>
+<td>Accident split</td>
+<td>88% unsafe acts, 10% unsafe conditions, 2% acts of God</td>
+<td><code>slide 41</code></td>
+</tr>
+<tr>
+<td>Key domino</td>
+<td>Factor three, the unsafe act or condition</td>
+<td><code>slide 44</code></td>
+</tr>
+<tr>
+<td>Theories listed</td>
+<td>Eight on the deck, plus systems theory (standard)</td>
+<td><code>slide 40</code></td>
+</tr>
+<tr>
+<td>Safety organisation types</td>
+<td>Line and staff</td>
+<td><code>slide 60</code></td>
+</tr>
+<tr>
+<td>Rework multiple</td>
+<td>Three times the original budget</td>
+<td><code>slide 19</code></td>
+</tr>
+<tr>
+<td>Reportable accident threshold</td>
+<td>Death, or 48 hours off work (standard)</td>
+<td>Factories Act 1948 (standard)</td>
+</tr>
+<tr>
+<td>Factories Act</td>
+<td>1948</td>
+<td><code>slide 75</code></td>
+</tr>
+<tr>
+<td>Mines Act</td>
+<td>1952</td>
+<td><code>slide 75</code></td>
+</tr>
+<tr>
+<td>Indian Boilers Act</td>
+<td>1923</td>
+<td><code>slide 75</code></td>
+</tr>
+<tr>
+<td>Workmen's Compensation Act</td>
+<td>1923</td>
+<td><code>slide 26</code>, <code>slide 75</code></td>
+</tr>
+<tr>
+<td>Petroleum Act</td>
+<td>1934</td>
+<td><code>slide 75</code></td>
+</tr>
+<tr>
+<td>Indian Electricity Act</td>
+<td>1884 and 1910, both on the deck</td>
+<td><code>slide 75</code></td>
+</tr>
+<tr>
+<td>Safety officer reports to</td>
+<td>Chief Operations Officer</td>
+<td><code>slide 81</code></td>
+</tr>
+<tr>
+<td>Safety committee types</td>
+<td>Five: labour-management, management, management-supervisors, technical, special</td>
+<td><code>slide 87</code>, <code>slide 88</code></td>
+</tr>
+<tr>
+<td>Safety officer duties</td>
+<td>Ten</td>
+<td><code>slide 82</code></td>
+</tr>
+</tbody>
+</table>
+<p>Definitions in one line each, in the deck's own words where the deck gives them: <strong>accident</strong> is an unplanned and uncontrolled event that may injure or damage. <strong>Injury</strong> is an abnormal condition or disorder, such as a cut or a fracture. <strong>Industrial injury</strong> is one arising out of employment and compensable under the 1923 Act. <strong>Unsafe act</strong> is a behaviour that breaks safe procedure. <strong>Unsafe condition</strong> is a physical state that departs from the safe standard. <strong>Dangerous occurrence</strong> is a notifiable near-miss. <strong>Reportable accident</strong> is one the law requires you to notify. <strong>Safety organisation</strong> is the group and authority that keeps the plant safe. <strong>Safety officer</strong> is the internal employee who prevents accidents and tests the programme. <strong>Safety committee</strong> is the standing management-worker group on safety.</p>
+<hr />
+<h2 id="5-diagrams-to-draw-from-the-deck-only">5. Diagrams to draw (from the deck only)<a class="anchor" href="#5-diagrams-to-draw-from-the-deck-only">#</a></h2>
+<ol>
+<li><strong>Domino chain</strong> (<code>slide 41</code>). Five upright dominoes in a row, labelled ancestry and environment, worker fault, unsafe act with hazard, accident, injury. Draw a hand removing the third.</li>
+<li><strong>Three pillars</strong> (<code>slide 14</code>). Three columns labelled safety, quality and productivity, joined by arrows running both ways.</li>
+<li><strong>Line organisation</strong> (<code>slide 61</code>). One vertical chain: chief executive to plant manager to supervisor to workman, with safety duties hanging off each supervisor.</li>
+<li><strong>Staff organisation</strong> (<code>slide 65</code>). The same vertical chain, plus a safety director in a box beside it, with advisory arrows into every level and a reporting line to the general manager.</li>
+<li><strong>Energy transfer</strong> (<code>slide 53</code>). Three boxes in a row: source, path, receiver, with the controls written under each, removal at the source, barriers and isolators on the path, PPE at the receiver.</li>
+</ol>
+<hr />
+<h2 id="6-say-this-if-grilled">6. Say-this-if-grilled<a class="anchor" href="#6-say-this-if-grilled">#</a></h2>
+<ol>
+<li>Safety is cheaper than repair, and the gap is not small, because rework can hit three times the budget.</li>
+<li>Heinrich's 88/10/2 is the most quoted number in the subject and the least evidenced; quote it and say so.</li>
+<li>The key domino is the unsafe act or condition, not the accident, because the accident is already too late to remove.</li>
+<li>Line organisation commands and staff organisation advises; only one of them changes who is accountable.</li>
+<li>Management designs, the supervisor operates, the workman complies, and the union watches.</li>
+<li>Stop-work authority is what turns a supervisor's concern into a decision.</li>
+<li>The safety officer's authority is narrow: stop an extremely hazardous job now, argue about everything else later.</li>
+<li>A safety committee is needed for two reasons, money and care, and the deck gives them in that order.</li>
+<li>Dangerous occurrence is the accident that did not happen, and it is the cheapest lesson available.</li>
+<li>If a question says need, give reasons; if it says functions, give the list. They are never interchangeable.</li>
+</ol>
+  </main>
+</div>
+<button id="chat-btn" title="Ask about this page (select text first)">✳</button>
+<div id="sel-chip">Ask about this</div>
+<div id="chat-panel" role="dialog" aria-label="Ask about this page">
+  <div id="chat-head"><span>Ask this page</span><span class="sp"></span><button id="chat-close" title="Close">✕</button></div>
+  <div id="chat-quote"></div>
+  <div id="chat-log"></div>
+  <form id="chat-form" autocomplete="off">
+    <textarea id="chat-input" rows="1" placeholder="Ask about the selection or the section…"></textarea>
+    <button id="chat-send" title="Send">↑</button>
+  </form>
+  <div id="chat-foot">Select text → “Ask about this”. Enter sends, Shift+Enter newline.</div>
+</div>
+<div class="tools">
+  <button id="theme" title="Toggle light / dark">☾</button>
+  <button id="top" title="Back to top">↑</button>
+</div>
+<script>
+(function(){
+  var root=document.documentElement, key='minotes-theme';
+  var saved=localStorage.getItem(key);
+  var prefers=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';
+  root.setAttribute('data-theme', saved || prefers);
+
+  var btn=document.getElementById('theme');
+  function sync(){ if(btn) btn.textContent = root.getAttribute('data-theme')==='dark' ? '\u2600' : '\u263E'; }
+  sync();
+  if(btn) btn.addEventListener('click',function(){
+    var next = root.getAttribute('data-theme')==='dark' ? 'light' : 'dark';
+    root.setAttribute('data-theme', next); localStorage.setItem(key,next); sync();
+  });
+
+  var bar=document.getElementById('progress');
+  if(bar) addEventListener('scroll',function(){
+    var h=document.documentElement.scrollHeight-innerHeight;
+    bar.style.width=(h>0?(scrollY/h*100):0)+'%';
+  },{passive:true});
+
+  document.querySelectorAll('pre').forEach(function(pre){
+    var b=document.createElement('button');
+    b.className='copy'; b.textContent='copy';
+    b.addEventListener('click',function(){
+      var t=pre.querySelector('code'); var txt=t?t.innerText:pre.innerText;
+      navigator.clipboard.writeText(txt).then(function(){
+        b.textContent='copied'; setTimeout(function(){b.textContent='copy';},1200);
+      });
+    });
+    pre.appendChild(b);
+  });
+
+  document.querySelectorAll('main table').forEach(function(t){
+    if(t.parentElement.classList.contains('table-scroll')) return;
+    var w=document.createElement('div'); w.className='table-scroll';
+    t.parentNode.insertBefore(w,t); w.appendChild(t);
+  });
+
+  var links=[].slice.call(document.querySelectorAll('.sidebar a[href^="#"]'));
+  var map={}; links.forEach(function(a){ map[a.getAttribute('href').slice(1)]=a; });
+  var heads=[].slice.call(document.querySelectorAll('main h2[id], main h3[id]'));
+  if('IntersectionObserver' in window && heads.length){
+    var obs=new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if(!e.isIntersecting) return;
+        links.forEach(function(a){a.classList.remove('active');});
+        var a=map[e.target.id]; if(a){a.classList.add('active');}
+      });
+    },{rootMargin:'-10% 0px -75% 0px'});
+    heads.forEach(function(h){obs.observe(h);});
+  }
+
+  var top=document.getElementById('top');
+  if(top) top.addEventListener('click',function(){ scrollTo({top:0,behavior:'smooth'}); });
+})();
+
+(function(){
+  var API="/api/chat";
+  var panel=document.getElementById("chat-panel"),
+      btn=document.getElementById("chat-btn"),
+      chip=document.getElementById("sel-chip"),
+      quote=document.getElementById("chat-quote"),
+      log=document.getElementById("chat-log"),
+      input=document.getElementById("chat-input"),
+      send=document.getElementById("chat-send"),
+      form=document.getElementById("chat-form");
+
+  if(!panel) return;
+  var pendingSelection="", busy=false, lastSelection="";
+
+  function esc(s){return s.replace(/[&<>]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;"}[c];});}
+
+  // minimal markdown: fenced code, inline code, bold, bullets, numbered lists
+  function md(src){
+    var parts=src.split(/```/), out="";
+    for(var i=0;i<parts.length;i++){
+      if(i%2){ out+="<pre><code>"+esc(parts[i].replace(/^\w*\n/,""))+"</code></pre>"; continue; }
+      var t=esc(parts[i]);
+      t=t.replace(/`([^`\n]+)`/g,"<code>$1</code>").replace(/\*\*([^*]+)\*\*/g,"<b>$1</b>");
+      var lines=t.split(/\n/), html="", inUl=false, inOl=false;
+      for(var j=0;j<lines.length;j++){
+        var line=lines[j];
+        if(/^\s*[-*]\s+/.test(line)){
+          if(inOl){html+="</ol>";inOl=false;}
+          if(!inUl){html+="<ul>";inUl=true;}
+          html+="<li>"+line.replace(/^\s*[-*]\s+/,"")+"</li>"; continue;
+        }
+        if(/^\s*\d+[.)]\s+/.test(line)){
+          if(inUl){html+="</ul>";inUl=false;}
+          if(!inOl){html+="<ol>";inOl=true;}
+          html+="<li>"+line.replace(/^\s*\d+[.)]\s+/,"")+"</li>"; continue;
+        }
+        if(inUl){html+="</ul>";inUl=false;}
+        if(inOl){html+="</ol>";inOl=false;}
+        if(line.trim()==="") continue;
+        html+="<p>"+line+"</p>";
+      }
+      if(inUl)html+="</ul>";
+      if(inOl)html+="</ol>";
+      out+=html;
+    }
+    return out;
+  }
+
+  function outline(){
+    return [].slice.call(document.querySelectorAll("main h2, main h3")).slice(0,40)
+      .map(function(h){return (h.tagName==="H3"?"  - ":"- ")+h.textContent.replace(/#$/,"").trim();}).join("\n");
+  }
+
+  function sectionFor(node){
+    var el = node && (node.nodeType===1?node:node.parentElement);
+    if(!el || !el.closest) return "";
+    el = el.closest("main") ? el : null;
+    if(!el) return "";
+    var heads=[].slice.call(document.querySelectorAll("main h2, main h3"));
+    var cur=null, idx=-1;
+    for(var i=0;i<heads.length;i++){
+      if(heads[i].compareDocumentPosition(el) & Node.DOCUMENT_POSITION_FOLLOWING) { cur=heads[i]; idx=i; }
+    }
+    if(!cur) return "";
+    var stop = heads[idx+1] || null, txt=[], n=cur;
+    while((n=n.nextSibling) && n!==stop){ if(n.textContent) txt.push(n.textContent); }
+    return (cur.textContent+"\n"+txt.join("\n")).replace(/\s+\n/g,"\n").slice(0,3000);
+  }
+
+  function placeChip(x,y){
+    chip.style.left=x+"px"; chip.style.top=(y+window.scrollY-8)+"px"; chip.style.display="block";
+  }
+  function hideChip(){ chip.style.display="none"; }
+
+  document.addEventListener("mouseup",function(e){
+    setTimeout(function(){
+      var s=window.getSelection(), text=s?s.toString().trim():"";
+      if(!text || text.length<3 || !s.anchorNode || !(s.anchorNode.parentElement||s.anchorNode).closest("main")){hideChip();return;}
+      lastSelection=text;
+      var r=s.getRangeAt(0).getBoundingClientRect();
+      placeChip(r.left+r.width/2, Math.max(r.top,8));
+    },10);
+  });
+  document.addEventListener("mousedown",function(e){ if(e.target!==chip) hideChip(); });
+
+  chip.addEventListener("mousedown",function(e){ e.preventDefault(); });
+  chip.addEventListener("click",function(e){
+    e.stopPropagation();
+    pendingSelection=lastSelection; hideChip(); open(pendingSelection);
+  });
+
+  function open(sel){
+    panel.classList.add("open");
+    if(sel){ quote.style.display="block"; quote.textContent=sel; pendingSelection=sel; }
+    else { quote.style.display="none"; quote.textContent=""; pendingSelection=""; }
+    setTimeout(function(){input.focus();},60);
+  }
+  function close(){ panel.classList.remove("open"); }
+
+  btn.addEventListener("click",function(){ panel.classList.contains("open")?close():open(lastSelection||""); });
+  document.getElementById("chat-close").addEventListener("click",close);
+  document.addEventListener("keydown",function(e){ if(e.key==="Escape") close(); });
+
+  function addMsg(cls,html){
+    var d=document.createElement("div"); d.className="msg "+cls; d.innerHTML=html; log.appendChild(d);
+    log.scrollTop=log.scrollHeight; return d;
+  }
+
+  async function ask(q){
+    if(busy||!q.trim()) return;
+    busy=true; send.disabled=true;
+    addMsg("user",esc(q));
+    var bot=addMsg("bot",'<span class="cursor"></span>');
+    var acc="";
+    var sid=sessionStorage.getItem("mn-sid");
+    if(!sid){ sid=(crypto.randomUUID?crypto.randomUUID():String(Date.now())+Math.random().toString(16).slice(2)); sessionStorage.setItem("mn-sid",sid); }
+    var payload={q:q, sid:sid, sel:pendingSelection||"", page:document.querySelector("h1")?document.querySelector("h1").textContent.trim():document.title,
+                 section:sectionFor(window.getSelection()&&window.getSelection().anchorNode?"":document.querySelector("main h2"))||"",
+                 outline:outline()};
+    // section: prefer the one containing the selection, else the first heading on screen
+    try{
+      var sel=window.getSelection();
+      if(pendingSelection && sel && sel.anchorNode){ payload.section=sectionFor(sel.anchorNode); }
+      if(!payload.section){
+        var vis=[].slice.call(document.querySelectorAll("main h2, main h3")).filter(function(h){
+          var r=h.getBoundingClientRect(); return r.top>-80 && r.top<window.innerHeight*0.6; }).pop();
+        if(vis) payload.section=sectionFor(vis);
+      }
+    }catch(_){}
+
+    try{
+      var res=await fetch(API,{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify(payload)});
+      if(!res.ok){
+        var j=await res.json().catch(function(){return{};});
+        throw new Error(j.error||("HTTP "+res.status));
+      }
+      var reader=res.body.getReader(), dec=new TextDecoder(), buf="";
+      for(;;){
+        var r=await reader.read(); if(r.done) break;
+        buf+=dec.decode(r.value,{stream:true});
+        var lines=buf.split("\n"); buf=lines.pop()||"";
+        for(var i=0;i<lines.length;i++){
+          var l=lines[i].trim(); if(l.indexOf("data:")!==0) continue;
+          var d=l.slice(5).trim(); if(d==="[DONE]") continue;
+          try{ var o=JSON.parse(d); if(o.d){acc+=o.d; bot.innerHTML=md(acc)+'<span class="cursor"></span>'; log.scrollTop=log.scrollHeight;} if(o.error) throw new Error(o.error);}catch(_){}
+        }
+      }
+      bot.innerHTML=md(acc||"_no answer_");
+    }catch(err){
+      bot.className="msg err";
+      bot.textContent = String(err.message).indexOf("Failed to fetch")>-1 || String(err.message).indexOf("HTTP 5")>-1
+        ? "Assistant unavailable — it only works on the deployed site (needs the /api/chat function)."
+        : "Error: "+err.message;
+    }finally{
+      busy=false; send.disabled=false; input.value=""; input.focus();
+      pendingSelection=""; quote.style.display="none";
+    }
+  }
+
+  form.addEventListener("submit",function(e){ e.preventDefault(); ask(input.value); });
+  input.addEventListener("keydown",function(e){
+    if(e.key==="Enter"&&!e.shiftKey){ e.preventDefault(); ask(input.value); }
+  });
+  input.addEventListener("input",function(){ input.style.height="auto"; input.style.height=Math.min(input.scrollHeight,110)+"px"; });
+})();
+</script>
+</body>
+</html>

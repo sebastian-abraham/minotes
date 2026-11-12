@@ -1,0 +1,2201 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Module 3 — Introduction to the Construction Industry and Safety · Industrial Safety Engineering</title>
+<style>
+:root{
+  --bg:#fbfaf8; --panel:#ffffff; --ink:#232120; --muted:#5f5a53; --line:#e6e1da;
+  --accent:#7a4fd0; --accent-soft:#f1ecfb; --code-bg:#f5f2ee; --code-ink:#2b2a28;
+  --warn-bg:#fff8e6; --warn-line:#f0d9a0;
+  --sans:"Inter","Segoe UI",system-ui,-apple-system,"Noto Sans",sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,"SF Mono",Menlo,Consolas,"Fira Code",monospace;
+}
+html[data-theme="dark"]{
+  --bg:#141317; --panel:#1b1a20; --ink:#e8e4de; --muted:#a8a199; --line:#2f2c36;
+  --accent:#b79cf5; --accent-soft:#241f33; --code-bg:#22202a; --code-ink:#e8e4de;
+  --warn-bg:#2a2417; --warn-line:#4a3d22;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0; background:var(--bg); color:var(--ink); font-family:var(--sans);
+  font-size:16.5px; line-height:1.72; -webkit-font-smoothing:antialiased;
+}
+#progress{position:fixed;top:0;left:0;height:3px;width:0;background:var(--accent);z-index:50;transition:width .1s linear}
+
+.wrap{display:flex;align-items:flex-start;min-height:100vh}
+.sidebar{
+  position:sticky;top:0;height:100vh;width:300px;flex:0 0 300px;overflow-y:auto;
+  padding:26px 20px 60px;border-right:1px solid var(--line);background:var(--panel);
+}
+.sidebar h1{font-size:15px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);
+  margin:0 0 4px;font-weight:600}
+.sidebar .sub{font-size:12.5px;color:var(--muted);margin:0 0 18px}
+.sidebar nav{font-size:14px}
+.sidebar .toc>ul{padding-left:0}
+.sidebar ul{list-style:none;margin:0;padding-left:12px}
+.sidebar ul ul{border-left:1px solid var(--line);margin-left:4px;padding-left:10px}
+.sidebar li{margin:3px 0}
+.sidebar a{color:var(--ink);text-decoration:none;display:block;padding:3px 8px;border-radius:8px;
+  line-height:1.35;transition:background .12s,color .12s}
+.sidebar a:hover{background:var(--accent-soft);color:var(--accent)}
+.sidebar a.active{background:var(--accent-soft);color:var(--accent);font-weight:600}
+.sidebar .home{display:inline-flex;align-items:center;gap:6px;margin-bottom:16px;font-size:13.5px;
+  color:var(--muted);text-decoration:none;border:1px solid var(--line);padding:5px 10px;border-radius:999px}
+.sidebar .home:hover{color:var(--accent);border-color:var(--accent)}
+
+main{flex:1;min-width:0;padding:46px 56px 120px;max-width:980px;margin:0 auto}
+.doc-head{border-bottom:1px solid var(--line);padding-bottom:18px;margin-bottom:34px}
+.doc-head .kicker{font-size:12.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);
+  font-weight:700;margin-bottom:8px}
+.doc-head .meta{font-size:13.5px;color:var(--muted)}
+
+h1,h2,h3,h4{line-height:1.25;font-weight:700;letter-spacing:-.01em}
+h1{font-size:2.05rem;margin:.2em 0 .5em}
+h2{font-size:1.55rem;margin:2.4em 0 .7em;padding-bottom:.35em;border-bottom:1px solid var(--line)}
+h3{font-size:1.2rem;margin:1.9em 0 .55em}
+h4{font-size:1.03rem;margin:1.5em 0 .45em;color:var(--muted)}
+h2 .anchor,h3 .anchor{opacity:0;margin-left:.35em;font-size:.8em;color:var(--muted);text-decoration:none}
+h2:hover .anchor,h3:hover .anchor{opacity:1}
+p{margin:.75em 0}
+a{color:var(--accent);text-underline-offset:2px}
+strong{font-weight:650}
+hr{border:0;border-top:1px solid var(--line);margin:2.6em 0}
+ul,ol{margin:.7em 0;padding-left:1.4em}
+li{margin:.3em 0}
+li>ul,li>ol{margin:.25em 0}
+blockquote{
+  margin:1.3em 0;padding:12px 18px;background:var(--warn-bg);border-left:3px solid var(--warn-line);
+  border-radius:0 10px 10px 0;color:var(--ink)
+}
+blockquote p{margin:.3em 0}
+
+code{font-family:var(--mono);font-size:.87em;background:var(--code-bg);color:var(--code-ink);
+  padding:.15em .38em;border-radius:6px;border:1px solid var(--line);
+  box-decoration-break:clone;-webkit-box-decoration-break:clone;overflow-wrap:anywhere}
+pre{position:relative;background:var(--code-bg);border:1px solid var(--line);border-radius:12px;
+  padding:16px 18px;overflow-x:auto;margin:1.1em 0}
+pre code{background:none;border:0;padding:0;font-size:13.6px;line-height:1.62;white-space:pre}
+.copy{position:absolute;top:8px;right:8px;font:600 11px/1 var(--sans);color:var(--muted);
+  background:var(--panel);border:1px solid var(--line);border-radius:7px;padding:5px 8px;cursor:pointer;
+  opacity:0;transition:opacity .15s}
+pre:hover .copy{opacity:1}
+.copy:hover{color:var(--accent);border-color:var(--accent)}
+
+.table-scroll{overflow-x:auto;margin:1.3em 0;border:1px solid var(--line);border-radius:12px;background:var(--panel)}
+table{border-collapse:collapse;width:100%;font-size:14.6px}
+th,td{padding:9px 13px;text-align:left;vertical-align:top;border-bottom:1px solid var(--line)}
+th{background:var(--accent-soft);font-weight:650;font-size:13px;letter-spacing:.02em;
+  position:sticky;top:0;backdrop-filter:blur(4px)}
+tr:last-child td{border-bottom:0}
+tbody tr:nth-child(even){background:color-mix(in srgb,var(--panel) 60%,var(--bg))}
+tbody tr:hover{background:var(--accent-soft)}
+
+.tools{position:fixed;right:22px;bottom:22px;display:flex;flex-direction:column;gap:8px;z-index:40}
+.tools button{width:42px;height:42px;border-radius:12px;border:1px solid var(--line);background:var(--panel);
+  color:var(--ink);cursor:pointer;font-size:16px;box-shadow:0 4px 14px rgba(0,0,0,.10)}
+.tools button:hover{color:var(--accent);border-color:var(--accent)}
+@media (max-width:1000px){
+  .wrap{display:block}
+  .sidebar{position:static;width:auto;height:auto;border-right:0;border-bottom:1px solid var(--line)}
+  .sidebar nav{max-height:40vh;overflow:auto}
+  main{padding:28px 20px 100px}
+}
+@media print{
+  .sidebar,.tools,#progress,.copy{display:none!important}
+  body{background:#fff;color:#000;font-size:11pt}
+  main{padding:0;max-width:none}
+  h2{break-after:avoid} pre,table,blockquote{break-inside:avoid}
+  a{color:#000;text-decoration:none}
+}
+
+/* ---- ask-about-this ---- */
+#chat-btn{position:fixed;right:20px;bottom:112px;width:44px;height:44px;border-radius:50%;
+  border:1px solid var(--line);background:var(--panel);color:var(--accent);cursor:pointer;font-size:17px;
+  box-shadow:0 6px 18px rgba(0,0,0,.12);z-index:45;display:grid;place-items:center}
+#chat-btn:hover{border-color:var(--accent)}
+#sel-chip{position:absolute;z-index:46;transform:translate(-50%,-100%);background:var(--ink);color:var(--bg);
+  font:600 12px/1 var(--sans);padding:7px 11px;border-radius:999px;cursor:pointer;white-space:nowrap;
+  box-shadow:0 6px 18px rgba(0,0,0,.25);display:none}
+#sel-chip:hover{background:var(--accent);color:#fff}
+#chat-panel{position:fixed;right:20px;bottom:164px;width:min(420px,calc(100vw - 40px));max-height:min(70vh,620px);
+  background:var(--panel);border:1px solid var(--line);border-radius:14px;z-index:47;display:none;
+  flex-direction:column;box-shadow:0 18px 50px rgba(0,0,0,.18);overflow:hidden}
+#chat-panel.open{display:flex}
+#chat-head{display:flex;align-items:center;gap:8px;padding:11px 13px;border-bottom:1px solid var(--line);
+  font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:700}
+#chat-head .sp{flex:1}
+#chat-head button{background:none;border:0;color:var(--muted);cursor:pointer;font-size:15px;padding:2px 4px}
+#chat-head button:hover{color:var(--accent)}
+#chat-quote{display:none;margin:10px 13px 0;padding:8px 10px;border-left:2px solid var(--accent);
+  background:var(--accent-soft);color:var(--muted);font-size:12.5px;border-radius:0 8px 8px 0;
+  max-height:84px;overflow:auto;white-space:pre-wrap}
+#chat-log{flex:1;overflow-y:auto;padding:12px 13px;display:flex;flex-direction:column;gap:10px;font-size:13.6px;line-height:1.55}
+.msg{max-width:100%}
+.msg.user{align-self:flex-end;background:var(--accent-soft);color:var(--ink);padding:7px 11px;border-radius:11px 11px 2px 11px;
+  max-width:86%;white-space:pre-wrap}
+.msg.bot{color:var(--ink)}
+.msg.bot p{margin:.3em 0}
+.msg.bot ul{margin:.3em 0;padding-left:1.15em}
+.msg.bot code{font-size:.9em}
+.msg.bot pre{background:var(--code-bg);border-radius:8px;padding:9px 11px;overflow-x:auto;font-size:12px;margin:.4em 0}
+.msg.err{color:#b3261e;font-size:12.5px}
+.msg .cursor:after{content:"▍";color:var(--accent);animation:blink 1s steps(2) infinite}
+@keyframes blink{50%{opacity:0}}
+#chat-form{display:flex;gap:8px;padding:10px 13px;border-top:1px solid var(--line)}
+#chat-input{flex:1;resize:none;border:1px solid var(--line);border-radius:9px;background:var(--bg);color:var(--ink);
+  font:inherit;font-size:13.5px;padding:8px 10px;max-height:110px;min-height:38px}
+#chat-input:focus{outline:2px solid var(--accent);outline-offset:0}
+#chat-send{border:1px solid var(--accent);background:var(--accent);color:#fff;border-radius:9px;
+  width:38px;cursor:pointer;font-size:15px}
+#chat-send:disabled{opacity:.45;cursor:default}
+#chat-foot{font-size:11px;color:var(--muted);padding:0 13px 9px}
+@media (max-width:640px){
+  #chat-panel{right:8px;left:8px;width:auto;bottom:150px;max-height:66vh}
+  #chat-btn{bottom:104px;right:16px}
+}
+@media print{#chat-btn,#chat-panel,#sel-chip{display:none!important}}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+<div class="wrap">
+  <aside class="sidebar">
+    <a class="home" href="index.html">← Industrial Safety Engineering</a>
+    <a class="home" href="practice.html">Practice drills</a>
+    <h1>M3 · Construction safety</h1>
+    <p class="sub">20% ESE · 31 questions</p>
+    <nav class="toc"><div class="toc">
+<ul>
+<li><a href="#1-coverage">1. Coverage</a><ul>
+<li><a href="#11-syllabus-line-section">1.1 Syllabus line → section</a></li>
+<li><a href="#12-all-31-assigned-questions">1.2 All 31 assigned questions</a></li>
+</ul>
+</li>
+<li><a href="#2-concepts">2. Concepts</a><ul>
+<li><a href="#21-the-construction-hazard-profile-stage-by-stage">2.1 The construction hazard profile, stage by stage</a></li>
+<li><a href="#22-excavation-and-filling">2.2 Excavation and filling</a></li>
+<li><a href="#23-under-water-works">2.3 Under-water works</a></li>
+<li><a href="#24-underpinning">2.4 Underpinning</a></li>
+<li><a href="#25-shoring">2.5 Shoring</a></li>
+<li><a href="#26-ladders">2.6 Ladders</a></li>
+<li><a href="#27-scaffolds">2.7 Scaffolds</a></li>
+<li><a href="#28-tunnelling">2.8 Tunnelling</a></li>
+<li><a href="#29-blasting">2.9 Blasting</a></li>
+<li><a href="#210-demolition">2.10 Demolition</a></li>
+<li><a href="#211-confined-space-in-construction">2.11 Confined space in construction</a></li>
+<li><a href="#212-the-national-building-code-and-the-indian-standards">2.12 The National Building Code and the Indian Standards</a></li>
+<li><a href="#213-relevance-of-ergonomics-in-construction-safety">2.13 Relevance of ergonomics in construction safety</a></li>
+<li><a href="#214-ergonomic-hazards-on-a-construction-site">2.14 Ergonomic hazards on a construction site</a></li>
+<li><a href="#215-musculoskeletal-disorders-and-cumulative-trauma-disorders">2.15 Musculoskeletal disorders and cumulative trauma disorders</a></li>
+</ul>
+</li>
+<li><a href="#3-answer-bank">3. Answer bank</a><ul>
+<li><a href="#31-three-mark-answers">3.1 Three-mark answers</a></li>
+<li><a href="#32-five-mark-answers">3.2 Five-mark answers</a></li>
+<li><a href="#33-eight-mark-answers-site-and-process-ah">3.3 Eight-mark answers — site and process (A–H)</a></li>
+<li><a href="#34-eight-mark-answers-codes-plant-and-people-io">3.4 Eight-mark answers — codes, plant and people (I–O)</a></li>
+<li><a href="#35-fourteen-mark-skeleton-q80-the-plan">3.5 Fourteen-mark skeleton (Q80) — the plan</a></li>
+<li><a href="#36-fourteen-mark-skeleton-marks-diagrams-and-alternates">3.6 Fourteen-mark skeleton — marks, diagrams and alternates</a></li>
+</ul>
+</li>
+<li><a href="#4-definitions-and-numbers-to-memorise">4. Definitions and numbers to memorise</a></li>
+<li><a href="#5-diagrams-to-draw">5. Diagrams to draw</a></li>
+<li><a href="#6-say-this-if-grilled">6. Say-this-if-grilled</a></li>
+</ul>
+</div>
+</nav>
+  </aside>
+  <main>
+    <div class="doc-head">
+      <div class="kicker">20MCN401 · Industrial Safety Engineering</div>
+      <div class="meta">20% ESE · 31 questions · rendered from KIT_M3_CONSTRUCTION.md</div>
+    </div>
+    <h1 id="module-3-introduction-to-the-construction-industry-and-safety">Module 3 — Introduction to the Construction Industry and Safety</h1>
+<p><strong>20MCN401 Industrial Safety Engineering · B.Tech CSE, Sem 7 (Saintgits, autonomous) · Module III of V, 20% ESE, CO3.</strong> Sources: <code>m3.txt</code> (<code>slide N</code>), read against <code>syllabus.md</code> and <code>question_map.md</code>. <strong>Read this first:</strong> the deck is a 26 MB PowerPoint that yields only 17 000 characters of text, because about 60 of its 115 slides are photographs with no text layer. Slides 27–30, 34–50, 61–66, 69–71, 74–77, 79–86, 90–108 and 112 are blank in the extract. Worse, <code>slide 115</code> — the whole National Building Code bullet — reads <code>(to be Included………………)</code>. So this module is mostly deck-followed, with three large gaps filled from the standard and marked <strong>(standard)</strong>: scaffolds (§2.7), tunnelling (§2.8) and the entire NBC and Indian Standards block (§2.12). Values marked <strong>(standard)</strong> appear in no slide, and you should be able to defend them as code values rather than invent precision.</p>
+<hr />
+<h2 id="1-coverage">1. Coverage<a class="anchor" href="#1-coverage">#</a></h2>
+<h3 id="11-syllabus-line-section">1.1 Syllabus line → section<a class="anchor" href="#11-syllabus-line-section">#</a></h3>
+<table>
+<thead>
+<tr>
+<th>Syllabus line (verbatim)</th>
+<th>Hrs</th>
+<th>Answered at</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Excavation and filling — under-water works — underpinning — shoring</td>
+<td>3</td>
+<td>§2.2, §2.3, §2.4, §2.5</td>
+</tr>
+<tr>
+<td>Ladders — scaffolds — tunnelling</td>
+<td>3</td>
+<td>§2.6, §2.7, §2.8</td>
+</tr>
+<tr>
+<td>Blasting — demolition — confined space</td>
+<td>3</td>
+<td>§2.9, §2.10, §2.11</td>
+</tr>
+<tr>
+<td>Indian Standards and National Building Code provisions on construction safety</td>
+<td>3</td>
+<td>§2.12</td>
+</tr>
+<tr>
+<td>Relevance of ergonomics in construction safety</td>
+<td>3</td>
+<td>§2.13</td>
+</tr>
+<tr>
+<td>Ergonomics hazards</td>
+<td>3</td>
+<td>§2.14</td>
+</tr>
+<tr>
+<td>Musculoskeletal disorders — cumulative trauma disorders</td>
+<td>3</td>
+<td>§2.15</td>
+</tr>
+</tbody>
+</table>
+<p>The construction-hazard overview that frames all seven lines sits in §2.1. It answers Q13 and gives every other answer its opener.</p>
+<p>Read the module in two passes. The first pass is §2.1 to §2.5, which is the ground: the hazard profile, then the earthworks block the syllabus writes as one line. The second pass is §2.6 to §2.11, which is the plant and the processes: ladders, scaffolds, tunnels, explosives, demolition, and the spaces you enter. §2.12 is the legal block and is the one place where you must be more careful than the deck, because the deck has nothing. §2.13 to §2.15 are ergonomics, and they are the most reliably asked eight marks in the module.</p>
+<p>The exam shape follows the hours. Seven syllabus lines at three hours each means the paper can afford one question per line, and it usually takes a 3-mark definition from one line, a 5-mark list from another, and an 8-mark or 14-mark construct from a third. Two patterns recur across the question bank. The first is the <strong>definition pair</strong> — underpinning and shoring, asked four separate times in slightly different words (Q82, Q83, Q154, and inside Q155). The second is the <strong>scenario</strong>, where the question hands you a job title and a site and asks what you would do (Q80, Q156, Q157). A scenario is marked like a method statement, not like an essay, and §3.5 and §3.6 shows the shape.</p>
+<p>Three things decide where the marks sit in this module. The first is <strong>the verb</strong>. "Define" wants a definition and one example, and nothing else. "Explain" wants a mechanism, in order. "Discuss" and "comment" want a position taken and then defended. "You are appointed as" wants a method statement with headings. The second is <strong>the number of items</strong>, because the paper almost always tells you: six practices, five causes, three stages. Count them on your fingers before you start writing, and number them on the paper. The third is <strong>the construct</strong>, because shoring, underpinning, tunnelling and blasting are the four topics the examiner can push on for a second question. A candidate who can explain how a raking shore carries load, or why underpinning is done in alternate bays, is not at risk in this module.</p>
+<p>Use §4 as the revision surface and §5 as the drawing practice. §4 exists because this module is unusually number-heavy: ladder angles, trench depths, guardrail heights, gas limits and cordon distances. Most of those numbers are in the deck, and the ones that are not are marked clearly. §5 lists eleven figures, and five of them are worth being able to draw in ninety seconds, because a labelled sketch earns marks faster than a paragraph and cannot be marked wrong for style.</p>
+<h3 id="12-all-31-assigned-questions">1.2 All 31 assigned questions<a class="anchor" href="#12-all-31-assigned-questions">#</a></h3>
+<table>
+<thead>
+<tr>
+<th>Q</th>
+<th>Question (short)</th>
+<th>Marks</th>
+<th>Answered at</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Q13</td>
+<td>Hazards at different stages of building construction</td>
+<td>8</td>
+<td>§3.3 A</td>
+</tr>
+<tr>
+<td>Q14</td>
+<td>Define shoring</td>
+<td>3</td>
+<td>§3.1 A</td>
+</tr>
+<tr>
+<td>Q15</td>
+<td>Six ladder safety practices</td>
+<td>3</td>
+<td>§3.1 B</td>
+</tr>
+<tr>
+<td>Q17</td>
+<td>Six practices for working at heights</td>
+<td>3</td>
+<td>§3.1 C</td>
+</tr>
+<tr>
+<td>Q18</td>
+<td>Six precautions before blasting</td>
+<td>3</td>
+<td>§3.1 D</td>
+</tr>
+<tr>
+<td>Q38</td>
+<td>NBC classification of residential buildings</td>
+<td>5</td>
+<td>§3.2 A</td>
+</tr>
+<tr>
+<td>Q39</td>
+<td>Why ergonomics is important</td>
+<td>3</td>
+<td>§3.1 E</td>
+</tr>
+<tr>
+<td>Q40</td>
+<td>Causes of ergonomic hazards in construction</td>
+<td>5</td>
+<td>§3.2 B</td>
+</tr>
+<tr>
+<td>Q41</td>
+<td>Relevance of ergonomics in construction safety</td>
+<td>8</td>
+<td>§3.3 B</td>
+</tr>
+<tr>
+<td>Q43</td>
+<td>NBC guidelines on building exits</td>
+<td>8</td>
+<td>§3.3 C</td>
+</tr>
+<tr>
+<td>Q44</td>
+<td>Why the NBC guidelines must be followed</td>
+<td>3</td>
+<td>§3.1 F</td>
+</tr>
+<tr>
+<td>Q78</td>
+<td>Safety practices in excavation work</td>
+<td>8</td>
+<td>§3.3 D</td>
+</tr>
+<tr>
+<td>Q79</td>
+<td>Safety measures in demolition</td>
+<td>8</td>
+<td>§3.3 E</td>
+</tr>
+<tr>
+<td>Q80</td>
+<td>Safety manager, 10-storey demolition, congested area</td>
+<td>14</td>
+<td>§3.4</td>
+</tr>
+<tr>
+<td>Q82</td>
+<td>Underpinning and shoring defined; underpinning precautions</td>
+<td>8</td>
+<td>§3.3 F</td>
+</tr>
+<tr>
+<td>Q83</td>
+<td>Underpinning and shoring defined; shoring precautions</td>
+<td>8</td>
+<td>§3.3 G</td>
+</tr>
+<tr>
+<td>Q101</td>
+<td>Ergonomic risk factors lead to MSD — comment</td>
+<td>5</td>
+<td>§3.2 C</td>
+</tr>
+<tr>
+<td>Q102</td>
+<td>Construction safety provisions in the NBC</td>
+<td>8</td>
+<td>§3.3 H</td>
+</tr>
+<tr>
+<td>Q103</td>
+<td>Major ergonomic hazards in construction</td>
+<td>8</td>
+<td>§3.3 I</td>
+</tr>
+<tr>
+<td>Q104</td>
+<td>Short note on cumulative trauma disorders</td>
+<td>5</td>
+<td>§3.2 D</td>
+</tr>
+<tr>
+<td>Q107</td>
+<td>High-rise safety and fire protection per NBC</td>
+<td>8</td>
+<td>§3.3 J</td>
+</tr>
+<tr>
+<td>Q108</td>
+<td>Important provisions of the NBC</td>
+<td>8</td>
+<td>§3.3 K</td>
+</tr>
+<tr>
+<td>Q125</td>
+<td>(a) PPE against chemical hazards (3) (b) MSDS (4)</td>
+<td>7</td>
+<td>§3.1 G · §3.2 E</td>
+</tr>
+<tr>
+<td>Q152</td>
+<td>Ergonomic risk factors and practical controls</td>
+<td>8</td>
+<td>§3.3 L</td>
+</tr>
+<tr>
+<td>Q153</td>
+<td>Hazards to check before underwater or excavation work</td>
+<td>5</td>
+<td>§3.2 F</td>
+</tr>
+<tr>
+<td>Q154</td>
+<td>Underpinning and shoring; underpinning precautions</td>
+<td>8</td>
+<td>§3.3 F</td>
+</tr>
+<tr>
+<td>Q155</td>
+<td>Ladder and scaffold hazards and prevention</td>
+<td>8</td>
+<td>§3.3 M</td>
+</tr>
+<tr>
+<td>Q156</td>
+<td>Blasting planned in a densely populated area</td>
+<td>8</td>
+<td>§3.3 N</td>
+</tr>
+<tr>
+<td>Q157</td>
+<td>Blasting near a protected wildlife area</td>
+<td>5</td>
+<td>§3.2 G</td>
+</tr>
+<tr>
+<td>Q158</td>
+<td>NBC general safety requirements for construction</td>
+<td>8</td>
+<td>§3.3 O</td>
+</tr>
+<tr>
+<td>Q159</td>
+<td>Early signs and symptoms of MSD and CTD</td>
+<td>5</td>
+<td>§3.2 H</td>
+</tr>
+</tbody>
+</table>
+<p>Q82 and Q154 are the same question, and Q83 is its mirror. One prepared answer in §3.3 E serves both, and the shoring precautions sit behind it in §3.3 F. Q125 is a Module V question that the paper set on this module — answer it short here and do not let it eat the time for the NBC question.</p>
+<p><strong>Not this module, though the wording looks close:</strong> confined-space entry procedure and permits (§ Module II); lifting and carrying technique (§ Module IV); fire extinguisher selection (§ Module V); HAZOP and PHA (§ Module V). Module III owns confined spaces <em>on a construction site</em>, and it owns ergonomics as a construction problem, not as an office problem.</p>
+<hr />
+<h2 id="2-concepts">2. Concepts<a class="anchor" href="#2-concepts">#</a></h2>
+<h3 id="21-the-construction-hazard-profile-stage-by-stage">2.1 The construction hazard profile, stage by stage<a class="anchor" href="#21-the-construction-hazard-profile-stage-by-stage">#</a></h3>
+<p><em>In plain English.</em> A building site is a factory that is rebuilt every week. The walls move, the floor is sometimes a hole, and the crew changes with the phase. That is why the hazard changes as the job goes up. A worker who is safe on the ground floor may be the one who dies on the roof.</p>
+<p><em>The detail.</em> The deck opens with four hazard families and treats them as the whole story (<code>slide 2</code>):</p>
+<ul>
+<li><strong>Falls</strong> — from height, into holes, off edges.</li>
+<li><strong>Electrocution</strong> — temporary supplies, overhead lines, portable tools, water.</li>
+<li><strong>Struck by falling objects</strong> — materials, tools, plant, structural steel.</li>
+<li><strong>Trapped during excavation</strong> — cave-in, burial, crushing.</li>
+</ul>
+<p>Falls are <strong>the leading cause of fatalities in construction</strong> (<code>slide 5</code>). A fall from as little as <strong>4–6 feet</strong> can cause lost work or death (<code>slide 5</code>). That single line explains why the deck spends three sections on fall protection before it mentions anything else.</p>
+<table>
+<thead>
+<tr>
+<th>Stage</th>
+<th>Dominant hazards</th>
+<th>One control</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Site clearance, demolition of old stock</td>
+<td>Dust and asbestos, falling structure, plant movement</td>
+<td>Survey first, exclusion zone, wet suppression</td>
+</tr>
+<tr>
+<td>Excavation and foundation</td>
+<td>Cave-in, buried services, water, falls into the hole</td>
+<td>Sloping or shoring, service scan, edge protection</td>
+</tr>
+<tr>
+<td>Piling</td>
+<td>Noise, vibration, rigging, suspended load, bore collapse</td>
+<td>Designed rig platform, exclusion radius, banksman</td>
+</tr>
+<tr>
+<td>Structural frame and RCC</td>
+<td>Formwork collapse, rebar impalement, falls, crane load</td>
+<td>Designed formwork, rebar caps, decks and nets</td>
+</tr>
+<tr>
+<td>Masonry and blockwork</td>
+<td>Falls, block weight, silica dust from cutting</td>
+<td>Guardrails, mechanical lifting, wet cutting</td>
+</tr>
+<tr>
+<td>Roofing and waterproofing</td>
+<td>Fragile roof, fall through openings, hot bitumen</td>
+<td>Crawl boards, covers, hot work permit</td>
+</tr>
+<tr>
+<td>Services and MEP</td>
+<td>Electrical contact, confined space, hot work</td>
+<td>Isolation, permit, gas test</td>
+</tr>
+<tr>
+<td>Finishing</td>
+<td>Solvent vapour, dust, awkward posture, ladders</td>
+<td>Ventilation, low-VOC paint, platform not ladder</td>
+</tr>
+<tr>
+<td>Handover and testing</td>
+<td>Energisation, pressure test, last-minute access</td>
+<td>Lock-out, test plan, no lone working</td>
+</tr>
+</tbody>
+</table>
+<p><em>What to write (8 marks).</em> Five stages, two hazards per stage, one control per stage. A table is faster than prose and easier to mark. Open with the four families and the falls-first fact, close with the sentence that the hazard follows the phase.</p>
+<p><strong>Mark anchor.</strong> Falls lead the fatality table; a fall from <strong>4–6 feet</strong> is enough. Quote both and you have shown you read the deck rather than a blog. If you have room, add the third fact: cave-in is the greatest excavation risk, and most of those accidents happen between five and fifteen feet. Three facts, three stages of the answer.</p>
+<p><strong>Exam trap.</strong> "Different stages" means the <strong>construction sequence</strong>, not the four hazard types. A candidate who writes falls / electrocution / struck-by / trapped has answered a different question, however correct the list.</p>
+<p>The four families are a useful opener and a poor answer, because they describe <strong>what hurt</strong> rather than <strong>when it was possible</strong>. A site with no excavation has no cave-in risk, and a finished frame has no more formwork to fall off. That is why the stages matter: each one brings its own plant, its own access and its own unfinished edges. The deck's own picture slides sit exactly where this detail should be — <code>slide 3</code> and <code>slide 27</code>–<code>slide 30</code> carry photographs of the four families and nothing else.</p>
+<h3 id="22-excavation-and-filling">2.2 Excavation and filling<a class="anchor" href="#22-excavation-and-filling">#</a></h3>
+<p><em>In plain English.</em> An excavation is a hole whose walls were never designed to stand up. The soil is holding itself together out of habit, and it stops doing that without warning. Most of the people killed in trenches are killed by a wall they were standing next to a minute earlier.</p>
+<p><em>The detail.</em> The deck is blunt about the ranking (<code>slide 15</code>):</p>
+<ul>
+<li>Excavation is <strong>the most hazardous construction operation</strong>.</li>
+<li><strong>Cave-in is the greatest risk</strong>, not falls or plant.</li>
+<li><strong>Most accidents happen in trenches 5–15 ft deep</strong> — deep enough to bury a person, shallow enough that nobody bothers to shore it.</li>
+<li>Employees must be protected by a <strong>well-designed protective system</strong> sized for the expected loads (<code>slide 16</code>).</li>
+</ul>
+<p><strong>Four ways to hold the ground</strong> (<code>slide 18</code>, <code>slide 26</code>):</p>
+<table>
+<thead>
+<tr>
+<th>System</th>
+<th>What it does</th>
+<th>When it is chosen</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Sloping</strong></td>
+<td>Cuts the wall back to a stable angle</td>
+<td>Open site with room either side</td>
+</tr>
+<tr>
+<td><strong>Benching</strong></td>
+<td>Cuts the wall into steps</td>
+<td>Cohesive soil, medium depth</td>
+</tr>
+<tr>
+<td><strong>Shoring</strong></td>
+<td>Pushes sheeting against the wall with struts</td>
+<td>Tight site, services close by</td>
+</tr>
+<tr>
+<td><strong>Shielding</strong></td>
+<td>Puts a box between the wall and the worker</td>
+<td>Any soil, where a crew must work in the trench</td>
+</tr>
+</tbody>
+</table>
+<p>Soil type sets the slope <strong>(standard)</strong>: about <strong>0.75 : 1</strong> for hard cohesive ground, <strong>1 : 1</strong> for firm soil, <strong>1.5 : 1</strong> for loose or water-bearing ground. The deck's own hazard list for the design is: <strong>soil classification, depth of cut, water content, weather change, and other operations nearby</strong> (<code>slide 20</code>).</p>
+<ul>
+<li>The <strong>competent person</strong> must be trained in soil classification, protective systems and the standard. That person must be able to identify a hazard and must be <strong>authorised to stop work on the spot</strong> (<code>slide 24</code>).</li>
+<li>Inspection is <strong>daily</strong>, before work starts, after rainstorms or high wind, and whenever a hazard is expected (<code>slide 25</code>).</li>
+<li><strong>Access and egress:</strong> a stairway, ladder or ramp is needed at <strong>4 ft or deeper</strong>, within <strong>25 ft</strong> of every worker, and it must stand <strong>3 ft above</strong> the excavation edge (<code>slide 23</code>).</li>
+<li>Spoil, plant and materials stay back from the edge — about <strong>0.6 m</strong> minimum <strong>(standard)</strong>.</li>
+<li>Other excavation hazards named by the deck (<code>slide 26</code>): <strong>water accumulation, oxygen deficiency, toxic fumes, falls, and mobile equipment</strong>.</li>
+</ul>
+<p><strong>Filling and backfill</strong> is the second half of the syllabus line and the deck ignores it. The hazards are real:</p>
+<ul>
+<li>Side-dumping soil into a trench instead of placing it in layers can <strong>collapse the shoring</strong> and damage services.</li>
+<li>Compact in layers of about <strong>150–200 mm</strong> <strong>(standard)</strong>, at the right moisture content, or the fill settles and the slab cracks.</li>
+<li>Plant working at the edge of a filled trench re-loads the wall. Keep the excavator back.</li>
+<li>Backfill against a new wall before it has cured, or before the props are struck in sequence, pushes the wall over.</li>
+<li>Fill over a service without a marker or a drawpit is a future excavation strike.</li>
+</ul>
+<p><em>What to write (8 marks).</em> Ranking first (cave-in, 5–15 ft). Then the four protective systems with one line each, and the competent person with the daily inspection rule. Finish on the 4 ft / 25 ft / 3 ft egress numbers and the "other hazards" list. Draw the four system sketches if there is room — they earn marks faster than prose.</p>
+<p><strong>Mark anchor.</strong> <strong>5–15 ft</strong> and <strong>daily inspection by a competent person</strong>. Those two facts separate a candidate who knows the module from one who knows that trenches collapse.</p>
+<p><strong>Exam trap.</strong> <strong>Shoring and shielding are not the same.</strong> A shield does not stop the wall moving; it survives the movement and protects whoever is inside it. A candidate who writes "trench box shores the sides" has lost the distinction the examiner is testing.</p>
+<h3 id="23-under-water-works">2.3 Under-water works<a class="anchor" href="#23-under-water-works">#</a></h3>
+<p><em>In plain English.</em> Working below water level means two things are trying to get into your workplace: the water, and your own body's nitrogen. One drowns you quickly, the other makes you ill on the way up. The deck has no slide on this topic at all, so treat every line here as <strong>(standard)</strong>.</p>
+<p><em>The detail.</em> Three families, and they fail differently:</p>
+<table>
+<thead>
+<tr>
+<th>Family</th>
+<th>What it is</th>
+<th>Signature hazard</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Open-water diving</strong></td>
+<td>A diver works in the water itself</td>
+<td>Drowning, entanglement, decompression sickness</td>
+</tr>
+<tr>
+<td><strong>Cofferdam or dewatered work</strong></td>
+<td>A watertight enclosure pumped dry</td>
+<td>Sudden flooding, wall collapse under differential pressure</td>
+</tr>
+<tr>
+<td><strong>Compressed-air caisson</strong></td>
+<td>A sealed working chamber held above atmospheric pressure</td>
+<td>Decompression sickness, air lock failure, fire</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>Decompression sickness</strong> ("the bends") happens when dissolved nitrogen forms bubbles as pressure drops too fast on the way up. It causes joint pain, dizziness, paralysis and can kill. Plain gloss: the gas that was dissolved in your blood comes out of solution inside your body.</li>
+<li>The controls are <strong>staged ascent to a decompression table</strong> and a <strong>decompression chamber on site</strong>. A chamber off site is a chamber too late.</li>
+<li>Other diver hazards: <strong>barotrauma</strong> (pressure injury to ear or lung), hypothermia, poor visibility, current, entanglement in lines or debris, contaminated water, boat traffic, loss of communication.</li>
+<li>Cofferdam hazards: <strong>flooding through a seal failure, sheet pile collapse, differential water pressure on the wall, drowning at the access ladder, and pumping out faster than the ground can take it</strong>.</li>
+<li>Caisson hazards: pressure, air lock discipline, blowout of the working face, fire in the compressed atmosphere, and the bends on exit.</li>
+</ul>
+<p><strong>Precautions that earn marks:</strong></p>
+<ul>
+<li>A <strong>diving supervisor</strong> in charge, a <strong>standby diver</strong> suited and ready, and a <strong>diver's log</strong> for every descent.</li>
+<li>Medical fitness to dive, current certification, and a <strong>permit to work</strong> for each dive.</li>
+<li><strong>Life line and communication</strong> to the surface; <strong>surface marker buoy and flag</strong>; an exclusion zone for plant and boats.</li>
+<li><strong>Oxygen and resuscitation equipment</strong> at the surface, and a trained first-aider.</li>
+<li>Tide and current checked before entry; no diving in poor visibility or high flow.</li>
+<li>Contaminated water: full face mask or a dry suit, and vaccination where sewage is present.</li>
+<li>Cofferdam: designed by an engineer for the hydrostatic head (the water pressure pushing on the wall), sealed joints, <strong>standby pumps</strong>, an escape ladder inside, and a watchman at the top.</li>
+<li>Caisson: <strong>air lock operated by a trained lock attendant</strong>, decompression staged by table, no alcohol, medicals, and fire watch inside.</li>
+</ul>
+<p><em>What to write (5 marks).</em> Name the three families, then give diving hazards and controls, then close with the cofferdam flooding risk. Two lines on the bends and the on-site chamber is the mark-earning pair.</p>
+<p><strong>Mark anchor.</strong> <strong>Decompression sickness plus an on-site decompression chamber.</strong> That pairing proves you understand pressure physiology and not just "water is dangerous".</p>
+<p>Two administrative controls carry more weight here than any item of equipment. The first is the <strong>permit to work</strong>, because a dive or a cofferdam entry has a start, a depth, a duration and an end, and the permit is where those are agreed. The second is the <strong>standby</strong>, which on a dive is a suited diver at the surface and on a cofferdam is a watchman at the top of the ladder. Neither can help if nobody is watching.</p>
+<p><strong>Exam trap.</strong> "Underwater" does not mean "wet". A <strong>dewatered cofferdam</strong> is an underwater work whose hazard is <strong>flooding and structural collapse</strong>, not drowning mid-dive. Candidates who write only about divers miss half the marks.</p>
+<h3 id="24-underpinning">2.4 Underpinning<a class="anchor" href="#24-underpinning">#</a></h3>
+<p><em>In plain English.</em> Underpinning is putting a new foot under an old building while the building keeps standing. You dig under a wall that is already carrying a house, pour concrete, and hope the wall does not notice. Everything in the method exists to make sure it never notices.</p>
+<p><em>The detail.</em> <strong>Definition:</strong> underpinning is the process of strengthening or deepening the foundation of an existing structure, by introducing new permanent support below the existing level (<code>slide 115</code> carries nothing; the deck has no underpinning slide, so <strong>(standard)</strong>).</p>
+<p><strong>Five triggers:</strong></p>
+<ol>
+<li><strong>Differential settlement</strong> — the building is cracking and the cause is the ground.</li>
+<li><strong>A deeper excavation next door</strong> — a basement or a metro cut removes the support the old footing was relying on.</li>
+<li><strong>Change of use or added storeys</strong> — the load went up and the footing did not.</li>
+<li><strong>Deterioration</strong> — the original footing was timber, or sulphate attack has eaten the concrete.</li>
+<li><strong>Raising a basement</strong> — the floor level goes down and the footing must follow.</li>
+</ol>
+<p><strong>Methods, one line each:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>How it works</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Pit underpinning</strong></td>
+<td>Dig small pits under the wall in alternate bays, fill with mass concrete, then do the bays in between</td>
+</tr>
+<tr>
+<td><strong>Needle and pile</strong></td>
+<td>A needle beam passes through the wall and carries it on piles either side</td>
+</tr>
+<tr>
+<td><strong>Mini-piling</strong></td>
+<td>Small-diameter bored piles installed from a low headroom rig</td>
+</tr>
+<tr>
+<td><strong>Jet or chemical grouting</strong></td>
+<td>Inject grout to bind loose ground under the footing</td>
+</tr>
+<tr>
+<td><strong>Soil freezing</strong></td>
+<td>Freeze the pore water until the ground is strong enough to dig</td>
+</tr>
+<tr>
+<td><strong>Screw piles</strong></td>
+<td>Power-installed piles with no excavation and no vibration</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Precautions — this is what the question pays for:</strong></p>
+<ul>
+<li><strong>Design first.</strong> A structural engineer designs the sequence, the section sizes and the props. The drawing stays on site.</li>
+<li><strong>Work in alternate bays</strong>, never a continuous open trench along the wall.</li>
+<li>Keep each open length to about <strong>1.2–1.5 m</strong>, and never have <strong>more than about a quarter of the wall length open at one time</strong> <strong>(standard)</strong>.</li>
+<li><strong>Shore or prop the structure above</strong> before you take the ground away. Load must be carried continuously, never suspended.</li>
+<li><strong>Never leave a pit open overnight</strong> without a cover, a prop and a barrier.</li>
+<li><strong>Monitor</strong>: tell-tales, settlement markers and crack gauges on the building and on its neighbours, read daily and recorded.</li>
+<li><strong>Check the neighbours.</strong> Party walls, adjoining footings and shared drains are affected by your digging, and are usually the first thing to crack.</li>
+<li><strong>Control water.</strong> Dewatering draws down the water table and causes settlement a street away. Monitor and recharge if needed.</li>
+<li><strong>Backfill and compact in layers</strong>, and do not strike the props until the new work has gained strength.</li>
+<li><strong>No vibration and no heavy plant</strong> close to the open face.</li>
+<li><strong>Competent supervision</strong> at all times, and one person with authority to stop the work.</li>
+</ul>
+<p><em>What to write (8 marks).</em> Definition, three triggers, two methods named and explained, then six precautions in the order above. Finish with the monitoring line — it is the one precaution that distinguishes an engineer's answer.</p>
+<p><strong>Mark anchor.</strong> <strong>Alternate bays, 1.2–1.5 m sections, never more than a quarter of the wall open.</strong> Three numbers that prove you know how underpinning is actually sequenced.</p>
+<p><strong>Exam trap.</strong> <strong>Underpinning is permanent and load-bearing; shoring is temporary.</strong> If your answer says "underpinning is a temporary support", you have defined the other word and the rest of the answer cannot recover.</p>
+<h3 id="25-shoring">2.5 Shoring<a class="anchor" href="#25-shoring">#</a></h3>
+<p><em>In plain English.</em> Shoring is a prop with a job description. It holds up something already standing — a wall, a floor, the side of a trench — until the permanent support exists or the work is finished. Take the prop away too early and the thing it was holding comes down on schedule.</p>
+<p><em>The detail.</em> <strong>Definition:</strong> shoring is the provision of temporary support to an existing structure, or to the sides of an excavation, to prevent collapse or movement (<code>slide 31</code>; <strong>(standard)</strong> for the structural forms).</p>
+<p><strong>Two families:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Family</th>
+<th>Purpose</th>
+<th>Members</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Structural shoring</strong> (dead shoring)</td>
+<td>Holds up a building while work goes on below</td>
+<td>Raking shore, flying shore, dead shore, needle and prop</td>
+</tr>
+<tr>
+<td><strong>Excavation shoring</strong></td>
+<td>Holds the sides of a trench or basement</td>
+<td>Sheeting, walers, struts, hydraulic braces</td>
+</tr>
+</tbody>
+</table>
+<p><strong>The forms you should be able to name and sketch:</strong></p>
+<ul>
+<li><strong>Raking shore</strong> — raking members lean against the wall at about 45°, footed on a sole plate on firm ground, with needles through the wall and cleats at the head. Used when there is ground beside the building to foot on.</li>
+<li><strong>Flying shore</strong> — a horizontal strut spanning between two buildings across a gap or a road, with straining beams and wedges at each end. Used when there is <strong>no</strong> ground to rake against.</li>
+<li><strong>Dead shore</strong> — vertical posts carrying a wall above an opening down to a new foundation, with needles through the wall.</li>
+<li><strong>Needle and prop</strong> — a beam through the wall, carried on props or on a frame, transferring the load away from the work.</li>
+</ul>
+<p><strong>Precautions — the deck gives these on <code>slide 32</code> and <code>slide 33</code>, and they are worth quoting:</strong></p>
+<ul>
+<li>A <strong>qualified person surveys the site</strong> for anything that could affect the shoring, and corrects it before erection.</li>
+<li><strong>Plan the installation in advance</strong>, including the equipment needed to finish safely.</li>
+<li><strong>Inspect every component before use</strong>; remove and repair anything defective, and never use it.</li>
+<li>Keep a <strong>shoring drawing from a qualified professional on site at all times</strong>.</li>
+<li>Handle the equipment as designed; <strong>do not erect, dismantle or alter it without a qualified supervisor's approval</strong>.</li>
+<li><strong>Inspect the system through the life of the project.</strong> If there is any doubt, <strong>stop work</strong> and call the supervisor.</li>
+<li><strong>Shoring is not fall protection</strong> (<code>slide 33</code>). A shoring frame is not an anchor and not a platform.</li>
+<li><strong>Do not climb on the cross braces.</strong></li>
+<li>Correct uneven ground; <strong>plumb and level the frames as erection proceeds</strong>; do not force braces to fit.</li>
+<li>On dismantling, <strong>nothing is removed until a supervisor approves</strong>.</li>
+</ul>
+<p>Add the numbers and the practice <strong>(standard)</strong>: sole plates under every leg, wedges rather than packing, struts at close spacing in soft ground, and monitoring of the wall or the trench edge while the shoring is loaded.</p>
+<p><em>What to write (8 marks).</em> Definition, the two families in a small table, raking versus flying with the "is there ground to foot on" test, then the deck's precautions as a numbered list. Close with "shoring is temporary and is never used as an anchor".</p>
+<p><strong>Mark anchor.</strong> <strong>Raking shore when there is ground beside the wall; flying shore when there is a road or a gap.</strong> That single decision line shows you can choose a shore rather than recite one.</p>
+<p><strong>Exam trap.</strong> The deck states in plain words that <strong>shoring systems must not be used for fall protection</strong>. That is a free mark, and it is the exact line most candidates skip.</p>
+<h3 id="26-ladders">2.6 Ladders<a class="anchor" href="#26-ladders">#</a></h3>
+<p><em>In plain English.</em> A ladder is a tool for reaching a place, not a place to work from. The moment you take both hands off to pull a cable, you are standing on a slope with nothing holding you. That is why the rules are so fussy about angle, tie-off and three points of contact.</p>
+<p><em>The detail.</em> The deck leads with the cost (<code>slide 51</code>):</p>
+<ul>
+<li><strong>Falls from ladders are about 20 per cent of fatal and lost-workday injuries</strong> in general industry, by OSHA's estimate (<code>slide 51</code>).</li>
+<li>A ladder is chosen first: <strong>what height must I reach, what must I check, what material is right</strong> (<code>slide 52</code>).</li>
+<li>Inspection before every use: <strong>label legible, non-slip feet, no defects, no slipping hazard</strong> (<code>slide 53</code>).</li>
+<li><strong>Step ladders</strong> (A-frame) must be <strong>fully extended with the arms locked</strong>, and pinch points are the joints (<code>slide 54</code>). <strong>Never use a step ladder as an extension ladder.</strong></li>
+<li><strong>Extension ladders</strong> need non-slip bases or spikes, and must be placed so they cannot slide (<code>slide 55</code>).</li>
+<li>The angle rule: <strong>base 1 foot out for every 4 feet up</strong>, which is about <strong>75°</strong>, and the ladder must <strong>extend 3 feet above the roofline</strong> (<code>slide 55</code>).</li>
+<li>The <strong>belt-buckle rule</strong>: keep your body centred between the rails (<code>slide 56</code>).</li>
+<li><strong>Never step above the labelled maximum height.</strong> Face the ladder, and keep <strong>three points of contact</strong> going up and down (<code>slide 56</code>).</li>
+<li>Base on <strong>firm, level footing</strong>; level the ladder rather than packing one leg (<code>slide 57</code>).</li>
+<li><strong>Tie, block or otherwise secure</strong> the ladder so it cannot slip. Stabilisers are acceptable (<code>slide 57</code>).</li>
+<li>Keep ladders out of doorways and traffic routes (<code>slide 57</code>).</li>
+<li><strong>Never leave a ladder unattended</strong>, never <strong>tie two ladders together</strong> or stack one on anything but the ground, and <strong>engage every lock</strong> (<code>slide 58</code>).</li>
+<li><strong>Never climb carrying tools or material</strong> — hoist them (<code>slide 58</code>).</li>
+</ul>
+<p>Add two <strong>(standard)</strong> rules: only one person on a ladder at a time, and never work from the top three rungs of a straight ladder.</p>
+<p><strong>The four ladder types, and where each one is wrong:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Use</th>
+<th>Never</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Step ladder (A-frame)</strong></td>
+<td>Short work at a fixed spot</td>
+<td>Used partly open, or as an extension ladder</td>
+</tr>
+<tr>
+<td><strong>Extension ladder</strong></td>
+<td>Access to a roof or a higher level</td>
+<td>Raised while someone is on it, or spliced to another</td>
+</tr>
+<tr>
+<td><strong>Trestle and platform ladder</strong></td>
+<td>Short duration work needing both hands</td>
+<td>Overloaded, or set on a slope without levelling</td>
+</tr>
+<tr>
+<td><strong>Fixed or cage ladder</strong></td>
+<td>Permanent access to a plant room or roof</td>
+<td>Used without the cage or the fall arrest where the code requires one</td>
+</tr>
+</tbody>
+</table>
+<p>Two more points earn marks and are easy to forget. A ladder is a <strong>means of access</strong>, so it must be long enough to land safely and must not be the place where the work is actually done — a platform is. And a fall from a ladder is not over when the body stops: a worker left suspended in a harness can lose consciousness in minutes, so the rescue plan matters as much as the tie-off.</p>
+<p><em>What to write (3 or 8 marks).</em> For 3: six rules, one line each — angle, tie-off, three points, no overreach, inspection, no carrying loads. For 8: add the 20 per cent figure and the choice-and-inspection sequence at the front.</p>
+<p><strong>Mark anchor.</strong> <strong>1 in 4, about 75°, and 3 feet above the landing.</strong> Three numbers that carry the whole answer.</p>
+<p><strong>Exam trap.</strong> The <strong>3 feet is above the landing</strong>, not the total length, and it is measured on an <strong>extension ladder</strong>, not a step ladder. Writing "the ladder should be 3 feet taller than the roof" is a different and wrong statement.</p>
+<h3 id="27-scaffolds">2.7 Scaffolds<a class="anchor" href="#27-scaffolds">#</a></h3>
+<p><em>In plain English.</em> A scaffold is a temporary building made of steel tubes whose only job is not to move. It is designed, erected, loaded and inspected like a structure, because that is what it is. Most scaffold deaths come from a platform that was never finished, never tied to the building, or loaded with more blocks than it was designed for.</p>
+<p><em>The detail.</em> The deck mentions scaffolds once, inside the fall-protection list (<code>slide 6</code>), and gives no dimensions. Everything below is <strong>(standard)</strong>.</p>
+<p><strong>Types:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Putlog scaffold</strong></td>
+<td>Inner end of the putlog sits in a hole in the wall — only for masonry, and illegal for most modern work</td>
+</tr>
+<tr>
+<td><strong>Independent or tied scaffold</strong></td>
+<td>Two rows of standards, tied back to the structure — the normal site scaffold</td>
+</tr>
+<tr>
+<td><strong>Mobile tower</strong></td>
+<td>Wheeled frame, moved by hand, never occupied while moving</td>
+</tr>
+<tr>
+<td><strong>Cantilever or bracket scaffold</strong></td>
+<td>Projecting from the structure where the ground is not available</td>
+</tr>
+<tr>
+<td><strong>Suspended scaffold (swing stage)</strong></td>
+<td>Hung from roof rigging on wire ropes, for facade work</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Members you must be able to label:</strong> <strong>standards</strong> (verticals), <strong>ledgers</strong> (horizontal along the face), <strong>transoms</strong> (across the width), <strong>braces</strong> (diagonal, for stability), <strong>sole plates</strong> and <strong>base plates</strong> (load spread), <strong>ties</strong> (to the building), <strong>guardrails</strong>, <strong>toeboards</strong>, and the <strong>working platform</strong>.</p>
+<p><strong>Dimensions and rules</strong> <strong>(standard)</strong>:</p>
+<ul>
+<li>Standards spaced no more than about <strong>2.0 m</strong> apart, with lifts no higher than <strong>2.0 m</strong>.</li>
+<li>Platform at least <strong>600 mm</strong> wide for persons, and wider where material is stacked.</li>
+<li><strong>Top guardrail 39–45 in (about 1.0 m)</strong> and a mid-rail at half height, with <strong>toeboards at least 3 in</strong> — the deck's fall-protection numbers (<code>slide 9</code>) and the usual code value <strong>(standard)</strong>.</li>
+<li><strong>Ties at every lift and at every alternate bay</strong>, and more where the scaffold is sheeted.</li>
+<li><strong>Sheeting or netting needs a design check</strong> for wind; a sheeting panel turns a scaffold into a sail.</li>
+<li>Duty rating stated and respected: light, medium or heavy, in <strong>kN/m²</strong>.</li>
+<li><strong>Erected, altered and dismantled only by trained scaffolders</strong>, under a supervisor.</li>
+<li><strong>Inspected before first use</strong>, then at intervals of no more than <strong>7 days</strong>, and <strong>after any alteration, impact or high wind</strong>. Tagged green or red.</li>
+<li><strong>Access by an internal ladder</strong>, never by climbing the braces.</li>
+<li><strong>Never partially dismantle</strong> a scaffold that is still in use, and never remove a tie to get a delivery through.</li>
+<li>Fall protection on the platform: guardrail first, harness only where guardrail is impossible.</li>
+</ul>
+<p><em>What to write (8 marks).</em> Type table, member names on a sketch, four dimensions, then inspection and tagging. A labelled elevation sketch in the middle of the answer is worth more than two extra paragraphs.</p>
+<p><strong>Mark anchor.</strong> <strong>Guardrail 39–45 in, toeboard 3 in, ties every lift at alternate bays, inspection every 7 days.</strong> Four specifications that show you have seen a scaffold tag.</p>
+<p><strong>Loading is where scaffolds fail quietly.</strong> A duty rating is a limit on the uniformly distributed load, and a pallet of blocks is a point load. The two are not the same, and a platform rated light will carry a stack of blocks in the middle without complaint until it does not. State the duty, spread the material, and clear the platform at the end of the shift.</p>
+<p><strong>Exam trap.</strong> "New scaffold, so it is safe" is wrong. The scaffold must be <strong>inspected before first use and re-inspected after alteration</strong>, because the dangerous scaffold is usually the one that was safe yesterday and had a tie removed this morning.</p>
+<h3 id="28-tunnelling">2.8 Tunnelling<a class="anchor" href="#28-tunnelling">#</a></h3>
+<p><em>In plain English.</em> A tunnel is a cave that you build on purpose, and the ground's only ambition is to close it again. So a tunnel job is three jobs at once: hold the ground up, keep the water out, and keep the air breathable. The deck has a section heading and nine blank slides here (<code>slide 59</code>–<code>slide 66</code>), so this is all <strong>(standard)</strong>.</p>
+<p><em>The detail.</em> <strong>Hazards:</strong></p>
+<ul>
+<li><strong>Fall of ground</strong> — roof or face collapse, spalling, rock burst in hard rock.</li>
+<li><strong>Water inrush</strong> — a sudden flood from a fault, a fissure or an old borehole. This is the fastest killer in tunnelling.</li>
+<li><strong>Gases</strong> — methane, hydrogen sulphide, carbon monoxide from plant, and <strong>oxygen deficiency</strong>. Sewer and metro tunnels hit all four.</li>
+<li><strong>Dust</strong> — respirable silica from drilling and cutting.</li>
+<li><strong>Fire</strong> — plant diesel, conveyor belting, hydraulic fluid, and timber.</li>
+<li><strong>Plant and transport</strong> — locomotives, TBM, muck skips, and men walking in the same narrow space.</li>
+<li><strong>Compressed-air working</strong> — decompression sickness where a face is pressurised.</li>
+<li><strong>Physical environment</strong> — heat, humidity, noise, vibration, poor lighting, restricted egress.</li>
+<li><strong>Explosives</strong> — in drill-and-blast headings.</li>
+</ul>
+<p><strong>Precautions:</strong></p>
+<ul>
+<li><strong>Investigate the ground before you cut it.</strong> Boreholes and a geological model along the alignment; <strong>probe drilling ahead of the face</strong> in unknown ground.</li>
+<li><strong>Design the support and install it with the excavation</strong>, not after it. Ribs, lattice girders, rock bolts, mesh, shotcrete or segmental lining, plus <strong>forepoling</strong> where the crown is weak.</li>
+<li><strong>Control the water</strong> — grout ahead of the face in water-bearing strata, and dewatering with <strong>standby pumps and a standby power supply</strong>.</li>
+<li><strong>Ventilate mechanically.</strong> Forced air to the face, sized to hold <strong>oxygen at or above 19.5 per cent</strong> and to dilute fumes and dust <strong>(standard)</strong>.</li>
+<li><strong>Monitor gas continuously</strong> at the face and at the return, with automatic alarm and <strong>flameproof electrical equipment</strong> in gassy ground.</li>
+<li><strong>Two independent ways out</strong>, maintained and lit, with an escape route marked and a muster point.</li>
+<li><strong>Refuge chambers or safe havens</strong> in long headings, with air, water and communication.</li>
+<li><strong>Communication</strong> from face to surface at all times — telephone, radio or a leaky feeder.</li>
+<li><strong>Trained rescue team</strong> and self-rescuers issued to everyone underground.</li>
+<li><strong>Compressed air</strong>: air locks with a trained lock attendant, staged decompression by table, medicals, and a chamber.</li>
+<li><strong>No hot work without a permit</strong>, and a fire point with extinguishers and a water main at the face.</li>
+<li><strong>Survey control</strong> for alignment, and a <strong>shotcrete and scaling regime</strong> to take down loose rock before anyone works under it.</li>
+</ul>
+<p><em>What to write (8 marks).</em> Three groups — ground, water, air — with three precautions each, plus the emergency arrangements. That structure answers the question even if the examiner wanted a different list, because it is exhaustive by construction.</p>
+<p><strong>Mark anchor.</strong> <strong>Probe ahead, support with the cut, ventilate and monitor gas.</strong> Those four verbs are the whole discipline of tunnelling safety.</p>
+<p><strong>Two ways to cut a tunnel change the hazard list.</strong> In drill and blast, the hazards are the explosive, the fumes and the scaling of the newly broken rock. With a tunnel boring machine, the hazards are the machine itself, the segment erector, dust, noise and heat, and the shield that holds the ground while the lining goes in. Say which method you are describing, because the precautions are not interchangeable.</p>
+<p><strong>Exam trap.</strong> Candidates write collapse and stop. In soft ground, <strong>water inrush and gas</strong> kill more crews than roof fall does, and an answer with no ventilation line looks like it was learned from a mining poster.</p>
+<h3 id="29-blasting">2.9 Blasting<a class="anchor" href="#29-blasting">#</a></h3>
+<p><em>In plain English.</em> Blasting turns rock into gravel with a controlled explosion. The rock is not the problem. The problem is all the energy that leaves the hole instead — through the ground, through the air, and through the sky as flying stone. Almost every blasting precaution is about where that leftover energy goes.</p>
+<p><em>The detail.</em> <strong>Definition and sequence (deck, <code>slide 67</code>):</strong> blasting is the reduction of rock or hard soil into fragments with the help of explosives. The operation has four steps — <strong>drill the holes, install the detonator and charge, detonate, remove the debris</strong>.</p>
+<p><strong>The five escape routes for energy, and the control for each:</strong></p>
+<table>
+<thead>
+<tr>
+<th>What escapes</th>
+<th>What it does</th>
+<th>Control</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Ground vibration</strong></td>
+<td>Cracks plaster and foundations nearby</td>
+<td>Charge per delay, millisecond delays, monitoring</td>
+</tr>
+<tr>
+<td><strong>Airblast</strong></td>
+<td>Broken windows, startled livestock, complaints</td>
+<td>Stemming length, matting, face orientation</td>
+</tr>
+<tr>
+<td><strong>Flyrock</strong></td>
+<td>Kills at a distance</td>
+<td>Correct burden, stemming, blasting mats, danger radius</td>
+</tr>
+<tr>
+<td><strong>Fumes</strong></td>
+<td>Carbon monoxide and nitrogen oxides in the pit</td>
+<td>Ventilate, wait, never re-enter on the wind</td>
+</tr>
+<tr>
+<td><strong>Misfire</strong></td>
+<td>An unexploded charge found by the next shift</td>
+<td>Written procedure, waiting time, no re-drilling</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Precautions before firing</strong> — the standard set <strong>(standard)</strong>. The deck's own slides 68–71 are pictures.</p>
+<ol>
+<li><strong>Only a licensed blaster in charge</strong>, under a <strong>permit to work</strong>, with a written blast design for the pattern, the charge and the delay sequence.</li>
+<li><strong>Survey the surroundings</strong> — structures, services, roads, wells, livestock, and the nearest neighbour, with a condition survey before the first blast.</li>
+<li><strong>Clear the area to the designed danger radius</strong>, in practice <strong>200–500 m</strong> in open rock, with <strong>sentries at every approach</strong> and barriers on the roads.</li>
+<li><strong>Warning signals</strong> agreed and audible: a warning, a countdown, the firing signal, and an <strong>all-clear</strong>. Red flags by day, red lights by night.</li>
+<li><strong>Shelter</strong> everyone, including the machine operators, behind cover or out of the radius.</li>
+<li><strong>Store and issue properly</strong> — licensed magazine, <strong>detonators in a separate store</strong>, issued by a storekeeper and signed for.</li>
+<li><strong>No flame, no smoking, no mobile phone or radio</strong> near electric detonators, because radio frequency energy can fire them.</li>
+<li><strong>Load with non-sparking tools</strong> — wooden or plastic tamping rods, no iron, no force.</li>
+<li><strong>No charging in a thunderstorm</strong>, and earth the firing circuit.</li>
+<li><strong>Check the burden</strong> before firing; a hole with too little rock in front of it throws its energy sideways as flyrock.</li>
+<li><strong>Use blasting mats</strong> over the holes in built-up areas.</li>
+<li><strong>Guard against vibration</strong> — limit the charge per delay, use delays, and keep <strong>peak particle velocity at about 5 mm/s at the nearest residential structure</strong> <strong>(standard)</strong>.</li>
+</ol>
+<p><strong>After the blast</strong> (<code>slide 67</code>, step four): wait for the fumes, inspect for <strong>misfires</strong>, scale down loose rock, and remove debris only when the blaster declares the face safe. On a misfire, <strong>nobody approaches until the waiting time has passed</strong> — 30 minutes with safety fuse, 5 minutes with electric firing, as a working rule <strong>(standard)</strong>. Never re-drill a misfire hole, never pull a detonator lead, and never assume a charge failed because the bang was quiet.</p>
+<p><em>What to write (3 or 8 marks).</em> For 3: six precautions — licensed blaster and permit, clear the radius with sentries, warning signals, correct stemming and mats, no flame or radio near detonators, post-blast inspection for misfires. For 8: add the energy table and the vibration limit.</p>
+<p><strong>Mark anchor.</strong> The <strong>four-step sequence</strong> plus <strong>"clear the radius, sentries at every approach, all-clear only from the blaster"</strong>. That is the sentence the examiner is looking for.</p>
+<p><strong>Exam trap.</strong> Q18 says <strong>before</strong> the operation. Survey, permit, warning, shelter and stemming all belong before; <strong>misfire inspection and scaling</strong> belong after. An answer that opens with "inspect for misfires" has answered the wrong half and lost the ordering marks.</p>
+<h3 id="210-demolition">2.10 Demolition<a class="anchor" href="#210-demolition">#</a></h3>
+<p><em>In plain English.</em> Demolition is construction in reverse, with two differences. The structure is already weak, and nobody can fully trust the drawings of it. So the work is planned from a survey, done from the top down, and kept away from people who are not in the business of being there.</p>
+<p><em>The detail.</em> <strong>Definition (deck, <code>slide 72</code>):</strong> demolition or dismantling means breaking up buildings or structures, either fully or partially.</p>
+<p><strong>Three goals of every demolition precaution (<code>slide 72</code>), and quote them in this order:</strong></p>
+<ol>
+<li><strong>Safeguard the personnel on the site.</strong></li>
+<li><strong>Safeguard persons not connected with the demolition</strong>, including the general public.</li>
+<li><strong>Protect property likely to be affected</strong> by the operation.</li>
+</ol>
+<p><strong>Causes of demolition accidents, straight from the deck (<code>slide 72</code>):</strong></p>
+<ul>
+<li><strong>Falls from height.</strong></li>
+<li><strong>Falling materials.</strong></li>
+<li><strong>Inadequate access.</strong></li>
+<li><strong>Over-fragile materials</strong> — the structure is weaker than assumed.</li>
+<li><strong>Premature collapse</strong> from incorrect dismantling, overloading, or excessive pre-weakening.</li>
+</ul>
+<p>That last group is the one to learn as a phrase. "Premature collapse due to incorrect dismantling" is the definition of almost every demolition fatality.</p>
+<p><strong>Methods:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Note</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Top-down or progressive</strong></td>
+<td>Element by element from the roof down; the default for buildings near other buildings</td>
+</tr>
+<tr>
+<td><strong>Mechanical</strong></td>
+<td>Pusher arm, grapple, or ball and crane; needs a bigger exclusion zone than people expect</td>
+</tr>
+<tr>
+<td><strong>Deliberate collapse</strong></td>
+<td>Cutting the structure so it falls in a chosen direction; used only in open ground</td>
+</tr>
+<tr>
+<td><strong>Explosive (implosion)</strong></td>
+<td>Charges on columns and core, sequenced to drop the building into its own footprint</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Precautions:</strong></p>
+<ul>
+<li><strong>Structural survey first</strong>, plus drawings of the original and of every alteration. Assume the drawings are wrong and verify.</li>
+<li><strong>Disconnect and isolate the services</strong> — electricity, gas, water, drainage — and prove the isolation. Seal the drains.</li>
+<li><strong>Asbestos survey and removal before anything else.</strong> Asbestos in a demolition is the classic hidden killer.</li>
+<li><strong>Exclusion zone</strong>: a hoarding, and a cordon of at least <strong>one and a half times the building height</strong> <strong>(standard)</strong>, with gates, guards and warning signs.</li>
+<li><strong>Plan the sequence</strong> so no element is left unsupported: remove from the top, never undercut, and never load a floor with debris beyond its design load.</li>
+<li><strong>Debris down chutes</strong>, not thrown from height, and skips positioned inside the cordon.</li>
+<li><strong>Dust suppression</strong> with water sprays, and respiratory protection for silica.</li>
+<li><strong>Protect the neighbours</strong>: condition survey of adjoining buildings, tell-tales on party walls, and monitoring for movement.</li>
+<li><strong>Access</strong> by proper stairs or scaffold, not by climbing debris.</li>
+<li><strong>Trained, competent operatives</strong> and a <strong>banksman</strong> for every machine.</li>
+<li><strong>No burning of waste on site</strong>, and a <strong>fire plan</strong> with water and extinguishers.</li>
+<li><strong>Emergency plan</strong> with a rescue route, first aid, and a means of accounting for everyone.</li>
+</ul>
+<p><em>What to write (8 marks).</em> Definition and three goals, the accident-cause list, two methods, then six precautions in a numbered list. Close with the sequence rule — top down, never undercut — because that is the engineering content of the answer.</p>
+<p><strong>Mark anchor.</strong> The <strong>three goals</strong> verbatim, and <strong>"premature collapse from incorrect dismantling or overloading"</strong>. Both are on the slide and both are quotable.</p>
+<p><strong>Exam trap.</strong> Demolition is not a synonym for explosives. Most demolition in a city is <strong>top-down mechanical</strong>, and an answer that goes straight to implosion has skipped the method that the examiner's own city uses.</p>
+<h3 id="211-confined-space-in-construction">2.11 Confined space in construction<a class="anchor" href="#211-confined-space-in-construction">#</a></h3>
+<p><em>In plain English.</em> A confined space is a place with one way in, air you cannot trust, and no room to fall over. On a building site they are everywhere, and they are almost never labelled. A manhole, a pile cap, a lift shaft sump, a duct, a tank, a formwork void — every one of them can kill in four minutes.</p>
+<p><em>The detail.</em> <strong>Definition</strong> <strong>(standard)</strong> — a space that is enclosed or partly enclosed, is not designed for continuous occupancy, has restricted entry and exit, and may contain a hazardous atmosphere or a material that can engulf.</p>
+<p><strong>Where they appear on a construction site:</strong> manholes and sewers, deep trenches and pits, pile bores and caissons. Also water tanks and sumps, lift shafts and service ducts, formwork and box-outs, silos and hoppers.</p>
+<p><strong>The air can fail in three ways:</strong> too little oxygen, too much of the wrong gas, or enough fuel to burn.</p>
+<ul>
+<li><strong>Oxygen deficiency</strong> — displaced by a heavier gas, or eaten by rust or by a flame.</li>
+<li><strong>Oxygen enrichment</strong> — a grease fire in a 25 per cent oxygen atmosphere.</li>
+<li><strong>Toxic gas</strong> — hydrogen sulphide in a sewer, carbon monoxide from a generator.</li>
+<li><strong>Flammable gas</strong>, and <strong>engulfment</strong> by soil or water.</li>
+<li><strong>Physical</strong>: heat, noise, poor light, electrical contact, and no room to get a stretcher in.</li>
+</ul>
+<p><strong>The control sequence, and this is the answer to every confined-space question:</strong></p>
+<ol>
+<li><strong>Avoid entry.</strong> Can it be done from outside — a camera, a rod, a remote tool? The deck says this first and means it (<code>slide 81</code>).</li>
+<li><strong>Assess the risk</strong> and write a <strong>safe system of work</strong> before anyone enters (<code>slide 81</code>).</li>
+<li><strong>Isolate</strong> — lock off, tag, blank the pipes, and disconnect drives. A valve is not an isolation.</li>
+<li><strong>Purge and ventilate</strong> with forced air, and keep ventilating while people are inside.</li>
+<li><strong>Test the atmosphere</strong> before entry and <strong>continuously</strong> while inside: <strong>oxygen 19.5–23.5 per cent, flammable gas below 10 per cent of the lower explosive limit, hydrogen sulphide below 10 ppm, carbon monoxide below 35 ppm</strong> <strong>(standard)</strong>.</li>
+<li><strong>Permit to work</strong>, signed, with the test results on it and a time limit.</li>
+<li><strong>Standby person at the entrance</strong>, in constant communication, with the entry log. The standby never enters to rescue.</li>
+<li><strong>Harness, life line and retrieval</strong> — a tripod over a manhole turns a rescue into a lift.</li>
+<li><strong>Escape breathing apparatus</strong> for the entrant, and <strong>full BA and training for the rescue team</strong>.</li>
+<li><strong>Emergency procedures ready before work starts</strong> (<code>slide 81</code>): rescue plan, alarms, first aid, and a practice that everyone has actually done.</li>
+<li><strong>Signs and barriers</strong> at the entrance, and a barrier that a child or a night-shift driver cannot move.</li>
+</ol>
+<p><em>What to write (5 or 8 marks).</em> The sequence above in order, with the four gas numbers. For 3 marks, take steps 1 to 6 and stop.</p>
+<p><strong>Mark anchor.</strong> <strong>Test, ventilate, test again, permit, standby outside, retrieve rather than enter.</strong> Six words of method.</p>
+<p><strong>Why rescues kill.</strong> Most confined-space fatalities include the would-be rescuer, and the reason is arithmetic. The atmosphere that dropped one worker will drop the next in the same number of breaths, and the second person has no harness and no line. That is why the standby's job is to raise the alarm and to haul, and never to climb down.</p>
+<p><strong>Exam trap.</strong> <strong>Trenches are confined spaces</strong> when they are deep, unventilated, and have one way out. Candidates separate "excavation" from "confined space" and then fail the question that puts a worker in a 3 m sewer trench.</p>
+<h3 id="212-the-national-building-code-and-the-indian-standards">2.12 The National Building Code and the Indian Standards<a class="anchor" href="#212-the-national-building-code-and-the-indian-standards">#</a></h3>
+<p><em>In plain English.</em> The National Building Code is the rulebook for buildings in India. It says how a building must be put up so that it does not fall on the people building it, and how it must be arranged so that people get out when it catches fire. Two different jobs, in two different parts of the same document.</p>
+<p><em>The detail.</em> The deck's whole treatment of this syllabus line is one slide that reads <code>Familiarization with relevant Indian Standards and the National Building Code provisions on construction safety. (to be Included………………)</code> (<code>slide 115</code>). Nothing follows it. So this section is <strong>(standard)</strong>, and you should say so rather than invent clause numbers.</p>
+<p><strong>What the NBC is.</strong> The <strong>National Building Code of India</strong>, published by the <strong>Bureau of Indian Standards</strong>. It is a model code: it has no force of its own, and becomes binding when a state or a municipal bye-law adopts it. Two parts matter here:</p>
+<table>
+<thead>
+<tr>
+<th>Part</th>
+<th>Title</th>
+<th>What it governs</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Part 7</strong></td>
+<td>Constructional Practices and Safety</td>
+<td>Safety during construction — the site, the excavation, the scaffold, the hoist, the demolition</td>
+</tr>
+<tr>
+<td><strong>Part 4</strong></td>
+<td>Fire and Life Safety</td>
+<td>Occupancy classification, exits, travel distance, stair geometry, fire protection systems</td>
+</tr>
+</tbody>
+</table>
+<p><strong>What Part 7 covers, in the order it is written</strong> <strong>(standard)</strong>. It opens with scope and definitions. Then general safety requirements and the duties of the parties. The working sections run: <strong>site preparation and clearance</strong>, <strong>storage and handling of materials</strong>, <strong>excavation and timbering</strong>, <strong>scaffolding</strong>, <strong>ladders</strong>, structural frame and floors, walls, roofs, <strong>floor and wall openings</strong>, <strong>demolition</strong>, <strong>hoists</strong>, <strong>material handling</strong>, <strong>pile driving</strong>, and <strong>safety equipment and PPE</strong>.</p>
+<p><strong>The Indian Standards you can name with confidence:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Code</th>
+<th>Subject</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>IS 3696 (Parts 1 and 2)</strong></td>
+<td>Safety code for scaffolds and ladders</td>
+</tr>
+<tr>
+<td><strong>IS 3764</strong></td>
+<td>Safety code for excavation work</td>
+</tr>
+<tr>
+<td><strong>IS 4081</strong></td>
+<td>Safety code for blasting and related drilling</td>
+</tr>
+<tr>
+<td><strong>IS 4130</strong></td>
+<td>Safety code for demolition of buildings</td>
+</tr>
+<tr>
+<td><strong>IS 5121</strong></td>
+<td>Safety code for piling and other deep foundations</td>
+</tr>
+<tr>
+<td><strong>IS 7969</strong></td>
+<td>Safety code for handling and storage of building materials</td>
+</tr>
+<tr>
+<td><strong>IS 4912</strong></td>
+<td>Safety requirements for floor and wall openings, stairs and railings</td>
+</tr>
+<tr>
+<td><strong>IS 2925</strong></td>
+<td>Industrial safety helmets</td>
+</tr>
+</tbody>
+</table>
+<p>The number is worth less than the title. If you cannot recall the number, write "the IS safety code for demolition (IS 4130)" and move on; a wrong number is worse than a named subject.</p>
+<p><strong>Part 4, the exit requirements for Q43</strong> <strong>(standard)</strong>.</p>
+<ul>
+<li><strong>Occupancy groups</strong> run A to I: A residential, B educational, C institutional, D assembly, E business, F mercantile, G industrial, H storage, I hazardous. The group decides the exit rules.</li>
+<li><strong>Number of exits:</strong> at least <strong>two</strong> where the occupant load is large or the building is high; one exit only for small, low buildings.</li>
+<li><strong>Unit of exit width</strong> is <strong>500 mm</strong>, and the total width is computed from the occupant load served.</li>
+<li><strong>Minimum stair width</strong> about <strong>1.0 m</strong> for a small residential building, and <strong>1.5 m</strong> where the building is tall or the load is heavy.</li>
+<li><strong>Riser not more than 190 mm, tread not less than 250 mm</strong>, with a handrail at about <strong>1.0 m</strong>.</li>
+<li><strong>Travel distance</strong> to the nearest exit is limited — about <strong>22.5 m</strong> in a residential building without sprinklers, more where the building is protected <strong>(standard)</strong>.</li>
+<li><strong>Exit enclosure</strong>: the staircase is in a fire-rated enclosure with self-closing doors, so smoke cannot use the stair as a chimney.</li>
+<li><strong>Signs and lighting</strong>: exit signs on every landing, and emergency lighting on the route.</li>
+</ul>
+<p><strong>Part 4, residential classification, for Q38</strong> <strong>(standard)</strong>. Residential is <strong>Group A</strong>, and the code splits it:</p>
+<table>
+<thead>
+<tr>
+<th>Sub-group</th>
+<th>What it covers</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>A-1</strong></td>
+<td>Private dwelling houses, flats and apartments — a family living as a household</td>
+</tr>
+<tr>
+<td><strong>A-2</strong></td>
+<td>Lodging and boarding houses, hotels, dormitories, hostels — sleeping accommodation for strangers</td>
+</tr>
+</tbody>
+</table>
+<p>The split matters because it changes the exit and fire requirements, not the architecture. A building full of people who do not know the layout needs more exits than a building full of people who live there.</p>
+<p><em>What to write.</em> For 3 marks on Q44: name the code and the publisher, name Parts 7 and 4, and give three reasons to comply — legal, life safety, insurance and liability. For 8 marks on Q43 or Q102: the exit list above, or the Part 7 subject list, as a table with two numbers.</p>
+<p><strong>Mark anchor.</strong> <strong>Part 7 = construction safety, Part 4 = fire and life safety, published by the Bureau of Indian Standards.</strong> One sentence that proves you know the document is not a single chapter.</p>
+<p><strong>Exam trap.</strong> Two traps. First, the NBC is <strong>not law by itself</strong> — it is adopted by state and municipal bye-laws, so "the NBC prosecutes you" is wrong. Second, <strong>do not invent clause numbers.</strong> "Clause 7.2.3.4" written from memory is a mark lost and a credibility lost with it. Name the Part and the requirement.</p>
+<h3 id="213-relevance-of-ergonomics-in-construction-safety">2.13 Relevance of ergonomics in construction safety<a class="anchor" href="#213-relevance-of-ergonomics-in-construction-safety">#</a></h3>
+<p><em>In plain English.</em> Ergonomics means changing the job until a normal body can do it for a whole shift. On a building site that is harder than in a factory, because the workplace is different every week. You cannot adjust the workbench when the workbench is a slab edge on the sixth floor.</p>
+<p><em>The detail.</em> <strong>Definition (deck, <code>slide 87</code>):</strong> the scientific discipline concerned with understanding the interactions among humans and other elements of a system. It is also the profession that applies theory, principles, methods and data to design, in order to optimise human well-being and overall system performance.</p>
+<ul>
+<li><strong>Ergo</strong> means work; <strong>nomos</strong> means law (<code>slide 88</code>). Ergonomics is literally the laws of work.</li>
+<li>The working definition the deck uses is <strong>"fitting the job to the worker"</strong> — the work stations, the tools and the equipment (<code>slide 88</code>). Note the direction: the job moves, not the worker.</li>
+</ul>
+<p><strong>Why it matters (<code>slide 89</code>), and these four lines are the 3-mark answer to Q39:</strong></p>
+<ol>
+<li><strong>Overexertion is a leading cause of injury</strong> at work.</li>
+<li>It is <strong>the most costly</strong> category of injury.</li>
+<li>It produces <strong>recurring and persistent pain</strong> that develops later, long after the shift.</li>
+<li><strong>Bodily reaction</strong> is another leading cause, and <strong>repetitive motion</strong> sits within the top ten.</li>
+</ol>
+<p><strong>Why it matters more in construction</strong> <strong>(standard)</strong>. Eight reasons, and any five make a good answer:</p>
+<ul>
+<li><strong>The workplace moves.</strong> The scaffold is dismantled, the floor changes, the access changes. A fix that worked yesterday is gone today.</li>
+<li><strong>The loads are heavy and awkward.</strong> Cement bags at 50 kg, blocks, rebar bundles, formwork panels — none of them have handles.</li>
+<li><strong>The postures are forced.</strong> Rebar tying at ankle height, concreting with a boom, fixing soffit services overhead, blockwork at chest height all day.</li>
+<li><strong>The tools are violent.</strong> Breakers, grinders, needle vibrators and impact drivers deliver hand-arm vibration for hours.</li>
+<li><strong>The ground is never level</strong>, and the surface is mud, rebar or a plank.</li>
+<li><strong>PPE adds load.</strong> A harness, a helmet and boots in 38 °C heat raise the metabolic cost of the same task.</li>
+<li><strong>The pace is set by the pour</strong>, not by the person. Concrete does not wait for a rest break.</li>
+<li><strong>The workforce is ageing</strong> and the trade is manual, so the same task gets harder each year.</li>
+</ul>
+<p>That is the argument in one line. Construction is <strong>manual handling, in awkward postures, with vibrating tools, on changing ground, at a pace set by others</strong>.</p>
+<p><em>What to write (8 marks).</em> Definition with the ergo/nomos gloss, "fitting the job to the worker", the four reasons from the deck, then five construction-specific reasons, then two controls. Close with the sentence that ergonomics prevents the injury rather than reporting it.</p>
+<p><strong>Mark anchor.</strong> <strong>"Fitting the job to the worker"</strong> plus <strong>overexertion as the leading and most costly cause.</strong> Both are quotable from the deck.</p>
+<p><strong>The construction argument in one comparison.</strong> In a factory, the fix is installed once: the bench comes up to waist height and stays there. On a site, the same fix has to be repeated at every lift, every floor and every trade, which is why the control is a method rather than a purchase. That sentence is worth more than a list of disorders.</p>
+<p><strong>Exam trap.</strong> Ergonomics is not comfort, and it is not office chairs. If your eight-mark answer is entirely about VDU workstations, you have answered Module II's office question and not this one.</p>
+<h3 id="214-ergonomic-hazards-on-a-construction-site">2.14 Ergonomic hazards on a construction site<a class="anchor" href="#214-ergonomic-hazards-on-a-construction-site">#</a></h3>
+<p><em>In plain English.</em> An ergonomic hazard is a demand the body can meet once but not five hundred times. One bag of cement is nothing. Two hundred bags in a day, at knee height, on a scaffold, is a back injury with a date on it.</p>
+<p><em>The detail.</em> The deck splits risk factors into two groups, and that split is the spine of the answer (<code>slide 111</code>).</p>
+<p><strong>Work-related, or ergonomic, risk factors — the three primary ones (<code>slide 113</code>):</strong></p>
+<table>
+<thead>
+<tr>
+<th>Risk factor</th>
+<th>What it means</th>
+<th>Site example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>High task repetition</strong></td>
+<td>The same cycle again and again; a job is highly repetitive if the <strong>cycle time is 30 seconds or less</strong></td>
+<td>Laying blocks, tying rebar, fixing clips</td>
+</tr>
+<tr>
+<td><strong>Forceful exertion</strong></td>
+<td>Load high enough that muscle effort and fatigue rise</td>
+<td>Lifting cement, pulling a breaker, tightening formwork</td>
+</tr>
+<tr>
+<td><strong>Awkward or sustained posture</strong></td>
+<td>A joint worked outside its mid-range, repeatedly or for long periods</td>
+<td>Overhead drilling, kneeling to tie rebar, bent-over blockwork</td>
+</tr>
+</tbody>
+</table>
+<p>The deck's own reasoning is worth keeping: joints are <strong>most efficient near the middle of their range</strong>, and risk rises when they work outside it without recovery time (<code>slide 113</code>).</p>
+<p><strong>Individual risk factors (<code>slide 114</code>):</strong> poor work practices and lifting technique; poor overall health habits; <strong>poor rest and recovery</strong>, so fatigue outruns repair; and poor nutrition, fitness and hydration.</p>
+<p><strong>Construction-specific hazards</strong> <strong>(standard)</strong> — this list is what Q103 and Q152 pay for.</p>
+<ul>
+<li><strong>Manual handling</strong> — lifting, carrying, pushing, pulling, and holding a load while someone else fixes it.</li>
+<li><strong>Awkward postures</strong> — overhead, kneeling, squatting, twisted, and confined.</li>
+<li><strong>Static postures</strong> — holding a sheet, a drill or a level while the work is set up.</li>
+<li><strong>Hand-arm vibration</strong> — breakers, grinders, compactors; leads to vibration white finger.</li>
+<li><strong>Whole-body vibration</strong> — dumper and excavator operators.</li>
+<li><strong>Repetition</strong> — the same fixing, the same cut, the same weld.</li>
+<li><strong>Contact stress</strong> — a bar edge pressed into the forearm, a tool handle into the palm.</li>
+<li><strong>Heat and PPE load</strong> — heat strain, and the extra effort of working in a harness.</li>
+<li><strong>Poor lighting</strong> — which forces the awkward posture in the first place.</li>
+<li><strong>Work organisation</strong> — piece rates, overtime, no scheduled breaks, one trade waiting on another.</li>
+</ul>
+<p><em>What to write (8 marks).</em> The three primary factors with a site example each, then the individual factors, then a short list of four site tasks and the injury each causes. Finish with controls grouped as <strong>design, tool, organisation, person</strong>.</p>
+<p><strong>Mark anchor.</strong> <strong>Cycle time of 30 seconds or less means highly repetitive.</strong> That is the deck's only number in this topic and it is a specific, checkable fact.</p>
+<p><strong>How the factors combine.</strong> The three primary factors multiply rather than add. A light load lifted five hundred times is a repetition injury; the same load lifted overhead is a shoulder injury; both together is a shoulder injury in half the time. That is why an assessment looks at the task as a whole and not at the weight alone. It is also why a single control, such as a lighter block, rarely removes the risk on its own.</p>
+<p><strong>Exam trap.</strong> The individual factors are <strong>not</strong> "the worker's fault". They modulate risk; the hazard is in the job. An answer that ends at "workers should be fitter" has blamed the victim and missed the engineering half.</p>
+<h3 id="215-musculoskeletal-disorders-and-cumulative-trauma-disorders">2.15 Musculoskeletal disorders and cumulative trauma disorders<a class="anchor" href="#215-musculoskeletal-disorders-and-cumulative-trauma-disorders">#</a></h3>
+<p><em>In plain English.</em> MSD is the umbrella term for damage to the parts that move you: muscle, tendon, ligament, nerve, disc. CTD is the subset that builds up slowly, from the same small strain repeated until the tissue gives way. One bad lift is an MSD. Ten thousand small lifts is a CTD.</p>
+<p><em>The detail.</em> <strong>MSD (deck, <code>slide 109</code>):</strong> injuries and disorders that affect the body's movement or musculoskeletal system — muscles, tendons, ligaments, nerves, discs and blood vessels.</p>
+<p><strong>Conditions named in the deck (<code>slide 109</code>, <code>slide 110</code>), with a plain gloss:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Condition</th>
+<th>What it is, in plain words</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Carpal tunnel syndrome</strong></td>
+<td>A pinched nerve at the wrist: numbness and tingling in the hand</td>
+</tr>
+<tr>
+<td><strong>Tendonitis</strong></td>
+<td>Inflammation or irritation of a tendon</td>
+</tr>
+<tr>
+<td><strong>Muscle or tendon strain</strong></td>
+<td>Overstretched or torn fibres</td>
+</tr>
+<tr>
+<td><strong>Ligament sprain</strong></td>
+<td>Stretched or torn ligament at a joint</td>
+</tr>
+<tr>
+<td><strong>Tension neck syndrome</strong></td>
+<td>Neck and shoulder pain from sustained posture</td>
+</tr>
+<tr>
+<td><strong>Thoracic outlet compression</strong></td>
+<td>Nerves or vessels squeezed between collarbone and first rib</td>
+</tr>
+<tr>
+<td><strong>Rotator cuff tendonitis</strong></td>
+<td>Shoulder tendons inflamed by overhead work</td>
+</tr>
+<tr>
+<td><strong>Epicondylitis</strong></td>
+<td>Elbow tendon pain at the muscle attachment ("tennis elbow")</td>
+</tr>
+<tr>
+<td><strong>Radial tunnel syndrome</strong></td>
+<td>Nerve compression in the forearm</td>
+</tr>
+<tr>
+<td><strong>Trigger finger</strong></td>
+<td>A finger that locks when bent, from repeated gripping</td>
+</tr>
+<tr>
+<td><strong>De Quervain's syndrome</strong></td>
+<td>Tendon pain at the base of the thumb</td>
+</tr>
+<tr>
+<td><strong>Mechanical back syndrome, degenerative disc disease, herniated disc</strong></td>
+<td>Back pain and disc damage from load and posture</td>
+</tr>
+</tbody>
+</table>
+<p>The deck's other names for the same family are <strong>repetitive motion injury, repetitive stress injury and overuse injury</strong> (<code>slide 109</code>).</p>
+<p><strong>CTD</strong> <strong>(standard)</strong>. A cumulative trauma disorder develops gradually from repeated microtrauma, with no single incident to point at. It is classified in three stages. The staging is the most examinable thing in the topic.</p>
+<table>
+<thead>
+<tr>
+<th>Stage</th>
+<th>What the worker reports</th>
+<th>Reversibility</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Stage 1</strong></td>
+<td>Aching and tiredness during work, gone by the next morning</td>
+<td>Fully reversible with rest and redesign</td>
+</tr>
+<tr>
+<td><strong>Stage 2</strong></td>
+<td>Symptoms persist after work, night pain, reduced capacity</td>
+<td>Partly reversible; needs medical treatment and change of task</td>
+</tr>
+<tr>
+<td><strong>Stage 3</strong></td>
+<td>Pain at rest, constant, loss of function, weakness</td>
+<td>Permanent disability</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Early signs and symptoms (Q159):</strong> numbness or tingling in the fingers, especially at night. Weakness in grip or pinch. Pain that <strong>persists after the shift ends</strong>, and stiffness on waking. Swelling at a joint or tendon. Cold, white fingers after a vibrating tool. A finger that clicks or locks, and a reduced range of motion.</p>
+<p>Those signs matter because <strong>Stage 1 is the only stage you can fully undo.</strong> The whole point of surveillance is to catch the worker at stage one.</p>
+<p><strong>Prevention</strong> <strong>(standard)</strong> — four groups, and that grouping is the answer structure.</p>
+<ul>
+<li><strong>Design</strong>: bring the work to waist height, and reduce the weight per unit.</li>
+<li><strong>Mechanise</strong>: hoist, conveyor, vacuum lifter, pallet truck.</li>
+<li><strong>Organise</strong>: rotate tasks, schedule micro-breaks, cut the carry distance.</li>
+<li><strong>Person</strong>: low-vibration tools, lifting technique, team lifts, health surveillance and modified duties.</li>
+</ul>
+<p><em>What to write (5 marks on Q101, Q104 or Q159).</em> Definition of MSD, three named conditions, the three stages of CTD, then three early signs and two controls.</p>
+<p><strong>Mark anchor.</strong> <strong>The three CTD stages, and the fact that stage one is fully reversible.</strong> No other answer in this module carries a staging that cleanly.</p>
+<p><strong>Exam trap.</strong> <strong>MSD is not a synonym for CTD.</strong> A crushed finger is an MSD. A back injury from one heavy lift is an MSD. Neither is cumulative. Writing "MSD and CTD are the same thing" loses the definition mark and contradicts the question, which asks about both.</p>
+<hr />
+<h2 id="3-answer-bank">3. Answer bank<a class="anchor" href="#3-answer-bank">#</a></h2>
+<h3 id="31-three-mark-answers">3.1 Three-mark answers<a class="anchor" href="#31-three-mark-answers">#</a></h3>
+<p><strong>A — Define shoring (Q14).</strong>
+1. <strong>Definition</strong> — temporary support given to an existing structure, or to the side of an excavation.
+2. <strong>Purpose</strong> — to stop collapse or movement until permanent support is built or the work ends.
+3. <strong>Two families</strong> — structural shoring (raking, flying, dead, needle) and excavation shoring (sheeting and struts).
+4. <strong>Limit</strong> — it is temporary, and it is never used as an anchor or a working platform.</p>
+<p><strong>B — Six ladder safety practices (Q15).</strong>
+1. Set the base <strong>1 foot out for every 4 feet up</strong>, about 75°, on firm level ground.
+2. <strong>Tie or secure</strong> the ladder at the top so it cannot slip or blow over.
+3. <strong>Extend 3 feet above</strong> the landing on an extension ladder.
+4. Keep <strong>three points of contact</strong>, face the ladder, and respect the belt-buckle rule.
+5. <strong>Inspect before use</strong> — label, feet, rungs, locks — and discard a defective ladder.
+6. <strong>Never carry tools or material</strong> while climbing, and never overreach or stand on the top rungs.</p>
+<p><strong>C — Six practices for working at heights (Q17).</strong>
+1. <strong>Guardrail first</strong> — top rail 39–45 in, mid-rail, toeboard at least 3 in.
+2. Where guardrail is impossible, use a <strong>personal fall arrest system</strong>: full body harness, anchored, free fall not over 6 feet.
+3. The <strong>anchor and safety line must carry 5 000 lb</strong>, and the system is inspected before every use.
+4. <strong>Cover or barricade every hole</strong>, and barricade open edges, openings and excavations.
+5. <strong>Safety nets</strong> no more than 30 ft below the work and 8–13 ft out from the edge.
+6. <strong>Protect those below</strong> — hard hats, canopies, and a barricaded drop zone. Train everyone before work starts.</p>
+<p><strong>D — Six precautions before blasting (Q18).</strong>
+1. A <strong>licensed blaster in charge</strong>, a written blast design, and a <strong>permit to work</strong>.
+2. <strong>Clear the danger radius</strong>, with <strong>sentries at every approach</strong> and barriers on roads.
+3. Agree the <strong>warning signals</strong> — warning, countdown, fire, all-clear — and shelter everyone.
+4. <strong>Correct stemming and blasting mats</strong>, with the burden checked before firing.
+5. <strong>Magazine discipline</strong> — detonators stored separately, issued and signed for, no flame, no radio.
+6. <strong>Wait for the fumes</strong>, then inspect for <strong>misfires</strong> and scale loose rock before debris removal.</p>
+<p><strong>E — Why ergonomics is important (Q39).</strong>
+1. <strong>Overexertion is a leading cause of workplace injury</strong>, and it is the <strong>most costly</strong> category.
+2. It leaves <strong>recurring and persistent pain</strong> that appears later, long after the shift.
+3. <strong>Bodily reaction</strong> is another leading cause, and <strong>repetitive motion</strong> sits in the top ten.
+4. On site the loads are heavy, the postures forced and the ground uneven, so the exposure is daily.
+5. Prevention is cheap: the fix is a height, a hoist or a rotation, not a medical claim.</p>
+<p><strong>F — Why the NBC guidelines must be followed (Q44).</strong>
+1. <strong>Life safety</strong> — exits, stairs and compartmentation are the difference between a fire and a disaster.
+2. <strong>Legal</strong> — the code is adopted by state and municipal bye-laws, so breach is an offence.
+3. <strong>Uniformity</strong> — one standard lets a designer, a builder and an inspector read the same drawing.
+4. <strong>Liability and insurance</strong> — a code-compliant building is insurable and defensible after a loss.
+5. <strong>Approval</strong> — no occupancy certificate without compliance, so the building cannot be used.</p>
+<p><strong>G — PPE in the control of chemical hazards (Q125a).</strong>
+1. <strong>Identify the route first</strong> — skin, eye, inhalation, ingestion — because the route picks the PPE.
+2. <strong>Skin</strong>: chemical-resistant gloves matched to the substance, apron or suit, and boots.
+3. <strong>Eyes</strong>: goggles or a face shield, and a wash station within reach.
+4. <strong>Inhalation</strong>: the right respirator — cartridge for vapour, particulate filter for dust, air-line where oxygen is low.
+5. <strong>Limit</strong> — PPE is last in the hierarchy. It protects one wearer, and it fails silently.</p>
+<h3 id="32-five-mark-answers">3.2 Five-mark answers<a class="anchor" href="#32-five-mark-answers">#</a></h3>
+<p><strong>A — NBC classification of residential buildings (Q38).</strong>
+1. <strong>The frame</strong> — NBC Part 4 sorts every building into an occupancy group, A to I.
+2. <strong>Group A is residential</strong>, and the code splits it by who sleeps there, not by what it looks like.
+3. <strong>A-1</strong> — private dwelling houses, flats and apartments: one household, people who know the layout.
+4. <strong>A-2</strong> — lodging and boarding houses, hotels, dormitories and hostels: strangers sleeping in numbers.
+5. <strong>Why the split</strong> — it changes the exit count, the travel distance and the fire protection, not the plan.
+6. <strong>Add the height split</strong> — low-rise below about 15 m, and <strong>high-rise at 15 m and above</strong> <strong>(standard)</strong>, which triggers the fire provisions in §3.3 J.
+7. <strong>Close</strong> — a residential building is described by its group, its sub-group and its height.</p>
+<p><strong>B — Causes of ergonomic hazards in construction (Q40).</strong>
+1. <strong>High task repetition</strong> — the same cycle under 30 seconds, all shift.
+2. <strong>Forceful exertion</strong> — cement, blocks, rebar, formwork, and pulling a breaker.
+3. <strong>Awkward or sustained posture</strong> — overhead, kneeling, twisted, and held without recovery.
+4. <strong>Vibration and contact stress</strong> — breakers and grinders, and a bar edge into the forearm.
+5. <strong>Work organisation</strong> — piece rates, overtime, no scheduled break, one trade waiting on another.
+6. <strong>Individual factors</strong> — poor technique, poor fitness, poor sleep, poor hydration. These raise risk, they do not create it.
+7. <strong>Close</strong> — the hazard is in the job design, which is why the control is redesign and not a warning.</p>
+<p><strong>C — Do ergonomic risk factors lead to MSD? (Q101).</strong>
+1. <strong>Yes, and the mechanism is dose</strong> — repeated load outruns the tissue's repair, so damage accumulates.
+2. <strong>The three factors</strong> are repetition, force and posture, and they multiply rather than add.
+3. <strong>The site version</strong> — 200 blocks an hour, at chest height, on a plank, with a bent back.
+4. <strong>The outcome</strong> — tendonitis, carpal tunnel syndrome, epicondylitis, and disc damage.
+5. <strong>The qualifier</strong> — individual factors modulate the dose. Age, fitness and recovery change the threshold, not the cause.
+6. <strong>The consequence</strong> — since the cause is design, the fix is design: height, hoist, rotation, tool.</p>
+<p><strong>D — Short note on cumulative trauma disorders (Q104).</strong>
+1. <strong>Definition</strong> — a disorder that builds from repeated microtrauma, with no single accident to point to.
+2. <strong>Other names</strong> — repetitive strain injury, overuse injury, repetitive motion injury.
+3. <strong>Examples</strong> — carpal tunnel syndrome, tendonitis, epicondylitis, trigger finger, De Quervain's, vibration white finger.
+4. <strong>Staging</strong> — stage 1 aches at work and clears overnight; stage 2 persists and wakes the worker; stage 3 is pain at rest and lost function.
+5. <strong>Why the staging matters</strong> — only stage 1 is fully reversible, which is the case for early reporting.
+6. <strong>Control</strong> — mechanise, adjust the height, rotate the task, break the cycle, and screen early.</p>
+<p><strong>E — Material Safety Data Sheets (Q125b).</strong>
+1. <strong>Definition</strong> — a standard document from the supplier that states the hazards of a substance and how to handle it.
+2. <strong>Legal role</strong> — the worker's right to know, and the employer's duty to inform and train.
+3. <strong>The sixteen sections</strong> — identification, hazards, composition, first aid, fire fighting, spill response.
+4. <strong>The rest</strong> — handling and storage, exposure controls and PPE, physical properties, stability, toxicology, ecology, disposal, transport, regulatory, other.
+5. <strong>Use on site</strong> — it sets the glove, the respirator, the storage and the first aid, so it must be at the point of use, in a language the crew reads.
+6. <strong>Limit</strong> — it is a hazard summary, not a risk assessment; it says what the chemical can do, not what your exposure is.</p>
+<p><strong>F — Hazards to check before underwater or excavation work (Q153).</strong>
+1. <strong>Services</strong> — scan for buried electricity, gas, water and telecom, and hand-dig within a metre of them.
+2. <strong>Ground and water</strong> — soil type, depth of cut, water table, and the risk of water inrush or flooding.
+3. <strong>Neighbours</strong> — foundations, party walls, drains and slopes that your cut will unload.
+4. <strong>Weather</strong> — rain and wind change the ground and the water level, and both are inspection triggers.
+5. <strong>Atmosphere</strong> — oxygen, toxic gas and flammable gas in any deep or enclosed working space.
+6. <strong>Access and egress</strong> — a ladder within 25 ft at 4 ft depth, and a rescue plan that works.
+7. <strong>Water-specific</strong> — tide, current, visibility, contamination, boat traffic, and diving fitness.</p>
+<p><strong>G — Blasting near a protected wildlife area (Q157).</strong>
+1. <strong>Baseline survey</strong> — species, nesting and calving seasons, movement corridors, and water bodies.
+2. <strong>Timing</strong> — no blasting in the breeding or nesting window, and none at dawn or dusk when animals move.
+3. <strong>Reduce the energy</strong> — smaller charges per delay, more delays, pre-split, and mats to cut airblast and flyrock.
+4. <strong>Monitor</strong> — seismograph for ground vibration, noise meter for airblast, and a record kept for the warden.
+5. <strong>Contain the site</strong> — no access roads through habitat, dust suppression, and no residue into streams.
+6. <strong>Consult</strong> — the forest or wildlife authority, with written clearance and a stop-work trigger.
+7. <strong>Consider the alternative</strong> — hydraulic breaker or expansive grout where the rock allows it.</p>
+<p><strong>H — Early signs and symptoms of MSD and CTD (Q159).</strong>
+1. <strong>Pain with a pattern</strong> — worse at work, better after rest, and in stage 2 it wakes the worker at night.
+2. <strong>Numbness and tingling</strong> in the fingers, especially at night, which points to a nerve compression at the wrist.
+3. <strong>Weakness</strong> — dropping tools, a failing grip or pinch, and difficulty with small fixings.
+4. <strong>Stiffness and swelling</strong> at a joint or along a tendon, and reduced range of motion.
+5. <strong>Vascular signs</strong> — fingers going white and cold after a vibrating tool.
+6. <strong>Mechanical signs</strong> — a finger that clicks or locks, and pain on the outside of the elbow.
+7. <strong>Why it matters</strong> — these are stage 1 and stage 2 signs, and stage 1 is the only fully reversible stage.</p>
+<h3 id="33-eight-mark-answers-site-and-process-ah">3.3 Eight-mark answers — site and process (A–H)<a class="anchor" href="#33-eight-mark-answers-site-and-process-ah">#</a></h3>
+<h4 id="a-hazards-at-different-stages-of-building-construction-q13">A — Hazards at different stages of building construction (Q13)</h4>
+<p><strong>Structure (8):</strong> four hazard families (2) → five stages, two hazards and one control each (5) → one closing line (1). A table is the fastest way to hold five stages.
+<strong>Answer</strong>
+- <strong>The four families (<code>slide 2</code>)</strong> — falls, electrocution, struck by a falling object, trapped during excavation. <strong>Falls lead the fatality table</strong>, and a fall from 4–6 feet is enough (<code>slide 5</code>).
+- <strong>Site clearance and demolition of old stock</strong> — dust, asbestos, falling structure, plant movement. Control: survey first, exclusion zone, wet suppression.
+- <strong>Excavation and foundation</strong> — cave-in, buried services, water, falls into the hole. Control: sloping or shoring, service scan, edge protection.
+- <strong>Structural frame and RCC</strong> — formwork collapse, rebar impalement, falls, crane load. Control: designed formwork, rebar caps, working decks and nets.
+- <strong>Masonry and blockwork</strong> — falls, block weight, silica dust from cutting. Control: guardrails, mechanical lifting, wet cutting.
+- <strong>Roofing, services and finishing</strong> — fragile roof, hot bitumen, electrical contact, confined space, solvent vapour. Control: crawl boards, permits, isolation.
+- <strong>Closing line</strong> — the hazard follows the phase, so the control has to be re-planned at every phase.</p>
+<p><strong>Traps:</strong> (1) Stages means the construction sequence, not the four hazard types. (2) Do not give the same control five times; each stage needs the control that stage actually uses.</p>
+<h4 id="b-relevance-of-ergonomics-in-construction-safety-q41">B — Relevance of ergonomics in construction safety (Q41)</h4>
+<p><strong>Structure (8):</strong> definition with the direction of fit (2) → four reasons from the deck (2) → five construction-specific reasons (3) → two controls and a closing line (1).
+<strong>Answer</strong>
+- <strong>Definition (<code>slide 87</code>)</strong> — the discipline that studies the interaction between people and the other elements of a system, and designs to optimise well-being and performance.
+- <strong>Direction (<code>slide 88</code>)</strong> — "fitting the job to the worker". Ergo is work, nomos is law. The job moves, not the worker.
+- <strong>The cost case (<code>slide 89</code>)</strong> — overexertion is a leading and the most costly cause; bodily reaction is another; repetitive motion is in the top ten; pain recurs later.
+- <strong>The workplace moves</strong> — the scaffold, the floor and the access change weekly, so a fix must be re-planned, not installed once.
+- <strong>The loads are awkward</strong> — 50 kg cement bags, blocks, rebar bundles and formwork panels, none of them with handles.
+- <strong>The postures are forced</strong> — rebar at ankle height, soffit services overhead, blockwork at chest height for a whole shift.
+- <strong>The tools are violent</strong> — breakers, grinders and needle vibrators deliver hand-arm vibration for hours.
+- <strong>Controls</strong> — mechanise the lift, bring the work to waist height, rotate the task, and screen for early signs.
+- <strong>Closing line</strong> — ergonomics prevents the injury; the clinic only records it.</p>
+<p><strong>Traps:</strong> (1) An answer built around office workstations has answered a different module. (2) "Fitting the worker to the job" is the reverse of the definition and loses the mark.</p>
+<h4 id="c-nbc-guidelines-on-building-exits-q43">C — NBC guidelines on building exits (Q43)</h4>
+<p><strong>Structure (8):</strong> the principle (2) → number and width of exits (2) → stair geometry (2) → enclosure, signs and lighting (2).
+<strong>Answer</strong>
+- <strong>Principle</strong> — an exit is a continuous protected route from any point to the open air, and it must stay usable under smoke.
+- <strong>Number</strong> — at least two exits where the occupant load is large or the building is high; one only for small low buildings <strong>(standard)</strong>.
+- <strong>Width</strong> — the <strong>unit of exit width is 500 mm</strong>, and the total width follows the occupant load served <strong>(standard)</strong>.
+- <strong>Stair width</strong> — about 1.0 m for a small residential block, 1.5 m where the building is tall or the load is heavy <strong>(standard)</strong>.
+- <strong>Geometry</strong> — riser not over <strong>190 mm</strong>, tread not under <strong>250 mm</strong>, handrail at about <strong>1.0 m</strong>, and headroom clear <strong>(standard)</strong>.
+- <strong>Travel distance</strong> — limited to about <strong>22.5 m</strong> in an unprotected residential building, longer where sprinklers are fitted <strong>(standard)</strong>.
+- <strong>Enclosure</strong> — the staircase sits in a fire-rated shaft with self-closing doors, so smoke cannot use the stair as a chimney.
+- <strong>Signs and lighting</strong> — exit signs on every landing, emergency lighting on the route, and no storage anywhere on it.</p>
+<p><strong>Traps:</strong> (1) An exit is a route, not a door. An answer that counts doors has missed the word "continuous". (2) Never quote a clause number you cannot defend; quote the Part and the requirement.</p>
+<h4 id="d-safety-practices-in-excavation-work-q78">D — Safety practices in excavation work (Q78)</h4>
+<p><strong>Structure (8):</strong> protective systems (2) → competent person and inspection (2) → access, edges and spoil (2) → the other hazards (2).
+<strong>Answer</strong>
+- <strong>Design the protection before digging</strong> — sloping, benching, shoring or a shield, sized for the expected loads (<code>slide 16</code>, <code>slide 18</code>).
+- <strong>Classify the soil</strong> and re-check it: soil type, depth of cut, water content, weather and nearby operations (<code>slide 20</code>).
+- <strong>Competent person</strong> — trained in soils and systems, able to identify a hazard, and authorised to stop the work (<code>slide 24</code>).
+- <strong>Daily inspection</strong> before work, after rain or high wind, and whenever exposure is expected (<code>slide 25</code>).
+- <strong>Egress</strong> — a ladder or ramp at 4 ft depth, within 25 ft of the worker, standing 3 ft above the edge (<code>slide 23</code>).
+- <strong>Keep the edge clear</strong> — spoil and plant back at least 0.6 m, and edge protection on every open side.
+- <strong>Find the services first</strong>, and hand-dig within a metre of any buried line.
+- <strong>The other hazards (<code>slide 26</code>)</strong> — water accumulation, oxygen deficiency, toxic fumes, falls and mobile equipment.
+- <strong>Never enter an unsupported trench to rescue.</strong> Shore it, or use a shield, and call the trained team.</p>
+<p><strong>Traps:</strong> (1) Shoring and shielding do different jobs; a box does not stop the wall moving. (2) "5–15 ft is where most accidents happen" is the ranking fact, and the answer that omits it loses the deck's own emphasis.</p>
+<h4 id="e-safety-measures-in-demolition-q79">E — Safety measures in demolition (Q79)</h4>
+<p><strong>Structure (8):</strong> definition and three goals (2) → causes of accidents (2) → methods (1) → six precautions (3).
+<strong>Answer</strong>
+- <strong>Definition (<code>slide 72</code>)</strong> — demolition is breaking up a building or structure, fully or partially.
+- <strong>Three goals, in order</strong> — safeguard site personnel; safeguard persons not connected, including the public; protect property likely to be affected.
+- <strong>Causes (<code>slide 72</code>)</strong> — falls from height, falling materials, inadequate access, over-fragile materials.
+- <strong>The fifth cause</strong> — premature collapse from incorrect dismantling, overloading, or excessive pre-weakening.
+- <strong>Method</strong> — top-down progressive is the default in a city; mechanical, deliberate collapse and implosion are alternatives.
+- <strong>Survey and isolate</strong> — structural survey, drawings verified, services disconnected and proved, asbestos removed first.
+- <strong>Sequence</strong> — never undercut, never leave an element unsupported, and never load a floor beyond its design load.
+- <strong>Contain</strong> — hoarding, a cordon of about 1.5 times the height, debris chutes, water sprays, and a banksman on every machine.
+- <strong>Plan for the failure</strong> — emergency plan, fire plan, first aid, and a way to account for everyone on site.</p>
+<p><strong>Traps:</strong> (1) The three goals are quotable and are worth two marks; most candidates write only the first. (2) Demolition is not a synonym for explosives.</p>
+<h4 id="f-underpinning-and-shoring-defined-with-underpinning-precautions-q82-q154">F — Underpinning and shoring defined, with underpinning precautions (Q82, Q154)</h4>
+<p><strong>Structure (8):</strong> two definitions (2) → three triggers (2) → two methods (2) → four precautions and a closing line (2).
+<strong>Answer</strong>
+- <strong>Underpinning</strong> — strengthening or deepening the foundation of an existing building by adding new permanent support below it.
+- <strong>Shoring</strong> — temporary support to an existing structure or an excavation side, to prevent collapse or movement.
+- <strong>The difference in one line</strong> — underpinning is permanent and carries load; shoring is temporary and is taken away.
+- <strong>Triggers</strong> — settlement and cracking, a deeper excavation next door, added storeys, a deteriorated footing, a new basement.
+- <strong>Pit underpinning</strong> — small pits under the wall in <strong>alternate bays</strong>, filled with mass concrete, then the bays between.
+- <strong>Needle and pile</strong> — a needle beam through the wall, carried on piles either side, so the load bypasses the work.
+- <strong>Keep the opening small</strong> — sections of 1.2–1.5 m, never more than a quarter of the wall open at once <strong>(standard)</strong>.
+- <strong>Prop before you dig</strong>, and never leave a pit open overnight without a cover, a prop and a barrier.
+- <strong>Monitor</strong> — tell-tales and settlement markers on the building and on its neighbours, read daily.
+- <strong>Close</strong> — check the neighbours' footings and party walls, and control dewatering before it settles the street.</p>
+<p><strong>Traps:</strong> (1) Swapping the two definitions loses four marks at once. (2) Underpinning precautions that never mention <strong>sequence</strong> have missed the engineering.</p>
+<h4 id="g-shoring-precautions-q83">G — Shoring precautions (Q83)</h4>
+<p><strong>Structure (8):</strong> definitions of both terms (2) → two families and the raking/flying choice (2) → the deck's precautions (4).
+<strong>Answer</strong>
+- <strong>Shoring</strong> — temporary support to hold an existing structure or an excavation side until permanent support exists.
+- <strong>Underpinning</strong> — permanent deepening or strengthening of a footing below an existing building.
+- <strong>Structural family</strong> — raking shore, flying shore, dead shore, needle and prop, used to hold a building up.
+- <strong>Excavation family</strong> — sheeting, walers, struts and hydraulic braces, used to hold a trench open.
+- <strong>Choose by the ground beside the wall</strong> — raking shore where there is ground to foot on, flying shore across a road or gap.
+- <strong>Survey and plan</strong> — a qualified person surveys for hazards, and a shoring drawing stays on site (<code>slide 32</code>).
+- <strong>Inspect every component</strong> before use; remove and repair anything defective, and never use it (<code>slide 32</code>).
+- <strong>No alteration without approval</strong> — erection, dismantling and alteration are the supervisor's decision (<code>slide 32</code>).
+- <strong>Inspect through the job</strong>, and stop work on any doubt; plumb and level as erection proceeds; do not climb the braces (<code>slide 33</code>).
+- <strong>Never use shoring for fall protection</strong>, and never remove a member until a supervisor approves (<code>slide 33</code>).</p>
+<p><strong>Traps:</strong> (1) The deck's own line that shoring is not fall protection is a free mark. (2) "Do not climb on the cross braces" is a precaution, not a joke — it appears on the slide.</p>
+<h4 id="h-construction-safety-provisions-in-the-nbc-q102">H — Construction safety provisions in the NBC (Q102)</h4>
+<p><strong>Structure (8):</strong> what Part 7 is (2) → the subjects it covers (3) → three specific requirements (2) → why it binds (1).
+<strong>Answer</strong>
+- <strong>Part 7 of the NBC</strong> is titled Constructional Practices and Safety, and it governs the site, not the finished building.
+- <strong>It covers</strong> site preparation and clearance, and storage, stacking and handling of materials.
+- <strong>It covers</strong> excavation and timbering, scaffolding, ladders, and floor and wall openings.
+- <strong>It covers</strong> demolition, hoists and lifting appliances, material handling, and pile driving.
+- <strong>It requires</strong> trenches beyond a safe depth to be sloped, shored or shielded, with inspection by a competent person.
+- <strong>It requires</strong> scaffolds and ladders to be designed and erected to the IS codes, and inspected before use.
+- <strong>It requires</strong> hoists and lifting gear to be tested, marked and examined at intervals.
+- <strong>It requires</strong> PPE, first aid, supervision, training, and a fence or hoarding around the site.
+- <strong>Why it binds</strong> — the code is adopted by state and municipal bye-laws, so a breach is a breach of the bye-law.</p>
+<p><strong>Traps:</strong> (1) Part 7 is about the construction phase; Part 4 is about fire in the finished building. Mixing them costs the structure mark. (2) Name the requirement, not an invented clause number.</p>
+<h3 id="34-eight-mark-answers-codes-plant-and-people-io">3.4 Eight-mark answers — codes, plant and people (I–O)<a class="anchor" href="#34-eight-mark-answers-codes-plant-and-people-io">#</a></h3>
+<h4 id="i-major-ergonomic-hazards-in-construction-q103">I — Major ergonomic hazards in construction (Q103)</h4>
+<p><strong>Structure (8):</strong> three primary factors (3) → five site hazards with an injury each (4) → one line on organisation (1).
+<strong>Answer</strong>
+- <strong>High task repetition</strong> — a cycle of <strong>30 seconds or less</strong> is highly repetitive, and blockwork and rebar tying qualify.
+- <strong>Forceful exertion</strong> — cement at 50 kg, formwork panels, breaker work, and pulling a cable through a duct.
+- <strong>Awkward posture</strong> — overhead drilling, kneeling to tie rebar, twisted lifting, and work in a confined void.
+- <strong>Static posture</strong> — holding a sheet, a level or a drill while someone else fixes it.
+- <strong>Hand-arm vibration</strong> — breakers, grinders and compactors; the outcome is vibration white finger.
+- <strong>Manual handling</strong> — carrying blocks up a scaffold, and holding a load while it is positioned.
+- <strong>Contact stress and heat</strong> — a bar edge into the forearm, and a harness in 38 °C heat.
+- <strong>Organisation</strong> — piece rates, overtime, no scheduled break, and one trade waiting on another.
+- <strong>The injuries</strong> — tendonitis, carpal tunnel syndrome, epicondylitis, tension neck, and disc damage.</p>
+<p><strong>Traps:</strong> (1) A hazard list without a site example is a list of words; the example is the mark. (2) Individual factors belong at the end as modifiers, not at the start as causes.</p>
+<h4 id="j-high-rise-safety-and-fire-protection-per-nbc-q107">J — High-rise safety and fire protection per NBC (Q107)</h4>
+<p><strong>Structure (8):</strong> define high-rise (1) → four families of provision (4) → the facility list (2) → the construction-phase point (1).
+<strong>Answer</strong>
+- <strong>High-rise</strong> — a building <strong>15 m or more</strong> in height <strong>(standard)</strong>, which is the threshold that switches on the fire provisions.
+- <strong>Means of escape</strong> — protected staircases, two independent routes, refuge floors in tall towers, and travel distance within the limit.
+- <strong>Means of detection and alarm</strong> — automatic detection, a manual call point on every landing, and an alarm audible throughout.
+- <strong>Means of fire fighting</strong> — <strong>wet riser and down-comer</strong>, hydrants, and <strong>main, standby and jockey pumps</strong> with a static tank.
+- <strong>Automatic sprinklers</strong> in the taller bands, in basements, and in car parks <strong>(standard)</strong>.
+- <strong>Compartmentation</strong> — fire-rated walls, floors and doors, and fire-stop around every penetration.
+- <strong>Access for the fire service</strong> — a hard-standing and a staircase the brigade can use, plus a lift lobby or fireman's lift.
+- <strong>Signs, lighting and drills</strong> — exit signs, emergency lighting, and a plan that the occupants have practised.
+- <strong>During construction</strong> — protected stairs built early, a temporary dry riser, hot work permits, and a fire watch after welding.</p>
+<p><strong>Traps:</strong> (1) Four families — escape, detection, suppression, compartmentation — make the answer exhaustive. (2) A building under construction has no sprinklers; say what replaces them.</p>
+<h4 id="k-important-provisions-of-the-nbc-q108">K — Important provisions of the NBC (Q108)</h4>
+<p><strong>Structure (8):</strong> what the code is (2) → the parts that matter to a builder (3) → three provisions (2) → one line on enforcement (1).
+<strong>Answer</strong>
+- <strong>What it is</strong> — the National Building Code of India, published by the <strong>Bureau of Indian Standards</strong>, a model code adopted by local bye-laws.
+- <strong>Part 4</strong> — Fire and Life Safety: occupancy groups A to I, exits, travel distance, stair geometry, fire protection.
+- <strong>Part 7</strong> — Constructional Practices and Safety: excavation, scaffolding, ladders, hoists, demolition, PPE.
+- <strong>Part 3</strong> — Development control rules: open space, floor area ratio, setbacks, and height limits <strong>(standard)</strong>.
+- <strong>Part 8</strong> — Building services: electrical, plumbing, air conditioning and lifts <strong>(standard)</strong>.
+- <strong>Part 11</strong> — Approach to sustainability, which is the newest addition to the code <strong>(standard)</strong>.
+- <strong>Provision</strong> — every building is classified by occupancy, and the classification sets the exits and the fire load.
+- <strong>Provision</strong> — structural safety is by design to the relevant IS codes, with drawings and supervision on record.
+- <strong>Enforcement</strong> — the local authority approves the plan and issues the occupancy certificate, so the code bites through the bye-law.</p>
+<p><strong>Traps:</strong> (1) A list of Part numbers with no content is not an answer; one provision per part is. (2) The NBC is a model code, not an Act.</p>
+<h4 id="l-ergonomic-risk-factors-and-practical-controls-q152">L — Ergonomic risk factors and practical controls (Q152)</h4>
+<p><strong>Structure (8):</strong> the three factors with the injury each causes (3) → how they combine (1) → controls by group (4).
+<strong>Answer</strong>
+- <strong>Repetitive motion</strong> — the same cycle under 30 seconds, all shift; the outcome is tendon and nerve injury at the wrist and elbow.
+- <strong>Awkward posture</strong> — overhead, kneeling or twisted; the outcome is shoulder, neck and lower-back pain.
+- <strong>Heavy lifting</strong> — cement, blocks and panels; the outcome is acute strain and, over years, disc damage.
+- <strong>They combine</strong> — force plus repetition plus posture gives more than the sum, which is why one change is rarely enough.
+- <strong>Eliminate or mechanise</strong> — hoist, conveyor, vacuum lifter, pallet truck, and a pump instead of a bucket.
+- <strong>Adjust the workplace</strong> — material at waist height, a platform instead of a ladder, and a stand for the tool.
+- <strong>Organise the work</strong> — rotate tasks, schedule micro-breaks, cap the carry distance, and drop the piece rate.
+- <strong>Equip and train</strong> — low-vibration tools with the right grip size, team lifts, and technique that is practised, not just described.
+- <strong>Screen</strong> — health surveillance, early reporting, and modified duties before stage 2 becomes stage 3.</p>
+<p><strong>Traps:</strong> (1) "Train the worker" alone is the weakest answer here; the hazard is in the job. (2) Controls must map to the factor — a hoist does nothing for overhead drilling.</p>
+<h4 id="m-ladder-and-scaffold-hazards-and-their-prevention-q155">M — Ladder and scaffold hazards and their prevention (Q155)</h4>
+<p><strong>Structure (8):</strong> ladder hazards and controls (3) → scaffold hazards and controls (3) → the tie between them (2).
+<strong>Answer</strong>
+- <strong>Ladder hazard</strong> — the wrong angle, an untied top, a slippery base, and a reach too far to one side.
+- <strong>Ladder hazard</strong> — using a step ladder as an extension ladder, carrying a load while climbing, and the top rungs.
+- <strong>Ladder control</strong> — 1 in 4, 3 feet above the landing, tied off, three points of contact, inspected before use. Ladder falls are about <strong>20 per cent</strong> of fatal and lost-day injuries (<code>slide 51</code>).
+- <strong>Scaffold hazard</strong> — no guardrail or toeboard, an incomplete platform, a missing tie, and overload with blocks.
+- <strong>Scaffold hazard</strong> — climbing the braces, partial dismantling, and sheeting that was never checked for wind.
+- <strong>Scaffold control</strong> — designed and erected by trained scaffolders, tied at every lift, inspected before first use and every <strong>7 days</strong> or after alteration.
+- <strong>Scaffold control</strong> — guardrail 39–45 in, toeboard 3 in, internal ladder access, and a duty rating respected.
+- <strong>The tie</strong> — both are temporary access, so both need a <strong>before-use inspection</strong> and a tag, and both fail silently.</p>
+<p><strong>Traps:</strong> (1) The question asks for hazards <strong>and</strong> prevention; half the candidates answer only one. (2) "Scaffold is new" is not a control.</p>
+<h4 id="n-blasting-planned-in-a-densely-populated-area-q156">N — Blasting planned in a densely populated area (Q156)</h4>
+<p><strong>Structure (8):</strong> survey and consent (2) → design and energy control (2) → protection of people (2) → monitoring and response (2).
+<strong>Answer</strong>
+- <strong>Condition survey first</strong> — every structure within the radius, photographed and cracked-mapped, before the first blast.
+- <strong>Consent and notification</strong> — police, local authority and neighbours informed, with a written schedule and a named contact.
+- <strong>Design for the constraint</strong> — small charges per delay, millisecond delays, pre-split, and a face that throws away from the buildings.
+- <strong>Cover the holes</strong> — blasting mats and adequate stemming, because flyrock is what breaks windows and skulls.
+- <strong>Control the vibration</strong> — keep peak particle velocity at about <strong>5 mm/s</strong> at the nearest residence <strong>(standard)</strong>, and monitor it.
+- <strong>Clear and shelter</strong> — a cordon, sentries at every approach, and a shelter for anyone who cannot leave.
+- <strong>Time it</strong> — daylight only, avoiding school opening and rush hour, with the traffic managed and the road closed.
+- <strong>Monitor and record</strong> — seismograph, noise meter, and a complaint log with a response.
+- <strong>Inspect after every blast</strong> for misfires, then scale and clear before the site reopens.</p>
+<p><strong>Traps:</strong> (1) The answer is a method statement, not an essay on explosives. (2) Neighbours are the client here; an answer that mentions only the crew has missed the scenario.</p>
+<h4 id="o-nbc-general-safety-requirements-for-construction-q158">O — NBC general safety requirements for construction (Q158)</h4>
+<p><strong>Structure (8):</strong> the duty (2) → site requirements (2) → access and plant (2) → people and records (2).
+<strong>Answer</strong>
+- <strong>The duty</strong> — the code places construction safety on the owner, the engineer and the contractor, and it is not delegated to the worker.
+- <strong>Site</strong> — a fence or hoarding, controlled entry, safe access, and a site that is drained, lit and kept clear.
+- <strong>Excavation</strong> — sloped, shored or shielded beyond a safe depth, with a competent person inspecting daily.
+- <strong>Scaffold and ladder</strong> — designed to the IS codes, erected by trained hands, inspected and tagged before use.
+- <strong>Openings and edges</strong> — every floor opening covered or guarded, and every edge provided with a guardrail and toeboard.
+- <strong>Plant and hoists</strong> — tested, marked with a safe working load, examined at intervals, and operated by certificated people.
+- <strong>People</strong> — PPE issued and worn, training recorded, supervision present, and first aid with a trained person on site.
+- <strong>Welfare and fire</strong> — drinking water, washing and shelter; extinguishers, a fire plan, and a hot work permit.
+- <strong>Records</strong> — inspection registers, test certificates, incident reports and a safety plan that is revised as the job changes.</p>
+<p><strong>Traps:</strong> (1) "General requirements" is the site-wide set; a list of exit widths has answered Part 4 instead. (2) Every requirement needs its actor — who does it — or it reads as a wish.</p>
+<h3 id="35-fourteen-mark-skeleton-q80-the-plan">3.5 Fourteen-mark skeleton (Q80) — the plan<a class="anchor" href="#35-fourteen-mark-skeleton-q80-the-plan">#</a></h3>
+<p><strong>Why this one.</strong> It is the only 14-mark scenario in the bank that combines the module's two heaviest topics, and it is written like a method statement. Two alternates are possible: <strong>Q107</strong> (high-rise fire provisions, if the paper wants the code instead of the site) and <strong>Q13</strong> (hazards across stages, if the paper wants breadth). The skeleton below transfers: survey → design → contain → execute → monitor → respond.</p>
+<p><strong>Open with the constraint, not the definition.</strong> The first forty words should name the site: ten storeys, occupied buildings on two sides, one access road. That single sentence tells the examiner you have understood why this demolition is harder than a normal one, and it frames every precaution that follows.</p>
+<p><strong>Budget the time.</strong> Fourteen marks is about twenty-five minutes, which is roughly two pages and two small diagrams. Six paragraphs of equal length is the wrong shape; paragraphs 2 and 4 carry six of the fourteen marks between them.</p>
+<p><strong>What a weak answer looks like.</strong> It describes demolition in general, then bolts on a list of precautions that would suit any site. It never names the constraint, never mentions the neighbours, and never says which method was rejected and why. It also tends to spend four marks' worth of space on the definition of demolition, which the question did not ask for.</p>
+<p><strong>Paragraph plan, 14 marks</strong></p>
+<ol>
+<li><strong>Scope and the three goals (2).</strong> Name the job: partial or total demolition of ten storeys, with occupied buildings on at least two sides. Then the deck's three goals — site personnel, persons not connected, property likely to be affected (<code>slide 72</code>). Say that goal two is the binding constraint on this site.</li>
+<li><strong>Survey and planning (3).</strong> Structural survey and drawings, verified rather than trusted. <strong>Asbestos survey and removal before demolition starts.</strong> Services disconnected and the isolation proved. A condition survey of every adjoining building, with tell-tales on the party walls. Ground conditions, and the stability of any basement. Then the method statement, the sequence, and the design of any temporary support. <em>This paragraph is where the marks are: a candidate who skips the survey has planned a demolition without knowing the building.</em></li>
+<li><strong>Method and sequence (2).</strong> <strong>Top-down progressive demolition</strong>, element by element, because mechanical collapse and implosion need far more space than a congested site gives. Never undercut. Never leave an element unsupported. Never let debris load a floor beyond its design capacity; clear it as it is made. Explain in one line why implosion is rejected here — the footprint is larger than the site.</li>
+<li><strong>Protection of the public (3).</strong> A hoarding, and a <strong>cordon of about 1.5 times the height</strong> <strong>(standard)</strong>. A covered walkway or a fan where the public must pass. Debris chutes and closed skips inside the line, and <strong>water sprays</strong> for dust. A banksman on every machine, and no work outside daylight. Add the traffic plan and the school-hours restriction. <strong>Draw the site plan here</strong> — building, cordon, chute, skip, gate, walkway.</li>
+<li><strong>Hazards to the crew (2).</strong> Falls — edge protection, harness with a proper anchor, and no climbing on debris. Falling material — exclusion under the work, toe boards, and no simultaneous work at two levels. Access — a proper stair or scaffold tower. Dust — silica and asbestos, with RPE and wet methods. Noise and vibration — monitoring, and rotation of breaker operators.</li>
+<li><strong>Emergency and monitoring (2).</strong> Emergency plan with a muster point outside the cordon, a rescue route, first aid, and a fire plan with extinguishers and a water supply. Daily inspection of the structure and the neighbours, with a <strong>stop-work trigger</strong> if movement is detected. A complaints and communication route for residents.</li>
+</ol>
+<h3 id="36-fourteen-mark-skeleton-marks-diagrams-and-alternates">3.6 Fourteen-mark skeleton — marks, diagrams and alternates<a class="anchor" href="#36-fourteen-mark-skeleton-marks-diagrams-and-alternates">#</a></h3>
+<p><strong>Diagrams.</strong> Two only, drawn small and labelled: the <strong>site plan</strong> (building outline, cordon at 1.5 H, gate, chute, skip, protected walkway) in paragraph 4, and the <strong>top-down sequence</strong> (roof → floors → frame → foundations, with the debris path) in paragraph 3.</p>
+<p><strong>Mark allocation discipline.</strong> Two marks for the goals, three for survey, two for method, three for public protection, two for crew hazards, two for emergency. If the paper is 14 marks and you have written six paragraphs of equal length, you have probably spent too long on the method.</p>
+<p><strong>If the paper instead asks Q107 (high-rise fire, 14 marks):</strong> reallocate as definition and threshold (2) → means of escape (3) → detection and alarm (2) → suppression and water supply (3) → compartmentation and refuge (2) → construction-phase fire safety (2). Same four-family spine as §3.3 J, at double the depth.</p>
+<hr />
+<h2 id="4-definitions-and-numbers-to-memorise">4. Definitions and numbers to memorise<a class="anchor" href="#4-definitions-and-numbers-to-memorise">#</a></h2>
+<table>
+<thead>
+<tr>
+<th>Term or number</th>
+<th>Exact value or definition</th>
+<th>Where it earns the mark</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Construction hazards</strong></td>
+<td>Falls, electrocution, struck by a falling object, trapped during excavation (<code>slide 2</code>)</td>
+<td>Any opener, Q13</td>
+</tr>
+<tr>
+<td><strong>Fall threshold</strong></td>
+<td>A fall from <strong>4–6 feet</strong> can cause lost work or death (<code>slide 5</code>)</td>
+<td>Q17, Q13</td>
+</tr>
+<tr>
+<td><strong>Guardrail</strong></td>
+<td>Top rail <strong>39–45 in</strong>, mid-rail, <strong>toeboard at least 3 in</strong> (<code>slide 9</code>)</td>
+<td>Q17, Q155</td>
+</tr>
+<tr>
+<td><strong>Personal fall arrest</strong></td>
+<td>Free fall not over <strong>6 feet</strong>; line rated <strong>5 000 lb</strong>; inspected before use (<code>slide 8</code>)</td>
+<td>Q17</td>
+</tr>
+<tr>
+<td><strong>Safety net</strong></td>
+<td>Not more than <strong>30 ft</strong> below the work, <strong>8–13 ft</strong> out from the edge (<code>slide 10</code>)</td>
+<td>Q17</td>
+</tr>
+<tr>
+<td><strong>Ladder angle</strong></td>
+<td>Base <strong>1 ft out per 4 ft up</strong>, about 75° (<code>slide 55</code>)</td>
+<td>Q15, Q155</td>
+</tr>
+<tr>
+<td><strong>Ladder extension</strong></td>
+<td><strong>3 ft above</strong> the landing (<code>slide 55</code>)</td>
+<td>Q15</td>
+</tr>
+<tr>
+<td><strong>Ladder share of injuries</strong></td>
+<td>About <strong>20 per cent</strong> of fatal and lost-workday injuries (OSHA, general industry) (<code>slide 51</code>)</td>
+<td>Q155</td>
+</tr>
+<tr>
+<td><strong>Excavation depth of accidents</strong></td>
+<td>Most happen in <strong>5–15 ft</strong> (<code>slide 15</code>)</td>
+<td>Q78, Q153</td>
+</tr>
+<tr>
+<td><strong>Excavation egress</strong></td>
+<td>Ladder at <strong>4 ft</strong> depth, within <strong>25 ft</strong> of the worker, <strong>3 ft above</strong> the edge (<code>slide 23</code>)</td>
+<td>Q78, Q153</td>
+</tr>
+<tr>
+<td><strong>Competent person</strong></td>
+<td>Trained in soils and systems, identifies hazards, <strong>authorised to stop work</strong> (<code>slide 24</code>)</td>
+<td>Q78</td>
+</tr>
+<tr>
+<td><strong>Spoil set-back</strong></td>
+<td>About <strong>0.6 m</strong> from the trench edge <strong>(standard)</strong></td>
+<td>Q78</td>
+</tr>
+<tr>
+<td><strong>Slope by soil</strong></td>
+<td><strong>0.75 : 1</strong> hard, <strong>1 : 1</strong> firm, <strong>1.5 : 1</strong> loose or wet <strong>(standard)</strong></td>
+<td>Q78</td>
+</tr>
+<tr>
+<td><strong>Shoring width</strong></td>
+<td><strong>1.2–1.5 m</strong> sections, alternate bays, quarter of the wall open at most <strong>(standard)</strong></td>
+<td>Q82, Q154</td>
+</tr>
+<tr>
+<td><strong>Scaffold guardrail</strong></td>
+<td><strong>39–45 in</strong> top rail, <strong>3 in</strong> toeboard; standards at <strong>2.0 m</strong>, lifts at <strong>2.0 m</strong> <strong>(standard)</strong></td>
+<td>Q155</td>
+</tr>
+<tr>
+<td><strong>Scaffold inspection</strong></td>
+<td>Before first use, every <strong>7 days</strong>, and after alteration <strong>(standard)</strong></td>
+<td>Q155</td>
+</tr>
+<tr>
+<td><strong>Tunnel air</strong></td>
+<td><strong>Oxygen at or above 19.5 per cent</strong>; continuous gas monitoring <strong>(standard)</strong></td>
+<td>Tunnelling answer</td>
+</tr>
+<tr>
+<td><strong>Blasting sequence</strong></td>
+<td>Drill → charge and detonator → detonate → remove debris (<code>slide 67</code>)</td>
+<td>Q18</td>
+</tr>
+<tr>
+<td><strong>Blast danger radius</strong></td>
+<td>Designed; in practice <strong>200–500 m</strong> in open rock <strong>(standard)</strong></td>
+<td>Q18, Q156</td>
+</tr>
+<tr>
+<td><strong>Vibration limit</strong></td>
+<td><strong>5 mm/s</strong> peak particle velocity at the nearest residence <strong>(standard)</strong></td>
+<td>Q156</td>
+</tr>
+<tr>
+<td><strong>Misfire wait</strong></td>
+<td><strong>30 minutes</strong> with safety fuse, <strong>5 minutes</strong> with electric firing <strong>(standard)</strong></td>
+<td>Q18</td>
+</tr>
+<tr>
+<td><strong>Demolition goals</strong></td>
+<td>Site personnel; persons not connected; property affected (<code>slide 72</code>)</td>
+<td>Q79, Q80</td>
+</tr>
+<tr>
+<td><strong>Demolition cordon</strong></td>
+<td>About <strong>1.5 times</strong> the building height <strong>(standard)</strong></td>
+<td>Q79, Q80</td>
+</tr>
+<tr>
+<td><strong>Confined-space air</strong></td>
+<td><strong>O₂ 19.5–23.5 %</strong>, flammable <strong>below 10 % LEL</strong>, <strong>H₂S below 10 ppm</strong>, <strong>CO below 35 ppm</strong> <strong>(standard)</strong></td>
+<td>Confined-space answer</td>
+</tr>
+<tr>
+<td><strong>Repetition threshold</strong></td>
+<td><strong>Cycle time of 30 seconds or less</strong> is highly repetitive (<code>slide 113</code>)</td>
+<td>Q40, Q103, Q152</td>
+</tr>
+<tr>
+<td><strong>Ergonomics</strong></td>
+<td>Study of the interaction between people and system elements; design to optimise well-being and performance (<code>slide 87</code>)</td>
+<td>Q39, Q41</td>
+</tr>
+<tr>
+<td><strong>Ergonomics, literally</strong></td>
+<td><em>Ergo</em> = work, <em>nomos</em> = law (<code>slide 88</code>)</td>
+<td>Q39</td>
+</tr>
+<tr>
+<td><strong>Direction of fit</strong></td>
+<td>"Fitting the job to the worker" (<code>slide 88</code>)</td>
+<td>Q41</td>
+</tr>
+<tr>
+<td><strong>Overexertion</strong></td>
+<td>A leading cause of injury, and the <strong>most costly</strong> (<code>slide 89</code>)</td>
+<td>Q39</td>
+</tr>
+<tr>
+<td><strong>MSD</strong></td>
+<td>Disorder of muscles, tendons, ligaments, nerves, discs, blood vessels (<code>slide 109</code>)</td>
+<td>Q101, Q104</td>
+</tr>
+<tr>
+<td><strong>CTD stages</strong></td>
+<td>Stage 1 reversible; stage 2 persistent; stage 3 permanent <strong>(standard)</strong></td>
+<td>Q104, Q159</td>
+</tr>
+<tr>
+<td><strong>NBC</strong></td>
+<td>National Building Code of India, <strong>Bureau of Indian Standards</strong>; a model code adopted by bye-laws <strong>(standard)</strong></td>
+<td>Q44, Q108</td>
+</tr>
+<tr>
+<td><strong>NBC Part 7</strong></td>
+<td>Constructional Practices and Safety — the construction phase <strong>(standard)</strong></td>
+<td>Q102, Q158</td>
+</tr>
+<tr>
+<td><strong>NBC Part 4</strong></td>
+<td>Fire and Life Safety — occupancy, exits, fire protection <strong>(standard)</strong></td>
+<td>Q43, Q107</td>
+</tr>
+<tr>
+<td><strong>Residential groups</strong></td>
+<td><strong>Group A</strong>, split <strong>A-1</strong> dwellings and <strong>A-2</strong> lodging and boarding <strong>(standard)</strong></td>
+<td>Q38</td>
+</tr>
+<tr>
+<td><strong>Exit width unit</strong></td>
+<td><strong>500 mm</strong> <strong>(standard)</strong></td>
+<td>Q43</td>
+</tr>
+<tr>
+<td><strong>Stair geometry</strong></td>
+<td>Riser <strong>≤ 190 mm</strong>, tread <strong>≥ 250 mm</strong>, handrail about <strong>1.0 m</strong> <strong>(standard)</strong></td>
+<td>Q43</td>
+</tr>
+<tr>
+<td><strong>High-rise threshold</strong></td>
+<td><strong>15 m</strong> and above <strong>(standard)</strong></td>
+<td>Q38, Q107</td>
+</tr>
+</tbody>
+</table>
+<p><strong>The rule about numbers.</strong> Every value above marked <strong>(standard)</strong> is a code or textbook figure that is <strong>not in the deck</strong>. Quote it as such — "about five millimetres per second, as the usual residential limit" — rather than as an exact clause. An examiner forgives "about"; an examiner does not forgive a fabricated decimal place.</p>
+<hr />
+<h2 id="5-diagrams-to-draw">5. Diagrams to draw<a class="anchor" href="#5-diagrams-to-draw">#</a></h2>
+<table>
+<thead>
+<tr>
+<th>Figure</th>
+<th>Source</th>
+<th>What to draw</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Four excavation protective systems</strong></td>
+<td><code>slide 18</code>, <code>slide 26</code></td>
+<td>Four small sections side by side: sloped, benched, shored (sheeting and struts), shielded (box). Label the soil angle on the sloped one.</td>
+</tr>
+<tr>
+<td><strong>Raking shore</strong></td>
+<td><code>slide 31</code>–<code>slide 33</code></td>
+<td>A wall in section, raking members at about 45° footed on a sole plate, needles through the wall, cleats at the head. One arrow for the load path.</td>
+</tr>
+<tr>
+<td><strong>Flying shore</strong></td>
+<td><code>slide 31</code>–<code>slide 33</code></td>
+<td>Two walls facing each other across a gap, a horizontal strut with straining beams and wedges at both ends. Caption: "used when there is no ground to rake against".</td>
+</tr>
+<tr>
+<td><strong>Underpinning sequence</strong></td>
+<td><strong>(standard)</strong></td>
+<td>Wall in elevation, numbered pits in alternate bays 1-3-5 then 2-4-6, with the open length marked 1.2–1.5 m and a prop over the work.</td>
+</tr>
+<tr>
+<td><strong>Ladder angle triangle</strong></td>
+<td><code>slide 55</code></td>
+<td>Right triangle: 4 up, 1 out, the ladder as the hypotenuse, 75° marked at the base, and 3 ft of ladder above the landing line.</td>
+</tr>
+<tr>
+<td><strong>Scaffold elevation</strong></td>
+<td><strong>(standard)</strong></td>
+<td>Two standards, ledgers, transoms, diagonal brace, ties to the wall at every lift, guardrail and toeboard, sole plates. Label eight members.</td>
+</tr>
+<tr>
+<td><strong>Blast pattern with delay numbers</strong></td>
+<td><strong>(standard)</strong></td>
+<td>Grid of holes numbered by delay, free face marked with an arrow, burden and spacing dimensioned, danger radius as a dashed circle with sentry positions.</td>
+</tr>
+<tr>
+<td><strong>Demolition site plan</strong></td>
+<td><strong>(standard)</strong></td>
+<td>Building footprint, cordon at 1.5 H, gate, debris chute, skip, protected walkway, adjoining buildings with tell-tales.</td>
+</tr>
+<tr>
+<td><strong>Top-down demolition sequence</strong></td>
+<td><strong>(standard)</strong></td>
+<td>Building in section, four stages from roof to frame, debris path shown down a chute, "no undercutting" arrow.</td>
+</tr>
+<tr>
+<td><strong>Confined space entry set-up</strong></td>
+<td><code>slide 81</code></td>
+<td>Manhole in section: tripod, harness and life line, standby person with the log, blower duct, gas meter at the entry, barrier and sign.</td>
+</tr>
+<tr>
+<td><strong>MSD body map</strong></td>
+<td><code>slide 109</code>, <code>slide 110</code></td>
+<td>Simple figure with the sites marked: neck and shoulder, elbow, wrist, thumb, lower back, knee. Label three conditions beside their site.</td>
+</tr>
+</tbody>
+</table>
+<p>Five of these are worth practising until they take ninety seconds: the excavation four, the ladder triangle, the scaffold elevation, the blast pattern and the demolition site plan.</p>
+<hr />
+<h2 id="6-say-this-if-grilled">6. Say-this-if-grilled<a class="anchor" href="#6-say-this-if-grilled">#</a></h2>
+<ol>
+<li>"The deck is 26 MB and yields 17 000 characters, because most of its slides are photographs. The NBC bullet on <code>slide 115</code> literally says 'to be Included'. So for the code I am quoting the standard, and I will say which values are mine rather than the slide's."</li>
+<li>"Cave-in is the greatest excavation risk, and most of the deaths happen between five and fifteen feet. That is the number that matters, because that is the depth where nobody bothers to shore."</li>
+<li>"Shoring holds the wall; shielding survives the wall. A trench box does not stop a collapse, it gives the worker somewhere to be when it happens."</li>
+<li>"Underpinning is permanent and carries load. Shoring is temporary and comes out. If I swap those two words, four marks go with them."</li>
+<li>"Underpinning is sequenced in alternate bays of about 1.2 to 1.5 metres, with no more than a quarter of the wall open. The whole method exists so the load is never unsupported."</li>
+<li>"The ladder rule is one in four, three feet above the landing, three points of contact. Falls from ladders are about a fifth of fatal and lost-day injuries, which is why the fuss is justified."</li>
+<li>"A scaffold is a structure. It needs a design, a tie at every lift, a guardrail, and an inspection before first use and every seven days after. 'It's new' is not an inspection."</li>
+<li>"Blasting is about the energy that leaves the hole. Vibration, airblast, flyrock, fumes and misfires — five escape routes, five controls, and the radius with sentries at every approach."</li>
+<li>"Demolition has three goals and the second one is the hard one in a city: safeguard persons not connected with the work. That is why the cordon is one and a half times the height."</li>
+<li>"A confined space is about atmosphere and egress, not size. A three-metre sewer trench is a confined space, and a trench rescue by an untrained colleague is how two people die instead of one."</li>
+<li>"The NBC is a model code. It binds because a state or municipal bye-law adopts it, and it bites at the occupancy certificate. Part 7 is the site; Part 4 is the fire."</li>
+<li>"Ergonomics is fitting the job to the worker, not the worker to the job. Overexertion is the leading and the most costly injury cause, and the fix is a height, a hoist or a rotation."</li>
+<li>"MSD is the umbrella; CTD is the part that accumulates. There are three stages, and stage one is the only one you can fully undo — which is the entire argument for early reporting."</li>
+<li>"I will not invent a clause number. If I cannot defend 'clause 7.2.3', I write 'Part 7 requires the trench to be shored' and keep the mark."</li>
+</ol>
+  </main>
+</div>
+<button id="chat-btn" title="Ask about this page (select text first)">✳</button>
+<div id="sel-chip">Ask about this</div>
+<div id="chat-panel" role="dialog" aria-label="Ask about this page">
+  <div id="chat-head"><span>Ask this page</span><span class="sp"></span><button id="chat-close" title="Close">✕</button></div>
+  <div id="chat-quote"></div>
+  <div id="chat-log"></div>
+  <form id="chat-form" autocomplete="off">
+    <textarea id="chat-input" rows="1" placeholder="Ask about the selection or the section…"></textarea>
+    <button id="chat-send" title="Send">↑</button>
+  </form>
+  <div id="chat-foot">Select text → “Ask about this”. Enter sends, Shift+Enter newline.</div>
+</div>
+<div class="tools">
+  <button id="theme" title="Toggle light / dark">☾</button>
+  <button id="top" title="Back to top">↑</button>
+</div>
+<script>
+(function(){
+  var root=document.documentElement, key='minotes-theme';
+  var saved=localStorage.getItem(key);
+  var prefers=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';
+  root.setAttribute('data-theme', saved || prefers);
+
+  var btn=document.getElementById('theme');
+  function sync(){ if(btn) btn.textContent = root.getAttribute('data-theme')==='dark' ? '\u2600' : '\u263E'; }
+  sync();
+  if(btn) btn.addEventListener('click',function(){
+    var next = root.getAttribute('data-theme')==='dark' ? 'light' : 'dark';
+    root.setAttribute('data-theme', next); localStorage.setItem(key,next); sync();
+  });
+
+  var bar=document.getElementById('progress');
+  if(bar) addEventListener('scroll',function(){
+    var h=document.documentElement.scrollHeight-innerHeight;
+    bar.style.width=(h>0?(scrollY/h*100):0)+'%';
+  },{passive:true});
+
+  document.querySelectorAll('pre').forEach(function(pre){
+    var b=document.createElement('button');
+    b.className='copy'; b.textContent='copy';
+    b.addEventListener('click',function(){
+      var t=pre.querySelector('code'); var txt=t?t.innerText:pre.innerText;
+      navigator.clipboard.writeText(txt).then(function(){
+        b.textContent='copied'; setTimeout(function(){b.textContent='copy';},1200);
+      });
+    });
+    pre.appendChild(b);
+  });
+
+  document.querySelectorAll('main table').forEach(function(t){
+    if(t.parentElement.classList.contains('table-scroll')) return;
+    var w=document.createElement('div'); w.className='table-scroll';
+    t.parentNode.insertBefore(w,t); w.appendChild(t);
+  });
+
+  var links=[].slice.call(document.querySelectorAll('.sidebar a[href^="#"]'));
+  var map={}; links.forEach(function(a){ map[a.getAttribute('href').slice(1)]=a; });
+  var heads=[].slice.call(document.querySelectorAll('main h2[id], main h3[id]'));
+  if('IntersectionObserver' in window && heads.length){
+    var obs=new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if(!e.isIntersecting) return;
+        links.forEach(function(a){a.classList.remove('active');});
+        var a=map[e.target.id]; if(a){a.classList.add('active');}
+      });
+    },{rootMargin:'-10% 0px -75% 0px'});
+    heads.forEach(function(h){obs.observe(h);});
+  }
+
+  var top=document.getElementById('top');
+  if(top) top.addEventListener('click',function(){ scrollTo({top:0,behavior:'smooth'}); });
+})();
+
+(function(){
+  var API="/api/chat";
+  var panel=document.getElementById("chat-panel"),
+      btn=document.getElementById("chat-btn"),
+      chip=document.getElementById("sel-chip"),
+      quote=document.getElementById("chat-quote"),
+      log=document.getElementById("chat-log"),
+      input=document.getElementById("chat-input"),
+      send=document.getElementById("chat-send"),
+      form=document.getElementById("chat-form");
+
+  if(!panel) return;
+  var pendingSelection="", busy=false, lastSelection="";
+
+  function esc(s){return s.replace(/[&<>]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;"}[c];});}
+
+  // minimal markdown: fenced code, inline code, bold, bullets, numbered lists
+  function md(src){
+    var parts=src.split(/```/), out="";
+    for(var i=0;i<parts.length;i++){
+      if(i%2){ out+="<pre><code>"+esc(parts[i].replace(/^\w*\n/,""))+"</code></pre>"; continue; }
+      var t=esc(parts[i]);
+      t=t.replace(/`([^`\n]+)`/g,"<code>$1</code>").replace(/\*\*([^*]+)\*\*/g,"<b>$1</b>");
+      var lines=t.split(/\n/), html="", inUl=false, inOl=false;
+      for(var j=0;j<lines.length;j++){
+        var line=lines[j];
+        if(/^\s*[-*]\s+/.test(line)){
+          if(inOl){html+="</ol>";inOl=false;}
+          if(!inUl){html+="<ul>";inUl=true;}
+          html+="<li>"+line.replace(/^\s*[-*]\s+/,"")+"</li>"; continue;
+        }
+        if(/^\s*\d+[.)]\s+/.test(line)){
+          if(inUl){html+="</ul>";inUl=false;}
+          if(!inOl){html+="<ol>";inOl=true;}
+          html+="<li>"+line.replace(/^\s*\d+[.)]\s+/,"")+"</li>"; continue;
+        }
+        if(inUl){html+="</ul>";inUl=false;}
+        if(inOl){html+="</ol>";inOl=false;}
+        if(line.trim()==="") continue;
+        html+="<p>"+line+"</p>";
+      }
+      if(inUl)html+="</ul>";
+      if(inOl)html+="</ol>";
+      out+=html;
+    }
+    return out;
+  }
+
+  function outline(){
+    return [].slice.call(document.querySelectorAll("main h2, main h3")).slice(0,40)
+      .map(function(h){return (h.tagName==="H3"?"  - ":"- ")+h.textContent.replace(/#$/,"").trim();}).join("\n");
+  }
+
+  function sectionFor(node){
+    var el = node && (node.nodeType===1?node:node.parentElement);
+    if(!el || !el.closest) return "";
+    el = el.closest("main") ? el : null;
+    if(!el) return "";
+    var heads=[].slice.call(document.querySelectorAll("main h2, main h3"));
+    var cur=null, idx=-1;
+    for(var i=0;i<heads.length;i++){
+      if(heads[i].compareDocumentPosition(el) & Node.DOCUMENT_POSITION_FOLLOWING) { cur=heads[i]; idx=i; }
+    }
+    if(!cur) return "";
+    var stop = heads[idx+1] || null, txt=[], n=cur;
+    while((n=n.nextSibling) && n!==stop){ if(n.textContent) txt.push(n.textContent); }
+    return (cur.textContent+"\n"+txt.join("\n")).replace(/\s+\n/g,"\n").slice(0,3000);
+  }
+
+  function placeChip(x,y){
+    chip.style.left=x+"px"; chip.style.top=(y+window.scrollY-8)+"px"; chip.style.display="block";
+  }
+  function hideChip(){ chip.style.display="none"; }
+
+  document.addEventListener("mouseup",function(e){
+    setTimeout(function(){
+      var s=window.getSelection(), text=s?s.toString().trim():"";
+      if(!text || text.length<3 || !s.anchorNode || !(s.anchorNode.parentElement||s.anchorNode).closest("main")){hideChip();return;}
+      lastSelection=text;
+      var r=s.getRangeAt(0).getBoundingClientRect();
+      placeChip(r.left+r.width/2, Math.max(r.top,8));
+    },10);
+  });
+  document.addEventListener("mousedown",function(e){ if(e.target!==chip) hideChip(); });
+
+  chip.addEventListener("mousedown",function(e){ e.preventDefault(); });
+  chip.addEventListener("click",function(e){
+    e.stopPropagation();
+    pendingSelection=lastSelection; hideChip(); open(pendingSelection);
+  });
+
+  function open(sel){
+    panel.classList.add("open");
+    if(sel){ quote.style.display="block"; quote.textContent=sel; pendingSelection=sel; }
+    else { quote.style.display="none"; quote.textContent=""; pendingSelection=""; }
+    setTimeout(function(){input.focus();},60);
+  }
+  function close(){ panel.classList.remove("open"); }
+
+  btn.addEventListener("click",function(){ panel.classList.contains("open")?close():open(lastSelection||""); });
+  document.getElementById("chat-close").addEventListener("click",close);
+  document.addEventListener("keydown",function(e){ if(e.key==="Escape") close(); });
+
+  function addMsg(cls,html){
+    var d=document.createElement("div"); d.className="msg "+cls; d.innerHTML=html; log.appendChild(d);
+    log.scrollTop=log.scrollHeight; return d;
+  }
+
+  async function ask(q){
+    if(busy||!q.trim()) return;
+    busy=true; send.disabled=true;
+    addMsg("user",esc(q));
+    var bot=addMsg("bot",'<span class="cursor"></span>');
+    var acc="";
+    var sid=sessionStorage.getItem("mn-sid");
+    if(!sid){ sid=(crypto.randomUUID?crypto.randomUUID():String(Date.now())+Math.random().toString(16).slice(2)); sessionStorage.setItem("mn-sid",sid); }
+    var payload={q:q, sid:sid, sel:pendingSelection||"", page:document.querySelector("h1")?document.querySelector("h1").textContent.trim():document.title,
+                 section:sectionFor(window.getSelection()&&window.getSelection().anchorNode?"":document.querySelector("main h2"))||"",
+                 outline:outline()};
+    // section: prefer the one containing the selection, else the first heading on screen
+    try{
+      var sel=window.getSelection();
+      if(pendingSelection && sel && sel.anchorNode){ payload.section=sectionFor(sel.anchorNode); }
+      if(!payload.section){
+        var vis=[].slice.call(document.querySelectorAll("main h2, main h3")).filter(function(h){
+          var r=h.getBoundingClientRect(); return r.top>-80 && r.top<window.innerHeight*0.6; }).pop();
+        if(vis) payload.section=sectionFor(vis);
+      }
+    }catch(_){}
+
+    try{
+      var res=await fetch(API,{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify(payload)});
+      if(!res.ok){
+        var j=await res.json().catch(function(){return{};});
+        throw new Error(j.error||("HTTP "+res.status));
+      }
+      var reader=res.body.getReader(), dec=new TextDecoder(), buf="";
+      for(;;){
+        var r=await reader.read(); if(r.done) break;
+        buf+=dec.decode(r.value,{stream:true});
+        var lines=buf.split("\n"); buf=lines.pop()||"";
+        for(var i=0;i<lines.length;i++){
+          var l=lines[i].trim(); if(l.indexOf("data:")!==0) continue;
+          var d=l.slice(5).trim(); if(d==="[DONE]") continue;
+          try{ var o=JSON.parse(d); if(o.d){acc+=o.d; bot.innerHTML=md(acc)+'<span class="cursor"></span>'; log.scrollTop=log.scrollHeight;} if(o.error) throw new Error(o.error);}catch(_){}
+        }
+      }
+      bot.innerHTML=md(acc||"_no answer_");
+    }catch(err){
+      bot.className="msg err";
+      bot.textContent = String(err.message).indexOf("Failed to fetch")>-1 || String(err.message).indexOf("HTTP 5")>-1
+        ? "Assistant unavailable — it only works on the deployed site (needs the /api/chat function)."
+        : "Error: "+err.message;
+    }finally{
+      busy=false; send.disabled=false; input.value=""; input.focus();
+      pendingSelection=""; quote.style.display="none";
+    }
+  }
+
+  form.addEventListener("submit",function(e){ e.preventDefault(); ask(input.value); });
+  input.addEventListener("keydown",function(e){
+    if(e.key==="Enter"&&!e.shiftKey){ e.preventDefault(); ask(input.value); }
+  });
+  input.addEventListener("input",function(){ input.style.height="auto"; input.style.height=Math.min(input.scrollHeight,110)+"px"; });
+})();
+</script>
+</body>
+</html>

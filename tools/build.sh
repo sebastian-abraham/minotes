@@ -20,6 +20,7 @@ sync_dir() {  # sync_dir "<source folder>" "<repo subject folder>"
 
 sync_dir "$HOME/study/Web Programming" "web-programming"
 sync_dir "$HOME/study/EHS" "ehs"
+sync_dir "$HOME/study/ISE" "ise"
 
 "$PY" "$REPO/tools/build.py"
 

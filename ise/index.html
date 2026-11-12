@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Industrial Safety Engineering · minotes</title>
+<style>
+:root{
+  --bg:#fbfaf8; --panel:#ffffff; --ink:#232120; --muted:#5f5a53; --line:#e6e1da;
+  --accent:#7a4fd0; --accent-soft:#f1ecfb; --code-bg:#f5f2ee; --code-ink:#2b2a28;
+  --warn-bg:#fff8e6; --warn-line:#f0d9a0;
+  --sans:"Inter","Segoe UI",system-ui,-apple-system,"Noto Sans",sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,"SF Mono",Menlo,Consolas,"Fira Code",monospace;
+}
+html[data-theme="dark"]{
+  --bg:#141317; --panel:#1b1a20; --ink:#e8e4de; --muted:#a8a199; --line:#2f2c36;
+  --accent:#b79cf5; --accent-soft:#241f33; --code-bg:#22202a; --code-ink:#e8e4de;
+  --warn-bg:#2a2417; --warn-line:#4a3d22;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0; background:var(--bg); color:var(--ink); font-family:var(--sans);
+  font-size:16.5px; line-height:1.72; -webkit-font-smoothing:antialiased;
+}
+#progress{position:fixed;top:0;left:0;height:3px;width:0;background:var(--accent);z-index:50;transition:width .1s linear}
+
+.wrap{display:flex;align-items:flex-start;min-height:100vh}
+.sidebar{
+  position:sticky;top:0;height:100vh;width:300px;flex:0 0 300px;overflow-y:auto;
+  padding:26px 20px 60px;border-right:1px solid var(--line);background:var(--panel);
+}
+.sidebar h1{font-size:15px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);
+  margin:0 0 4px;font-weight:600}
+.sidebar .sub{font-size:12.5px;color:var(--muted);margin:0 0 18px}
+.sidebar nav{font-size:14px}
+.sidebar .toc>ul{padding-left:0}
+.sidebar ul{list-style:none;margin:0;padding-left:12px}
+.sidebar ul ul{border-left:1px solid var(--line);margin-left:4px;padding-left:10px}
+.sidebar li{margin:3px 0}
+.sidebar a{color:var(--ink);text-decoration:none;display:block;padding:3px 8px;border-radius:8px;
+  line-height:1.35;transition:background .12s,color .12s}
+.sidebar a:hover{background:var(--accent-soft);color:var(--accent)}
+.sidebar a.active{background:var(--accent-soft);color:var(--accent);font-weight:600}
+.sidebar .home{display:inline-flex;align-items:center;gap:6px;margin-bottom:16px;font-size:13.5px;
+  color:var(--muted);text-decoration:none;border:1px solid var(--line);padding:5px 10px;border-radius:999px}
+.sidebar .home:hover{color:var(--accent);border-color:var(--accent)}
+
+main{flex:1;min-width:0;padding:46px 56px 120px;max-width:980px;margin:0 auto}
+.doc-head{border-bottom:1px solid var(--line);padding-bottom:18px;margin-bottom:34px}
+.doc-head .kicker{font-size:12.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);
+  font-weight:700;margin-bottom:8px}
+.doc-head .meta{font-size:13.5px;color:var(--muted)}
+
+h1,h2,h3,h4{line-height:1.25;font-weight:700;letter-spacing:-.01em}
+h1{font-size:2.05rem;margin:.2em 0 .5em}
+h2{font-size:1.55rem;margin:2.4em 0 .7em;padding-bottom:.35em;border-bottom:1px solid var(--line)}
+h3{font-size:1.2rem;margin:1.9em 0 .55em}
+h4{font-size:1.03rem;margin:1.5em 0 .45em;color:var(--muted)}
+h2 .anchor,h3 .anchor{opacity:0;margin-left:.35em;font-size:.8em;color:var(--muted);text-decoration:none}
+h2:hover .anchor,h3:hover .anchor{opacity:1}
+p{margin:.75em 0}
+a{color:var(--accent);text-underline-offset:2px}
+strong{font-weight:650}
+hr{border:0;border-top:1px solid var(--line);margin:2.6em 0}
+ul,ol{margin:.7em 0;padding-left:1.4em}
+li{margin:.3em 0}
+li>ul,li>ol{margin:.25em 0}
+blockquote{
+  margin:1.3em 0;padding:12px 18px;background:var(--warn-bg);border-left:3px solid var(--warn-line);
+  border-radius:0 10px 10px 0;color:var(--ink)
+}
+blockquote p{margin:.3em 0}
+
+code{font-family:var(--mono);font-size:.87em;background:var(--code-bg);color:var(--code-ink);
+  padding:.15em .38em;border-radius:6px;border:1px solid var(--line);
+  box-decoration-break:clone;-webkit-box-decoration-break:clone;overflow-wrap:anywhere}
+pre{position:relative;background:var(--code-bg);border:1px solid var(--line);border-radius:12px;
+  padding:16px 18px;overflow-x:auto;margin:1.1em 0}
+pre code{background:none;border:0;padding:0;font-size:13.6px;line-height:1.62;white-space:pre}
+.copy{position:absolute;top:8px;right:8px;font:600 11px/1 var(--sans);color:var(--muted);
+  background:var(--panel);border:1px solid var(--line);border-radius:7px;padding:5px 8px;cursor:pointer;
+  opacity:0;transition:opacity .15s}
+pre:hover .copy{opacity:1}
+.copy:hover{color:var(--accent);border-color:var(--accent)}
+
+.table-scroll{overflow-x:auto;margin:1.3em 0;border:1px solid var(--line);border-radius:12px;background:var(--panel)}
+table{border-collapse:collapse;width:100%;font-size:14.6px}
+th,td{padding:9px 13px;text-align:left;vertical-align:top;border-bottom:1px solid var(--line)}
+th{background:var(--accent-soft);font-weight:650;font-size:13px;letter-spacing:.02em;
+  position:sticky;top:0;backdrop-filter:blur(4px)}
+tr:last-child td{border-bottom:0}
+tbody tr:nth-child(even){background:color-mix(in srgb,var(--panel) 60%,var(--bg))}
+tbody tr:hover{background:var(--accent-soft)}
+
+.tools{position:fixed;right:22px;bottom:22px;display:flex;flex-direction:column;gap:8px;z-index:40}
+.tools button{width:42px;height:42px;border-radius:12px;border:1px solid var(--line);background:var(--panel);
+  color:var(--ink);cursor:pointer;font-size:16px;box-shadow:0 4px 14px rgba(0,0,0,.10)}
+.tools button:hover{color:var(--accent);border-color:var(--accent)}
+@media (max-width:1000px){
+  .wrap{display:block}
+  .sidebar{position:static;width:auto;height:auto;border-right:0;border-bottom:1px solid var(--line)}
+  .sidebar nav{max-height:40vh;overflow:auto}
+  main{padding:28px 20px 100px}
+}
+@media print{
+  .sidebar,.tools,#progress,.copy{display:none!important}
+  body{background:#fff;color:#000;font-size:11pt}
+  main{padding:0;max-width:none}
+  h2{break-after:avoid} pre,table,blockquote{break-inside:avoid}
+  a{color:#000;text-decoration:none}
+}
+
+body{background:var(--bg)}
+.shell{max-width:1080px;margin:0 auto;padding:0 28px}
+.topbar{padding:26px 0 0;display:flex;justify-content:space-between;align-items:center;gap:16px}
+.topbar .brand{font-size:12.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:700}
+.topbar a{font-size:13px;color:var(--muted);text-decoration:none}
+.topbar a:hover{color:var(--accent)}
+.hero{padding:34px 0 6px}
+.hero .kicker{font-size:12.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);font-weight:700}
+.hero h1{font-size:2.4rem;margin:.2em 0 .25em;letter-spacing:-.02em}
+.hero p{color:var(--muted);max-width:64ch;margin:0}
+.searchbox{margin:24px 0 6px;display:flex;align-items:center;gap:12px}
+.searchbox label{font-size:12.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);
+  font-weight:700;white-space:nowrap}
+.searchbox input{flex:1;padding:13px 16px;border-radius:12px;border:1px solid var(--line);
+  background:var(--panel);color:var(--ink);font:inherit;font-size:15px}
+.searchbox input:focus{outline:2px solid var(--accent);outline-offset:1px}
+.count{font-size:13px;color:var(--muted);white-space:nowrap;min-width:150px;text-align:right}
+section.group{margin:38px 0 0}
+section.group>h2{font-size:12.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink);
+  opacity:.62;border:0;margin:0 0 14px;padding:0;font-weight:700}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:16px}
+.card{position:relative;display:flex;flex-direction:column;text-decoration:none;color:inherit;
+  background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:20px 20px 16px;
+  transition:transform .15s,border-color .15s,box-shadow .15s}
+.card:hover{transform:translateY(-3px);border-color:var(--accent);box-shadow:0 12px 30px rgba(0,0,0,.09)}
+.card .tag{font-size:11.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--accent);font-weight:700}
+.card h3{font-size:1.14rem;margin:.5em 0 .35em;border:0;padding:0;line-height:1.3}
+.card .blurb{margin:0;color:var(--muted);font-size:14px}
+.card .q{margin-top:auto;padding-top:14px;font-size:12.5px;color:var(--muted);font-family:var(--mono)}
+.card .go{position:absolute;top:18px;right:18px;color:var(--accent);opacity:0;transition:opacity .15s}
+.card:hover .go{opacity:1}
+.card.hero-card{grid-column:1/-1;background:linear-gradient(120deg,var(--accent-soft),var(--panel) 62%);
+  border-color:color-mix(in srgb,var(--accent) 30%,var(--line));padding:24px 26px}
+.card.hero-card h3{font-size:1.45rem;margin-top:.3em}
+.card.hero-card .go{opacity:.9}
+.hint{max-width:1080px;margin:44px auto 70px;padding:0 28px;font-size:13px;color:var(--muted)}
+.tools button{box-shadow:0 4px 14px rgba(0,0,0,.10)}
+</style>
+</head>
+<body>
+<div class="shell">
+  <div class="topbar"><div class="brand">20MCN401 · Industrial Safety Engineering</div><a href="../index.html">minotes ↗</a></div>
+  <div class="hero">
+    <div class="kicker">Semester 7 · CSE · 0-credit, still 100 marks</div>
+    <h1>Industrial Safety Engineering</h1>
+    <p>Five module kits answering all 172 questions of the department bank, written as plain-English explainers with a mark anchor and an exam trap in every section.</p>
+  </div>
+  <div class="searchbox">
+    <label for="q">Filter</label>
+    <input id="q" type="search" placeholder="laravel · box model · arrays · session · tracker">
+    <span class="count" id="count"></span>
+  </div>
+</div>
+<div class="shell">
+<section class="group"><a class="card hero-card" href="start-here.html" data-tags="Start here Start here — the plan How to use the kits and where the marks are START_HERE.md">
+  <span class="go">→</span>
+  <div class="tag">Start here</div>
+  <h3>Start here — the plan</h3>
+  <p class="blurb">How to use the kits and where the marks are</p>
+  <div class="q">Scope, answer shapes, order of attack</div>
+</a></section>
+<section class="group"><h2>Practice — type it until it sticks</h2><div class="grid"><a class="card hero-card" href="practice.html" data-tags="practice drills coding syntax fill output write">
+  <span class="go">→</span>
+  <div class="tag">Practice</div>
+  <h3>Syntax drills — 10 combined tasks</h3>
+  <p class="blurb">Two per module: fill the blanks, or write the whole thing and have the tutor grade it.</p>
+  <div class="q">fill · output · write · checked in the browser</div>
+</a></div></section>
+<section class="group"><h2>Module kits — every bank question answered</h2><div class="grid"><a class="card" href="m1-intro.html" data-tags="M1 · Intro &amp; accident theory Module 1 · Introduction to industrial safety Theories, safety organisation, roles KIT_M1_INTRO.md">
+  <span class="go">→</span>
+  <div class="tag">M1 · Intro &amp; accident theory</div>
+  <h3>Module 1 · Introduction to industrial safety</h3>
+  <p class="blurb">Theories, safety organisation, roles</p>
+  <div class="q">20% ESE · 32 questions</div>
+</a><a class="card" href="m2-ppe.html" data-tags="M2 · PPE &amp; monitoring Module 2 · Personal protection in the work environment PPE, the four rates, housekeeping, permits KIT_M2_PPE.md">
+  <span class="go">→</span>
+  <div class="tag">M2 · PPE &amp; monitoring</div>
+  <h3>Module 2 · Personal protection in the work environment</h3>
+  <p class="blurb">PPE, the four rates, housekeeping, permits</p>
+  <div class="q">20% ESE · 32 questions</div>
+</a><a class="card" href="m3-construction.html" data-tags="M3 · Construction safety Module 3 · Construction industry and safety Excavation, shoring, scaffolds, blasting, NBC KIT_M3_CONSTRUCTION.md">
+  <span class="go">→</span>
+  <div class="tag">M3 · Construction safety</div>
+  <h3>Module 3 · Construction industry and safety</h3>
+  <p class="blurb">Excavation, shoring, scaffolds, blasting, NBC</p>
+  <div class="q">20% ESE · 31 questions</div>
+</a><a class="card" href="m4-machinery.html" data-tags="M4 · Machinery &amp; handling Module 4 · Machinery safeguard and material handling Guarding, presses, machine tools, slings KIT_M4_MACHINERY.md">
+  <span class="go">→</span>
+  <div class="tag">M4 · Machinery &amp; handling</div>
+  <h3>Module 4 · Machinery safeguard and material handling</h3>
+  <p class="blurb">Guarding, presses, machine tools, slings</p>
+  <div class="q">20% ESE · 30 questions</div>
+</a><a class="card" href="m5-hazard-id.html" data-tags="M5 · Hazard identification Module 5 · Hazard identification and control Fire, Dow index, PHA, HAZOP, MSDS KIT_M5_HAZARD_ID.md">
+  <span class="go">→</span>
+  <div class="tag">M5 · Hazard identification</div>
+  <h3>Module 5 · Hazard identification and control</h3>
+  <p class="blurb">Fire, Dow index, PHA, HAZOP, MSDS</p>
+  <div class="q">20% ESE · 47 questions</div>
+</a></div></section>
+<section class="group"><h2>Source material — the notes and the bank</h2><div class="grid"><a class="card" href="syllabus.html" data-tags="Syllabus Syllabus (verbatim) The scope, module by module syllabus.md">
+  <span class="go">→</span>
+  <div class="tag">Syllabus</div>
+  <h3>Syllabus (verbatim)</h3>
+  <p class="blurb">The scope, module by module</p>
+  <div class="q">Five modules, verbatim</div>
+</a><a class="card" href="question-bank.html" data-tags="Question bank Question bank (172, mapped) Every bank question and which kit answers it question_map.md">
+  <span class="go">→</span>
+  <div class="tag">Question bank</div>
+  <h3>Question bank (172, mapped)</h3>
+  <p class="blurb">Every bank question and which kit answers it</p>
+  <div class="q">172 questions, mapped</div>
+</a></div></section>
+</div>
+<p class="hint">Inside any document: <strong>☾</strong> switches light/dark, <strong>↑</strong> jumps back to the top, every code block has a copy button, and Ctrl+P prints cleanly without the sidebar.</p>
+<div class="tools"><button id="theme" title="Toggle light / dark">☾</button></div>
+<script>
+(function(){
+  var root=document.documentElement, key='minotes-theme';
+  var saved=localStorage.getItem(key);
+  var prefers=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';
+  root.setAttribute('data-theme', saved || prefers);
+
+  var btn=document.getElementById('theme');
+  function sync(){ if(btn) btn.textContent = root.getAttribute('data-theme')==='dark' ? '\u2600' : '\u263E'; }
+  sync();
+  if(btn) btn.addEventListener('click',function(){
+    var next = root.getAttribute('data-theme')==='dark' ? 'light' : 'dark';
+    root.setAttribute('data-theme', next); localStorage.setItem(key,next); sync();
+  });
+
+  var bar=document.getElementById('progress');
+  if(bar) addEventListener('scroll',function(){
+    var h=document.documentElement.scrollHeight-innerHeight;
+    bar.style.width=(h>0?(scrollY/h*100):0)+'%';
+  },{passive:true});
+
+  document.querySelectorAll('pre').forEach(function(pre){
+    var b=document.createElement('button');
+    b.className='copy'; b.textContent='copy';
+    b.addEventListener('click',function(){
+      var t=pre.querySelector('code'); var txt=t?t.innerText:pre.innerText;
+      navigator.clipboard.writeText(txt).then(function(){
+        b.textContent='copied'; setTimeout(function(){b.textContent='copy';},1200);
+      });
+    });
+    pre.appendChild(b);
+  });
+
+  document.querySelectorAll('main table').forEach(function(t){
+    if(t.parentElement.classList.contains('table-scroll')) return;
+    var w=document.createElement('div'); w.className='table-scroll';
+    t.parentNode.insertBefore(w,t); w.appendChild(t);
+  });
+
+  var links=[].slice.call(document.querySelectorAll('.sidebar a[href^="#"]'));
+  var map={}; links.forEach(function(a){ map[a.getAttribute('href').slice(1)]=a; });
+  var heads=[].slice.call(document.querySelectorAll('main h2[id], main h3[id]'));
+  if('IntersectionObserver' in window && heads.length){
+    var obs=new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if(!e.isIntersecting) return;
+        links.forEach(function(a){a.classList.remove('active');});
+        var a=map[e.target.id]; if(a){a.classList.add('active');}
+      });
+    },{rootMargin:'-10% 0px -75% 0px'});
+    heads.forEach(function(h){obs.observe(h);});
+  }
+
+  var top=document.getElementById('top');
+  if(top) top.addEventListener('click',function(){ scrollTo({top:0,behavior:'smooth'}); });
+})();
+</script>
+<script>
+(function(){
+  var input=document.getElementById('q'), count=document.getElementById('count');
+  var cards=[].slice.call(document.querySelectorAll('.card'));
+  function apply(){
+    var v=input.value.toLowerCase().trim(), shown=0;
+    cards.forEach(function(c){
+      var hay=(c.textContent+' '+(c.dataset.tags||'')).toLowerCase();
+      var hit = !v || hay.indexOf(v) > -1;
+      c.style.display = hit ? '' : 'none'; if(hit) shown++;
+    });
+    document.querySelectorAll('section.group').forEach(function(g){
+      var any=[].slice.call(g.querySelectorAll('.card')).some(function(c){return c.style.display!=='none';});
+      g.style.display = any ? '' : 'none';
+    });
+    count.textContent = shown + ' of ' + cards.length + ' documents';
+  }
+  input.addEventListener('input', apply); apply();
+})();
+</script>
+</body>
+</html>

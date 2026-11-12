@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Practice — Industrial Safety Engineering</title>
+<style>
+:root{
+  --bg:#fbfaf8; --panel:#ffffff; --ink:#232120; --muted:#5f5a53; --line:#e6e1da;
+  --accent:#7a4fd0; --accent-soft:#f1ecfb; --code-bg:#f5f2ee; --code-ink:#2b2a28;
+  --warn-bg:#fff8e6; --warn-line:#f0d9a0;
+  --sans:"Inter","Segoe UI",system-ui,-apple-system,"Noto Sans",sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,"SF Mono",Menlo,Consolas,"Fira Code",monospace;
+}
+html[data-theme="dark"]{
+  --bg:#141317; --panel:#1b1a20; --ink:#e8e4de; --muted:#a8a199; --line:#2f2c36;
+  --accent:#b79cf5; --accent-soft:#241f33; --code-bg:#22202a; --code-ink:#e8e4de;
+  --warn-bg:#2a2417; --warn-line:#4a3d22;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0; background:var(--bg); color:var(--ink); font-family:var(--sans);
+  font-size:16.5px; line-height:1.72; -webkit-font-smoothing:antialiased;
+}
+#progress{position:fixed;top:0;left:0;height:3px;width:0;background:var(--accent);z-index:50;transition:width .1s linear}
+
+.wrap{display:flex;align-items:flex-start;min-height:100vh}
+.sidebar{
+  position:sticky;top:0;height:100vh;width:300px;flex:0 0 300px;overflow-y:auto;
+  padding:26px 20px 60px;border-right:1px solid var(--line);background:var(--panel);
+}
+.sidebar h1{font-size:15px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);
+  margin:0 0 4px;font-weight:600}
+.sidebar .sub{font-size:12.5px;color:var(--muted);margin:0 0 18px}
+.sidebar nav{font-size:14px}
+.sidebar .toc>ul{padding-left:0}
+.sidebar ul{list-style:none;margin:0;padding-left:12px}
+.sidebar ul ul{border-left:1px solid var(--line);margin-left:4px;padding-left:10px}
+.sidebar li{margin:3px 0}
+.sidebar a{color:var(--ink);text-decoration:none;display:block;padding:3px 8px;border-radius:8px;
+  line-height:1.35;transition:background .12s,color .12s}
+.sidebar a:hover{background:var(--accent-soft);color:var(--accent)}
+.sidebar a.active{background:var(--accent-soft);color:var(--accent);font-weight:600}
+.sidebar .home{display:inline-flex;align-items:center;gap:6px;margin-bottom:16px;font-size:13.5px;
+  color:var(--muted);text-decoration:none;border:1px solid var(--line);padding:5px 10px;border-radius:999px}
+.sidebar .home:hover{color:var(--accent);border-color:var(--accent)}
+
+main{flex:1;min-width:0;padding:46px 56px 120px;max-width:980px;margin:0 auto}
+.doc-head{border-bottom:1px solid var(--line);padding-bottom:18px;margin-bottom:34px}
+.doc-head .kicker{font-size:12.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);
+  font-weight:700;margin-bottom:8px}
+.doc-head .meta{font-size:13.5px;color:var(--muted)}
+
+h1,h2,h3,h4{line-height:1.25;font-weight:700;letter-spacing:-.01em}
+h1{font-size:2.05rem;margin:.2em 0 .5em}
+h2{font-size:1.55rem;margin:2.4em 0 .7em;padding-bottom:.35em;border-bottom:1px solid var(--line)}
+h3{font-size:1.2rem;margin:1.9em 0 .55em}
+h4{font-size:1.03rem;margin:1.5em 0 .45em;color:var(--muted)}
+h2 .anchor,h3 .anchor{opacity:0;margin-left:.35em;font-size:.8em;color:var(--muted);text-decoration:none}
+h2:hover .anchor,h3:hover .anchor{opacity:1}
+p{margin:.75em 0}
+a{color:var(--accent);text-underline-offset:2px}
+strong{font-weight:650}
+hr{border:0;border-top:1px solid var(--line);margin:2.6em 0}
+ul,ol{margin:.7em 0;padding-left:1.4em}
+li{margin:.3em 0}
+li>ul,li>ol{margin:.25em 0}
+blockquote{
+  margin:1.3em 0;padding:12px 18px;background:var(--warn-bg);border-left:3px solid var(--warn-line);
+  border-radius:0 10px 10px 0;color:var(--ink)
+}
+blockquote p{margin:.3em 0}
+
+code{font-family:var(--mono);font-size:.87em;background:var(--code-bg);color:var(--code-ink);
+  padding:.15em .38em;border-radius:6px;border:1px solid var(--line);
+  box-decoration-break:clone;-webkit-box-decoration-break:clone;overflow-wrap:anywhere}
+pre{position:relative;background:var(--code-bg);border:1px solid var(--line);border-radius:12px;
+  padding:16px 18px;overflow-x:auto;margin:1.1em 0}
+pre code{background:none;border:0;padding:0;font-size:13.6px;line-height:1.62;white-space:pre}
+.copy{position:absolute;top:8px;right:8px;font:600 11px/1 var(--sans);color:var(--muted);
+  background:var(--panel);border:1px solid var(--line);border-radius:7px;padding:5px 8px;cursor:pointer;
+  opacity:0;transition:opacity .15s}
+pre:hover .copy{opacity:1}
+.copy:hover{color:var(--accent);border-color:var(--accent)}
+
+.table-scroll{overflow-x:auto;margin:1.3em 0;border:1px solid var(--line);border-radius:12px;background:var(--panel)}
+table{border-collapse:collapse;width:100%;font-size:14.6px}
+th,td{padding:9px 13px;text-align:left;vertical-align:top;border-bottom:1px solid var(--line)}
+th{background:var(--accent-soft);font-weight:650;font-size:13px;letter-spacing:.02em;
+  position:sticky;top:0;backdrop-filter:blur(4px)}
+tr:last-child td{border-bottom:0}
+tbody tr:nth-child(even){background:color-mix(in srgb,var(--panel) 60%,var(--bg))}
+tbody tr:hover{background:var(--accent-soft)}
+
+.tools{position:fixed;right:22px;bottom:22px;display:flex;flex-direction:column;gap:8px;z-index:40}
+.tools button{width:42px;height:42px;border-radius:12px;border:1px solid var(--line);background:var(--panel);
+  color:var(--ink);cursor:pointer;font-size:16px;box-shadow:0 4px 14px rgba(0,0,0,.10)}
+.tools button:hover{color:var(--accent);border-color:var(--accent)}
+@media (max-width:1000px){
+  .wrap{display:block}
+  .sidebar{position:static;width:auto;height:auto;border-right:0;border-bottom:1px solid var(--line)}
+  .sidebar nav{max-height:40vh;overflow:auto}
+  main{padding:28px 20px 100px}
+}
+@media print{
+  .sidebar,.tools,#progress,.copy{display:none!important}
+  body{background:#fff;color:#000;font-size:11pt}
+  main{padding:0;max-width:none}
+  h2{break-after:avoid} pre,table,blockquote{break-inside:avoid}
+  a{color:#000;text-decoration:none}
+}
+
+body{background:var(--bg)}
+.shell{max-width:1080px;margin:0 auto;padding:0 28px}
+.topbar{padding:26px 0 0;display:flex;justify-content:space-between;align-items:center;gap:16px}
+.topbar .brand{font-size:12.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:700}
+.topbar a{font-size:13px;color:var(--muted);text-decoration:none}
+.topbar a:hover{color:var(--accent)}
+.hero{padding:34px 0 6px}
+.hero .kicker{font-size:12.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);font-weight:700}
+.hero h1{font-size:2.4rem;margin:.2em 0 .25em;letter-spacing:-.02em}
+.hero p{color:var(--muted);max-width:64ch;margin:0}
+.searchbox{margin:24px 0 6px;display:flex;align-items:center;gap:12px}
+.searchbox label{font-size:12.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);
+  font-weight:700;white-space:nowrap}
+.searchbox input{flex:1;padding:13px 16px;border-radius:12px;border:1px solid var(--line);
+  background:var(--panel);color:var(--ink);font:inherit;font-size:15px}
+.searchbox input:focus{outline:2px solid var(--accent);outline-offset:1px}
+.count{font-size:13px;color:var(--muted);white-space:nowrap;min-width:150px;text-align:right}
+section.group{margin:38px 0 0}
+section.group>h2{font-size:12.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink);
+  opacity:.62;border:0;margin:0 0 14px;padding:0;font-weight:700}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:16px}
+.card{position:relative;display:flex;flex-direction:column;text-decoration:none;color:inherit;
+  background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:20px 20px 16px;
+  transition:transform .15s,border-color .15s,box-shadow .15s}
+.card:hover{transform:translateY(-3px);border-color:var(--accent);box-shadow:0 12px 30px rgba(0,0,0,.09)}
+.card .tag{font-size:11.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--accent);font-weight:700}
+.card h3{font-size:1.14rem;margin:.5em 0 .35em;border:0;padding:0;line-height:1.3}
+.card .blurb{margin:0;color:var(--muted);font-size:14px}
+.card .q{margin-top:auto;padding-top:14px;font-size:12.5px;color:var(--muted);font-family:var(--mono)}
+.card .go{position:absolute;top:18px;right:18px;color:var(--accent);opacity:0;transition:opacity .15s}
+.card:hover .go{opacity:1}
+.card.hero-card{grid-column:1/-1;background:linear-gradient(120deg,var(--accent-soft),var(--panel) 62%);
+  border-color:color-mix(in srgb,var(--accent) 30%,var(--line));padding:24px 26px}
+.card.hero-card h3{font-size:1.45rem;margin-top:.3em}
+.card.hero-card .go{opacity:.9}
+.hint{max-width:1080px;margin:44px auto 70px;padding:0 28px;font-size:13px;color:var(--muted)}
+.tools button{box-shadow:0 4px 14px rgba(0,0,0,.10)}
+
+/* ---------- practice app ---------- */
+body{padding-bottom:60px}
+.wrap{max-width:1240px;margin:0 auto;padding:26px 26px 40px;display:grid;
+  grid-template-columns:310px minmax(0,1fr);gap:26px;align-items:start}
+@media (max-width:900px){.wrap{grid-template-columns:1fr}}
+.head{grid-column:1/-1;display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;
+  border-bottom:1px solid var(--line);padding-bottom:14px}
+.head h1{font-size:1.5rem;margin:0}
+.head .sub{color:var(--muted);font-size:13px}
+.head .grow{flex:1}
+.head a{font-size:13px;color:var(--muted);text-decoration:none}
+.head a:hover{color:var(--accent)}
+
+aside{position:sticky;top:20px;max-height:calc(100vh - 40px);overflow:auto;padding-right:4px}
+.filters{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
+.filters button{font:600 11.5px/1 var(--sans);letter-spacing:.04em;text-transform:uppercase;
+  border:1px solid var(--line);background:var(--panel);color:var(--muted);border-radius:999px;
+  padding:6px 10px;cursor:pointer}
+.filters button.on{background:var(--accent-soft);border-color:var(--accent);color:var(--accent)}
+.score{font-size:12px;color:var(--muted);margin:0 0 10px}
+.bar{height:4px;background:var(--line);border-radius:2px;overflow:hidden;margin:0 0 14px}
+.bar span{display:block;height:100%;background:var(--accent);width:0}
+.list{display:flex;flex-direction:column;gap:2px}
+.item{display:flex;gap:8px;align-items:flex-start;padding:6px 8px;border-radius:8px;cursor:pointer;
+  border:1px solid transparent;font-size:13.2px;line-height:1.35;color:var(--muted)}
+.item:hover{background:var(--accent-soft)}
+.item.sel{background:var(--accent-soft);border-color:var(--accent);color:var(--ink)}
+.item .dot{width:8px;height:8px;border-radius:50%;border:1.5px solid var(--line);margin-top:5px;flex:0 0 8px}
+.item.ok .dot{background:var(--accent);border-color:var(--accent)}
+.item .t{flex:1}
+.item .m{font-family:var(--mono);font-size:10.5px;color:var(--muted);opacity:.8}
+.grouphead{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);
+  margin:12px 0 4px;font-weight:700}
+
+article{min-width:0}
+.card2{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:22px}
+.tagrow{display:flex;gap:8px;align-items:center;margin-bottom:10px;flex-wrap:wrap}
+.tag{font-size:10.5px;letter-spacing:.09em;text-transform:uppercase;font-weight:700;color:var(--accent);
+  background:var(--accent-soft);border-radius:999px;padding:3px 9px}
+.tag.g{color:var(--muted);background:none;border:1px solid var(--line)}
+.card2 h2{font-size:1.08rem;margin:.1em 0 .7em;line-height:1.35}
+.hint{font-size:12.5px;color:var(--muted);margin:-4px 0 12px}
+
+pre.scaf{background:var(--code-bg);border:1px solid var(--line);border-radius:10px;padding:16px 16px;
+  overflow-x:auto;font-family:var(--mono);font-size:13.2px;line-height:2.1;white-space:pre-wrap}
+pre.scaf input{font-family:var(--mono);font-size:13px;border:1px solid var(--line);border-bottom:2px solid var(--accent);
+  border-radius:5px;background:var(--bg);color:var(--ink);padding:2px 6px;min-width:60px}
+pre.scaf input.ok{border-bottom-color:#2e7d32;background:#e8f5e9;color:#1b5e20}
+pre.scaf input.bad{border-bottom-color:#c62828;background:#fdecea;color:#b71c1c}
+html[data-theme="dark"] pre.scaf input.ok{background:#12301a;color:#a5d6a7}
+html[data-theme="dark"] pre.scaf input.bad{background:#3a1717;color:#ef9a9a}
+
+textarea.ans{width:100%;min-height:150px;background:var(--code-bg);border:1px solid var(--line);
+  border-radius:10px;color:var(--ink);font-family:var(--mono);font-size:13px;line-height:1.6;padding:12px 14px}
+textarea.ans:focus{outline:2px solid var(--accent);outline-offset:0}
+pre.code{background:var(--code-bg);border:1px solid var(--line);border-radius:10px;padding:14px 16px;
+  overflow-x:auto;font-family:var(--mono);font-size:13px;line-height:1.55;white-space:pre}
+
+.row{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px;align-items:center}
+button.act{font:600 13px/1 var(--sans);border-radius:9px;padding:9px 14px;cursor:pointer;
+  border:1px solid var(--line);background:var(--panel);color:var(--ink)}
+button.act:hover{border-color:var(--accent);color:var(--accent)}
+button.act.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+button.act.primary:hover{filter:brightness(1.06);color:#fff}
+button.act:disabled{opacity:.5;cursor:default}
+.verdict{font-size:13.5px;font-weight:650;margin-top:12px}
+.verdict.ok{color:#2e7d32}
+.verdict.bad{color:#c62828}
+html[data-theme="dark"] .verdict.ok{color:#81c784}
+html[data-theme="dark"] .verdict.bad{color:#ef9a9a}
+.reveal{margin-top:14px;border-top:1px solid var(--line);padding-top:14px}
+.reveal h3{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:0 0 8px}
+.reveal ul{margin:.4em 0;padding-left:1.2em}
+.opts{display:flex;flex-direction:column;gap:8px;margin-top:6px}
+.opt{text-align:left;font:inherit;font-size:13.6px;border:1px solid var(--line);background:var(--panel);
+  color:var(--ink);border-radius:10px;padding:11px 13px;cursor:pointer}
+.opt:hover{border-color:var(--accent)}
+.opt.ok{border-color:#2e7d32;background:#e8f5e9;color:#1b5e20}
+.opt.bad{border-color:#c62828;background:#fdecea;color:#b71c1c}
+html[data-theme="dark"] .opt.ok{background:#12301a;color:#a5d6a7}
+html[data-theme="dark"] .opt.bad{background:#3a1717;color:#ef9a9a}
+#tutor{margin-top:16px;border-top:1px solid var(--line);padding-top:14px;display:none}
+#tutor.on{display:block}
+#tutor .t{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+#tutor .body{font-size:13.4px;line-height:1.6}
+#tutor .body p{margin:.35em 0}
+#tutor .body ul{margin:.35em 0;padding-left:1.2em}
+#tutor .body pre{background:var(--code-bg);padding:10px 12px;border-radius:8px;font-size:12.2px;overflow-x:auto}
+#tutor .body .cursor:after{content:"▍";color:var(--accent);animation:blink 1s steps(2) infinite}
+@keyframes blink{50%{opacity:0}}
+.emptynote{color:var(--muted);font-size:14px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="head">
+    <h1>Practice</h1>
+    <span class="sub">Industrial Safety Engineering · syntax drills, checked in the browser</span>
+    <span class="grow"></span>
+    <a href="index.html">← Industrial Safety Engineering</a>
+  </div>
+
+  <aside>
+    <div class="filters" id="mfilters"></div>
+    <div class="filters" id="tfilters"></div>
+    <p class="score" id="score">0 of 0 done</p>
+    <div class="bar"><span id="barfill"></span></div>
+    <div class="list" id="list"></div>
+  </aside>
+
+  <article id="stage"><div class="card2"><p class="emptynote">Pick a drill on the left. Fill mode gives you the scaffolding and you type only the missing syntax; output mode asks what the code prints; write mode is a full answer you can hand to the tutor for grading.</p></div></article>
+</div>
+
+<div class="tools"><button id="theme" title="Toggle light / dark">☾</button></div>
+<script>
+(function(){
+  var root=document.documentElement, key='minotes-theme';
+  var saved=localStorage.getItem(key);
+  var prefers=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';
+  root.setAttribute('data-theme', saved || prefers);
+
+  var btn=document.getElementById('theme');
+  function sync(){ if(btn) btn.textContent = root.getAttribute('data-theme')==='dark' ? '\u2600' : '\u263E'; }
+  sync();
+  if(btn) btn.addEventListener('click',function(){
+    var next = root.getAttribute('data-theme')==='dark' ? 'light' : 'dark';
+    root.setAttribute('data-theme', next); localStorage.setItem(key,next); sync();
+  });
+
+  var bar=document.getElementById('progress');
+  if(bar) addEventListener('scroll',function(){
+    var h=document.documentElement.scrollHeight-innerHeight;
+    bar.style.width=(h>0?(scrollY/h*100):0)+'%';
+  },{passive:true});
+
+  document.querySelectorAll('pre').forEach(function(pre){
+    var b=document.createElement('button');
+    b.className='copy'; b.textContent='copy';
+    b.addEventListener('click',function(){
+      var t=pre.querySelector('code'); var txt=t?t.innerText:pre.innerText;
+      navigator.clipboard.writeText(txt).then(function(){
+        b.textContent='copied'; setTimeout(function(){b.textContent='copy';},1200);
+      });
+    });
+    pre.appendChild(b);
+  });
+
+  document.querySelectorAll('main table').forEach(function(t){
+    if(t.parentElement.classList.contains('table-scroll')) return;
+    var w=document.createElement('div'); w.className='table-scroll';
+    t.parentNode.insertBefore(w,t); w.appendChild(t);
+  });
+
+  var links=[].slice.call(document.querySelectorAll('.sidebar a[href^="#"]'));
+  var map={}; links.forEach(function(a){ map[a.getAttribute('href').slice(1)]=a; });
+  var heads=[].slice.call(document.querySelectorAll('main h2[id], main h3[id]'));
+  if('IntersectionObserver' in window && heads.length){
+    var obs=new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if(!e.isIntersecting) return;
+        links.forEach(function(a){a.classList.remove('active');});
+        var a=map[e.target.id]; if(a){a.classList.add('active');}
+      });
+    },{rootMargin:'-10% 0px -75% 0px'});
+    heads.forEach(function(h){obs.observe(h);});
+  }
+
+  var top=document.getElementById('top');
+  if(top) top.addEventListener('click',function(){ scrollTo({top:0,behavior:'smooth'}); });
+})();
+</script>
+<script>
+const DRILLS = [
+ {
+  "id": "i1",
+  "m": 1,
+  "type": "write",
+  "topic": "Domino theory → prevention",
+  "q": "Explain the Domino theory of accident causation and show what it changes about prevention. (8 marks)",
+  "model": "**In plain English.** Heinrich imagined an accident as five dominoes in a line. Each one knocks the next over. Remove any domino and the last one never falls — so prevention is about pulling one out, not about blaming the worker who was hit.\n\n**The five dominoes.**\n1. Ancestry and social environment — upbringing and background that shape a person's habits.\n2. Fault of the person — carelessness, recklessness, or ignorance of safe practice.\n3. Unsafe act or unsafe condition — the immediate mechanical or human cause.\n4. Accident — the unplanned event itself: the fall, the release, the contact.\n5. Injury — the consequence.\n\n**What it changes.** The first two are hard for a manager to influence. The third is where control actually happens: guard the machine, fix the floor, train the task. Removing domino 3 stops the sequence before domino 4.\n\n**Its limits.** It puts the focus on the worker's fault, and it treats the sequence as linear. Later theories — human factors, systems theory — model multiple causes acting together.\n\n**For marks:** name five dominoes in order, state the removal principle, then give one construction example and one limitation.",
+  "points": [
+   "five dominoes in order",
+   "removal principle (any one domino)",
+   "focus on unsafe act/condition",
+   "one worked example",
+   "one limitation (blames worker, linear model)"
+  ]
+ },
+ {
+  "id": "i2",
+  "m": 2,
+  "type": "write",
+  "topic": "safety performance rates",
+  "q": "Define frequency rate, severity rate, incidence rate and activity rate, and explain what each one tells a manager that the others do not. (8 marks)",
+  "model": "**In plain English.** Four rates measure four different things. Frequency counts how often injury happens. Severity counts how badly. Incidence counts how many workers were affected in a period. Activity counts how much safety work was actually done.\n\n**The formulas.**\n- **Frequency rate** = (number of lost-time injuries × 1,000,000) ÷ total man-hours worked. It answers: how often per million hours.\n- **Severity rate** = (total man-days lost × 1,000,000) ÷ total man-hours worked. It answers: how many days lost per million hours.\n- **Incidence rate** = (number of injuries × 1,000) ÷ average number of workers employed. It answers: how many of my people were hurt.\n- **Activity rate** = (number of safety activities completed ÷ number planned) × 100. It answers: are we doing the work we promised.\n\n**Why four and not one.** Frequency can stay flat while severity climbs — the same number of accidents but worse ones. Incidence shifts with headcount, so a growing site looks worse. Activity is the leading indicator; the other three are lagging.\n\n**Worked check.** 4 lost-time injuries, 2,000 man-days lost, 500,000 man-hours, 250 workers.\nFrequency = 4 × 1,000,000 ÷ 500,000 = **8**. Severity = 2,000 × 1,000,000 ÷ 500,000 = **4,000** man-days per million hours. Incidence = 4 × 1,000 ÷ 250 = **16**.\n\n**Trap.** Forgetting the multiplier, or mixing man-hours with man-days. Write the formula, substitute, then state the unit.",
+  "points": [
+   "four formulas with multipliers",
+   "what each measures",
+   "lagging vs leading distinction",
+   "worked calculation",
+   "unit stated"
+  ]
+ },
+ {
+  "id": "i3",
+  "m": 3,
+  "type": "write",
+  "topic": "scaffolding + demolition",
+  "q": "State the safety precautions for scaffolding and working platforms, then the safety measures for demolishing a ten-storey building in a congested area. (8 marks)",
+  "model": "**In plain English.** A scaffold is a temporary structure carrying people, so it gets treated like a permanent structure. Demolition is the reverse of construction: it must be planned in the order the building was built, but backwards.\n\n**Scaffolding precautions.**\n1. Designed and erected by a competent person, on a stable base with sole plates.\n2. Standards, ledgers and transoms braced; ties to the building at intervals.\n3. Platform fully decked, with guardrails about 1 m high and toe boards.\n4. Inspected before first use, after alteration, and after bad weather; tagged safe.\n5. No overloading; materials spread evenly; work stops in high wind.\n6. Access by a tied ladder, never by climbing the frame.\n\n**Demolition in a congested area.**\n1. Survey and structural report first; method statement and sequence approved before work.\n2. Services isolated — electricity, gas, water — and proven dead.\n3. Exclusion zone with hoarding and signage; adjacent structures monitored for vibration and settlement.\n4. Debris controlled: chutes, enclosed skips, no throwing from height; dust suppression by water.\n5. Work from the top down; never undercut walls; temporary supports where load paths change.\n6. Trained crew, PPE, fall protection, and a first-aid plan; no demolition by untrained labour.\n7. Neighbours notified; noise and dust limited to permitted hours.\n\n**For marks:** two labelled lists. The examiner is checking that scaffolding is about *structure and inspection*, and demolition is about *sequence and exclusion*.",
+  "points": [
+   "competent person + inspection",
+   "guardrails, toe boards, decking",
+   "bracing and ties",
+   "services isolated",
+   "top-down sequence + exclusion zone",
+   "dust, vibration, neighbours"
+  ]
+ },
+ {
+  "id": "i4",
+  "m": 4,
+  "type": "write",
+  "topic": "machine guarding",
+  "q": "Explain the principle of machine guarding and describe three types of guards or devices, with one power-press example. (8 marks)",
+  "model": "**In plain English.** The point of operation is where the machine cuts, bends or presses. Guarding means the hand cannot reach that point while the machine can move — and the machine cannot move while the hand is there.\n\n**The principle.** Three rules:\n1. The guard prevents contact with the point of operation.\n2. It does not create a new hazard — no sharp edges, no trap points.\n3. It must not be easy to defeat or remove; it needs a tool to open.\n\n**Three types.**\n- **Fixed guard** — a physical barrier, no moving parts. Cheapest and most reliable; needs no interlocks, but access for maintenance is harder.\n- **Interlocked guard** — the machine cannot run while the guard is open. Good for presses and doors; relies on the interlock working, so it is tested.\n- **Presence-sensing device** — a light curtain or pressure mat that stops the stroke when a hand enters. Fast enough for a press, but needs a brake that actually stops the ram in time.\n\n**Power-press example.** On a press brake, a fixed guard covers the back, an interlocked gate covers the front, and the two-hand control keeps both hands out of the die during the stroke.\n\n**Trap.** A guard that only slows the hand down is not a guard. Guarding is about distance, time and barriers, not warnings.",
+  "points": [
+   "point of operation defined",
+   "three rules of guarding",
+   "three guard types",
+   "power-press application",
+   "defeat-resistance"
+  ]
+ },
+ {
+  "id": "i5",
+  "m": 5,
+  "type": "write",
+  "topic": "HAZOP",
+  "q": "Explain the objectives and steps of a HAZOP study, and work one deviation for a feed line. (8 marks)",
+  "model": "**In plain English.** HAZOP asks one question in many ways: *what if this parameter is not what we intended?* A team walks the plant line by line, applying guide words to each parameter, and records what could go wrong.\n\n**Objectives.** Identify hazards and operability problems in a design or an existing plant. Find the causes of deviations. Decide whether existing safeguards are enough. Produce actions with owners.\n\n**Steps.**\n1. Define the scope and the nodes, and mark them on a P&ID.\n2. Assemble the team — process, operations, maintenance, safety, and a trained leader who is not the designer.\n3. For each node, list the parameters that matter: flow, pressure, temperature, level.\n4. Apply each guide word to each parameter: no, more, less, as well as, part of, reverse, other than.\n5. Record the deviation, its causes, its consequences, and the safeguards that already exist.\n6. Decide: acceptable, or an action with a named owner and a date.\n7. Write the report and follow up the actions.\n\n**One worked deviation.** Node: feed line to reactor. Parameter: flow. Guide word: *no*.\n- Deviation: no flow.\n- Causes: pump trip, closed valve, blocked strainer, empty tank.\n- Consequences: reaction stops, or unreacted material accumulates and reacts later.\n- Safeguards: low-flow alarm, pump interlock, level indication.\n- Action: add a low-flow trip, and test the interlock quarterly.\n\n**Trap.** HAZOP is a team study, not a checklist. Writing \"operator error\" as a cause is a non-answer; name the mechanism.",
+  "points": [
+   "one-sentence purpose",
+   "objectives",
+   "seven steps",
+   "guide words with a parameter",
+   "worked node with cause/consequence/safeguard/action"
+  ]
+ }
+];
+const STORE = "mn-drills-v1";
+let state = {};
+try { state = JSON.parse(localStorage.getItem(STORE) || "{}"); } catch (e) { state = {}; }
+const save = () => localStorage.setItem(STORE, JSON.stringify(state));
+
+let modFilter = 0, typeFilter = "";
+const root = document.getElementById("stage");
+const listEl = document.getElementById("list");
+
+const TYPES = { fill: "fill the blanks", output: "predict the output", write: "write it", mcq: "multiple choice" };
+const esc = (s) => String(s).replace(/[&<>]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;" }[c]));
+const norm = (s) => String(s).replace(/\r/g, "").trim().replace(/[ \t]+/g, " ").toLowerCase();
+const normCode = (s) => String(s).replace(/\r/g, "").split("\n").map((l) => l.trim()).filter(Boolean).join("\n").toLowerCase();
+
+/* ---------------- filters + list ---------------- */
+function buildFilters() {
+  const mf = document.getElementById("mfilters");
+  mf.innerHTML = ["All", "M1", "M2", "M3", "M4", "M5"].map((label, i) =>
+    `<button data-m="${i}" class="${modFilter === i ? "on" : ""}">${label}</button>`).join("");
+  mf.onclick = (e) => {
+    const b = e.target.closest("button"); if (!b) return;
+    modFilter = Number(b.dataset.m); buildFilters(); renderList();
+  };
+  const tf = document.getElementById("tfilters");
+  tf.innerHTML = ["All types", "fill", "output", "write", "mcq"].map((label, i) =>
+    `<button data-t="${i === 0 ? "" : label}" class="${typeFilter === (i === 0 ? "" : label) ? "on" : ""}">${label}</button>`).join("");
+  tf.onclick = (e) => {
+    const b = e.target.closest("button"); if (!b) return;
+    typeFilter = b.dataset.t; buildFilters(); renderList();
+  };
+}
+
+function visible() {
+  return DRILLS.filter((d) => (modFilter === 0 || d.m === modFilter) && (!typeFilter || d.type === typeFilter));
+}
+
+function renderList() {
+  const items = visible();
+  let html = "", lastM = null;
+  for (const d of items) {
+    if (d.m !== lastM) { html += `<div class="grouphead">Module ${d.m}</div>`; lastM = d.m; }
+    const done = state[d.id] === "done";
+    html += `<div class="item ${done ? "ok" : ""}" data-id="${d.id}">
+      <span class="dot"></span><span class="t">${esc(d.topic)} — ${esc(d.q).slice(0, 52)}…</span>
+      <span class="m">${d.type}</span></div>`;
+  }
+  listEl.innerHTML = html || '<p class="emptynote">Nothing matches that filter.</p>';
+  listEl.querySelectorAll(".item").forEach((el) => {
+    el.onclick = () => openDrill(el.dataset.id);
+  });
+  const doneCount = DRILLS.filter((d) => state[d.id] === "done").length;
+  document.getElementById("score").textContent = `${doneCount} of ${DRILLS.length} done`;
+  document.getElementById("barfill").style.width = `${(doneCount / DRILLS.length) * 100}%`;
+  if (current) {
+    const sel = listEl.querySelector(`[data-id="${current.id}"]`);
+    if (sel) sel.classList.add("sel");
+  }
+}
+
+/* ---------------- drill rendering ---------------- */
+let current = null;
+
+function openDrill(id) {
+  current = DRILLS.find((d) => d.id === id);
+  renderList();
+  render();
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+function fillMarkup(d) {
+  // {{1}} … → inline inputs sized to the answer
+  return d.scaffold.split(/(\{\{\d+\}\})/).map((part) => {
+    const m = part.match(/\{\{(\d+)\}\}/);
+    if (!m) return esc(part);
+    const i = Number(m[1]) - 1;
+    const w = Math.max(6, Math.min(34, (d.answers[i] || "").length + 3));
+    return `<input class="blank" data-i="${i}" size="${w}" spellcheck="false" autocomplete="off">`;
+  }).join("");
+}
+
+function render() {
+  const d = current;
+  if (!d) return;
+  const head = `<div class="tagrow">
+      <span class="tag">${d.type === "fill" ? "fill" : d.type}</span>
+      <span class="tag g">Module ${d.m}</span>
+      <span class="tag g">${esc(d.topic)}</span>
+      <span class="tag g">${esc(d.id)}</span>
+    </div><h2>${esc(d.q)}</h2>`;
+
+  let body = "";
+  if (d.type === "fill") {
+    body = `${d.hint ? `<p class="hint">${esc(d.hint)}</p>` : ""}
+      <pre class="scaf">${fillMarkup(d)}</pre>
+      <div class="row">
+        <button class="act primary" id="check">Check</button>
+        <button class="act" id="show">Show answer</button>
+        <button class="act" id="tutorbtn">Ask the tutor</button>
+        <span style="flex:1"></span>
+        <button class="act" id="markdone">Mark done</button>
+      </div>
+      <div id="verdict" class="verdict"></div>
+      <div id="reveal"></div>`;
+  } else if (d.type === "output") {
+    body = `<pre class="code">${esc(d.code)}</pre>
+      <textarea class="ans" id="ans" placeholder="What does it print? (one answer per line)"></textarea>
+      <div class="row">
+        <button class="act primary" id="check">Check</button>
+        <button class="act" id="show">Show answer</button>
+        <button class="act" id="tutorbtn">Ask the tutor</button>
+        <span style="flex:1"></span>
+        <button class="act" id="markdone">Mark done</button>
+      </div>
+      <div id="verdict" class="verdict"></div>
+      <div id="reveal"></div>`;
+  } else if (d.type === "write") {
+    body = `<textarea class="ans" id="ans" style="min-height:230px" placeholder="Write your answer…"></textarea>
+      <div class="row">
+        <button class="act primary" id="tutorbtn">Grade with tutor</button>
+        <button class="act" id="show">Show model answer</button>
+        <span style="flex:1"></span>
+        <button class="act" id="markdone">Mark done</button>
+      </div>
+      <div id="verdict" class="verdict"></div>
+      <div id="reveal"></div>`;
+  } else {
+    body = `<div class="opts" id="opts">${d.options.map((o, i) =>
+      `<button class="opt" data-i="${i}">${esc(o)}</button>`).join("")}</div>
+      <div id="verdict" class="verdict"></div>
+      <div class="row"><span style="flex:1"></span><button class="act" id="markdone">Mark done</button></div>
+      <div id="reveal"></div>`;
+  }
+
+  root.innerHTML = `<div class="card2">${head}${body}
+    <div id="tutor" class="tutor">
+      <div class="t">Tutor</div>
+      <div class="body" id="tutorbody"></div>
+    </div></div>`;
+
+  wire(d);
+}
+
+function verdict(kind, text) {
+  const v = document.getElementById("verdict");
+  v.className = "verdict " + (kind === true ? "ok" : kind === false ? "bad" : "");
+  v.textContent = text;
+}
+
+function reveal(d) {
+  const box = document.getElementById("reveal");
+  let html = `<h3>Model answer</h3>`;
+  if (d.type === "fill") {
+    html += `<pre class="code">${esc(d.scaffold.replace(/\{\{(\d+)\}\}/g, (_, n) => d.answers[Number(n) - 1]))}</pre>`;
+    html += `<h3 style="margin-top:12px">Blanks</h3><ul>${d.answers.map((a, i) =>
+      `<li><code>${esc(a)}</code></li>`).join("")}</ul>`;
+  } else if (d.type === "output") {
+    html += `<pre class="code">${esc(d.out)}</pre>`;
+  } else if (d.type === "write") {
+    html += `<pre class="code">${esc(d.model)}</pre>`;
+    if (d.points) html += `<h3 style="margin-top:12px">Marks are for</h3><ul>${d.points.map((p) => `<li>${esc(p)}</li>`).join("")}</ul>`;
+  } else {
+    html += `<p>${esc(d.why || "")}</p>`;
+  }
+  box.innerHTML = `<div class="reveal">${html}</div>`;
+}
+
+function wire(d) {
+  const show = document.getElementById("show");
+  if (show) show.onclick = () => reveal(d);
+
+  const done = document.getElementById("markdone");
+  if (done) done.onclick = () => {
+    state[d.id] = state[d.id] === "done" ? undefined : "done";
+    if (state[d.id] === undefined) delete state[d.id];
+    save(); renderList();
+    verdict(true, state[d.id] === "done" ? "Marked done." : "Marked not done.");
+  };
+
+  if (d.type === "fill") {
+    const inputs = [...document.querySelectorAll("pre.scaf input")];
+    // a blank may appear more than once in the scaffold (same {{n}}): check it once
+    const ids = [...new Set(inputs.map((x) => x.dataset.i))];
+    const group = (i) => inputs.filter((x) => x.dataset.i === i);
+    document.getElementById("check").onclick = () => {
+      let ok = 0;
+      ids.forEach((i) => {
+        const want = norm(d.answers[i]);
+        const got = norm(group(i)[0].value);
+        const alt = (d.alts && d.alts[i] ? d.alts[i] : []).map(norm);
+        const good = got === want || alt.includes(got);
+        group(i).forEach((inp) => { inp.classList.toggle("ok", good); inp.classList.toggle("bad", !good); });
+        if (good) ok++;
+      });
+      const all = ok === ids.length;
+      verdict(all, all ? `All ${ids.length} blanks correct.` : `${ok} of ${ids.length} correct — red blanks are wrong or empty.`);
+      if (all) { state[d.id] = "done"; save(); renderList(); }
+    };
+    inputs.forEach((inp, i) => {
+      inp.addEventListener("keydown", (e) => { if (e.key === "Enter") inputs[i + 1] ? inputs[i + 1].focus() : document.getElementById("check").click(); });
+    });
+    inputs[0] && inputs[0].focus();
+  }
+
+  if (d.type === "output") {
+    document.getElementById("check").onclick = () => {
+      const got = normCode(document.getElementById("ans").value);
+      const want = normCode(d.out);
+      if (!got) return verdict(null, "Write what it prints first.");
+      if (got === want) { verdict(true, "Correct."); state[d.id] = "done"; save(); renderList(); }
+      else verdict(false, "Not quite — compare with the model answer below.");
+    };
+  }
+
+  if (d.type === "mcq") {
+    document.querySelectorAll(".opt").forEach((b) => {
+      b.onclick = () => {
+        const i = Number(b.dataset.i);
+        document.querySelectorAll(".opt").forEach((x) => (x.disabled = true));
+        document.querySelector(`.opt[data-i="${d.correct}"]`).classList.add("ok");
+        if (i === d.correct) {
+          verdict(true, "Correct.");
+          state[d.id] = "done"; save(); renderList();
+        } else {
+          b.classList.add("bad");
+          verdict(false, "Not that one.");
+        }
+        reveal(d);
+      };
+    });
+  }
+
+  const t = document.getElementById("tutorbtn");
+  if (t) t.onclick = () => gradeWithTutor(d, t);
+}
+
+/* ---------------- tutor grading ---------------- */
+async function gradeWithTutor(d, btn) {
+  const box = document.getElementById("tutor");
+  const body = document.getElementById("tutorbody");
+  box.classList.add("on");
+  const mine = d.type === "fill"
+    ? [...document.querySelectorAll("pre.scaf input")].map((x, i) => `blank ${i + 1}: ${x.value || "(empty)"}`).join("\n")
+    : (document.getElementById("ans") ? document.getElementById("ans").value : "");
+  if (!mine.trim()) { body.textContent = "Write something first, then ask the tutor."; return; }
+
+  const model = d.type === "fill" ? d.scaffold.replace(/\{\{(\d+)\}\}/g, (_, n) => d.answers[Number(n) - 1])
+              : d.type === "output" ? d.out
+              : d.type === "write" ? d.model
+              : d.options[d.correct];
+
+  const q = `Grade my answer to this exam drill. Question: ${d.q}\n\nMy answer:\n${mine}\n\nModel answer:\n${model}\n\nSay: correct / partly / wrong, then the exact syntax or logic mistakes and the fix. Max 90 words.`;
+  body.innerHTML = '<span class="cursor"></span>';
+  btn.disabled = true;
+  let acc = "";
+  try {
+    const res = await fetch("/api/chat", {
+      method: "POST", headers: { "content-type": "application/json" },
+      body: JSON.stringify({ q, page: "Practice — " + d.topic, section: "Module " + d.m + " drill " + d.id, outline: "" }),
+    });
+    if (!res.ok) throw new Error((await res.json().catch(() => ({}))).error || "HTTP " + res.status);
+    const reader = res.body.getReader(), dec = new TextDecoder();
+    let buf = "";
+    for (;;) {
+      const r = await reader.read(); if (r.done) break;
+      buf += dec.decode(r.value, { stream: true });
+      const lines = buf.split("\n"); buf = lines.pop() || "";
+      for (const line of lines) {
+        const l = line.trim(); if (!l.startsWith("data:")) continue;
+        const data = l.slice(5).trim(); if (data === "[DONE]") continue;
+        try { const o = JSON.parse(data); if (o.d) { acc += o.d; body.innerHTML = md(acc) + '<span class="cursor"></span>'; } } catch (e) {}
+      }
+    }
+    body.innerHTML = md(acc || "_no answer_");
+  } catch (e) {
+    body.textContent = "Tutor unavailable — it only works on the deployed site.";
+  } finally { btn.disabled = false; }
+}
+
+function md(src) {
+  const parts = src.split(/```/); let out = "";
+  for (let i = 0; i < parts.length; i++) {
+    if (i % 2) { out += "<pre><code>" + esc(parts[i].replace(/^\w*\n/, "")) + "</code></pre>"; continue; }
+    let t = esc(parts[i]).replace(/`([^`\n]+)`/g, "<code>$1</code>").replace(/\*\*([^*]+)\*\*/g, "<b>$1</b>");
+    const lines = t.split("\n"); let html = "", ul = false;
+    for (const line of lines) {
+      if (/^\s*[-*]\s+/.test(line)) { if (!ul) { html += "<ul>"; ul = true; } html += "<li>" + line.replace(/^\s*[-*]\s+/, "") + "</li>"; }
+      else { if (ul) { html += "</ul>"; ul = false; } if (line.trim()) html += "<p>" + line + "</p>"; }
+    }
+    if (ul) html += "</ul>";
+    out += html;
+  }
+  return out;
+}
+
+buildFilters(); renderList();
+</script>
+</body>
+</html>

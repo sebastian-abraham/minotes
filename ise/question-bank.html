@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Question bank — 20MCN401 ISE (172 questions, mapped to modules) · Industrial Safety Engineering</title>
+<style>
+:root{
+  --bg:#fbfaf8; --panel:#ffffff; --ink:#232120; --muted:#5f5a53; --line:#e6e1da;
+  --accent:#7a4fd0; --accent-soft:#f1ecfb; --code-bg:#f5f2ee; --code-ink:#2b2a28;
+  --warn-bg:#fff8e6; --warn-line:#f0d9a0;
+  --sans:"Inter","Segoe UI",system-ui,-apple-system,"Noto Sans",sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,"SF Mono",Menlo,Consolas,"Fira Code",monospace;
+}
+html[data-theme="dark"]{
+  --bg:#141317; --panel:#1b1a20; --ink:#e8e4de; --muted:#a8a199; --line:#2f2c36;
+  --accent:#b79cf5; --accent-soft:#241f33; --code-bg:#22202a; --code-ink:#e8e4de;
+  --warn-bg:#2a2417; --warn-line:#4a3d22;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0; background:var(--bg); color:var(--ink); font-family:var(--sans);
+  font-size:16.5px; line-height:1.72; -webkit-font-smoothing:antialiased;
+}
+#progress{position:fixed;top:0;left:0;height:3px;width:0;background:var(--accent);z-index:50;transition:width .1s linear}
+
+.wrap{display:flex;align-items:flex-start;min-height:100vh}
+.sidebar{
+  position:sticky;top:0;height:100vh;width:300px;flex:0 0 300px;overflow-y:auto;
+  padding:26px 20px 60px;border-right:1px solid var(--line);background:var(--panel);
+}
+.sidebar h1{font-size:15px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);
+  margin:0 0 4px;font-weight:600}
+.sidebar .sub{font-size:12.5px;color:var(--muted);margin:0 0 18px}
+.sidebar nav{font-size:14px}
+.sidebar .toc>ul{padding-left:0}
+.sidebar ul{list-style:none;margin:0;padding-left:12px}
+.sidebar ul ul{border-left:1px solid var(--line);margin-left:4px;padding-left:10px}
+.sidebar li{margin:3px 0}
+.sidebar a{color:var(--ink);text-decoration:none;display:block;padding:3px 8px;border-radius:8px;
+  line-height:1.35;transition:background .12s,color .12s}
+.sidebar a:hover{background:var(--accent-soft);color:var(--accent)}
+.sidebar a.active{background:var(--accent-soft);color:var(--accent);font-weight:600}
+.sidebar .home{display:inline-flex;align-items:center;gap:6px;margin-bottom:16px;font-size:13.5px;
+  color:var(--muted);text-decoration:none;border:1px solid var(--line);padding:5px 10px;border-radius:999px}
+.sidebar .home:hover{color:var(--accent);border-color:var(--accent)}
+
+main{flex:1;min-width:0;padding:46px 56px 120px;max-width:980px;margin:0 auto}
+.doc-head{border-bottom:1px solid var(--line);padding-bottom:18px;margin-bottom:34px}
+.doc-head .kicker{font-size:12.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);
+  font-weight:700;margin-bottom:8px}
+.doc-head .meta{font-size:13.5px;color:var(--muted)}
+
+h1,h2,h3,h4{line-height:1.25;font-weight:700;letter-spacing:-.01em}
+h1{font-size:2.05rem;margin:.2em 0 .5em}
+h2{font-size:1.55rem;margin:2.4em 0 .7em;padding-bottom:.35em;border-bottom:1px solid var(--line)}
+h3{font-size:1.2rem;margin:1.9em 0 .55em}
+h4{font-size:1.03rem;margin:1.5em 0 .45em;color:var(--muted)}
+h2 .anchor,h3 .anchor{opacity:0;margin-left:.35em;font-size:.8em;color:var(--muted);text-decoration:none}
+h2:hover .anchor,h3:hover .anchor{opacity:1}
+p{margin:.75em 0}
+a{color:var(--accent);text-underline-offset:2px}
+strong{font-weight:650}
+hr{border:0;border-top:1px solid var(--line);margin:2.6em 0}
+ul,ol{margin:.7em 0;padding-left:1.4em}
+li{margin:.3em 0}
+li>ul,li>ol{margin:.25em 0}
+blockquote{
+  margin:1.3em 0;padding:12px 18px;background:var(--warn-bg);border-left:3px solid var(--warn-line);
+  border-radius:0 10px 10px 0;color:var(--ink)
+}
+blockquote p{margin:.3em 0}
+
+code{font-family:var(--mono);font-size:.87em;background:var(--code-bg);color:var(--code-ink);
+  padding:.15em .38em;border-radius:6px;border:1px solid var(--line);
+  box-decoration-break:clone;-webkit-box-decoration-break:clone;overflow-wrap:anywhere}
+pre{position:relative;background:var(--code-bg);border:1px solid var(--line);border-radius:12px;
+  padding:16px 18px;overflow-x:auto;margin:1.1em 0}
+pre code{background:none;border:0;padding:0;font-size:13.6px;line-height:1.62;white-space:pre}
+.copy{position:absolute;top:8px;right:8px;font:600 11px/1 var(--sans);color:var(--muted);
+  background:var(--panel);border:1px solid var(--line);border-radius:7px;padding:5px 8px;cursor:pointer;
+  opacity:0;transition:opacity .15s}
+pre:hover .copy{opacity:1}
+.copy:hover{color:var(--accent);border-color:var(--accent)}
+
+.table-scroll{overflow-x:auto;margin:1.3em 0;border:1px solid var(--line);border-radius:12px;background:var(--panel)}
+table{border-collapse:collapse;width:100%;font-size:14.6px}
+th,td{padding:9px 13px;text-align:left;vertical-align:top;border-bottom:1px solid var(--line)}
+th{background:var(--accent-soft);font-weight:650;font-size:13px;letter-spacing:.02em;
+  position:sticky;top:0;backdrop-filter:blur(4px)}
+tr:last-child td{border-bottom:0}
+tbody tr:nth-child(even){background:color-mix(in srgb,var(--panel) 60%,var(--bg))}
+tbody tr:hover{background:var(--accent-soft)}
+
+.tools{position:fixed;right:22px;bottom:22px;display:flex;flex-direction:column;gap:8px;z-index:40}
+.tools button{width:42px;height:42px;border-radius:12px;border:1px solid var(--line);background:var(--panel);
+  color:var(--ink);cursor:pointer;font-size:16px;box-shadow:0 4px 14px rgba(0,0,0,.10)}
+.tools button:hover{color:var(--accent);border-color:var(--accent)}
+@media (max-width:1000px){
+  .wrap{display:block}
+  .sidebar{position:static;width:auto;height:auto;border-right:0;border-bottom:1px solid var(--line)}
+  .sidebar nav{max-height:40vh;overflow:auto}
+  main{padding:28px 20px 100px}
+}
+@media print{
+  .sidebar,.tools,#progress,.copy{display:none!important}
+  body{background:#fff;color:#000;font-size:11pt}
+  main{padding:0;max-width:none}
+  h2{break-after:avoid} pre,table,blockquote{break-inside:avoid}
+  a{color:#000;text-decoration:none}
+}
+
+/* ---- ask-about-this ---- */
+#chat-btn{position:fixed;right:20px;bottom:112px;width:44px;height:44px;border-radius:50%;
+  border:1px solid var(--line);background:var(--panel);color:var(--accent);cursor:pointer;font-size:17px;
+  box-shadow:0 6px 18px rgba(0,0,0,.12);z-index:45;display:grid;place-items:center}
+#chat-btn:hover{border-color:var(--accent)}
+#sel-chip{position:absolute;z-index:46;transform:translate(-50%,-100%);background:var(--ink);color:var(--bg);
+  font:600 12px/1 var(--sans);padding:7px 11px;border-radius:999px;cursor:pointer;white-space:nowrap;
+  box-shadow:0 6px 18px rgba(0,0,0,.25);display:none}
+#sel-chip:hover{background:var(--accent);color:#fff}
+#chat-panel{position:fixed;right:20px;bottom:164px;width:min(420px,calc(100vw - 40px));max-height:min(70vh,620px);
+  background:var(--panel);border:1px solid var(--line);border-radius:14px;z-index:47;display:none;
+  flex-direction:column;box-shadow:0 18px 50px rgba(0,0,0,.18);overflow:hidden}
+#chat-panel.open{display:flex}
+#chat-head{display:flex;align-items:center;gap:8px;padding:11px 13px;border-bottom:1px solid var(--line);
+  font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:700}
+#chat-head .sp{flex:1}
+#chat-head button{background:none;border:0;color:var(--muted);cursor:pointer;font-size:15px;padding:2px 4px}
+#chat-head button:hover{color:var(--accent)}
+#chat-quote{display:none;margin:10px 13px 0;padding:8px 10px;border-left:2px solid var(--accent);
+  background:var(--accent-soft);color:var(--muted);font-size:12.5px;border-radius:0 8px 8px 0;
+  max-height:84px;overflow:auto;white-space:pre-wrap}
+#chat-log{flex:1;overflow-y:auto;padding:12px 13px;display:flex;flex-direction:column;gap:10px;font-size:13.6px;line-height:1.55}
+.msg{max-width:100%}
+.msg.user{align-self:flex-end;background:var(--accent-soft);color:var(--ink);padding:7px 11px;border-radius:11px 11px 2px 11px;
+  max-width:86%;white-space:pre-wrap}
+.msg.bot{color:var(--ink)}
+.msg.bot p{margin:.3em 0}
+.msg.bot ul{margin:.3em 0;padding-left:1.15em}
+.msg.bot code{font-size:.9em}
+.msg.bot pre{background:var(--code-bg);border-radius:8px;padding:9px 11px;overflow-x:auto;font-size:12px;margin:.4em 0}
+.msg.err{color:#b3261e;font-size:12.5px}
+.msg .cursor:after{content:"▍";color:var(--accent);animation:blink 1s steps(2) infinite}
+@keyframes blink{50%{opacity:0}}
+#chat-form{display:flex;gap:8px;padding:10px 13px;border-top:1px solid var(--line)}
+#chat-input{flex:1;resize:none;border:1px solid var(--line);border-radius:9px;background:var(--bg);color:var(--ink);
+  font:inherit;font-size:13.5px;padding:8px 10px;max-height:110px;min-height:38px}
+#chat-input:focus{outline:2px solid var(--accent);outline-offset:0}
+#chat-send{border:1px solid var(--accent);background:var(--accent);color:#fff;border-radius:9px;
+  width:38px;cursor:pointer;font-size:15px}
+#chat-send:disabled{opacity:.45;cursor:default}
+#chat-foot{font-size:11px;color:var(--muted);padding:0 13px 9px}
+@media (max-width:640px){
+  #chat-panel{right:8px;left:8px;width:auto;bottom:150px;max-height:66vh}
+  #chat-btn{bottom:104px;right:16px}
+}
+@media print{#chat-btn,#chat-panel,#sel-chip{display:none!important}}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+<div class="wrap">
+  <aside class="sidebar">
+    <a class="home" href="index.html">← Industrial Safety Engineering</a>
+    <a class="home" href="practice.html">Practice drills</a>
+    <h1>Question bank</h1>
+    <p class="sub">172 questions, mapped</p>
+    <nav class="toc"><div class="toc">
+<ul>
+<li><a href="#module-1-introduction-to-industrial-safety-engineering-32-questions">Module 1 — Introduction to Industrial Safety Engineering (32 questions)</a></li>
+<li><a href="#module-2-personal-protection-in-the-work-environment-32-questions">Module 2 — Personal Protection in the Work Environment (32 questions)</a></li>
+<li><a href="#module-3-introduction-to-the-construction-industry-and-safety-31-questions">Module 3 — Introduction to the Construction Industry and Safety (31 questions)</a></li>
+<li><a href="#module-4-machinery-safeguard-and-material-handling-30-questions">Module 4 — Machinery Safeguard and Material Handling (30 questions)</a></li>
+<li><a href="#module-5-hazard-identification-and-control-47-questions">Module 5 — Hazard Identification and Control (47 questions)</a></li>
+</ul>
+</div>
+</nav>
+  </aside>
+  <main>
+    <div class="doc-head">
+      <div class="kicker">20MCN401 · Industrial Safety Engineering</div>
+      <div class="meta">172 questions, mapped · rendered from question_map.md</div>
+    </div>
+    <h1 id="question-bank-20mcn401-ise-172-questions-mapped-to-modules">Question bank — 20MCN401 ISE (172 questions, mapped to modules)</h1>
+<p>Every question appears once. The module kit that owns a number must answer it in its answer bank; the coverage table must list the number.</p>
+<h2 id="module-1-introduction-to-industrial-safety-engineering-32-questions">Module 1 — Introduction to Industrial Safety Engineering (32 questions)<a class="anchor" href="#module-1-introduction-to-industrial-safety-engineering-32-questions">#</a></h2>
+<ul>
+<li><strong>Q19.</strong> State the objectives of safety in an industry.</li>
+<li><strong>Q20.</strong> Enlist the functions of safety committee</li>
+<li><strong>Q21.</strong> How unions play an important role in the safety of an organisation? Explain with the help of an example</li>
+<li><strong>Q22.</strong> Describe the need for safety in an industry.</li>
+<li><strong>Q23.</strong> List the major theories of accident causation</li>
+<li><strong>Q24.</strong> Discuss the importance of Domino theory of accident causation</li>
+<li><strong>Q25.</strong> Define Safety organisation.</li>
+<li><strong>Q45.</strong> Explain the role of management in safety</li>
+<li><strong>Q46.</strong> Explain the role of union in safety</li>
+<li><strong>Q47.</strong> Explain the responsibilities of management and unions in safety</li>
+<li><strong>Q48.</strong> Explain the role of safety officer</li>
+<li><strong>Q49.</strong> Explain safety committee</li>
+<li><strong>Q50.</strong> Explain the types of safety committee</li>
+<li><strong>Q84.</strong> Discuss in detail regarding the realtion bewteen safety and productivity.</li>
+<li><strong>Q85.</strong> Describe the following: a) Dangerous Occurrence, b) Unsafe condition</li>
+<li><strong>Q86.</strong> Describe the following: a) Accident, b) Reportable accidents</li>
+<li><strong>Q87.</strong> List the major theories of accident causation. Explain in detail about Domino theory and Human factors theory</li>
+<li><strong>Q88.</strong> List the major theories of accident causation. Explain in detail about Systems theory and Human factors theory</li>
+<li><strong>Q89.</strong> Describe Safety organisation.Also mention the major benfits of implementing the same in a company.</li>
+<li><strong>Q116.</strong> Explain the role of workmen in safety</li>
+<li><strong>Q117.</strong> Explain the role of supervisors in safety</li>
+<li><strong>Q118.</strong> Explain the responsibility of safety officer</li>
+<li><strong>Q120.</strong> What are the functions and duties of safety committee</li>
+<li><strong>Q136.</strong> Describe the following with suitable example: a) Accident, b) Injury, c) Unsafe act.</li>
+<li><strong>Q137.</strong> Enumerate any five needs of ensuring safety in an industry.</li>
+<li><strong>Q138.</strong> Describe any three important theories that explain the causes of accidents.</li>
+<li><strong>Q139.</strong> Explain about any three major theories of accident causation.</li>
+<li><strong>Q140.</strong> Discuss three major theories that explain how accidents occur.</li>
+<li><strong>Q141.</strong> Describe the roles of management, supervisors, workmen and unions in ensuring safety in an industry.</li>
+<li><strong>Q142.</strong> Explain how management, supervisors, workers, and unions contribute to maintaining industrial safety.</li>
+<li><strong>Q143.</strong> What are the responsibilities and authorities of a safety officer?</li>
+<li><strong>Q144.</strong> What is the need for a safety committee?</li>
+</ul>
+<h2 id="module-2-personal-protection-in-the-work-environment-32-questions">Module 2 — Personal Protection in the Work Environment (32 questions)<a class="anchor" href="#module-2-personal-protection-in-the-work-environment-32-questions">#</a></h2>
+<ul>
+<li><strong>Q1.</strong> Explain the term PPE.</li>
+<li><strong>Q2.</strong> Explain about assessing and choosing PPE</li>
+<li><strong>Q3.</strong> Differentiate respiratory and non-respiratory equipment.</li>
+<li><strong>Q4.</strong> Examine some strategies to make employees comfortable with PPE</li>
+<li><strong>Q5.</strong> Classify some personal hearing protection devices.</li>
+<li><strong>Q6.</strong> Define the terms severity rate, incident rate and activity rate.</li>
+<li><strong>Q16.</strong> List any six good housekeeping practices to be followed in construction sites.</li>
+<li><strong>Q26.</strong> List and describe three advantages of maintaining good housekeeping in an industrial environment.</li>
+<li><strong>Q27.</strong> Explain any three responsibilities of management in ensuring house keeping.</li>
+<li><strong>Q28.</strong> What is a work permit system, and why is it important?</li>
+<li><strong>Q29.</strong> What is the difference between a hot work permit and a cold work permit?</li>
+<li><strong>Q30.</strong> Enlist six major hazards associated with confined spaces?</li>
+<li><strong>Q31.</strong> Distinguish between FMEA and JSA models for improving safety in workplace.</li>
+<li><strong>Q72.</strong> Explain in detail about the necessity of hearing protection device and its classifications.</li>
+<li><strong>Q73.</strong> Explain in detail about any four respiratory personal protection devices.</li>
+<li><strong>Q74.</strong> Explain in detail about health hazard monitoring, personal hearing protection devices standard generated by OSHA standards for hearing conservation program.</li>
+<li><strong>Q75.</strong> Explain the importance of eye protection and also describe some of the eye protection equipment.</li>
+<li><strong>Q76.</strong> Explain in detail different types of PPEs.</li>
+<li><strong>Q77.</strong> Elaborate any four approaches to prevent the inhalation of hazardously contaminated air.</li>
+<li><strong>Q81.</strong> What are the safety precautions to be taken before entering a confined space?</li>
+<li><strong>Q95.</strong> Enlist and explain the 5S in Housekeeping.</li>
+<li><strong>Q96.</strong> Outline and describe the five S principles essential for maintaining effective housekeeping?</li>
+<li><strong>Q97.</strong> How are air quality, fire and explosion hazrads prevented in confined space?</li>
+<li><strong>Q98.</strong> What measures are taken to prevent air quality issues, fire hazards, and explosion risks in confined spaces?</li>
+<li><strong>Q99.</strong> Discuss the purpose and explain any five industrial models and methodologies commonly used to improve safety in the workplace.</li>
+<li><strong>Q100.</strong> Explore the goals and outline five widely adopted industrial models and methodologies designed to enhance safety in the workplace.</li>
+<li><strong>Q146.</strong> Define the following terms: a) Frequency rate, b) Severity rate, c) Incidence rate, d) Activity rate</li>
+<li><strong>Q147.</strong> Define the following terms: a) Frequency rate, b) Severity rate, c) Incidence rate, d) Activity rate.</li>
+<li><strong>Q148.</strong> How are frequency rate and severity rate used as indicators for monitoring safety performance in industries?</li>
+<li><strong>Q149.</strong> Describe 5s used in house keeping. Mention the advantages and disadvantages of 5s system.</li>
+<li><strong>Q150.</strong> What is 5S in housekeeping? Describe its benefits.</li>
+<li><strong>Q151.</strong> Explain Hot Work Permit and Cold Work Permit.</li>
+</ul>
+<h2 id="module-3-introduction-to-the-construction-industry-and-safety-31-questions">Module 3 — Introduction to the Construction Industry and Safety (31 questions)<a class="anchor" href="#module-3-introduction-to-the-construction-industry-and-safety-31-questions">#</a></h2>
+<ul>
+<li><strong>Q13.</strong> What are the various hazards that can occur during different stages of building construction?</li>
+<li><strong>Q14.</strong> Define shoring.</li>
+<li><strong>Q15.</strong> List any six safety practices used with ladders in construction sites.</li>
+<li><strong>Q17.</strong> List any six safety practices to be followed while working at heights.</li>
+<li><strong>Q18.</strong> Mention six important safety precautions to be followed before operating any blasting operation.</li>
+<li><strong>Q38.</strong> Explain the classification of residential buildings based on the National Building Code of India.</li>
+<li><strong>Q39.</strong> Why is ergonomics important?</li>
+<li><strong>Q40.</strong> What are the causes of ergonomic hazards in construction work?</li>
+<li><strong>Q41.</strong> Explain the relevance of ergonomics in the construction safety.</li>
+<li><strong>Q43.</strong> Discuss the guidelines related to building exits provided by National Building Code of India.</li>
+<li><strong>Q44.</strong> Why is it important to follow the guidelines provided by National Building Code of India?</li>
+<li><strong>Q78.</strong> What are the different types of safety practices in excavation works?</li>
+<li><strong>Q79.</strong> What are the safety measures to be followed in demolition of the buildings.</li>
+<li><strong>Q80.</strong> You are appointed as a safety manager for a demolition work of a 10-storey building in a congested residential area. What are the safety measures that you need to ensure for the completion of the work?</li>
+<li><strong>Q82.</strong> Define the terms underpinning&amp; shoring associated with building construction. Explain the safety precautions to be followed in underpinning.</li>
+<li><strong>Q83.</strong> Define the terms underpinning&amp; shoring associated with building construction. Explain the safety precautions to be followed in shoring.</li>
+<li><strong>Q101.</strong> Ergonomic risk factors lead to Musculoskeletal Disorders (MSD). Express your opinion about the statement and briefly elaborate.</li>
+<li><strong>Q102.</strong> Discuss some important aspects of construction safety provisions in National Building Code.</li>
+<li><strong>Q103.</strong> Discuss the major ergonomic hazards associated with construction industries.</li>
+<li><strong>Q104.</strong> Write short notes on Cumulative Trauma Disorders due to ergonomic issues in work sites.</li>
+<li><strong>Q107.</strong> Discuss the safety and fire protection facilities required for a high-rise building as per the National Building Code of India.</li>
+<li><strong>Q108.</strong> Explain the important provisions in the National Building Code.</li>
+<li><strong>Q125.</strong> (a) Explain the role of personal protective equipment in controlling chemical hazards. (3 marks) (b) Write short note on Material Safety Data Sheets (MSDS). (4 marks)</li>
+<li><strong>Q152.</strong> How can ergonomic risk factors (e.g., repetitive motion, awkward postures, heavy lifting) contribute to injuries on construction sites, and what practical measures can be implemented to reduce these risks?</li>
+<li><strong>Q153.</strong> What hazards should we look for before starting underwater or excavation work?</li>
+<li><strong>Q154.</strong> What do the terms "underpinning" and "shoring" mean in the context of construction engineering? Describe the important safety precautions to be observed while performing underpinning work.</li>
+<li><strong>Q155.</strong> List the potential hazards associated with ladder and scaffolding use and describe how they can be prevented.</li>
+<li><strong>Q156.</strong> A demolition project is planned in a densely populated urban area. How would you plan the blasting operations to ensure the safety of nearby residents and structures?</li>
+<li><strong>Q157.</strong> A blasting operation is scheduled near a protected wildlife area. What additional environmental safety measures should be taken to minimize impact while maintaining operational safety?</li>
+<li><strong>Q158.</strong> What are the general safety requirements specified by the National Building Code of India for building construction</li>
+<li><strong>Q159.</strong> Describe the early signs and symptoms of Musculoskeletal Disorders and Cumulative Trauma Disorders.</li>
+</ul>
+<h2 id="module-4-machinery-safeguard-and-material-handling-30-questions">Module 4 — Machinery Safeguard and Material Handling (30 questions)<a class="anchor" href="#module-4-machinery-safeguard-and-material-handling-30-questions">#</a></h2>
+<ul>
+<li><strong>Q32.</strong> Explain the injuries caused due to moving machinery?</li>
+<li><strong>Q33.</strong> Discuss any 3 machinery safeguards.</li>
+<li><strong>Q34.</strong> Explain the principle of machine guarding.</li>
+<li><strong>Q35.</strong> Explain the methods of safeguarding.</li>
+<li><strong>Q36.</strong> List welding safety gear.</li>
+<li><strong>Q37.</strong> List the advantages and disadvantages of using adjustable safeguards.</li>
+<li><strong>Q66.</strong> Explain the importance of palletizing and finishing.</li>
+<li><strong>Q67.</strong> What are the different equipments for the transportation of materials?</li>
+<li><strong>Q68.</strong> What are the safety precautions to be considered while using clamps?</li>
+<li><strong>Q69.</strong> What are the hazards associated with manual material handling?</li>
+<li><strong>Q70.</strong> What are the hazards associated with mechanical handling of materials?</li>
+<li><strong>Q71.</strong> Define stocking. Explain the importance of stocking.</li>
+<li><strong>Q109.</strong> Explain mechanical machinery hazards. Discuss possible ways to prevent the hazards.</li>
+<li><strong>Q110.</strong> Which are the various types of machine guarding devices used in industries. Discuss the sustainability of each machine guarding devices.</li>
+<li><strong>Q111.</strong> Explain machinery safeguard. Discuss the different types of guards.</li>
+<li><strong>Q112.</strong> Describe the safety practices to be followed during grinding process.</li>
+<li><strong>Q113.</strong> Describe the safety practices to be followed during arc welding process.</li>
+<li><strong>Q114.</strong> Describe the safety practices to be followed during milling machine process.</li>
+<li><strong>Q129.</strong> What are the safety considerations in manual material handling?</li>
+<li><strong>Q130.</strong> What are the safety considerations in mechanical material handling?</li>
+<li><strong>Q133.</strong> Explain the maintenance practises for the use of hooks with a neat sketch.</li>
+<li><strong>Q134.</strong> Explain the maintenance practises while using a chain sling with a neat sketch.</li>
+<li><strong>Q135.</strong> Explain the maintenance practises for the use of wire ropes with a neat sketch.</li>
+<li><strong>Q160.</strong> Explain the principle of machine guarding and its importance in ensuring worker safety during machine operation.</li>
+<li><strong>Q161.</strong> Explain the various types of machine guarding devices used in industries and analyze the sustainability of each type</li>
+<li><strong>Q162.</strong> List the safety measures to be observed while performing milling, grinding and planing operations.</li>
+<li><strong>Q163.</strong> What are the common safety risks in arc and gas welding, and how can they be controlled?</li>
+<li><strong>Q164.</strong> Explain the classification of material handling equipment with suitable examples.</li>
+<li><strong>Q166.</strong> Explain the maintenance practices to be followed while using a chain sling, supported by a neat sketch.</li>
+<li><strong>Q167.</strong> What are the key differences in the inspection criteria for hooks and clamps during regular maintenance checks?</li>
+</ul>
+<h2 id="module-5-hazard-identification-and-control-47-questions">Module 5 — Hazard Identification and Control (47 questions)<a class="anchor" href="#module-5-hazard-identification-and-control-47-questions">#</a></h2>
+<ul>
+<li><strong>Q7.</strong> Define the term hazard and risk.</li>
+<li><strong>Q8.</strong> List the types of hazards.</li>
+<li><strong>Q9.</strong> List out the type of fire hazards.</li>
+<li><strong>Q10.</strong> What is a fire extinguisher?</li>
+<li><strong>Q11.</strong> What are the things to remember before the installation of a fire extinguisher?</li>
+<li><strong>Q12.</strong> List out the items required to develop the DOW Fire and Explosion Index.</li>
+<li><strong>Q42.</strong> List out the items required to develop DOW Fire &amp;Explosion Index</li>
+<li><strong>Q51.</strong> Define the key objectives of a HAZOP study.</li>
+<li><strong>Q52.</strong> List the main steps involved in conducting a HAZOP analysis.</li>
+<li><strong>Q53.</strong> Define the key objectives of a Preliminary Hazard Analysis (PHA).</li>
+<li><strong>Q54.</strong> Discuss the advantages and disadvantages of PHA.</li>
+<li><strong>Q55.</strong> Identify common hazards considered in a PHA.</li>
+<li><strong>Q56.</strong> Define Material Safety Data Sheets (MSDS) and their purpose in industrial settings.</li>
+<li><strong>Q57.</strong> List the types of chemical hazards.</li>
+<li><strong>Q58.</strong> Discuss the control measures that can be taken to control chemical harards.</li>
+<li><strong>Q59.</strong> Explain how hazardous chemical properties like toxicity, flammability, and reactivity impact environmental safety.</li>
+<li><strong>Q60.</strong> Explain the role of personal protective equipment in controlling chemical hazards</li>
+<li><strong>Q61.</strong> Compare the effectiveness of administrative controls and personal protective equipment (PPE) in controlling chemical hazards in India's automotive industry.</li>
+<li><strong>Q62.</strong> Identify three common control measures used for chemical hazards in a manufacturing unit.</li>
+<li><strong>Q63.</strong> What are the major chemical hazard symbols used in the Globally Harmonized System (GHS)?</li>
+<li><strong>Q64.</strong> Define the importance of HAZOP analysis.</li>
+<li><strong>Q65.</strong> Explain in detail the results of a HAZOP study.</li>
+<li><strong>Q90.</strong> How do you classify fires?</li>
+<li><strong>Q91.</strong> Explain various types of fire extinguishers used in industries.</li>
+<li><strong>Q92.</strong> Explain four commonly used risk assessment tools for different business.</li>
+<li><strong>Q93.</strong> What is the dow fire and explosion index and what are the objectives of the dow fire and explosion index?</li>
+<li><strong>Q94.</strong> Explain the steps to calculate the Dow Fire and Explosion Hazard Index.</li>
+<li><strong>Q105.</strong> Draw the flow chart for calculating DOW Fire &amp;Explosion index and other Risk Analysis Information.</li>
+<li><strong>Q106.</strong> Discuss about different hazard factors which contributes to DOW Fire &amp; Explosion Index</li>
+<li><strong>Q115.</strong> Explain the role of government in safety</li>
+<li><strong>Q119.</strong> Explain the need and importance of satety committee</li>
+<li><strong>Q121.</strong> Compare and contrast the Preliminary Hazard Analysis (PHA) and HAZOP techniques. In what situations would you prioritize one method over the other, and why? Provide examples from different industries.</li>
+<li><strong>Q122.</strong> (a) Discuss the role of Preliminary Hazard Analysis (PHA) in modern industrial safety management. (3 marks) (b) Explain in briefly the steps to determine impementation criteria and plans. (4 marks)</li>
+<li><strong>Q123.</strong> Discuss in detail the control measures that can be taken to control chemical harards.</li>
+<li><strong>Q124.</strong> Explain how hazardous chemical properties like toxicity, flammability, and reactivity impact environmental safety.</li>
+<li><strong>Q126.</strong> Identify three common control measures used for chemical hazards in a manufacturing unit. Explain in detail.</li>
+<li><strong>Q127.</strong> Examine in detail the strategies that can be employed to control and mitigate chemical hazards.</li>
+<li><strong>Q128.</strong> Explain in detail the main steps involved in conducting a HAZOP analysis.</li>
+<li><strong>Q131.</strong> What are the safety precautions to be taken while lifting and carrying materials?</li>
+<li><strong>Q132.</strong> What are the safety considerations in pulling and pushing operations?</li>
+<li><strong>Q145.</strong> Enlist and explain with figure the suitability of at least 14 types of Personal Protection Equipment used for ensuring safety.</li>
+<li><strong>Q165.</strong> How do handling aids and mechanical equipment reduce the risk of injuries related to pulling, pushing, lifting, and carrying?</li>
+<li><strong>Q168.</strong> You are responsible for preparing a fire safety plan for a manufacturing unit. How would you use the classification of fire to determine the placement of fire extinguishers and safety equipment?</li>
+<li><strong>Q169.</strong> What is the Dow Fire and Explosion Hazard Index, and what are its main objectives?</li>
+<li><strong>Q170.</strong> During an industrial fire emergency, how would you identify the class of fire and select the appropriate fire extinguisher based on the classification of fire?</li>
+<li><strong>Q171.</strong> Compare and contrast Preliminary Hazard Analysis (PHA) and HAZOP techniques. In which situations would you prioritize one method over the other, and why? Illustrate your answer with examples from different industries</li>
+<li><strong>Q172.</strong> Discuss in detail the strategies for controlling and mitigating chemical hazards in industriES.</li>
+</ul>
+  </main>
+</div>
+<button id="chat-btn" title="Ask about this page (select text first)">✳</button>
+<div id="sel-chip">Ask about this</div>
+<div id="chat-panel" role="dialog" aria-label="Ask about this page">
+  <div id="chat-head"><span>Ask this page</span><span class="sp"></span><button id="chat-close" title="Close">✕</button></div>
+  <div id="chat-quote"></div>
+  <div id="chat-log"></div>
+  <form id="chat-form" autocomplete="off">
+    <textarea id="chat-input" rows="1" placeholder="Ask about the selection or the section…"></textarea>
+    <button id="chat-send" title="Send">↑</button>
+  </form>
+  <div id="chat-foot">Select text → “Ask about this”. Enter sends, Shift+Enter newline.</div>
+</div>
+<div class="tools">
+  <button id="theme" title="Toggle light / dark">☾</button>
+  <button id="top" title="Back to top">↑</button>
+</div>
+<script>
+(function(){
+  var root=document.documentElement, key='minotes-theme';
+  var saved=localStorage.getItem(key);
+  var prefers=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';
+  root.setAttribute('data-theme', saved || prefers);
+
+  var btn=document.getElementById('theme');
+  function sync(){ if(btn) btn.textContent = root.getAttribute('data-theme')==='dark' ? '\u2600' : '\u263E'; }
+  sync();
+  if(btn) btn.addEventListener('click',function(){
+    var next = root.getAttribute('data-theme')==='dark' ? 'light' : 'dark';
+    root.setAttribute('data-theme', next); localStorage.setItem(key,next); sync();
+  });
+
+  var bar=document.getElementById('progress');
+  if(bar) addEventListener('scroll',function(){
+    var h=document.documentElement.scrollHeight-innerHeight;
+    bar.style.width=(h>0?(scrollY/h*100):0)+'%';
+  },{passive:true});
+
+  document.querySelectorAll('pre').forEach(function(pre){
+    var b=document.createElement('button');
+    b.className='copy'; b.textContent='copy';
+    b.addEventListener('click',function(){
+      var t=pre.querySelector('code'); var txt=t?t.innerText:pre.innerText;
+      navigator.clipboard.writeText(txt).then(function(){
+        b.textContent='copied'; setTimeout(function(){b.textContent='copy';},1200);
+      });
+    });
+    pre.appendChild(b);
+  });
+
+  document.querySelectorAll('main table').forEach(function(t){
+    if(t.parentElement.classList.contains('table-scroll')) return;
+    var w=document.createElement('div'); w.className='table-scroll';
+    t.parentNode.insertBefore(w,t); w.appendChild(t);
+  });
+
+  var links=[].slice.call(document.querySelectorAll('.sidebar a[href^="#"]'));
+  var map={}; links.forEach(function(a){ map[a.getAttribute('href').slice(1)]=a; });
+  var heads=[].slice.call(document.querySelectorAll('main h2[id], main h3[id]'));
+  if('IntersectionObserver' in window && heads.length){
+    var obs=new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if(!e.isIntersecting) return;
+        links.forEach(function(a){a.classList.remove('active');});
+        var a=map[e.target.id]; if(a){a.classList.add('active');}
+      });
+    },{rootMargin:'-10% 0px -75% 0px'});
+    heads.forEach(function(h){obs.observe(h);});
+  }
+
+  var top=document.getElementById('top');
+  if(top) top.addEventListener('click',function(){ scrollTo({top:0,behavior:'smooth'}); });
+})();
+
+(function(){
+  var API="/api/chat";
+  var panel=document.getElementById("chat-panel"),
+      btn=document.getElementById("chat-btn"),
+      chip=document.getElementById("sel-chip"),
+      quote=document.getElementById("chat-quote"),
+      log=document.getElementById("chat-log"),
+      input=document.getElementById("chat-input"),
+      send=document.getElementById("chat-send"),
+      form=document.getElementById("chat-form");
+
+  if(!panel) return;
+  var pendingSelection="", busy=false, lastSelection="";
+
+  function esc(s){return s.replace(/[&<>]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;"}[c];});}
+
+  // minimal markdown: fenced code, inline code, bold, bullets, numbered lists
+  function md(src){
+    var parts=src.split(/```/), out="";
+    for(var i=0;i<parts.length;i++){
+      if(i%2){ out+="<pre><code>"+esc(parts[i].replace(/^\w*\n/,""))+"</code></pre>"; continue; }
+      var t=esc(parts[i]);
+      t=t.replace(/`([^`\n]+)`/g,"<code>$1</code>").replace(/\*\*([^*]+)\*\*/g,"<b>$1</b>");
+      var lines=t.split(/\n/), html="", inUl=false, inOl=false;
+      for(var j=0;j<lines.length;j++){
+        var line=lines[j];
+        if(/^\s*[-*]\s+/.test(line)){
+          if(inOl){html+="</ol>";inOl=false;}
+          if(!inUl){html+="<ul>";inUl=true;}
+          html+="<li>"+line.replace(/^\s*[-*]\s+/,"")+"</li>"; continue;
+        }
+        if(/^\s*\d+[.)]\s+/.test(line)){
+          if(inUl){html+="</ul>";inUl=false;}
+          if(!inOl){html+="<ol>";inOl=true;}
+          html+="<li>"+line.replace(/^\s*\d+[.)]\s+/,"")+"</li>"; continue;
+        }
+        if(inUl){html+="</ul>";inUl=false;}
+        if(inOl){html+="</ol>";inOl=false;}
+        if(line.trim()==="") continue;
+        html+="<p>"+line+"</p>";
+      }
+      if(inUl)html+="</ul>";
+      if(inOl)html+="</ol>";
+      out+=html;
+    }
+    return out;
+  }
+
+  function outline(){
+    return [].slice.call(document.querySelectorAll("main h2, main h3")).slice(0,40)
+      .map(function(h){return (h.tagName==="H3"?"  - ":"- ")+h.textContent.replace(/#$/,"").trim();}).join("\n");
+  }
+
+  function sectionFor(node){
+    var el = node && (node.nodeType===1?node:node.parentElement);
+    if(!el || !el.closest) return "";
+    el = el.closest("main") ? el : null;
+    if(!el) return "";
+    var heads=[].slice.call(document.querySelectorAll("main h2, main h3"));
+    var cur=null, idx=-1;
+    for(var i=0;i<heads.length;i++){
+      if(heads[i].compareDocumentPosition(el) & Node.DOCUMENT_POSITION_FOLLOWING) { cur=heads[i]; idx=i; }
+    }
+    if(!cur) return "";
+    var stop = heads[idx+1] || null, txt=[], n=cur;
+    while((n=n.nextSibling) && n!==stop){ if(n.textContent) txt.push(n.textContent); }
+    return (cur.textContent+"\n"+txt.join("\n")).replace(/\s+\n/g,"\n").slice(0,3000);
+  }
+
+  function placeChip(x,y){
+    chip.style.left=x+"px"; chip.style.top=(y+window.scrollY-8)+"px"; chip.style.display="block";
+  }
+  function hideChip(){ chip.style.display="none"; }
+
+  document.addEventListener("mouseup",function(e){
+    setTimeout(function(){
+      var s=window.getSelection(), text=s?s.toString().trim():"";
+      if(!text || text.length<3 || !s.anchorNode || !(s.anchorNode.parentElement||s.anchorNode).closest("main")){hideChip();return;}
+      lastSelection=text;
+      var r=s.getRangeAt(0).getBoundingClientRect();
+      placeChip(r.left+r.width/2, Math.max(r.top,8));
+    },10);
+  });
+  document.addEventListener("mousedown",function(e){ if(e.target!==chip) hideChip(); });
+
+  chip.addEventListener("mousedown",function(e){ e.preventDefault(); });
+  chip.addEventListener("click",function(e){
+    e.stopPropagation();
+    pendingSelection=lastSelection; hideChip(); open(pendingSelection);
+  });
+
+  function open(sel){
+    panel.classList.add("open");
+    if(sel){ quote.style.display="block"; quote.textContent=sel; pendingSelection=sel; }
+    else { quote.style.display="none"; quote.textContent=""; pendingSelection=""; }
+    setTimeout(function(){input.focus();},60);
+  }
+  function close(){ panel.classList.remove("open"); }
+
+  btn.addEventListener("click",function(){ panel.classList.contains("open")?close():open(lastSelection||""); });
+  document.getElementById("chat-close").addEventListener("click",close);
+  document.addEventListener("keydown",function(e){ if(e.key==="Escape") close(); });
+
+  function addMsg(cls,html){
+    var d=document.createElement("div"); d.className="msg "+cls; d.innerHTML=html; log.appendChild(d);
+    log.scrollTop=log.scrollHeight; return d;
+  }
+
+  async function ask(q){
+    if(busy||!q.trim()) return;
+    busy=true; send.disabled=true;
+    addMsg("user",esc(q));
+    var bot=addMsg("bot",'<span class="cursor"></span>');
+    var acc="";
+    var sid=sessionStorage.getItem("mn-sid");
+    if(!sid){ sid=(crypto.randomUUID?crypto.randomUUID():String(Date.now())+Math.random().toString(16).slice(2)); sessionStorage.setItem("mn-sid",sid); }
+    var payload={q:q, sid:sid, sel:pendingSelection||"", page:document.querySelector("h1")?document.querySelector("h1").textContent.trim():document.title,
+                 section:sectionFor(window.getSelection()&&window.getSelection().anchorNode?"":document.querySelector("main h2"))||"",
+                 outline:outline()};
+    // section: prefer the one containing the selection, else the first heading on screen
+    try{
+      var sel=window.getSelection();
+      if(pendingSelection && sel && sel.anchorNode){ payload.section=sectionFor(sel.anchorNode); }
+      if(!payload.section){
+        var vis=[].slice.call(document.querySelectorAll("main h2, main h3")).filter(function(h){
+          var r=h.getBoundingClientRect(); return r.top>-80 && r.top<window.innerHeight*0.6; }).pop();
+        if(vis) payload.section=sectionFor(vis);
+      }
+    }catch(_){}
+
+    try{
+      var res=await fetch(API,{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify(payload)});
+      if(!res.ok){
+        var j=await res.json().catch(function(){return{};});
+        throw new Error(j.error||("HTTP "+res.status));
+      }
+      var reader=res.body.getReader(), dec=new TextDecoder(), buf="";
+      for(;;){
+        var r=await reader.read(); if(r.done) break;
+        buf+=dec.decode(r.value,{stream:true});
+        var lines=buf.split("\n"); buf=lines.pop()||"";
+        for(var i=0;i<lines.length;i++){
+          var l=lines[i].trim(); if(l.indexOf("data:")!==0) continue;
+          var d=l.slice(5).trim(); if(d==="[DONE]") continue;
+          try{ var o=JSON.parse(d); if(o.d){acc+=o.d; bot.innerHTML=md(acc)+'<span class="cursor"></span>'; log.scrollTop=log.scrollHeight;} if(o.error) throw new Error(o.error);}catch(_){}
+        }
+      }
+      bot.innerHTML=md(acc||"_no answer_");
+    }catch(err){
+      bot.className="msg err";
+      bot.textContent = String(err.message).indexOf("Failed to fetch")>-1 || String(err.message).indexOf("HTTP 5")>-1
+        ? "Assistant unavailable — it only works on the deployed site (needs the /api/chat function)."
+        : "Error: "+err.message;
+    }finally{
+      busy=false; send.disabled=false; input.value=""; input.focus();
+      pendingSelection=""; quote.style.display="none";
+    }
+  }
+
+  form.addEventListener("submit",function(e){ e.preventDefault(); ask(input.value); });
+  input.addEventListener("keydown",function(e){
+    if(e.key==="Enter"&&!e.shiftKey){ e.preventDefault(); ask(input.value); }
+  });
+  input.addEventListener("input",function(){ input.style.height="auto"; input.style.height=Math.min(input.scrollHeight,110)+"px"; });
+})();
+</script>
+</body>
+</html>

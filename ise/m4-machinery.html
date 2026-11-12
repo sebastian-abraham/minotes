@@ -1,0 +1,1362 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Module 4 — Machinery Safeguard and Material Handling · Industrial Safety Engineering</title>
+<style>
+:root{
+  --bg:#fbfaf8; --panel:#ffffff; --ink:#232120; --muted:#5f5a53; --line:#e6e1da;
+  --accent:#7a4fd0; --accent-soft:#f1ecfb; --code-bg:#f5f2ee; --code-ink:#2b2a28;
+  --warn-bg:#fff8e6; --warn-line:#f0d9a0;
+  --sans:"Inter","Segoe UI",system-ui,-apple-system,"Noto Sans",sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,"SF Mono",Menlo,Consolas,"Fira Code",monospace;
+}
+html[data-theme="dark"]{
+  --bg:#141317; --panel:#1b1a20; --ink:#e8e4de; --muted:#a8a199; --line:#2f2c36;
+  --accent:#b79cf5; --accent-soft:#241f33; --code-bg:#22202a; --code-ink:#e8e4de;
+  --warn-bg:#2a2417; --warn-line:#4a3d22;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0; background:var(--bg); color:var(--ink); font-family:var(--sans);
+  font-size:16.5px; line-height:1.72; -webkit-font-smoothing:antialiased;
+}
+#progress{position:fixed;top:0;left:0;height:3px;width:0;background:var(--accent);z-index:50;transition:width .1s linear}
+
+.wrap{display:flex;align-items:flex-start;min-height:100vh}
+.sidebar{
+  position:sticky;top:0;height:100vh;width:300px;flex:0 0 300px;overflow-y:auto;
+  padding:26px 20px 60px;border-right:1px solid var(--line);background:var(--panel);
+}
+.sidebar h1{font-size:15px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);
+  margin:0 0 4px;font-weight:600}
+.sidebar .sub{font-size:12.5px;color:var(--muted);margin:0 0 18px}
+.sidebar nav{font-size:14px}
+.sidebar .toc>ul{padding-left:0}
+.sidebar ul{list-style:none;margin:0;padding-left:12px}
+.sidebar ul ul{border-left:1px solid var(--line);margin-left:4px;padding-left:10px}
+.sidebar li{margin:3px 0}
+.sidebar a{color:var(--ink);text-decoration:none;display:block;padding:3px 8px;border-radius:8px;
+  line-height:1.35;transition:background .12s,color .12s}
+.sidebar a:hover{background:var(--accent-soft);color:var(--accent)}
+.sidebar a.active{background:var(--accent-soft);color:var(--accent);font-weight:600}
+.sidebar .home{display:inline-flex;align-items:center;gap:6px;margin-bottom:16px;font-size:13.5px;
+  color:var(--muted);text-decoration:none;border:1px solid var(--line);padding:5px 10px;border-radius:999px}
+.sidebar .home:hover{color:var(--accent);border-color:var(--accent)}
+
+main{flex:1;min-width:0;padding:46px 56px 120px;max-width:980px;margin:0 auto}
+.doc-head{border-bottom:1px solid var(--line);padding-bottom:18px;margin-bottom:34px}
+.doc-head .kicker{font-size:12.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);
+  font-weight:700;margin-bottom:8px}
+.doc-head .meta{font-size:13.5px;color:var(--muted)}
+
+h1,h2,h3,h4{line-height:1.25;font-weight:700;letter-spacing:-.01em}
+h1{font-size:2.05rem;margin:.2em 0 .5em}
+h2{font-size:1.55rem;margin:2.4em 0 .7em;padding-bottom:.35em;border-bottom:1px solid var(--line)}
+h3{font-size:1.2rem;margin:1.9em 0 .55em}
+h4{font-size:1.03rem;margin:1.5em 0 .45em;color:var(--muted)}
+h2 .anchor,h3 .anchor{opacity:0;margin-left:.35em;font-size:.8em;color:var(--muted);text-decoration:none}
+h2:hover .anchor,h3:hover .anchor{opacity:1}
+p{margin:.75em 0}
+a{color:var(--accent);text-underline-offset:2px}
+strong{font-weight:650}
+hr{border:0;border-top:1px solid var(--line);margin:2.6em 0}
+ul,ol{margin:.7em 0;padding-left:1.4em}
+li{margin:.3em 0}
+li>ul,li>ol{margin:.25em 0}
+blockquote{
+  margin:1.3em 0;padding:12px 18px;background:var(--warn-bg);border-left:3px solid var(--warn-line);
+  border-radius:0 10px 10px 0;color:var(--ink)
+}
+blockquote p{margin:.3em 0}
+
+code{font-family:var(--mono);font-size:.87em;background:var(--code-bg);color:var(--code-ink);
+  padding:.15em .38em;border-radius:6px;border:1px solid var(--line);
+  box-decoration-break:clone;-webkit-box-decoration-break:clone;overflow-wrap:anywhere}
+pre{position:relative;background:var(--code-bg);border:1px solid var(--line);border-radius:12px;
+  padding:16px 18px;overflow-x:auto;margin:1.1em 0}
+pre code{background:none;border:0;padding:0;font-size:13.6px;line-height:1.62;white-space:pre}
+.copy{position:absolute;top:8px;right:8px;font:600 11px/1 var(--sans);color:var(--muted);
+  background:var(--panel);border:1px solid var(--line);border-radius:7px;padding:5px 8px;cursor:pointer;
+  opacity:0;transition:opacity .15s}
+pre:hover .copy{opacity:1}
+.copy:hover{color:var(--accent);border-color:var(--accent)}
+
+.table-scroll{overflow-x:auto;margin:1.3em 0;border:1px solid var(--line);border-radius:12px;background:var(--panel)}
+table{border-collapse:collapse;width:100%;font-size:14.6px}
+th,td{padding:9px 13px;text-align:left;vertical-align:top;border-bottom:1px solid var(--line)}
+th{background:var(--accent-soft);font-weight:650;font-size:13px;letter-spacing:.02em;
+  position:sticky;top:0;backdrop-filter:blur(4px)}
+tr:last-child td{border-bottom:0}
+tbody tr:nth-child(even){background:color-mix(in srgb,var(--panel) 60%,var(--bg))}
+tbody tr:hover{background:var(--accent-soft)}
+
+.tools{position:fixed;right:22px;bottom:22px;display:flex;flex-direction:column;gap:8px;z-index:40}
+.tools button{width:42px;height:42px;border-radius:12px;border:1px solid var(--line);background:var(--panel);
+  color:var(--ink);cursor:pointer;font-size:16px;box-shadow:0 4px 14px rgba(0,0,0,.10)}
+.tools button:hover{color:var(--accent);border-color:var(--accent)}
+@media (max-width:1000px){
+  .wrap{display:block}
+  .sidebar{position:static;width:auto;height:auto;border-right:0;border-bottom:1px solid var(--line)}
+  .sidebar nav{max-height:40vh;overflow:auto}
+  main{padding:28px 20px 100px}
+}
+@media print{
+  .sidebar,.tools,#progress,.copy{display:none!important}
+  body{background:#fff;color:#000;font-size:11pt}
+  main{padding:0;max-width:none}
+  h2{break-after:avoid} pre,table,blockquote{break-inside:avoid}
+  a{color:#000;text-decoration:none}
+}
+
+/* ---- ask-about-this ---- */
+#chat-btn{position:fixed;right:20px;bottom:112px;width:44px;height:44px;border-radius:50%;
+  border:1px solid var(--line);background:var(--panel);color:var(--accent);cursor:pointer;font-size:17px;
+  box-shadow:0 6px 18px rgba(0,0,0,.12);z-index:45;display:grid;place-items:center}
+#chat-btn:hover{border-color:var(--accent)}
+#sel-chip{position:absolute;z-index:46;transform:translate(-50%,-100%);background:var(--ink);color:var(--bg);
+  font:600 12px/1 var(--sans);padding:7px 11px;border-radius:999px;cursor:pointer;white-space:nowrap;
+  box-shadow:0 6px 18px rgba(0,0,0,.25);display:none}
+#sel-chip:hover{background:var(--accent);color:#fff}
+#chat-panel{position:fixed;right:20px;bottom:164px;width:min(420px,calc(100vw - 40px));max-height:min(70vh,620px);
+  background:var(--panel);border:1px solid var(--line);border-radius:14px;z-index:47;display:none;
+  flex-direction:column;box-shadow:0 18px 50px rgba(0,0,0,.18);overflow:hidden}
+#chat-panel.open{display:flex}
+#chat-head{display:flex;align-items:center;gap:8px;padding:11px 13px;border-bottom:1px solid var(--line);
+  font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:700}
+#chat-head .sp{flex:1}
+#chat-head button{background:none;border:0;color:var(--muted);cursor:pointer;font-size:15px;padding:2px 4px}
+#chat-head button:hover{color:var(--accent)}
+#chat-quote{display:none;margin:10px 13px 0;padding:8px 10px;border-left:2px solid var(--accent);
+  background:var(--accent-soft);color:var(--muted);font-size:12.5px;border-radius:0 8px 8px 0;
+  max-height:84px;overflow:auto;white-space:pre-wrap}
+#chat-log{flex:1;overflow-y:auto;padding:12px 13px;display:flex;flex-direction:column;gap:10px;font-size:13.6px;line-height:1.55}
+.msg{max-width:100%}
+.msg.user{align-self:flex-end;background:var(--accent-soft);color:var(--ink);padding:7px 11px;border-radius:11px 11px 2px 11px;
+  max-width:86%;white-space:pre-wrap}
+.msg.bot{color:var(--ink)}
+.msg.bot p{margin:.3em 0}
+.msg.bot ul{margin:.3em 0;padding-left:1.15em}
+.msg.bot code{font-size:.9em}
+.msg.bot pre{background:var(--code-bg);border-radius:8px;padding:9px 11px;overflow-x:auto;font-size:12px;margin:.4em 0}
+.msg.err{color:#b3261e;font-size:12.5px}
+.msg .cursor:after{content:"▍";color:var(--accent);animation:blink 1s steps(2) infinite}
+@keyframes blink{50%{opacity:0}}
+#chat-form{display:flex;gap:8px;padding:10px 13px;border-top:1px solid var(--line)}
+#chat-input{flex:1;resize:none;border:1px solid var(--line);border-radius:9px;background:var(--bg);color:var(--ink);
+  font:inherit;font-size:13.5px;padding:8px 10px;max-height:110px;min-height:38px}
+#chat-input:focus{outline:2px solid var(--accent);outline-offset:0}
+#chat-send{border:1px solid var(--accent);background:var(--accent);color:#fff;border-radius:9px;
+  width:38px;cursor:pointer;font-size:15px}
+#chat-send:disabled{opacity:.45;cursor:default}
+#chat-foot{font-size:11px;color:var(--muted);padding:0 13px 9px}
+@media (max-width:640px){
+  #chat-panel{right:8px;left:8px;width:auto;bottom:150px;max-height:66vh}
+  #chat-btn{bottom:104px;right:16px}
+}
+@media print{#chat-btn,#chat-panel,#sel-chip{display:none!important}}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+<div class="wrap">
+  <aside class="sidebar">
+    <a class="home" href="index.html">← Industrial Safety Engineering</a>
+    <a class="home" href="practice.html">Practice drills</a>
+    <h1>M4 · Machinery &amp; handling</h1>
+    <p class="sub">20% ESE · 30 questions</p>
+    <nav class="toc"><div class="toc">
+<ul>
+<li><a href="#1-coverage">1. Coverage</a><ul>
+<li><a href="#table-a-syllabus-line-section">Table A — syllabus line → section</a></li>
+<li><a href="#table-b-the-30-assigned-questions">Table B — the 30 assigned questions</a></li>
+</ul>
+</li>
+<li><a href="#2-concepts">2. Concepts</a><ul>
+<li><a href="#21-point-of-operation-and-the-principle-of-machine-guarding-23-4">2.1 Point of operation and the principle of machine guarding (<code>slide 2</code>–<code>slide 6</code>, <code>slide 15</code>)</a></li>
+<li><a href="#22-types-of-guards-1011">2.2 Types of guards (<code>slide 24</code>–<code>slide 34</code>)</a></li>
+<li><a href="#23-types-of-devices-2324">2.3 Types of devices (<code>slide 36</code>–<code>slide 48</code>)</a></li>
+<li><a href="#24-safety-in-power-presses-3637">2.4 Safety in power presses (<code>slide 60</code>–<code>slide 63</code>)</a></li>
+<li><a href="#25-safety-in-turning-boring-milling-planing-and-grinding-4445">2.5 Safety in turning, boring, milling, planing and grinding (<code>slide 64</code>–<code>slide 86</code>)</a></li>
+<li><a href="#26-welding-safety-precautions-for-gas-and-arc-5253">2.6 Welding — safety precautions for gas and arc (<code>slide 87</code>–<code>slide 101</code>)</a></li>
+<li><a href="#27-cutting-and-finishing-7071-standard">2.7 Cutting and finishing (<code>slide 90</code>–<code>slide 99</code>, standard)</a></li>
+<li><a href="#28-material-handling-manual-and-mechanical-7273">2.8 Material handling — manual and mechanical (<code>slide 129</code>–<code>slide 152</code>)</a></li>
+<li><a href="#29-handling-equipment-wire-rope-chain-slings-hooks-clamps-8788">2.9 Handling equipment — wire rope, chain slings, hooks, clamps (<code>slide 138</code>–<code>slide 164</code>)</a></li>
+</ul>
+</li>
+<li><a href="#3-answer-bank">3. Answer bank</a><ul>
+<li><a href="#31-three-mark-machinery-injuries-safeguard-types-methods-q32-q33-q35">3.1 Three-mark — machinery injuries, safeguard types, methods (Q32, Q33, Q35)</a></li>
+<li><a href="#32-three-mark-welding-gear-adjustable-guards-palletizing-q36-q37-q66">3.2 Three-mark — welding gear, adjustable guards, palletizing (Q36, Q37, Q66)</a></li>
+<li><a href="#33-three-mark-handling-equipment-clamps-handling-hazards-stocking-q67q71">3.3 Three-mark — handling equipment, clamps, handling hazards, stocking (Q67–Q71)</a></li>
+<li><a href="#34-five-mark-guarding-principle-safeguards-machinery-hazards-q109-q34-q111-q160">3.4 Five-mark — guarding principle, safeguards, machinery hazards (Q109, Q34, Q111, Q160)</a></li>
+<li><a href="#35-five-mark-grinding-milling-planing-q112-q114-q162">3.5 Five-mark — grinding, milling, planing (Q112, Q114, Q162)</a></li>
+<li><a href="#36-five-mark-arc-welding-and-arc-versus-gas-q113-q163">3.6 Five-mark — arc welding, and arc versus gas (Q113, Q163)</a></li>
+<li><a href="#37-five-mark-manual-and-mechanical-handling-safety-classification-q129-q130-q164">3.7 Five-mark — manual and mechanical handling safety, classification (Q129, Q130, Q164)</a></li>
+<li><a href="#38-eight-mark-guarding-devices-and-their-sustainability-q110-q161">3.8 Eight-mark — guarding devices and their sustainability (Q110, Q161)</a></li>
+<li><a href="#39-eight-mark-hooks-and-hooks-versus-clamps-q133-q167">3.9 Eight-mark — hooks, and hooks versus clamps (Q133, Q167)</a></li>
+<li><a href="#310-eight-mark-chain-slings-q134-q166">3.10 Eight-mark — chain slings (Q134, Q166)</a></li>
+<li><a href="#311-eight-mark-wire-rope-q135">3.11 Eight-mark — wire rope (Q135)</a></li>
+<li><a href="#312-fourteen-mark-skeleton-ese-part-b">3.12 Fourteen-mark skeleton (ESE Part B)</a></li>
+</ul>
+</li>
+<li><a href="#4-definitions-and-numbers">4. Definitions and numbers</a><ul>
+<li><a href="#41-guard-distances-the-opening-rule">4.1 Guard distances (the opening rule)</a></li>
+<li><a href="#42-machine-tool-numbers">4.2 Machine-tool numbers</a></li>
+<li><a href="#43-rope-chain-hook-and-clamp-discard-criteria">4.3 Rope, chain, hook and clamp discard criteria</a></li>
+<li><a href="#44-sling-angles">4.4 Sling angles</a></li>
+</ul>
+</li>
+<li><a href="#5-diagrams-to-draw">5. Diagrams to draw</a><ul>
+<li><a href="#51-four-guards-on-one-plate">5.1 Four guards on one plate</a></li>
+<li><a href="#52-the-point-of-operation-and-the-two-zones">5.2 The point of operation and the two zones</a></li>
+<li><a href="#53-the-sling-angle-triangle">5.3 The sling angle triangle</a></li>
+</ul>
+</li>
+<li><a href="#6-say-this-if-grilled">6. Say-this-if-grilled</a><ul>
+<li><a href="#61-the-sentences-to-have-ready">6.1 The sentences to have ready</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</nav>
+  </aside>
+  <main>
+    <div class="doc-head">
+      <div class="kicker">20MCN401 · Industrial Safety Engineering</div>
+      <div class="meta">20% ESE · 30 questions · rendered from KIT_M4_MACHINERY.md</div>
+    </div>
+    <h1 id="module-4-machinery-safeguard-and-material-handling">Module 4 — Machinery Safeguard and Material Handling</h1>
+<blockquote>
+<p><strong>20MCN401 Industrial Safety Engineering · B.Tech CSE, Sem 7 (Saintgits, autonomous) · Module IV of five · 20 per cent of the ESE paper.</strong> This module is where the marks come from lists: guard types, device types, welding hazards, handling hazards, hook rejection criteria. Five numbers do most of the work — 10 per cent wear, 15 per cent throat opening, 10 degrees of twist, 1/8 inch work-rest gap, and 10,000 cubic feet of air per welder. Sources: <code>m4.txt</code> (<code>slide N</code>); values marked <strong>(standard)</strong> are exam-standard but absent from the deck.</p>
+</blockquote>
+<hr />
+<h2 id="1-coverage">1. Coverage<a class="anchor" href="#1-coverage">#</a></h2>
+<h3 id="table-a-syllabus-line-section">Table A — syllabus line → section<a class="anchor" href="#table-a-syllabus-line-section">#</a></h3>
+<table>
+<thead>
+<tr>
+<th>Syllabus line (verbatim)</th>
+<th>Hrs</th>
+<th>Answered at</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Point of operation — principle of machine guarding</td>
+<td>4</td>
+<td>§2.1</td>
+</tr>
+<tr>
+<td>Types of guards and devices</td>
+<td>4</td>
+<td>§2.2, §2.3</td>
+</tr>
+<tr>
+<td>Safety in power presses — primary and secondary operations, shearing, bending, rolling, drawing</td>
+<td>4</td>
+<td>§2.4</td>
+</tr>
+<tr>
+<td>Safety in turning, boring, milling, planing and grinding</td>
+<td>4</td>
+<td>§2.5</td>
+</tr>
+<tr>
+<td>Welding and cutting — safety precautions for gas and arc welding</td>
+<td>4</td>
+<td>§2.6</td>
+</tr>
+<tr>
+<td>Cutting and finishing</td>
+<td>4</td>
+<td>§2.7</td>
+</tr>
+<tr>
+<td>Material handling — classification, safety considerations, manual and mechanical handling, assessments, lifting, carrying, pulling, pushing, palletizing, stocking</td>
+<td>4</td>
+<td>§2.8</td>
+</tr>
+<tr>
+<td>Material handling equipment — operation and maintenance, wire rope, chain slings, hooks, clamps</td>
+<td>4</td>
+<td>§2.9</td>
+</tr>
+</tbody>
+</table>
+<p>Every line is four hours, so no line is allowed to shrink. Where the deck is image-only (presses, lathes, mills, rigging) the content is supplied as <strong>(standard)</strong> and flagged in the text.</p>
+<h3 id="table-b-the-30-assigned-questions">Table B — the 30 assigned questions<a class="anchor" href="#table-b-the-30-assigned-questions">#</a></h3>
+<table>
+<thead>
+<tr>
+<th>Q</th>
+<th>Marks</th>
+<th>Answered at</th>
+<th>What the answer covers</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Q32</td>
+<td>3</td>
+<td>§3.1</td>
+<td>Injuries from moving machinery</td>
+</tr>
+<tr>
+<td>Q33</td>
+<td>3</td>
+<td>§3.1</td>
+<td>Three safeguards</td>
+</tr>
+<tr>
+<td>Q34</td>
+<td>5</td>
+<td>§3.4</td>
+<td>Principle of machine guarding</td>
+</tr>
+<tr>
+<td>Q35</td>
+<td>3</td>
+<td>§3.1</td>
+<td>Methods of safeguarding</td>
+</tr>
+<tr>
+<td>Q36</td>
+<td>3</td>
+<td>§3.2</td>
+<td>Welding safety gear</td>
+</tr>
+<tr>
+<td>Q37</td>
+<td>3</td>
+<td>§3.2</td>
+<td>Adjustable guards, pros and cons</td>
+</tr>
+<tr>
+<td>Q66</td>
+<td>3</td>
+<td>§3.2</td>
+<td>Palletizing and finishing</td>
+</tr>
+<tr>
+<td>Q67</td>
+<td>3</td>
+<td>§3.3</td>
+<td>Transport equipment for materials</td>
+</tr>
+<tr>
+<td>Q68</td>
+<td>3</td>
+<td>§3.3</td>
+<td>Clamp precautions</td>
+</tr>
+<tr>
+<td>Q69</td>
+<td>3</td>
+<td>§3.3</td>
+<td>Manual handling hazards</td>
+</tr>
+<tr>
+<td>Q70</td>
+<td>3</td>
+<td>§3.3</td>
+<td>Mechanical handling hazards</td>
+</tr>
+<tr>
+<td>Q71</td>
+<td>3</td>
+<td>§3.3</td>
+<td>Stocking, and why it matters</td>
+</tr>
+<tr>
+<td>Q109</td>
+<td>5</td>
+<td>§3.4</td>
+<td>Mechanical machinery hazards and prevention</td>
+</tr>
+<tr>
+<td>Q110</td>
+<td>8</td>
+<td>§3.8</td>
+<td>Guarding devices and sustainability</td>
+</tr>
+<tr>
+<td>Q111</td>
+<td>5</td>
+<td>§3.4</td>
+<td>Machinery safeguard and guard types</td>
+</tr>
+<tr>
+<td>Q112</td>
+<td>5</td>
+<td>§3.5</td>
+<td>Grinding safety practice</td>
+</tr>
+<tr>
+<td>Q113</td>
+<td>5</td>
+<td>§3.6</td>
+<td>Arc welding safety practice</td>
+</tr>
+<tr>
+<td>Q114</td>
+<td>5</td>
+<td>§3.5</td>
+<td>Milling safety practice</td>
+</tr>
+<tr>
+<td>Q129</td>
+<td>5</td>
+<td>§3.7</td>
+<td>Manual handling safety</td>
+</tr>
+<tr>
+<td>Q130</td>
+<td>5</td>
+<td>§3.7</td>
+<td>Mechanical handling safety</td>
+</tr>
+<tr>
+<td>Q133</td>
+<td>8</td>
+<td>§3.9</td>
+<td>Hook maintenance, with sketch</td>
+</tr>
+<tr>
+<td>Q134</td>
+<td>8</td>
+<td>§3.10</td>
+<td>Chain sling maintenance, with sketch</td>
+</tr>
+<tr>
+<td>Q135</td>
+<td>8</td>
+<td>§3.11</td>
+<td>Wire rope maintenance, with sketch</td>
+</tr>
+<tr>
+<td>Q160</td>
+<td>5</td>
+<td>§3.4</td>
+<td>Guarding principle and its importance</td>
+</tr>
+<tr>
+<td>Q161</td>
+<td>8</td>
+<td>§3.8</td>
+<td>Guarding devices, sustainability analysis</td>
+</tr>
+<tr>
+<td>Q162</td>
+<td>5</td>
+<td>§3.5</td>
+<td>Milling, grinding and planing measures</td>
+</tr>
+<tr>
+<td>Q163</td>
+<td>5</td>
+<td>§3.6</td>
+<td>Arc and gas welding risks and control</td>
+</tr>
+<tr>
+<td>Q164</td>
+<td>5</td>
+<td>§3.7</td>
+<td>Classification of handling equipment</td>
+</tr>
+<tr>
+<td>Q166</td>
+<td>8</td>
+<td>§3.10</td>
+<td>Chain sling maintenance, with sketch</td>
+</tr>
+<tr>
+<td>Q167</td>
+<td>8</td>
+<td>§3.9</td>
+<td>Hooks versus clamps, inspection</td>
+</tr>
+</tbody>
+</table>
+<p>Twelve three-mark, eleven five-mark, seven eight-mark. §3.12 carries the 14-mark skeleton you adapt when the Part B question is "machine guarding" or "material handling".</p>
+<hr />
+<h2 id="2-concepts">2. Concepts<a class="anchor" href="#2-concepts">#</a></h2>
+<h3 id="21-point-of-operation-and-the-principle-of-machine-guarding-23-4">2.1 Point of operation and the principle of machine guarding (<code>slide 2</code>–<code>slide 6</code>, <code>slide 15</code>)<a class="anchor" href="#21-point-of-operation-and-the-principle-of-machine-guarding-23-4">#</a></h3>
+<p><em>In plain English.</em> A machine hurts you in one place: where the tool touches the metal. Call that place the point of operation. Guarding means putting something solid between that place and your hand. A warning notice is not a guard. A guard has to work on the day you are tired, rushed and looking the other way.</p>
+<p><em>The detail.</em>
+- <strong>Point of operation</strong> is where work is done on the material: cutting, shaping, boring, forming (<code>slide 3</code>).
+- <strong>Power transmission apparatus</strong> carries energy from the motor to the tool.
+- Its members: flywheels, pulleys, belts, connecting rods, couplings, cams, spindles, chains, cranks and gears (<code>slide 3</code>).
+- <strong>Operating controls</strong> are the third machine part; <strong>other moving parts</strong> (feed mechanisms, auxiliary parts) are the fourth (<code>slide 4</code>).
+- <strong>Three injury routes</strong> (<code>slide 2</code>): caught by or drawn into the machine, struck by a moving part, struck by a failed component or a flying particle.
+- <strong>Six guarding principles</strong> (<code>slide 15</code>): prevent contact; make the guard hard to remove; stop objects falling in.
+- The rest of the list: add no new hazard, do not slow the job, allow lubrication without removal.
+- <strong>Two zones need guarding</strong>, not one: the die or blade (hands) and the drive (sleeves, hair, rags).
+- <strong>Distance can be the guard</strong> where the opening is small and far enough away (§4.1).</p>
+<p><em>What to write.</em> For 3 marks: define the point of operation, then give the three injury routes. For 5: add the four machine parts and the six principles. For 8: add the device families and the distance rule.</p>
+<p><strong>Mark anchor.</strong> Name the <em>power transmission apparatus</em> and two of its members. Most answers guard the blade only, and lose the mark that the belt drive was also a hazard.</p>
+<p><strong>Exam trap.</strong> Point of operation and power transmission are different hazards with different fixes. A nip at the belt drive gets a fixed enclosure. A press die gets presence sensing or a two-hand control. Swap the two and both marks go.</p>
+<h3 id="22-types-of-guards-1011">2.2 Types of guards (<code>slide 24</code>–<code>slide 34</code>)<a class="anchor" href="#22-types-of-guards-1011">#</a></h3>
+<p><em>In plain English.</em> A guard is a barrier. It does not sense you and it does not think; it simply stands between you and the moving part. The four types differ in one question: who is allowed to move the barrier, and when?</p>
+<p><em>The detail.</em>
+- <strong>Fixed guard</strong> is a permanent part of the machine. Removal needs a tool.
+- It depends on nothing moving to do its job. Sheet metal, screen, wire cloth, bars or plastic all serve (<code>slide 25</code>).
+- A fixed guard is usually first choice, for simplicity and permanence (<code>slide 25</code>).
+- Power transmission is best protected by fixed guards that enclose the danger (<code>slide 26</code>).
+- <strong>Interlocked guard</strong> cuts power or trips the machine when it opens (<code>slide 29</code>).
+- The machine cannot cycle until the guard is back in place (<code>slide 29</code>).
+- The interlock may be electrical, mechanical, hydraulic or pneumatic (<code>slide 30</code>).
+- Closing the guard must not restart the machine by itself (<code>slide 30</code>).
+- <strong>Adjustable guard</strong> has an opening you set by hand to suit the stock (<code>slide 32</code>).
+- <strong>Self-adjusting guard</strong> has an opening set by the stock itself. It moves just enough to admit the work and returns to rest (<code>slide 34</code>).</p>
+<p><em>What to write.</em> For 3 marks: name the four guards and give one line each. For 5: add the fixed-guard characteristics and the interlock behaviour on closing.</p>
+<p><strong>Mark anchor.</strong> "Replacing the guard must not restart the machine." That single sentence separates an interlocked guard from a door switch, and it is on <code>slide 30</code>.</p>
+<p><strong>Exam trap.</strong> An interlocked guard can be defeated, and the deck shows one taped down (<code>slide 31</code>). Say that plainly, then say the control is supervision and planned maintenance. Claiming interlocks cannot fail loses the credibility mark.</p>
+<h3 id="23-types-of-devices-2324">2.3 Types of devices (<code>slide 36</code>–<code>slide 48</code>)<a class="anchor" href="#23-types-of-devices-2324">#</a></h3>
+<p><em>In plain English.</em> A device is the smarter cousin of a guard. It watches the danger area and stops the machine when you enter. The difference matters: a guard blocks, a device reacts. A device that reacts too slowly is worse than useless, because it teaches people to trust it.</p>
+<p><em>The detail.</em>
+- <strong>Presence sensing, photoelectric:</strong> a light curtain; breaking the beam stops the cycle (<code>slide 37</code>).
+- <strong>Presence sensing, radio frequency:</strong> a capacitance field; breaking it stops or prevents the cycle (<code>slide 37</code>).
+- <strong>Pullback:</strong> cables on hands, wrists or arms haul the operator clear as the ram descends (<code>slide 42</code>).
+- Pullback suits machines with a stroking action; access is allowed only while the slide is up.
+- <strong>Restraint (holdout):</strong> straps fix the hands at a point, so they cannot reach the die at all (<code>slide 40</code>).
+- Restraint has no retracting action; it only limits travel.
+- <strong>Two-hand control:</strong> both buttons held down together, all the time, to keep the stroke running (<code>slide 45</code>).
+- <strong>Two-hand trip:</strong> both buttons pressed together to start, then the hands are free (<code>slide 47</code>).
+- <strong>Gate:</strong> a barrier synchronised with the cycle, closed during the dangerous part (<code>slide 48</code>).
+- <strong>Location and distance</strong> is a separate strategy: fence, height, or small stock opening (<code>slide 50</code>).
+- <strong>Feeding and ejection</strong> by machine, semi-automatic or robot keeps hands out entirely (<code>slide 52</code>–<code>slide 57</code>).
+- <strong>Miscellaneous aids</strong> give margin only: awareness barrier, shield, holding tool, push stick (<code>slide 58</code>).</p>
+<p><em>What to write.</em> For 5 marks: five devices, one line of mechanism each, plus the two-hand pair distinguished. For 8: add the limits of each device.</p>
+<p><strong>Mark anchor.</strong> Two-hand <strong>control</strong> must be held; two-hand <strong>trip</strong> is pressed once. Naming that difference is the mark most scripts miss.</p>
+<p><strong>Exam trap.</strong> A device protects only the entry it senses. A light curtain across the front does nothing about a hand coming over the top or round the side. Say "the perimeter must be closed" and you have answered the follow-up before it is asked.</p>
+<h3 id="24-safety-in-power-presses-3637">2.4 Safety in power presses (<code>slide 60</code>–<code>slide 63</code>)<a class="anchor" href="#24-safety-in-power-presses-3637">#</a></h3>
+<p><em>In plain English.</em> A press is a heavy slide that comes down hard, again and again, onto a die. The die is where the work happens and where fingers are lost. The machine is harmless between strokes and lethal during one, so the guard must act faster than a reflex.</p>
+<p><em>The detail.</em>
+- <strong>Press</strong> = a machine that punches, shears, forms or assembles, using dies on a slide or ram (<code>slide 61</code>).
+- <strong>Parts:</strong> frame, motor, flywheel, crankshaft, clutch, brake (<code>slide 62</code>).
+- <strong>Three drives:</strong> mechanical (flywheel and clutch), hydraulic, pneumatic (<code>slide 60</code>).
+- <strong>The main injury is amputation</strong>, from a hand placed in the point of operation (<code>slide 63</code>).
+- <strong>Three causes</strong> in the deck: hand in the die, unguarded or badly guarded press, safeguard defeated or overridden (<code>slide 63</code>).
+- <strong>Safeguards used:</strong> barrier guard on a fixed surface, radio-frequency sensor, light curtain, pullback device, fixed guard (<code>slide 63</code>).
+- <strong>Primary operation</strong> = the first cut that makes the blank: shearing, blanking, piercing.
+- <strong>Secondary operation</strong> = shaping that blank afterwards: bending, drawing, forming.
+- <strong>Shearing</strong> cuts sheet with a straight blade; the hazard is the hand under the hold-down.
+- <strong>Bending</strong> is a press brake driving a punch into a V die; the hazard is fingers between punch and die.
+- <strong>Rolling</strong> passes plate between powered rolls to curve it; the hazard is the in-running nip.
+- <strong>Drawing</strong> pulls sheet into a die to form a cup; the hazard is the draw-in at the die mouth.</p>
+<p><strong>The four processes at a glance</strong> (standard).</p>
+<table>
+<thead>
+<tr>
+<th>Process</th>
+<th>Tool</th>
+<th>Where the hand is lost</th>
+<th>Guard that fits</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Shearing</td>
+<td>Straight blade on a bed</td>
+<td>Under the hold-down, behind the blade</td>
+<td>Fixed barrier plus hold-down; light curtain</td>
+</tr>
+<tr>
+<td>Bending</td>
+<td>Punch into V die on a press brake</td>
+<td>Between punch tip and die shoulder</td>
+<td>Die guard, two-hand control, light curtain</td>
+</tr>
+<tr>
+<td>Rolling</td>
+<td>Powered rolls, plate fed between</td>
+<td>In-running nip between rolls</td>
+<td>Trip wire or bar along the nip</td>
+</tr>
+<tr>
+<td>Drawing</td>
+<td>Punch pulls sheet into a die</td>
+<td>At the die mouth, on the draw-in</td>
+<td>Enclosure with small opening; two-hand control</td>
+</tr>
+</tbody>
+</table>
+<p><em>What to write.</em> For 5 marks: press definition, three drives, the amputation hazard, three safeguards. For 8: add the four processes with the hazard that belongs to each.</p>
+<p><strong>Mark anchor.</strong> One hazard per process: shear has the blade and hold-down, bend has punch and die, roll has the nip, draw has the die mouth. Four pairs, four marks.</p>
+<p><strong>Exam trap.</strong> "Primary" and "secondary" here mean first cut and later forming. In manufacturing textbooks they mean casting and machining. State which sense you are using in one line, then move on.</p>
+<h3 id="25-safety-in-turning-boring-milling-planing-and-grinding-4445">2.5 Safety in turning, boring, milling, planing and grinding (<code>slide 64</code>–<code>slide 86</code>)<a class="anchor" href="#25-safety-in-turning-boring-milling-planing-and-grinding-4445">#</a></h3>
+<p><em>In plain English.</em> These five machines all remove metal with a sharp edge, and all five throw it. The difference is what moves. On a lathe the work spins. On a mill the cutter spins. On a planer the table slides. On a grinder a stone spins fast enough to burst.</p>
+<p><em>The detail.</em>
+- <strong>Turning:</strong> the lathe spins the work and a single-point tool feeds along it.
+- Hazards are the chuck jaws, bar stock sticking out of the spindle, entanglement, hot swarf and a workpiece thrown from the chuck.
+- Guard the chuck and the spindle end; keep the tool over the work; never leave the key in the chuck.
+- <strong>Boring</strong> enlarges a hole already drilled, usually on a boring mill (<code>slide 71</code>).
+- Broken drilling heads are a leading cause of injury; match the tool to the spindle speed and the workpiece (<code>slide 71</code>).
+- Dress tight, with no loose hanging cloth, and wear eye protection (<code>slide 72</code>).
+- Know the machine: inexperienced boring operators are three times as likely to cause an accident (<code>slide 73</code>).
+- Service the machine regularly; worn tooling causes both bad work and breakdowns (<code>slide 74</code>).
+- <strong>Milling:</strong> a multi-tooth cutter rotates while the table feeds the work past it.
+- Hazards are cutter contact, flying chips, draw-in at the cutter, and a workpiece pulled out of an unclamped vice.
+- <strong>Planing:</strong> the table carries the work back and forth under a fixed tool, or the tool strokes over fixed work.
+- The hazard is the traverse: being struck at the end of the stroke, or caught by work overhanging the table.
+- <strong>Grinding:</strong> an abrasive wheel runs at high surface speed and can burst.
+- A burst wheel throws fragments across the shop; dust and sparks add to the fire and lung risk.</p>
+<p><strong>Wheel rules for grinding</strong> (standard).</p>
+<table>
+<thead>
+<tr>
+<th>Rule</th>
+<th>Value</th>
+<th>Why</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Work rest gap</td>
+<td>1/8 inch (3 mm)</td>
+<td>Stops work being drawn between wheel and rest</td>
+</tr>
+<tr>
+<td>Tongue guard gap</td>
+<td>1/4 inch</td>
+<td>Contains fragments if the wheel bursts</td>
+</tr>
+<tr>
+<td>Wheel speed</td>
+<td>Never above the marked speed</td>
+<td>Overspeed is the commonest cause of burst</td>
+</tr>
+<tr>
+<td>Ring test</td>
+<td>Tap and listen before mounting</td>
+<td>A cracked wheel rings dull</td>
+</tr>
+<tr>
+<td>Starting</td>
+<td>Stand to one side for the first run</td>
+<td>Burst happens at start-up</td>
+</tr>
+<tr>
+<td>Dressing</td>
+<td>With a proper dresser, dust extraction on</td>
+<td>Removes glaze and silica dust</td>
+</tr>
+</tbody>
+</table>
+<p><em>What to write.</em> For 5 marks: one hazard and one control per machine, five short pairs. For 8: add the wheel rules for grinding and the clamping rules for milling.</p>
+<p><strong>Mark anchor.</strong> Boring's three-times figure (<code>slide 73</code>) and the 1/8 inch work-rest gap (§4.2). One is quotable evidence, the other is a number a marker can check.</p>
+<p><strong>Exam trap.</strong> Guards on these machines are not interchangeable with press safeguards. A lathe chuck gets a hinged or fixed cover; a milling cutter gets an adjustable nose guard; a wheel gets a casing plus a work rest. Naming "light curtain" for a lathe is a wrong answer.</p>
+<h3 id="26-welding-safety-precautions-for-gas-and-arc-5253">2.6 Welding — safety precautions for gas and arc (<code>slide 87</code>–<code>slide 101</code>)<a class="anchor" href="#26-welding-safety-precautions-for-gas-and-arc-5253">#</a></h3>
+<p><em>In plain English.</em> Welding is the only common shop job that carries its own fire, its own gas cylinder, its own electric supply and its own sun. You are holding an arc brighter than daylight at arm's length. Every precaution below exists because one of those four has killed someone.</p>
+<p><em>The detail.</em>
+- <strong>Acetylene</strong> is the usual fuel gas. It ignites over a very wide range of concentrations, so a small leak is already a risk (<code>slide 88</code>).
+- <strong>Oxygen</strong> does not burn or explode by itself. It makes everything else burn far faster (<code>slide 88</code>).
+- A damaged valve turns a cylinder into a rocket; chain every cylinder upright (<code>slide 88</code>, <code>slide 89</code>).
+- <strong>Storage rules</strong> (<code>slide 89</code>): keep clear of heat and damage, chain upright, caps on, valves closed before moving, oxygen and acetylene stored apart.
+- Move a cylinder by rolling it on its bottom edge. Never drag it (<code>slide 89</code>).
+- <strong>Leak test</strong> every connection with approved solution; inspect hoses and replace worn ones (<code>slide 90</code>).
+- Light with a <strong>flint lighter</strong>, never a match, and stand to the side of the regulators (<code>slide 90</code>).
+- Open the acetylene valve only <strong>one quarter to three quarters of a turn</strong>, and leave the wrench on it (<code>slide 90</code>).
+- Light the acetylene first, then open oxygen to a neutral flame (<code>slide 90</code>).
+- <strong>Ventilation is adequate</strong> at 10,000 cubic feet per welder and a 16 foot ceiling (<code>slide 92</code>).
+- Otherwise supply <strong>2000 cfm per welder</strong>, or use local exhaust or an air-line respirator (<code>slide 92</code>).
+- <strong>Arc hazards, six of them</strong> (<code>slide 95</code>): fumes and gases, electric shock, arc rays, fire and explosion, noise, hot objects.
+- <strong>Primary voltage</strong> is 230 or 460 volts; <strong>secondary</strong> is 6 to 100 volts (<code>slide 97</code>).
+- The arc is brighter than the sun. Ultraviolet light burns the eye and the skin (<code>slide 98</code>).
+- <strong>Sparks travel up to 35 feet.</strong> Clear flammables, keep an extinguisher, re-check the area 30 minutes after (<code>slide 99</code>).</p>
+<p><em>What to write.</em> For 5 marks: five hazards with one control each, then the ventilation rule. For 8: split gas and arc, and give the cylinder rules as a list.</p>
+<p><strong>Mark anchor.</strong> 35 feet, 10,000 cubic feet, 2000 cfm, one quarter to three quarters of a turn. Any two of those four numbers prove you read the standard.</p>
+<p><strong>Exam trap.</strong> Gas and arc hazards overlap but are not the same. Gas adds cylinder handling and flashback; arc adds electric shock and ultraviolet. An answer that lists only "fire and fume" for both is a half answer.</p>
+<h3 id="27-cutting-and-finishing-7071-standard">2.7 Cutting and finishing (<code>slide 90</code>–<code>slide 99</code>, standard)<a class="anchor" href="#27-cutting-and-finishing-7071-standard">#</a></h3>
+<p><em>In plain English.</em> Cutting separates metal; finishing smooths it. Both throw something at you: sparks and slag from the cut, dust and grit from the finish. The control is the same in both cases — catch it at the source, then protect the face.</p>
+<p><em>The detail.</em>
+- <strong>Oxy-fuel cutting</strong> heats the metal to ignition, then a jet of oxygen burns it away.
+- <strong>Plasma cutting</strong> uses a constricted arc and a fast gas jet; it cuts faster and throws more fume.
+- <strong>Mechanical cutting</strong> means shears, saws, and abrasive cut-off wheels.
+- Cutting hazards: molten slag and sparks, hot cut edge, fume, noise, and fire in nearby combustibles.
+- Screen the cut, wet down or shield combustibles, and keep an extinguisher within reach.
+- <strong>Finishing</strong> covers chipping, grinding, buffing, polishing, sanding and deburring.
+- Finishing hazards: airborne dust (metal and silica), noise, hand-arm vibration, flying particles, repetitive strain.
+- Solvent-based finishing adds vapour, dermatitis (skin inflammation) and a fire risk.
+- Controls, in order: local exhaust at the tool, wet methods, enclosure, then PPE.
+- PPE for both: face shield over goggles, hearing protection, gloves, and a flame-resistant apron for cutting.</p>
+<p><em>What to write.</em> For 3 marks: three hazards of cutting and three of finishing, with one control each. For 8: add the control hierarchy and the fire watch.</p>
+<p><strong>Mark anchor.</strong> "Catch it at the source" — local exhaust before respirator. Hierarchy of control is the phrase that earns the mark beyond the list.</p>
+<p><strong>Exam trap.</strong> A face shield alone is not eye protection for grinding. Particles come from below and around the shield. Say "goggles under the shield" and you have covered the gap.</p>
+<h3 id="28-material-handling-manual-and-mechanical-7273">2.8 Material handling — manual and mechanical (<code>slide 129</code>–<code>slide 152</code>)<a class="anchor" href="#28-material-handling-manual-and-mechanical-7273">#</a></h3>
+<p><em>In plain English.</em> Material handling is everything you do to a load between one place and another: pick it up, carry it, push it, stack it. Done by hand it wears the body out. Done by machine it can drop a tonne on someone. Both need a plan, and the plan starts with the weight.</p>
+<p><em>The detail.</em>
+- <strong>Manual handling</strong> means using your own strength to move material (<code>slide 129</code>).
+- It raises injury risk and adds cost to the product, so the first move is to remove it (<code>slide 129</code>).
+- Remove it by combining operations, eliminating them, or mechanising them (<code>slide 129</code>).
+- <strong>Mechanical handling</strong> covers lifting, transporting, stacking, loading and unloading by machine (<code>slide 137</code>).
+- The deck's machines: palletizer, chain pulley block, forklift, conveyor, crane and hoist (<code>slide 137</code>).
+- It removes the musculoskeletal risk of manual work and raises productivity (<code>slide 137</code>).
+- <strong>TILE</strong> is the assessment frame: Task, Individual, Load, Environment (<code>slide 146</code>).
+- Some add <strong>Other factors</strong> (pace, monotony) and call it TILEO (<code>slide 146</code>).
+- <strong>Lifting:</strong> feet shoulder width, squat with knees bent, back straight, load close to the body (<code>slide 149</code>).
+- Never lift above chest height; test the weight with the "big toe" push first (<code>slide 149</code>).
+- <strong>Pulling:</strong> feet hip width, hips dropped, knees bent, core tight, small backward steps (<code>slide 150</code>).
+- <strong>Carrying:</strong> load close to the body, back straight, eyes ahead, and set it down with the same knee bend.
+- <strong>Pushing beats pulling.</strong> Push with legs and body weight, back straight, and do not twist at the hips (<code>slide 151</code>).
+- Face the load squarely, not at its top edge or its bottom edge (<code>slide 151</code>).
+- <strong>Palletizing</strong> stacks goods on a pallet so a forklift can move the whole load at once.
+- <strong>Stocking</strong> puts material in a defined, labelled place, so it can be found and counted.</p>
+<p><em>What to write.</em> For 5 marks: define manual and mechanical, give TILE, then the lifting sequence. For 8: add the mechanical hazard list and the dos and don'ts.</p>
+<p><strong>Mark anchor.</strong> TILE spelled out, plus "push, don't pull". Both are on the deck and both are cheap marks.</p>
+<p><strong>Exam trap.</strong> The injury in manual handling is usually the back, but the cause is often the <em>task design</em>, not the worker's technique. Say "redesign first, technique second" and you have the modern answer.</p>
+<h3 id="29-handling-equipment-wire-rope-chain-slings-hooks-clamps-8788">2.9 Handling equipment — wire rope, chain slings, hooks, clamps (<code>slide 138</code>–<code>slide 164</code>)<a class="anchor" href="#29-handling-equipment-wire-rope-chain-slings-hooks-clamps-8788">#</a></h3>
+<p><em>In plain English.</em> A sling is the weakest link in any lift, because it is the part that is handled, dragged and dropped every day. It fails quietly: a wire breaks, a link stretches, a hook opens. Inspection is how you find the failure before the load does.</p>
+<p><em>The detail.</em>
+- <strong>General rule:</strong> never use gear that has lost more than <strong>10 per cent of its breaking strength</strong> (<code>slide 142</code>).
+- <strong>Wire rope</strong> is strands laid around a core. A <strong>lay</strong> is one complete turn of the strands.
+- Discard on broken wires, diameter loss, corrosion, kinking, bird-caging or heat damage (§4.3).
+- <strong>Chain sling:</strong> check every link for cracks, bends, twists and stretch; check the tag and the WLL.
+- Never shorten a chain by knotting it, and never hammer a link back into shape.
+- <strong>Hooks:</strong> the deck gives seven rejection criteria, all quotable (<code>slide 161</code>).
+- A hook is rejected for cracks, nicks or gouges, or for twist over <strong>10 degrees</strong>.
+- It is rejected if the latch is damaged, or the throat has opened by more than <strong>15 per cent</strong>.
+- It is rejected for wear over <strong>10 per cent</strong>, heat damage, or an unauthorised repair (<code>slide 161</code>).
+- The <strong>hook bowl</strong> carries the load, never the latch. Seat the sling properly (<code>slide 161</code>).
+- Never side load, back load or point load a hook. Point loading can cut capacity by <strong>60 per cent</strong> (<code>slide 161</code>).
+- Grind a nick lengthwise along the hook contour, and replace it if 10 per cent is lost (<code>slide 161</code>).
+- Never weld, heat, burn or bend a hook back into shape without the maker's approval.
+- <strong>Clamps:</strong> plate clamps for plate, beam clamps for beams; check jaw teeth and the pivot.
+- Keep clamps clean and dry, free of grit and oil, and store them off the floor (<code>slide 163</code>, <code>slide 164</code>).</p>
+<p><em>What to write.</em> For 8 marks: one paragraph per item — rope, chain, hook, clamp — each with its inspection points and one number.</p>
+<p><strong>Mark anchor.</strong> The three percentages: 10 per cent wear, 15 per cent throat, 10 degrees twist. They are the only numbers in this topic and they are asked for directly.</p>
+<p><strong>Exam trap.</strong> A hook that has been repaired by welding is scrap, not repaired. The deck says so twice. Writing "weld it and return to service" fails the question outright.</p>
+<h2 id="3-answer-bank">3. Answer bank<a class="anchor" href="#3-answer-bank">#</a></h2>
+<p>The numbering follows the mark bands: 3.1–3.3 are three-mark, 3.4–3.7 are five-mark, 3.8–3.11 are eight-mark, 3.12 is the 14-mark skeleton. Answers are grouped by topic so that one read covers a cluster of questions.</p>
+<h3 id="31-three-mark-machinery-injuries-safeguard-types-methods-q32-q33-q35">3.1 Three-mark — machinery injuries, safeguard types, methods (Q32, Q33, Q35)<a class="anchor" href="#31-three-mark-machinery-injuries-safeguard-types-methods-q32-q33-q35">#</a></h3>
+<p><strong>Q32 · Explain the injuries caused due to moving machinery. (3)</strong>
+Three routes, one line each. <strong>Caught in or drawn into:</strong> a rotating shaft grips a sleeve or a glove and pulls the arm in. <strong>Struck by a moving part:</strong> the ram, the chuck jaw or the flywheel hits you. <strong>Struck by a failed part or particle:</strong> a burst wheel or a broken tool throws fragments. Name the outcomes: amputation, fracture, crushing and eye injury. The worst is amputation, because the point of operation takes fingers, not bruises.</p>
+<p><strong>Q33 · Discuss any 3 machinery safeguards. (3)</strong>
+Take one from each family and give the mechanism. <strong>Fixed guard</strong> on the belt drive: a sheet-metal cover that needs a tool to remove. <strong>Interlocked guard</strong> on the access door: opening it cuts the power, and the machine will not restart until it is closed. <strong>Light curtain</strong> at the press die: a hand in the beam stops the stroke before the ram reaches the work. Add one line on why each fits: the first is cheap and permanent, the second allows access, the third allows fast loading.</p>
+<p><strong>Q35 · Explain the methods of safeguarding. (3)</strong>
+Five methods, listed. <strong>Guards:</strong> fixed, interlocked, adjustable, self-adjusting. <strong>Devices:</strong> presence sensing, pullback, restraint, two-hand control or trip, gates. <strong>Location and distance:</strong> fence, height, or a small stock opening. <strong>Feeding and ejection:</strong> automatic, semi-automatic, or robot. <strong>Miscellaneous aids:</strong> awareness barrier, shield, holding tool, push stick.</p>
+<p><strong>Mark anchor.</strong> "Guard blocks; device reacts; distance removes the reach; feeding removes the hand." That one line organises all five methods.</p>
+<p><strong>Exam trap.</strong> The question says <em>methods</em>, so a list of four guard types is not a complete answer. Guards are one method out of five.</p>
+<h3 id="32-three-mark-welding-gear-adjustable-guards-palletizing-q36-q37-q66">3.2 Three-mark — welding gear, adjustable guards, palletizing (Q36, Q37, Q66)<a class="anchor" href="#32-three-mark-welding-gear-adjustable-guards-palletizing-q36-q37-q66">#</a></h3>
+<p><strong>Q36 · List welding safety gear. (3)</strong>
+Head and eyes: welding helmet with the right filter shade, and safety glasses underneath. Body: flame-resistant jacket or apron, long sleeves, straight-legged trousers, leather boots. Hands: gauntlet gloves. Ears: plugs or muffs for arc work. Add a cap or shoulder cover for overhead work, and a respirator or local exhaust where ventilation is poor. For <strong>gas</strong> welding a filter goggle replaces the helmet; for <strong>arc</strong> welding the helmet is mandatory because of ultraviolet.</p>
+<p><strong>Q37 · List the advantages and disadvantages of using adjustable safeguards. (3)</strong>
+Advantages: one guard covers a range of stock sizes, so tooling cost falls. The opening can be set to the job, so odd shapes can still be run. Disadvantages: the setting is only as good as the operator, and it can be left wide open. It adds a setup step and needs checking at each changeover. It is easier to defeat than a fixed guard.</p>
+<p><strong>Q66 · Explain the importance of palletizing and finishing. (3)</strong>
+<strong>Palletizing</strong> groups goods on a pallet so a forklift moves the whole load in one trip. That cuts handling time, handling damage and the number of manual lifts. It also gives a standard footprint for racking and counting. <strong>Finishing</strong> is the last operation, and it decides how the part survives service. It adds corrosion resistance, wear resistance and appearance. It also removes burrs that would cut the fitter or the customer.</p>
+<p><strong>Mark anchor.</strong> "One lift instead of twenty" for palletizing; "the last operation decides the life of the part" for finishing.</p>
+<p><strong>Exam trap.</strong> Finishing is a safety topic, not only a quality topic. Name its hazards — dust, noise, vibration, solvent vapour — or the answer reads as a production answer.</p>
+<h3 id="33-three-mark-handling-equipment-clamps-handling-hazards-stocking-q67q71">3.3 Three-mark — handling equipment, clamps, handling hazards, stocking (Q67–Q71)<a class="anchor" href="#33-three-mark-handling-equipment-clamps-handling-hazards-stocking-q67q71">#</a></h3>
+<p><strong>Q67 · What are the different equipment for the transportation of materials? (3)</strong>
+Four families with one example each. <strong>Conveyors:</strong> belt, roller, screw, bucket, overhead chain. <strong>Industrial trucks:</strong> forklift, pallet truck, platform truck, tractor-trailer. <strong>Cranes and hoists:</strong> overhead crane, jib crane, chain pulley block, monorail hoist. <strong>Unit-load and robotic equipment:</strong> palletizer, automated guided vehicle, robot arm. Bulk solids move by pneumatic pipeline or chute.</p>
+<p><strong>Q68 · What are the safety precautions to be considered while using clamps? (3)</strong>
+Use the clamp made for the shape — plate clamp for plate, beam clamp for beams. Check the marked working load and never exceed it. Seat the jaws fully on the material, with the load square to the clamp body. Pad sharp edges, and lift one plate at a time. Inspect jaw teeth, the pivot and the spring before every shift. Never side-load a clamp or use it as a hook.</p>
+<p><strong>Q69 · What are the hazards associated with manual material handling? (3)</strong>
+Musculoskeletal injury is the main one: back strain, shoulder injury, hernia, wrist and knee damage. Then dropping the load on the feet, cuts from sharp edges, and trapping fingers. Awkward posture and repetition add cumulative trauma. Heat, poor lighting and uneven floors raise the risk further. The cost is not only the injury: it is absenteeism, compensation and lower output.</p>
+<p><strong>Q70 · What are the hazards associated with mechanical handling? (3)</strong>
+The deck lists them (<code>slide 138</code>). Equipment used without a valid inspection certificate. Wrong or inadequate selection of tool for the load. Damaged or faulty equipment. Congested operating space. Incompetent operator. Overloading. Unbalanced loads. Poor rigging and lifting. Overspeeding and unauthorised use. Machines running without guards. Each one has a matching control: certification, rated capacity, inspection, layout, training and guarding.</p>
+<p><strong>Q71 · Define stocking. Explain the importance of stocking. (3)</strong>
+<strong>Stocking</strong> means placing material in a defined, identified location, in a known quantity, so it can be found and issued. Importance: it cuts search and travel time, which is a direct labour cost. It prevents overstock and shortage, so production does not stop. It allows first-in-first-out, which matters for dated and coated material. It keeps aisles and exits clear, which is a fire and housekeeping requirement. It also makes counting and audit possible.</p>
+<p><strong>Mark anchor.</strong> Q70 has ten named hazards on the slide. Ten is more than three marks need, so give six with controls attached.</p>
+<p><strong>Exam trap.</strong> "Poor rigging" belongs to mechanical handling, not manual. Sorting hazards into the right column is the whole point of the pair Q69 and Q70.</p>
+<h3 id="34-five-mark-guarding-principle-safeguards-machinery-hazards-q109-q34-q111-q160">3.4 Five-mark — guarding principle, safeguards, machinery hazards (Q109, Q34, Q111, Q160)<a class="anchor" href="#34-five-mark-guarding-principle-safeguards-machinery-hazards-q109-q34-q111-q160">#</a></h3>
+<p><strong>Q34 · Explain the principle of machine guarding. (5)</strong>
+Start with the aim: keep the body out of the danger area, at every stage of the cycle. Then the six principles (<code>slide 15</code>). <strong>Prevent contact</strong> between the hazard and any part of the body or clothing. <strong>Secure the guard</strong>, so it cannot be shifted or lifted off by hand. <strong>Block falling objects</strong>, so nothing drops into the moving parts. <strong>Add no new hazard</strong>: no sharp edges, no pinch points, no trap. <strong>Do not interfere</strong> with the job, the comfort or the speed of work. <strong>Allow safe lubrication</strong>, without taking the guard off. Close with: a guard that slows the job will be removed, so design for the job.</p>
+<p><strong>Q111 · Explain machinery safeguard. Discuss the different types of guards. (5)</strong>
+A <strong>safeguard</strong> is any physical or control measure that keeps a person out of a machine's danger area. Guards are the first family. <strong>Fixed:</strong> permanent, tool needed to remove, independent of moving parts. <strong>Interlocked:</strong> opening it cuts power or trips the machine, and closing it must not restart the machine. <strong>Adjustable:</strong> the opening is set by hand to suit the stock. <strong>Self-adjusting:</strong> the stock itself opens the guard just enough, and the guard returns to rest. Say where each fits: fixed for the drive, interlocked for access doors, adjustable for mixed stock, self-adjusting for repetitive feeding.</p>
+<p><strong>Q160 · Explain the principle of machine guarding and its importance. (5)</strong>
+Give the principle as the six rules above, then the importance. It prevents amputation and crushing, which are the injuries that cannot be undone. It protects people who are not operating the machine: cleaners, setters, visitors. It makes the machine legal and defensible after an accident. It removes the fear that makes operators slow and careless. It reduces compensation, downtime and retraining cost. One line to close: guarding is cheaper than the accident it prevents.</p>
+<p><strong>Q109 · Explain mechanical machinery hazards. Discuss possible ways to prevent them. (5)</strong>
+Group the hazards by motion (standard). <strong>Crushing</strong> between two parts. <strong>Shearing</strong> between a moving and a fixed edge. <strong>Cutting</strong> by a sharp tool or edge. <strong>Entanglement</strong> with a rotating shaft, coupling or spindle. <strong>Drawing-in</strong> at a nip point. <strong>Impact</strong> from a moving part or an ejected workpiece. <strong>Stabbing</strong> by a tool or a flying chip. Prevention follows the same order: guard the hazard, add a protective device, use distance or a feeding aid, then train and supervise.</p>
+<p><strong>Mark anchor.</strong> The six principles, verbatim and in order, are worth three of the five marks on Q34. Learn them as a sequence, not as prose.</p>
+<p><strong>Exam trap.</strong> Q34 and Q160 look identical and are not. Q34 wants the principle. Q160 wants the principle <em>plus</em> why it matters. An answer that repeats the six rules twice earns five once.</p>
+<h3 id="35-five-mark-grinding-milling-planing-q112-q114-q162">3.5 Five-mark — grinding, milling, planing (Q112, Q114, Q162)<a class="anchor" href="#35-five-mark-grinding-milling-planing-q112-q114-q162">#</a></h3>
+<p><strong>Q112 · Describe the safety practices to be followed during grinding. (5)</strong>
+Wheel: use a wheel rated for the machine speed, ring-test it before mounting, and never exceed the marked speed. Guarding: a casing over the wheel, a tongue guard at 1/4 inch, a work rest at 1/8 inch. Mounting: use the correct flanges, and do not over-tighten. Starting: stand to one side for the first run, because burst happens at start-up. Working: hold small work in a tool, not in the fingers; grind on the face, not the side; dress with a proper dresser. Health: eye shield plus goggles, dust extraction, and hearing protection.</p>
+<p><strong>Q114 · Describe the safety practices to be followed during milling. (5)</strong>
+Clamp the work and the vice before starting; a workpiece thrown from a mill kills. Guard the cutter with an adjustable nose guard, and keep the chip shield down. Use the right cutter, speed and feed, so the cutter is not overloaded. Never reach over or near a rotating cutter, and never measure or clear chips while the spindle turns. Stop the spindle for swarf removal, and use a brush, not a hand. Keep the floor clear of chips and coolant. No gloves or loose sleeves near the cutter.</p>
+<p><strong>Q162 · List the safety measures for milling, grinding and planing operations. (5)</strong>
+Three columns, three lines each. <strong>Milling:</strong> clamp work, guard the cutter, stop the spindle before measuring. <strong>Grinding:</strong> rated wheel, ring test, casing and work rest, goggles. <strong>Planing:</strong> keep clear of the table traverse, guard the stroke ends, clamp the work so it cannot overhang, and never reach across the moving table. Add the common lines: eye protection, no loose clothing, housekeeping, and a stop control within reach.</p>
+<p><strong>Mark anchor.</strong> 1/4 inch tongue guard, 1/8 inch work rest. Those two numbers answer half of Q112 on their own.</p>
+<p><strong>Exam trap.</strong> A ring test is not a strength test. It only finds a cracked wheel. Say that, and you avoid claiming more than the test can do.</p>
+<h3 id="36-five-mark-arc-welding-and-arc-versus-gas-q113-q163">3.6 Five-mark — arc welding, and arc versus gas (Q113, Q163)<a class="anchor" href="#36-five-mark-arc-welding-and-arc-versus-gas-q113-q163">#</a></h3>
+<p><strong>Q113 · Describe the safety practices to be followed during arc welding. (5)</strong>
+Six hazards, one control each (<code>slide 95</code>). <strong>Fumes and gases:</strong> keep your head out of the plume, exhaust at the arc, or wear an air-line respirator. <strong>Electric shock:</strong> do not touch live parts, insulate yourself from work and ground, and never repair the set yourself. <strong>Arc rays:</strong> helmet with the right shade and safety glasses under it; screen the arc from others. <strong>Fire and explosion:</strong> clear flammables, because sparks reach 35 feet, keep an extinguisher, and re-check 30 minutes after. <strong>Noise:</strong> plugs or muffs. <strong>Hot objects:</strong> gloves and tongs, and mark hot work.</p>
+<p><strong>Q163 · What are the common safety risks in arc and gas welding, and how can they be controlled? (5)</strong>
+Give the shared risks first, then what each process adds. <strong>Shared:</strong> fire from sparks and slag, fume, burns from hot metal, and eye damage from radiation. <strong>Arc adds:</strong> electric shock, at 230 or 460 volts on the primary side. <strong>Gas adds:</strong> cylinder handling, a fuel gas that ignites over a wide range, and flashback into the hose. Controls: ventilation or exhaust, fire watch and extinguisher, correct filter shade, dry gloves and insulated holder, cylinders chained upright with flashback arrestors, and a leak test at every connection.</p>
+<p><strong>Mark anchor.</strong> "Sparks reach 35 feet" and "primary 230 or 460 volts" are the two facts that separate a read answer from a remembered one.</p>
+<p><strong>Exam trap.</strong> A welding helmet protects against radiation, not against fume. If the question mentions confined space, ventilation is the answer, not a better helmet.</p>
+<h3 id="37-five-mark-manual-and-mechanical-handling-safety-classification-q129-q130-q164">3.7 Five-mark — manual and mechanical handling safety, classification (Q129, Q130, Q164)<a class="anchor" href="#37-five-mark-manual-and-mechanical-handling-safety-classification-q129-q130-q164">#</a></h3>
+<p><strong>Q129 · What are the safety considerations in manual material handling? (5)</strong>
+Assess first, with TILE. Look at the task, the individual, the load and the environment. Then remove the lift if you can: use a trolley, a hoist or a team lift. If the lift stays, use the technique: feet apart, knees bent, back straight, load close, no twisting. Never lift above chest height, and test the weight before committing. Keep the path clear, wear gloves and safety footwear, and break heavy work with rest. Train the worker, then supervise the technique.</p>
+<p><strong>Q130 · What are the safety considerations in mechanical material handling? (5)</strong>
+Equipment: certified, inspected, and marked with its safe working load. Operator: trained and authorised, and only that person uses the machine. Before the lift: check the emergency stop, the limit switches and the overload alarm. Plan the lift: estimate weight, distance and the hazards on the route. Rigging: correct sling, padded corners, a guide rope on the load. During the lift: slow near the destination, keep eye contact with the load, barricade the area. Never stand or pass under a suspended load.</p>
+<p><strong>Q164 · Explain the classification of material handling equipment with suitable examples. (5)</strong>
+Classify by function, which is how the exam wants it. <strong>Conveyors:</strong> belt, roller, screw, bucket, for continuous flow. <strong>Cranes and hoists:</strong> overhead crane, jib, chain pulley block, for intermittent lifting. <strong>Industrial trucks:</strong> forklift, pallet truck, platform truck, for flexible movement. <strong>Containers and unit loads:</strong> pallet, skid, bin, crate. <strong>Robots and automated vehicles:</strong> pick-and-place arm, AGV, for repeat work. <strong>Bulk handling:</strong> pump, pipeline, chute, for powders and liquids. Then split all of it into manual and mechanical.</p>
+<p><strong>Mark anchor.</strong> "Continuous versus intermittent" is the distinction that makes a conveyor list and a crane list different, and it is worth a mark.</p>
+<p><strong>Exam trap.</strong> A pallet is equipment in the classification sense, but it is not machinery. Putting it under "cranes" loses the structure mark.</p>
+<h3 id="38-eight-mark-guarding-devices-and-their-sustainability-q110-q161">3.8 Eight-mark — guarding devices and their sustainability (Q110, Q161)<a class="anchor" href="#38-eight-mark-guarding-devices-and-their-sustainability-q110-q161">#</a></h3>
+<p><strong>Q110 · Which are the various types of machine guarding devices used in industries. Discuss the sustainability of each machine guarding device. (8)</strong>
+<strong>Q161 · Explain the various types of machine guarding devices used in industries and analyze the sustainability of each type. (8)</strong></p>
+<p>Both questions want the same thing: a list of devices, then a judgement on each. Answer once, and take the second wording as permission to spend longer on the judgement.</p>
+<p><strong>Structure.</strong> Four guarded families, then a two-column judgement for each. Use the words <em>reliable</em>, <em>maintainable</em>, <em>defeatable</em> and <em>cost</em> in the judgement; they are the four things "sustainability" means here.</p>
+<p><strong>Answer.</strong>
+Guards come first. <strong>Fixed:</strong> a barrier that needs a tool to remove. Sustainable because it has no moving parts and nothing to fail. Its weakness is that it allows no access, so it gets cut away for setting. <strong>Interlocked:</strong> cuts power when opened. Sustainable only with planned maintenance, because the switch wears and the deck shows one taped down (<code>slide 31</code>). <strong>Adjustable:</strong> set by hand to the stock. Sustainable if the setting is checked at each changeover; otherwise it drifts open. <strong>Self-adjusting:</strong> opened by the stock itself. Sustainable for one product family, useless when the family changes.</p>
+<p>Devices come second. <strong>Presence sensing by light curtain:</strong> stops the stroke when the beam breaks. Sustainable if the lenses are cleaned and the beam is aligned; blind spots at the edges are the failure. <strong>Radio-frequency sensing:</strong> stops when the field is disturbed. Sustainable, but needs tuning to the machine, and is easily defeated by a fixed object in the field. <strong>Pullback:</strong> cables pull the hands clear. Sustainable only with a daily check, because a slack cable no longer saves the hand. <strong>Restraint:</strong> straps fix the hands outside the zone. Cheap and reliable, but operators dislike it and it is often removed. <strong>Two-hand control and trip:</strong> both hands occupied. Sustainable and cheap, but it protects the hands only, not a second person. <strong>Gate:</strong> a barrier synchronised with the cycle. Sustainable with interlock maintenance.</p>
+<p>Close with the ranking. Fixed and interlocked guards last longest. Devices need calibration and cleaning, so they need a maintenance budget. Anything an operator can tape over will be taped over, so buy-in and supervision are part of the design.</p>
+<p><strong>Traps.</strong> Do not describe only guards; the question says devices. Do not call a device "maintenance free": a light curtain with dusty lenses is a false sense of safety. And never claim an interlock cannot be defeated, because the deck shows one defeated.</p>
+<p><strong>Mark anchor.</strong> One sentence per device on how it fails. Eight devices with a failure mode each reads as understanding; eight definitions read as memory.</p>
+<h3 id="39-eight-mark-hooks-and-hooks-versus-clamps-q133-q167">3.9 Eight-mark — hooks, and hooks versus clamps (Q133, Q167)<a class="anchor" href="#39-eight-mark-hooks-and-hooks-versus-clamps-q133-q167">#</a></h3>
+<p><strong>Q133 · Explain the maintenance practices for the use of hooks with a neat sketch. (8)</strong>
+<strong>Structure.</strong> Sketch first, then inspection, then rejection criteria, then loading rules.</p>
+<p><strong>Sketch.</strong> Draw the hook in profile. Show the <strong>bowl</strong> at the bottom, where the sling sits. Mark the <strong>throat</strong> opening as a dimension. Draw the <strong>latch</strong> across the throat, and a dotted centre line to show the plane of the hook. Label the throat opening and the twist axis. Five labels are enough.</p>
+<p><strong>Inspection.</strong> An experienced rigger inspects every hook before use (<code>slide 161</code>). Check for cracks, nicks and gouges, and look closely at the inside of the bowl. Check the latch for damage or a weak spring. Measure the throat opening and compare it with the original. Measure wear at the bowl, and check for heat damage or colour change. Ask whether the hook has been repaired without authority.</p>
+<p><strong>Rejection criteria, the deck's seven.</strong> Cracks, nicks or gouges. Twist greater than <strong>10 degrees</strong> from the plane of the unbent hook. Latch damage or malfunction. Throat opening more than <strong>15 per cent</strong> over the original. Wear more than <strong>10 per cent</strong> of the original dimension. Heat damage. Any unauthorised repair. Any one of these removes the hook from service.</p>
+<p><strong>Repair and loading.</strong> A qualified person may grind a nick, working lengthwise along the contour. If grinding removes more than 10 per cent of the dimension, replace the hook. Never weld, heat, burn or bend a hook back into shape without the maker's approval. Load the bowl, never the latch. Never side load, back load or point load; point loading can cut capacity by <strong>60 per cent</strong>.</p>
+<p><strong>Traps.</strong> A hook with a good latch and a 20 per cent throat opening is still scrap. The latch is not the strength member, and it is not the acceptance criterion. And a hook that has been welded is not repaired; it is unapproved.</p>
+<p><strong>Mark anchor.</strong> The 10 degree / 15 per cent / 10 per cent triple. Quote all three and the sketch becomes a bonus rather than a crutch.</p>
+<p><strong>Q167 · What are the key differences in the inspection criteria for hooks and clamps during regular maintenance checks? (8)</strong>
+<strong>Structure.</strong> One paragraph on what each component is, then a comparison table, then the reason for the difference.</p>
+<p><strong>Answer.</strong> A hook is a single forged part that carries the load in tension through its bowl. Its inspection is therefore <strong>dimensional and metallurgical</strong>. You measure twist, throat opening and wear, and you look for heat damage and unapproved repair. A clamp is a mechanism: jaws, a pivot, a spring and sometimes a screw. Its inspection is therefore <strong>functional</strong>. You check that the jaws grip, that the teeth are not worn smooth, that the pivot is not loose, and that the spring returns the jaw. Both need a legible working-load mark and a record of inspection. Both are rejected for cracks. Only the hook is rejected for twist and throat opening, because only the hook is loaded through a single opening.</p>
+<p><strong>Traps.</strong> Do not give the hook criteria for a clamp. A clamp has no throat opening and no twist limit. Say instead what the clamp has: jaw wear, pivot play, spring return, and a body free of cracks at the jaw root.</p>
+<p><strong>Mark anchor.</strong> "Hook: dimensional. Clamp: functional." That single contrast is the answer the question is testing.</p>
+<h3 id="310-eight-mark-chain-slings-q134-q166">3.10 Eight-mark — chain slings (Q134, Q166)<a class="anchor" href="#310-eight-mark-chain-slings-q134-q166">#</a></h3>
+<p><strong>Q134 · Explain the maintenance practices while using a chain sling with a neat sketch. (8)</strong>
+<strong>Q166 · Explain the maintenance practices to be followed while using a chain sling, supported by a neat sketch. (8)</strong></p>
+<p>Same answer for both; Q166 adds nothing but the sketch emphasis.</p>
+<p><strong>Structure.</strong> Sketch, then pre-use inspection, then rejection criteria, then use rules, then storage and records.</p>
+<p><strong>Sketch.</strong> Draw a two-leg chain sling: master link at the top, the two legs, a hook at the end of each leg, and the identification tag on the master link. Mark the <strong>included angle</strong> between the legs. Add a second small sketch of a single link with a dimension across the straight side, which is where wear is measured.</p>
+<p><strong>Pre-use inspection.</strong> Inspect link by link, not the sling as a whole (<code>slide 134</code>, standard). Check every link for cracks, particularly at the weld. Check for bent, twisted or gouged links. Check for stretch: compare the leg length with the recorded original. Check the end fittings and hooks against §3.9. Check that the tag is present and readable, with the grade and the working load.</p>
+<p><strong>Rejection criteria</strong> (standard). A crack in any link. Elongation of a link beyond about 5 per cent, or a leg that no longer matches its pair. Wear more than 10 per cent of the link diameter. Bent or twisted links. Heat damage or corrosion pitting. A missing or illegible tag. Any of these means the sling is cut up, not repaired.</p>
+<p><strong>Use rules.</strong> Never knot a chain or shorten it with a bolt through the links. Pad sharp corners, because a chain cuts itself on an edge. Keep the included angle at 90 degrees or less; at 120 degrees each leg carries the full load (§4.4). Never hammer a link straight. Never weld a link. Do not drag a chain on the floor (<code>slide 142</code>).</p>
+<p><strong>Storage and records.</strong> Hang the sling on a rack, off the floor, away from heat and chemicals. Record each inspection, and keep the certificate with the sling's identity number.</p>
+<p><strong>Traps.</strong> The angle is the mark most scripts miss. Two legs at 120 degrees do not share the load equally with a vertical lift; each leg sees the whole load. And a stretched chain is not "still strong"; elongation is the warning before failure.</p>
+<p><strong>Mark anchor.</strong> "Link by link, and the angle." Those two phrases carry the answer.</p>
+<h3 id="311-eight-mark-wire-rope-q135">3.11 Eight-mark — wire rope (Q135)<a class="anchor" href="#311-eight-mark-wire-rope-q135">#</a></h3>
+<p><strong>Q135 · Explain the maintenance practices for the use of wire ropes with a neat sketch. (8)</strong>
+<strong>Structure.</strong> Sketch, construction, inspection, rejection criteria, then care in service.</p>
+<p><strong>Sketch.</strong> Draw a cross-section of a 6×19 rope: six strands around a core, with the wires inside one strand shown. Beside it, draw one <strong>lay</strong>, marked as the length of one complete helical turn of a strand. Label the core, a strand, a wire, and the lay. The lay is the unit every wire-count rule uses, so it must be on the drawing.</p>
+<p><strong>Construction.</strong> Wires make a strand, strands are laid around a core, and the result is the rope. A fibre core is flexible; a steel core carries more load. The lay direction and length decide how the rope wears on a sheave.</p>
+<p><strong>Inspection</strong> (standard). Run the rope through a cloth or a gloved hand and feel for broken wires. Count broken wires over one lay, and count the worst single strand separately. Measure the diameter at several points; a rope that has lost diameter is worn or crushed. Look for corrosion, which shows as pitting and a reddish-brown stain. Look for kinking, crushing and bird-caging, where the strands have opened into a cage. Check the end fittings for cracks, slip and corrosion.</p>
+<p><strong>Rejection criteria</strong> (standard, OSHA running-rope figures). <strong>Six</strong> randomly distributed broken wires in one lay, or <strong>three</strong> broken wires in one strand in one lay. A diameter reduction of about 10 per cent. Kinking, crushing, bird-caging or heat damage. Any cracked or deformed end attachment. Wear of one third of the outer wire diameter.</p>
+<p><strong>Care in service.</strong> Keep the sheave diameter large enough for the rope, because a tight bend fatigues wires. Avoid reverse bending over more than one sheave. Lubricate to the maker's schedule, which also slows corrosion. Do not drag the rope over edges or let it cross itself on the drum. Store coiled and dry, and keep the certificate with the rope.</p>
+<p><strong>Traps.</strong> Broken wires are counted <strong>per lay</strong>, not per metre. And a rope can pass the wire count and still fail on diameter loss, so give both criteria.</p>
+<p><strong>Mark anchor.</strong> "Six in a lay, three in a strand." That pair, with the lay marked on the sketch, is the whole answer.</p>
+<h3 id="312-fourteen-mark-skeleton-ese-part-b">3.12 Fourteen-mark skeleton (ESE Part B)<a class="anchor" href="#312-fourteen-mark-skeleton-ese-part-b">#</a></h3>
+<p>Use this shape when Part B asks for guarding, or for material handling, as one long question. The marks are roughly 2 + 4 + 4 + 2 + 2.</p>
+<ol>
+<li><strong>Frame it (2).</strong> One paragraph: machines injure at the point of operation and at the drive; the fix is a safeguard, not a warning. Name the module's two halves, machines and handling.</li>
+<li><strong>The hazard (4).</strong> Three injury routes, then the motion types: rotating, reciprocating, transverse, cutting, punching, shearing, bending. One line each, with an example machine.</li>
+<li><strong>The controls (4).</strong> Guards (fixed, interlocked, adjustable, self-adjusting), devices (presence sensing, pullback, restraint, two-hand, gate), distance, feeding aids, robotics. Add the six guarding principles as the test each control must pass.</li>
+<li><strong>Apply it (2).</strong> Two worked cases: a power press with a light curtain and a two-hand control; a lathe with a chuck guard and a spindle cover. Say what each control does and what it does not cover.</li>
+<li><strong>Handling and upkeep (2).</strong> One paragraph on manual handling (TILE, push not pull) and one on equipment inspection (10 per cent, 15 per cent, 10 degrees). Close with the management line: guarding and inspection are planned activities, not good intentions.</li>
+</ol>
+<p><strong>Mark anchor.</strong> The 2 + 4 + 4 + 2 + 2 split, written as sub-headings, tells the examiner where each mark is. It also stops you writing four pages on guards and nothing on handling.</p>
+<p><strong>Exam trap.</strong> A 14-mark answer that describes only guards loses the handling half. The module title has two halves for a reason.</p>
+<h2 id="4-definitions-and-numbers">4. Definitions and numbers<a class="anchor" href="#4-definitions-and-numbers">#</a></h2>
+<p>Everything here is quotable as a one-line answer. Each entry says whether it comes from the deck or from the standard.</p>
+<h3 id="41-guard-distances-the-opening-rule">4.1 Guard distances (the opening rule)<a class="anchor" href="#41-guard-distances-the-opening-rule">#</a></h3>
+<p>A fixed barrier does not have to be far away. It has to be far enough that a finger entering the opening cannot reach the die before the ram arrives. The rule is on opening size, not on guesswork: <strong>the wider the opening, the further the guard must sit</strong>. Deck: none. Values: <strong>(standard)</strong>, OSHA 1910.217 Table O-10.</p>
+<table>
+<thead>
+<tr>
+<th>Opening in the guard</th>
+<th>Minimum distance from the point of operation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1/4 inch</td>
+<td>1/2 to 1 1/2 inches</td>
+</tr>
+<tr>
+<td>3/8 inch</td>
+<td>1 1/2 to 2 1/2 inches</td>
+</tr>
+<tr>
+<td>1/2 inch</td>
+<td>2 1/2 to 3 1/2 inches</td>
+</tr>
+<tr>
+<td>3/4 inch</td>
+<td>4 1/2 to 5 1/2 inches</td>
+</tr>
+<tr>
+<td>1 1/4 inches</td>
+<td>6 1/2 to 7 1/2 inches</td>
+</tr>
+<tr>
+<td>2 1/4 inches</td>
+<td>9 1/2 to 10 1/2 inches</td>
+</tr>
+</tbody>
+</table>
+<p>Two sentences make it usable. An opening of 3/8 inch or less can sit close to the die. A barrier with a large opening is not a barrier at all, because the hand passes through it.</p>
+<p>The table assumes a hand moving at about 63 inches per second, and a ram that takes a known time to close. That is why the values come as a range: a fast press needs the longer distance. Do not quote one number without saying which press it belongs to.</p>
+<p>The practical rule for the exam: choose the opening first, then read the distance. A guard designed the other way round, distance first and opening afterwards, always ends up with a slot the hand fits through.</p>
+<h3 id="42-machine-tool-numbers">4.2 Machine-tool numbers<a class="anchor" href="#42-machine-tool-numbers">#</a></h3>
+<p>Each of these is a single checkable value, and each earns a mark when quoted instead of described.</p>
+<table>
+<thead>
+<tr>
+<th>Value</th>
+<th>Where it applies</th>
+<th>Source</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1/8 inch (3 mm)</td>
+<td>Work-rest gap on a bench or pedestal grinder</td>
+<td>standard</td>
+</tr>
+<tr>
+<td>1/4 inch</td>
+<td>Tongue-guard gap at the top of the wheel</td>
+<td>standard</td>
+</tr>
+<tr>
+<td>Marked wheel speed</td>
+<td>Never exceed it; overspeed bursts wheels</td>
+<td>standard</td>
+</tr>
+<tr>
+<td>10,000 cubic feet per welder</td>
+<td>Ventilation without mechanical help</td>
+<td><code>slide 92</code></td>
+</tr>
+<tr>
+<td>16 feet</td>
+<td>Minimum ceiling height for natural ventilation</td>
+<td><code>slide 92</code></td>
+</tr>
+<tr>
+<td>2000 cfm per welder</td>
+<td>Mechanical ventilation when space is short</td>
+<td><code>slide 92</code></td>
+</tr>
+<tr>
+<td>35 feet</td>
+<td>How far welding sparks and spatter travel</td>
+<td><code>slide 99</code></td>
+</tr>
+<tr>
+<td>230 or 460 volts</td>
+<td>Primary voltage of an arc set</td>
+<td><code>slide 97</code></td>
+</tr>
+<tr>
+<td>6 to 100 volts</td>
+<td>Secondary, welding voltage</td>
+<td><code>slide 97</code></td>
+</tr>
+<tr>
+<td>1/4 to 3/4 turn</td>
+<td>How far to open an acetylene cylinder valve</td>
+<td><code>slide 90</code></td>
+</tr>
+<tr>
+<td>30 minutes</td>
+<td>Fire watch after welding ends</td>
+<td><code>slide 99</code></td>
+</tr>
+</tbody>
+</table>
+<p>Two of these get confused, so keep them apart. <strong>Primary</strong> voltage is what the mains supplies to the set, and it is the lethal side. <strong>Secondary</strong> is what the arc runs at, and it is lower but still enough to kill on a wet floor.</p>
+<p>The grinder pair matters for a different reason. A work rest more than 1/8 inch from the wheel lets the work drop into the gap and be pulled through. The gap does not warn you; it swallows the workpiece and then the fingers holding it.</p>
+<h3 id="43-rope-chain-hook-and-clamp-discard-criteria">4.3 Rope, chain, hook and clamp discard criteria<a class="anchor" href="#43-rope-chain-hook-and-clamp-discard-criteria">#</a></h3>
+<p>The three percentages are the backbone. Learn them as a triple: <strong>10 per cent wear, 15 per cent throat, 10 degrees twist</strong>. All are on <code>slide 161</code>, and all refer to the hook.</p>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Reject when</th>
+<th>Source</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Hook</td>
+<td>Cracks, nicks or gouges</td>
+<td><code>slide 161</code></td>
+</tr>
+<tr>
+<td>Hook</td>
+<td>Twist more than 10 degrees from the plane</td>
+<td><code>slide 161</code></td>
+</tr>
+<tr>
+<td>Hook</td>
+<td>Latch damaged or not working</td>
+<td><code>slide 161</code></td>
+</tr>
+<tr>
+<td>Hook</td>
+<td>Throat opening more than 15 per cent over original</td>
+<td><code>slide 161</code></td>
+</tr>
+<tr>
+<td>Hook</td>
+<td>Wear more than 10 per cent of the original dimension</td>
+<td><code>slide 161</code></td>
+</tr>
+<tr>
+<td>Hook</td>
+<td>Heat damage, or an unauthorised repair</td>
+<td><code>slide 161</code></td>
+</tr>
+<tr>
+<td>Any gear</td>
+<td>Lost more than 10 per cent of its breaking strength</td>
+<td><code>slide 142</code></td>
+</tr>
+<tr>
+<td>Wire rope</td>
+<td>6 broken wires in one lay, or 3 in one strand</td>
+<td>standard</td>
+</tr>
+<tr>
+<td>Wire rope</td>
+<td>Diameter loss around 10 per cent; kink, crush or bird-cage</td>
+<td>standard</td>
+</tr>
+<tr>
+<td>Chain sling</td>
+<td>Crack, bend, twist, or elongation near 5 per cent</td>
+<td>standard</td>
+</tr>
+<tr>
+<td>Chain sling</td>
+<td>Wear more than 10 per cent of the link diameter</td>
+<td>standard</td>
+</tr>
+<tr>
+<td>Clamp</td>
+<td>Worn jaw teeth, loose pivot, weak spring, crack at jaw root</td>
+<td>standard</td>
+</tr>
+</tbody>
+</table>
+<p>The criteria are percentages rather than sizes because the gear comes in every size. A 5 per cent stretch on a short link and on a long link are the same loss of strength, even though the millimetres differ.</p>
+<p>One criterion is enough to condemn. You do not average them, and you do not pass a hook because only the throat is out. Write that in the answer: any single failure removes the item from service.</p>
+<h3 id="44-sling-angles">4.4 Sling angles<a class="anchor" href="#44-sling-angles">#</a></h3>
+<p>A two-leg sling does not halve the load. Each leg carries a share that grows as the legs spread. The formula is <strong>tension per leg = W ÷ (2 cos(α/2))</strong>, where α is the included angle between the legs.</p>
+<table>
+<thead>
+<tr>
+<th>Included angle between legs</th>
+<th>Share of the load in each leg</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>30 degrees</td>
+<td>0.52 W</td>
+</tr>
+<tr>
+<td>60 degrees</td>
+<td>0.58 W</td>
+</tr>
+<tr>
+<td>90 degrees</td>
+<td>0.71 W</td>
+</tr>
+<tr>
+<td>120 degrees</td>
+<td>1.00 W</td>
+</tr>
+<tr>
+<td>150 degrees</td>
+<td>1.93 W</td>
+</tr>
+</tbody>
+</table>
+<p>Read the table as a warning. At 120 degrees each leg carries the whole load, so a two-tonne sling lifts two tonnes, not four. At 150 degrees each leg carries nearly twice the load. That is why the rule is <strong>keep the included angle at 90 degrees or less</strong>.</p>
+<p>Worked once, with a four-tonne load. At 90 degrees the tension per leg is 0.71 × 4, which is 2.84 tonnes. A pair of 3-tonne slings just covers it. At 150 degrees the same load puts 7.7 tonnes on each leg, so the slings part before the load moves.</p>
+<p>The arithmetic also explains the deck's rule on derated gear (<code>slide 142</code>). A sling that has lost 10 per cent of its strength, used at a wide angle, fails at a load nobody expected. Two small errors multiply.</p>
+<h2 id="5-diagrams-to-draw">5. Diagrams to draw<a class="anchor" href="#5-diagrams-to-draw">#</a></h2>
+<p>Three sketches cover every diagram mark in this module. Draw them small, label every part, and put the number next to the label.</p>
+<h3 id="51-four-guards-on-one-plate">5.1 Four guards on one plate<a class="anchor" href="#51-four-guards-on-one-plate">#</a></h3>
+<p>Draw one horizontal line as the machine frame, and four small panels above it. <strong>Panel 1, fixed:</strong> a belt and pulley inside a sheet-metal box, with a bolt and spanner shown at the corner. Label "tool needed to remove". <strong>Panel 2, interlocked:</strong> a hinged door with a switch at the hinge and a wire running to the motor contactor. Label "opens, power off". <strong>Panel 3, adjustable:</strong> a guard with a slotted bracket and a wing nut, the opening set to the stock thickness. Label "set by hand". <strong>Panel 4, self-adjusting:</strong> a pivoted flap resting on the stock, with a return spring and an arrow showing the flap opening only as wide as the stock.</p>
+<p>Two labels carry the marks: "tool needed" on the fixed guard, and "returns to rest" on the self-adjusting one. Those are the phrases that separate the four types.</p>
+<p>Add one line under the plate: fixed for the drive, interlocked for access, adjustable for mixed stock, self-adjusting for one product family. That line is the answer to "which guard where".</p>
+<p>Draw it in five minutes and keep it crude. Four rectangles and one arrow each is enough. The marker is reading your labels, not your draughtsmanship, so label first and shade later.</p>
+<h3 id="52-the-point-of-operation-and-the-two-zones">5.2 The point of operation and the two zones<a class="anchor" href="#52-the-point-of-operation-and-the-two-zones">#</a></h3>
+<p>Draw a press in section. The <strong>bed</strong> is a thick horizontal block at the bottom, the <strong>ram</strong> a block above it, and the <strong>die</strong> between them. Mark the gap as the <strong>point of operation</strong>. Draw a hand approaching the die with a crossed-out arrow, and a light curtain as two vertical posts with dashed beams across the front.</p>
+<p>Now add the drive at the top right: <strong>flywheel</strong>, <strong>belt</strong>, <strong>pulley</strong>, with a fixed box around them. Label that box "power transmission apparatus". Add the <strong>two-hand control</strong> as two buttons on a console, with a note "both held, hands away from the die".</p>
+<p>Three labels earn the marks: point of operation, power transmission apparatus, and the two-hand control as a device rather than a guard. A fourth, the light curtain's blind spot at the top edge, earns the follow-up.</p>
+<p>The common error is drawing the guard only at the die. That picture answers half the question, because the belt and flywheel are still open at the top. Draw both zones and you have answered the second half before it is asked.</p>
+<p>Keep the scale honest enough to show the gap. If the die gap is drawn wider than the ram, the sketch stops making sense and the labels stop helping.</p>
+<h3 id="53-the-sling-angle-triangle">5.3 The sling angle triangle<a class="anchor" href="#53-the-sling-angle-triangle">#</a></h3>
+<p>Draw a master link at the top, two legs going down and out, and a load block at the bottom joining them. Mark the <strong>included angle</strong> α between the legs. Put an arrow on each leg labelled T, and an arrow on the load labelled W.</p>
+<p>Write the values beside the triangle: 60 degrees gives 0.58 W per leg, 90 gives 0.71 W, 120 gives 1.00 W. Add the formula <strong>T = W ÷ (2 cos(α/2))</strong> in the corner.</p>
+<p>Then draw the same triangle with α at 150 degrees, legs almost horizontal, and the labels 1.93 W. The pair of drawings makes the point that widening the angle raises the tension, which is the mark the question is really after.</p>
+<p>Work the numbers once on the sketch. A four-tonne load at 90 degrees puts 2.84 tonnes on each leg, so 3-tonne slings are just adequate. The same load at 150 degrees puts 7.7 tonnes on each leg, so the sling fails. Two numbers beside two triangles say more than a paragraph.</p>
+<p>Label the angle as the <strong>included</strong> angle, not the angle to the horizontal. Most textbooks draw it one way and most riggers say it the other, and the examiner will mark the number you compute.</p>
+<p><strong>Mark anchor.</strong> Every diagram in this module is worth more with one number on it than with three pretty labels. Put 1/8 inch on the grinder, 35 feet on the welding sketch, and 120 degrees on the sling.</p>
+<hr />
+<h2 id="6-say-this-if-grilled">6. Say-this-if-grilled<a class="anchor" href="#6-say-this-if-grilled">#</a></h2>
+<h3 id="61-the-sentences-to-have-ready">6.1 The sentences to have ready<a class="anchor" href="#61-the-sentences-to-have-ready">#</a></h3>
+<p>Short, defensible sentences. Each one answers a follow-up question that a marker or an interviewer actually asks. Say them as statements, not as quotations.</p>
+<ul>
+<li>The guard has to work on the day the operator is tired, rushed and looking away. That is the design test, not the average day.</li>
+<li>Guard blocks, device reacts, distance removes the reach, feeding removes the hand. Four strategies, one purpose.</li>
+<li>The drive needs guarding as much as the die does. A sleeve caught in a coupling is the same amputation.</li>
+<li>An interlock can be defeated, and the deck shows one taped down. So the control is maintenance and supervision.</li>
+<li>A two-hand control protects the hands on the buttons. It does not protect the person loading from the side.</li>
+<li>A light curtain protects the plane it crosses. A hand over the top or round the side is not in that plane.</li>
+<li>A ring test finds a cracked wheel. It does not test strength, and saying it does is a wrong answer.</li>
+<li>A hook is scrap at 15 per cent throat opening, whatever the latch looks like. The latch carries no load.</li>
+<li>A hook repaired by welding is an unapproved hook, not a repaired one. The deck says it twice.</li>
+<li>Two legs at 120 degrees means each leg carries the whole load. A two-tonne sling then lifts two tonnes.</li>
+<li>Sparks reach 35 feet, so the fire watch is 35 feet wide and 30 minutes long.</li>
+<li>Manual handling is a design problem before it is a technique problem. Remove the lift, then teach the lift.</li>
+<li>Push before pull, because pushing puts the load in front of your legs and your weight behind it.</li>
+<li>Guarding and inspection are planned activities. If they depend on good intentions, they stop on the busy shift.</li>
+</ul>
+<p>If the follow-up is what you would do first, answer with the hierarchy. Eliminate the hazard by design, then guard it. Then add a device, then warn, then protect the person. Guarding sits above PPE, and saying so ends the argument.</p>
+  </main>
+</div>
+<button id="chat-btn" title="Ask about this page (select text first)">✳</button>
+<div id="sel-chip">Ask about this</div>
+<div id="chat-panel" role="dialog" aria-label="Ask about this page">
+  <div id="chat-head"><span>Ask this page</span><span class="sp"></span><button id="chat-close" title="Close">✕</button></div>
+  <div id="chat-quote"></div>
+  <div id="chat-log"></div>
+  <form id="chat-form" autocomplete="off">
+    <textarea id="chat-input" rows="1" placeholder="Ask about the selection or the section…"></textarea>
+    <button id="chat-send" title="Send">↑</button>
+  </form>
+  <div id="chat-foot">Select text → “Ask about this”. Enter sends, Shift+Enter newline.</div>
+</div>
+<div class="tools">
+  <button id="theme" title="Toggle light / dark">☾</button>
+  <button id="top" title="Back to top">↑</button>
+</div>
+<script>
+(function(){
+  var root=document.documentElement, key='minotes-theme';
+  var saved=localStorage.getItem(key);
+  var prefers=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';
+  root.setAttribute('data-theme', saved || prefers);
+
+  var btn=document.getElementById('theme');
+  function sync(){ if(btn) btn.textContent = root.getAttribute('data-theme')==='dark' ? '\u2600' : '\u263E'; }
+  sync();
+  if(btn) btn.addEventListener('click',function(){
+    var next = root.getAttribute('data-theme')==='dark' ? 'light' : 'dark';
+    root.setAttribute('data-theme', next); localStorage.setItem(key,next); sync();
+  });
+
+  var bar=document.getElementById('progress');
+  if(bar) addEventListener('scroll',function(){
+    var h=document.documentElement.scrollHeight-innerHeight;
+    bar.style.width=(h>0?(scrollY/h*100):0)+'%';
+  },{passive:true});
+
+  document.querySelectorAll('pre').forEach(function(pre){
+    var b=document.createElement('button');
+    b.className='copy'; b.textContent='copy';
+    b.addEventListener('click',function(){
+      var t=pre.querySelector('code'); var txt=t?t.innerText:pre.innerText;
+      navigator.clipboard.writeText(txt).then(function(){
+        b.textContent='copied'; setTimeout(function(){b.textContent='copy';},1200);
+      });
+    });
+    pre.appendChild(b);
+  });
+
+  document.querySelectorAll('main table').forEach(function(t){
+    if(t.parentElement.classList.contains('table-scroll')) return;
+    var w=document.createElement('div'); w.className='table-scroll';
+    t.parentNode.insertBefore(w,t); w.appendChild(t);
+  });
+
+  var links=[].slice.call(document.querySelectorAll('.sidebar a[href^="#"]'));
+  var map={}; links.forEach(function(a){ map[a.getAttribute('href').slice(1)]=a; });
+  var heads=[].slice.call(document.querySelectorAll('main h2[id], main h3[id]'));
+  if('IntersectionObserver' in window && heads.length){
+    var obs=new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if(!e.isIntersecting) return;
+        links.forEach(function(a){a.classList.remove('active');});
+        var a=map[e.target.id]; if(a){a.classList.add('active');}
+      });
+    },{rootMargin:'-10% 0px -75% 0px'});
+    heads.forEach(function(h){obs.observe(h);});
+  }
+
+  var top=document.getElementById('top');
+  if(top) top.addEventListener('click',function(){ scrollTo({top:0,behavior:'smooth'}); });
+})();
+
+(function(){
+  var API="/api/chat";
+  var panel=document.getElementById("chat-panel"),
+      btn=document.getElementById("chat-btn"),
+      chip=document.getElementById("sel-chip"),
+      quote=document.getElementById("chat-quote"),
+      log=document.getElementById("chat-log"),
+      input=document.getElementById("chat-input"),
+      send=document.getElementById("chat-send"),
+      form=document.getElementById("chat-form");
+
+  if(!panel) return;
+  var pendingSelection="", busy=false, lastSelection="";
+
+  function esc(s){return s.replace(/[&<>]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;"}[c];});}
+
+  // minimal markdown: fenced code, inline code, bold, bullets, numbered lists
+  function md(src){
+    var parts=src.split(/```/), out="";
+    for(var i=0;i<parts.length;i++){
+      if(i%2){ out+="<pre><code>"+esc(parts[i].replace(/^\w*\n/,""))+"</code></pre>"; continue; }
+      var t=esc(parts[i]);
+      t=t.replace(/`([^`\n]+)`/g,"<code>$1</code>").replace(/\*\*([^*]+)\*\*/g,"<b>$1</b>");
+      var lines=t.split(/\n/), html="", inUl=false, inOl=false;
+      for(var j=0;j<lines.length;j++){
+        var line=lines[j];
+        if(/^\s*[-*]\s+/.test(line)){
+          if(inOl){html+="</ol>";inOl=false;}
+          if(!inUl){html+="<ul>";inUl=true;}
+          html+="<li>"+line.replace(/^\s*[-*]\s+/,"")+"</li>"; continue;
+        }
+        if(/^\s*\d+[.)]\s+/.test(line)){
+          if(inUl){html+="</ul>";inUl=false;}
+          if(!inOl){html+="<ol>";inOl=true;}
+          html+="<li>"+line.replace(/^\s*\d+[.)]\s+/,"")+"</li>"; continue;
+        }
+        if(inUl){html+="</ul>";inUl=false;}
+        if(inOl){html+="</ol>";inOl=false;}
+        if(line.trim()==="") continue;
+        html+="<p>"+line+"</p>";
+      }
+      if(inUl)html+="</ul>";
+      if(inOl)html+="</ol>";
+      out+=html;
+    }
+    return out;
+  }
+
+  function outline(){
+    return [].slice.call(document.querySelectorAll("main h2, main h3")).slice(0,40)
+      .map(function(h){return (h.tagName==="H3"?"  - ":"- ")+h.textContent.replace(/#$/,"").trim();}).join("\n");
+  }
+
+  function sectionFor(node){
+    var el = node && (node.nodeType===1?node:node.parentElement);
+    if(!el || !el.closest) return "";
+    el = el.closest("main") ? el : null;
+    if(!el) return "";
+    var heads=[].slice.call(document.querySelectorAll("main h2, main h3"));
+    var cur=null, idx=-1;
+    for(var i=0;i<heads.length;i++){
+      if(heads[i].compareDocumentPosition(el) & Node.DOCUMENT_POSITION_FOLLOWING) { cur=heads[i]; idx=i; }
+    }
+    if(!cur) return "";
+    var stop = heads[idx+1] || null, txt=[], n=cur;
+    while((n=n.nextSibling) && n!==stop){ if(n.textContent) txt.push(n.textContent); }
+    return (cur.textContent+"\n"+txt.join("\n")).replace(/\s+\n/g,"\n").slice(0,3000);
+  }
+
+  function placeChip(x,y){
+    chip.style.left=x+"px"; chip.style.top=(y+window.scrollY-8)+"px"; chip.style.display="block";
+  }
+  function hideChip(){ chip.style.display="none"; }
+
+  document.addEventListener("mouseup",function(e){
+    setTimeout(function(){
+      var s=window.getSelection(), text=s?s.toString().trim():"";
+      if(!text || text.length<3 || !s.anchorNode || !(s.anchorNode.parentElement||s.anchorNode).closest("main")){hideChip();return;}
+      lastSelection=text;
+      var r=s.getRangeAt(0).getBoundingClientRect();
+      placeChip(r.left+r.width/2, Math.max(r.top,8));
+    },10);
+  });
+  document.addEventListener("mousedown",function(e){ if(e.target!==chip) hideChip(); });
+
+  chip.addEventListener("mousedown",function(e){ e.preventDefault(); });
+  chip.addEventListener("click",function(e){
+    e.stopPropagation();
+    pendingSelection=lastSelection; hideChip(); open(pendingSelection);
+  });
+
+  function open(sel){
+    panel.classList.add("open");
+    if(sel){ quote.style.display="block"; quote.textContent=sel; pendingSelection=sel; }
+    else { quote.style.display="none"; quote.textContent=""; pendingSelection=""; }
+    setTimeout(function(){input.focus();},60);
+  }
+  function close(){ panel.classList.remove("open"); }
+
+  btn.addEventListener("click",function(){ panel.classList.contains("open")?close():open(lastSelection||""); });
+  document.getElementById("chat-close").addEventListener("click",close);
+  document.addEventListener("keydown",function(e){ if(e.key==="Escape") close(); });
+
+  function addMsg(cls,html){
+    var d=document.createElement("div"); d.className="msg "+cls; d.innerHTML=html; log.appendChild(d);
+    log.scrollTop=log.scrollHeight; return d;
+  }
+
+  async function ask(q){
+    if(busy||!q.trim()) return;
+    busy=true; send.disabled=true;
+    addMsg("user",esc(q));
+    var bot=addMsg("bot",'<span class="cursor"></span>');
+    var acc="";
+    var sid=sessionStorage.getItem("mn-sid");
+    if(!sid){ sid=(crypto.randomUUID?crypto.randomUUID():String(Date.now())+Math.random().toString(16).slice(2)); sessionStorage.setItem("mn-sid",sid); }
+    var payload={q:q, sid:sid, sel:pendingSelection||"", page:document.querySelector("h1")?document.querySelector("h1").textContent.trim():document.title,
+                 section:sectionFor(window.getSelection()&&window.getSelection().anchorNode?"":document.querySelector("main h2"))||"",
+                 outline:outline()};
+    // section: prefer the one containing the selection, else the first heading on screen
+    try{
+      var sel=window.getSelection();
+      if(pendingSelection && sel && sel.anchorNode){ payload.section=sectionFor(sel.anchorNode); }
+      if(!payload.section){
+        var vis=[].slice.call(document.querySelectorAll("main h2, main h3")).filter(function(h){
+          var r=h.getBoundingClientRect(); return r.top>-80 && r.top<window.innerHeight*0.6; }).pop();
+        if(vis) payload.section=sectionFor(vis);
+      }
+    }catch(_){}
+
+    try{
+      var res=await fetch(API,{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify(payload)});
+      if(!res.ok){
+        var j=await res.json().catch(function(){return{};});
+        throw new Error(j.error||("HTTP "+res.status));
+      }
+      var reader=res.body.getReader(), dec=new TextDecoder(), buf="";
+      for(;;){
+        var r=await reader.read(); if(r.done) break;
+        buf+=dec.decode(r.value,{stream:true});
+        var lines=buf.split("\n"); buf=lines.pop()||"";
+        for(var i=0;i<lines.length;i++){
+          var l=lines[i].trim(); if(l.indexOf("data:")!==0) continue;
+          var d=l.slice(5).trim(); if(d==="[DONE]") continue;
+          try{ var o=JSON.parse(d); if(o.d){acc+=o.d; bot.innerHTML=md(acc)+'<span class="cursor"></span>'; log.scrollTop=log.scrollHeight;} if(o.error) throw new Error(o.error);}catch(_){}
+        }
+      }
+      bot.innerHTML=md(acc||"_no answer_");
+    }catch(err){
+      bot.className="msg err";
+      bot.textContent = String(err.message).indexOf("Failed to fetch")>-1 || String(err.message).indexOf("HTTP 5")>-1
+        ? "Assistant unavailable — it only works on the deployed site (needs the /api/chat function)."
+        : "Error: "+err.message;
+    }finally{
+      busy=false; send.disabled=false; input.value=""; input.focus();
+      pendingSelection=""; quote.style.display="none";
+    }
+  }
+
+  form.addEventListener("submit",function(e){ e.preventDefault(); ask(input.value); });
+  input.addEventListener("keydown",function(e){
+    if(e.key==="Enter"&&!e.shiftKey){ e.preventDefault(); ask(input.value); }
+  });
+  input.addEventListener("input",function(){ input.style.height="auto"; input.style.height=Math.min(input.scrollHeight,110)+"px"; });
+})();
+</script>
+</body>
+</html>

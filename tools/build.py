@@ -24,6 +24,7 @@ from markdown.extensions.toc import slugify_unicode
 
 import drills as drill_data
 import ehs_drills as ehs_drill_data
+import ise_drills as ise_drill_data
 import practice as practice_page
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -102,6 +103,31 @@ SUBJECTS = [
              "What was actually asked, and what never was", "Internal question papers", "source", "internal-papers"),
             ("friend_notes_site.md", "Notes · friend's", "Long-form study notes",
              "The HTML notes this subject started from", "Friend's notes (HTML → markdown)", "source", "notes-friend"),
+        ],
+    },
+    {
+        "slug": "ise",
+        "title": "Industrial Safety Engineering",
+        "code": "20MCN401",
+        "tagline": "Semester 7 · CSE · 0-credit, still 100 marks",
+        "blurb": "Five module kits answering all 172 questions of the department bank, written as plain-English explainers "
+                 "with a mark anchor and an exam trap in every section.",
+        "drills": "ise",
+        "docs": [
+            ("START_HERE.md", "Start here", "Scope, answer shapes, order of attack",
+             "How to use the kits and where the marks are", "Start here — the plan", "start", "start-here"),
+            ("KIT_M1_INTRO.md", "M1 · Intro & accident theory", "20% ESE · 32 questions",
+             "Theories, safety organisation, roles", "Module 1 · Introduction to industrial safety", "kits", "m1-intro"),
+            ("KIT_M2_PPE.md", "M2 · PPE & monitoring", "20% ESE · 32 questions",
+             "PPE, the four rates, housekeeping, permits", "Module 2 · Personal protection in the work environment", "kits", "m2-ppe"),
+            ("KIT_M3_CONSTRUCTION.md", "M3 · Construction safety", "20% ESE · 31 questions",
+             "Excavation, shoring, scaffolds, blasting, NBC", "Module 3 · Construction industry and safety", "kits", "m3-construction"),
+            ("KIT_M4_MACHINERY.md", "M4 · Machinery & handling", "20% ESE · 30 questions",
+             "Guarding, presses, machine tools, slings", "Module 4 · Machinery safeguard and material handling", "kits", "m4-machinery"),
+            ("KIT_M5_HAZARD_ID.md", "M5 · Hazard identification", "20% ESE · 47 questions",
+             "Fire, Dow index, PHA, HAZOP, MSDS", "Module 5 · Hazard identification and control", "kits", "m5-hazard-id"),
+            ("syllabus.md", "Syllabus", "Five modules, verbatim", "The scope, module by module", "Syllabus (verbatim)", "source", "syllabus"),
+            ("question_map.md", "Question bank", "172 questions, mapped", "Every bank question and which kit answers it", "Question bank (172, mapped)", "source", "question-bank"),
         ],
     },
 ]
@@ -810,7 +836,7 @@ def build_subject(subject):
         .replace("{{SUB}}", "fill · output · write · checked in the browser")
         .replace("{{TAGS}}", "practice drills coding syntax fill output write"))
 
-    drill_list = ehs_drill_data.EHS_DRILLS if subject.get("drills") == "ehs" else drill_data.DRILLS
+    drill_list = {"ehs": ehs_drill_data.EHS_DRILLS, "ise": ise_drill_data.ISE_DRILLS}.get(subject.get("drills"), drill_data.DRILLS)
     page = practice_page.build(drill_list, subject["title"], CSS + SHELL_CSS, JS)
     write(os.path.join(ROOT, subject["slug"], "practice.html"), page)
     print(f"  {subject['slug']}/practice.html      {os.path.getsize(os.path.join(ROOT, subject['slug'], 'practice.html')) // 1024:5d} KB  ({len(drill_list)} drills)")
@@ -863,8 +889,10 @@ def build_hub():
 
 
 def main(argv):
-    print("Building site from:", SOURCES)
-    for subject in SUBJECTS:
+    only = [a for a in argv if not a.startswith("-")]
+    subjects = [s for s in SUBJECTS if not only or s["slug"] in only]
+    print("Building site from:", SOURCES, "| subjects:", ", ".join(s["slug"] for s in subjects))
+    for subject in subjects:
         build_subject(subject)
     build_hub()
     print("\nDone. Open", os.path.join(ROOT, "index.html"))
