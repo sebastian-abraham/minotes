@@ -2,7 +2,8 @@
 
 Lecture notes, exam kits and trackers — written in Markdown, published as a static site.
 
-Live: **https://minotes.vercel.app** (once the Vercel project is imported)
+Live: **https://sebastian-abraham.github.io/minotes/** (GitHub Pages, branch `main`, root;
+`.nojekyll` is committed so the HTML is served verbatim)
 
 ```
 index.html                  hub — one card per subject
