@@ -136,6 +136,7 @@ SUBJECTS = [
         "title": "Compiler Lab",
         "code": "20CSL401",
         "tagline": "Semester 7 · CSE · lab exam",
+        "hint": "exp 7 · FIRST/FOLLOW · shift-reduce · three-address",
         "blurb": "Eleven experiments as a bench you can poke: every algorithm step is wired to the exact "
                  "C lines that implement it, a trace player runs the algorithm on your own input, "
                  "curveball lists say what changes when the question is modified, and the playground "
@@ -693,7 +694,7 @@ SUBJECT_PAGE = """<!DOCTYPE html>
   </div>
   <div class="searchbox">
     <label for="q">Filter</label>
-    <input id="q" type="search" placeholder="laravel · box model · arrays · session · tracker">
+    <input id="q" type="search" placeholder="{{HINT}}">
     <span class="count" id="count"></span>
   </div>
 </div>
@@ -944,6 +945,7 @@ def build_subject(subject):
     page = (SUBJECT_PAGE
             .replace("{{SUBJECT}}", html_mod.escape(subject["title"]))
             .replace("{{CODE}}", html_mod.escape(subject["code"]))
+            .replace("{{HINT}}", html_mod.escape(subject.get("hint", "laravel · box model · arrays · session · tracker")))
             .replace("{{TAGLINE}}", html_mod.escape(subject["tagline"]))
             .replace("{{BLURB}}", html_mod.escape(subject["blurb"]))
             .replace("{{CARDS}}", "\n".join(blocks))
