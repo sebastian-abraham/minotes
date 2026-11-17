@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Compiler Design Lab — Exam Drill Pack · Compiler Lab</title>
+<style>
+:root{
+  --bg:#fbfaf8; --panel:#ffffff; --ink:#232120; --muted:#5f5a53; --line:#e6e1da;
+  --accent:#7a4fd0; --accent-soft:#f1ecfb; --code-bg:#f5f2ee; --code-ink:#2b2a28;
+  --warn-bg:#fff8e6; --warn-line:#f0d9a0;
+  --sans:"Inter","Segoe UI",system-ui,-apple-system,"Noto Sans",sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,"SF Mono",Menlo,Consolas,"Fira Code",monospace;
+}
+html[data-theme="dark"]{
+  --bg:#141317; --panel:#1b1a20; --ink:#e8e4de; --muted:#a8a199; --line:#2f2c36;
+  --accent:#b79cf5; --accent-soft:#241f33; --code-bg:#22202a; --code-ink:#e8e4de;
+  --warn-bg:#2a2417; --warn-line:#4a3d22;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0; background:var(--bg); color:var(--ink); font-family:var(--sans);
+  font-size:16.5px; line-height:1.72; -webkit-font-smoothing:antialiased;
+}
+#progress{position:fixed;top:0;left:0;height:3px;width:0;background:var(--accent);z-index:50;transition:width .1s linear}
+
+.wrap{display:flex;align-items:flex-start;min-height:100vh}
+.sidebar{
+  position:sticky;top:0;height:100vh;width:300px;flex:0 0 300px;overflow-y:auto;
+  padding:26px 20px 60px;border-right:1px solid var(--line);background:var(--panel);
+}
+.sidebar h1{font-size:15px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);
+  margin:0 0 4px;font-weight:600}
+.sidebar .sub{font-size:12.5px;color:var(--muted);margin:0 0 18px}
+.sidebar nav{font-size:14px}
+.sidebar .toc>ul{padding-left:0}
+.sidebar ul{list-style:none;margin:0;padding-left:12px}
+.sidebar ul ul{border-left:1px solid var(--line);margin-left:4px;padding-left:10px}
+.sidebar li{margin:3px 0}
+.sidebar a{color:var(--ink);text-decoration:none;display:block;padding:3px 8px;border-radius:8px;
+  line-height:1.35;transition:background .12s,color .12s}
+.sidebar a:hover{background:var(--accent-soft);color:var(--accent)}
+.sidebar a.active{background:var(--accent-soft);color:var(--accent);font-weight:600}
+.sidebar .home{display:inline-flex;align-items:center;gap:6px;margin-bottom:16px;font-size:13.5px;
+  color:var(--muted);text-decoration:none;border:1px solid var(--line);padding:5px 10px;border-radius:999px}
+.sidebar .home:hover{color:var(--accent);border-color:var(--accent)}
+
+main{flex:1;min-width:0;padding:46px 56px 120px;max-width:980px;margin:0 auto}
+.doc-head{border-bottom:1px solid var(--line);padding-bottom:18px;margin-bottom:34px}
+.doc-head .kicker{font-size:12.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);
+  font-weight:700;margin-bottom:8px}
+.doc-head .meta{font-size:13.5px;color:var(--muted)}
+
+h1,h2,h3,h4{line-height:1.25;font-weight:700;letter-spacing:-.01em}
+h1{font-size:2.05rem;margin:.2em 0 .5em}
+h2{font-size:1.55rem;margin:2.4em 0 .7em;padding-bottom:.35em;border-bottom:1px solid var(--line)}
+h3{font-size:1.2rem;margin:1.9em 0 .55em}
+h4{font-size:1.03rem;margin:1.5em 0 .45em;color:var(--muted)}
+h2 .anchor,h3 .anchor{opacity:0;margin-left:.35em;font-size:.8em;color:var(--muted);text-decoration:none}
+h2:hover .anchor,h3:hover .anchor{opacity:1}
+p{margin:.75em 0}
+a{color:var(--accent);text-underline-offset:2px}
+strong{font-weight:650}
+hr{border:0;border-top:1px solid var(--line);margin:2.6em 0}
+ul,ol{margin:.7em 0;padding-left:1.4em}
+li{margin:.3em 0}
+li>ul,li>ol{margin:.25em 0}
+blockquote{
+  margin:1.3em 0;padding:12px 18px;background:var(--warn-bg);border-left:3px solid var(--warn-line);
+  border-radius:0 10px 10px 0;color:var(--ink)
+}
+blockquote p{margin:.3em 0}
+
+code{font-family:var(--mono);font-size:.87em;background:var(--code-bg);color:var(--code-ink);
+  padding:.15em .38em;border-radius:6px;border:1px solid var(--line);
+  box-decoration-break:clone;-webkit-box-decoration-break:clone;overflow-wrap:anywhere}
+pre{position:relative;background:var(--code-bg);border:1px solid var(--line);border-radius:12px;
+  padding:16px 18px;overflow-x:auto;margin:1.1em 0}
+pre code{background:none;border:0;padding:0;font-size:13.6px;line-height:1.62;white-space:pre}
+.copy{position:absolute;top:8px;right:8px;font:600 11px/1 var(--sans);color:var(--muted);
+  background:var(--panel);border:1px solid var(--line);border-radius:7px;padding:5px 8px;cursor:pointer;
+  opacity:0;transition:opacity .15s}
+pre:hover .copy{opacity:1}
+.copy:hover{color:var(--accent);border-color:var(--accent)}
+
+.table-scroll{overflow-x:auto;margin:1.3em 0;border:1px solid var(--line);border-radius:12px;background:var(--panel)}
+table{border-collapse:collapse;width:100%;font-size:14.6px}
+th,td{padding:9px 13px;text-align:left;vertical-align:top;border-bottom:1px solid var(--line)}
+th{background:var(--accent-soft);font-weight:650;font-size:13px;letter-spacing:.02em;
+  position:sticky;top:0;backdrop-filter:blur(4px)}
+tr:last-child td{border-bottom:0}
+tbody tr:nth-child(even){background:color-mix(in srgb,var(--panel) 60%,var(--bg))}
+tbody tr:hover{background:var(--accent-soft)}
+
+.tools{position:fixed;right:22px;bottom:22px;display:flex;flex-direction:column;gap:8px;z-index:40}
+.tools button{width:42px;height:42px;border-radius:12px;border:1px solid var(--line);background:var(--panel);
+  color:var(--ink);cursor:pointer;font-size:16px;box-shadow:0 4px 14px rgba(0,0,0,.10)}
+.tools button:hover{color:var(--accent);border-color:var(--accent)}
+@media (max-width:1000px){
+  .wrap{display:block}
+  .sidebar{position:static;width:auto;height:auto;border-right:0;border-bottom:1px solid var(--line)}
+  .sidebar nav{max-height:40vh;overflow:auto}
+  main{padding:28px 20px 100px}
+}
+@media print{
+  .sidebar,.tools,#progress,.copy{display:none!important}
+  body{background:#fff;color:#000;font-size:11pt}
+  main{padding:0;max-width:none}
+  h2{break-after:avoid} pre,table,blockquote{break-inside:avoid}
+  a{color:#000;text-decoration:none}
+}
+
+/* ---- ask-about-this ---- */
+#chat-btn{position:fixed;right:20px;bottom:112px;width:44px;height:44px;border-radius:50%;
+  border:1px solid var(--line);background:var(--panel);color:var(--accent);cursor:pointer;font-size:17px;
+  box-shadow:0 6px 18px rgba(0,0,0,.12);z-index:45;display:grid;place-items:center}
+#chat-btn:hover{border-color:var(--accent)}
+#sel-chip{position:absolute;z-index:46;transform:translate(-50%,-100%);background:var(--ink);color:var(--bg);
+  font:600 12px/1 var(--sans);padding:7px 11px;border-radius:999px;cursor:pointer;white-space:nowrap;
+  box-shadow:0 6px 18px rgba(0,0,0,.25);display:none}
+#sel-chip:hover{background:var(--accent);color:#fff}
+#chat-panel{position:fixed;right:20px;bottom:164px;width:min(420px,calc(100vw - 40px));max-height:min(70vh,620px);
+  background:var(--panel);border:1px solid var(--line);border-radius:14px;z-index:47;display:none;
+  flex-direction:column;box-shadow:0 18px 50px rgba(0,0,0,.18);overflow:hidden}
+#chat-panel.open{display:flex}
+#chat-head{display:flex;align-items:center;gap:8px;padding:11px 13px;border-bottom:1px solid var(--line);
+  font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:700}
+#chat-head .sp{flex:1}
+#chat-head button{background:none;border:0;color:var(--muted);cursor:pointer;font-size:15px;padding:2px 4px}
+#chat-head button:hover{color:var(--accent)}
+#chat-quote{display:none;margin:10px 13px 0;padding:8px 10px;border-left:2px solid var(--accent);
+  background:var(--accent-soft);color:var(--muted);font-size:12.5px;border-radius:0 8px 8px 0;
+  max-height:84px;overflow:auto;white-space:pre-wrap}
+#chat-log{flex:1;overflow-y:auto;padding:12px 13px;display:flex;flex-direction:column;gap:10px;font-size:13.6px;line-height:1.55}
+.msg{max-width:100%}
+.msg.user{align-self:flex-end;background:var(--accent-soft);color:var(--ink);padding:7px 11px;border-radius:11px 11px 2px 11px;
+  max-width:86%;white-space:pre-wrap}
+.msg.bot{color:var(--ink)}
+.msg.bot p{margin:.3em 0}
+.msg.bot ul{margin:.3em 0;padding-left:1.15em}
+.msg.bot code{font-size:.9em}
+.msg.bot pre{background:var(--code-bg);border-radius:8px;padding:9px 11px;overflow-x:auto;font-size:12px;margin:.4em 0}
+.msg.err{color:#b3261e;font-size:12.5px}
+.msg .cursor:after{content:"▍";color:var(--accent);animation:blink 1s steps(2) infinite}
+@keyframes blink{50%{opacity:0}}
+#chat-form{display:flex;gap:8px;padding:10px 13px;border-top:1px solid var(--line)}
+#chat-input{flex:1;resize:none;border:1px solid var(--line);border-radius:9px;background:var(--bg);color:var(--ink);
+  font:inherit;font-size:13.5px;padding:8px 10px;max-height:110px;min-height:38px}
+#chat-input:focus{outline:2px solid var(--accent);outline-offset:0}
+#chat-send{border:1px solid var(--accent);background:var(--accent);color:#fff;border-radius:9px;
+  width:38px;cursor:pointer;font-size:15px}
+#chat-send:disabled{opacity:.45;cursor:default}
+#chat-foot{font-size:11px;color:var(--muted);padding:0 13px 9px}
+@media (max-width:640px){
+  #chat-panel{right:8px;left:8px;width:auto;bottom:150px;max-height:66vh}
+  #chat-btn{bottom:104px;right:16px}
+}
+@media print{#chat-btn,#chat-panel,#sel-chip{display:none!important}}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+<div class="wrap">
+  <aside class="sidebar">
+    <a class="home" href="index.html">← Compiler Lab</a>
+    
+    <h1>Drill pack</h1>
+    <p class="sub">closed book · answers behind a barrier</p>
+    <nav class="toc"><div class="toc">
+<ul>
+<li><a href="#0-exam-day-command-sheet-verified-on-this-machine-17-nov-2026">0. Exam-day command sheet — verified on this machine (17 Nov 2026)</a></li>
+<li><a href="#1-priority-order-if-you-only-get-to-some">1. Priority order — if you only get to some</a></li>
+<li><a href="#2-drill-log-fill-this-in-its-what-tells-you-youre-ready">2. Drill log — fill this in, it's what tells you you're ready</a></li>
+<li><a href="#-">---</a></li>
+<li><a href="#-_1">---</a></li>
+<li><a href="#11-ε-closure-exp-5">1.1 ε-closure (Exp 5)</a></li>
+<li><a href="#12-nfa-dfa-exp-7">1.2 NFA → DFA (Exp 7)</a></li>
+<li><a href="#13-first-follow-exp-8">1.3 FIRST / FOLLOW (Exp 8)</a></li>
+<li><a href="#14-shift-reduce-exp-10">1.4 Shift-reduce (Exp 10)</a></li>
+<li><a href="#21-79-verified-run">2.1 <code>srp.c</code> — verified run</a></li>
+<li><a href="#22-86-verified-run">2.2 <code>rdp.c</code> — verified run</a></li>
+<li><a href="#23-106-verified-run">2.3 <code>intermediate.c</code> — verified run</a></li>
+<li><a href="#24-exp-4-verified-run-chain">2.4 Exp 4 — verified run + chain</a></li>
+</ul>
+</div>
+</nav>
+  </aside>
+  <main>
+    <div class="doc-head">
+      <div class="kicker">20CSL401 · Compiler Lab</div>
+      <div class="meta">closed book · answers behind a barrier · rendered from EXAM_DRILLS.md</div>
+    </div>
+    <h1 id="compiler-design-lab-exam-drill-pack">Compiler Design Lab — Exam Drill Pack</h1>
+<p><strong>Exam shape (from Haze):</strong> write the <strong>algorithm on paper</strong> → get machine access → <strong>write + run the code</strong>
+→ <strong>viva</strong>. Same 11 experiments as the record (<code>README.md</code>).</p>
+<p><strong>How to use this file.</strong> Nothing below is new material — the teaching docs are
+<code>ALGORITHMS.md</code> + <code>study/GROUP_*.md</code>. This file is the <em>practice</em>: closed-book tasks, then the
+answers behind the barrier at the foot. Work a whole set first, then scroll.</p>
+<p>Rule: <strong>write your attempt before looking.</strong> A set is 4 tasks. Grade line by line against the
+checklist in each answer block.</p>
+<hr />
+<h2 id="0-exam-day-command-sheet-verified-on-this-machine-17-nov-2026">0. Exam-day command sheet — verified on this machine (17 Nov 2026)<a class="anchor" href="#0-exam-day-command-sheet-verified-on-this-machine-17-nov-2026">#</a></h2>
+<p><code>flex</code>, <code>bison</code>, <code>gcc</code> all present. <code>yacc</code> <em>is</em> <code>bison 3.8.2</code>; <code>lex</code> <em>is</em> <code>flex</code>.</p>
+<p><pre><code>Exp 1   gcc lex_a.c                                     ./a.out      (needs input.c in the same folder)
+Exp 2   lex lexer.l ; gcc lex.yy.c -lfl ;               ./a.out
+Exp 3   lex lex_count.l ; gcc lex.yy.c -lfl ;           ./a.out      (end input with Ctrl+D)
+Exp 4   yacc -d yacc_id.y ; lex lex_id.l ; gcc y.tab.c lex.yy.c -lfl ; ./a.out   ← order matters
+Exp 5   gcc e_closure.c ;      ./a.out
+Exp 6   gcc e-nfa_nfa.c ;      ./a.out
+Exp 7   gcc nfa_dfa.c ;        ./a.out
+Exp 8   gcc fnf.c ;            ./a.out
+Exp 9   gcc rdp.c ;            ./a.out
+Exp 10  gcc srp.c ;            ./a.out
+Exp 11  gcc intermediate.c ;   ./a.out
+</code></pre></p>
+<p><strong>Two traps, both hit for real this session:</strong></p>
+<ol>
+<li><strong><code>-ll</code> fails on this machine</strong> — <code>ld: cannot find -ll</code>. The lex library here is <code>libfl</code>, so
+   the flag is <strong><code>-lfl</code></strong>. The textbook/record says <code>-ll</code>; on the college machine either may work.
+   <em>Say this in the viva:</em> "<code>-ll</code> is the System V lex library name; flex installs <code>libfl</code>, so the
+   link flag is <code>-lfl</code>."</li>
+<li><strong><code>yacc -d</code> must run before <code>lex</code></strong> — the <code>.l</code> file does <code>#include &quot;y.tab.h&quot;</code>, which <code>yacc -d</code>
+   generates. Regenerate it first or the compile dies on a missing header. If <code>lex.yy.c</code> was
+   generated into another directory, add <strong><code>-I.</code></strong> to gcc so <code>y.tab.h</code> is found.</li>
+</ol>
+<p><code>./verify_all.sh</code> in the project rebuilds and runs all 11 with their header sample inputs, so you
+can diff your output against a known-good run in one command.</p>
+<hr />
+<h2 id="1-priority-order-if-you-only-get-to-some">1. Priority order — if you only get to some<a class="anchor" href="#1-priority-order-if-you-only-get-to-some">#</a></h2>
+<table>
+<thead>
+<tr>
+<th>Tier</th>
+<th>Experiments</th>
+<th>Why</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Must</strong></td>
+<td>4 (lex+yacc), 10 (shift-reduce), 8 (FIRST/FOLLOW)</td>
+<td>Each is a full-credit question on its own; 4 is the only two-tool chain</td>
+</tr>
+<tr>
+<td><strong>Must</strong></td>
+<td>11 (three-address code), 9 (recursive descent)</td>
+<td>20 lines of code each, easy to blank out under pressure</td>
+</tr>
+<tr>
+<td><strong>Should</strong></td>
+<td>5, 7 (ε-closure, subset construction)</td>
+<td>The formulas are the marks; trace by hand</td>
+</tr>
+<tr>
+<td><strong>Should</strong></td>
+<td>2, 3 (lex rules)</td>
+<td>Pure regex recall, no algorithm to forget</td>
+</tr>
+<tr>
+<td><strong>Last</strong></td>
+<td>1 (hand-written scanner), 6 (ε-NFA→NFA)</td>
+<td>Longest programs, least likely to be the assigned one</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="2-drill-log-fill-this-in-its-what-tells-you-youre-ready">2. Drill log — fill this in, it's what tells you you're ready<a class="anchor" href="#2-drill-log-fill-this-in-its-what-tells-you-youre-ready">#</a></h2>
+<table>
+<thead>
+<tr>
+<th>Set</th>
+<th>Date</th>
+<th>Score</th>
+<th>Corrections to remember</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1 — algorithm recall</td>
+<td></td>
+<td>/4</td>
+<td></td>
+</tr>
+<tr>
+<td>2 — code from blank</td>
+<td></td>
+<td>/4</td>
+<td></td>
+</tr>
+<tr>
+<td>3 — viva bank</td>
+<td></td>
+<td>/20</td>
+<td></td>
+</tr>
+<tr>
+<td>1 — retry</td>
+<td></td>
+<td>/4</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h1 id="set-1-algorithm-recall-closed-book-6-minutes-each">SET 1 — Algorithm recall (closed book, 6 minutes each)</h1>
+<p>Write the <strong>mid-level record version</strong>: name the real structures and the real loop/condition, one
+short "why" where a step is a trick. Not "declare int i", not "process the input".</p>
+<p><strong>1.1</strong> Write the algorithm for <strong>ε-closure of all states of an NFA</strong> (Exp 5), including the
+recursive helper.</p>
+<p><strong>1.2</strong> Write the algorithm for <strong>NFA → DFA conversion by subset construction</strong> (Exp 7).</p>
+<p><strong>1.3</strong> Write the algorithm for <strong>FIRST and FOLLOW</strong> (Exp 8) — both procedures and the main driver.</p>
+<p><strong>1.4</strong> Write the algorithm for <strong>shift-reduce parsing</strong> (Exp 10), including the termination
+condition.</p>
+<p><em>(Set 2 and Set 3 are below the barrier.)</em></p>
+<h1 id="set-2-code-from-a-blank-file-machine-phase">SET 2 — Code from a blank file (machine phase)</h1>
+<p>Start with <code>touch x.c</code>, no reference, 20 minutes each. Then compile and run against the header
+sample input. Pass = your output matches the verified run in the answer block.</p>
+<p><strong>2.1</strong> <code>srp.c</code> — shift-reduce parser, grammar <code>E → E+E | E*E | i</code>, input <code>i+i*i</code>.
+Expected end state: stack = single <code>E</code>, prints "String Accepted".</p>
+<p><strong>2.2</strong> <code>rdp.c</code> — recursive descent, grammar <code>E→TE&#x27;</code>, <code>E&#x27;→+TE&#x27;|ε</code>, <code>T→FT&#x27;</code>, <code>T&#x27;→*FT&#x27;|ε</code>,
+<code>F→i|(E)</code>. Must accept <code>(i+i)*i</code> and reject <code>i+*i</code>.</p>
+<p><strong>2.3</strong> <code>intermediate.c</code> — three-address code from an infix expression; input <code>a+b*c</code> must print
+<code>t1 = b * c</code> and <code>t2 = a + t1</code>.</p>
+<p><strong>2.4</strong> <code>lex_id.l</code> + <code>yacc_id.y</code> — identifier validator. <code>abc123</code> → Valid, <code>123abc</code> → Invalid.
+Write out the exact 3-command build chain too.</p>
+<h1 id="set-3-viva-bank-say-the-answer-in-one-or-two-sentences">SET 3 — Viva bank (say the answer in one or two sentences)</h1>
+<p>3.1 Why does Exp 1 read one character <em>past</em> the end of a token?
+3.2 In lex, <code>int</code> matches both a keyword rule and an identifier rule. Which wins, and why?
+3.3 What does <code>yyleng</code> give you, and which experiment needs it?
+3.4 Division of labour between lex and yacc, in one sentence.
+3.5 What does <code>yacc -d</code> do that plain <code>yacc</code> doesn't?
+3.6 What does <code>-ll</code> / <code>-lfl</code> link, and why is flex's name different?
+3.7 Why must the identifier grammar be left-recursive?
+3.8 In Exp 4, what exactly makes <code>123abc</code> fail — which grammar rule can never derive it?
+3.9 Why is ε-closure recursive, and what stops it looping forever?
+3.10 State the ε-NFA→NFA formula verbatim.
+3.11 Why is the ε-closure <em>input</em> to Exp 6 rather than computed there?
+3.12 What is a DFA state, in terms of NFA states?
+3.13 Why does Exp 7 sort each set before storing it?
+3.14 The loop in Exp 7 iterates over "each DFA state in the set list" while appending to that list.
+Why doesn't it miss states?
+3.15 FIRST vs FOLLOW — one line each.
+3.16 Why does <code>#</code> mean ε in the FIRST/FOLLOW program?
+3.17 In recursive descent, where is the ε-production? There is no <code>if (eps)</code> anywhere.
+3.18 Why does <code>*</code> bind tighter than <code>+</code> in the recursive-descent parser?
+3.19 Shift vs reduce — one line each.
+3.20 In shift-reduce, why does the reduce loop compare <code>top</code> before and after a pass?
+3.21 Why does Exp 11 pop the <em>second</em> operand as the left operand <code>a</code>?
+3.22 Why <code>&gt;=</code> and not <code>&gt;</code> when comparing precedence in Exp 11?
+3.23 Exp 10 accepts <code>i+i*i</code>. Which reduction order does it choose, and does that matter?
+3.24 On a machine with no <code>flex</code> but with <code>lex</code>: does anything in your build change?</p>
+<h2 id="-">---<a class="anchor" href="#-">#</a></h2>
+<hr />
+<h1 id="barrier-scroll-only-after-you-have-written-your-own-attempt">⛔ BARRIER — scroll only after you have written your own attempt</h1>
+<h2 id="-_1">---<a class="anchor" href="#-_1">#</a></h2>
+<hr />
+<h1 id="answers-set-1">ANSWERS — SET 1</h1>
+<h2 id="11-ε-closure-exp-5">1.1 ε-closure (Exp 5)<a class="anchor" href="#11-ε-closure-exp-5">#</a></h2>
+<p><pre><code>1. Read n, the number of states.
+2. Read the n×n epsilon matrix ε, where ε[i][j]=1 means an ε-move i→j.
+3. Initialise the closure matrix to 0.
+4. For each state s = 0 .. n-1: call findClosure(s, s).
+5. For each s, print every j with closure[s][j]=1 as E-closure(qs).
+6. Stop.
+
+findClosure(state, current):
+1. Mark closure[state][current] = 1.
+2. For each i = 0 .. n-1:
+     if ε[current][i] = 1 AND closure[state][i] = 0:
+         findClosure(state, i).
+</code></pre></p>
+<p>Two-parameter trick: <code>state</code> is <em>whose</em> closure we're computing (fixed); <code>current</code> is where the walk
+is now (changes). The <code>closure[state][i] = 0</code> test is what stops a cycle of ε-moves recursing forever.</p>
+<h2 id="12-nfa-dfa-exp-7">1.2 NFA → DFA (Exp 7)<a class="anchor" href="#12-nfa-dfa-exp-7">#</a></h2>
+<p><pre><code>1. Read n, m, the input symbols, and the NFA transition table
+   (per state and symbol: a count followed by the destination states).
+2. Create DFA state 0 = { q0 } and add it to the set list.
+3. For each DFA state i in the set list (list grows while looping):
+     for each input symbol j:
+       a. temp = union of δ(p, j) over every NFA state p in DFA state i, duplicates removed.
+       b. Sort temp, so identical sets are stored in the same order.
+       c. dfa[i][j] = addSet(temp)   — reuse the existing index if this set is already a DFA state.
+4. Print the DFA table, labelling each state by its set, e.g. {q1,q2}.
+5. Stop.
+
+sameSet(a,b) : are two sets identical?
+findSet(s)   : index of this set if already a DFA state, else −1
+addSet(s)    : findSet(s) if it exists, otherwise append it and return the new index
+</code></pre></p>
+<h2 id="13-first-follow-exp-8">1.3 FIRST / FOLLOW (Exp 8)<a class="anchor" href="#13-first-follow-exp-8">#</a></h2>
+<p><pre><code>FIRST(X):
+1. X terminal      → FIRST(X) = { X }; return.
+2. X non-terminal  → for each production X → Y1 Y2 ... Yk:
+     a. add FIRST(Y1) − {ε} to FIRST(X);
+     b. if Y1 can derive ε, add FIRST(Y2) − {ε}, and continue for Y3 ...
+     c. if every Yi can derive ε, add ε to FIRST(X).
+
+FOLLOW(A):
+1. If A is the start symbol, add $ to FOLLOW(A).
+2. For each production B → α A β:
+     a. add FIRST(β) − {ε} to FOLLOW(A);
+     b. if β derives ε (or β is empty), add FOLLOW(B) to FOLLOW(A).
+
+MAIN:
+1. Read n and the n productions as strings (use # for ε).
+2. For each non-terminal on a left-hand side, compute and print FIRST.
+3. For each non-terminal, compute and print FOLLOW.
+</code></pre></p>
+<p>Implementation notes worth saying: a set is stored as a plain char string and <code>add()</code> appends only
+if absent (that is the dedupe); FOLLOW recurses on the LHS of the current production in the
+"β can vanish" case — that is step 2(b) of the theory, not an implementation shortcut.</p>
+<h2 id="14-shift-reduce-exp-10">1.4 Shift-reduce (Exp 10)<a class="anchor" href="#14-shift-reduce-exp-10">#</a></h2>
+<p><pre><code>1. Read the input string. top = −1 (empty stack).
+2. For each input character, left to right:
+   a. SHIFT: push the character; print the stack.
+   b. REDUCE repeatedly while the top of the stack matches a RHS:
+        top = &#x27;i&#x27;                → replace by &#x27;E&#x27;      (E → i)
+        top three = E &#x27;+&#x27; E      → replace by &#x27;E&#x27;      (E → E+E)
+        top three = E &#x27;*&#x27; E      → replace by &#x27;E&#x27;      (E → E*E)
+      Print every reduction.
+3. After the input ends, keep reducing until a full pass performs no reduction
+   (top unchanged before and after the pass).
+4. If the stack holds exactly one symbol and it is &#x27;E&#x27; → &quot;String Accepted&quot;, else &quot;String Rejected&quot;.
+</code></pre></p>
+<p>Detail for a mark: after every push/pop write <code>stack[top+1] = &#x27;\0&#x27;</code> so the stack can be printed as a
+string in the trace.</p>
+<h1 id="answers-set-2">ANSWERS — SET 2</h1>
+<h2 id="21-79-verified-run">2.1 <code>srp.c</code> — verified run<a class="anchor" href="#21-79-verified-run">#</a></h2>
+<p>Input <code>i+i*i</code> printed exactly:</p>
+<p><pre><code>Shift i   Stack: i
+Reduce E -&gt; i
+Shift +   Stack: E+
+Shift i   Stack: E+i
+Reduce E -&gt; i
+Shift *   Stack: E+E*
+Shift i   Stack: E+E*i
+Reduce E -&gt; i
+Reduce E -&gt; E*E
+Reduce E -&gt; E+E
+
+String Accepted
+</code></pre></p>
+<p>Mark-bearing points: global <code>char stack[50], input[50]; int top = -1;</code> · a <code>reduce()</code> that tries the
+three RHS matches in that order · the <code>top</code> before/after comparison that ends the second loop ·
+<code>stack[top+1]=&#x27;\0&#x27;</code> before every print · accept test = <code>top == 0 &amp;&amp; stack[0] == &#x27;E&#x27;</code>.</p>
+<h2 id="22-86-verified-run">2.2 <code>rdp.c</code> — verified run<a class="anchor" href="#22-86-verified-run">#</a></h2>
+<p><code>(i+i)*i</code> → <code>String is accepted</code> · <code>i+*i</code> → <code>Invalid string</code></p>
+<p>Shape: <code>char input[100]; int pos = 0;</code> and five functions <code>E, Eprime, T, Tprime, F</code> plus <code>error()</code>
+which prints "Invalid string" and <code>exit(0)</code>. Accept test in main: <code>input[pos] == &#x27;\0&#x27;</code> after <code>E()</code>.
+<code>Eprime()</code> = <code>if (input[pos]==&#x27;+&#x27;) { pos++; T(); Eprime(); }</code> and nothing else — <strong>the absent
+<code>else</code> is the ε-production.</strong> <code>F()</code> = <code>&#x27;i&#x27;</code> → pos++ · <code>&#x27;(&#x27;</code> → pos++, <code>E()</code>, expect <code>&#x27;)&#x27;</code> → pos++ ·
+anything else → <code>error()</code>.</p>
+<h2 id="23-106-verified-run">2.3 <code>intermediate.c</code> — verified run<a class="anchor" href="#23-106-verified-run">#</a></h2>
+<p>Input <code>a+b*c</code> printed exactly:</p>
+<p><pre><code>Intermediate Code:
+t1 = b * c
+t2 = a + t1
+</code></pre></p>
+<p>Shape: two char stacks (<code>operand[ ][ ]</code> of strings, <code>opstack[ ]</code>), <code>int temp = 1</code>, <code>precedence()</code>
+returning 2 for <code>* /</code>, 1 for <code>+ -</code>, 0 otherwise; <code>generate()</code> printing <code>&quot;%s = %s %c %s&quot;</code>. Reduction
+condition <code>while (top_op &gt;= 0 &amp;&amp; precedence(opstack[top_op]) &gt;= precedence(ch))</code> — then pop <code>b</code>
+first, <code>a</code> second, <code>sprintf(result,&quot;t%d&quot;,temp++)</code>, push result.</p>
+<h2 id="24-exp-4-verified-run-chain">2.4 Exp 4 — verified run + chain<a class="anchor" href="#24-exp-4-verified-run-chain">#</a></h2>
+<p><code>abc123</code> → <code>Valid Identifier</code> · <code>123abc</code> → <code>Invalid Identifier</code></p>
+<p><pre><code>yacc -d yacc_id.y            # writes y.tab.c AND y.tab.h
+lex lex_id.l                 # .l includes y.tab.h → must exist first
+gcc y.tab.c lex.yy.c -lfl    # -ll on a System V lex; -lfl for flex
+./a.out
+</code></pre></p>
+<p><code>lex_id.l</code> is 4 rules only (<code>[a-zA-Z]</code>→LETTER, <code>[0-9]</code>→DIGIT, <code>\n</code>→<code>&#x27;\n&#x27;</code>, <code>.</code>→ itself), no <code>main</code>.
+<code>yacc_id.y</code> carries <code>%token LETTER DIGIT</code>, the left-recursive rule, <code>main()</code> calling <code>yyparse()</code>,
+and <code>yyerror()</code> printing "Invalid Identifier".</p>
+<h1 id="answers-set-3-viva">ANSWERS — SET 3 (viva)</h1>
+<p><strong>3.1</strong> To detect where the token ends. That character belongs to the <em>next</em> token, so it is pushed
+back with <code>ungetc()</code> — otherwise it is lost and the next token is misread.</p>
+<p><strong>3.2</strong> Both are possible, but lex applies <strong>longest match first, then the earlier rule on a tie</strong>.
+Same length, so the keyword rule wins because it is written first.</p>
+<p><strong>3.3</strong> The length of the matched text (<code>yytext</code>). Exp 3 uses it to count characters without
+looping: <code>characters += yyleng</code>.</p>
+<p><strong>3.4</strong> lex recognises tokens (regular expressions); yacc checks their <em>order</em> against a grammar
+(context-free rules). lex feeds <code>yylex()</code>, yacc consumes it in <code>yyparse()</code>.</p>
+<p><strong>3.5</strong> It also writes the token-definition header <code>y.tab.h</code>, which the <code>.l</code> file includes so the two
+halves agree on token numbers.</p>
+<p><strong>3.6</strong> The lex runtime library (<code>yywrap</code>, the input buffer). System V lex ships it as <code>libl</code> →
+<code>-ll</code>; flex ships <code>libfl</code> → <code>-lfl</code>. On this machine only <code>libfl</code> exists.</p>
+<p><strong>3.7</strong> yacc is LALR — bottom-up — and left recursion lets it consume input with a bounded stack; it
+also encodes "an identifier followed by one more letter is still an identifier" directly. Right
+recursion would grow the stack for every symbol.</p>
+<p><strong>3.8</strong> <code>123abc</code> starts with <code>DIGIT</code>, and the rule <code>identifier : LETTER | identifier LETTER |
+identifier DIGIT<code> can only *start* from </code>LETTER<code>. No derivation exists, so </code>yyerror()</code> fires.</p>
+<p><strong>3.9</strong> ε-closure = the state plus everything reachable by ε-moves, and ε-moves can chain, so it is
+naturally recursive. The <code>closure[state][i] == 0</code> check visits each state once, so cycles terminate.</p>
+<p><strong>3.10</strong> δ'(q, a) = ε-closure( ∪ over p ∈ ε-closure(q) of δ(p, a) ) — teleport freely, read the
+symbol, teleport freely again.</p>
+<p><strong>3.11</strong> Exp 5 computes it; Exp 6 takes it as input. That is the pipeline: 5 → 6 → 7.</p>
+<p><strong>3.12</strong> A <strong>set of NFA states</strong> — "the NFA could be in any of these right now". The subset
+construction makes each such set one state of the deterministic machine.</p>
+<p><strong>3.13</strong> Without sorting, <code>{q1,q2}</code> and <code>{q2,q1}</code> are different arrays, <code>sameSet</code> says no, and the
+DFA grows duplicate states forever.</p>
+<p><strong>3.14</strong> Sets are <strong>appended</strong> to the list and the loop index keeps advancing, so a set discovered at
+index 3 is processed when the loop reaches index 3 in the same pass.</p>
+<p><strong>3.15</strong> FIRST(X): terminals that can begin a string derived from X. FOLLOW(A): terminals that can
+appear immediately after A (plus <code>$</code> if A can end the input).</p>
+<p><strong>3.16</strong> ε is awkward to type on a terminal, so <code>#</code> stands in for it in the production strings.</p>
+<p><strong>3.17</strong> It is the <strong>absence of a match</strong>: <code>Eprime()</code> tests for <code>+</code>; if it isn't there, the function
+returns without consuming anything. That silent return <em>is</em> the ε-production.</p>
+<p><strong>3.18</strong> Because <code>*</code> lives one level deeper — <code>F</code> is inside <code>T</code>, <code>T</code> is inside <code>E</code>. Deeper nesting is
+applied first, so <code>*</code> binds tighter.</p>
+<p><strong>3.19</strong> Shift: move one input symbol onto the stack. Reduce: replace a RHS on top of the stack by
+its LHS. Bottom-up, vs recursive descent's top-down.</p>
+<p><strong>3.20</strong> To detect "no progress". If a full pass leaves <code>top</code> unchanged, no rule applies and further
+passes would loop forever.</p>
+<p><strong>3.21</strong> Operands come off a stack, so the <strong>last</strong> one pushed is the <strong>right</strong> operand. Popping
+<code>b</code> first, then <code>a</code>, keeps <code>a op b</code> in source order — getting it backwards prints <code>t1 = c * b</code>.</p>
+<p><strong>3.22</strong> <code>&gt;=</code> makes equal precedence reduce immediately, so operators of the same precedence
+associate <strong>left to right</strong> — <code>a-b-c</code> becomes <code>(a-b)-c</code>, which is what C does.</p>
+<p><strong>3.23</strong> It reduces <code>i→E</code>, then <code>E*E→E</code>, then <code>E+E→E</code> — i.e. <code>i+(i*i)</code>, which matches precedence. The
+grammar <code>E→E+E|E*E|i</code> is ambiguous, and this reduce-as-soon-as-possible order happens to pick the
+precedence-correct parse for this input; it is not guaranteed in general.</p>
+<p><strong>3.24</strong> No. <code>lex</code> is the traditional name; on a flex machine it is the same tool (often a symlink or
+wrapper). The generated file and the <code>-lfl</code> flag are what change, not your source.</p>
+  </main>
+</div>
+<button id="chat-btn" title="Ask about this page (select text first)">✳</button>
+<div id="sel-chip">Ask about this</div>
+<div id="chat-panel" role="dialog" aria-label="Ask about this page">
+  <div id="chat-head"><span>Ask this page</span><span class="sp"></span><button id="chat-close" title="Close">✕</button></div>
+  <div id="chat-quote"></div>
+  <div id="chat-log"></div>
+  <form id="chat-form" autocomplete="off">
+    <textarea id="chat-input" rows="1" placeholder="Ask about the selection or the section…"></textarea>
+    <button id="chat-send" title="Send">↑</button>
+  </form>
+  <div id="chat-foot">Select text → “Ask about this”. Enter sends, Shift+Enter newline.</div>
+</div>
+<div class="tools">
+  <button id="theme" title="Toggle light / dark">☾</button>
+  <button id="top" title="Back to top">↑</button>
+</div>
+<script>
+(function(){
+  var root=document.documentElement, key='minotes-theme';
+  var saved=localStorage.getItem(key);
+  var prefers=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';
+  root.setAttribute('data-theme', saved || prefers);
+
+  var btn=document.getElementById('theme');
+  function sync(){ if(btn) btn.textContent = root.getAttribute('data-theme')==='dark' ? '\u2600' : '\u263E'; }
+  sync();
+  if(btn) btn.addEventListener('click',function(){
+    var next = root.getAttribute('data-theme')==='dark' ? 'light' : 'dark';
+    root.setAttribute('data-theme', next); localStorage.setItem(key,next); sync();
+  });
+
+  var bar=document.getElementById('progress');
+  if(bar) addEventListener('scroll',function(){
+    var h=document.documentElement.scrollHeight-innerHeight;
+    bar.style.width=(h>0?(scrollY/h*100):0)+'%';
+  },{passive:true});
+
+  document.querySelectorAll('pre').forEach(function(pre){
+    var b=document.createElement('button');
+    b.className='copy'; b.textContent='copy';
+    b.addEventListener('click',function(){
+      var t=pre.querySelector('code'); var txt=t?t.innerText:pre.innerText;
+      navigator.clipboard.writeText(txt).then(function(){
+        b.textContent='copied'; setTimeout(function(){b.textContent='copy';},1200);
+      });
+    });
+    pre.appendChild(b);
+  });
+
+  document.querySelectorAll('main table').forEach(function(t){
+    if(t.parentElement.classList.contains('table-scroll')) return;
+    var w=document.createElement('div'); w.className='table-scroll';
+    t.parentNode.insertBefore(w,t); w.appendChild(t);
+  });
+
+  var links=[].slice.call(document.querySelectorAll('.sidebar a[href^="#"]'));
+  var map={}; links.forEach(function(a){ map[a.getAttribute('href').slice(1)]=a; });
+  var heads=[].slice.call(document.querySelectorAll('main h2[id], main h3[id]'));
+  if('IntersectionObserver' in window && heads.length){
+    var obs=new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if(!e.isIntersecting) return;
+        links.forEach(function(a){a.classList.remove('active');});
+        var a=map[e.target.id]; if(a){a.classList.add('active');}
+      });
+    },{rootMargin:'-10% 0px -75% 0px'});
+    heads.forEach(function(h){obs.observe(h);});
+  }
+
+  var top=document.getElementById('top');
+  if(top) top.addEventListener('click',function(){ scrollTo({top:0,behavior:'smooth'}); });
+})();
+
+(function(){
+  var API="/api/chat";
+  var panel=document.getElementById("chat-panel"),
+      btn=document.getElementById("chat-btn"),
+      chip=document.getElementById("sel-chip"),
+      quote=document.getElementById("chat-quote"),
+      log=document.getElementById("chat-log"),
+      input=document.getElementById("chat-input"),
+      send=document.getElementById("chat-send"),
+      form=document.getElementById("chat-form");
+
+  if(!panel) return;
+  var pendingSelection="", busy=false, lastSelection="";
+
+  function esc(s){return s.replace(/[&<>]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;"}[c];});}
+
+  // minimal markdown: fenced code, inline code, bold, bullets, numbered lists
+  function md(src){
+    var parts=src.split(/```/), out="";
+    for(var i=0;i<parts.length;i++){
+      if(i%2){ out+="<pre><code>"+esc(parts[i].replace(/^\w*\n/,""))+"</code></pre>"; continue; }
+      var t=esc(parts[i]);
+      t=t.replace(/`([^`\n]+)`/g,"<code>$1</code>").replace(/\*\*([^*]+)\*\*/g,"<b>$1</b>");
+      var lines=t.split(/\n/), html="", inUl=false, inOl=false;
+      for(var j=0;j<lines.length;j++){
+        var line=lines[j];
+        if(/^\s*[-*]\s+/.test(line)){
+          if(inOl){html+="</ol>";inOl=false;}
+          if(!inUl){html+="<ul>";inUl=true;}
+          html+="<li>"+line.replace(/^\s*[-*]\s+/,"")+"</li>"; continue;
+        }
+        if(/^\s*\d+[.)]\s+/.test(line)){
+          if(inUl){html+="</ul>";inUl=false;}
+          if(!inOl){html+="<ol>";inOl=true;}
+          html+="<li>"+line.replace(/^\s*\d+[.)]\s+/,"")+"</li>"; continue;
+        }
+        if(inUl){html+="</ul>";inUl=false;}
+        if(inOl){html+="</ol>";inOl=false;}
+        if(line.trim()==="") continue;
+        html+="<p>"+line+"</p>";
+      }
+      if(inUl)html+="</ul>";
+      if(inOl)html+="</ol>";
+      out+=html;
+    }
+    return out;
+  }
+
+  function outline(){
+    return [].slice.call(document.querySelectorAll("main h2, main h3")).slice(0,40)
+      .map(function(h){return (h.tagName==="H3"?"  - ":"- ")+h.textContent.replace(/#$/,"").trim();}).join("\n");
+  }
+
+  function sectionFor(node){
+    var el = node && (node.nodeType===1?node:node.parentElement);
+    if(!el || !el.closest) return "";
+    el = el.closest("main") ? el : null;
+    if(!el) return "";
+    var heads=[].slice.call(document.querySelectorAll("main h2, main h3"));
+    var cur=null, idx=-1;
+    for(var i=0;i<heads.length;i++){
+      if(heads[i].compareDocumentPosition(el) & Node.DOCUMENT_POSITION_FOLLOWING) { cur=heads[i]; idx=i; }
+    }
+    if(!cur) return "";
+    var stop = heads[idx+1] || null, txt=[], n=cur;
+    while((n=n.nextSibling) && n!==stop){ if(n.textContent) txt.push(n.textContent); }
+    return (cur.textContent+"\n"+txt.join("\n")).replace(/\s+\n/g,"\n").slice(0,3000);
+  }
+
+  function placeChip(x,y){
+    chip.style.left=x+"px"; chip.style.top=(y+window.scrollY-8)+"px"; chip.style.display="block";
+  }
+  function hideChip(){ chip.style.display="none"; }
+
+  document.addEventListener("mouseup",function(e){
+    setTimeout(function(){
+      var s=window.getSelection(), text=s?s.toString().trim():"";
+      if(!text || text.length<3 || !s.anchorNode || !(s.anchorNode.parentElement||s.anchorNode).closest("main")){hideChip();return;}
+      lastSelection=text;
+      var r=s.getRangeAt(0).getBoundingClientRect();
+      placeChip(r.left+r.width/2, Math.max(r.top,8));
+    },10);
+  });
+  document.addEventListener("mousedown",function(e){ if(e.target!==chip) hideChip(); });
+
+  chip.addEventListener("mousedown",function(e){ e.preventDefault(); });
+  chip.addEventListener("click",function(e){
+    e.stopPropagation();
+    pendingSelection=lastSelection; hideChip(); open(pendingSelection);
+  });
+
+  function open(sel){
+    panel.classList.add("open");
+    if(sel){ quote.style.display="block"; quote.textContent=sel; pendingSelection=sel; }
+    else { quote.style.display="none"; quote.textContent=""; pendingSelection=""; }
+    setTimeout(function(){input.focus();},60);
+  }
+  function close(){ panel.classList.remove("open"); }
+
+  btn.addEventListener("click",function(){ panel.classList.contains("open")?close():open(lastSelection||""); });
+  document.getElementById("chat-close").addEventListener("click",close);
+  document.addEventListener("keydown",function(e){ if(e.key==="Escape") close(); });
+
+  function addMsg(cls,html){
+    var d=document.createElement("div"); d.className="msg "+cls; d.innerHTML=html; log.appendChild(d);
+    log.scrollTop=log.scrollHeight; return d;
+  }
+
+  async function ask(q){
+    if(busy||!q.trim()) return;
+    busy=true; send.disabled=true;
+    addMsg("user",esc(q));
+    var bot=addMsg("bot",'<span class="cursor"></span>');
+    var acc="";
+    var sid=sessionStorage.getItem("mn-sid");
+    if(!sid){ sid=(crypto.randomUUID?crypto.randomUUID():String(Date.now())+Math.random().toString(16).slice(2)); sessionStorage.setItem("mn-sid",sid); }
+    var payload={q:q, sid:sid, sel:pendingSelection||"", page:document.querySelector("h1")?document.querySelector("h1").textContent.trim():document.title,
+                 section:sectionFor(window.getSelection()&&window.getSelection().anchorNode?"":document.querySelector("main h2"))||"",
+                 outline:outline()};
+    // section: prefer the one containing the selection, else the first heading on screen
+    try{
+      var sel=window.getSelection();
+      if(pendingSelection && sel && sel.anchorNode){ payload.section=sectionFor(sel.anchorNode); }
+      if(!payload.section){
+        var vis=[].slice.call(document.querySelectorAll("main h2, main h3")).filter(function(h){
+          var r=h.getBoundingClientRect(); return r.top>-80 && r.top<window.innerHeight*0.6; }).pop();
+        if(vis) payload.section=sectionFor(vis);
+      }
+    }catch(_){}
+
+    try{
+      var res=await fetch(API,{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify(payload)});
+      if(!res.ok){
+        var j=await res.json().catch(function(){return{};});
+        throw new Error(j.error||("HTTP "+res.status));
+      }
+      var reader=res.body.getReader(), dec=new TextDecoder(), buf="";
+      for(;;){
+        var r=await reader.read(); if(r.done) break;
+        buf+=dec.decode(r.value,{stream:true});
+        var lines=buf.split("\n"); buf=lines.pop()||"";
+        for(var i=0;i<lines.length;i++){
+          var l=lines[i].trim(); if(l.indexOf("data:")!==0) continue;
+          var d=l.slice(5).trim(); if(d==="[DONE]") continue;
+          try{ var o=JSON.parse(d); if(o.d){acc+=o.d; bot.innerHTML=md(acc)+'<span class="cursor"></span>'; log.scrollTop=log.scrollHeight;} if(o.error) throw new Error(o.error);}catch(_){}
+        }
+      }
+      bot.innerHTML=md(acc||"_no answer_");
+    }catch(err){
+      bot.className="msg err";
+      bot.textContent = String(err.message).indexOf("Failed to fetch")>-1 || String(err.message).indexOf("HTTP 5")>-1
+        ? "Assistant unavailable — it only works on the deployed site (needs the /api/chat function)."
+        : "Error: "+err.message;
+    }finally{
+      busy=false; send.disabled=false; input.value=""; input.focus();
+      pendingSelection=""; quote.style.display="none";
+    }
+  }
+
+  form.addEventListener("submit",function(e){ e.preventDefault(); ask(input.value); });
+  input.addEventListener("keydown",function(e){
+    if(e.key==="Enter"&&!e.shiftKey){ e.preventDefault(); ask(input.value); }
+  });
+  input.addEventListener("input",function(){ input.style.height="auto"; input.style.height=Math.min(input.scrollHeight,110)+"px"; });
+})();
+</script>
+
+</body>
+</html>

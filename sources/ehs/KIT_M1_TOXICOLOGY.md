@@ -31,25 +31,80 @@ Not this module, though the wording looks close: MSDS (§ Module II), routes of 
 
 ### 2.1 Occupational safety and health (`slide 8`, `slide 12`, `slide 13`, `slide 14`)
 
-**What:** OSH protects the safety, health and welfare of people engaged in work or employment, and its goal is a safe and healthy work environment (`slide 8`).
+*In plain English.* OSH is not "don't slip on the wet floor". It is redesigning the work so it
+does not break the body. And it does not stop at the person on the clock: visitors, customers,
+co-workers and the family who breathe the dust carried home on clothes all count.
 
-- Scope deliberately reaches past the worker: co-workers, family members, employers, customers and others who might be affected by the workplace environment (`slide 8`).
-- Definition is jointly owned — adopted by the Joint ILO/WHO Committee on Occupational Health at its first session, **1950**, revised at its twelfth session, **1995** (`slide 13`).
-- The definition carries five separate aims, and listing them separately scores better than paraphrasing:
-  - **Promotion and maintenance** of the highest degree of physical, mental and social well-being of workers in all occupations.
-  - **Prevention** among workers of departures from health caused by their working conditions.
-  - **Protection** of workers in employment from risks resulting from factors adverse to health.
-  - **Adaptation of the environment** to the worker's physiological and psychological capabilities.
-  - **Adaptation of work to man and of each man to his job.**
-- Three declared objectives (`slide 14`): maintain and promote workers' health and working capacity; improve working conditions and environment to be conducive to safety and health; develop work organisation and work cultures (managerial systems, personnel policy, principles of participation, voluntary quality-related management).
-- Three justifications (`slide 12`): **moral** (protection of employees' lives and health), **legal** (preventive, punitive and compensatory effects of law), **financial** (reduces medical care, sick leave and disability benefit costs).
-- **Duty of care** = the common-law duty to take reasonable care of employees' safety; statute law may impose general duties, introduce specific duties, and create government bodies with powers to regulate occupational safety (`slide 12`, `slide 26`).
+*The detail.*
+- **Scope** reaches past the worker to co-workers, family, employers, customers and anyone
+  affected by the workplace environment (`slide 8`).
+- **Who owns the definition:** the Joint ILO/WHO Committee on Occupational Health, **1950**,
+  revised at its twelfth session, **1995** (`slide 13`).
+- **Five aims** live inside that definition — they are a list, so write them as a list rather
+  than paraphrasing them into one sentence.
+- **Three objectives** are a second, different list (`slide 14`). See the trap below.
+- **Three justifications** for spending money on safety (`slide 12`): **moral** (protect lives),
+  **legal** (preventive rules, fines, compensation), **financial** (fewer medical bills, less
+  sick leave, less disability benefit).
+- **Duty of care** is the common-law duty to take reasonable care of employees' safety; statute
+  law adds general duties, specific duties, and regulators with enforcement powers (`slide 12`,
+  `slide 26`).
 
-**Trap:** "aims" and "objectives" are different lists — five aims inside the ILO/WHO definition, three objectives on `slide 14`. A 3-mark "enlist the objectives" accepts either, but do not present three as if they were the definition.
+**The five aims** (from the ILO/WHO definition, `slide 13`):
+1. **Promote and maintain** the highest degree of physical, mental and social well-being of
+   workers in all occupations.
+2. **Prevent** departures from health caused by working conditions.
+3. **Protect** workers from risks arising from factors adverse to health.
+4. **Adapt the environment** to the worker's physiological and psychological capabilities.
+5. **Adapt work to the worker**, and each worker to the job.
+
+**The three objectives** (`slide 14`):
+1. Maintain and promote workers' health and working capacity.
+2. Improve working conditions and the working environment so they support health and safety.
+3. Develop work organisation and work culture — managerial systems, personnel policy,
+   participation, voluntary quality-related management.
+
+*What to write.* For 3 marks: one line of definition, one line naming the ILO/WHO body with
+**1950 / 1995**, one line of mechanisms or scope. For 5 marks: definition + the aims (or the
+objectives, whichever is asked) + one justification. For 8 marks: definition, the five aims,
+the three justifications, and one sentence on duty of care.
+
+**Mark anchor.** "Joint ILO/WHO Committee on Occupational Health, 1950, revised 1995." Quoting
+it proves the definition is an international standard rather than your own wording.
+
+**Exam trap.** **Aims and objectives are different lists.** Five aims sit inside the definition;
+three objectives sit on `slide 14`. If the question says "enlist the objectives", giving the
+five aims is a wrong answer — and presenting the three objectives as "the definition" is the
+same mistake in the other direction.
 
 ### 2.2 Toxicology — the vocabulary (`slide 16`, `slide 18`, `slide 19`, `slide 101`, `slide 105`)
 
-**What:** Toxicology is the study of the adverse effects of chemicals or physical agents on living organisms (`slide 16`); industrial toxicology is the study of the harmful effects on humans of chemicals used in the workplace, the products produced by companies, and the wastes created in manufacturing (`slide 101`).
+*In plain English.* A **hazard** is the tiger. A **risk** is how close you stand to the cage.
+The acid in a tank is always corrosive — you cannot change that — but you can change whether it
+ever reaches your skin. Most of this subject is the second half of that sentence.
+
+*The detail.*
+- **Toxicology** = the study of the harmful effects of chemicals or physical agents on living
+  things (`slide 16`).
+- **Industrial toxicology** narrows it to the workplace: the chemicals used, the products made,
+  and the wastes left over (`slide 101`).
+- **Four toxic families** (`slide 19`) — the exam wants one example and its target organ each:
+
+| Family | Example | What it attacks |
+|---|---|---|
+| Heavy metals | Lead, mercury | Kidneys, brain and nerves, bone marrow |
+| Organic solvents | Benzene, toluene | Central nervous system (depression), liver |
+| Pesticides | Organophosphates | Nerve transmission |
+| Gases, vapours, particulates | Chlorine, silica dust | Respiratory tract and lungs |
+
+- **Two independent classification axes** (`slide 105`) — mixing them up is the commonest lost
+  mark in this topic:
+  - **Where it acts.** **Local** = damage at the point of contact (acid on skin, ammonia in the
+    throat). **Systemic** = the chemical is absorbed and harms organs elsewhere (lead dust →
+    nerve and kidney damage).
+  - **When it acts.** **Acute** = hours or days after a brief high exposure (chlorine gas →
+    immediate choking). **Chronic** = months or years of repeated exposure (silica → scarring
+    after 15 years). Most **carcinogens** act chronically.
 
 | Term | Deck's wording (`slide 18`, `slide 19`) |
 |---|---|
@@ -60,10 +115,17 @@ Not this module, though the wording looks close: MSDS (§ Module II), routes of 
 | Hazard | Any source of potential damage, harm or adverse health effects on something or someone under certain conditions at work |
 | Risk | The chance or probability that a person will be harmed or experience an adverse health effect if exposed to a hazard |
 
-- Four families of common occupational toxic substance: **heavy metals, pesticides, organic solvents, gases/vapours/particulates** (`slide 19`).
-- Classification of toxic effects (`slide 105`): **local** = occurs at the site of chemical contact; **systemic** = occurs distant from the point of contact, may involve many organ systems; **acute** = almost immediately (hours/days) after exposure; **chronic** = cumulative damage to specific organ systems, taking many months or years to produce recognisable clinical disease — *most carcinogens produce chronic effects*.
+*What to write.* For 3 marks: define hazard and risk, or name the four families with one example
+each. For 5 marks: definitions + the two axes with one example per cell. For 8 marks: add the
+four families with target organs and one control per family.
 
-**Trap:** local/systemic answers *where*, acute/chronic answers *when* — two independent axes, not one severity scale. A substance can be acutely systemic or chronically local.
+**Mark anchor.** "Local/systemic answers **where**; acute/chronic answers **when**." Stating that
+sentence explicitly is worth a mark, because it shows you know they are two axes and not one
+severity scale.
+
+**Exam trap.** A substance can be **acutely systemic** (cyanide, acting within minutes on brain
+and heart) or **chronically local** (weak acid splashing the same skin for years). Do not sort
+chemicals into "acute" and "chronic" as if the pair covered everything.
 
 ### 2.3 Safety at work — the socio-economic reasons (`slide 15`, `slide 20`–`slide 27`)
 
@@ -172,21 +234,61 @@ Not this module, though the wording looks close: MSDS (§ Module II), routes of 
 
 ### 2.9 Silicosis, asbestosis, pneumoconiosis (`slide 7`, `slide 33` name them; `slide 37`–`slide 66` are image-only, so the detail below is `notes §1.6`)
 
-**Silicosis** — a fibrosing lung disease caused by inhaling respirable crystalline silica, chiefly quartz.
-- Mechanism: the particle is engulfed by an alveolar macrophage, which cannot digest it; the macrophage dies and releases the silica again, the inflammatory cycle repeats, and collagen is laid down around the dust foci.
-- Size decides the hazard: only the respirable fraction — roughly **below 5 µm** **(standard)** — bypasses the nose and the mucociliary escalator and reaches the alveoli, which is why the risk comes from cutting, grinding, drilling and blasting rather than from a heap of sand.
-- Lesion: a discrete, rounded **hyaline nodule** of concentric collagen, forming first in the **upper lobes** and coalescing into progressive massive fibrosis; hilar nodes may calcify in a rim (the "eggshell" pattern); because silica impairs the macrophage's ability to kill mycobacteria, silicosis carries an **excess risk of tuberculosis**.
-- Course: appears after years of exposure, is **irreversible**, and continues to progress after exposure stops — so prevention is entirely environmental: wet methods, local exhaust ventilation, enclosure of the working area, substitution of a less hazardous abrasive, respiratory protection last.
+**Silicosis**
 
-**Asbestosis** — diffuse interstitial pulmonary fibrosis caused by inhaling asbestos fibres, in which the retained fibre provokes chronic inflammation and collagen deposition in the alveolar walls rather than discrete nodules.
-- Geometry is the pathology: **serpentine** asbestos (chrysotile) forms curly fibres; **amphibole** asbestos (crocidolite, amosite) forms straight, stiff, needle-like fibres that penetrate deep and cannot be cleared or dissolved.
-- Mechanism: the fibre is too long for a macrophage to engulf completely — **frustrated phagocytosis** — so the cell spreads along it, releases oxidants and cytokines, dies, and leaves the fibre to the next cell.
-- Lesion and signs: diffuse thickening of the alveolar interstitium, worst at the **lung bases and subpleural regions**; fine crackles, finger clubbing, progressive breathlessness, and pleural thickening and plaques on the radiograph.
-- Latency is of the order of **decades** **(standard)**. Asbestos also causes pleural plaques and effusion, **lung cancer** (with a multiplicative interaction with smoking) and **mesothelioma**. Classical exposures: shipbreaking (Alang), insulation, roofing, brake linings, demolition. Control is substitution — ban and replace.
+*In plain English.* Silica dust is a speck the lung can swallow but cannot digest. The cell
+that does the swallowing is the **macrophage** — the lung's cleaner. It eats the speck, fails
+to break it down, dies, and releases the speck for the next cleaner to eat. Every round of
+that fight leaves scar tissue behind. After years, the scars harden into small balls, mostly
+in the upper part of the lung.
 
-**Pneumoconiosis** — the general term for any lung disease produced by the accumulation of inhaled mineral dust and the tissue reaction to it; silicosis, asbestosis, coal workers' pneumoconiosis and byssinosis are its named forms.
-- **Coal workers' pneumoconiosis:** coal dust is less fibrogenic than silica, so the early lesion is a **coal macule** — dust-laden macrophages with a little reticulin, centred on the respiratory bronchiole — with focal emphysema; a sufficient dust burden coalesces the macules into progressive massive fibrosis.
-- **Byssinosis:** cotton, flax and hemp dust produce airway obstruction **without fibrosis**, with Monday-morning chest tightness that improves through the week.
+*The detail.*
+- **Size decides everything:** only fragments below about **5 µm** **(standard)** get past the
+  nose and the mucociliary escalator to reach the air sacs (alveoli).
+- **Where it comes from:** cutting, grinding, drilling, blasting, sandblasting, quarrying,
+  foundry work — not from a heap of sand sitting still.
+- **The scar:** rounded nodules of collagen, starting in the **upper lobes**, which can merge
+  into a mass — **progressive massive fibrosis** (PMF).
+- **Two radiology signatures:** hilar lymph nodes may calcify in a ring ("**eggshell**"
+  calcification), and silica weakens the macrophage's ability to kill mycobacteria, so there is
+  an **excess risk of tuberculosis**.
+- **Course:** irreversible, and it keeps progressing after exposure stops.
+
+*What to write (3 marks).* Agent → what the cell does → where the scar sits → one distinctive
+feature. Four lines, no introduction. For 8 marks add prevention (wet methods, local exhaust
+ventilation, enclosure, substitution of the abrasive, respirator last).
+
+**Asbestosis**
+
+*In plain English.* Asbestos is a rock that splits into needles. The lung can neither dissolve
+a needle nor swallow it whole, so the cleaner cell spreads itself along the fibre and fails —
+and the scar it builds is the disease. Silica scars in **lumps high up**; asbestos scars in
+**sheets low down**.
+
+*The detail.*
+- **Two geometries:** **serpentine** asbestos (chrysotile) is curly; **amphibole** asbestos
+  (crocidolite, amosite) is straight and stiff, penetrates deeper, and cannot be cleared or
+  dissolved — which is why amphiboles are the worse exposure.
+- **Mechanism:** the fibre is too long for one macrophage to engulf, so the cell spills its
+  enzymes and oxidants along the fibre and dies. The textbook calls this **frustrated
+  phagocytosis** — frustrated because the cell cannot finish the job.
+- **The scar:** spread through the lung wall, worst at the **lung bases** and just under the
+  pleura. The textbook name, *diffuse interstitial fibrosis*, means "scarring spread through
+  the tissue between the air sacs".
+- **Signs:** fine crackles at the bases, finger clubbing, worsening breathlessness, pleural
+  thickening and plaques on the X-ray.
+- **Stakes:** latency of **decades** **(standard)**; also causes **lung cancer** (risk
+  multiplies with smoking) and **mesothelioma**. Classical exposures: shipbreaking (Alang),
+  insulation, roofing, brake linings, demolition. Control is substitution and ban — not a
+  "safe limit".
+
+**Pneumoconiosis** is the umbrella term: any lung disease from accumulated mineral dust plus
+the tissue reaction to it. Two named forms sit beside the two above.
+- **Coal workers' pneumoconiosis:** coal dust is less fibrogenic than silica, so the early
+  lesion is a **coal macule** (dust-laden cells on the respiratory bronchiole, with a little
+  reticulin) and focal emphysema; enough dust merges the macules into PMF.
+- **Byssinosis:** cotton, flax and hemp dust cause airway obstruction **without fibrosis** —
+  the classic "Monday-morning chest tightness" that eases through the week.
 
 | Disease | Agent | Typical exposure | Site and lesion | Distinctive feature |
 |---|---|---|---|---|
@@ -195,7 +297,12 @@ Not this module, though the wording looks close: MSDS (§ Module II), routes of 
 | Coal workers' pneumoconiosis | Coal mine dust | Underground coal mining | Upper lobes; coal macules with focal emphysema → PMF | Dust macules, not hyaline nodules |
 | Byssinosis | Cotton, flax, hemp dust | Textile spinning and carding | Bronchi; obstruction, no fibrosis | Monday-morning chest tightness |
 
-**Trap:** silica gives upper-lobe nodules, asbestos gives lower-lobe diffuse fibrosis. Swapping the two loses the distinguishing mark in a 3-mark answer, which is the whole answer.
+**Mark anchor.** Silica = *upper* lobes, *nodules*, eggshell calcification, TB risk.
+Asbestos = *lower* lobes, *diffuse*, pleural plaques, mesothelioma.
+
+**Exam trap.** The two diseases are not "both dust diseases" — they differ in **lesion shape
+and site**. A 3-mark answer that swaps upper for lower has lost its only distinguishing mark.
+Second trap: **byssinosis is not a fibrosis**, and coal macules are not hyaline nodules.
 
 ### 2.10 Toxic materials and substances used in work (`slide 19`, `slide 101`, `notes §1.7`)
 

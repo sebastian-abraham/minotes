@@ -26,6 +26,7 @@ import drills as drill_data
 import ehs_drills as ehs_drill_data
 import ise_drills as ise_drill_data
 import practice as practice_page
+import compiler_lab as compiler_lab_pages
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)                 # repo root = site root
@@ -128,6 +129,48 @@ SUBJECTS = [
              "Fire, Dow index, PHA, HAZOP, MSDS", "Module 5 · Hazard identification and control", "kits", "m5-hazard-id"),
             ("syllabus.md", "Syllabus", "Five modules, verbatim", "The scope, module by module", "Syllabus (verbatim)", "source", "syllabus"),
             ("question_map.md", "Question bank", "172 questions, mapped", "Every bank question and which kit answers it", "Question bank (172, mapped)", "source", "question-bank"),
+        ],
+    },
+    {
+        "slug": "compiler-lab",
+        "title": "Compiler Lab",
+        "code": "20CSL401",
+        "tagline": "Semester 7 · CSE · lab exam",
+        "blurb": "Eleven experiments as a bench you can poke: every algorithm step is wired to the exact "
+                 "C lines that implement it, a trace player runs the algorithm on your own input, "
+                 "curveball lists say what changes when the question is modified, and the playground "
+                 "really compiles C in the browser.",
+        "gen": "compiler_lab",
+        "pages": [
+            ("lab.html", "Lab bench", "11 experiments · step ↔ code",
+             "Click a step, the C lights up — plus a trace player per experiment",
+             "Lab bench — every step mapped to the code", "practice", "lab"),
+            ("playground.html", "Playground", "write C · compile · run",
+             "Type a program, run it on a real gcc sandbox, no install",
+             "Playground — write it and run it", "practice", "playground"),
+        ],
+        "docs": [
+            ("START_HERE.md", "Start here", "Exam shape · priority · traps",
+             "Three phases, what to learn first, the two build traps",
+             "Start here — the plan", "start", "start-here"),
+            ("GROUP_A_lexical_analysis.md", "Group A · Lexical", "Exp 1–4 · lex & yacc",
+             "Hand-written scanner, LEX, counting, LEX+YACC — derivation and verified runs",
+             "Group A — lexical analysis", "kits", "group-a-lexical"),
+            ("GROUP_B_automata.md", "Group B · Automata", "Exp 5–7 · ε and subsets",
+             "ε-closure, ε-NFA → NFA, NFA → DFA — the formulas written out",
+             "Group B — finite automata", "kits", "group-b-automata"),
+            ("GROUP_C_parsing.md", "Group C · Parsing", "Exp 8–10 · FIRST to shift-reduce",
+             "FIRST/FOLLOW, recursive descent, shift-reduce — two real bugs found by running",
+             "Group C — parsing", "kits", "group-c-parsing"),
+            ("GROUP_D_code_generation.md", "Group D · Codegen", "Exp 11 · three-address code",
+             "Two stacks, precedence, temporaries — the whole experiment in two lines",
+             "Group D — code generation", "kits", "group-d-codegen"),
+            ("EXAM_DRILLS.md", "Drill pack", "closed book · answers behind a barrier",
+             "4 algorithm recalls, 4 code-from-blank tasks, 24 viva questions",
+             "Exam drill pack", "progress", "drills"),
+            ("ALGORITHMS.md", "Condensed algorithms", "11 experiments · one page each",
+             "The last-10-minutes revision sheet",
+             "Condensed algorithms (11)", "source", "algorithms"),
         ],
     },
 ]
@@ -851,6 +894,26 @@ def build_subject(subject):
                 .replace("{{TAGS}}", html_mod.escape(f"{label} {pretty} {blurb} {src_name}")))
         cards.setdefault(group, []).append(card)
 
+    # pre-built app pages (raw HTML already on disk) — cards only, nothing to render
+    for file_name, label, sub, blurb, pretty, group, slug in subject.get("pages", []):
+        cards.setdefault(group, []).append(
+            DOC_CARD
+            .replace("{{CLASS}}", "")
+            .replace("{{FILE}}", file_name)
+            .replace("{{LABEL}}", html_mod.escape(label))
+            .replace("{{TITLE}}", html_mod.escape(pretty))
+            .replace("{{BLURB}}", html_mod.escape(blurb))
+            .replace("{{SUB}}", html_mod.escape(sub))
+            .replace("{{TAGS}}", html_mod.escape(f"{label} {pretty} {blurb} {file_name}")))
+
+    # generated interactive apps (compiler lab: step↔code bench + C playground)
+    if subject.get("gen") == "compiler_lab":
+        lab_html, play_html = compiler_lab_pages.build_pages(subject["title"], CSS + SHELL_CSS)
+        for name, content in (("lab.html", lab_html), ("playground.html", play_html)):
+            path = os.path.join(ROOT, subject["slug"], name)
+            write(path, content)
+            print(f"  {subject['slug']}/{name}      {os.path.getsize(path) // 1024:5d} KB  (generated app)")
+
     if subject.get("drills"):
       cards.setdefault("practice", []).append(
         DOC_CARD
@@ -862,10 +925,11 @@ def build_subject(subject):
         .replace("{{SUB}}", "fill · output · write · checked in the browser")
         .replace("{{TAGS}}", "practice drills coding syntax fill output write"))
 
-    drill_list = {"ehs": ehs_drill_data.EHS_DRILLS, "ise": ise_drill_data.ISE_DRILLS}.get(subject.get("drills"), drill_data.DRILLS)
-    page = practice_page.build(drill_list, subject["title"], CSS + SHELL_CSS, JS)
-    write(os.path.join(ROOT, subject["slug"], "practice.html"), page)
-    print(f"  {subject['slug']}/practice.html      {os.path.getsize(os.path.join(ROOT, subject['slug'], 'practice.html')) // 1024:5d} KB  ({len(drill_list)} drills)")
+    if not subject.get("gen"):
+      drill_list = {"ehs": ehs_drill_data.EHS_DRILLS, "ise": ise_drill_data.ISE_DRILLS}.get(subject.get("drills"), drill_data.DRILLS)
+      page = practice_page.build(drill_list, subject["title"], CSS + SHELL_CSS, JS)
+      write(os.path.join(ROOT, subject["slug"], "practice.html"), page)
+      print(f"  {subject['slug']}/practice.html      {os.path.getsize(os.path.join(ROOT, subject['slug'], 'practice.html')) // 1024:5d} KB  ({len(drill_list)} drills)")
 
     blocks = []
     for key, heading in GROUPS:

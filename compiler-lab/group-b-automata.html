@@ -1,0 +1,1059 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GROUP B — Finite Automata (Exp 5–7) · Compiler Lab</title>
+<style>
+:root{
+  --bg:#fbfaf8; --panel:#ffffff; --ink:#232120; --muted:#5f5a53; --line:#e6e1da;
+  --accent:#7a4fd0; --accent-soft:#f1ecfb; --code-bg:#f5f2ee; --code-ink:#2b2a28;
+  --warn-bg:#fff8e6; --warn-line:#f0d9a0;
+  --sans:"Inter","Segoe UI",system-ui,-apple-system,"Noto Sans",sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,"SF Mono",Menlo,Consolas,"Fira Code",monospace;
+}
+html[data-theme="dark"]{
+  --bg:#141317; --panel:#1b1a20; --ink:#e8e4de; --muted:#a8a199; --line:#2f2c36;
+  --accent:#b79cf5; --accent-soft:#241f33; --code-bg:#22202a; --code-ink:#e8e4de;
+  --warn-bg:#2a2417; --warn-line:#4a3d22;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0; background:var(--bg); color:var(--ink); font-family:var(--sans);
+  font-size:16.5px; line-height:1.72; -webkit-font-smoothing:antialiased;
+}
+#progress{position:fixed;top:0;left:0;height:3px;width:0;background:var(--accent);z-index:50;transition:width .1s linear}
+
+.wrap{display:flex;align-items:flex-start;min-height:100vh}
+.sidebar{
+  position:sticky;top:0;height:100vh;width:300px;flex:0 0 300px;overflow-y:auto;
+  padding:26px 20px 60px;border-right:1px solid var(--line);background:var(--panel);
+}
+.sidebar h1{font-size:15px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);
+  margin:0 0 4px;font-weight:600}
+.sidebar .sub{font-size:12.5px;color:var(--muted);margin:0 0 18px}
+.sidebar nav{font-size:14px}
+.sidebar .toc>ul{padding-left:0}
+.sidebar ul{list-style:none;margin:0;padding-left:12px}
+.sidebar ul ul{border-left:1px solid var(--line);margin-left:4px;padding-left:10px}
+.sidebar li{margin:3px 0}
+.sidebar a{color:var(--ink);text-decoration:none;display:block;padding:3px 8px;border-radius:8px;
+  line-height:1.35;transition:background .12s,color .12s}
+.sidebar a:hover{background:var(--accent-soft);color:var(--accent)}
+.sidebar a.active{background:var(--accent-soft);color:var(--accent);font-weight:600}
+.sidebar .home{display:inline-flex;align-items:center;gap:6px;margin-bottom:16px;font-size:13.5px;
+  color:var(--muted);text-decoration:none;border:1px solid var(--line);padding:5px 10px;border-radius:999px}
+.sidebar .home:hover{color:var(--accent);border-color:var(--accent)}
+
+main{flex:1;min-width:0;padding:46px 56px 120px;max-width:980px;margin:0 auto}
+.doc-head{border-bottom:1px solid var(--line);padding-bottom:18px;margin-bottom:34px}
+.doc-head .kicker{font-size:12.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);
+  font-weight:700;margin-bottom:8px}
+.doc-head .meta{font-size:13.5px;color:var(--muted)}
+
+h1,h2,h3,h4{line-height:1.25;font-weight:700;letter-spacing:-.01em}
+h1{font-size:2.05rem;margin:.2em 0 .5em}
+h2{font-size:1.55rem;margin:2.4em 0 .7em;padding-bottom:.35em;border-bottom:1px solid var(--line)}
+h3{font-size:1.2rem;margin:1.9em 0 .55em}
+h4{font-size:1.03rem;margin:1.5em 0 .45em;color:var(--muted)}
+h2 .anchor,h3 .anchor{opacity:0;margin-left:.35em;font-size:.8em;color:var(--muted);text-decoration:none}
+h2:hover .anchor,h3:hover .anchor{opacity:1}
+p{margin:.75em 0}
+a{color:var(--accent);text-underline-offset:2px}
+strong{font-weight:650}
+hr{border:0;border-top:1px solid var(--line);margin:2.6em 0}
+ul,ol{margin:.7em 0;padding-left:1.4em}
+li{margin:.3em 0}
+li>ul,li>ol{margin:.25em 0}
+blockquote{
+  margin:1.3em 0;padding:12px 18px;background:var(--warn-bg);border-left:3px solid var(--warn-line);
+  border-radius:0 10px 10px 0;color:var(--ink)
+}
+blockquote p{margin:.3em 0}
+
+code{font-family:var(--mono);font-size:.87em;background:var(--code-bg);color:var(--code-ink);
+  padding:.15em .38em;border-radius:6px;border:1px solid var(--line);
+  box-decoration-break:clone;-webkit-box-decoration-break:clone;overflow-wrap:anywhere}
+pre{position:relative;background:var(--code-bg);border:1px solid var(--line);border-radius:12px;
+  padding:16px 18px;overflow-x:auto;margin:1.1em 0}
+pre code{background:none;border:0;padding:0;font-size:13.6px;line-height:1.62;white-space:pre}
+.copy{position:absolute;top:8px;right:8px;font:600 11px/1 var(--sans);color:var(--muted);
+  background:var(--panel);border:1px solid var(--line);border-radius:7px;padding:5px 8px;cursor:pointer;
+  opacity:0;transition:opacity .15s}
+pre:hover .copy{opacity:1}
+.copy:hover{color:var(--accent);border-color:var(--accent)}
+
+.table-scroll{overflow-x:auto;margin:1.3em 0;border:1px solid var(--line);border-radius:12px;background:var(--panel)}
+table{border-collapse:collapse;width:100%;font-size:14.6px}
+th,td{padding:9px 13px;text-align:left;vertical-align:top;border-bottom:1px solid var(--line)}
+th{background:var(--accent-soft);font-weight:650;font-size:13px;letter-spacing:.02em;
+  position:sticky;top:0;backdrop-filter:blur(4px)}
+tr:last-child td{border-bottom:0}
+tbody tr:nth-child(even){background:color-mix(in srgb,var(--panel) 60%,var(--bg))}
+tbody tr:hover{background:var(--accent-soft)}
+
+.tools{position:fixed;right:22px;bottom:22px;display:flex;flex-direction:column;gap:8px;z-index:40}
+.tools button{width:42px;height:42px;border-radius:12px;border:1px solid var(--line);background:var(--panel);
+  color:var(--ink);cursor:pointer;font-size:16px;box-shadow:0 4px 14px rgba(0,0,0,.10)}
+.tools button:hover{color:var(--accent);border-color:var(--accent)}
+@media (max-width:1000px){
+  .wrap{display:block}
+  .sidebar{position:static;width:auto;height:auto;border-right:0;border-bottom:1px solid var(--line)}
+  .sidebar nav{max-height:40vh;overflow:auto}
+  main{padding:28px 20px 100px}
+}
+@media print{
+  .sidebar,.tools,#progress,.copy{display:none!important}
+  body{background:#fff;color:#000;font-size:11pt}
+  main{padding:0;max-width:none}
+  h2{break-after:avoid} pre,table,blockquote{break-inside:avoid}
+  a{color:#000;text-decoration:none}
+}
+
+/* ---- ask-about-this ---- */
+#chat-btn{position:fixed;right:20px;bottom:112px;width:44px;height:44px;border-radius:50%;
+  border:1px solid var(--line);background:var(--panel);color:var(--accent);cursor:pointer;font-size:17px;
+  box-shadow:0 6px 18px rgba(0,0,0,.12);z-index:45;display:grid;place-items:center}
+#chat-btn:hover{border-color:var(--accent)}
+#sel-chip{position:absolute;z-index:46;transform:translate(-50%,-100%);background:var(--ink);color:var(--bg);
+  font:600 12px/1 var(--sans);padding:7px 11px;border-radius:999px;cursor:pointer;white-space:nowrap;
+  box-shadow:0 6px 18px rgba(0,0,0,.25);display:none}
+#sel-chip:hover{background:var(--accent);color:#fff}
+#chat-panel{position:fixed;right:20px;bottom:164px;width:min(420px,calc(100vw - 40px));max-height:min(70vh,620px);
+  background:var(--panel);border:1px solid var(--line);border-radius:14px;z-index:47;display:none;
+  flex-direction:column;box-shadow:0 18px 50px rgba(0,0,0,.18);overflow:hidden}
+#chat-panel.open{display:flex}
+#chat-head{display:flex;align-items:center;gap:8px;padding:11px 13px;border-bottom:1px solid var(--line);
+  font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:700}
+#chat-head .sp{flex:1}
+#chat-head button{background:none;border:0;color:var(--muted);cursor:pointer;font-size:15px;padding:2px 4px}
+#chat-head button:hover{color:var(--accent)}
+#chat-quote{display:none;margin:10px 13px 0;padding:8px 10px;border-left:2px solid var(--accent);
+  background:var(--accent-soft);color:var(--muted);font-size:12.5px;border-radius:0 8px 8px 0;
+  max-height:84px;overflow:auto;white-space:pre-wrap}
+#chat-log{flex:1;overflow-y:auto;padding:12px 13px;display:flex;flex-direction:column;gap:10px;font-size:13.6px;line-height:1.55}
+.msg{max-width:100%}
+.msg.user{align-self:flex-end;background:var(--accent-soft);color:var(--ink);padding:7px 11px;border-radius:11px 11px 2px 11px;
+  max-width:86%;white-space:pre-wrap}
+.msg.bot{color:var(--ink)}
+.msg.bot p{margin:.3em 0}
+.msg.bot ul{margin:.3em 0;padding-left:1.15em}
+.msg.bot code{font-size:.9em}
+.msg.bot pre{background:var(--code-bg);border-radius:8px;padding:9px 11px;overflow-x:auto;font-size:12px;margin:.4em 0}
+.msg.err{color:#b3261e;font-size:12.5px}
+.msg .cursor:after{content:"▍";color:var(--accent);animation:blink 1s steps(2) infinite}
+@keyframes blink{50%{opacity:0}}
+#chat-form{display:flex;gap:8px;padding:10px 13px;border-top:1px solid var(--line)}
+#chat-input{flex:1;resize:none;border:1px solid var(--line);border-radius:9px;background:var(--bg);color:var(--ink);
+  font:inherit;font-size:13.5px;padding:8px 10px;max-height:110px;min-height:38px}
+#chat-input:focus{outline:2px solid var(--accent);outline-offset:0}
+#chat-send{border:1px solid var(--accent);background:var(--accent);color:#fff;border-radius:9px;
+  width:38px;cursor:pointer;font-size:15px}
+#chat-send:disabled{opacity:.45;cursor:default}
+#chat-foot{font-size:11px;color:var(--muted);padding:0 13px 9px}
+@media (max-width:640px){
+  #chat-panel{right:8px;left:8px;width:auto;bottom:150px;max-height:66vh}
+  #chat-btn{bottom:104px;right:16px}
+}
+@media print{#chat-btn,#chat-panel,#sel-chip{display:none!important}}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+<div class="wrap">
+  <aside class="sidebar">
+    <a class="home" href="index.html">← Compiler Lab</a>
+    
+    <h1>Group B · Automata</h1>
+    <p class="sub">Exp 5–7 · ε and subsets</p>
+    <nav class="toc"><div class="toc">
+<ul>
+<li><a href="#read-this-first-why-these-three-exist-and-why-in-this-order">Read this first: why these three exist, and why in this order</a></li>
+<li><a href="#exp-5-ε-closure-of-every-state-of-an-nfa-13">Exp 5 — ε-closure of every state of an NFA · <code>e_closure.c</code></a><ul>
+<li><a href="#1-why-this-exists">1. Why this exists</a></li>
+<li><a href="#2-input-target-output">2. Input → target output</a></li>
+<li><a href="#3-the-logic">3. The logic</a></li>
+<li><a href="#4-edge-cases">4. Edge cases</a></li>
+<li><a href="#5-built-ins-used-and-why">5. Built-ins used (and why)</a></li>
+<li><a href="#6-algorithm-deep-pseudocode">6. Algorithm — deep pseudocode</a></li>
+<li><a href="#7-algorithm-record-version-mid-level">7. Algorithm — record version (mid-level)</a></li>
+<li><a href="#verified-output">▶ Verified output</a></li>
+</ul>
+</li>
+<li><a href="#exp-6-conversion-of-ε-nfa-to-nfa-60">Exp 6 — Conversion of ε-NFA to NFA · <code>e-nfa_nfa.c</code></a><ul>
+<li><a href="#1-why-this-exists_1">1. Why this exists</a></li>
+<li><a href="#2-input-target-output_1">2. Input → target output</a></li>
+<li><a href="#3-the-logic_1">3. The logic</a></li>
+<li><a href="#4-edge-cases_1">4. Edge cases</a></li>
+<li><a href="#5-built-ins-used-and-why_1">5. Built-ins used (and why)</a></li>
+<li><a href="#6-algorithm-deep-pseudocode_1">6. Algorithm — deep pseudocode</a></li>
+<li><a href="#7-algorithm-record-version-mid-level_1">7. Algorithm — record version (mid-level)</a></li>
+<li><a href="#verified-output_1">▶ Verified output</a></li>
+</ul>
+</li>
+<li><a href="#exp-7-conversion-of-nfa-to-dfa-subset-construction-100">Exp 7 — Conversion of NFA to DFA (subset construction) · <code>nfa_dfa.c</code></a><ul>
+<li><a href="#1-why-this-exists_2">1. Why this exists</a></li>
+<li><a href="#2-input-target-output_2">2. Input → target output</a></li>
+<li><a href="#3-the-logic_2">3. The logic</a></li>
+<li><a href="#4-edge-cases_2">4. Edge cases</a></li>
+<li><a href="#5-built-ins-used-and-why_2">5. Built-ins used (and why)</a></li>
+<li><a href="#6-algorithm-deep-pseudocode_2">6. Algorithm — deep pseudocode</a></li>
+<li><a href="#7-algorithm-record-version-mid-level_2">7. Algorithm — record version (mid-level)</a></li>
+<li><a href="#verified-output_2">▶ Verified output</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</nav>
+  </aside>
+  <main>
+    <div class="doc-head">
+      <div class="kicker">20CSL401 · Compiler Lab</div>
+      <div class="meta">Exp 5–7 · ε and subsets · rendered from GROUP_B_automata.md</div>
+    </div>
+    <h1 id="group-b-finite-automata-exp-57">GROUP B — Finite Automata (Exp 5–7)</h1>
+<p>Same layout as Group A: <strong>why it exists → input/output → logic → edge cases → built-ins →
+deep pseudocode → record version → verified output.</strong></p>
+<h2 id="read-this-first-why-these-three-exist-and-why-in-this-order">Read this first: why these three exist, and why in this order<a class="anchor" href="#read-this-first-why-these-three-exist-and-why-in-this-order">#</a></h2>
+<p>This chain is the part of the lab that people blank on, because the three experiments look
+unrelated. They are not — they are one single pipeline, and knowing the pipeline is what makes
+them stick.</p>
+<p><strong>The story starts inside LEX.</strong> LEX has to turn a set of regular expressions into executable
+code. The classic method (Thompson's construction) builds an <strong>ε-NFA</strong>: to glue two
+sub-automata together you invent a <strong>free transition — a move that consumes no input</strong>. That's
+an <strong>ε-transition</strong>, and it makes <em>construction</em> easy.</p>
+<p>But ε-transitions make <em>simulation</em> hard, and an NFA makes it harder still: at each step an NFA
+may be in <strong>several states at once</strong>, and a real computer cannot "be in three states" or "guess
+which branch to take". So three repairs are needed, in order:</p>
+<p><pre><code>ε-NFA  ──(Exp 5: compute ε-closures)──►  ε-NFA you understand
+       ──(Exp 6: absorb ε into the symbol moves)──►  plain NFA, no ε
+       ──(Exp 7: each SET of NFA states becomes ONE DFA state)──►  DFA  ← a computer can run this
+</code></pre></p>
+<p><strong>The dependency to memorise:</strong> Exp 6 takes the ε-closures as <strong>input</strong> — i.e. Exp 5's output.
+Exp 7 then consumes the ε-free machine. <strong>5 feeds 6; 5 and 6 feed 7.</strong> If you can say that
+sentence, the group is organised in your head.</p>
+<hr />
+<h2 id="exp-5-ε-closure-of-every-state-of-an-nfa-13">Exp 5 — ε-closure of every state of an NFA  ·  <code>e_closure.c</code><a class="anchor" href="#exp-5-ε-closure-of-every-state-of-an-nfa-13">#</a></h2>
+<h3 id="1-why-this-exists">1. Why this exists<a class="anchor" href="#1-why-this-exists">#</a></h3>
+<p>An ε-transition is a move that consumes <strong>no input character</strong> — a free jump. They exist
+because building automata from regular expressions uses them as glue (Thompson's construction).</p>
+<p>The problem: to <em>run</em> such a machine you must know "from state q, <strong>without reading anything</strong>,
+where can I end up?" Answer: q itself, and then keep following ε-jumps as far as they go. That
+set is the <strong>ε-closure of q</strong>, written <strong>E-closure(q)</strong> or <strong>ε-closure(q)</strong>.</p>
+<p>This is the first repair in the chain, and it is needed <em>before</em> anything else can be done,
+because Exp 6's formula is written entirely in terms of closures.</p>
+<h3 id="2-input-target-output">2. Input → target output<a class="anchor" href="#2-input-target-output">#</a></h3>
+<p><strong>Input:</strong> <code>n</code> (number of states) followed by an <strong>n × n matrix</strong> of 0/1 where
+<code>ε[i][j] = 1</code> means "there is an ε-transition from state i to state j".</p>
+<p>Sample: <code>4</code> then
+<pre><code>0 1 0 0      q0 --ε--&gt; q1
+0 0 1 0      q1 --ε--&gt; q2
+0 0 0 1      q2 --ε--&gt; q3
+0 0 0 0      q3 has no ε-moves
+</code></pre></p>
+<p><strong>Target output:</strong> the closure of every state.
+<pre><code>E-closure(q0) = { q0 q1 q2 q3 }
+E-closure(q1) = { q1 q2 q3 }
+E-closure(q2) = { q2 q3 }
+E-closure(q3) = { q3 }
+</code></pre>
+Read the first line as: <em>"starting at q0 and jumping only on ε, I can reach q0, q1, q2, q3."</em>
+Note every closure <strong>includes its own state</strong> — that is by definition, not an accident.</p>
+<h3 id="3-the-logic">3. The logic<a class="anchor" href="#3-the-logic">#</a></h3>
+<p>Closure is naturally <strong>recursive</strong>: "the closure of q is q, plus the closure of every state
+reachable from q by one ε-move."</p>
+<p><pre><code>closure(q) = { q } ∪ { closure(p) | there is an ε-transition q → p }
+</code></pre></p>
+<p>Three design decisions carry the whole program:</p>
+<p><strong>(a) Where to store the answer.</strong> Not as a list of sets, but as one <strong>n × n boolean matrix</strong>
+<code>closure[state][j]</code>. <code>closure[s][j] = 1</code> means "j is in the closure of s". This makes printing
+a trivial double loop and makes the "have I been here?" test a single array lookup.</p>
+<p><strong>(b) The two parameters.</strong> <code>findClosure(state, current)</code>:
+- <code>state</code> = <strong>whose closure we are computing</strong> — fixed for the whole call, never changes
+- <code>current</code> = <strong>where the walk is right now</strong> — this is what changes as we recurse</p>
+<p>That separation is the whole trick. Without it you couldn't tell "who am I collecting for" from
+"where am I standing".</p>
+<p><strong>(c) Termination.</strong> A cycle like <code>q1 --ε--&gt; q2 --ε--&gt; q1</code> would recurse forever. The code
+uses <strong>the answer matrix itself as the visited set</strong>: it marks <code>closure[state][current] = 1</code>
+<em>before</em> recursing, and only recurses <code>if closure[state][i] == 0</code>. So a state already in the
+closure is never visited again → the walk terminates.</p>
+<p>Notice this is <em>different</em> from the sibling program <code>nfa.c</code> in <code>~/output_recon/code/</code>, which
+used a separate <code>visited[]</code> array and a <code>member[]</code> list. Both work; this version is leaner.
+Know both, because an examiner may ask "how do you avoid the infinite loop?"</p>
+<h3 id="4-edge-cases">4. Edge cases<a class="anchor" href="#4-edge-cases">#</a></h3>
+<table>
+<thead>
+<tr>
+<th>Edge case</th>
+<th>What would break</th>
+<th>How the code accounts for it</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>cycles of ε-moves</strong> (q1→q2→q1)</td>
+<td>infinite recursion → stack overflow</td>
+<td><code>closure[state][i] == 0</code> test: an already-marked state is never re-entered. This is <em>the</em> edge case of this experiment</td>
+</tr>
+<tr>
+<td>a <strong>self-loop</strong> ε(q→q)</td>
+<td>would recurse into itself forever</td>
+<td>harmless: <code>closure[state][state]</code> is set to 1 <em>before</em> the loop, so the guard blocks the re-entry</td>
+</tr>
+<tr>
+<td>a state with <strong>no ε-moves</strong></td>
+<td>closure would be empty</td>
+<td>the function marks itself first, so <code>E-closure(q) = { q }</code> — never empty</td>
+</tr>
+<tr>
+<td>ε reaching many states transitively</td>
+<td>a non-recursive one-pass loop would miss them</td>
+<td>recursion follows the chain all the way down</td>
+</tr>
+<tr>
+<td>an ε-transition <em>into</em> an already-closed state</td>
+<td>duplicate entries</td>
+<td>the matrix stores a <em>flag</em>, so duplicates are structurally impossible — unlike a list where you'd need a <code>seen</code> check</td>
+</tr>
+<tr>
+<td><strong>n &gt; 20</strong></td>
+<td><code>epsilon[20][20]</code> overflows</td>
+<td><strong>not guarded</strong> — the arrays are statically sized. Worth one line in the record</td>
+</tr>
+<tr>
+<td>reading the matrix</td>
+<td>wrong count of values → wrong parse</td>
+<td><code>scanf</code> is called exactly <code>n × n</code> times in a nested loop: outer <code>i</code>, inner <code>j</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="5-built-ins-used-and-why">5. Built-ins used (and why)<a class="anchor" href="#5-built-ins-used-and-why">#</a></h3>
+<p>This program uses almost nothing — deliberately. Its whole content is the recursion, so the
+"built-ins" section is about <strong>recursion itself</strong>.</p>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>What it does</th>
+<th>Why it's used</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>scanf(&quot;%d&quot;, &amp;epsilon[i][j])</code></td>
+<td>reads one integer into a matrix cell</td>
+<td>the machine is described as a matrix, so it is read as a matrix</td>
+</tr>
+<tr>
+<td><code>printf</code> inside a <code>for</code> over <code>j</code></td>
+<td>prints the states flagged 1</td>
+<td>the answer matrix is already the set — printing is a lookup, no searching</td>
+</tr>
+<tr>
+<td><strong>recursion</strong> <code>findClosure(state, i)</code></td>
+<td>the function calls itself on the next state</td>
+<td>ε-closure is defined recursively; writing it as a loop would need an explicit stack</td>
+</tr>
+<tr>
+<td>a <code>for</code> from 0 to n−1 scanning a row</td>
+<td>"for every state reachable from <code>current</code>"</td>
+<td>reading the matrix row <em>is</em> enumerating the outgoing ε-moves. No adjacency list needed</td>
+</tr>
+<tr>
+<td>the matrix as a <strong>visited mark</strong></td>
+<td>doubles as the dedupe + termination mechanism</td>
+<td>one array does two jobs — the elegant part of this program</td>
+</tr>
+</tbody>
+</table>
+<h3 id="6-algorithm-deep-pseudocode">6. Algorithm — deep pseudocode<a class="anchor" href="#6-algorithm-deep-pseudocode">#</a></h3>
+<p><pre><code>globals:  n
+          epsilon[20][20]      # epsilon[i][j] = 1  ⟺  ε-transition i → j
+          closure[20][20]      # closure[s][j]  = 1  ⟺  j ∈ E-closure(s)   (also the visited set)
+
+findClosure(state, current):
+    closure[state][current] = 1                 # mark FIRST — this is what stops the cycle
+    for i = 0 to n-1:
+        if epsilon[current][i] == 1 and closure[state][i] == 0:
+            findClosure(state, i)               # recurse only into UNvisited states
+
+main:
+    read n
+    for i = 0 to n-1:                           # read the n × n matrix
+        for j = 0 to n-1:
+            read epsilon[i][j]
+    for i = 0 to n-1:
+        findClosure(i, i)                       # closure of i, starting the walk AT i
+    print &quot;Epsilon Closure of all states:&quot;
+    for i = 0 to n-1:
+        print &quot;E-closure(q&quot; + i + &quot;) = {&quot;
+        for j = 0 to n-1:
+            if closure[i][j] == 1:  print &quot;q&quot; + j
+        print &quot;}&quot;
+</code></pre>
+Trace <code>findClosure(0,0)</code> on the sample: marks <code>[0][0]</code>; sees ε(0,1)=1 and <code>[0][1]</code>=0 → recurse
+<code>(0,1)</code>; marks <code>[0][1]</code>; sees ε(1,2)=1 → recurse <code>(0,2)</code>; marks <code>[0][2]</code>; ε(2,3)=1 → recurse
+<code>(0,3)</code>; marks <code>[0][3]</code>; row 3 is all zeros → return. Result: <code>{q0,q1,q2,q3}</code>. ✔</p>
+<h3 id="7-algorithm-record-version-mid-level">7. Algorithm — record version (mid-level)<a class="anchor" href="#7-algorithm-record-version-mid-level">#</a></h3>
+<p><pre><code>ALGORITHM: ε-closure of every state of an NFA
+1. Start.
+2. Read n, the number of states.
+3. Read the n × n epsilon transition matrix ε, where ε[i][j] = 1 means an ε-move from i to j.
+4. Initialise the closure matrix to 0.
+5. For each state s from 0 to n-1: call findClosure(s, s).
+6. For each state s, print every j with closure[s][j] = 1 as E-closure(qs).
+7. Stop.
+
+Function findClosure(state, current):
+   1. Mark closure[state][current] = 1.
+   2. For every state i from 0 to n-1:
+        if ε[current][i] = 1 and closure[state][i] = 0 → findClosure(state, i).
+</code></pre></p>
+<h3 id="verified-output">▶ Verified output<a class="anchor" href="#verified-output">#</a></h3>
+<p>Input <code>4</code> + the matrix above → <code>E-closure(q0) = { q0 q1 q2 q3 }</code>,
+<code>E-closure(q1) = { q1 q2 q3 }</code>, <code>E-closure(q2) = { q2 q3 }</code>, <code>E-closure(q3) = { q3 }</code></p>
+<hr />
+<h2 id="exp-6-conversion-of-ε-nfa-to-nfa-60">Exp 6 — Conversion of ε-NFA to NFA  ·  <code>e-nfa_nfa.c</code><a class="anchor" href="#exp-6-conversion-of-ε-nfa-to-nfa-60">#</a></h2>
+<h3 id="1-why-this-exists_1">1. Why this exists<a class="anchor" href="#1-why-this-exists_1">#</a></h3>
+<p>Exp 5 gave you the closures. Now use them to <strong>delete the ε-transitions</strong>.</p>
+<p>Why delete them? Because a machine with ε-moves is awkward to simulate: at every step you'd
+have to remember "also teleport wherever ε leads". It is cleaner to <strong>absorb the teleports into
+the symbol moves</strong>, producing a machine where every transition reads a real character. The
+language accepted is <em>exactly</em> the same — that's the point of the conversion.</p>
+<h3 id="2-input-target-output_1">2. Input → target output<a class="anchor" href="#2-input-target-output_1">#</a></h3>
+<p><strong>Input (interactive, in this exact order):</strong>
+1. number of states <code>n</code>
+2. number of input symbols <code>m</code>
+3. the <code>m</code> symbols (e.g. <code>a b</code>)
+4. for each state: <strong>how many states are in its E-closure</strong>, then those states
+   <em>(this is Exp 5's output, hand-fed in)</em>
+5. for each state and each symbol: <strong>how many destinations</strong>, then the destination states</p>
+<p><strong>Target output:</strong> the new, ε-free transition for every (state, symbol) pair.
+<pre><code>δ&#x27;(q0,a) = { q1 q2 }
+δ&#x27;(q0,b) = { q0 q1 q2 }
+δ&#x27;(q1,a) = { q2 }
+δ&#x27;(q1,b) = { q2 }
+δ&#x27;(q2,a) = { }
+δ&#x27;(q2,b) = { q2 }
+</code></pre></p>
+<h3 id="3-the-logic_1">3. The logic<a class="anchor" href="#3-the-logic_1">#</a></h3>
+<p>The whole experiment is <strong>one formula</strong>, written in terms of Exp 5's closure:</p>
+<blockquote>
+<p><strong>δ'(q, a) = ε-closure( ⋃ over p ∈ ε-closure(q) of δ(p, a) )</strong></p>
+</blockquote>
+<p>In words, and this is how to remember it — <strong>three moves in order:</strong>
+1. <strong>Teleport free</strong> — from q, go everywhere ε allows: that's <code>ε-closure(q)</code>.
+2. <strong>Read the symbol</strong> — from each of those states, take the <code>a</code>-move: that's <code>δ(p, a)</code>.
+3. <strong>Teleport free again</strong> — from every state you landed on, take its ε-closure.</p>
+<p>The result is a set, so δ' is a <em>set-valued</em> transition — the machine is still an NFA, just one
+with no ε-moves. (Removing ε does <strong>not</strong> make it deterministic. Determinism is Exp 7's job —
+this is the single most common misconception here.)</p>
+<p><strong>Why the nested loops map exactly onto the formula</strong> — this correspondence is what makes the
+code readable:
+<pre><code>for p in ε-closure(q)          ← step 1 (teleport free)
+    for q2 in δ(p, a)          ← step 2 (read the symbol)
+        add ε-closure(q2)      ← step 3 (teleport free again)
+</code></pre></p>
+<h3 id="4-edge-cases_1">4. Edge cases<a class="anchor" href="#4-edge-cases_1">#</a></h3>
+<table>
+<thead>
+<tr>
+<th>Edge case</th>
+<th>How it's handled</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>the result is empty</strong> (no state in the closure has an <code>a</code>-move)</td>
+<td><code>rcount</code> stays 0 and the code prints <code>{ }</code> — an empty set. Verified: <code>δ&#x27;(q2,a) = { }</code>. This is <em>correct</em>, not a bug: it means "no move on a"</td>
+</tr>
+<tr>
+<td><strong>the same state arriving from two different sources</strong></td>
+<td><code>addState()</code> checks the whole array before appending — a <strong>linear-search dedupe</strong>. Without it, <code>{ q1 q1 q2 }</code> would print. This is the whole job of the helper</td>
+</tr>
+<tr>
+<td>a destination state's E-closure</td>
+<td>step 3 must add <em>all</em> of <code>ε-closure(q2)</code>, not just <code>q2</code> itself — a very easy thing to get wrong</td>
+</tr>
+<tr>
+<td>a state with <strong>no transitions</strong> on some symbol</td>
+<td><code>trans[state][j][0] == 0</code>, so the inner loop <code>for x = 1; x &lt;= 0</code> never runs → contributes nothing</td>
+</tr>
+<tr>
+<td>a state with <strong>no ε-moves</strong></td>
+<td><code>ecount[i] == 1</code> (just itself), so the outer loop runs once with <code>p = i</code> — naturally correct</td>
+</tr>
+<tr>
+<td><strong>n or m &gt; 10</strong></td>
+<td><code>MAX = 10</code>, arrays are <code>[10][10][10]</code> → overflow, <strong>not guarded</strong></td>
+</tr>
+<tr>
+<td><strong>ordering of the output set</strong></td>
+<td>the states print in <strong>discovery order</strong>, not sorted. (The sibling program <code>nfa_with_e.c</code> in <code>~/output_recon</code> <em>does</em> sort. Both are correct; know which you're presenting.)</td>
+</tr>
+<tr>
+<td>closure not supplied (Exp 5 skipped)</td>
+<td>the program <strong>assumes</strong> the closure is given as input. It cannot compute it — that's Exp 5's job</td>
+</tr>
+</tbody>
+</table>
+<h3 id="5-built-ins-used-and-why_1">5. Built-ins used (and why)<a class="anchor" href="#5-built-ins-used-and-why_1">#</a></h3>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>What it does</th>
+<th>Why it's used here</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>addState(arr, &amp;count, state)</code> (<strong>own helper</strong>)</td>
+<td>appends only if absent — linear scan then write</td>
+<td>sets must not have duplicates; C has no set type, so you write the dedupe</td>
+</tr>
+<tr>
+<td>the <code>&amp;count</code> argument (pointer to <code>int</code>)</td>
+<td>lets the helper <strong>increase the caller's counter</strong></td>
+<td>C passes by value; to let a function grow the caller's array-length you must pass the address</td>
+</tr>
+<tr>
+<td><code>scanf</code> in nested loops</td>
+<td>fills the 3-D array <code>trans[state][symbol][k]</code></td>
+<td>δ is a 3-D relation: source, symbol, destination</td>
+</tr>
+<tr>
+<td><code>trans[i][j][0]</code> storing the <strong>count</strong></td>
+<td>index 0 of each row holds "how many destinations follow"</td>
+<td>keeps the array rectangular and self-describing — you always know where the row ends</td>
+</tr>
+<tr>
+<td><code>printf</code> + a loop over <code>result[]</code></td>
+<td>prints the set</td>
+<td>the set is a plain array plus its count</td>
+</tr>
+<tr>
+<td><code>ε-closure</code> reuse</td>
+<td>conceptually the output of Exp 5</td>
+<td>this program <em>demonstrates the dependency</em>; say that in the record</td>
+</tr>
+</tbody>
+</table>
+<h3 id="6-algorithm-deep-pseudocode_1">6. Algorithm — deep pseudocode<a class="anchor" href="#6-algorithm-deep-pseudocode_1">#</a></h3>
+<p><pre><code>globals: n, m, symbols[10]
+         trans[10][10][10]     # trans[state][symbolIdx][0] = count, [1..count] = destinations
+         eclose[10][10]        # eclose[state][k] = k-th member of E-closure(state)
+         ecount[10]            # ecount[state]   = size of E-closure(state)
+
+addState(arr, *count, state):            # set-insert with dedupe
+    for i = 0 to *count-1:
+        if arr[i] == state: return       # already present → do nothing
+    arr[*count] = state                  # else append
+    (*count)++
+
+main:
+    read n;  read m;  read the m symbols
+    for i = 0 to n-1:                    # step A: closures come IN as data (Exp 5&#x27;s output)
+        read ecount[i]
+        for j = 0 to ecount[i]-1: read eclose[i][j]
+    for i = 0 to n-1:                    # step B: the ε-NFA&#x27;s transitions
+        for j = 0 to m-1:
+            read trans[i][j][0]                  # count of destinations
+            for k = 1 to trans[i][j][0]: read trans[i][j][k]
+
+    print &quot;Equivalent NFA without epsilon transitions:&quot;
+
+    for i = 0 to n-1:                    # step C: apply δ&#x27;(q,a) = E( ⋃ E(δ(p,a)) )
+        for j = 0 to m-1:
+            result[MAX], rcount = 0
+
+            for k = 0 to ecount[i]-1:                    # ← teleport free
+                state = eclose[i][k]
+                tcount = trans[state][j][0]
+                for x = 1 to tcount:                     # ← read the symbol
+                    next = trans[state][j][x]
+                    for y = 0 to ecount[next]-1:         # ← teleport free again
+                        addState(result, &amp;rcount, eclose[next][y])
+
+            print &quot;d&#x27;(q&quot; + i + &quot;,&quot; + symbols[j] + &quot;) = { &quot;
+            for k = 0 to rcount-1: print &quot;q&quot; + result[k]
+            print &quot;}&quot;
+</code></pre>
+Point at the three innermost loops and say <em>"teleport — read — teleport"</em>; that is the answer.</p>
+<h3 id="7-algorithm-record-version-mid-level_1">7. Algorithm — record version (mid-level)<a class="anchor" href="#7-algorithm-record-version-mid-level_1">#</a></h3>
+<p><pre><code>ALGORITHM: Convert an ε-NFA into an equivalent NFA without ε-transitions
+1. Start.
+2. Read n (number of states), m (number of input symbols) and the m symbols.
+3. Read the E-closure of each state: for each state, a count followed by the states in it.
+4. Read the transitions: for each state and symbol, a count followed by the destination states.
+5. For each state i and each input symbol a:
+   a. Set result = empty.
+   b. For each state p in E-closure(i):
+        for each destination q in δ(p, a):
+            add every state of E-closure(q) to result, skipping duplicates.
+   c. Print δ&#x27;(qi, a) = result.
+6. Stop.
+</code></pre></p>
+<h3 id="verified-output_1">▶ Verified output<a class="anchor" href="#verified-output_1">#</a></h3>
+<p>With n=3, symbols <code>a b</code>, closures {0,1,2} {1,2} {2}, and the sample transitions →
+<code>δ&#x27;(q0,a) = { q1 q2 }</code>, <code>δ&#x27;(q0,b) = { q0 q1 q2 }</code>, <code>δ&#x27;(q1,a) = { q2 }</code>, <code>δ&#x27;(q1,b) = { q2 }</code>,
+<code>δ&#x27;(q2,a) = { }</code>, <code>δ&#x27;(q2,b) = { q2 }</code></p>
+<hr />
+<h2 id="exp-7-conversion-of-nfa-to-dfa-subset-construction-100">Exp 7 — Conversion of NFA to DFA (subset construction)  ·  <code>nfa_dfa.c</code><a class="anchor" href="#exp-7-conversion-of-nfa-to-dfa-subset-construction-100">#</a></h2>
+<h3 id="1-why-this-exists_2">1. Why this exists<a class="anchor" href="#1-why-this-exists_2">#</a></h3>
+<p>Exp 6 removed the ε-moves, but the machine is <strong>still non-deterministic</strong>: from <code>q1</code> on <code>b</code> it
+may go to <code>q1</code> <em>or</em> <code>q2</code>. And here is the fundamental problem:</p>
+<blockquote>
+<p><strong>A computer cannot be in two states at once, and it cannot guess.</strong></p>
+</blockquote>
+<p>So an NFA is <strong>not directly runnable</strong>. The repair is a change of viewpoint, and it is the single
+best idea in this group:</p>
+<blockquote>
+<p><strong>If the machine might be in {q1, q2}, then let {q1, q2} itself BE one state of a new machine.</strong></p>
+</blockquote>
+<p>Now there is nothing to guess: the machine is always in exactly one state — a <em>set</em> — and each
+set has exactly one successor per symbol. That new machine is a <strong>DFA</strong>, and a DFA is what
+LEX's generated scanner actually runs.</p>
+<h3 id="2-input-target-output_2">2. Input → target output<a class="anchor" href="#2-input-target-output_2">#</a></h3>
+<p><strong>Input:</strong> <code>n</code>; <code>m</code>; the <code>m</code> symbols; then for every state and symbol, a count followed by the
+destination states (a plain, ε-free NFA).</p>
+<p><strong>Target output:</strong> the DFA transition table, each state labelled by the set it stands for.
+<pre><code>DFA State       a               b
+{q0}            {q0}            {q1}
+{q1}            {q0}            {q1,q2}
+{q1,q2}         {q0,q2}         {q1,q2}
+{q0,q2}         {q0,q2}         {q1}
+</code></pre></p>
+<h3 id="3-the-logic_2">3. The logic<a class="anchor" href="#3-the-logic_2">#</a></h3>
+<p>The rules of the construction:
+- The <strong>start state is {q0}</strong> — the set containing the NFA's start state.
+- For a DFA state <strong>S</strong> and symbol <strong>a</strong>: <em>δ_DFA(S, a) = the union of δ(p, a) over every p in S.</em>
+- If that union is a set you have <strong>not seen before, it becomes a new DFA state</strong> — append it and keep processing.</p>
+<p>Read the table above as a story: start at <code>{q0}</code>; on <code>a</code> everything goes to <code>q0</code> → <code>{q0}</code>; on <code>b</code>
+<code>q0</code> goes to <code>q1</code> → <code>{q1}</code>. From <code>{q1}</code> on <code>b</code> we get <code>q1</code> <strong>and</strong> <code>q2</code> → the brand-new state
+<code>{q1,q2}</code>, which must then be processed in its own right. That is why the table has 4 rows from
+a 3-state NFA.</p>
+<p><strong>Set equality is the crux.</strong> Two DFA states are the same state only if their sets contain
+<strong>exactly</strong> the same members. <code>{q1,q2}</code> and <code>{q2,q1}</code> are the same set — but compared
+element-by-element, position 0 differs. Hence the code <strong>sorts each new set</strong> before storing it
+(step c below). Without that sort the DFA explodes into spurious duplicate states.</p>
+<p><strong>The worklist loop.</strong> The construction needs a queue of "sets discovered but not yet
+processed". This program uses the <strong>set list itself as that queue</strong>:
+<code>for (i = 0; i &lt; nSets; i++)</code> — and <code>nSets</code> <strong>grows while the loop runs</strong>. New sets are appended
+and therefore get processed in the same pass. That is a genuine subtlety; it is effectively a
+BFS with <code>setList</code> as the queue.</p>
+<p><strong>Three helpers do all the set work:</strong>
+- <code>sameSet(A, B)</code> — do two sets have identical members? (sizes must match, then member-by-member)
+- <code>findSet(S)</code> — has this set already become a DFA state? → its index, or −1
+- <code>addSet(S)</code> — return the existing index, or store S as a new DFA state and return the new index</p>
+<h3 id="4-edge-cases_2">4. Edge cases<a class="anchor" href="#4-edge-cases_2">#</a></h3>
+<table>
+<thead>
+<tr>
+<th>Edge case</th>
+<th>What would break</th>
+<th>How the code accounts for it</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>the same set reached by two different paths</strong></td>
+<td>a DFA with duplicated states — the classic failure</td>
+<td><code>findSet</code> searches all existing sets before <code>addSet</code> appends; identical sets collapse to one state</td>
+</tr>
+<tr>
+<td><strong>member order differing</strong> (<code>{q1,q2}</code> vs <code>{q2,q1}</code>)</td>
+<td><code>sameSet</code> compares positionally → they'd look different → duplicate states</td>
+<td>each new set is <strong>sorted ascending</strong> (bubble sort of <code>tmp</code>) before being stored, so equal sets are byte-identical</td>
+</tr>
+<tr>
+<td><strong>an empty set</strong> (some state has no move on a symbol)</td>
+<td>it is a legitimate DFA state — the <strong>trap / dead state</strong></td>
+<td><code>addSet(tmp, 0)</code> is allowed: <code>sameSet</code> with two empty sets returns 1 (the comparison loop simply doesn't execute), so exactly <strong>one</strong> empty state is ever created, and it prints as <code>{}</code></td>
+</tr>
+<tr>
+<td>the DFA having <strong>fewer</strong> states than the NFA</td>
+<td>expected</td>
+<td>only reachable subsets appear — unreachable NFA states never generate a DFA state</td>
+</tr>
+<tr>
+<td>the DFA having <strong>more</strong> states than the NFA</td>
+<td>expected</td>
+<td>the table above: 3 NFA states → 4 DFA states</td>
+</tr>
+<tr>
+<td>infinite looping</td>
+<td>appending sets forever</td>
+<td>every new set is either already in the list (<code>findSet</code> ≠ −1) or genuinely new; the number of subsets of n states is finite (≤ 2ⁿ), so it terminates</td>
+</tr>
+<tr>
+<td><strong>n, or the number of DFA states &gt; 200</strong></td>
+<td><code>setList[200][10]</code> overflow</td>
+<td><strong>not guarded</strong>; the 200 is the stated subset cap</td>
+</tr>
+<tr>
+<td>a state with <strong>more than 10 destinations</strong></td>
+<td><code>trans[10][10][11]</code> — index 0 is the count, so only 10 fit</td>
+<td>overflow, not guarded</td>
+</tr>
+<tr>
+<td>declaring a variable <strong>inside</strong> a <code>for</code> body</td>
+<td>illegal in C89</td>
+<td><code>int q = trans[p][j][idx], seen = 0;</code> is C99 (a block-scope declaration). Fine with modern gcc, worth knowing the rule</td>
+</tr>
+</tbody>
+</table>
+<h3 id="5-built-ins-used-and-why_2">5. Built-ins used (and why)<a class="anchor" href="#5-built-ins-used-and-why_2">#</a></h3>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>What it does</th>
+<th>Why it's used here</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>sameSet</code>, <code>findSet</code>, <code>addSet</code> (<strong>own</strong>)</td>
+<td>set equality, set lookup, set insertion</td>
+<td>C has no sets; these three <em>are</em> the algorithm</td>
+</tr>
+<tr>
+<td><code>sprintf(out + k, &quot;q%d&quot;, s[i])</code></td>
+<td>writes formatted text <strong>at an offset</strong>, returns how many chars it wrote</td>
+<td>builds the label <code>{q0,q1}</code> piece by piece; the returned length advances <code>k</code> so the next piece appends after it. A neat use of sprintf's return value</td>
+</tr>
+<tr>
+<td>the bubble sort (<code>for a</code>, <code>for b &gt; a</code>, swap)</td>
+<td>sorts the new set ascending</td>
+<td>makes equal sets compare equal element-by-element</td>
+</tr>
+<tr>
+<td><code>trans[p][j][idx]</code> with <code>idx</code> from 1</td>
+<td>the destinations, skipping index 0</td>
+<td>index 0 is the count, not a state</td>
+</tr>
+<tr>
+<td><code>addSet(...)</code> returning an index</td>
+<td>the DFA's transition becomes an <strong>integer reference to a state</strong></td>
+<td>tables are indexed by numbers; the sets are only for display</td>
+</tr>
+<tr>
+<td><code>%-16s</code> in <code>printf</code></td>
+<td>left-justified, padded to 16 columns</td>
+<td>makes the DFA table line up</td>
+</tr>
+</tbody>
+</table>
+<h3 id="6-algorithm-deep-pseudocode_2">6. Algorithm — deep pseudocode<a class="anchor" href="#6-algorithm-deep-pseudocode_2">#</a></h3>
+<p><pre><code>globals: n, m, sym[10]
+         trans[10][10][11]        # trans[state][sym][0] = count, [1..count] = destinations
+         setList[200][10]         # setList[i] = the i-th DFA state, as a set of NFA states
+         setSize[200]             # size of each set
+         dfa[200][10]             # dfa[i][sym] = index of the next DFA state
+         nSets = 0                # how many DFA states exist so far  (grows during the loop)
+
+sameSet(A, na, B, nb):
+    if na != nb: return 0
+    for i = 0 to na-1: if A[i] != B[i]: return 0
+    return 1
+
+findSet(S, ns):                  # linear search over discovered DFA states
+    for i = 0 to nSets-1:
+        if sameSet(setList[i], setSize[i], S, ns): return i
+    return -1                    # not seen before
+
+addSet(S, ns):
+    idx = findSet(S, ns)
+    if idx != -1: return idx              # already a DFA state → reuse it
+    copy S into setList[nSets]; setSize[nSets] = ns
+    return nSets++                        # new DFA state → its index, list grows
+
+main:
+    read n; read m; read the m symbols
+    for i = 0 to n-1: for j = 0 to m-1:
+        read trans[i][j][0]                     # count
+        for k = 1 to trans[i][j][0]: read trans[i][j][k]
+
+    start[0] = 0;  addSet(start, 1)             # DFA start state = { q0 }
+
+    for i = 0 to nSets-1:                       # NOTE: nSets grows inside the loop
+        for j = 0 to m-1:
+            tmp[MAX], cnt = 0
+            for k = 0 to setSize[i]-1:          # every NFA state in this DFA state
+                p = setList[i][k]
+                for idx = 1 to trans[p][j][0]:  # union of δ(p, j)
+                    q = trans[p][j][idx]
+                    if q not already in tmp:  tmp[cnt++] = q     # dedupe
+            sort tmp ascending (bubble)         # so equal sets compare equal
+            dfa[i][j] = addSet(tmp, cnt)        # reuse or create the DFA state
+
+    print the table: header row of symbols, then
+        for each i: label(setList[i]) then for each j: label(setList[dfa[i][j]])
+</code></pre></p>
+<h3 id="7-algorithm-record-version-mid-level_2">7. Algorithm — record version (mid-level)<a class="anchor" href="#7-algorithm-record-version-mid-level_2">#</a></h3>
+<p><pre><code>ALGORITHM: NFA to DFA conversion (subset construction)
+1. Start.
+2. Read n, m and the input symbols.
+3. Read the NFA transitions: for each state and symbol, a count followed by the destinations.
+4. Create the first DFA state = { q0 } and add it to the set list.
+5. For each DFA state i in the set list (the list grows as new sets are discovered):
+     for each input symbol j:
+       a. Set temp = empty.
+       b. For each NFA state p in DFA state i: add every destination of δ(p, j) to temp,
+          skipping duplicates.
+       c. Sort temp so identical sets are always stored in the same order.
+       d. dfa[i][j] = addSet(temp)   — reuse the index if temp already exists.
+6. Print the DFA transition table, labelling each state by its set, e.g. {q0,q1}.
+7. Stop.
+</code></pre></p>
+<h3 id="verified-output_2">▶ Verified output<a class="anchor" href="#verified-output_2">#</a></h3>
+<p>n=3, symbols <code>a b</code>, transitions δ(q0,a)={0} δ(q0,b)={1} δ(q1,a)={0} δ(q1,b)={1,2} δ(q2,a)={2}
+δ(q2,b)={} → the 4-row table shown in §2 above.</p>
+<hr />
+<p><strong>Next group:</strong> Group C (Exp 8–10) — where the tokens from Group A finally get <em>parsed</em>.</p>
+  </main>
+</div>
+<button id="chat-btn" title="Ask about this page (select text first)">✳</button>
+<div id="sel-chip">Ask about this</div>
+<div id="chat-panel" role="dialog" aria-label="Ask about this page">
+  <div id="chat-head"><span>Ask this page</span><span class="sp"></span><button id="chat-close" title="Close">✕</button></div>
+  <div id="chat-quote"></div>
+  <div id="chat-log"></div>
+  <form id="chat-form" autocomplete="off">
+    <textarea id="chat-input" rows="1" placeholder="Ask about the selection or the section…"></textarea>
+    <button id="chat-send" title="Send">↑</button>
+  </form>
+  <div id="chat-foot">Select text → “Ask about this”. Enter sends, Shift+Enter newline.</div>
+</div>
+<div class="tools">
+  <button id="theme" title="Toggle light / dark">☾</button>
+  <button id="top" title="Back to top">↑</button>
+</div>
+<script>
+(function(){
+  var root=document.documentElement, key='minotes-theme';
+  var saved=localStorage.getItem(key);
+  var prefers=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';
+  root.setAttribute('data-theme', saved || prefers);
+
+  var btn=document.getElementById('theme');
+  function sync(){ if(btn) btn.textContent = root.getAttribute('data-theme')==='dark' ? '\u2600' : '\u263E'; }
+  sync();
+  if(btn) btn.addEventListener('click',function(){
+    var next = root.getAttribute('data-theme')==='dark' ? 'light' : 'dark';
+    root.setAttribute('data-theme', next); localStorage.setItem(key,next); sync();
+  });
+
+  var bar=document.getElementById('progress');
+  if(bar) addEventListener('scroll',function(){
+    var h=document.documentElement.scrollHeight-innerHeight;
+    bar.style.width=(h>0?(scrollY/h*100):0)+'%';
+  },{passive:true});
+
+  document.querySelectorAll('pre').forEach(function(pre){
+    var b=document.createElement('button');
+    b.className='copy'; b.textContent='copy';
+    b.addEventListener('click',function(){
+      var t=pre.querySelector('code'); var txt=t?t.innerText:pre.innerText;
+      navigator.clipboard.writeText(txt).then(function(){
+        b.textContent='copied'; setTimeout(function(){b.textContent='copy';},1200);
+      });
+    });
+    pre.appendChild(b);
+  });
+
+  document.querySelectorAll('main table').forEach(function(t){
+    if(t.parentElement.classList.contains('table-scroll')) return;
+    var w=document.createElement('div'); w.className='table-scroll';
+    t.parentNode.insertBefore(w,t); w.appendChild(t);
+  });
+
+  var links=[].slice.call(document.querySelectorAll('.sidebar a[href^="#"]'));
+  var map={}; links.forEach(function(a){ map[a.getAttribute('href').slice(1)]=a; });
+  var heads=[].slice.call(document.querySelectorAll('main h2[id], main h3[id]'));
+  if('IntersectionObserver' in window && heads.length){
+    var obs=new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if(!e.isIntersecting) return;
+        links.forEach(function(a){a.classList.remove('active');});
+        var a=map[e.target.id]; if(a){a.classList.add('active');}
+      });
+    },{rootMargin:'-10% 0px -75% 0px'});
+    heads.forEach(function(h){obs.observe(h);});
+  }
+
+  var top=document.getElementById('top');
+  if(top) top.addEventListener('click',function(){ scrollTo({top:0,behavior:'smooth'}); });
+})();
+
+(function(){
+  var API="/api/chat";
+  var panel=document.getElementById("chat-panel"),
+      btn=document.getElementById("chat-btn"),
+      chip=document.getElementById("sel-chip"),
+      quote=document.getElementById("chat-quote"),
+      log=document.getElementById("chat-log"),
+      input=document.getElementById("chat-input"),
+      send=document.getElementById("chat-send"),
+      form=document.getElementById("chat-form");
+
+  if(!panel) return;
+  var pendingSelection="", busy=false, lastSelection="";
+
+  function esc(s){return s.replace(/[&<>]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;"}[c];});}
+
+  // minimal markdown: fenced code, inline code, bold, bullets, numbered lists
+  function md(src){
+    var parts=src.split(/```/), out="";
+    for(var i=0;i<parts.length;i++){
+      if(i%2){ out+="<pre><code>"+esc(parts[i].replace(/^\w*\n/,""))+"</code></pre>"; continue; }
+      var t=esc(parts[i]);
+      t=t.replace(/`([^`\n]+)`/g,"<code>$1</code>").replace(/\*\*([^*]+)\*\*/g,"<b>$1</b>");
+      var lines=t.split(/\n/), html="", inUl=false, inOl=false;
+      for(var j=0;j<lines.length;j++){
+        var line=lines[j];
+        if(/^\s*[-*]\s+/.test(line)){
+          if(inOl){html+="</ol>";inOl=false;}
+          if(!inUl){html+="<ul>";inUl=true;}
+          html+="<li>"+line.replace(/^\s*[-*]\s+/,"")+"</li>"; continue;
+        }
+        if(/^\s*\d+[.)]\s+/.test(line)){
+          if(inUl){html+="</ul>";inUl=false;}
+          if(!inOl){html+="<ol>";inOl=true;}
+          html+="<li>"+line.replace(/^\s*\d+[.)]\s+/,"")+"</li>"; continue;
+        }
+        if(inUl){html+="</ul>";inUl=false;}
+        if(inOl){html+="</ol>";inOl=false;}
+        if(line.trim()==="") continue;
+        html+="<p>"+line+"</p>";
+      }
+      if(inUl)html+="</ul>";
+      if(inOl)html+="</ol>";
+      out+=html;
+    }
+    return out;
+  }
+
+  function outline(){
+    return [].slice.call(document.querySelectorAll("main h2, main h3")).slice(0,40)
+      .map(function(h){return (h.tagName==="H3"?"  - ":"- ")+h.textContent.replace(/#$/,"").trim();}).join("\n");
+  }
+
+  function sectionFor(node){
+    var el = node && (node.nodeType===1?node:node.parentElement);
+    if(!el || !el.closest) return "";
+    el = el.closest("main") ? el : null;
+    if(!el) return "";
+    var heads=[].slice.call(document.querySelectorAll("main h2, main h3"));
+    var cur=null, idx=-1;
+    for(var i=0;i<heads.length;i++){
+      if(heads[i].compareDocumentPosition(el) & Node.DOCUMENT_POSITION_FOLLOWING) { cur=heads[i]; idx=i; }
+    }
+    if(!cur) return "";
+    var stop = heads[idx+1] || null, txt=[], n=cur;
+    while((n=n.nextSibling) && n!==stop){ if(n.textContent) txt.push(n.textContent); }
+    return (cur.textContent+"\n"+txt.join("\n")).replace(/\s+\n/g,"\n").slice(0,3000);
+  }
+
+  function placeChip(x,y){
+    chip.style.left=x+"px"; chip.style.top=(y+window.scrollY-8)+"px"; chip.style.display="block";
+  }
+  function hideChip(){ chip.style.display="none"; }
+
+  document.addEventListener("mouseup",function(e){
+    setTimeout(function(){
+      var s=window.getSelection(), text=s?s.toString().trim():"";
+      if(!text || text.length<3 || !s.anchorNode || !(s.anchorNode.parentElement||s.anchorNode).closest("main")){hideChip();return;}
+      lastSelection=text;
+      var r=s.getRangeAt(0).getBoundingClientRect();
+      placeChip(r.left+r.width/2, Math.max(r.top,8));
+    },10);
+  });
+  document.addEventListener("mousedown",function(e){ if(e.target!==chip) hideChip(); });
+
+  chip.addEventListener("mousedown",function(e){ e.preventDefault(); });
+  chip.addEventListener("click",function(e){
+    e.stopPropagation();
+    pendingSelection=lastSelection; hideChip(); open(pendingSelection);
+  });
+
+  function open(sel){
+    panel.classList.add("open");
+    if(sel){ quote.style.display="block"; quote.textContent=sel; pendingSelection=sel; }
+    else { quote.style.display="none"; quote.textContent=""; pendingSelection=""; }
+    setTimeout(function(){input.focus();},60);
+  }
+  function close(){ panel.classList.remove("open"); }
+
+  btn.addEventListener("click",function(){ panel.classList.contains("open")?close():open(lastSelection||""); });
+  document.getElementById("chat-close").addEventListener("click",close);
+  document.addEventListener("keydown",function(e){ if(e.key==="Escape") close(); });
+
+  function addMsg(cls,html){
+    var d=document.createElement("div"); d.className="msg "+cls; d.innerHTML=html; log.appendChild(d);
+    log.scrollTop=log.scrollHeight; return d;
+  }
+
+  async function ask(q){
+    if(busy||!q.trim()) return;
+    busy=true; send.disabled=true;
+    addMsg("user",esc(q));
+    var bot=addMsg("bot",'<span class="cursor"></span>');
+    var acc="";
+    var sid=sessionStorage.getItem("mn-sid");
+    if(!sid){ sid=(crypto.randomUUID?crypto.randomUUID():String(Date.now())+Math.random().toString(16).slice(2)); sessionStorage.setItem("mn-sid",sid); }
+    var payload={q:q, sid:sid, sel:pendingSelection||"", page:document.querySelector("h1")?document.querySelector("h1").textContent.trim():document.title,
+                 section:sectionFor(window.getSelection()&&window.getSelection().anchorNode?"":document.querySelector("main h2"))||"",
+                 outline:outline()};
+    // section: prefer the one containing the selection, else the first heading on screen
+    try{
+      var sel=window.getSelection();
+      if(pendingSelection && sel && sel.anchorNode){ payload.section=sectionFor(sel.anchorNode); }
+      if(!payload.section){
+        var vis=[].slice.call(document.querySelectorAll("main h2, main h3")).filter(function(h){
+          var r=h.getBoundingClientRect(); return r.top>-80 && r.top<window.innerHeight*0.6; }).pop();
+        if(vis) payload.section=sectionFor(vis);
+      }
+    }catch(_){}
+
+    try{
+      var res=await fetch(API,{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify(payload)});
+      if(!res.ok){
+        var j=await res.json().catch(function(){return{};});
+        throw new Error(j.error||("HTTP "+res.status));
+      }
+      var reader=res.body.getReader(), dec=new TextDecoder(), buf="";
+      for(;;){
+        var r=await reader.read(); if(r.done) break;
+        buf+=dec.decode(r.value,{stream:true});
+        var lines=buf.split("\n"); buf=lines.pop()||"";
+        for(var i=0;i<lines.length;i++){
+          var l=lines[i].trim(); if(l.indexOf("data:")!==0) continue;
+          var d=l.slice(5).trim(); if(d==="[DONE]") continue;
+          try{ var o=JSON.parse(d); if(o.d){acc+=o.d; bot.innerHTML=md(acc)+'<span class="cursor"></span>'; log.scrollTop=log.scrollHeight;} if(o.error) throw new Error(o.error);}catch(_){}
+        }
+      }
+      bot.innerHTML=md(acc||"_no answer_");
+    }catch(err){
+      bot.className="msg err";
+      bot.textContent = String(err.message).indexOf("Failed to fetch")>-1 || String(err.message).indexOf("HTTP 5")>-1
+        ? "Assistant unavailable — it only works on the deployed site (needs the /api/chat function)."
+        : "Error: "+err.message;
+    }finally{
+      busy=false; send.disabled=false; input.value=""; input.focus();
+      pendingSelection=""; quote.style.display="none";
+    }
+  }
+
+  form.addEventListener("submit",function(e){ e.preventDefault(); ask(input.value); });
+  input.addEventListener("keydown",function(e){
+    if(e.key==="Enter"&&!e.shiftKey){ e.preventDefault(); ask(input.value); }
+  });
+  input.addEventListener("input",function(){ input.style.height="auto"; input.style.height=Math.min(input.scrollHeight,110)+"px"; });
+})();
+</script>
+
+</body>
+</html>

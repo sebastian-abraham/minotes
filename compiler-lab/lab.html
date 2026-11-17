@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lab bench — Compiler Lab</title>
+<style>
+:root{
+  --bg:#fbfaf8; --panel:#ffffff; --ink:#232120; --muted:#5f5a53; --line:#e6e1da;
+  --accent:#7a4fd0; --accent-soft:#f1ecfb; --code-bg:#f5f2ee; --code-ink:#2b2a28;
+  --warn-bg:#fff8e6; --warn-line:#f0d9a0;
+  --sans:"Inter","Segoe UI",system-ui,-apple-system,"Noto Sans",sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,"SF Mono",Menlo,Consolas,"Fira Code",monospace;
+}
+html[data-theme="dark"]{
+  --bg:#141317; --panel:#1b1a20; --ink:#e8e4de; --muted:#a8a199; --line:#2f2c36;
+  --accent:#b79cf5; --accent-soft:#241f33; --code-bg:#22202a; --code-ink:#e8e4de;
+  --warn-bg:#2a2417; --warn-line:#4a3d22;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0; background:var(--bg); color:var(--ink); font-family:var(--sans);
+  font-size:16.5px; line-height:1.72; -webkit-font-smoothing:antialiased;
+}
+#progress{position:fixed;top:0;left:0;height:3px;width:0;background:var(--accent);z-index:50;transition:width .1s linear}
+
+.wrap{display:flex;align-items:flex-start;min-height:100vh}
+.sidebar{
+  position:sticky;top:0;height:100vh;width:300px;flex:0 0 300px;overflow-y:auto;
+  padding:26px 20px 60px;border-right:1px solid var(--line);background:var(--panel);
+}
+.sidebar h1{font-size:15px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);
+  margin:0 0 4px;font-weight:600}
+.sidebar .sub{font-size:12.5px;color:var(--muted);margin:0 0 18px}
+.sidebar nav{font-size:14px}
+.sidebar .toc>ul{padding-left:0}
+.sidebar ul{list-style:none;margin:0;padding-left:12px}
+.sidebar ul ul{border-left:1px solid var(--line);margin-left:4px;padding-left:10px}
+.sidebar li{margin:3px 0}
+.sidebar a{color:var(--ink);text-decoration:none;display:block;padding:3px 8px;border-radius:8px;
+  line-height:1.35;transition:background .12s,color .12s}
+.sidebar a:hover{background:var(--accent-soft);color:var(--accent)}
+.sidebar a.active{background:var(--accent-soft);color:var(--accent);font-weight:600}
+.sidebar .home{display:inline-flex;align-items:center;gap:6px;margin-bottom:16px;font-size:13.5px;
+  color:var(--muted);text-decoration:none;border:1px solid var(--line);padding:5px 10px;border-radius:999px}
+.sidebar .home:hover{color:var(--accent);border-color:var(--accent)}
+
+main{flex:1;min-width:0;padding:46px 56px 120px;max-width:980px;margin:0 auto}
+.doc-head{border-bottom:1px solid var(--line);padding-bottom:18px;margin-bottom:34px}
+.doc-head .kicker{font-size:12.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);
+  font-weight:700;margin-bottom:8px}
+.doc-head .meta{font-size:13.5px;color:var(--muted)}
+
+h1,h2,h3,h4{line-height:1.25;font-weight:700;letter-spacing:-.01em}
+h1{font-size:2.05rem;margin:.2em 0 .5em}
+h2{font-size:1.55rem;margin:2.4em 0 .7em;padding-bottom:.35em;border-bottom:1px solid var(--line)}
+h3{font-size:1.2rem;margin:1.9em 0 .55em}
+h4{font-size:1.03rem;margin:1.5em 0 .45em;color:var(--muted)}
+h2 .anchor,h3 .anchor{opacity:0;margin-left:.35em;font-size:.8em;color:var(--muted);text-decoration:none}
+h2:hover .anchor,h3:hover .anchor{opacity:1}
+p{margin:.75em 0}
+a{color:var(--accent);text-underline-offset:2px}
+strong{font-weight:650}
+hr{border:0;border-top:1px solid var(--line);margin:2.6em 0}
+ul,ol{margin:.7em 0;padding-left:1.4em}
+li{margin:.3em 0}
+li>ul,li>ol{margin:.25em 0}
+blockquote{
+  margin:1.3em 0;padding:12px 18px;background:var(--warn-bg);border-left:3px solid var(--warn-line);
+  border-radius:0 10px 10px 0;color:var(--ink)
+}
+blockquote p{margin:.3em 0}
+
+code{font-family:var(--mono);font-size:.87em;background:var(--code-bg);color:var(--code-ink);
+  padding:.15em .38em;border-radius:6px;border:1px solid var(--line);
+  box-decoration-break:clone;-webkit-box-decoration-break:clone;overflow-wrap:anywhere}
+pre{position:relative;background:var(--code-bg);border:1px solid var(--line);border-radius:12px;
+  padding:16px 18px;overflow-x:auto;margin:1.1em 0}
+pre code{background:none;border:0;padding:0;font-size:13.6px;line-height:1.62;white-space:pre}
+.copy{position:absolute;top:8px;right:8px;font:600 11px/1 var(--sans);color:var(--muted);
+  background:var(--panel);border:1px solid var(--line);border-radius:7px;padding:5px 8px;cursor:pointer;
+  opacity:0;transition:opacity .15s}
+pre:hover .copy{opacity:1}
+.copy:hover{color:var(--accent);border-color:var(--accent)}
+
+.table-scroll{overflow-x:auto;margin:1.3em 0;border:1px solid var(--line);border-radius:12px;background:var(--panel)}
+table{border-collapse:collapse;width:100%;font-size:14.6px}
+th,td{padding:9px 13px;text-align:left;vertical-align:top;border-bottom:1px solid var(--line)}
+th{background:var(--accent-soft);font-weight:650;font-size:13px;letter-spacing:.02em;
+  position:sticky;top:0;backdrop-filter:blur(4px)}
+tr:last-child td{border-bottom:0}
+tbody tr:nth-child(even){background:color-mix(in srgb,var(--panel) 60%,var(--bg))}
+tbody tr:hover{background:var(--accent-soft)}
+
+.tools{position:fixed;right:22px;bottom:22px;display:flex;flex-direction:column;gap:8px;z-index:40}
+.tools button{width:42px;height:42px;border-radius:12px;border:1px solid var(--line);background:var(--panel);
+  color:var(--ink);cursor:pointer;font-size:16px;box-shadow:0 4px 14px rgba(0,0,0,.10)}
+.tools button:hover{color:var(--accent);border-color:var(--accent)}
+@media (max-width:1000px){
+  .wrap{display:block}
+  .sidebar{position:static;width:auto;height:auto;border-right:0;border-bottom:1px solid var(--line)}
+  .sidebar nav{max-height:40vh;overflow:auto}
+  main{padding:28px 20px 100px}
+}
+@media print{
+  .sidebar,.tools,#progress,.copy{display:none!important}
+  body{background:#fff;color:#000;font-size:11pt}
+  main{padding:0;max-width:none}
+  h2{break-after:avoid} pre,table,blockquote{break-inside:avoid}
+  a{color:#000;text-decoration:none}
+}
+
+body{background:var(--bg)}
+.shell{max-width:1080px;margin:0 auto;padding:0 28px}
+.topbar{padding:26px 0 0;display:flex;justify-content:space-between;align-items:center;gap:16px}
+.topbar .brand{font-size:12.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:700}
+.topbar a{font-size:13px;color:var(--muted);text-decoration:none}
+.topbar a:hover{color:var(--accent)}
+.hero{padding:34px 0 6px}
+.hero .kicker{font-size:12.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);font-weight:700}
+.hero h1{font-size:2.4rem;margin:.2em 0 .25em;letter-spacing:-.02em}
+.hero p{color:var(--muted);max-width:64ch;margin:0}
+.searchbox{margin:24px 0 6px;display:flex;align-items:center;gap:12px}
+.searchbox label{font-size:12.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);
+  font-weight:700;white-space:nowrap}
+.searchbox input{flex:1;padding:13px 16px;border-radius:12px;border:1px solid var(--line);
+  background:var(--panel);color:var(--ink);font:inherit;font-size:15px}
+.searchbox input:focus{outline:2px solid var(--accent);outline-offset:1px}
+.count{font-size:13px;color:var(--muted);white-space:nowrap;min-width:150px;text-align:right}
+section.group{margin:38px 0 0}
+section.group>h2{font-size:12.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink);
+  opacity:.62;border:0;margin:0 0 14px;padding:0;font-weight:700}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:16px}
+.card{position:relative;display:flex;flex-direction:column;text-decoration:none;color:inherit;
+  background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:20px 20px 16px;
+  transition:transform .15s,border-color .15s,box-shadow .15s}
+.card:hover{transform:translateY(-3px);border-color:var(--accent);box-shadow:0 12px 30px rgba(0,0,0,.09)}
+.card .tag{font-size:11.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--accent);font-weight:700}
+.card h3{font-size:1.14rem;margin:.5em 0 .35em;border:0;padding:0;line-height:1.3}
+.card .blurb{margin:0;color:var(--muted);font-size:14px}
+.card .q{margin-top:auto;padding-top:14px;font-size:12.5px;color:var(--muted);font-family:var(--mono)}
+.card .go{position:absolute;top:18px;right:18px;color:var(--accent);opacity:0;transition:opacity .15s}
+.card:hover .go{opacity:1}
+.card.hero-card{grid-column:1/-1;background:linear-gradient(120deg,var(--accent-soft),var(--panel) 62%);
+  border-color:color-mix(in srgb,var(--accent) 30%,var(--line));padding:24px 26px}
+.card.hero-card h3{font-size:1.45rem;margin-top:.3em}
+.card.hero-card .go{opacity:.9}
+.hint{max-width:1080px;margin:44px auto 70px;padding:0 28px;font-size:13px;color:var(--muted)}
+.tools button{box-shadow:0 4px 14px rgba(0,0,0,.10)}
+
+/* ---------- lab app ---------- */
+body{padding-bottom:70px}
+.lab{max-width:1500px;margin:0 auto;padding:22px 22px 50px;display:grid;
+  grid-template-columns:236px minmax(0,1fr);gap:22px;align-items:start}
+@media (max-width:980px){.lab{grid-template-columns:1fr;padding:16px}
+  .rail{position:static!important;max-height:none!important;display:flex;overflow-x:auto;gap:6px}
+  .rail .rl{white-space:nowrap;flex:0 0 auto}}
+.rail{position:sticky;top:16px;max-height:calc(100vh - 32px);overflow:auto}
+.rail h4{font:700 10.5px/1 var(--sans);letter-spacing:.11em;text-transform:uppercase;
+  color:var(--muted);margin:0 0 8px}
+.rl{display:flex;gap:8px;align-items:baseline;padding:6px 9px;border-radius:8px;cursor:pointer;
+  font-size:13px;color:var(--muted);border:1px solid transparent;line-height:1.3}
+.rl:hover{background:var(--accent-soft)}
+.rl.on{background:var(--accent-soft);border-color:var(--accent);color:var(--ink)}
+.rl b{font-family:var(--mono);font-size:11px;color:var(--accent);flex:0 0 20px}
+
+.exp{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:20px 22px 22px}
+.exp h2{margin:.1em 0 .5em;font-size:1.28rem;line-height:1.3}
+.exp h2 span{color:var(--accent);font-family:var(--mono);font-size:1rem;margin-right:8px}
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.chip{font-family:var(--mono);font-size:11px;color:var(--muted);border:1px solid var(--line);
+  border-radius:6px;padding:2px 7px;background:var(--code-bg)}
+.story{font-size:13.6px;line-height:1.62;color:var(--ink);margin:0 0 16px;
+  border-left:2px solid var(--accent);padding-left:12px}
+
+.map{display:grid;grid-template-columns:minmax(280px,.95fr) minmax(0,1.05fr);gap:16px;align-items:start}
+@media (max-width:1180px){.map{grid-template-columns:1fr}}
+.steps{display:flex;flex-direction:column;gap:4px}
+.step{display:grid;grid-template-columns:20px 1fr;gap:9px;padding:7px 9px;border-radius:8px;
+  cursor:pointer;border:1px solid transparent;font-size:13.1px;line-height:1.5}
+.step:hover{background:var(--accent-soft)}
+.step.on{background:var(--accent-soft);border-color:var(--accent)}
+.step .num{font-family:var(--mono);font-size:10.5px;color:var(--accent);padding-top:3px}
+.step code{font-size:11.5px}
+
+.codepane{position:static;border:none;border-radius:0;background:var(--code-bg)}
+#panes{position:sticky;top:16px;border:1px solid var(--line);border-radius:11px;
+  background:var(--code-bg);overflow:auto;max-height:52vh}
+#panes .codepane + .codepane{border-top:1px solid var(--line)}
+.codepane .fname{font:700 10.5px/1 var(--sans);letter-spacing:.1em;text-transform:uppercase;
+  color:var(--muted);padding:9px 12px;border-bottom:1px solid var(--line);position:sticky;top:0;
+  background:var(--code-bg);z-index:2}
+.codepane table{border-collapse:collapse;width:100%;font-family:var(--mono);font-size:11.6px}
+.codepane td{vertical-align:top;padding:0}
+.codepane td.ln{width:38px;text-align:right;padding:0 8px 0 0;color:var(--muted);opacity:.55;
+  user-select:none;border-right:1px solid var(--line)}
+.codepane td.cd{padding:0 12px 0 10px;white-space:pre-wrap;word-break:break-word;color:var(--ink)}
+.codepane tr.hl{background:color-mix(in srgb, var(--accent) 16%, transparent)}
+.codepane tr.hl td.ln{opacity:1;color:var(--accent);font-weight:700}
+.codepane tr.live{background:color-mix(in srgb, #ff9f0a 26%, transparent)}
+.codepane tr{cursor:pointer}
+
+.trace{margin-top:18px;border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.trace .th{display:flex;gap:10px;align-items:center;flex-wrap:wrap;padding:10px 12px;
+  background:var(--accent-soft);border-bottom:1px solid var(--line)}
+.trace .th b{font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--accent)}
+.trace .th .hint2{font-size:11.5px;color:var(--muted);flex:1}
+.trace .tb{padding:12px}
+.trace textarea{width:100%;min-height:60px;font-family:var(--mono);font-size:12px;
+  background:var(--code-bg);color:var(--ink);border:1px solid var(--line);border-radius:8px;
+  padding:9px 10px;resize:vertical}
+.btn{font:600 12px/1 var(--sans);border:1px solid var(--line);background:var(--panel);
+  color:var(--ink);border-radius:7px;padding:7px 11px;cursor:pointer}
+.btn:hover{border-color:var(--accent);color:var(--accent)}
+.btn.p{background:var(--accent);color:#fff;border-color:var(--accent)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.btnrow{display:flex;gap:7px;align-items:center;flex-wrap:wrap;margin-top:9px}
+.note{margin-top:11px;font-size:13px;line-height:1.55;background:var(--accent-soft);
+  border-left:2px solid var(--accent);border-radius:0 8px 8px 0;padding:9px 12px;min-height:20px}
+.state{margin-top:10px;display:flex;gap:10px;flex-wrap:wrap}
+.sbox{border:1px solid var(--line);border-radius:9px;background:var(--panel);min-width:120px}
+.sbox-t{font:700 9.5px/1 var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--muted);
+  padding:7px 9px;border-bottom:1px solid var(--line)}
+.sbox-b{padding:8px 9px;font-family:var(--mono);font-size:11.5px;line-height:1.5;overflow:auto;max-width:420px}
+.sbox-b pre{margin:0;font-size:11.5px}
+.kv{display:flex;gap:8px;font-size:12px;padding:2px 0}
+.kv .k{color:var(--muted);min-width:78px}
+.kv .v{font-family:var(--mono);font-size:11.5px}
+.cell{display:inline-block;border:1px solid var(--line);border-radius:5px;background:var(--code-bg);
+  padding:1px 6px;margin:1px 2px;font-family:var(--mono);font-size:11px}
+.cell.top{border-color:var(--accent);color:var(--accent);font-weight:700}
+.dim{color:var(--muted);opacity:.7;font-size:11px}
+.stbl{border-collapse:collapse;font-family:var(--mono);font-size:11px}
+.stbl th,.stbl td{border:1px solid var(--line);padding:2px 6px;text-align:center}
+.stbl th{color:var(--muted);font-weight:600;background:var(--code-bg)}
+.stbl td.hi{background:color-mix(in srgb, var(--accent) 22%, transparent);font-weight:700}
+.counter{font-family:var(--mono);font-size:11px;color:var(--muted)}
+details{border-top:1px solid var(--line);margin-top:14px;padding-top:10px}
+summary{cursor:pointer;font-size:12.5px;font-weight:600;color:var(--ink);letter-spacing:.01em}
+summary::marker{color:var(--accent)}
+.curve{margin-top:8px}
+.cv{padding:8px 0;border-bottom:1px dashed var(--line);font-size:13px;line-height:1.55}
+.cv:last-child{border-bottom:none}
+.cv b{display:block;color:var(--accent);font-size:12px;margin-bottom:2px}
+.qa{padding:8px 0;border-bottom:1px dashed var(--line);font-size:13px;line-height:1.55}
+.qa:last-child{border-bottom:none}
+.qa b{display:block;margin-bottom:3px}
+.cmd{position:relative;margin:10px 0 0}
+.cmd pre{margin:0;background:var(--code-bg);border:1px solid var(--line);border-radius:8px;
+  padding:10px 12px;font-size:11.6px;overflow:auto}
+.toplink{font-size:12.5px;color:var(--muted);text-decoration:none}
+.toplink:hover{color:var(--accent)}
+</style>
+</head>
+<body>
+<div class="lab">
+  <nav class="rail">
+    <h4>11 experiments</h4>
+    <div id="rail"></div>
+    <h4 style="margin-top:16px">Elsewhere</h4>
+    <div class="rl" onclick="location.href='playground.html'">⌨ Playground</div>
+    <div class="rl" onclick="location.href='index.html'">← All documents</div>
+  </nav>
+  <main id="main"></main>
+</div>
+<script>var EXPS = [{"id": "exp1", "n": "1", "title": "Lexical analyser, hand-written", "story": "The compiler's first job is to stop seeing text and start seeing <b>words<\/b>. This program reads a file character by character and prints what each chunk is: keyword, identifier, number, operator, or symbol. Each chunk is a <b>token<\/b>.", "files": [{"name": "lex_a.c", "lines": ["/*", "gcc lex_a.c", "./a.out", "*/", "", "#include <stdio.h>", "#include <ctype.h>", "#include <string.h>", "", "char *keywords[] = {", "    \"int\", \"float\", \"char\", \"if\", \"else\", \"while\", \"for\",", "    \"return\", \"void\", \"break\", \"continue\", \"double\",\"main\"", "};", "", "int isKeyword(char *str) {", "    int n = sizeof(keywords) / sizeof(keywords[0]);", "    for (int i = 0; i < n; i++) {", "        if (strcmp(str, keywords[i]) == 0)", "            return 1;", "    }", "    return 0;", "}", "", "int main() {", "    FILE *fp = fopen(\"input.c\", \"r\");", "", "    char ch, buffer[100];", "    int i;", "", "    while ((ch = fgetc(fp)) != EOF) {", "", "        if (ch == ' ' || ch == '\\t' || ch == '\\n')", "            continue;", "", "        if (ch == '/') {", "            char next = fgetc(fp);", "", "            if (next == '/') {", "                while ((ch = fgetc(fp)) != '\\n' && ch != EOF);", "                continue;", "            }", "", "            else if (next == '*') {", "                char prev = 0;", "                while ((ch = fgetc(fp)) != EOF) {", "                    if (prev == '*' && ch == '/')", "                        break;", "                    prev = ch;", "                }", "                continue;", "            }", "", "            else {", "                printf(\"Operator : /\\n\");", "                ungetc(next, fp);", "                continue;", "            }", "        }", "", "        if (isalpha(ch) || ch == '_') {", "            i = 0;", "            buffer[i++] = ch;", "", "            while ((ch = fgetc(fp)) != EOF &&", "                   (isalnum(ch) || ch == '_')) {", "                buffer[i++] = ch;", "            }", "", "            buffer[i] = '\\0';", "", "            if (ch != EOF)", "                ungetc(ch, fp);", "", "            if (isKeyword(buffer))", "                printf(\"Keyword    : %s\\n\", buffer);", "            else", "                printf(\"Identifier : %s\\n\", buffer);", "        }", "", "        else if (isdigit(ch)) {", "            i = 0;", "            buffer[i++] = ch;", "", "            while ((ch = fgetc(fp)) != EOF && isdigit(ch)) {", "                buffer[i++] = ch;", "            }", "", "            buffer[i] = '\\0';", "", "            if (ch != EOF)", "                ungetc(ch, fp);", "", "            printf(\"Number     : %s\\n\", buffer);", "        }", "", "        else if (strchr(\"+-*=<>!%\", ch)) {", "            printf(\"Operator   : %c\\n\", ch);", "        }", "", "        else if (strchr(\"(){}[];,.\", ch)) {", "            printf(\"Symbol     : %c\\n\", ch);", "        }", "    }", "", "    fclose(fp);", "    return 0;", "}", ""]}, {"name": "input.c", "lines": ["//comment", "", "int main() {", "    int a = 10;", "    float b = 20;", "", "    /* Multi-line", "       comment */", "", "    if(a < b) {", "        a = a + 1;", "    }", "", "    return 0;", "}", ""]}], "steps": [{"t": "Open the file and read <b>one character at a time<\/b> — the whole program is one loop over fgetc().", "code": [{"f": "lex_a.c", "l": [25]}, {"f": "lex_a.c", "l": [30, 45]}]}, {"t": "Skip blanks, tabs and newlines before classifying anything.", "code": [{"f": "lex_a.c", "l": [32]}]}, {"t": "A '/' is ambiguous — it may be a comment or an operator, so <b>read one character past it<\/b>.", "code": [{"f": "lex_a.c", "l": [35]}, {"f": "lex_a.c", "l": [36]}]}, {"t": "'//' swallows the rest of the line; '/*' swallows until the pair '*' '/' — tracked with a <b>prev<\/b> variable, because one character alone cannot tell you the pair just closed.", "code": [{"f": "lex_a.c", "l": [38]}, {"f": "lex_a.c", "l": [46]}]}, {"t": "A bare '/' IS an operator — and the character you read to check must be <b>pushed back<\/b> with ungetc(), or the next token loses its first character.", "code": [{"f": "lex_a.c", "l": [54]}, {"f": "lex_a.c", "l": [55]}]}, {"t": "A letter or '_' starts a word: copy it and every following letter/digit/'_' into a buffer.", "code": [{"f": "lex_a.c", "l": [60]}]}, {"t": "Close the buffer with '\\0' and push the terminating character back, so it is read again as the start of the next token.", "code": [{"f": "lex_a.c", "l": [69, 88]}, {"f": "lex_a.c", "l": [72, 91]}]}, {"t": "Compare the buffer against the keyword array: match → <b>Keyword<\/b>, no match → <b>Identifier<\/b>. Same shape, fixed list — that is the only difference between the two.", "code": [{"f": "lex_a.c", "l": [74]}]}, {"t": "A digit starts a number and only digits continue it — same push-back discipline.", "code": [{"f": "lex_a.c", "l": [80]}]}, {"t": "Operators and symbols are single characters in a fixed set, so strchr() decides them.", "code": [{"f": "lex_a.c", "l": [96]}, {"f": "lex_a.c", "l": [100]}]}, {"t": "At EOF the file is closed and the program ends.", "code": [{"f": "lex_a.c", "l": [105]}]}], "curve": [["They ask for <b>more keywords<\/b>", "Only the keywords[] array changes. The scanner logic is untouched — this is the cheapest possible modification, and a common one."], ["They ask it to read <b>stdin instead of input.c<\/b>", "Drop fopen/fclose and use getchar() in place of fgetc(fp); ungetc's second argument becomes stdin. The loop condition becomes while ((ch = getchar()) != EOF)."], ["They ask for <b>two-character operators<\/b> (<=, >=, ==)", "This design cannot do it in one pass: it classifies a single character. You must copy the '/' trick — read the next character after '<'/'='/'>' and decide, pushing back when it is not the second half."], ["They ask to <b>count<\/b> tokens instead of printing", "Add an int per class and ++ in each branch; the printing lines are the only ones that change."]], "viva": [["Why read a character past the end of a token?", "To know the token ended. That character belongs to the next token, so ungetc() pushes it back — otherwise every following token loses its first character."], ["How does it tell a keyword from an identifier?", "isKeyword() strcmp's the buffer against the array. Both are the same shape; only the fixed list separates them."], ["Why is the multiline comment loop tricky?", "It needs TWO characters to decide ('*' then '/'), so it keeps the previous one in prev. A single getc cannot see a pair."], ["What happens to a character in no set, like '@'?", "It is silently ignored — the four if/else-if branches have no final else. That is a real limitation to state honestly."]], "sim": "scan", "simhint": "Paste any C snippet; the scanner classifies it token by token.", "simdefault": "int main(){\n  int a = 10;\n  float b = 20;\n  if (a < b) { a = a + 1; }\n  return 0;\n}", "build": "gcc lex_a.c && ./a.out          # reads input.c from the same folder"}, {"id": "exp2", "n": "2", "title": "Lexical analyser with LEX", "story": "Exp 1 was hand-written. Here LEX <b>writes the scanner for you<\/b>: you list pattern → action pairs, and it generates lex.yy.c containing yylex(). LEX builds one big DFA from all the patterns, which is why matching order has rules.", "files": [{"name": "lexer.l", "lines": ["/*", "lex lexer.l", "gcc lex.yy.c", "/a.out", "int a = a+b*2;", "*/", "", "%{", "#include <stdio.h>", "%}", "", "%%", "", "\"int\"|\"float\"|\"char\"|\"double\"|\"void\"|\"if\"|\"else\"|\"while\"|\"for\"|\"return\"|\"break\"|\"continue\"|\"main\"    { printf(\"Keyword : %s\\n\", yytext); }", "", "[0-9]+    { printf(\"Number : %s\\n\", yytext); }", "", "[a-zA-Z_][a-zA-Z0-9_]*    { printf(\"Identifier : %s\\n\", yytext); }", "", "\"==\"|\"!=\"|\"<=\"|\">=\"|\"=\"|\"<\"|\">\"|\"+\"|\"-\"|\"*\"|\"/\"    { printf(\"Operator : %s\\n\", yytext); }", "", "\"[\"|\"]\"|\"(\"|\")\"|\"{\"|\"}\"|\";\"|\",\"    { printf(\"Special Symbol : %s\\n\", yytext); }", "", "[ \\t\\n]+    ;", "", ".    { printf(\"Unknown : %s\\n\", yytext); }", "", "%%", "", "int yywrap()", "{", "    return 1;", "}", "", "int main()", "{", "    printf(\"Enter a C program:\\n\");", "    yylex();", "    return 0;", "}", ""]}], "steps": [{"t": "<b>Definitions section<\/b> (%{ … %}): headers and any globals the actions need.", "code": [{"f": "lexer.l", "l": [8]}]}, {"t": "<b>Rules section<\/b> (after %%): one pattern → action pair per token class. This is the entire program logic.", "code": [{"f": "lexer.l", "l": [14]}]}, {"t": "Keywords first: quoted strings, alternated with |. Each prints the matched text yytext.", "code": [{"f": "lexer.l", "l": [14]}]}, {"t": "Numbers: [0-9]+ means 'one or more digits'. The + is why 42 is one token and not two.", "code": [{"f": "lexer.l", "l": [16]}]}, {"t": "Identifiers: a letter or underscore, then any number of letters/digits/underscores. Written as [a-zA-Z_][a-zA-Z0-9_]* — two character classes, not one.", "code": [{"f": "lexer.l", "l": [18]}]}, {"t": "Operators, longest strings first inside the alternation (== before =) — reflex, not required, but it keeps the intent obvious.", "code": [{"f": "lexer.l", "l": [20]}]}, {"t": "Special symbols: the bracket/brace/semicolon/comma set.", "code": [{"f": "lexer.l", "l": [22]}]}, {"t": "Whitespace matches and does <b>nothing<\/b> — an empty action (just a semicolon). Consuming it is the point.", "code": [{"f": "lexer.l", "l": [24]}]}, {"t": "A final '.' catches anything unmatched, so no character is silently lost (Exp 1's weakness).", "code": [{"f": "lexer.l", "l": [26]}]}, {"t": "<b>User code section<\/b>: yywrap() returning 1 means 'no more input files', and main() just calls yylex() once — it loops internally until EOF.", "code": [{"f": "lexer.l", "l": [30]}, {"f": "lexer.l", "l": [38]}]}], "curve": [["They ask to <b>add comments<\/b>", "Two rules, both written BEFORE the operator rule: \\/\\/.* ; and \\/\\*([^*]|\\*+[^*/])*\\*+\\/ ;. Longest-match makes /* win over the '/' operator, and the earlier-rule rule settles ties."], ["They ask to <b>count<\/b> keywords", "int k=0; in the definitions section, k++ inside the keyword action, print in main. Only the action changes."], ["They ask for <b>one output per line<\/b> instead of per token", "You cannot — LEX calls your action per match. Buffer the text and print at EOF, or write a rule that matches a whole line (.*\\n) and re-tokenise inside it."], ["They ask what happens to '123abc'", "Longest match: the identifier rule would need a letter first, so [0-9]+ takes 123, then [a-zA-Z_][a-zA-Z0-9_]* takes abc — two tokens, not one error. LEX has no concept of 'invalid token', only 'unmatched'."]], "viva": [["Longest match vs first rule — which wins?", "Length first: the longest match at the current position wins. Only when two rules match the SAME length does the earlier rule win."], ["What are yytext and yyleng?", "yytext is the matched text as a string, yyleng its length. No copying needed, which is why counting is characters += yyleng."], ["Why is main() inside the third section?", "YACC also generates a main() (Exp 4). Standalone LEX needs its own driver, so it goes after the second %% and calls yylex()."], ["What does yywrap() do?", "Called at end of input; returning 1 tells the scanner there are no further files, so yylex() returns 0."]], "sim": "lex", "simhint": "Type C code; each token shows which rule won and why.", "simdefault": "int a = a+b*2;", "build": "lex lexer.l && gcc lex.yy.c -lfl && ./a.out"}, {"id": "exp3", "n": "3", "title": "Count lines, words, characters with LEX", "story": "Same tool, different job: instead of <b>labelling<\/b> tokens it <b>counts<\/b> them. It proves a lex action can do anything C can — including keeping state.", "files": [{"name": "lex_count.l", "lines": ["/*", "lex lex_count.l", "gcc lex.yy.c", "./a.out", "hello world", "this is lex", "", "ctrl + d", "*/", "", "%{", "#include <stdio.h>", "", "int lines = 0;", "int words = 0;", "int characters = 0;", "%}", "", "%%", "", "\\n              { lines++; characters++; }", "", "[ \\t]+          { characters += yyleng; }", "", "[a-zA-Z0-9]+    { words++; characters += yyleng; }", "", ".               { characters++; }", "", "%%", "", "int yywrap()", "{", "    return 1;", "}", "", "int main()", "{", "    printf(\"Enter the text:\\n\");", "    yylex();", "", "    printf(\"\\nNumber of lines      : %d\\n\", lines);", "    printf(\"Number of words      : %d\\n\", words);", "    printf(\"Number of characters : %d\\n\", characters);", "", "    return 0;", "}", ""]}], "steps": [{"t": "The three counters are <b>globals<\/b> in the definitions section, so every action can update them.", "code": [{"f": "lex_count.l", "l": [14]}, {"f": "lex_count.l", "l": [15]}, {"f": "lex_count.l", "l": [16]}]}, {"t": "Newline rule: one line, one character. The pattern is the escape \\n.", "code": [{"f": "lex_count.l", "l": [21]}]}, {"t": "Blanks and tabs: [ \\t]+ matches a RUN, so characters must add yyleng — not 1.", "code": [{"f": "lex_count.l", "l": [23]}]}, {"t": "Word rule: a run of letters/digits is one word, and its length is again added with yyleng.", "code": [{"f": "lex_count.l", "l": [25]}]}, {"t": "Catch-all '.' takes any single other character (punctuation) — it counts one character.", "code": [{"f": "lex_count.l", "l": [27]}]}, {"t": "main() prints the prompt, calls yylex() (which loops to EOF), then prints the three counters.", "code": [{"f": "lex_count.l", "l": [41]}, {"f": "lex_count.l", "l": [42]}, {"f": "lex_count.l", "l": [43]}]}], "curve": [["They ask to count <b>sentences<\/b>", "Add a rule [.!?] with sentences++ and characters += yyleng. The structure of the program does not change at all — that is the lesson."], ["They ask what happens without the '.' rule", "Characters in no rule are skipped silently, so the character count is WRONG while lines and words stay right. The catch-all is what makes the count conservation property hold."], ["They ask for words <b>excluding digits<\/b>", "Change [a-zA-Z0-9]+ to [a-zA-Z]+, and note digits then fall to the '.' rule and count as characters only. Say that consequence out loud."], ["They ask why characters is updated in every rule", "Because every matched rule consumes characters. Any rule that forgets to account for its own match breaks the invariant 'sum of consumed = total'."]], "viva": [["How do you end input in this program?", "Ctrl+D (not Enter). yylex() returns on EOF, then main() prints."], ["What is special about the whitespace rule here vs Exp 2?", "Exp 2's whitespace action is empty; here it must add yyleng to characters. Same pattern, different action — the action is where the experiment lives."], ["Why is [ \\t]+ one rule and not two?", "[ \\t]+ is a run: a tab-indented line is one match. Splitting it would still count the same characters, but yyleng makes the run cheaper."]], "sim": "count", "simhint": "Type text; watch the three counters move rule by rule (Ctrl+D is the real program's EOF).", "simdefault": "hello world\nthis is lex\n", "build": "lex lex_count.l && gcc lex.yy.c -lfl && ./a.out     # Ctrl+D at the end"}, {"id": "exp4", "n": "4", "title": "Identifier validator: LEX + YACC", "story": "LEX knows nothing about <b>order<\/b>. It can say 'this is a letter', not 'a letter must come first'. YACC supplies the grammar, LEX supplies the tokens — together they decide legality.", "files": [{"name": "lex_id.l", "lines": ["/*", "yacc -d yacc_id.y", "lex lex_id.l", "", "gcc y.tab.c lex.yy.c -ll", "./a.out", "", "abc123", "123abc", "*/", "", "%{", "#include \"y.tab.h\"", "%}", "", "%%", "", "[a-zA-Z]    { return LETTER; }", "[0-9]       { return DIGIT; }", "\\n          { return '\\n'; }", ".           { return yytext[0]; }", "", "%%", ""]}, {"name": "yacc_id.y", "lines": ["/*", "yacc -d yacc_id.y", "lex lex_id.l", "", "gcc y.tab.c lex.yy.c -ll", "./a.out", "", "abc123", "123abc", "*/", "", "%{", "#include <stdio.h>", "", "int yylex(void);", "int yyerror(char *s);", "%}", "", "%token LETTER DIGIT", "", "%%", "", "start:", "      identifier '\\n'   { printf(\"Valid Identifier\\n\"); }", "    ;", "", "identifier:", "      LETTER", "    | identifier LETTER", "    | identifier DIGIT", "    ;", "", "%%", "", "int main()", "{", "    printf(\"Enter an identifier: \");", "    yyparse();", "    return 0;", "}", "", "int yyerror(char *s)", "{", "    printf(\"Invalid Identifier\\n\");", "    return 0;", "}", ""]}], "steps": [{"t": "LEX includes the header yacc -d generated, so token NAMES exist in both halves with identical numbers.", "code": [{"f": "lex_id.l", "l": [13]}]}, {"t": "Only four rules. A letter returns LETTER, a digit returns DIGIT — LEX does not decide anything, it just reports what it saw.", "code": [{"f": "lex_id.l", "l": [18]}, {"f": "lex_id.l", "l": [19]}]}, {"t": "Newline is passed through explicitly, and every other character is returned as itself. Those are the characters the grammar has no rule for — YACC will reject them.", "code": [{"f": "lex_id.l", "l": [20]}, {"f": "lex_id.l", "l": [21]}]}, {"t": "YACC declares the two token names it expects from LEX.", "code": [{"f": "yacc_id.y", "l": [19]}]}, {"t": "The start rule demands identifier followed by the newline; only then does the action print Valid.", "code": [{"f": "yacc_id.y", "l": [24]}]}, {"t": "The grammar rule is <b>left-recursive<\/b>: identifier can be a LETTER, or an identifier followed by one more LETTER/DIGIT. Left recursion is what LALR wants, and note the base case is LETTER only.", "code": [{"f": "yacc_id.y", "l": [28]}, {"f": "yacc_id.y", "l": [29]}, {"f": "yacc_id.y", "l": [30]}]}, {"t": "main() calls yyparse(), which drives yylex() until the start symbol is complete or an error occurs.", "code": [{"f": "yacc_id.y", "l": [38]}]}, {"t": "yyerror() is called by YACC when no rule can consume the next token — that is the invalid path.", "code": [{"f": "yacc_id.y", "l": [44]}]}], "curve": [["They allow an identifier to <b>start with underscore<\/b>", "Change ONLY the .l: [a-zA-Z_] returns LETTER. The grammar is untouched, because '_' is just another letter to it. The .y file is where you say WHY nothing changes."], ["They ask for <b>float validation<\/b> (digits '.' digits)", "That is a grammar change: add a rule like number : DIGIT | number DIGIT | number '.' DIGIT …, and add a token for '.'. Same left-recursive shape — this is the modification most likely to appear, so be able to sketch it."], ["They ask why 123abc fails but abc123 passes", "The only way to START a derivation is LETTER. 123 starts with DIGIT, so no derivation exists; after a first letter, DIGIT and LETTER are both fine."], ["They ask for a longer identifier limit", "YACC has no length limit; the constraint, if any, is a C array or a length counter in a lex action. Nothing in the grammar changes."]], "viva": [["Which tool decides, LEX or YACC?", "LEX reports tokens; YACC decides. LEX's [a-zA-Z] rule cannot know position — the grammar is what encodes 'letter first'."], ["What does yacc -d add?", "It writes y.tab.h containing the token numbers, which the .l file includes. Without it the two halves disagree and nothing compiles."], ["Why left recursion and not right?", "LALR parsers consume input bottom-up with a bounded stack; left recursion folds each new symbol into the existing identifier. Right recursion would grow the stack for the length of the name."], ["What is yyerror's role?", "YACC calls it when the next token fits no rule. Here it prints Invalid Identifier; a real compiler would also report the line number."]], "sim": "yacc", "simhint": "Type an identifier; watch LEX feed tokens and YACC decide.", "simdefault": "abc123", "build": "yacc -d yacc_id.y && lex lex_id.l && gcc y.tab.c lex.yy.c -lfl && ./a.out"}, {"id": "exp5", "n": "5", "title": "ε-closure of every state", "story": "An NFA may have <b>ε-transitions<\/b>: moves that consume no input, like a free teleport. The ε-closure of a state is the state itself plus everything reachable by ε-moves only. Experiments 6 and 7 both need this set.", "files": [{"name": "e_closure.c", "lines": ["/*", "gcc e_closure.c", "./a.out", "", "4", "0 1 0 0", "0 0 1 0", "0 0 0 1", "0 0 0 0", "*/", "", "#include <stdio.h>", "", "int n;", "int epsilon[20][20];", "int closure[20][20];", "", "void findClosure(int state, int current){", "    int i;", "", "    closure[state][current] = 1;", "", "    for (i = 0; i < n; i++){", "        if (epsilon[current][i] == 1 && closure[state][i] == 0){", "            findClosure(state, i);", "        }", "    }", "}", "", "int main(){", "    int i, j;", "", "    printf(\"Enter the number of states: \");", "    scanf(\"%d\", &n);", "", "    printf(\"Enter the epsilon transition matrix:\\n\");", "    printf(\"(Enter 1 if epsilon transition exists, otherwise 0)\\n\");", "", "    for (i = 0; i < n; i++){", "        for (j = 0; j < n; j++){", "            scanf(\"%d\", &epsilon[i][j]);", "        }", "    }", "", "    for (i = 0; i < n; i++){", "        findClosure(i, i);", "    }", "", "    printf(\"\\nEpsilon Closure of all states:\\n\");", "", "    for (i = 0; i < n; i++){", "        printf(\"E-closure(q%d) = { \", i);", "", "        for (j = 0; j < n; j++){", "            if (closure[i][j] == 1){", "                printf(\"q%d \", j);", "            }", "        }", "", "        printf(\"}\\n\");", "    }", "", "    return 0;", "}", "", ""]}], "steps": [{"t": "State lives in two global matrices: epsilon (the input) and closure (what we compute). closure[s][t] = 1 means 't is in the ε-closure of s'.", "code": [{"f": "e_closure.c", "l": [15]}, {"f": "e_closure.c", "l": [16]}]}, {"t": "The recursive helper takes <b>two<\/b> states: state = whose closure (fixed), current = where the walk is now (changes).", "code": [{"f": "e_closure.c", "l": [18]}]}, {"t": "Mark the current state as belonging to the closure. This happens BEFORE looking for moves — that is what makes it terminate.", "code": [{"f": "e_closure.c", "l": [21]}]}, {"t": "Scan all states for an ε-move out of current <b>that we have not already marked<\/b>. The second half of that condition is the cycle guard.", "code": [{"f": "e_closure.c", "l": [24]}]}, {"t": "Recurse on each unvisited ε-reachable state. The closure matrix doubles as the visited set — no separate array is needed.", "code": [{"f": "e_closure.c", "l": [25]}]}, {"t": "main reads n, then the full n×n matrix row by row.", "code": [{"f": "e_closure.c", "l": [34]}, {"f": "e_closure.c", "l": [41]}]}, {"t": "Every state is seeded with itself: findClosure(s, s) for s = 0 … n-1.", "code": [{"f": "e_closure.c", "l": [46]}]}, {"t": "Print by scanning each closure row for 1s — the order of printing is q0 first, and the set order is ascending, which matters if you compare against the sample.", "code": [{"f": "e_closure.c", "l": [52]}]}], "curve": [["They ask for the closure of <b>one state only<\/b>", "One call: findClosure(k, k), then print row k. The driver loop is the only change."], ["They give the automaton as an <b>edge list<\/b> instead of a matrix", "Read pairs (from, to) into the same matrix; everything downstream is identical. Say that the representation is not the algorithm."], ["They ask for <b>transitive closure<\/b> of a general relation", "Same recursion with ε replaced by the relation — this IS Warshall's algorithm in recursive clothing, and saying that out loud is worth marks."], ["They ask what breaks on an ε-cycle", "Nothing — that is exactly what the closure[state][i]==0 test prevents. Remove it and you get infinite recursion, i.e. a stack overflow."]], "viva": [["Why does the helper need two parameters?", "One says whose closure is being computed and never changes; the other is the state we have reached. Conflating them loses the origin."], ["Where is the visited check?", "In the if condition: closure[state][i] == 0. Marking before recursing is what makes it a visited set."], ["What does ε-closure(q0) mean in words?", "Every state the machine could be in without consuming any input, starting from q0. It is where 'free moves' are resolved."], ["Which later experiment consumes this result?", "Exp 6 takes it as input and Exp 7 needs it whenever the NFA has ε-moves. The pipeline is 5 → 6 → 7."]], "sim": "eclosure", "simhint": "First line = number of states n, then n lines of n 0/1 values.", "simdefault": "4\n0 1 0 0\n0 0 1 0\n0 0 0 1\n0 0 0 0", "build": "gcc e_closure.c && ./a.out"}, {"id": "exp6", "n": "6", "title": "ε-NFA → NFA (remove ε-moves)", "story": "ε-moves are convenient to draw and annoying to run. This experiment rewrites the transition table so every move reads a real symbol, while accepting exactly the same language.", "files": [{"name": "e-nfa_nfa.c", "lines": ["/*", "gcc e-nfa_nfa.c", "./a.out", "", "3", "2", "a b", "", "3", "0 1 2", "", "2 ", "1 2", "", "1", "2", "", "1 1", "1 0", "1 2", "0", "0 ", "1 2", "*/", "", "#include <stdio.h>", "#include <string.h>", "", "#define MAX 10", "", "int n, m;", "char symbols[MAX];", "int trans[MAX][MAX][MAX];  ", "int eclose[MAX][MAX];", "int ecount[MAX];", "", "void addState(int arr[], int *count, int state) {", "    for (int i = 0; i < *count; i++)", "        if (arr[i] == state)", "            return;", "    arr[(*count)++] = state;", "}", "", "int main() {", "    int i, j, k;", "", "    printf(\"Enter number of states: \");", "    scanf(\"%d\", &n);", "", "    printf(\"Enter number of input symbols: \");", "    scanf(\"%d\", &m);", "", "    printf(\"Enter input symbols: \");", "    for (i = 0; i < m; i++)", "        scanf(\" %c\", &symbols[i]);", "", "    printf(\"\\nEnter epsilon closure of each state:\\n\");", "    for (i = 0; i < n; i++) {", "        printf(\"Number of states in E-closure(q%d): \", i);", "        scanf(\"%d\", &ecount[i]);", "        printf(\"States: \");", "        for (j = 0; j < ecount[i]; j++)", "            scanf(\"%d\", &eclose[i][j]);", "    }", "", "    printf(\"\\nEnter transitions (number of destinations followed by states):\\n\");", "    for (i = 0; i < n; i++) {", "        for (j = 0; j < m; j++) {", "            printf(\"d(q%d,%c): \", i, symbols[j]);", "            scanf(\"%d\", &trans[i][j][0]);", "            for (k = 1; k <= trans[i][j][0]; k++)", "                scanf(\"%d\", &trans[i][j][k]);", "        }", "    }", "", "    printf(\"\\nEquivalent NFA without epsilon transitions:\\n\");", "", "    for (i = 0; i < n; i++) {", "        for (j = 0; j < m; j++) {", "            int result[MAX], rcount = 0;", "", "            for (k = 0; k < ecount[i]; k++) {", "                int state = eclose[i][k];", "", "                int tcount = trans[state][j][0];", "                for (int x = 1; x <= tcount; x++) {", "                    int next = trans[state][j][x];", "", "                    for (int y = 0; y < ecount[next]; y++)", "                        addState(result, &rcount, eclose[next][y]);", "                }", "            }", "", "            printf(\"d'(q%d,%c) = { \", i, symbols[j]);", "            for (k = 0; k < rcount; k++)", "                printf(\"q%d \", result[k]);", "            printf(\"}\\n\");", "        }", "    }", "", "    return 0;", "}", "", "", "", "", "", ""]}], "steps": [{"t": "addState() appends a state to a set only if it is not already there. Every set in this program is kept duplicate-free by that one function.", "code": [{"f": "e-nfa_nfa.c", "l": [37]}]}, {"t": "Read n, m and the m alphabet symbols.", "code": [{"f": "e-nfa_nfa.c", "l": [55]}]}, {"t": "Read the ε-closure of every state as input. This program does NOT compute it — Exp 5 does. Say that link out loud.", "code": [{"f": "e-nfa_nfa.c", "l": [60]}]}, {"t": "Read the transitions: for each state and symbol, a count followed by that many destinations.", "code": [{"f": "e-nfa_nfa.c", "l": [70]}]}, {"t": "The core loop — for each state i and each symbol j, build one result set.", "code": [{"f": "e-nfa_nfa.c", "l": [80]}]}, {"t": "Step 1 of the formula: iterate over ε-closure(i). You may teleport freely <b>before<\/b> reading.", "code": [{"f": "e-nfa_nfa.c", "l": [82]}]}, {"t": "Step 2: from each of those states, read the symbol and take its destinations.", "code": [{"f": "e-nfa_nfa.c", "l": [85]}]}, {"t": "Step 3: from each destination, add its whole ε-closure — teleport freely <b>after<\/b> reading. addState keeps the union duplicate-free.", "code": [{"f": "e-nfa_nfa.c", "l": [89]}, {"f": "e-nfa_nfa.c", "l": [90]}]}, {"t": "Print δ'(qi, a) = the accumulated set. Three nested loops, one formula.", "code": [{"f": "e-nfa_nfa.c", "l": [94]}]}], "curve": [["They ask you to <b>compute<\/b> the closure instead of taking it as input", "Call Exp 5's findClosure() before the main loop and fill eclose from the closure matrix. Nothing else changes — that is why the two experiments are neighbours."], ["They ask for <b>one symbol only<\/b>", "Fix j to that symbol's index; the outer loop over j disappears."], ["They ask what the formula is, verbatim", "δ'(q,a) = ε-closure( ∪ over p ∈ ε-closure(q) of δ(p,a) ). In words: teleport free, read the symbol, teleport free."], ["They ask why δ' may include MORE states than δ", "Because both free-teleport passes add states that the original move never named. That is the price of removing ε: the sets get fatter, the language does not change."]], "viva": [["Why remove ε-moves at all?", "A machine cannot 'choose' to teleport — an implementation needs a concrete next state for every (state, symbol). Removing ε makes it runnable, and Exp 7 then makes it deterministic."], ["What does addState protect against?", "Duplicates. Two different paths can reach the same state, and a set with repeats would print wrongly and break set comparison later."], ["Is the result an NFA or a DFA?", "Still an NFA — a symbol may lead to several states. Determinism is Exp 7's job."], ["What is the input order here?", "n, m, the m symbols, then per state: count + closure states, then per state × symbol: count + destinations. Reading the header comment is the fastest way to get it right."]], "sim": "enfa", "simhint": "Program's own input format: n, m, symbols, then closures, then transitions.", "simdefault": "3 2\na b\n3\n0 1 2\n2\n1 2\n1\n2\n1 1\n1 0\n1 2\n0\n0\n1 2", "build": "gcc e-nfa_nfa.c && ./a.out"}, {"id": "exp7", "n": "7", "title": "NFA → DFA (subset construction)", "story": "A computer cannot be in three states at once. Subset construction fixes that by declaring every <b>set of NFA states<\/b> to be a single state of a new deterministic machine. Where the NFA branches, the DFA tracks the whole branch.", "files": [{"name": "nfa_dfa.c", "lines": ["/*", "gcc nfa_dfa.c", "./a.out", "", "3", "2", "a b", "", "1 0", "1 1 ", "1 0", "2 1 2", "1 2", "0", "*/", "", "", "#include <stdio.h>", "", "#define MAX 20", "", "int n, m;", "char symbols[MAX];", "", "int nfa[MAX][MAX][MAX];", "", "int dfaStates[MAX][MAX];", "int dfaCount[MAX];", "int dfa[MAX][MAX];", "int totalDFA = 0;", "", "int contains(int set[], int count, int state){", "    for (int i = 0; i < count; i++){", "        if (set[i] == state)", "            return 1;", "    }", "    return 0;", "}", "", "void sortSet(int set[], int count){", "    for (int i = 0; i < count - 1; i++){", "        for (int j = i + 1; j < count; j++){", "            if (set[i] > set[j]){", "                int temp = set[i];", "                set[i] = set[j];", "                set[j] = temp;", "            }", "        }", "    }", "}", "", "int sameSet(int a[], int acount, int b[], int bcount){", "    if (acount != bcount)", "        return 0;", "", "    for (int i = 0; i < acount; i++){", "        if (!contains(b, bcount, a[i]))", "            return 0;", "    }", "", "    return 1;", "}", "", "int findDFAState(int set[], int count){", "    for (int i = 0; i < totalDFA; i++){", "        if (sameSet(dfaStates[i], dfaCount[i], set, count))", "            return i;", "    }", "", "    return -1;", "}", "", "void printSet(int set[], int count){", "    if (count == 0){", "        printf(\"{}\");", "        return;", "    }", "", "    printf(\"{\");", "", "    for (int i = 0; i < count; i++){", "        if (i > 0)", "            printf(\",\");", "", "        printf(\"q%d\", set[i]);", "    }", "", "    printf(\"}\");", "}", "", "int main(){", "    printf(\"Enter number of states: \");", "    scanf(\"%d\", &n);", "", "    printf(\"Enter number of input symbols: \");", "    scanf(\"%d\", &m);", "", "    printf(\"Enter input symbols: \");", "    for (int i = 0; i < m; i++)", "        scanf(\" %c\", &symbols[i]);", "", "    printf(\"\\nEnter NFA transitions.\\n\");", "    printf(\"For each transition, enter number of destination states followed by states.\\n\\n\");", "", "    for (int i = 0; i < n; i++){", "        for (int j = 0; j < m; j++){", "            printf(\"delta(q%d,%c): \", i, symbols[j]);", "", "            int count;", "            scanf(\"%d\", &count);", "", "            nfa[i][j][0] = count;", "", "            for (int k = 1; k <= count; k++)", "                scanf(\"%d\", &nfa[i][j][k]);", "        }", "    }", "", "    dfaStates[0][0] = 0;", "    dfaCount[0] = 1;", "    totalDFA = 1;", "", "    int current = 0;", "", "    while (current < totalDFA){", "        for (int j = 0; j < m; j++){", "            int newSet[MAX];", "            int newCount = 0;", "", "            for (int i = 0; i < dfaCount[current]; i++){", "                int state = dfaStates[current][i];", "", "                int transitionCount = nfa[state][j][0];", "", "                for (int k = 1; k <= transitionCount; k++){", "                    int nextState = nfa[state][j][k];", "", "                    if (!contains(newSet, newCount, nextState)){", "                        newSet[newCount++] = nextState;", "                    }", "                }", "            }", "", "            sortSet(newSet, newCount);", "", "            int stateIndex = findDFAState(newSet, newCount);", "", "            if (stateIndex == -1){", "                stateIndex = totalDFA;", "", "                for (int k = 0; k < newCount; k++)", "                    dfaStates[totalDFA][k] = newSet[k];", "", "                dfaCount[totalDFA] = newCount;", "", "                totalDFA++;", "            }", "", "            dfa[current][j] = stateIndex;", "        }", "", "        current++;", "    }", "", "    printf(\"\\nEquivalent DFA Transition Table:\\n\\n\");", "", "    printf(\"DFA State\\t\");", "    for (int i = 0; i < m; i++)", "        printf(\"%c\\t\\t\", symbols[i]);", "", "    printf(\"\\n\");", "", "    for (int i = 0; i < totalDFA; i++){", "        printSet(dfaStates[i], dfaCount[i]);", "        printf(\"\\t\\t\");", "", "        for (int j = 0; j < m; j++){", "            int next = dfa[i][j];", "", "            printSet(dfaStates[next], dfaCount[next]);", "            printf(\"\\t\\t\");", "        }", "        printf(\"\\n\");", "    }", "    return 0;", "}", "", ""]}], "steps": [{"t": "Three set helpers do the real work: contains(), sortSet(), sameSet() — and findDFAState() uses them to ask 'have I seen this set before?'.", "code": [{"f": "nfa_dfa.c", "l": [32]}, {"f": "nfa_dfa.c", "l": [52]}]}, {"t": "sortSet() exists for one reason: {q1,q2} and {q2,q1} must compare equal, or the DFA grows duplicate states and never terminates.", "code": [{"f": "nfa_dfa.c", "l": [40]}]}, {"t": "The DFA starts as ONE state: {q0}. totalDFA counts how many exist.", "code": [{"f": "nfa_dfa.c", "l": [119]}, {"f": "nfa_dfa.c", "l": [121]}]}, {"t": "The worklist loop: while there is an unprocessed DFA state. New sets are APPENDED during the loop, so they are processed in the same pass — a queue, for free.", "code": [{"f": "nfa_dfa.c", "l": [125]}]}, {"t": "For the current DFA state, union the NFA moves from <b>every<\/b> NFA state in the set.", "code": [{"f": "nfa_dfa.c", "l": [130]}]}, {"t": "Duplicates are filtered as they are added, then the set is sorted so it has one canonical form.", "code": [{"f": "nfa_dfa.c", "l": [138]}, {"f": "nfa_dfa.c", "l": [144]}]}, {"t": "Look the set up: if it already exists, reuse its index; if not, it becomes a new DFA state and is appended to the list.", "code": [{"f": "nfa_dfa.c", "l": [146]}, {"f": "nfa_dfa.c", "l": [148]}, {"f": "nfa_dfa.c", "l": [156]}]}, {"t": "Record the transition and move to the next symbol.", "code": [{"f": "nfa_dfa.c", "l": [159]}]}, {"t": "After all states are processed, print the table with each state labelled by its set, e.g. {q1,q2}.", "code": [{"f": "nfa_dfa.c", "l": [165]}]}], "curve": [["They add <b>final states<\/b>", "A DFA state is final if its set CONTAINS any NFA final state. One extra loop when printing — the construction itself is unchanged."], ["They use a <b>3-symbol alphabet<\/b>", "Only m and the read loop change. Say explicitly that the algorithm is alphabet-agnostic."], ["They ask what happens if you skip sortSet()", "Set identity is order-dependent, so {q1,q2} and {q2,q1} count as two states, the table grows without bound, and the program loops or overflows. That is the bug the sort prevents."], ["They ask how many DFA states at most", "Up to 2^n subsets of an n-state NFA — in practice far fewer, because only reachable subsets appear."]], "viva": [["What is a DFA state here?", "A set of NFA states — 'the NFA could be in any of these'. That is the entire idea of subset construction."], ["Why does the worklist loop terminate?", "Each iteration either processes a state already in the list or appends a genuinely new subset. There are finitely many subsets, so it must end."], ["Where would ε-closure fit in?", "If the NFA has ε-moves, each computed set must be ε-closed before being stored (and the start state is ε-closure(q0)). This program's input has none, so it is absent."], ["What does sameSet compare?", "Sizes first, then membership of every element of a in b — an order-independent equality, which is why sorting is not strictly required but is still good hygiene."]], "sim": "subset", "simhint": "Program's input format: n, m, symbols, then per state × symbol: count + destinations.", "simdefault": "3 2\na b\n1 0\n1 1\n1 0\n2 1 2\n1 2\n0", "build": "gcc nfa_dfa.c && ./a.out"}, {"id": "exp8", "n": "8", "title": "FIRST and FOLLOW", "story": "To parse, a machine must answer at every step: <b>given the token I am looking at, which rule do I apply?<\/b> That decision is precomputed into a table, and the table is filled from these two sets.", "files": [{"name": "fnf.c", "lines": ["/*", "gcc fnf.c", "./a.out", "4", "S=AB", "A=a", "B=bC", "C=c", "*/", "", "#include <stdio.h>", "#include <string.h>", "#include <ctype.h>", "", "char prod[10][20];", "int n;", "", "void add(char set[], char c) {", "    int i;", "", "    for (i = 0; set[i] != '\\0'; i++) {", "        if (set[i] == c)", "            return;", "    }", "", "    set[i] = c;", "    set[i + 1] = '\\0';", "}", "", "void FIRST(char c, char result[]) {", "    int i, j;", "", "    if (!isupper(c)) {", "        add(result, c);", "        return;", "    }", "", "    for (i = 0; i < n; i++) {", "        if (prod[i][0] == c) {", "            if (prod[i][2] == '#') {", "                add(result, '#');", "            } else {", "                j = 2;", "", "                while (prod[i][j] != '\\0') {", "                    char temp[20] = \"\";", "", "                    FIRST(prod[i][j], temp);", "", "                    int k;", "                    int epsilon = 0;", "", "                    for (k = 0; temp[k] != '\\0'; k++) {", "                        if (temp[k] == '#')", "                            epsilon = 1;", "                        else", "                            add(result, temp[k]);", "                    }", "", "                    if (!epsilon)", "                        break;", "", "                    j++;", "                }", "            }", "        }", "    }", "}", "", "void FOLLOW(char c, char result[]) {", "    int i, j, k;", "", "    if (c == prod[0][0])", "        add(result, '$');", "", "    for (i = 0; i < n; i++) {", "        for (j = 2; prod[i][j] != '\\0'; j++) {", "            if (prod[i][j] == c) {", "                if (prod[i][j + 1] != '\\0') {", "                    char next = prod[i][j + 1];", "                    char temp[20] = \"\";", "", "                    FIRST(next, temp);", "", "                    int epsilon = 0;", "", "                    for (k = 0; temp[k] != '\\0'; k++) {", "                        if (temp[k] == '#')", "                            epsilon = 1;", "                        else", "                            add(result, temp[k]);", "                    }", "", "                    if (epsilon) {", "                        char temp2[20] = \"\";", "", "                        if (prod[i][0] != c) {", "                            FOLLOW(prod[i][0], temp2);", "", "                            for (k = 0; temp2[k] != '\\0'; k++)", "                                add(result, temp2[k]);", "                        }", "                    }", "                } else {", "                    if (prod[i][0] != c) {", "                        char temp[20] = \"\";", "", "                        FOLLOW(prod[i][0], temp);", "", "                        for (k = 0; temp[k] != '\\0'; k++)", "                            add(result, temp[k]);", "                    }", "                }", "            }", "        }", "    }", "}", "", "int main() {", "    int i, j;", "    char temp[20];", "", "    printf(\"Enter number of productions: \");", "    scanf(\"%d\", &n);", "", "    printf(\"Enter productions (use # for epsilon):\\n\");", "", "    for (i = 0; i < n; i++)", "        scanf(\"%s\", prod[i]);", "", "    printf(\"\\nFIRST sets:\\n\");", "", "    for (i = 0; i < n; i++) {", "        temp[0] = '\\0';", "", "        FIRST(prod[i][0], temp);", "", "        printf(\"FIRST(%c) = {\", prod[i][0]);", "", "        for (j = 0; temp[j] != '\\0'; j++)", "            printf(\" %c\", temp[j]);", "", "        printf(\" }\\n\");", "    }", "", "    printf(\"\\nFOLLOW sets:\\n\");", "", "    for (i = 0; i < n; i++) {", "        temp[0] = '\\0';", "", "        FOLLOW(prod[i][0], temp);", "", "        printf(\"FOLLOW(%c) = {\", prod[i][0]);", "", "        for (j = 0; temp[j] != '\\0'; j++)", "            printf(\" %c\", temp[j]);", "", "        printf(\" }\\n\");", "    }", "", "    return 0;", "}", ""]}], "steps": [{"t": "Sets are plain C strings, and add() appends a character only when it is not already present. That single function is the whole set implementation — dedupe included.", "code": [{"f": "fnf.c", "l": [18]}]}, {"t": "FIRST of a terminal is itself — the base case. isupper() is how the program tells a non-terminal from a terminal.", "code": [{"f": "fnf.c", "l": [33]}]}, {"t": "FIRST of a non-terminal: scan every production whose left-hand side is c.", "code": [{"f": "fnf.c", "l": [39]}]}, {"t": "An explicit ε-production (#) puts ε in FIRST directly.", "code": [{"f": "fnf.c", "l": [40]}]}, {"t": "Otherwise walk the right-hand side, taking FIRST of each symbol in turn.", "code": [{"f": "fnf.c", "l": [48]}]}, {"t": "Add everything except ε, and STOP as soon as a symbol cannot vanish. Only a nullable symbol lets you move to the next one — that is the rule people forget.", "code": [{"f": "fnf.c", "l": [60]}, {"f": "fnf.c", "l": [61]}]}, {"t": "FOLLOW of the start symbol always contains $. Here the start symbol is simply prod[0][0] — the left-hand side of the first production.", "code": [{"f": "fnf.c", "l": [73]}]}, {"t": "FOLLOW scan: find c anywhere in a right-hand side (starting at index 2, since index 1 is '=').", "code": [{"f": "fnf.c", "l": [77]}]}, {"t": "If something follows c, add FIRST of it minus ε; if nothing does — or it can vanish — copy FOLLOW of the left-hand side. That recursion is the theory's step 2(b), not a shortcut.", "code": [{"f": "fnf.c", "l": [98]}, {"f": "fnf.c", "l": [108, 151]}]}, {"t": "main() reads n productions, then computes and prints FIRST for each left-hand side, then FOLLOW.", "code": [{"f": "fnf.c", "l": [131]}, {"f": "fnf.c", "l": [146]}]}], "curve": [["A grammar with an <b>ε production<\/b>", "Write it as A=# . FIRST(A) gets #, and every FIRST of a non-terminal that references A must then continue past it — the !epsilon check is what handles that."], ["They ask for the <b>LL(1) table<\/b> from these sets", "Rule A → α goes into [A, t] for t ∈ FIRST(α); if α is nullable, also into [A, t] for t ∈ FOLLOW(A). Two loops over the productions you already have."], ["A grammar where a non-terminal never appears on any right-hand side", "FOLLOW is {$} if it is the start symbol, otherwise EMPTY — worth saying, examiners like that edge."], ["They change the input format", "This program is positional: prod[i][0] is the LHS and the RHS starts at index 2 because index 1 is '='. Change the format and those two offsets everywhere are what must change — good answer to 'what if the format were A->a'?"]], "viva": [["FIRST vs FOLLOW in one line each", "FIRST(X): terminals that can BEGIN a string derived from X. FOLLOW(A): terminals that can appear immediately AFTER A (plus $ if A can end the input)."], ["Why does '#' stand for ε?", "Epsilon cannot be typed conveniently, so the program uses a character that is not a grammar symbol."], ["Why does add() matter so much?", "Every set is a raw char string; without dedupe, FIRST and FOLLOW print with repeats and any downstream table lookup is wrong."], ["When do you stop scanning a right-hand side?", "As soon as a symbol's FIRST does not contain ε — nothing past it can be first."]], "sim": "fnf", "simhint": "Productions as S=AB, one per token or line; use # for ε.", "simdefault": "S=AB A=a B=bC C=c", "build": "gcc fnf.c && ./a.out"}, {"id": "exp9", "n": "9", "title": "Recursive descent parser", "story": "The simplest way to build a parser: <b>one C function per grammar non-terminal<\/b>. To parse E you call E(); it calls T(), which calls F(). Each function eats the symbol it expects. If everything is eaten and we stand on end-of-string, the input was valid.", "files": [{"name": "rdp.c", "lines": ["/*", "gcc rdp.c", "./a.out", "", "(i+i)*i", "", "./a.out", "i+*i", "*/", "", "#include <stdio.h>", "#include <stdlib.h>", "", "char input[100];", "int pos = 0;", "", "void E();", "void Eprime();", "void T();", "void Tprime();", "void F();", "", "void error() {", "    printf(\"Invalid string\\n\");", "    exit(0);", "}", "", "void E() {", "    T();", "    Eprime();", "}", "", "void Eprime() {", "    if (input[pos] == '+') {", "        pos++;", "        T();", "        Eprime();", "    }", "}", "", "void T() {", "    F();", "    Tprime();", "}", "", "void Tprime() {", "    if (input[pos] == '*') {", "        pos++;", "        F();", "        Tprime();", "    }", "}", "", "void F() {", "    if (input[pos] == 'i') {", "        pos++;", "    }", "    else if (input[pos] == '(') {", "        pos++;", "        E();", "", "        if (input[pos] == ')')", "            pos++;", "        else", "            error();", "    }", "    else {", "        error();", "    }", "}", "", "int main() {", "    printf(\"Enter the input string: \");", "    scanf(\"%s\", input);", "", "    E();", "", "    if (input[pos] == '\\0')", "        printf(\"String is accepted\\n\");", "    else", "        printf(\"String is rejected\\n\");", "", "    return 0;", "}", ""]}], "steps": [{"t": "A shared index pos into the input string. It only ever moves forward — one symbol per match. That shared cursor is what makes separate functions cooperate.", "code": [{"f": "rdp.c", "l": [14]}, {"f": "rdp.c", "l": [15]}]}, {"t": "E → T E': call the two functions for its right-hand side, in order. Nothing else.", "code": [{"f": "rdp.c", "l": [28]}]}, {"t": "E' → + T E' | ε: test for '+'. If present, consume it (pos++) and recurse; if absent, return. <b>The absent match IS the ε-production<\/b> — there is no if(ε) anywhere.", "code": [{"f": "rdp.c", "l": [33]}, {"f": "rdp.c", "l": [34]}]}, {"t": "T → F T': same pattern one level down.", "code": [{"f": "rdp.c", "l": [41]}]}, {"t": "T' → * F T' | ε: identical shape, testing '*'. Because T' lives inside T, every '*' is finished before the enclosing '+' is touched — <b>that nesting is where precedence comes from<\/b>.", "code": [{"f": "rdp.c", "l": [46]}, {"f": "rdp.c", "l": [47]}]}, {"t": "F → i | ( E ): the only function that consumes a token or brackets. An operand is one character here.", "code": [{"f": "rdp.c", "l": [55]}]}, {"t": "On '(' it recurses into E for the whole bracketed expression, then REQUIRES ')'. A missing bracket is an immediate error, not a misplaced symbol.", "code": [{"f": "rdp.c", "l": [58]}, {"f": "rdp.c", "l": [62]}]}, {"t": "error() prints and calls exit(0) — the parse does not unwind, it terminates. Worth knowing for the viva: exit(0) is a success status, which is arguably a bug.", "code": [{"f": "rdp.c", "l": [23]}, {"f": "rdp.c", "l": [25]}]}, {"t": "Accept test: after E(), pos must have reached the end of the string.", "code": [{"f": "rdp.c", "l": [78]}]}], "curve": [["They add '-' and '/'", "Extend the two tests: if (input[pos]=='+' || input[pos]=='-') and the same for '*' || '/'. Nothing else changes — that is the payoff of one-function-per-non-terminal."], ["They want multi-digit numbers", "F must collect a run of digits: while (isdigit(input[pos])) pos++. The structure is unchanged; only F's 'i' case grows."], ["They ask for a grammar with left recursion (E → E + T)", "It CANNOT be written this way — the first call to E() would call E() again forever. That is precisely why the grammar is rewritten to E → T E'. Saying this is a strong viva answer."], ["They ask what error recovery exists", "None. error() exits. A real parser would report the position and skip to a synchronising token."]], "viva": [["Where is the ε-production in the code?", "In the missing else: Eprime() tests for '+' and otherwise falls off the end. Returning without consuming anything is the ε-derivation."], ["Why does * bind tighter than +?", "Because * is matched deeper in the call chain (inside T, which is inside E). Deeper nesting is completed first."], ["What makes this left-to-right?", "The single shared pos. Each call resumes exactly where the previous one stopped."], ["Why is one function per non-terminal enough?", "The grammar is LL(1)-ish here: at every point one token of lookahead (input[pos]) decides which alternative to take. No backtracking is needed."]], "sim": "rdp", "simhint": "i = operand, brackets allowed. Try (i+i)*i, then i+*i.", "simdefault": "(i+i)*i", "build": "gcc rdp.c && ./a.out"}, {"id": "exp10", "n": "10", "title": "Shift-reduce parser", "story": "The opposite direction to Exp 9. Instead of predicting from the top, build the parse from the <b>bottom up<\/b>: push input symbols (<b>shift<\/b>), and whenever the top of the stack looks like a rule's right-hand side, replace it by the left-hand side (<b>reduce<\/b>).", "files": [{"name": "srp.c", "lines": ["/*", "gcc srp.c", "./a.out", "", "i+i*i", "*/", "", "#include <stdio.h>", "#include <string.h>", "", "char stack[50], input[50];", "int top = -1;", "", "void reduce() {", "    if (top >= 0 && stack[top] == 'i') {", "        stack[top] = 'E';", "        printf(\"Reduce E -> i\\n\");", "    }", "    else if (top >= 2 &&", "             stack[top] == 'E' &&", "             stack[top - 1] == '+' &&", "             stack[top - 2] == 'E') {", "        top -= 2;", "        stack[top] = 'E';", "        printf(\"Reduce E -> E+E\\n\");", "    }", "    else if (top >= 2 &&", "             stack[top] == 'E' &&", "             stack[top - 1] == '*' &&", "             stack[top - 2] == 'E') {", "        top -= 2;", "        stack[top] = 'E';", "        printf(\"Reduce E -> E*E\\n\");", "    }", "}", "", "int main() {", "    int i;", "", "    printf(\"Enter input string: \");", "    scanf(\"%s\", input);", "", "    printf(\"\\nShift Reduce Steps:\\n\");", "", "    for (i = 0; input[i] != '\\0'; i++) {", "        stack[++top] = input[i];", "        stack[top + 1] = '\\0';", "", "        printf(\"Shift %c\\tStack: %s\\n\", input[i], stack);", "", "        reduce();", "        stack[top + 1] = '\\0';", "    }", "", "    while (top > 0) {", "        int oldtop = top;", "", "        reduce();", "        stack[top + 1] = '\\0';", "", "        if (oldtop == top)", "            break;", "    }", "", "    if (top == 0 && stack[0] == 'E')", "        printf(\"\\nString Accepted\\n\");", "    else", "        printf(\"\\nString Rejected\\n\");", "", "    return 0;", "}", ""]}], "steps": [{"t": "A character stack and a top index; top = -1 means empty. The stack is the parser's entire memory.", "code": [{"f": "srp.c", "l": [11]}, {"f": "srp.c", "l": [12]}]}, {"t": "reduce() tries three right-hand sides, in this order: 'i' first, then E+E, then E*E. That order is the program's entire grammar.", "code": [{"f": "srp.c", "l": [14]}, {"f": "srp.c", "l": [15]}]}, {"t": "E → E+E: the top three symbols must be E, '+', E, and the reduction pops two and pushes one.", "code": [{"f": "srp.c", "l": [21]}]}, {"t": "E → E*E: same, looking for '*'.", "code": [{"f": "srp.c", "l": [29]}]}, {"t": "main() walks the input; each character is pushed (SHIFT).", "code": [{"f": "srp.c", "l": [46]}]}, {"t": "After every push, stack[top+1] is set to '\\0' so the stack can be printed as a string in the trace. That single write is why the output looks like a stack.", "code": [{"f": "srp.c", "l": [47, 52, 59]}]}, {"t": "<b>reduce() is called once per shift<\/b> and performs AT MOST ONE reduction (if/else-if, no loop). That is why i+i*i reduces i, then E*E, then E+E — and not the other way round.", "code": [{"f": "srp.c", "l": [51, 58]}]}, {"t": "After the input ends, reduce again while top > 0, breaking when a call changes nothing. The oldtop == top comparison is the only termination guard.", "code": [{"f": "srp.c", "l": [56]}, {"f": "srp.c", "l": [61]}]}, {"t": "Accept means the stack is exactly one symbol and it is E.", "code": [{"f": "srp.c", "l": [65]}]}], "curve": [["They add brackets: E → (E)", "One more else-if in reduce(): if the top three are '(', E, ')' then replace by E. Same pattern of three-symbol lookback — be able to write it."], ["They want multi-character operands (id, num)", "This design breaks: the stack holds single characters. You would need a stack of strings and a comparison against whole right-hand sides — say that honestly."], ["They ask about the ambiguous grammar", "E→E+E|E*E|i is ambiguous. This parser gets i+i*i right by accident of reduction order, not by principle. A real LR parser uses a table with precedence; that is what YACC (Exp 4) is."], ["They ask why the trace is not the textbook one", "Because reduce() does one reduction per call and main() calls it once per shift. A textbook parser reduces in a loop until no rule applies; this one defers, which changes the visible order of reductions but not the final result."]], "viva": [["Shift vs reduce in one line each", "Shift: push the next input symbol. Reduce: replace a right-hand side on top of the stack with its left-hand side."], ["How does it terminate?", "Two loops: one over input, then while (top > 0) with an oldtop == top break when no reduction applies."], ["How is this related to YACC?", "YACC is an LR parser: same shift/reduce operations, but the decision comes from a generated table instead of hard-coded ifs. Exp 4 and Exp 10 are the same idea at two levels."], ["Why does the stack need the '\\0' write?", "So the trace can printf(\"%s\", stack). C strings need a terminator, and the array is being used as both stack and string."]], "sim": "srp", "simhint": "Grammar E→E+E | E*E | i. Try i+i*i, then i*i+i.", "simdefault": "i+i*i", "build": "gcc srp.c && ./a.out"}, {"id": "exp11", "n": "11", "title": "Three-address intermediate code", "story": "Turn infix like a+b*c into tiny instructions with at most one operator each, storing partial results in compiler-made temporaries t1, t2. That is <b>three-address code<\/b> — what a real compiler hands to the next phase.", "files": [{"name": "intermediate.c", "lines": ["/*", "gcc intermediate.c", "./a.out", "", "a+b*c", "*/", "", "#include <stdio.h>", "#include <string.h>", "#include <ctype.h>", "", "char expr[50];", "int temp = 1;", "", "void generate(char op, char a[], char b[], char result[]) {", "    printf(\"%s = %s %c %s\\n\", result, a, op, b);", "}", "", "int precedence(char op) {", "    if (op == '*' || op == '/')", "        return 2;", "", "    if (op == '+' || op == '-')", "        return 1;", "", "    return 0;", "}", "", "int main() {", "    char operands[50][10];", "    char operators[50];", "    int top = -1;", "    int opTop = -1;", "    int i;", "", "    printf(\"Enter expression: \");", "    scanf(\"%s\", expr);", "", "    printf(\"\\nIntermediate Code:\\n\");", "", "    for (i = 0; expr[i] != '\\0'; i++) {", "", "        if (isalnum(expr[i])) {", "            top++;", "            operands[top][0] = expr[i];", "            operands[top][1] = '\\0';", "        }", "        else {", "            while (opTop >= 0 &&", "                   precedence(operators[opTop]) >= precedence(expr[i])) {", "", "                char a[10], b[10], result[10];", "", "                strcpy(b, operands[top--]);", "                strcpy(a, operands[top--]);", "", "                sprintf(result, \"t%d\", temp);", "", "                generate(operators[opTop], a, b, result);", "", "                strcpy(operands[++top], result);", "", "                temp++;", "                opTop--;", "            }", "", "            operators[++opTop] = expr[i];", "        }", "    }", "", "    while (opTop >= 0) {", "        char a[10], b[10], result[10];", "", "        strcpy(b, operands[top--]);", "        strcpy(a, operands[top--]);", "", "        sprintf(result, \"t%d\", temp);", "", "        generate(operators[opTop], a, b, result);", "", "        strcpy(operands[++top], result);", "", "        temp++;", "        opTop--;", "    }", "", "    return 0;", "}", ""]}], "steps": [{"t": "Globals: the expression string, and a counter for temporaries starting at 1.", "code": [{"f": "intermediate.c", "l": [12]}, {"f": "intermediate.c", "l": [13]}]}, {"t": "generate() is the only place that prints — it takes the operator and the two operands and emits one instruction. Keeping it in one function is why the output format is consistent.", "code": [{"f": "intermediate.c", "l": [15]}]}, {"t": "precedence() is the whole decision table: * / = 2, + - = 1, anything else 0.", "code": [{"f": "intermediate.c", "l": [19]}, {"f": "intermediate.c", "l": [20]}]}, {"t": "Two stacks: operand stack (strings, holding values AND temporaries) and operator stack (characters).", "code": [{"f": "intermediate.c", "l": [30]}, {"f": "intermediate.c", "l": [31]}]}, {"t": "Operands are pushed as one-character strings (isalnum).", "code": [{"f": "intermediate.c", "l": [43]}]}, {"t": "For an operator, reduce while the stacked operator has precedence >= the incoming one. The >= (not >) is what makes a-b-c parse as (a-b)-c.", "code": [{"f": "intermediate.c", "l": [50]}]}, {"t": "Pop twice: b FIRST, then a. The second pop is the LEFT operand — get this backwards and the code still runs, but every instruction has its operands swapped.", "code": [{"f": "intermediate.c", "l": [54, 74]}, {"f": "intermediate.c", "l": [55, 75]}]}, {"t": "Name the temporary t<counter> with sprintf, print the instruction, push the temporary back as a value, then bump the counter and drop the operator.", "code": [{"f": "intermediate.c", "l": [57, 77]}, {"f": "intermediate.c", "l": [61, 81]}, {"f": "intermediate.c", "l": [63, 83]}]}, {"t": "Push the incoming operator — it now waits for its right operand.", "code": [{"f": "intermediate.c", "l": [67]}]}, {"t": "When the input runs out, drain the operator stack the same way until it is empty.", "code": [{"f": "intermediate.c", "l": [71]}]}], "curve": [["They add <b>parentheses<\/b>", "Add a '(' case that pushes without reducing, and a ')' case that reduces until '(' is popped and discarded. That is the standard extension — say it in those two steps."], ["They add <b>^ right-associative<\/b>", "Give ^ precedence 3, and use > instead of >= when the incoming operator is ^. Right-associativity IS the > comparison."], ["They want unary minus", "Hardest of the four: there is no operand on the left of the stack to pop. You need a special case that emits t = 0 - a, or a marker operand. Naming the problem earns the marks."], ["They change the expression to have multi-letter operands", "isalnum handles one character. You would collect runs of letters/digits into the operand string — the stacks already hold strings, so nothing else changes."]], "viva": [["Why two stacks?", "The operand stack holds partial results waiting for their operator; the operator stack holds operators waiting for their right operand."], ["Why >= and not >?", ">= reduces equal precedence immediately, giving left-to-right associativity: a-b-c → (a-b)-c, which is what C does."], ["What is a temporary and why invent one?", "A compiler-generated variable holding a partial result, so each instruction has at most one operator. Real backends map temporaries to registers."], ["How do you get a full expression's code, not just one step?", "Steps 2 and 3 of the algorithm run as a loop: every reduction emits one instruction, and the number of instructions equals the number of operators in the expression."]], "sim": "tac", "simhint": "Infix with single-letter operands, + - * /. Try a+b*c, then a-b-c.", "simdefault": "a+b*c", "build": "gcc intermediate.c && ./a.out"}];</script>
+<script src="sims.js?v=e5a1c467"></script>
+<script>
+var cur = 0, frames = [], fi = 0, timer = null;
+
+function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
+
+function rail(){
+  document.getElementById("rail").innerHTML = EXPS.map(function(e,i){
+    return '<div class="rl'+(i===cur?" on":"")+'" data-i="'+i+'"><b>'+e.n+'</b><span>'+
+      esc(e.title)+'</span></div>';
+  }).join("");
+  Array.prototype.forEach.call(document.querySelectorAll(".rl[data-i]"),function(el){
+    el.onclick=function(){
+      cur=+el.dataset.i;
+      if(history.replaceState) history.replaceState(null,"","#"+EXPS[cur].id);
+      render();window.scrollTo({top:0,behavior:"smooth"});};
+  });
+}
+
+function codePane(e){
+  var out = "";
+  e.files.forEach(function(f){
+    out += '<div class="codepane" data-file="'+esc(f.name)+'"><div class="fname">'+esc(f.name)+'</div>'+
+      '<table><tbody>'+f.lines.map(function(ln,i){
+        return '<tr data-line="'+(i+1)+'"><td class="ln">'+(i+1)+'</td><td class="cd">'+
+               (esc(ln)||" ")+'</td></tr>';
+      }).join("")+'</tbody></table></div>';
+  });
+  return out;
+}
+
+function render(){
+  rail();
+  var e = EXPS[cur];
+  var h = '<article class="exp">';
+  h += '<h2><span>Exp '+e.n+'</span>'+esc(e.title)+'</h2>';
+  h += '<div class="chips">'+e.files.map(function(f){return '<span class="chip">'+esc(f.name)+'</span>';}).join("")+
+       '<a class="toplink" href="playground.html">run it in the playground →</a></div>';
+  h += '<p class="story">'+e.story+'</p>';
+  h += '<div class="map"><div class="steps" id="steps">';
+  e.steps.forEach(function(s,i){
+    h += '<div class="step" data-i="'+i+'"><div class="num">'+(i+1)+'</div><div>'+s.t+'</div></div>';
+  });
+  h += '</div><div id="panes">'+codePane(e)+'</div></div>';
+
+  h += '<div class="trace"><div class="th"><b>Trace</b><span class="hint2">'+esc(e.simhint)+
+       '</span><span class="counter" id="cnt"></span></div><div class="tb">'+
+       '<textarea id="simin" spellcheck="false"></textarea>'+
+       '<div class="btnrow"><button class="btn p" id="run">▶ Run trace</button>'+
+       '<button class="btn" id="prev" disabled>← Prev</button>'+
+       '<button class="btn" id="next" disabled>Next →</button>'+
+       '<button class="btn" id="play" disabled>⏵ Auto</button>'+
+       '<button class="btn" id="reset" disabled>⟲ Reset</button></div>'+
+       '<div class="note" id="note">Press <b>Run trace</b> — every step lights the C lines that do it.</div>'+
+       '<div class="state" id="state"></div></div></div>';
+
+  h += '<div class="cmd"><pre>'+"$ "+esc(e.build)+'</pre></div>';
+
+  h += '<details><summary>Curveballs — what changes if the question is modified</summary><div class="curve">'+
+       e.curve.map(function(c){return '<div class="cv"><b>'+c[0]+'</b>'+c[1]+'</div>';}).join("")+
+       '</div></details>';
+  h += '<details><summary>Viva — '+e.viva.length+' questions with answers</summary>'+
+       e.viva.map(function(q){return '<div class="qa"><b>'+q[0]+'</b>'+q[1]+'</div>';}).join("")+
+       '</details>';
+  h += '</article>';
+  document.getElementById("main").innerHTML = h;
+
+  document.getElementById("simin").value = e.simdefault;
+  Array.prototype.forEach.call(document.querySelectorAll(".step"),function(el){
+    el.onclick=function(){selectStep(+el.dataset.i);};
+  });
+  Array.prototype.forEach.call(document.querySelectorAll(".codepane tr"),function(tr){
+    tr.onclick=function(){
+      var ln = +tr.dataset.line, f = tr.closest(".codepane").dataset.file, hits = [];
+      e.steps.forEach(function(s,i){
+        s.code.forEach(function(c){ if(c.f===f && c.l.indexOf(ln)>=0) hits.push(i); });
+      });
+      if(hits.length) selectStep(hits[0]); else clearHL();
+    };
+  });
+  document.getElementById("run").onclick = function(){ runSim(false); };
+  document.getElementById("prev").onclick = function(){ step(-1); };
+  document.getElementById("next").onclick = function(){ step(1); };
+  document.getElementById("play").onclick = function(){ auto(); };
+  document.getElementById("reset").onclick = function(){ runSim(false); };
+  clearHL();
+}
+
+function clearHL(){
+  Array.prototype.forEach.call(document.querySelectorAll(".codepane tr.hl, .codepane tr.live"),
+    function(tr){tr.classList.remove("hl");tr.classList.remove("live");});
+  Array.prototype.forEach.call(document.querySelectorAll(".step.on"),
+    function(el){el.classList.remove("on");});
+}
+
+function hl(anchors, cls){
+  if(!anchors) return;
+  anchors.forEach(function(c){
+    var pane = document.querySelector('.codepane[data-file="'+c.f.replace(/"/g,'')+'"]');
+    if(!pane) return;
+    c.l.forEach(function(ln){
+      var tr = pane.querySelector('tr[data-line="'+ln+'"]');
+      if(tr){ tr.classList.add(cls||"hl"); }
+    });
+  });
+}
+
+function scrollToRow(tr){
+  var panes = document.getElementById("panes");
+  if(!tr || !panes) return;
+  var top = tr.getBoundingClientRect().top - panes.getBoundingClientRect().top + panes.scrollTop;
+  panes.scrollTop = Math.max(0, top - panes.clientHeight/3);
+}
+
+function selectStep(i){
+  clearHL();
+  var e = EXPS[cur], s = e.steps[i];
+  var el = document.querySelector('.step[data-i="'+i+'"]');
+  if(el){ el.classList.add("on"); }
+  hl(s.code, "hl");
+  var first = null;
+  s.code.forEach(function(c){
+    var pane = document.querySelector('.codepane[data-file="'+c.f.replace(/"/g,'')+'"]');
+    if(pane && c.l.length){
+      var tr = pane.querySelector('tr[data-line="'+c.l[0]+'"]');
+      if(tr && !first) first = tr;
+    }
+  });
+  scrollToRow(first);
+  document.getElementById("note").innerHTML =
+    "<b>Step "+(i+1)+":</b> "+e.steps[i].t+
+    (s.code.length ? '<br><span class="counter">→ the highlighted lines in the right pane are exactly this step</span>' : "");
+}
+
+function runSim(keep){
+  var e = EXPS[cur], input = document.getElementById("simin").value;
+  clearHL();
+  if(!SIMS[e.sim]){ document.getElementById("note").textContent = "No trace for this experiment."; return; }
+  try { frames = SIMS[e.sim](input) || []; }
+  catch(err){ frames = [{note:"Trace failed: "+err+"\\nCheck the input format.", state:"", code:[]}]; }
+  fi = 0;
+  document.getElementById("cnt").textContent = frames.length + " steps";
+  ["prev","next","play","reset"].forEach(function(id){document.getElementById(id).disabled=false;});
+  showFrame();
+}
+
+function liveHL(anchors){
+  // Highlight, in the C pane, every line whose text contains one of the frame's
+  // anchors. Done by text search rather than by line numbers so a frame can point
+  // at code that no algorithm step owns.
+  if(!anchors || !anchors.length) return;
+  EXPS[cur].files.forEach(function(file){
+    var pane = document.querySelector('.codepane[data-file="'+file.name+'"]');
+    if(!pane) return;
+    Array.prototype.forEach.call(pane.querySelectorAll("tr"), function(tr){
+      var cd = tr.querySelector(".cd");
+      if(!cd) return;
+      var txt = cd.textContent;
+      for(var i=0;i<anchors.length;i++){
+        if(anchors[i] && txt.indexOf(anchors[i]) >= 0){ tr.classList.add("live"); return; }
+      }
+    });
+  });
+}
+
+function showFrame(){
+  if(!frames.length) return;
+  var f = frames[fi];
+  clearHL();
+  document.getElementById("note").innerHTML = "<b>"+(fi+1)+"/"+frames.length+".</b> "+f.note;
+  document.getElementById("state").innerHTML = f.state || "";
+  document.getElementById("prev").disabled = fi===0;
+  document.getElementById("next").disabled = fi===frames.length-1;
+  if(f.code && f.code.length){
+    liveHL(f.code);
+    scrollToRow(document.querySelector(".codepane tr.live"));
+  }
+}
+
+function step(d){
+  fi = Math.max(0, Math.min(frames.length-1, fi+d));
+  showFrame();
+}
+
+function auto(){
+  if(timer){ clearInterval(timer); timer=null; document.getElementById("play").textContent="⏵ Auto"; return; }
+  document.getElementById("play").textContent="⏸ Stop";
+  timer = setInterval(function(){
+    if(fi >= frames.length-1){ clearInterval(timer); timer=null;
+      document.getElementById("play").textContent="⏵ Auto"; return; }
+    step(1);
+  }, 900);
+}
+
+document.addEventListener("keydown", function(ev){
+  if(ev.target.tagName === "TEXTAREA") return;
+  if(ev.key === "ArrowRight") step(1);
+  if(ev.key === "ArrowLeft") step(-1);
+});
+
+function pickFromHash(){
+  var m = /exp(\d+)/.exec(location.hash || "");
+  if(!m) return;
+  for(var i=0;i<EXPS.length;i++){ if(+EXPS[i].n === +m[1]){ cur = i; return; } }
+}
+
+pickFromHash();
+render();
+if(/[?&]run=1/.test(location.search)) runSim(false);
+</script>
+</body>
+</html>

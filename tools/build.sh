@@ -22,6 +22,20 @@ sync_dir "$HOME/study/Web Programming" "web-programming"
 sync_dir "$HOME/study/EHS" "ehs"
 sync_dir "$HOME/study/ISE" "ise"
 
+# Compiler Lab: the docs and programs live in the lab repo, not under ~/study.
+LAB="$HOME/projects/mainproject"
+if [[ -d "$LAB" ]]; then
+  cp "$LAB/ALGORITHMS.md" "$LAB/EXAM_DRILLS.md" "$REPO/sources/compiler-lab/" 2>/dev/null || true
+  cp "$LAB"/study/GROUP_*.md "$REPO/sources/compiler-lab/" 2>/dev/null || true
+  for f in lex_a.c lexer.l lex_count.l lex_id.l yacc_id.y e_closure.c e-nfa_nfa.c \
+           nfa_dfa.c fnf.c rdp.c srp.c intermediate.c input.c; do
+    [[ -f "$LAB/$f" ]] && cp "$LAB/$f" "$REPO/sources/compiler-lab/code/"
+  done
+  echo "sources synced: $LAB -> sources/compiler-lab"
+else
+  echo "note: $LAB not found, building compiler-lab from committed sources"
+fi
+
 "$PY" "$REPO/tools/build.py"
 
 echo

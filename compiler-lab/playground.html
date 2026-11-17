@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Playground — Compiler Lab</title>
+<style>
+:root{
+  --bg:#fbfaf8; --panel:#ffffff; --ink:#232120; --muted:#5f5a53; --line:#e6e1da;
+  --accent:#7a4fd0; --accent-soft:#f1ecfb; --code-bg:#f5f2ee; --code-ink:#2b2a28;
+  --warn-bg:#fff8e6; --warn-line:#f0d9a0;
+  --sans:"Inter","Segoe UI",system-ui,-apple-system,"Noto Sans",sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,"SF Mono",Menlo,Consolas,"Fira Code",monospace;
+}
+html[data-theme="dark"]{
+  --bg:#141317; --panel:#1b1a20; --ink:#e8e4de; --muted:#a8a199; --line:#2f2c36;
+  --accent:#b79cf5; --accent-soft:#241f33; --code-bg:#22202a; --code-ink:#e8e4de;
+  --warn-bg:#2a2417; --warn-line:#4a3d22;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0; background:var(--bg); color:var(--ink); font-family:var(--sans);
+  font-size:16.5px; line-height:1.72; -webkit-font-smoothing:antialiased;
+}
+#progress{position:fixed;top:0;left:0;height:3px;width:0;background:var(--accent);z-index:50;transition:width .1s linear}
+
+.wrap{display:flex;align-items:flex-start;min-height:100vh}
+.sidebar{
+  position:sticky;top:0;height:100vh;width:300px;flex:0 0 300px;overflow-y:auto;
+  padding:26px 20px 60px;border-right:1px solid var(--line);background:var(--panel);
+}
+.sidebar h1{font-size:15px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);
+  margin:0 0 4px;font-weight:600}
+.sidebar .sub{font-size:12.5px;color:var(--muted);margin:0 0 18px}
+.sidebar nav{font-size:14px}
+.sidebar .toc>ul{padding-left:0}
+.sidebar ul{list-style:none;margin:0;padding-left:12px}
+.sidebar ul ul{border-left:1px solid var(--line);margin-left:4px;padding-left:10px}
+.sidebar li{margin:3px 0}
+.sidebar a{color:var(--ink);text-decoration:none;display:block;padding:3px 8px;border-radius:8px;
+  line-height:1.35;transition:background .12s,color .12s}
+.sidebar a:hover{background:var(--accent-soft);color:var(--accent)}
+.sidebar a.active{background:var(--accent-soft);color:var(--accent);font-weight:600}
+.sidebar .home{display:inline-flex;align-items:center;gap:6px;margin-bottom:16px;font-size:13.5px;
+  color:var(--muted);text-decoration:none;border:1px solid var(--line);padding:5px 10px;border-radius:999px}
+.sidebar .home:hover{color:var(--accent);border-color:var(--accent)}
+
+main{flex:1;min-width:0;padding:46px 56px 120px;max-width:980px;margin:0 auto}
+.doc-head{border-bottom:1px solid var(--line);padding-bottom:18px;margin-bottom:34px}
+.doc-head .kicker{font-size:12.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);
+  font-weight:700;margin-bottom:8px}
+.doc-head .meta{font-size:13.5px;color:var(--muted)}
+
+h1,h2,h3,h4{line-height:1.25;font-weight:700;letter-spacing:-.01em}
+h1{font-size:2.05rem;margin:.2em 0 .5em}
+h2{font-size:1.55rem;margin:2.4em 0 .7em;padding-bottom:.35em;border-bottom:1px solid var(--line)}
+h3{font-size:1.2rem;margin:1.9em 0 .55em}
+h4{font-size:1.03rem;margin:1.5em 0 .45em;color:var(--muted)}
+h2 .anchor,h3 .anchor{opacity:0;margin-left:.35em;font-size:.8em;color:var(--muted);text-decoration:none}
+h2:hover .anchor,h3:hover .anchor{opacity:1}
+p{margin:.75em 0}
+a{color:var(--accent);text-underline-offset:2px}
+strong{font-weight:650}
+hr{border:0;border-top:1px solid var(--line);margin:2.6em 0}
+ul,ol{margin:.7em 0;padding-left:1.4em}
+li{margin:.3em 0}
+li>ul,li>ol{margin:.25em 0}
+blockquote{
+  margin:1.3em 0;padding:12px 18px;background:var(--warn-bg);border-left:3px solid var(--warn-line);
+  border-radius:0 10px 10px 0;color:var(--ink)
+}
+blockquote p{margin:.3em 0}
+
+code{font-family:var(--mono);font-size:.87em;background:var(--code-bg);color:var(--code-ink);
+  padding:.15em .38em;border-radius:6px;border:1px solid var(--line);
+  box-decoration-break:clone;-webkit-box-decoration-break:clone;overflow-wrap:anywhere}
+pre{position:relative;background:var(--code-bg);border:1px solid var(--line);border-radius:12px;
+  padding:16px 18px;overflow-x:auto;margin:1.1em 0}
+pre code{background:none;border:0;padding:0;font-size:13.6px;line-height:1.62;white-space:pre}
+.copy{position:absolute;top:8px;right:8px;font:600 11px/1 var(--sans);color:var(--muted);
+  background:var(--panel);border:1px solid var(--line);border-radius:7px;padding:5px 8px;cursor:pointer;
+  opacity:0;transition:opacity .15s}
+pre:hover .copy{opacity:1}
+.copy:hover{color:var(--accent);border-color:var(--accent)}
+
+.table-scroll{overflow-x:auto;margin:1.3em 0;border:1px solid var(--line);border-radius:12px;background:var(--panel)}
+table{border-collapse:collapse;width:100%;font-size:14.6px}
+th,td{padding:9px 13px;text-align:left;vertical-align:top;border-bottom:1px solid var(--line)}
+th{background:var(--accent-soft);font-weight:650;font-size:13px;letter-spacing:.02em;
+  position:sticky;top:0;backdrop-filter:blur(4px)}
+tr:last-child td{border-bottom:0}
+tbody tr:nth-child(even){background:color-mix(in srgb,var(--panel) 60%,var(--bg))}
+tbody tr:hover{background:var(--accent-soft)}
+
+.tools{position:fixed;right:22px;bottom:22px;display:flex;flex-direction:column;gap:8px;z-index:40}
+.tools button{width:42px;height:42px;border-radius:12px;border:1px solid var(--line);background:var(--panel);
+  color:var(--ink);cursor:pointer;font-size:16px;box-shadow:0 4px 14px rgba(0,0,0,.10)}
+.tools button:hover{color:var(--accent);border-color:var(--accent)}
+@media (max-width:1000px){
+  .wrap{display:block}
+  .sidebar{position:static;width:auto;height:auto;border-right:0;border-bottom:1px solid var(--line)}
+  .sidebar nav{max-height:40vh;overflow:auto}
+  main{padding:28px 20px 100px}
+}
+@media print{
+  .sidebar,.tools,#progress,.copy{display:none!important}
+  body{background:#fff;color:#000;font-size:11pt}
+  main{padding:0;max-width:none}
+  h2{break-after:avoid} pre,table,blockquote{break-inside:avoid}
+  a{color:#000;text-decoration:none}
+}
+
+body{background:var(--bg)}
+.shell{max-width:1080px;margin:0 auto;padding:0 28px}
+.topbar{padding:26px 0 0;display:flex;justify-content:space-between;align-items:center;gap:16px}
+.topbar .brand{font-size:12.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:700}
+.topbar a{font-size:13px;color:var(--muted);text-decoration:none}
+.topbar a:hover{color:var(--accent)}
+.hero{padding:34px 0 6px}
+.hero .kicker{font-size:12.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);font-weight:700}
+.hero h1{font-size:2.4rem;margin:.2em 0 .25em;letter-spacing:-.02em}
+.hero p{color:var(--muted);max-width:64ch;margin:0}
+.searchbox{margin:24px 0 6px;display:flex;align-items:center;gap:12px}
+.searchbox label{font-size:12.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);
+  font-weight:700;white-space:nowrap}
+.searchbox input{flex:1;padding:13px 16px;border-radius:12px;border:1px solid var(--line);
+  background:var(--panel);color:var(--ink);font:inherit;font-size:15px}
+.searchbox input:focus{outline:2px solid var(--accent);outline-offset:1px}
+.count{font-size:13px;color:var(--muted);white-space:nowrap;min-width:150px;text-align:right}
+section.group{margin:38px 0 0}
+section.group>h2{font-size:12.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink);
+  opacity:.62;border:0;margin:0 0 14px;padding:0;font-weight:700}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:16px}
+.card{position:relative;display:flex;flex-direction:column;text-decoration:none;color:inherit;
+  background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:20px 20px 16px;
+  transition:transform .15s,border-color .15s,box-shadow .15s}
+.card:hover{transform:translateY(-3px);border-color:var(--accent);box-shadow:0 12px 30px rgba(0,0,0,.09)}
+.card .tag{font-size:11.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--accent);font-weight:700}
+.card h3{font-size:1.14rem;margin:.5em 0 .35em;border:0;padding:0;line-height:1.3}
+.card .blurb{margin:0;color:var(--muted);font-size:14px}
+.card .q{margin-top:auto;padding-top:14px;font-size:12.5px;color:var(--muted);font-family:var(--mono)}
+.card .go{position:absolute;top:18px;right:18px;color:var(--accent);opacity:0;transition:opacity .15s}
+.card:hover .go{opacity:1}
+.card.hero-card{grid-column:1/-1;background:linear-gradient(120deg,var(--accent-soft),var(--panel) 62%);
+  border-color:color-mix(in srgb,var(--accent) 30%,var(--line));padding:24px 26px}
+.card.hero-card h3{font-size:1.45rem;margin-top:.3em}
+.card.hero-card .go{opacity:.9}
+.hint{max-width:1080px;margin:44px auto 70px;padding:0 28px;font-size:13px;color:var(--muted)}
+.tools button{box-shadow:0 4px 14px rgba(0,0,0,.10)}
+
+/* ---------- playground ---------- */
+body{padding-bottom:60px}
+.pg{max-width:1400px;margin:0 auto;padding:22px;display:grid;
+  grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px;align-items:start}
+@media (max-width:1000px){.pg{grid-template-columns:1fr}}
+.pg .full{grid-column:1/-1}
+.card3{background:var(--panel);border:1px solid var(--line);border-radius:13px;overflow:hidden}
+.card3 .ch{display:flex;gap:9px;align-items:center;flex-wrap:wrap;padding:10px 12px;
+  border-bottom:1px solid var(--line);background:var(--code-bg)}
+.card3 .ch b{font:700 11px/1 var(--sans);letter-spacing:.09em;text-transform:uppercase;color:var(--muted)}
+.card3 .cb{padding:12px}
+select,textarea,input{font-family:var(--mono);font-size:12.4px;background:var(--code-bg);
+  color:var(--ink);border:1px solid var(--line);border-radius:7px;padding:8px 9px;width:100%}
+#code{min-height:330px;line-height:1.55;white-space:pre;tab-size:4}
+#stdin{min-height:52px}
+#out{background:var(--code-bg);border:1px solid var(--line);border-radius:8px;padding:11px 12px;
+  font-family:var(--mono);font-size:12.2px;line-height:1.5;white-space:pre-wrap;min-height:180px;
+  max-height:46vh;overflow:auto}
+.ok{color:#2ea043;font-weight:700}
+.bad{color:#e5534b;font-weight:700}
+.btn{font:600 12px/1 var(--sans);border:1px solid var(--line);background:var(--panel);color:var(--ink);
+  border-radius:7px;padding:7px 12px;cursor:pointer}
+.btn:hover{border-color:var(--accent);color:var(--accent)}
+.btn.p{background:var(--accent);color:#fff;border-color:var(--accent)}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.row{display:flex;gap:7px;align-items:center;flex-wrap:wrap}
+.hintline{font-size:12px;color:var(--muted);line-height:1.5;margin-top:8px}
+</style>
+</head>
+<body>
+<div class="pg">
+  <div class="full row" style="justify-content:space-between">
+    <div>
+      <h1 style="font-size:1.3rem;margin:0 0 4px">Write it, run it</h1>
+      <div class="hintline">C is compiled and executed on a remote sandbox (Wandbox) — nothing to install.
+        LEX/YACC are not available there, so experiments 2–4 run locally with the command under the output.</div>
+    </div>
+    <div class="row">
+      <a class="btn" href="lab.html">← Lab bench</a>
+      <a class="btn" href="index.html">All documents</a>
+    </div>
+  </div>
+
+  <div class="card3">
+    <div class="ch"><b>source</b>
+      <select id="tpl" style="width:auto;min-width:230px"></select>
+      <span class="row" style="margin-left:auto">
+        <button class="btn" id="clear">Blank file</button>
+      </span>
+    </div>
+    <div class="cb"><textarea id="code" spellcheck="false"></textarea></div>
+  </div>
+
+  <div>
+    <div class="card3">
+      <div class="ch"><b>stdin</b><span class="hintline" style="margin:0">what scanf() will read</span></div>
+      <div class="cb"><textarea id="stdin" spellcheck="false"></textarea>
+        <div class="btnrow row" style="margin-top:9px">
+          <button class="btn p" id="run">▶ Compile &amp; run</button>
+          <button class="btn" id="local">Copy local command</button>
+          <span id="status" class="hintline" style="margin:0"></span>
+        </div>
+      </div>
+    </div>
+    <div class="card3" style="margin-top:16px">
+      <div class="ch"><b>output</b><span id="meta" class="hintline" style="margin:0"></span></div>
+      <div class="cb"><div id="out">Run something. The exit status and any compiler diagnostics appear here.</div></div>
+    </div>
+  </div>
+</div>
+<script>var TPL = [{"n": "1", "title": "Lexical analyser, hand-written", "file": "lex_a.c", "code": "/*\ngcc lex_a.c\n./a.out\n*/\n\n#include <stdio.h>\n#include <ctype.h>\n#include <string.h>\n\nchar *keywords[] = {\n    \"int\", \"float\", \"char\", \"if\", \"else\", \"while\", \"for\",\n    \"return\", \"void\", \"break\", \"continue\", \"double\",\"main\"\n};\n\nint isKeyword(char *str) {\n    int n = sizeof(keywords) / sizeof(keywords[0]);\n    for (int i = 0; i < n; i++) {\n        if (strcmp(str, keywords[i]) == 0)\n            return 1;\n    }\n    return 0;\n}\n\nint main() {\n    FILE *fp = fopen(\"input.c\", \"r\");\n\n    char ch, buffer[100];\n    int i;\n\n    while ((ch = fgetc(fp)) != EOF) {\n\n        if (ch == ' ' || ch == '\\t' || ch == '\\n')\n            continue;\n\n        if (ch == '/') {\n            char next = fgetc(fp);\n\n            if (next == '/') {\n                while ((ch = fgetc(fp)) != '\\n' && ch != EOF);\n                continue;\n            }\n\n            else if (next == '*') {\n                char prev = 0;\n                while ((ch = fgetc(fp)) != EOF) {\n                    if (prev == '*' && ch == '/')\n                        break;\n                    prev = ch;\n                }\n                continue;\n            }\n\n            else {\n                printf(\"Operator : /\\n\");\n                ungetc(next, fp);\n                continue;\n            }\n        }\n\n        if (isalpha(ch) || ch == '_') {\n            i = 0;\n            buffer[i++] = ch;\n\n            while ((ch = fgetc(fp)) != EOF &&\n                   (isalnum(ch) || ch == '_')) {\n                buffer[i++] = ch;\n            }\n\n            buffer[i] = '\\0';\n\n            if (ch != EOF)\n                ungetc(ch, fp);\n\n            if (isKeyword(buffer))\n                printf(\"Keyword    : %s\\n\", buffer);\n            else\n                printf(\"Identifier : %s\\n\", buffer);\n        }\n\n        else if (isdigit(ch)) {\n            i = 0;\n            buffer[i++] = ch;\n\n            while ((ch = fgetc(fp)) != EOF && isdigit(ch)) {\n                buffer[i++] = ch;\n            }\n\n            buffer[i] = '\\0';\n\n            if (ch != EOF)\n                ungetc(ch, fp);\n\n            printf(\"Number     : %s\\n\", buffer);\n        }\n\n        else if (strchr(\"+-*=<>!%\", ch)) {\n            printf(\"Operator   : %c\\n\", ch);\n        }\n\n        else if (strchr(\"(){}[];,.\", ch)) {\n            printf(\"Symbol     : %c\\n\", ch);\n        }\n    }\n\n    fclose(fp);\n    return 0;\n}\n", "stdin": "", "cmd": "gcc lex_a.c && ./a.out          # reads input.c from the same folder"}, {"n": "2", "title": "Lexical analyser with LEX", "file": "lexer.l", "code": "/*\nlex lexer.l\ngcc lex.yy.c\n/a.out\nint a = a+b*2;\n*/\n\n%{\n#include <stdio.h>\n%}\n\n%%\n\n\"int\"|\"float\"|\"char\"|\"double\"|\"void\"|\"if\"|\"else\"|\"while\"|\"for\"|\"return\"|\"break\"|\"continue\"|\"main\"    { printf(\"Keyword : %s\\n\", yytext); }\n\n[0-9]+    { printf(\"Number : %s\\n\", yytext); }\n\n[a-zA-Z_][a-zA-Z0-9_]*    { printf(\"Identifier : %s\\n\", yytext); }\n\n\"==\"|\"!=\"|\"<=\"|\">=\"|\"=\"|\"<\"|\">\"|\"+\"|\"-\"|\"*\"|\"/\"    { printf(\"Operator : %s\\n\", yytext); }\n\n\"[\"|\"]\"|\"(\"|\")\"|\"{\"|\"}\"|\";\"|\",\"    { printf(\"Special Symbol : %s\\n\", yytext); }\n\n[ \\t\\n]+    ;\n\n.    { printf(\"Unknown : %s\\n\", yytext); }\n\n%%\n\nint yywrap()\n{\n    return 1;\n}\n\nint main()\n{\n    printf(\"Enter a C program:\\n\");\n    yylex();\n    return 0;\n}\n", "stdin": "int a = a+b*2;", "cmd": "lex lexer.l && gcc lex.yy.c -lfl && ./a.out"}, {"n": "3", "title": "Count lines, words, characters with LEX", "file": "lex_count.l", "code": "/*\nlex lex_count.l\ngcc lex.yy.c\n./a.out\nhello world\nthis is lex\n\nctrl + d\n*/\n\n%{\n#include <stdio.h>\n\nint lines = 0;\nint words = 0;\nint characters = 0;\n%}\n\n%%\n\n\\n              { lines++; characters++; }\n\n[ \\t]+          { characters += yyleng; }\n\n[a-zA-Z0-9]+    { words++; characters += yyleng; }\n\n.               { characters++; }\n\n%%\n\nint yywrap()\n{\n    return 1;\n}\n\nint main()\n{\n    printf(\"Enter the text:\\n\");\n    yylex();\n\n    printf(\"\\nNumber of lines      : %d\\n\", lines);\n    printf(\"Number of words      : %d\\n\", words);\n    printf(\"Number of characters : %d\\n\", characters);\n\n    return 0;\n}\n", "stdin": "hello world\nthis is lex\n", "cmd": "lex lex_count.l && gcc lex.yy.c -lfl && ./a.out     # Ctrl+D at the end"}, {"n": "4", "title": "Identifier validator: LEX + YACC", "file": "lex_id.l", "code": "/*\nyacc -d yacc_id.y\nlex lex_id.l\n\ngcc y.tab.c lex.yy.c -ll\n./a.out\n\nabc123\n123abc\n*/\n\n%{\n#include \"y.tab.h\"\n%}\n\n%%\n\n[a-zA-Z]    { return LETTER; }\n[0-9]       { return DIGIT; }\n\\n          { return '\\n'; }\n.           { return yytext[0]; }\n\n%%\n", "stdin": "abc123", "cmd": "yacc -d yacc_id.y && lex lex_id.l && gcc y.tab.c lex.yy.c -lfl && ./a.out"}, {"n": "5", "title": "ε-closure of every state", "file": "e_closure.c", "code": "/*\ngcc e_closure.c\n./a.out\n\n4\n0 1 0 0\n0 0 1 0\n0 0 0 1\n0 0 0 0\n*/\n\n#include <stdio.h>\n\nint n;\nint epsilon[20][20];\nint closure[20][20];\n\nvoid findClosure(int state, int current){\n    int i;\n\n    closure[state][current] = 1;\n\n    for (i = 0; i < n; i++){\n        if (epsilon[current][i] == 1 && closure[state][i] == 0){\n            findClosure(state, i);\n        }\n    }\n}\n\nint main(){\n    int i, j;\n\n    printf(\"Enter the number of states: \");\n    scanf(\"%d\", &n);\n\n    printf(\"Enter the epsilon transition matrix:\\n\");\n    printf(\"(Enter 1 if epsilon transition exists, otherwise 0)\\n\");\n\n    for (i = 0; i < n; i++){\n        for (j = 0; j < n; j++){\n            scanf(\"%d\", &epsilon[i][j]);\n        }\n    }\n\n    for (i = 0; i < n; i++){\n        findClosure(i, i);\n    }\n\n    printf(\"\\nEpsilon Closure of all states:\\n\");\n\n    for (i = 0; i < n; i++){\n        printf(\"E-closure(q%d) = { \", i);\n\n        for (j = 0; j < n; j++){\n            if (closure[i][j] == 1){\n                printf(\"q%d \", j);\n            }\n        }\n\n        printf(\"}\\n\");\n    }\n\n    return 0;\n}\n\n", "stdin": "4\n0 1 0 0\n0 0 1 0\n0 0 0 1\n0 0 0 0", "cmd": "gcc e_closure.c && ./a.out"}, {"n": "6", "title": "ε-NFA → NFA (remove ε-moves)", "file": "e-nfa_nfa.c", "code": "/*\ngcc e-nfa_nfa.c\n./a.out\n\n3\n2\na b\n\n3\n0 1 2\n\n2 \n1 2\n\n1\n2\n\n1 1\n1 0\n1 2\n0\n0 \n1 2\n*/\n\n#include <stdio.h>\n#include <string.h>\n\n#define MAX 10\n\nint n, m;\nchar symbols[MAX];\nint trans[MAX][MAX][MAX];  \nint eclose[MAX][MAX];\nint ecount[MAX];\n\nvoid addState(int arr[], int *count, int state) {\n    for (int i = 0; i < *count; i++)\n        if (arr[i] == state)\n            return;\n    arr[(*count)++] = state;\n}\n\nint main() {\n    int i, j, k;\n\n    printf(\"Enter number of states: \");\n    scanf(\"%d\", &n);\n\n    printf(\"Enter number of input symbols: \");\n    scanf(\"%d\", &m);\n\n    printf(\"Enter input symbols: \");\n    for (i = 0; i < m; i++)\n        scanf(\" %c\", &symbols[i]);\n\n    printf(\"\\nEnter epsilon closure of each state:\\n\");\n    for (i = 0; i < n; i++) {\n        printf(\"Number of states in E-closure(q%d): \", i);\n        scanf(\"%d\", &ecount[i]);\n        printf(\"States: \");\n        for (j = 0; j < ecount[i]; j++)\n            scanf(\"%d\", &eclose[i][j]);\n    }\n\n    printf(\"\\nEnter transitions (number of destinations followed by states):\\n\");\n    for (i = 0; i < n; i++) {\n        for (j = 0; j < m; j++) {\n            printf(\"d(q%d,%c): \", i, symbols[j]);\n            scanf(\"%d\", &trans[i][j][0]);\n            for (k = 1; k <= trans[i][j][0]; k++)\n                scanf(\"%d\", &trans[i][j][k]);\n        }\n    }\n\n    printf(\"\\nEquivalent NFA without epsilon transitions:\\n\");\n\n    for (i = 0; i < n; i++) {\n        for (j = 0; j < m; j++) {\n            int result[MAX], rcount = 0;\n\n            for (k = 0; k < ecount[i]; k++) {\n                int state = eclose[i][k];\n\n                int tcount = trans[state][j][0];\n                for (int x = 1; x <= tcount; x++) {\n                    int next = trans[state][j][x];\n\n                    for (int y = 0; y < ecount[next]; y++)\n                        addState(result, &rcount, eclose[next][y]);\n                }\n            }\n\n            printf(\"d'(q%d,%c) = { \", i, symbols[j]);\n            for (k = 0; k < rcount; k++)\n                printf(\"q%d \", result[k]);\n            printf(\"}\\n\");\n        }\n    }\n\n    return 0;\n}\n\n\n\n\n\n", "stdin": "3 2\na b\n3\n0 1 2\n2\n1 2\n1\n2\n1 1\n1 0\n1 2\n0\n0\n1 2", "cmd": "gcc e-nfa_nfa.c && ./a.out"}, {"n": "7", "title": "NFA → DFA (subset construction)", "file": "nfa_dfa.c", "code": "/*\ngcc nfa_dfa.c\n./a.out\n\n3\n2\na b\n\n1 0\n1 1 \n1 0\n2 1 2\n1 2\n0\n*/\n\n\n#include <stdio.h>\n\n#define MAX 20\n\nint n, m;\nchar symbols[MAX];\n\nint nfa[MAX][MAX][MAX];\n\nint dfaStates[MAX][MAX];\nint dfaCount[MAX];\nint dfa[MAX][MAX];\nint totalDFA = 0;\n\nint contains(int set[], int count, int state){\n    for (int i = 0; i < count; i++){\n        if (set[i] == state)\n            return 1;\n    }\n    return 0;\n}\n\nvoid sortSet(int set[], int count){\n    for (int i = 0; i < count - 1; i++){\n        for (int j = i + 1; j < count; j++){\n            if (set[i] > set[j]){\n                int temp = set[i];\n                set[i] = set[j];\n                set[j] = temp;\n            }\n        }\n    }\n}\n\nint sameSet(int a[], int acount, int b[], int bcount){\n    if (acount != bcount)\n        return 0;\n\n    for (int i = 0; i < acount; i++){\n        if (!contains(b, bcount, a[i]))\n            return 0;\n    }\n\n    return 1;\n}\n\nint findDFAState(int set[], int count){\n    for (int i = 0; i < totalDFA; i++){\n        if (sameSet(dfaStates[i], dfaCount[i], set, count))\n            return i;\n    }\n\n    return -1;\n}\n\nvoid printSet(int set[], int count){\n    if (count == 0){\n        printf(\"{}\");\n        return;\n    }\n\n    printf(\"{\");\n\n    for (int i = 0; i < count; i++){\n        if (i > 0)\n            printf(\",\");\n\n        printf(\"q%d\", set[i]);\n    }\n\n    printf(\"}\");\n}\n\nint main(){\n    printf(\"Enter number of states: \");\n    scanf(\"%d\", &n);\n\n    printf(\"Enter number of input symbols: \");\n    scanf(\"%d\", &m);\n\n    printf(\"Enter input symbols: \");\n    for (int i = 0; i < m; i++)\n        scanf(\" %c\", &symbols[i]);\n\n    printf(\"\\nEnter NFA transitions.\\n\");\n    printf(\"For each transition, enter number of destination states followed by states.\\n\\n\");\n\n    for (int i = 0; i < n; i++){\n        for (int j = 0; j < m; j++){\n            printf(\"delta(q%d,%c): \", i, symbols[j]);\n\n            int count;\n            scanf(\"%d\", &count);\n\n            nfa[i][j][0] = count;\n\n            for (int k = 1; k <= count; k++)\n                scanf(\"%d\", &nfa[i][j][k]);\n        }\n    }\n\n    dfaStates[0][0] = 0;\n    dfaCount[0] = 1;\n    totalDFA = 1;\n\n    int current = 0;\n\n    while (current < totalDFA){\n        for (int j = 0; j < m; j++){\n            int newSet[MAX];\n            int newCount = 0;\n\n            for (int i = 0; i < dfaCount[current]; i++){\n                int state = dfaStates[current][i];\n\n                int transitionCount = nfa[state][j][0];\n\n                for (int k = 1; k <= transitionCount; k++){\n                    int nextState = nfa[state][j][k];\n\n                    if (!contains(newSet, newCount, nextState)){\n                        newSet[newCount++] = nextState;\n                    }\n                }\n            }\n\n            sortSet(newSet, newCount);\n\n            int stateIndex = findDFAState(newSet, newCount);\n\n            if (stateIndex == -1){\n                stateIndex = totalDFA;\n\n                for (int k = 0; k < newCount; k++)\n                    dfaStates[totalDFA][k] = newSet[k];\n\n                dfaCount[totalDFA] = newCount;\n\n                totalDFA++;\n            }\n\n            dfa[current][j] = stateIndex;\n        }\n\n        current++;\n    }\n\n    printf(\"\\nEquivalent DFA Transition Table:\\n\\n\");\n\n    printf(\"DFA State\\t\");\n    for (int i = 0; i < m; i++)\n        printf(\"%c\\t\\t\", symbols[i]);\n\n    printf(\"\\n\");\n\n    for (int i = 0; i < totalDFA; i++){\n        printSet(dfaStates[i], dfaCount[i]);\n        printf(\"\\t\\t\");\n\n        for (int j = 0; j < m; j++){\n            int next = dfa[i][j];\n\n            printSet(dfaStates[next], dfaCount[next]);\n            printf(\"\\t\\t\");\n        }\n        printf(\"\\n\");\n    }\n    return 0;\n}\n\n", "stdin": "3 2\na b\n1 0\n1 1\n1 0\n2 1 2\n1 2\n0", "cmd": "gcc nfa_dfa.c && ./a.out"}, {"n": "8", "title": "FIRST and FOLLOW", "file": "fnf.c", "code": "/*\ngcc fnf.c\n./a.out\n4\nS=AB\nA=a\nB=bC\nC=c\n*/\n\n#include <stdio.h>\n#include <string.h>\n#include <ctype.h>\n\nchar prod[10][20];\nint n;\n\nvoid add(char set[], char c) {\n    int i;\n\n    for (i = 0; set[i] != '\\0'; i++) {\n        if (set[i] == c)\n            return;\n    }\n\n    set[i] = c;\n    set[i + 1] = '\\0';\n}\n\nvoid FIRST(char c, char result[]) {\n    int i, j;\n\n    if (!isupper(c)) {\n        add(result, c);\n        return;\n    }\n\n    for (i = 0; i < n; i++) {\n        if (prod[i][0] == c) {\n            if (prod[i][2] == '#') {\n                add(result, '#');\n            } else {\n                j = 2;\n\n                while (prod[i][j] != '\\0') {\n                    char temp[20] = \"\";\n\n                    FIRST(prod[i][j], temp);\n\n                    int k;\n                    int epsilon = 0;\n\n                    for (k = 0; temp[k] != '\\0'; k++) {\n                        if (temp[k] == '#')\n                            epsilon = 1;\n                        else\n                            add(result, temp[k]);\n                    }\n\n                    if (!epsilon)\n                        break;\n\n                    j++;\n                }\n            }\n        }\n    }\n}\n\nvoid FOLLOW(char c, char result[]) {\n    int i, j, k;\n\n    if (c == prod[0][0])\n        add(result, '$');\n\n    for (i = 0; i < n; i++) {\n        for (j = 2; prod[i][j] != '\\0'; j++) {\n            if (prod[i][j] == c) {\n                if (prod[i][j + 1] != '\\0') {\n                    char next = prod[i][j + 1];\n                    char temp[20] = \"\";\n\n                    FIRST(next, temp);\n\n                    int epsilon = 0;\n\n                    for (k = 0; temp[k] != '\\0'; k++) {\n                        if (temp[k] == '#')\n                            epsilon = 1;\n                        else\n                            add(result, temp[k]);\n                    }\n\n                    if (epsilon) {\n                        char temp2[20] = \"\";\n\n                        if (prod[i][0] != c) {\n                            FOLLOW(prod[i][0], temp2);\n\n                            for (k = 0; temp2[k] != '\\0'; k++)\n                                add(result, temp2[k]);\n                        }\n                    }\n                } else {\n                    if (prod[i][0] != c) {\n                        char temp[20] = \"\";\n\n                        FOLLOW(prod[i][0], temp);\n\n                        for (k = 0; temp[k] != '\\0'; k++)\n                            add(result, temp[k]);\n                    }\n                }\n            }\n        }\n    }\n}\n\nint main() {\n    int i, j;\n    char temp[20];\n\n    printf(\"Enter number of productions: \");\n    scanf(\"%d\", &n);\n\n    printf(\"Enter productions (use # for epsilon):\\n\");\n\n    for (i = 0; i < n; i++)\n        scanf(\"%s\", prod[i]);\n\n    printf(\"\\nFIRST sets:\\n\");\n\n    for (i = 0; i < n; i++) {\n        temp[0] = '\\0';\n\n        FIRST(prod[i][0], temp);\n\n        printf(\"FIRST(%c) = {\", prod[i][0]);\n\n        for (j = 0; temp[j] != '\\0'; j++)\n            printf(\" %c\", temp[j]);\n\n        printf(\" }\\n\");\n    }\n\n    printf(\"\\nFOLLOW sets:\\n\");\n\n    for (i = 0; i < n; i++) {\n        temp[0] = '\\0';\n\n        FOLLOW(prod[i][0], temp);\n\n        printf(\"FOLLOW(%c) = {\", prod[i][0]);\n\n        for (j = 0; temp[j] != '\\0'; j++)\n            printf(\" %c\", temp[j]);\n\n        printf(\" }\\n\");\n    }\n\n    return 0;\n}\n", "stdin": "S=AB A=a B=bC C=c", "cmd": "gcc fnf.c && ./a.out"}, {"n": "9", "title": "Recursive descent parser", "file": "rdp.c", "code": "/*\ngcc rdp.c\n./a.out\n\n(i+i)*i\n\n./a.out\ni+*i\n*/\n\n#include <stdio.h>\n#include <stdlib.h>\n\nchar input[100];\nint pos = 0;\n\nvoid E();\nvoid Eprime();\nvoid T();\nvoid Tprime();\nvoid F();\n\nvoid error() {\n    printf(\"Invalid string\\n\");\n    exit(0);\n}\n\nvoid E() {\n    T();\n    Eprime();\n}\n\nvoid Eprime() {\n    if (input[pos] == '+') {\n        pos++;\n        T();\n        Eprime();\n    }\n}\n\nvoid T() {\n    F();\n    Tprime();\n}\n\nvoid Tprime() {\n    if (input[pos] == '*') {\n        pos++;\n        F();\n        Tprime();\n    }\n}\n\nvoid F() {\n    if (input[pos] == 'i') {\n        pos++;\n    }\n    else if (input[pos] == '(') {\n        pos++;\n        E();\n\n        if (input[pos] == ')')\n            pos++;\n        else\n            error();\n    }\n    else {\n        error();\n    }\n}\n\nint main() {\n    printf(\"Enter the input string: \");\n    scanf(\"%s\", input);\n\n    E();\n\n    if (input[pos] == '\\0')\n        printf(\"String is accepted\\n\");\n    else\n        printf(\"String is rejected\\n\");\n\n    return 0;\n}\n", "stdin": "(i+i)*i", "cmd": "gcc rdp.c && ./a.out"}, {"n": "10", "title": "Shift-reduce parser", "file": "srp.c", "code": "/*\ngcc srp.c\n./a.out\n\ni+i*i\n*/\n\n#include <stdio.h>\n#include <string.h>\n\nchar stack[50], input[50];\nint top = -1;\n\nvoid reduce() {\n    if (top >= 0 && stack[top] == 'i') {\n        stack[top] = 'E';\n        printf(\"Reduce E -> i\\n\");\n    }\n    else if (top >= 2 &&\n             stack[top] == 'E' &&\n             stack[top - 1] == '+' &&\n             stack[top - 2] == 'E') {\n        top -= 2;\n        stack[top] = 'E';\n        printf(\"Reduce E -> E+E\\n\");\n    }\n    else if (top >= 2 &&\n             stack[top] == 'E' &&\n             stack[top - 1] == '*' &&\n             stack[top - 2] == 'E') {\n        top -= 2;\n        stack[top] = 'E';\n        printf(\"Reduce E -> E*E\\n\");\n    }\n}\n\nint main() {\n    int i;\n\n    printf(\"Enter input string: \");\n    scanf(\"%s\", input);\n\n    printf(\"\\nShift Reduce Steps:\\n\");\n\n    for (i = 0; input[i] != '\\0'; i++) {\n        stack[++top] = input[i];\n        stack[top + 1] = '\\0';\n\n        printf(\"Shift %c\\tStack: %s\\n\", input[i], stack);\n\n        reduce();\n        stack[top + 1] = '\\0';\n    }\n\n    while (top > 0) {\n        int oldtop = top;\n\n        reduce();\n        stack[top + 1] = '\\0';\n\n        if (oldtop == top)\n            break;\n    }\n\n    if (top == 0 && stack[0] == 'E')\n        printf(\"\\nString Accepted\\n\");\n    else\n        printf(\"\\nString Rejected\\n\");\n\n    return 0;\n}\n", "stdin": "i+i*i", "cmd": "gcc srp.c && ./a.out"}, {"n": "11", "title": "Three-address intermediate code", "file": "intermediate.c", "code": "/*\ngcc intermediate.c\n./a.out\n\na+b*c\n*/\n\n#include <stdio.h>\n#include <string.h>\n#include <ctype.h>\n\nchar expr[50];\nint temp = 1;\n\nvoid generate(char op, char a[], char b[], char result[]) {\n    printf(\"%s = %s %c %s\\n\", result, a, op, b);\n}\n\nint precedence(char op) {\n    if (op == '*' || op == '/')\n        return 2;\n\n    if (op == '+' || op == '-')\n        return 1;\n\n    return 0;\n}\n\nint main() {\n    char operands[50][10];\n    char operators[50];\n    int top = -1;\n    int opTop = -1;\n    int i;\n\n    printf(\"Enter expression: \");\n    scanf(\"%s\", expr);\n\n    printf(\"\\nIntermediate Code:\\n\");\n\n    for (i = 0; expr[i] != '\\0'; i++) {\n\n        if (isalnum(expr[i])) {\n            top++;\n            operands[top][0] = expr[i];\n            operands[top][1] = '\\0';\n        }\n        else {\n            while (opTop >= 0 &&\n                   precedence(operators[opTop]) >= precedence(expr[i])) {\n\n                char a[10], b[10], result[10];\n\n                strcpy(b, operands[top--]);\n                strcpy(a, operands[top--]);\n\n                sprintf(result, \"t%d\", temp);\n\n                generate(operators[opTop], a, b, result);\n\n                strcpy(operands[++top], result);\n\n                temp++;\n                opTop--;\n            }\n\n            operators[++opTop] = expr[i];\n        }\n    }\n\n    while (opTop >= 0) {\n        char a[10], b[10], result[10];\n\n        strcpy(b, operands[top--]);\n        strcpy(a, operands[top--]);\n\n        sprintf(result, \"t%d\", temp);\n\n        generate(operators[opTop], a, b, result);\n\n        strcpy(operands[++top], result);\n\n        temp++;\n        opTop--;\n    }\n\n    return 0;\n}\n", "stdin": "a+b*c", "cmd": "gcc intermediate.c && ./a.out"}];</script>
+<script>
+var COMPILER = "gcc-13.2.0-c";   // if this ever 400s, fall back to "gcc-head"
+var el = function(id){return document.getElementById(id);};
+
+TPL.forEach(function(t,i){
+  var o = document.createElement("option");
+  o.value = i; o.textContent = "Exp " + t.n + " — " + t.title + " (" + t.file + ")";
+  el("tpl").appendChild(o);
+});
+
+function loadTemplate(i){
+  var t = TPL[i];
+  el("code").value = t.code;
+  el("stdin").value = t.stdin || "";
+}
+el("tpl").onchange = function(){ loadTemplate(+el("tpl").value); };
+el("clear").onclick = function(){
+  el("code").value = "/* Exp X — write it from memory, then run.\n   compile: gcc x.c   run: ./a.out */\n\n#include <stdio.h>\n\nint main() {\n    \n    return 0;\n}\n";
+  el("stdin").value = "";
+  el("out").textContent = "Blank file. Type your version and press Run.";
+};
+el("run").onclick = function(){ run(); };
+
+function run(){
+  var code = el("code").value, stdin = el("stdin").value;
+  if(!code.trim()){ el("out").textContent = "Nothing to compile."; return; }
+  el("out").textContent = "Compiling…";
+  el("status").textContent = "";
+  el("run").disabled = true;
+
+  // The public sandbox occasionally refuses to spawn a container
+  // ("OCI runtime error: crun: clone: Resource temporarily unavailable").
+  // That is server-side capacity, not your code — so retry once on another compiler.
+  var queue = ["gcc-13.2.0-c", "gcc-head"];
+
+  function attempt(i){
+    if(i >= queue.length){
+      el("run").disabled = false;
+      el("out").textContent = "The sandbox refused to run the program twice (server capacity, not your code).\n\n" +
+        "Run it locally instead — copy the source into a file and:\n\n  " +
+        (TPL[+el("tpl").value] || {cmd:"gcc prog.c -o prog && ./prog"}).cmd;
+      return;
+    }
+    COMPILER = queue[i];
+    el("meta").textContent = COMPILER;
+    var body = JSON.stringify({
+      compiler: COMPILER,
+      code: code,
+      stdin: stdin,
+      "compiler-option-raw": "-w",
+      save: false
+    });
+    fetch("https://wandbox.org/api/compile.json", {
+      method: "POST",
+      // text/plain keeps this a "simple" request, so no CORS preflight is needed
+      headers: {"Content-Type": "text/plain;charset=UTF-8"},
+      body: body
+    }).then(function(r){ return r.json(); }).then(function(d){
+      var bad = String(d.status) === "126" ||
+                /OCI runtime error|Resource temporarily unavailable/i.test(d.program_error || "");
+      if(bad && i + 1 < queue.length){ attempt(i + 1); return; }
+      el("run").disabled = false;
+      render(d);
+    }).catch(function(e){
+      el("run").disabled = false;
+      el("out").textContent = "Network or sandbox error: " + e +
+        "\n\nFall back to local: copy the source into a file and run the command from the Lab bench page.";
+    });
+  }
+  attempt(0);
+}
+
+function render(d){
+  el("run").disabled = false;
+  var parts = [];
+  var cerr = (d.compiler_error || "").trim();
+  if(cerr){ parts.push("COMPILER ERROR\n" + cerr); }
+  var cmsg = (d.compiler_message || "").trim();
+  if(cmsg){ parts.push("compiler diagnostics\n" + cmsg); }
+  var out = d.program_output || "";
+  var perr = d.program_error || "";
+  parts.push("stdout\n" + (out.length ? out : "(nothing)"));
+  if(perr.trim()){ parts.push("stderr\n" + perr); }
+  parts.push("exit status: " + d.status + (d.status === "0" ? "  (success)" : "  (non-zero)"));
+  el("out").textContent = parts.join("\n\n" + new Array(58).join("-") + "\n\n");
+  el("status").innerHTML = d.status === "0" ? '<span class="ok">ran</span>' : '<span class="bad">failed</span>';
+}
+
+el("local").onclick = function(){
+  var t = TPL[+el("tpl").value] || {file:"prog.c"};
+  var cmd = t.cmd || ("gcc " + t.file + " -o prog && ./prog");
+  navigator.clipboard && navigator.clipboard.writeText(cmd);
+  el("out").textContent = "Local command (copied):\n\n  " + cmd +
+    "\n\nRun it from ~/projects/mainproject, or drop your file next to the others and use ./run.sh <n>.";
+};
+
+loadTemplate(0);
+</script>
+</body>
+</html>

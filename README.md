@@ -13,10 +13,21 @@ web-programming/
   question-bank.html        all 286 faculty questions
   notes-m1.html … notes-m5.html         lecture notes
   tracker.html, revision-log.html, drill-key.html
-sources/web-programming/    the Markdown these pages were rendered from
+compiler-lab/               generated apps, not Markdown
+  lab.html                  the 11 experiments: algorithm step ↔ source line + trace player
+  playground.html           write C and run it in the browser (Wandbox sandbox)
+  sims.js                   the algorithm simulators the trace player drives
+sources/<subject>/          the Markdown the pages were rendered from
 tools/build.py              renderer: Markdown → HTML
 tools/build.sh              sync sources + rebuild
+tools/compiler_lab*.py      generator for compiler-lab/lab.html + playground.html
 ```
+
+The compiler lab is the one subject whose pages are **apps**: `lab.html` carries the whole
+experiment data as JSON (every algorithm step resolved to real line numbers of the vendored
+sources in `sources/compiler-lab/code/`), and `sims.js` re-implements each algorithm so a trace
+can be stepped on your own input. `tools/compiler_lab_test.js` (run with `node`) asserts every
+simulator reproduces the C program's verified output.
 
 Everything is plain static HTML with inline CSS and JS — no framework, no
 runtime dependencies, no build step on the host.

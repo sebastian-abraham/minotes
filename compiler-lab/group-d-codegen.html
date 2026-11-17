@@ -1,0 +1,877 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GROUP D — Intermediate Code Generation (Exp 11) · Compiler Lab</title>
+<style>
+:root{
+  --bg:#fbfaf8; --panel:#ffffff; --ink:#232120; --muted:#5f5a53; --line:#e6e1da;
+  --accent:#7a4fd0; --accent-soft:#f1ecfb; --code-bg:#f5f2ee; --code-ink:#2b2a28;
+  --warn-bg:#fff8e6; --warn-line:#f0d9a0;
+  --sans:"Inter","Segoe UI",system-ui,-apple-system,"Noto Sans",sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,"SF Mono",Menlo,Consolas,"Fira Code",monospace;
+}
+html[data-theme="dark"]{
+  --bg:#141317; --panel:#1b1a20; --ink:#e8e4de; --muted:#a8a199; --line:#2f2c36;
+  --accent:#b79cf5; --accent-soft:#241f33; --code-bg:#22202a; --code-ink:#e8e4de;
+  --warn-bg:#2a2417; --warn-line:#4a3d22;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0; background:var(--bg); color:var(--ink); font-family:var(--sans);
+  font-size:16.5px; line-height:1.72; -webkit-font-smoothing:antialiased;
+}
+#progress{position:fixed;top:0;left:0;height:3px;width:0;background:var(--accent);z-index:50;transition:width .1s linear}
+
+.wrap{display:flex;align-items:flex-start;min-height:100vh}
+.sidebar{
+  position:sticky;top:0;height:100vh;width:300px;flex:0 0 300px;overflow-y:auto;
+  padding:26px 20px 60px;border-right:1px solid var(--line);background:var(--panel);
+}
+.sidebar h1{font-size:15px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);
+  margin:0 0 4px;font-weight:600}
+.sidebar .sub{font-size:12.5px;color:var(--muted);margin:0 0 18px}
+.sidebar nav{font-size:14px}
+.sidebar .toc>ul{padding-left:0}
+.sidebar ul{list-style:none;margin:0;padding-left:12px}
+.sidebar ul ul{border-left:1px solid var(--line);margin-left:4px;padding-left:10px}
+.sidebar li{margin:3px 0}
+.sidebar a{color:var(--ink);text-decoration:none;display:block;padding:3px 8px;border-radius:8px;
+  line-height:1.35;transition:background .12s,color .12s}
+.sidebar a:hover{background:var(--accent-soft);color:var(--accent)}
+.sidebar a.active{background:var(--accent-soft);color:var(--accent);font-weight:600}
+.sidebar .home{display:inline-flex;align-items:center;gap:6px;margin-bottom:16px;font-size:13.5px;
+  color:var(--muted);text-decoration:none;border:1px solid var(--line);padding:5px 10px;border-radius:999px}
+.sidebar .home:hover{color:var(--accent);border-color:var(--accent)}
+
+main{flex:1;min-width:0;padding:46px 56px 120px;max-width:980px;margin:0 auto}
+.doc-head{border-bottom:1px solid var(--line);padding-bottom:18px;margin-bottom:34px}
+.doc-head .kicker{font-size:12.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);
+  font-weight:700;margin-bottom:8px}
+.doc-head .meta{font-size:13.5px;color:var(--muted)}
+
+h1,h2,h3,h4{line-height:1.25;font-weight:700;letter-spacing:-.01em}
+h1{font-size:2.05rem;margin:.2em 0 .5em}
+h2{font-size:1.55rem;margin:2.4em 0 .7em;padding-bottom:.35em;border-bottom:1px solid var(--line)}
+h3{font-size:1.2rem;margin:1.9em 0 .55em}
+h4{font-size:1.03rem;margin:1.5em 0 .45em;color:var(--muted)}
+h2 .anchor,h3 .anchor{opacity:0;margin-left:.35em;font-size:.8em;color:var(--muted);text-decoration:none}
+h2:hover .anchor,h3:hover .anchor{opacity:1}
+p{margin:.75em 0}
+a{color:var(--accent);text-underline-offset:2px}
+strong{font-weight:650}
+hr{border:0;border-top:1px solid var(--line);margin:2.6em 0}
+ul,ol{margin:.7em 0;padding-left:1.4em}
+li{margin:.3em 0}
+li>ul,li>ol{margin:.25em 0}
+blockquote{
+  margin:1.3em 0;padding:12px 18px;background:var(--warn-bg);border-left:3px solid var(--warn-line);
+  border-radius:0 10px 10px 0;color:var(--ink)
+}
+blockquote p{margin:.3em 0}
+
+code{font-family:var(--mono);font-size:.87em;background:var(--code-bg);color:var(--code-ink);
+  padding:.15em .38em;border-radius:6px;border:1px solid var(--line);
+  box-decoration-break:clone;-webkit-box-decoration-break:clone;overflow-wrap:anywhere}
+pre{position:relative;background:var(--code-bg);border:1px solid var(--line);border-radius:12px;
+  padding:16px 18px;overflow-x:auto;margin:1.1em 0}
+pre code{background:none;border:0;padding:0;font-size:13.6px;line-height:1.62;white-space:pre}
+.copy{position:absolute;top:8px;right:8px;font:600 11px/1 var(--sans);color:var(--muted);
+  background:var(--panel);border:1px solid var(--line);border-radius:7px;padding:5px 8px;cursor:pointer;
+  opacity:0;transition:opacity .15s}
+pre:hover .copy{opacity:1}
+.copy:hover{color:var(--accent);border-color:var(--accent)}
+
+.table-scroll{overflow-x:auto;margin:1.3em 0;border:1px solid var(--line);border-radius:12px;background:var(--panel)}
+table{border-collapse:collapse;width:100%;font-size:14.6px}
+th,td{padding:9px 13px;text-align:left;vertical-align:top;border-bottom:1px solid var(--line)}
+th{background:var(--accent-soft);font-weight:650;font-size:13px;letter-spacing:.02em;
+  position:sticky;top:0;backdrop-filter:blur(4px)}
+tr:last-child td{border-bottom:0}
+tbody tr:nth-child(even){background:color-mix(in srgb,var(--panel) 60%,var(--bg))}
+tbody tr:hover{background:var(--accent-soft)}
+
+.tools{position:fixed;right:22px;bottom:22px;display:flex;flex-direction:column;gap:8px;z-index:40}
+.tools button{width:42px;height:42px;border-radius:12px;border:1px solid var(--line);background:var(--panel);
+  color:var(--ink);cursor:pointer;font-size:16px;box-shadow:0 4px 14px rgba(0,0,0,.10)}
+.tools button:hover{color:var(--accent);border-color:var(--accent)}
+@media (max-width:1000px){
+  .wrap{display:block}
+  .sidebar{position:static;width:auto;height:auto;border-right:0;border-bottom:1px solid var(--line)}
+  .sidebar nav{max-height:40vh;overflow:auto}
+  main{padding:28px 20px 100px}
+}
+@media print{
+  .sidebar,.tools,#progress,.copy{display:none!important}
+  body{background:#fff;color:#000;font-size:11pt}
+  main{padding:0;max-width:none}
+  h2{break-after:avoid} pre,table,blockquote{break-inside:avoid}
+  a{color:#000;text-decoration:none}
+}
+
+/* ---- ask-about-this ---- */
+#chat-btn{position:fixed;right:20px;bottom:112px;width:44px;height:44px;border-radius:50%;
+  border:1px solid var(--line);background:var(--panel);color:var(--accent);cursor:pointer;font-size:17px;
+  box-shadow:0 6px 18px rgba(0,0,0,.12);z-index:45;display:grid;place-items:center}
+#chat-btn:hover{border-color:var(--accent)}
+#sel-chip{position:absolute;z-index:46;transform:translate(-50%,-100%);background:var(--ink);color:var(--bg);
+  font:600 12px/1 var(--sans);padding:7px 11px;border-radius:999px;cursor:pointer;white-space:nowrap;
+  box-shadow:0 6px 18px rgba(0,0,0,.25);display:none}
+#sel-chip:hover{background:var(--accent);color:#fff}
+#chat-panel{position:fixed;right:20px;bottom:164px;width:min(420px,calc(100vw - 40px));max-height:min(70vh,620px);
+  background:var(--panel);border:1px solid var(--line);border-radius:14px;z-index:47;display:none;
+  flex-direction:column;box-shadow:0 18px 50px rgba(0,0,0,.18);overflow:hidden}
+#chat-panel.open{display:flex}
+#chat-head{display:flex;align-items:center;gap:8px;padding:11px 13px;border-bottom:1px solid var(--line);
+  font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:700}
+#chat-head .sp{flex:1}
+#chat-head button{background:none;border:0;color:var(--muted);cursor:pointer;font-size:15px;padding:2px 4px}
+#chat-head button:hover{color:var(--accent)}
+#chat-quote{display:none;margin:10px 13px 0;padding:8px 10px;border-left:2px solid var(--accent);
+  background:var(--accent-soft);color:var(--muted);font-size:12.5px;border-radius:0 8px 8px 0;
+  max-height:84px;overflow:auto;white-space:pre-wrap}
+#chat-log{flex:1;overflow-y:auto;padding:12px 13px;display:flex;flex-direction:column;gap:10px;font-size:13.6px;line-height:1.55}
+.msg{max-width:100%}
+.msg.user{align-self:flex-end;background:var(--accent-soft);color:var(--ink);padding:7px 11px;border-radius:11px 11px 2px 11px;
+  max-width:86%;white-space:pre-wrap}
+.msg.bot{color:var(--ink)}
+.msg.bot p{margin:.3em 0}
+.msg.bot ul{margin:.3em 0;padding-left:1.15em}
+.msg.bot code{font-size:.9em}
+.msg.bot pre{background:var(--code-bg);border-radius:8px;padding:9px 11px;overflow-x:auto;font-size:12px;margin:.4em 0}
+.msg.err{color:#b3261e;font-size:12.5px}
+.msg .cursor:after{content:"▍";color:var(--accent);animation:blink 1s steps(2) infinite}
+@keyframes blink{50%{opacity:0}}
+#chat-form{display:flex;gap:8px;padding:10px 13px;border-top:1px solid var(--line)}
+#chat-input{flex:1;resize:none;border:1px solid var(--line);border-radius:9px;background:var(--bg);color:var(--ink);
+  font:inherit;font-size:13.5px;padding:8px 10px;max-height:110px;min-height:38px}
+#chat-input:focus{outline:2px solid var(--accent);outline-offset:0}
+#chat-send{border:1px solid var(--accent);background:var(--accent);color:#fff;border-radius:9px;
+  width:38px;cursor:pointer;font-size:15px}
+#chat-send:disabled{opacity:.45;cursor:default}
+#chat-foot{font-size:11px;color:var(--muted);padding:0 13px 9px}
+@media (max-width:640px){
+  #chat-panel{right:8px;left:8px;width:auto;bottom:150px;max-height:66vh}
+  #chat-btn{bottom:104px;right:16px}
+}
+@media print{#chat-btn,#chat-panel,#sel-chip{display:none!important}}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+<div class="wrap">
+  <aside class="sidebar">
+    <a class="home" href="index.html">← Compiler Lab</a>
+    
+    <h1>Group D · Codegen</h1>
+    <p class="sub">Exp 11 · three-address code</p>
+    <nav class="toc"><div class="toc">
+<ul>
+<li><a href="#where-this-sits">Where this sits</a></li>
+<li><a href="#exp-11-generation-of-three-address-code-from-an-infix-expression-7">Exp 11 — Generation of three-address code from an infix expression · <code>intermediate.c</code></a><ul>
+<li><a href="#1-why-this-exists">1. Why this exists</a></li>
+<li><a href="#2-input-target-output">2. Input → target output</a></li>
+<li><a href="#3-the-logic">3. The logic</a></li>
+<li><a href="#4-edge-cases-all-verified-by-running">4. Edge cases — all verified by running</a></li>
+<li><a href="#5-built-ins-used-and-why">5. Built-ins used (and why)</a></li>
+<li><a href="#6-algorithm-deep-pseudocode">6. Algorithm — deep pseudocode</a></li>
+<li><a href="#7-algorithm-record-version-mid-level">7. Algorithm — record version (mid-level)</a></li>
+<li><a href="#verified-output">▶ Verified output</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</nav>
+  </aside>
+  <main>
+    <div class="doc-head">
+      <div class="kicker">20CSL401 · Compiler Lab</div>
+      <div class="meta">Exp 11 · three-address code · rendered from GROUP_D_code_generation.md</div>
+    </div>
+    <h1 id="group-d-intermediate-code-generation-exp-11">GROUP D — Intermediate Code Generation (Exp 11)</h1>
+<p>Same layout: <strong>why it exists → input/output → logic → edge cases → built-ins → deep
+pseudocode → record version → verified output.</strong></p>
+<h2 id="where-this-sits">Where this sits<a class="anchor" href="#where-this-sits">#</a></h2>
+<p>You have now, across the course, gone:</p>
+<p><pre><code>characters ──(Group A)──► tokens ──(Group C)──► a parse tree ──(THIS experiment)──► instructions
+</code></pre></p>
+<p>After parsing, a compiler holds a <strong>parse tree</strong>. The next phase must turn that tree into
+something closer to a machine. You cannot jump straight to assembly — you need a
+<strong>machine-independent middle form</strong> first, so that the optimisation passes and the final
+target-specific code generator have something clean to work on. That middle form is
+<strong>intermediate code</strong>, and the specific flavour here is <strong>three-address code</strong>.</p>
+<h2 id="exp-11-generation-of-three-address-code-from-an-infix-expression-7">Exp 11 — Generation of three-address code from an infix expression  ·  <code>intermediate.c</code><a class="anchor" href="#exp-11-generation-of-three-address-code-from-an-infix-expression-7">#</a></h2>
+<h3 id="1-why-this-exists">1. Why this exists<a class="anchor" href="#1-why-this-exists">#</a></h3>
+<p><strong>Three-address code</strong> means every instruction has <strong>at most one operator</strong> and <strong>at most three
+addresses</strong>:</p>
+<p><pre><code>result = operand1 operator operand2
+</code></pre></p>
+<p>So <code>a + b * c</code> cannot stay as one line — the multiplication must be done first, its answer stored
+somewhere, and then the addition uses that answer. The "somewhere" is a <strong>temporary</strong>, and the
+compiler invents them: <code>t1</code>, <code>t2</code>, …</p>
+<p><strong>Where the algorithm comes from.</strong> If you built the parse tree for <code>a+b*c</code> it would be
+<code>(+ a (* b c))</code>. A <strong>post-order walk</strong> of that tree emits exactly:</p>
+<p><pre><code>t1 = b * c      ← visit the * subtree first (deeper = higher precedence)
+t2 = a + t1     ← then the +
+</code></pre></p>
+<p>The post-order walk is the <em>concept</em>. But building a tree and walking it is a lot of code. The
+<strong>two-stack method</strong> achieves the same emission <strong>in a single left-to-right pass</strong>, using a
+stack of pending operators and a precedence rule to decide <em>when</em> to emit — the operator is
+emitted as soon as something of higher-or-equal precedence is waiting behind it. So:</p>
+<blockquote>
+<p><strong>the two-stack method is a post-order tree walk done inline, with the tree implicit in the
+stacks.</strong></p>
+</blockquote>
+<p>That sentence is the "how did we arrive here", and it is the answer to any "why does this work?"
+question about this program.</p>
+<h3 id="2-input-target-output">2. Input → target output<a class="anchor" href="#2-input-target-output">#</a></h3>
+<p><strong>Input:</strong> an infix expression typed as one string, e.g. <code>a+b*c</code>. Intended alphabet:
+<strong>single-character</strong> operands and the operators <code>+ - * /</code>.</p>
+<p><strong>Target output:</strong> one line of three-address code per operation, in execution order.
+<pre><code>Enter expression: a+b*c
+
+Intermediate Code:
+t1 = b * c
+t2 = a + t1
+</code></pre>
+Note <code>t2</code> uses <code>t1</code> — <strong>the temporaries are the data-flow between instructions.</strong> That is exactly
+what makes this "code" rather than just "text": there is a producer and a consumer.</p>
+<h3 id="3-the-logic">3. The logic<a class="anchor" href="#3-the-logic">#</a></h3>
+<p>Two stacks and one comparison:</p>
+<ul>
+<li><strong>operand stack</strong> — holds <em>names</em> of values (originally the input letters, later the <code>tN</code>)</li>
+<li><strong>operator stack</strong> — holds operators that have been seen but <strong>cannot be emitted yet</strong>, because
+  their right-hand operand has not arrived</li>
+</ul>
+<p>The scan, one character at a time:</p>
+<ol>
+<li><strong>Operand</strong> (letter/digit) → push it on the operand stack. Nothing else; a lone value needs no
+   instruction.</li>
+<li><strong>Operator</strong> → you cannot emit it yet (its right operand is still ahead of you). But before
+   pushing it, check: <em>is an operator already waiting whose precedence is ≥ mine?</em> If yes, that
+   waiting operator is <strong>done</strong> — everything it needed is now on the stack — so <strong>emit it</strong>, then
+   push the new one.
+   - the <code>while</code> (not <code>if</code>) matters: you may have to emit <strong>several</strong> before pushing one.
+   - <strong><code>&gt;=</code> and not <code>&gt;</code> is a deliberate choice</strong>: it makes operators of <em>equal</em> precedence emit
+     left-to-right, which is what gives correct <strong>left associativity</strong>. <code>a-b-c</code> must be
+     <code>(a-b)-c</code>, and <code>&gt;=</code> is what enforces it.</li>
+<li><strong>After the scan</strong>, the operator stack may still hold operators (the lowest-precedence ones).
+   Drain it with the same step.</li>
+</ol>
+<p><strong>The emit step, in detail</strong> — because the two pops are where people lose marks:
+<pre><code>b = pop(operands)        ← the TOP of the stack
+a = pop(operands)        ← the SECOND value down
+result = &quot;t&quot; + (temp++)
+emit:  result = a &lt;op&gt; b
+push(operands, result)   ← the temporary becomes an operand for the next operation
+</code></pre>
+<strong><code>b</code> is popped first and <code>a</code> second.</strong> The stack gives you the <em>last-pushed</em> first, and the
+last-pushed value is the <strong>right</strong> operand. Swapping these produces <code>t1 = c * b</code> — textually
+almost identical, semantically wrong. Know which pop is which.</p>
+<p>Also note <em>where</em> the result goes: it is pushed <strong>back onto the operand stack</strong>, so the temporaries
+become operands of later instructions. That single line is why <code>t2 = a + t1</code> can reference <code>t1</code>.</p>
+<h3 id="4-edge-cases-all-verified-by-running">4. Edge cases — <strong>all verified by running</strong><a class="anchor" href="#4-edge-cases-all-verified-by-running">#</a></h3>
+<table>
+<thead>
+<tr>
+<th>Edge case</th>
+<th>What actually happens</th>
+<th>Verdict</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>multi-digit numbers</strong> <code>12+3</code></td>
+<td><code>isalnum</code> is tested <strong>per character</strong>, so <code>1</code> and <code>2</code> become two separate operands. Result: <code>t1 = 2 + 3</code> — the <code>1</code> sits unused at the bottom of the operand stack and is <strong>silently dropped</strong></td>
+<td><strong>real bug</strong>; verified. The scanner never builds a multi-character number token</td>
+</tr>
+<tr>
+<td><strong>parentheses</strong> <code>(a+b)*c</code></td>
+<td><code>(</code> and <code>)</code> are not <code>isalnum</code>, so they fall into the <em>operator</em> branch. Their <code>precedence()</code> is <code>0</code>, and the while condition is <code>precedence(top) &gt;= precedence(current)</code> = <code>≥ 0</code> — which is <strong>true for every operator</strong>, so it pops everything, including past the bottom of the operand stack → <code>operands[-1]</code> → <strong>segmentation fault</strong></td>
+<td><strong>crash</strong>; verified (<code>Segmentation fault (core dumped)</code>). Understanding <em>why</em> is worth more than the fact: a precedence of 0 makes the comparison always succeed</td>
+</tr>
+<tr>
+<td><strong>a bare operand</strong> <code>a</code></td>
+<td>no operator is ever pushed, so both while loops never run → <strong>no output at all</strong></td>
+<td>not a crash, but there is no instruction. Fine (a lone value needs no code) but note it</td>
+</tr>
+<tr>
+<td><strong>left associativity</strong> <code>a-b-c</code></td>
+<td><code>t1 = a - b</code>, then <code>t2 = t1 - c</code></td>
+<td>correct ✔ — this is the <code>&gt;=</code> at work</td>
+</tr>
+<tr>
+<td><strong>chained operators</strong> <code>a+b*c+d</code></td>
+<td><code>t1 = b * c</code>, <code>t2 = a + t1</code>, <code>t3 = t2 + d</code></td>
+<td>correct ✔ — one temporary per operator</td>
+</tr>
+<tr>
+<td><strong>unary minus</strong> <code>-a</code></td>
+<td>treated as a binary operator with no left operand → pops an empty operand</td>
+<td>unsupported; the program has no notion of arity</td>
+</tr>
+<tr>
+<td><strong>an operator with no operands</strong> <code>+</code></td>
+<td>pops an empty stack</td>
+<td>unsupported; not guarded</td>
+</tr>
+<tr>
+<td>division by zero</td>
+<td>irrelevant</td>
+<td>the program only <em>generates</em> code, it never evaluates — nothing is divided</td>
+</tr>
+<tr>
+<td><strong>temporaries past <code>t9</code></strong></td>
+<td><code>sprintf(result, &quot;t%d&quot;, temp)</code> writing into <code>char[10]</code></td>
+<td>safe: <code>t100</code> is 4 characters</td>
+</tr>
+<tr>
+<td>more than 50 operands/operators</td>
+<td><code>operands[50][10]</code>, <code>operators[50]</code></td>
+<td>overflow, <strong>not guarded</strong></td>
+</tr>
+<tr>
+<td>spaces in the input</td>
+<td><code>scanf(&quot;%s&quot;)</code> stops at the first space</td>
+<td>spaces cannot appear — the expression must be one word</td>
+</tr>
+<tr>
+<td>input with <code>%</code>, <code>^</code>, <code>&amp;</code></td>
+<td>precedence 0 → same always-pop problem as brackets</td>
+<td>unsupported; know the failure mode is <em>the same one as <code>)</code></em></td>
+</tr>
+</tbody>
+</table>
+<p><strong>The pattern to notice across those rows:</strong> three separate edge cases (<code>)</code>, <code>(</code>, <code>%</code>) all fail
+for the <strong>same reason</strong> — <code>precedence()</code> returns <code>0</code>, and <code>0</code> is ≥ <code>0</code>, so every pending operator
+gets popped. One sentence explains three bugs.</p>
+<h3 id="5-built-ins-used-and-why">5. Built-ins used (and why)<a class="anchor" href="#5-built-ins-used-and-why">#</a></h3>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>What it does</th>
+<th>Why it's used here</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>isalnum(c)</code></td>
+<td>true if letter or digit</td>
+<td>the "is this an operand or an operator?" test. In an infix expression the two cases are exactly "(letter/digit) vs anything else"</td>
+</tr>
+<tr>
+<td><code>char operands[50][10]</code></td>
+<td>a stack of <strong>strings</strong>, not chars</td>
+<td>later values are <code>&quot;t10&quot;</code> — two characters, more than a <code>char</code> can hold. This is why the stack is 2-D</td>
+</tr>
+<tr>
+<td><code>strcpy(b, operands[top--])</code></td>
+<td>copies one stack entry into a local buffer</td>
+<td>the values are strings, so assignment means copy — and the <code>--</code> pops in the same expression</td>
+</tr>
+<tr>
+<td><code>strcpy(operands[++top], result)</code></td>
+<td>pushes the new temporary back</td>
+<td>the result of one instruction becomes the operand of the next</td>
+</tr>
+<tr>
+<td><code>sprintf(result, &quot;t%d&quot;, temp)</code></td>
+<td>formats <code>t1</code>, <code>t2</code>, … into a string</td>
+<td>generates the compiler's temporary names. <strong><code>sprintf</code> returns the character count</strong>, though here the return value is ignored</td>
+</tr>
+<tr>
+<td><code>precedence(op)</code> (<strong>own</strong>)</td>
+<td>returns 2 for <code>* /</code>, 1 for <code>+ -</code>, 0 otherwise</td>
+<td>encapsulates the one table the algorithm needs</td>
+</tr>
+<tr>
+<td><code>generate(op, a, b, result)</code> (<strong>own</strong>)</td>
+<td>a <strong>one-line wrapper around <code>printf</code></strong></td>
+<td>exists so the emission format lives in exactly one place — if the output format changes, one function changes. Worth pointing out: a tiny example of factoring out an output format</td>
+</tr>
+<tr>
+<td><code>printf(&quot;%s = %s %c %s\n&quot;, result, a, op, b)</code></td>
+<td>the instruction format</td>
+<td><code>%c</code> for the single-character operator, <code>%s</code> for the string operands</td>
+</tr>
+<tr>
+<td><code>scanf(&quot;%s&quot;, expr)</code></td>
+<td>reads the expression</td>
+<td>one word, no spaces</td>
+</tr>
+</tbody>
+</table>
+<h3 id="6-algorithm-deep-pseudocode">6. Algorithm — deep pseudocode<a class="anchor" href="#6-algorithm-deep-pseudocode">#</a></h3>
+<p><pre><code>globals: expr[50];  temp = 1        # the temporary counter
+
+precedence(op):
+    if op is &#x27;*&#x27; or &#x27;/&#x27;: return 2
+    if op is &#x27;+&#x27; or &#x27;-&#x27;: return 1
+    return 0                        # ← this 0 is the source of the bracket bug
+
+generate(op, a, b, result):
+    print result + &quot; = &quot; + a + &quot; &quot; + op + &quot; &quot; + b
+
+main:
+    read expr
+    operands[50][10];  top = -1          # operand stack, empty
+    operators[50];     opTop = -1        # operator stack, empty
+
+    for i = 0 to expr[i] != &#x27;\0&#x27;:
+
+        if isalnum(expr[i]):                       # --- operand ---
+            push expr[i] onto operands          (top++)
+            continue
+
+        # --- operator ---
+        while opTop &gt;= 0 and
+              precedence(operators[opTop]) &gt;= precedence(expr[i]):   # &gt;= enforces left-assoc
+
+            b = pop(operands)               # TOP first  → the RIGHT operand
+            a = pop(operands)               # next       → the LEFT operand
+            result = &quot;t&quot; + temp
+            generate(operators[opTop], a, b, result)
+            push(operands, result)          # the temporary becomes an operand
+            temp++
+            opTop--                         # that operator is now consumed
+
+        push expr[i] onto operators          (opTop++)
+
+    # drain the operator stack with the same emission step
+    while opTop &gt;= 0:
+        b = pop(operands);  a = pop(operands)
+        result = &quot;t&quot; + temp
+        generate(operators[opTop], a, b, result)
+        push(operands, result)
+        temp++
+        opTop--
+</code></pre></p>
+<p><strong>Hand-trace <code>a+b*c</code></strong> — worth memorising, because the emitted output is only two lines and it is
+the expected exam answer:</p>
+<table>
+<thead>
+<tr>
+<th>Step</th>
+<th>char</th>
+<th>action</th>
+<th>operand stack</th>
+<th>operator stack</th>
+<th>emitted</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><code>a</code></td>
+<td>push operand</td>
+<td><code>a</code></td>
+<td>—</td>
+<td></td>
+</tr>
+<tr>
+<td>2</td>
+<td><code>+</code></td>
+<td>opTop empty → push</td>
+<td><code>a</code></td>
+<td><code>+</code></td>
+<td></td>
+</tr>
+<tr>
+<td>3</td>
+<td><code>b</code></td>
+<td>push operand</td>
+<td><code>a b</code></td>
+<td><code>+</code></td>
+<td></td>
+</tr>
+<tr>
+<td>4</td>
+<td><code>*</code></td>
+<td>prec(<code>+</code>)=1 ≥ prec(<code>*</code>)=2? <strong>no</strong> → push</td>
+<td><code>a b</code></td>
+<td><code>+ *</code></td>
+<td></td>
+</tr>
+<tr>
+<td>5</td>
+<td><code>c</code></td>
+<td>push operand</td>
+<td><code>a b c</code></td>
+<td><code>+ *</code></td>
+<td></td>
+</tr>
+<tr>
+<td>6</td>
+<td>end</td>
+<td>drain: pop <code>*</code></td>
+<td><code>a t1</code></td>
+<td><code>+</code></td>
+<td><strong>t1 = b * c</strong></td>
+</tr>
+<tr>
+<td>7</td>
+<td>end</td>
+<td>drain: pop <code>+</code></td>
+<td><code>t2</code></td>
+<td>—</td>
+<td><strong>t2 = a + t1</strong></td>
+</tr>
+</tbody>
+</table>
+<h3 id="7-algorithm-record-version-mid-level">7. Algorithm — record version (mid-level)<a class="anchor" href="#7-algorithm-record-version-mid-level">#</a></h3>
+<p><pre><code>ALGORITHM: Generation of three-address intermediate code from an infix expression
+1. Start. Read the infix expression. Set the temporary counter t = 1.
+2. For each character of the expression, left to right:
+   a. If it is an operand (a letter or a digit):
+        push it onto the operand stack.
+   b. Otherwise it is an operator:
+        i. While the operator stack is not empty AND
+           precedence(top of operator stack) &gt;= precedence(current operator):
+              - pop two operands (b first, then a) from the operand stack;
+              - emit the instruction  tN = a &lt;op&gt; b ;
+              - push tN back onto the operand stack and increment N;
+              - pop the operator stack.
+        ii. Push the current operator onto the operator stack.
+3. After the whole expression is scanned, repeat step 2(b)(i) until the operator stack is empty.
+4. Stop.
+
+precedence(op):  &#x27;*&#x27; or &#x27;/&#x27; → 2 ;  &#x27;+&#x27; or &#x27;-&#x27; → 1 ;  otherwise 0.
+</code></pre></p>
+<h3 id="verified-output">▶ Verified output<a class="anchor" href="#verified-output">#</a></h3>
+<table>
+<thead>
+<tr>
+<th>Input</th>
+<th>Output</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>a+b*c</code></td>
+<td><code>t1 = b * c</code> / <code>t2 = a + t1</code></td>
+</tr>
+<tr>
+<td><code>a+b*c+d</code></td>
+<td><code>t1 = b * c</code> / <code>t2 = a + t1</code> / <code>t3 = t2 + d</code></td>
+</tr>
+<tr>
+<td><code>a-b-c</code></td>
+<td><code>t1 = a - b</code> / <code>t2 = t1 - c</code>  ← left associativity, from <code>&gt;=</code></td>
+</tr>
+<tr>
+<td><code>a</code></td>
+<td><em>(nothing emitted)</em></td>
+</tr>
+<tr>
+<td><code>12+3</code></td>
+<td><code>t1 = 2 + 3</code>  ← <strong>the <code>1</code> is silently dropped</strong></td>
+</tr>
+<tr>
+<td><code>(a+b)*c</code></td>
+<td><strong><code>Segmentation fault (core dumped)</code></strong></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h1 id="cross-group-one-liners-the-whole-lab-smallest-possible-form">Cross-group one-liners (the whole lab, smallest possible form)</h1>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>The one idea</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Characters → tokens by hand; lookahead is <strong>pushed back</strong> with <code>ungetc</code></td>
+</tr>
+<tr>
+<td>2</td>
+<td>LEX generates the scanner; <strong>longest match wins, earlier rule wins ties</strong></td>
+</tr>
+<tr>
+<td>3</td>
+<td>Every rule counts its <strong>own</strong> characters (<code>yyleng</code>); Ctrl+D ends input</td>
+</tr>
+<tr>
+<td>4</td>
+<td>LEX makes tokens, <strong>YACC checks their order</strong>; the left-recursive rule forces "letter first"</td>
+</tr>
+<tr>
+<td>5</td>
+<td>E-closure = the state <strong>+ everything reachable by ε</strong>; the answer matrix doubles as the visited set</td>
+</tr>
+<tr>
+<td>6</td>
+<td>δ'(q,a) = <strong>ε-closure( ∪ ε-closure(q) of δ(p,a) )</strong> — <em>teleport, read, teleport</em></td>
+</tr>
+<tr>
+<td>7</td>
+<td><strong>A SET of NFA states becomes ONE DFA state</strong>; sort sets so equal sets compare equal</td>
+</tr>
+<tr>
+<td>8</td>
+<td>FIRST = what it can <strong>begin</strong> with; FOLLOW = what can come <strong>after</strong>; they fill the LL(1) table</td>
+</tr>
+<tr>
+<td>9</td>
+<td>One function per non-terminal; <strong>falling out of the function IS the ε-production</strong></td>
+</tr>
+<tr>
+<td>10</td>
+<td><strong>Shift</strong> = push, <strong>reduce</strong> = replace a RHS on top by its LHS; stop when a pass changes nothing</td>
+</tr>
+<tr>
+<td>11</td>
+<td>Two stacks + precedence → <code>t1 = b*c</code>, <code>t2 = a+t1</code> (a post-order tree walk, done inline)</td>
+</tr>
+</tbody>
+</table>
+  </main>
+</div>
+<button id="chat-btn" title="Ask about this page (select text first)">✳</button>
+<div id="sel-chip">Ask about this</div>
+<div id="chat-panel" role="dialog" aria-label="Ask about this page">
+  <div id="chat-head"><span>Ask this page</span><span class="sp"></span><button id="chat-close" title="Close">✕</button></div>
+  <div id="chat-quote"></div>
+  <div id="chat-log"></div>
+  <form id="chat-form" autocomplete="off">
+    <textarea id="chat-input" rows="1" placeholder="Ask about the selection or the section…"></textarea>
+    <button id="chat-send" title="Send">↑</button>
+  </form>
+  <div id="chat-foot">Select text → “Ask about this”. Enter sends, Shift+Enter newline.</div>
+</div>
+<div class="tools">
+  <button id="theme" title="Toggle light / dark">☾</button>
+  <button id="top" title="Back to top">↑</button>
+</div>
+<script>
+(function(){
+  var root=document.documentElement, key='minotes-theme';
+  var saved=localStorage.getItem(key);
+  var prefers=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';
+  root.setAttribute('data-theme', saved || prefers);
+
+  var btn=document.getElementById('theme');
+  function sync(){ if(btn) btn.textContent = root.getAttribute('data-theme')==='dark' ? '\u2600' : '\u263E'; }
+  sync();
+  if(btn) btn.addEventListener('click',function(){
+    var next = root.getAttribute('data-theme')==='dark' ? 'light' : 'dark';
+    root.setAttribute('data-theme', next); localStorage.setItem(key,next); sync();
+  });
+
+  var bar=document.getElementById('progress');
+  if(bar) addEventListener('scroll',function(){
+    var h=document.documentElement.scrollHeight-innerHeight;
+    bar.style.width=(h>0?(scrollY/h*100):0)+'%';
+  },{passive:true});
+
+  document.querySelectorAll('pre').forEach(function(pre){
+    var b=document.createElement('button');
+    b.className='copy'; b.textContent='copy';
+    b.addEventListener('click',function(){
+      var t=pre.querySelector('code'); var txt=t?t.innerText:pre.innerText;
+      navigator.clipboard.writeText(txt).then(function(){
+        b.textContent='copied'; setTimeout(function(){b.textContent='copy';},1200);
+      });
+    });
+    pre.appendChild(b);
+  });
+
+  document.querySelectorAll('main table').forEach(function(t){
+    if(t.parentElement.classList.contains('table-scroll')) return;
+    var w=document.createElement('div'); w.className='table-scroll';
+    t.parentNode.insertBefore(w,t); w.appendChild(t);
+  });
+
+  var links=[].slice.call(document.querySelectorAll('.sidebar a[href^="#"]'));
+  var map={}; links.forEach(function(a){ map[a.getAttribute('href').slice(1)]=a; });
+  var heads=[].slice.call(document.querySelectorAll('main h2[id], main h3[id]'));
+  if('IntersectionObserver' in window && heads.length){
+    var obs=new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if(!e.isIntersecting) return;
+        links.forEach(function(a){a.classList.remove('active');});
+        var a=map[e.target.id]; if(a){a.classList.add('active');}
+      });
+    },{rootMargin:'-10% 0px -75% 0px'});
+    heads.forEach(function(h){obs.observe(h);});
+  }
+
+  var top=document.getElementById('top');
+  if(top) top.addEventListener('click',function(){ scrollTo({top:0,behavior:'smooth'}); });
+})();
+
+(function(){
+  var API="/api/chat";
+  var panel=document.getElementById("chat-panel"),
+      btn=document.getElementById("chat-btn"),
+      chip=document.getElementById("sel-chip"),
+      quote=document.getElementById("chat-quote"),
+      log=document.getElementById("chat-log"),
+      input=document.getElementById("chat-input"),
+      send=document.getElementById("chat-send"),
+      form=document.getElementById("chat-form");
+
+  if(!panel) return;
+  var pendingSelection="", busy=false, lastSelection="";
+
+  function esc(s){return s.replace(/[&<>]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;"}[c];});}
+
+  // minimal markdown: fenced code, inline code, bold, bullets, numbered lists
+  function md(src){
+    var parts=src.split(/```/), out="";
+    for(var i=0;i<parts.length;i++){
+      if(i%2){ out+="<pre><code>"+esc(parts[i].replace(/^\w*\n/,""))+"</code></pre>"; continue; }
+      var t=esc(parts[i]);
+      t=t.replace(/`([^`\n]+)`/g,"<code>$1</code>").replace(/\*\*([^*]+)\*\*/g,"<b>$1</b>");
+      var lines=t.split(/\n/), html="", inUl=false, inOl=false;
+      for(var j=0;j<lines.length;j++){
+        var line=lines[j];
+        if(/^\s*[-*]\s+/.test(line)){
+          if(inOl){html+="</ol>";inOl=false;}
+          if(!inUl){html+="<ul>";inUl=true;}
+          html+="<li>"+line.replace(/^\s*[-*]\s+/,"")+"</li>"; continue;
+        }
+        if(/^\s*\d+[.)]\s+/.test(line)){
+          if(inUl){html+="</ul>";inUl=false;}
+          if(!inOl){html+="<ol>";inOl=true;}
+          html+="<li>"+line.replace(/^\s*\d+[.)]\s+/,"")+"</li>"; continue;
+        }
+        if(inUl){html+="</ul>";inUl=false;}
+        if(inOl){html+="</ol>";inOl=false;}
+        if(line.trim()==="") continue;
+        html+="<p>"+line+"</p>";
+      }
+      if(inUl)html+="</ul>";
+      if(inOl)html+="</ol>";
+      out+=html;
+    }
+    return out;
+  }
+
+  function outline(){
+    return [].slice.call(document.querySelectorAll("main h2, main h3")).slice(0,40)
+      .map(function(h){return (h.tagName==="H3"?"  - ":"- ")+h.textContent.replace(/#$/,"").trim();}).join("\n");
+  }
+
+  function sectionFor(node){
+    var el = node && (node.nodeType===1?node:node.parentElement);
+    if(!el || !el.closest) return "";
+    el = el.closest("main") ? el : null;
+    if(!el) return "";
+    var heads=[].slice.call(document.querySelectorAll("main h2, main h3"));
+    var cur=null, idx=-1;
+    for(var i=0;i<heads.length;i++){
+      if(heads[i].compareDocumentPosition(el) & Node.DOCUMENT_POSITION_FOLLOWING) { cur=heads[i]; idx=i; }
+    }
+    if(!cur) return "";
+    var stop = heads[idx+1] || null, txt=[], n=cur;
+    while((n=n.nextSibling) && n!==stop){ if(n.textContent) txt.push(n.textContent); }
+    return (cur.textContent+"\n"+txt.join("\n")).replace(/\s+\n/g,"\n").slice(0,3000);
+  }
+
+  function placeChip(x,y){
+    chip.style.left=x+"px"; chip.style.top=(y+window.scrollY-8)+"px"; chip.style.display="block";
+  }
+  function hideChip(){ chip.style.display="none"; }
+
+  document.addEventListener("mouseup",function(e){
+    setTimeout(function(){
+      var s=window.getSelection(), text=s?s.toString().trim():"";
+      if(!text || text.length<3 || !s.anchorNode || !(s.anchorNode.parentElement||s.anchorNode).closest("main")){hideChip();return;}
+      lastSelection=text;
+      var r=s.getRangeAt(0).getBoundingClientRect();
+      placeChip(r.left+r.width/2, Math.max(r.top,8));
+    },10);
+  });
+  document.addEventListener("mousedown",function(e){ if(e.target!==chip) hideChip(); });
+
+  chip.addEventListener("mousedown",function(e){ e.preventDefault(); });
+  chip.addEventListener("click",function(e){
+    e.stopPropagation();
+    pendingSelection=lastSelection; hideChip(); open(pendingSelection);
+  });
+
+  function open(sel){
+    panel.classList.add("open");
+    if(sel){ quote.style.display="block"; quote.textContent=sel; pendingSelection=sel; }
+    else { quote.style.display="none"; quote.textContent=""; pendingSelection=""; }
+    setTimeout(function(){input.focus();},60);
+  }
+  function close(){ panel.classList.remove("open"); }
+
+  btn.addEventListener("click",function(){ panel.classList.contains("open")?close():open(lastSelection||""); });
+  document.getElementById("chat-close").addEventListener("click",close);
+  document.addEventListener("keydown",function(e){ if(e.key==="Escape") close(); });
+
+  function addMsg(cls,html){
+    var d=document.createElement("div"); d.className="msg "+cls; d.innerHTML=html; log.appendChild(d);
+    log.scrollTop=log.scrollHeight; return d;
+  }
+
+  async function ask(q){
+    if(busy||!q.trim()) return;
+    busy=true; send.disabled=true;
+    addMsg("user",esc(q));
+    var bot=addMsg("bot",'<span class="cursor"></span>');
+    var acc="";
+    var sid=sessionStorage.getItem("mn-sid");
+    if(!sid){ sid=(crypto.randomUUID?crypto.randomUUID():String(Date.now())+Math.random().toString(16).slice(2)); sessionStorage.setItem("mn-sid",sid); }
+    var payload={q:q, sid:sid, sel:pendingSelection||"", page:document.querySelector("h1")?document.querySelector("h1").textContent.trim():document.title,
+                 section:sectionFor(window.getSelection()&&window.getSelection().anchorNode?"":document.querySelector("main h2"))||"",
+                 outline:outline()};
+    // section: prefer the one containing the selection, else the first heading on screen
+    try{
+      var sel=window.getSelection();
+      if(pendingSelection && sel && sel.anchorNode){ payload.section=sectionFor(sel.anchorNode); }
+      if(!payload.section){
+        var vis=[].slice.call(document.querySelectorAll("main h2, main h3")).filter(function(h){
+          var r=h.getBoundingClientRect(); return r.top>-80 && r.top<window.innerHeight*0.6; }).pop();
+        if(vis) payload.section=sectionFor(vis);
+      }
+    }catch(_){}
+
+    try{
+      var res=await fetch(API,{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify(payload)});
+      if(!res.ok){
+        var j=await res.json().catch(function(){return{};});
+        throw new Error(j.error||("HTTP "+res.status));
+      }
+      var reader=res.body.getReader(), dec=new TextDecoder(), buf="";
+      for(;;){
+        var r=await reader.read(); if(r.done) break;
+        buf+=dec.decode(r.value,{stream:true});
+        var lines=buf.split("\n"); buf=lines.pop()||"";
+        for(var i=0;i<lines.length;i++){
+          var l=lines[i].trim(); if(l.indexOf("data:")!==0) continue;
+          var d=l.slice(5).trim(); if(d==="[DONE]") continue;
+          try{ var o=JSON.parse(d); if(o.d){acc+=o.d; bot.innerHTML=md(acc)+'<span class="cursor"></span>'; log.scrollTop=log.scrollHeight;} if(o.error) throw new Error(o.error);}catch(_){}
+        }
+      }
+      bot.innerHTML=md(acc||"_no answer_");
+    }catch(err){
+      bot.className="msg err";
+      bot.textContent = String(err.message).indexOf("Failed to fetch")>-1 || String(err.message).indexOf("HTTP 5")>-1
+        ? "Assistant unavailable — it only works on the deployed site (needs the /api/chat function)."
+        : "Error: "+err.message;
+    }finally{
+      busy=false; send.disabled=false; input.value=""; input.focus();
+      pendingSelection=""; quote.style.display="none";
+    }
+  }
+
+  form.addEventListener("submit",function(e){ e.preventDefault(); ask(input.value); });
+  input.addEventListener("keydown",function(e){
+    if(e.key==="Enter"&&!e.shiftKey){ e.preventDefault(); ask(input.value); }
+  });
+  input.addEventListener("input",function(){ input.style.height="auto"; input.style.height=Math.min(input.scrollHeight,110)+"px"; });
+})();
+</script>
+
+</body>
+</html>

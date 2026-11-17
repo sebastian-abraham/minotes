@@ -1,0 +1,1269 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GROUP A — Lexical Analysis (Exp 1–4) · Compiler Lab</title>
+<style>
+:root{
+  --bg:#fbfaf8; --panel:#ffffff; --ink:#232120; --muted:#5f5a53; --line:#e6e1da;
+  --accent:#7a4fd0; --accent-soft:#f1ecfb; --code-bg:#f5f2ee; --code-ink:#2b2a28;
+  --warn-bg:#fff8e6; --warn-line:#f0d9a0;
+  --sans:"Inter","Segoe UI",system-ui,-apple-system,"Noto Sans",sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,"SF Mono",Menlo,Consolas,"Fira Code",monospace;
+}
+html[data-theme="dark"]{
+  --bg:#141317; --panel:#1b1a20; --ink:#e8e4de; --muted:#a8a199; --line:#2f2c36;
+  --accent:#b79cf5; --accent-soft:#241f33; --code-bg:#22202a; --code-ink:#e8e4de;
+  --warn-bg:#2a2417; --warn-line:#4a3d22;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0; background:var(--bg); color:var(--ink); font-family:var(--sans);
+  font-size:16.5px; line-height:1.72; -webkit-font-smoothing:antialiased;
+}
+#progress{position:fixed;top:0;left:0;height:3px;width:0;background:var(--accent);z-index:50;transition:width .1s linear}
+
+.wrap{display:flex;align-items:flex-start;min-height:100vh}
+.sidebar{
+  position:sticky;top:0;height:100vh;width:300px;flex:0 0 300px;overflow-y:auto;
+  padding:26px 20px 60px;border-right:1px solid var(--line);background:var(--panel);
+}
+.sidebar h1{font-size:15px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);
+  margin:0 0 4px;font-weight:600}
+.sidebar .sub{font-size:12.5px;color:var(--muted);margin:0 0 18px}
+.sidebar nav{font-size:14px}
+.sidebar .toc>ul{padding-left:0}
+.sidebar ul{list-style:none;margin:0;padding-left:12px}
+.sidebar ul ul{border-left:1px solid var(--line);margin-left:4px;padding-left:10px}
+.sidebar li{margin:3px 0}
+.sidebar a{color:var(--ink);text-decoration:none;display:block;padding:3px 8px;border-radius:8px;
+  line-height:1.35;transition:background .12s,color .12s}
+.sidebar a:hover{background:var(--accent-soft);color:var(--accent)}
+.sidebar a.active{background:var(--accent-soft);color:var(--accent);font-weight:600}
+.sidebar .home{display:inline-flex;align-items:center;gap:6px;margin-bottom:16px;font-size:13.5px;
+  color:var(--muted);text-decoration:none;border:1px solid var(--line);padding:5px 10px;border-radius:999px}
+.sidebar .home:hover{color:var(--accent);border-color:var(--accent)}
+
+main{flex:1;min-width:0;padding:46px 56px 120px;max-width:980px;margin:0 auto}
+.doc-head{border-bottom:1px solid var(--line);padding-bottom:18px;margin-bottom:34px}
+.doc-head .kicker{font-size:12.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);
+  font-weight:700;margin-bottom:8px}
+.doc-head .meta{font-size:13.5px;color:var(--muted)}
+
+h1,h2,h3,h4{line-height:1.25;font-weight:700;letter-spacing:-.01em}
+h1{font-size:2.05rem;margin:.2em 0 .5em}
+h2{font-size:1.55rem;margin:2.4em 0 .7em;padding-bottom:.35em;border-bottom:1px solid var(--line)}
+h3{font-size:1.2rem;margin:1.9em 0 .55em}
+h4{font-size:1.03rem;margin:1.5em 0 .45em;color:var(--muted)}
+h2 .anchor,h3 .anchor{opacity:0;margin-left:.35em;font-size:.8em;color:var(--muted);text-decoration:none}
+h2:hover .anchor,h3:hover .anchor{opacity:1}
+p{margin:.75em 0}
+a{color:var(--accent);text-underline-offset:2px}
+strong{font-weight:650}
+hr{border:0;border-top:1px solid var(--line);margin:2.6em 0}
+ul,ol{margin:.7em 0;padding-left:1.4em}
+li{margin:.3em 0}
+li>ul,li>ol{margin:.25em 0}
+blockquote{
+  margin:1.3em 0;padding:12px 18px;background:var(--warn-bg);border-left:3px solid var(--warn-line);
+  border-radius:0 10px 10px 0;color:var(--ink)
+}
+blockquote p{margin:.3em 0}
+
+code{font-family:var(--mono);font-size:.87em;background:var(--code-bg);color:var(--code-ink);
+  padding:.15em .38em;border-radius:6px;border:1px solid var(--line);
+  box-decoration-break:clone;-webkit-box-decoration-break:clone;overflow-wrap:anywhere}
+pre{position:relative;background:var(--code-bg);border:1px solid var(--line);border-radius:12px;
+  padding:16px 18px;overflow-x:auto;margin:1.1em 0}
+pre code{background:none;border:0;padding:0;font-size:13.6px;line-height:1.62;white-space:pre}
+.copy{position:absolute;top:8px;right:8px;font:600 11px/1 var(--sans);color:var(--muted);
+  background:var(--panel);border:1px solid var(--line);border-radius:7px;padding:5px 8px;cursor:pointer;
+  opacity:0;transition:opacity .15s}
+pre:hover .copy{opacity:1}
+.copy:hover{color:var(--accent);border-color:var(--accent)}
+
+.table-scroll{overflow-x:auto;margin:1.3em 0;border:1px solid var(--line);border-radius:12px;background:var(--panel)}
+table{border-collapse:collapse;width:100%;font-size:14.6px}
+th,td{padding:9px 13px;text-align:left;vertical-align:top;border-bottom:1px solid var(--line)}
+th{background:var(--accent-soft);font-weight:650;font-size:13px;letter-spacing:.02em;
+  position:sticky;top:0;backdrop-filter:blur(4px)}
+tr:last-child td{border-bottom:0}
+tbody tr:nth-child(even){background:color-mix(in srgb,var(--panel) 60%,var(--bg))}
+tbody tr:hover{background:var(--accent-soft)}
+
+.tools{position:fixed;right:22px;bottom:22px;display:flex;flex-direction:column;gap:8px;z-index:40}
+.tools button{width:42px;height:42px;border-radius:12px;border:1px solid var(--line);background:var(--panel);
+  color:var(--ink);cursor:pointer;font-size:16px;box-shadow:0 4px 14px rgba(0,0,0,.10)}
+.tools button:hover{color:var(--accent);border-color:var(--accent)}
+@media (max-width:1000px){
+  .wrap{display:block}
+  .sidebar{position:static;width:auto;height:auto;border-right:0;border-bottom:1px solid var(--line)}
+  .sidebar nav{max-height:40vh;overflow:auto}
+  main{padding:28px 20px 100px}
+}
+@media print{
+  .sidebar,.tools,#progress,.copy{display:none!important}
+  body{background:#fff;color:#000;font-size:11pt}
+  main{padding:0;max-width:none}
+  h2{break-after:avoid} pre,table,blockquote{break-inside:avoid}
+  a{color:#000;text-decoration:none}
+}
+
+/* ---- ask-about-this ---- */
+#chat-btn{position:fixed;right:20px;bottom:112px;width:44px;height:44px;border-radius:50%;
+  border:1px solid var(--line);background:var(--panel);color:var(--accent);cursor:pointer;font-size:17px;
+  box-shadow:0 6px 18px rgba(0,0,0,.12);z-index:45;display:grid;place-items:center}
+#chat-btn:hover{border-color:var(--accent)}
+#sel-chip{position:absolute;z-index:46;transform:translate(-50%,-100%);background:var(--ink);color:var(--bg);
+  font:600 12px/1 var(--sans);padding:7px 11px;border-radius:999px;cursor:pointer;white-space:nowrap;
+  box-shadow:0 6px 18px rgba(0,0,0,.25);display:none}
+#sel-chip:hover{background:var(--accent);color:#fff}
+#chat-panel{position:fixed;right:20px;bottom:164px;width:min(420px,calc(100vw - 40px));max-height:min(70vh,620px);
+  background:var(--panel);border:1px solid var(--line);border-radius:14px;z-index:47;display:none;
+  flex-direction:column;box-shadow:0 18px 50px rgba(0,0,0,.18);overflow:hidden}
+#chat-panel.open{display:flex}
+#chat-head{display:flex;align-items:center;gap:8px;padding:11px 13px;border-bottom:1px solid var(--line);
+  font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:700}
+#chat-head .sp{flex:1}
+#chat-head button{background:none;border:0;color:var(--muted);cursor:pointer;font-size:15px;padding:2px 4px}
+#chat-head button:hover{color:var(--accent)}
+#chat-quote{display:none;margin:10px 13px 0;padding:8px 10px;border-left:2px solid var(--accent);
+  background:var(--accent-soft);color:var(--muted);font-size:12.5px;border-radius:0 8px 8px 0;
+  max-height:84px;overflow:auto;white-space:pre-wrap}
+#chat-log{flex:1;overflow-y:auto;padding:12px 13px;display:flex;flex-direction:column;gap:10px;font-size:13.6px;line-height:1.55}
+.msg{max-width:100%}
+.msg.user{align-self:flex-end;background:var(--accent-soft);color:var(--ink);padding:7px 11px;border-radius:11px 11px 2px 11px;
+  max-width:86%;white-space:pre-wrap}
+.msg.bot{color:var(--ink)}
+.msg.bot p{margin:.3em 0}
+.msg.bot ul{margin:.3em 0;padding-left:1.15em}
+.msg.bot code{font-size:.9em}
+.msg.bot pre{background:var(--code-bg);border-radius:8px;padding:9px 11px;overflow-x:auto;font-size:12px;margin:.4em 0}
+.msg.err{color:#b3261e;font-size:12.5px}
+.msg .cursor:after{content:"▍";color:var(--accent);animation:blink 1s steps(2) infinite}
+@keyframes blink{50%{opacity:0}}
+#chat-form{display:flex;gap:8px;padding:10px 13px;border-top:1px solid var(--line)}
+#chat-input{flex:1;resize:none;border:1px solid var(--line);border-radius:9px;background:var(--bg);color:var(--ink);
+  font:inherit;font-size:13.5px;padding:8px 10px;max-height:110px;min-height:38px}
+#chat-input:focus{outline:2px solid var(--accent);outline-offset:0}
+#chat-send{border:1px solid var(--accent);background:var(--accent);color:#fff;border-radius:9px;
+  width:38px;cursor:pointer;font-size:15px}
+#chat-send:disabled{opacity:.45;cursor:default}
+#chat-foot{font-size:11px;color:var(--muted);padding:0 13px 9px}
+@media (max-width:640px){
+  #chat-panel{right:8px;left:8px;width:auto;bottom:150px;max-height:66vh}
+  #chat-btn{bottom:104px;right:16px}
+}
+@media print{#chat-btn,#chat-panel,#sel-chip{display:none!important}}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+<div class="wrap">
+  <aside class="sidebar">
+    <a class="home" href="index.html">← Compiler Lab</a>
+    
+    <h1>Group A · Lexical</h1>
+    <p class="sub">Exp 1–4 · lex &amp; yacc</p>
+    <nav class="toc"><div class="toc">
+<ul>
+<li><a href="#exp-1-lexical-analyser-hand-written-15-16">Exp 1 — Lexical Analyser, hand-written · <code>input.c</code>, <code>lex_a.c</code></a><ul>
+<li><a href="#1-why-this-exists">1. Why this exists</a></li>
+<li><a href="#2-input-target-output">2. Input → target output</a></li>
+<li><a href="#3-the-logic">3. The logic</a></li>
+<li><a href="#4-edge-cases">4. Edge cases</a></li>
+<li><a href="#5-built-ins-used-and-why-this-one">5. Built-ins used (and why this one)</a></li>
+<li><a href="#6-algorithm-deep-pseudocode">6. Algorithm — deep pseudocode</a></li>
+<li><a href="#7-algorithm-record-version-mid-level">7. Algorithm — record version (mid-level)</a></li>
+<li><a href="#verified-output">▶ Verified output</a></li>
+</ul>
+</li>
+<li><a href="#exp-2-lexical-analyser-using-lex-155">Exp 2 — Lexical Analyser using LEX · <code>lexer.l</code></a><ul>
+<li><a href="#1-why-this-exists_1">1. Why this exists</a></li>
+<li><a href="#2-input-target-output_1">2. Input → target output</a></li>
+<li><a href="#3-the-logic_1">3. The logic</a></li>
+<li><a href="#4-edge-cases_1">4. Edge cases</a></li>
+<li><a href="#5-built-ins-lex-constructs-used-and-why">5. Built-ins / LEX constructs used (and why)</a></li>
+<li><a href="#6-algorithm-deep-pseudocode_1">6. Algorithm — deep pseudocode</a></li>
+<li><a href="#7-algorithm-record-version-mid-level_1">7. Algorithm — record version (mid-level)</a></li>
+<li><a href="#verified-output_1">▶ Verified output</a></li>
+</ul>
+</li>
+<li><a href="#exp-3-count-lines-words-and-characters-using-lex-215">Exp 3 — Count lines, words and characters using LEX · <code>lex_count.l</code></a><ul>
+<li><a href="#1-why-this-exists_2">1. Why this exists</a></li>
+<li><a href="#2-input-target-output_2">2. Input → target output</a></li>
+<li><a href="#3-the-logic_2">3. The logic</a></li>
+<li><a href="#4-edge-cases_2">4. Edge cases</a></li>
+<li><a href="#5-built-ins-used-and-why">5. Built-ins used (and why)</a></li>
+<li><a href="#6-algorithm-deep-pseudocode_2">6. Algorithm — deep pseudocode</a></li>
+<li><a href="#7-algorithm-record-version-mid-level_2">7. Algorithm — record version (mid-level)</a></li>
+<li><a href="#verified-output_2">▶ Verified output</a></li>
+</ul>
+</li>
+<li><a href="#exp-4-valid-identifier-check-using-lex-yacc-254-255">Exp 4 — Valid identifier check using LEX + YACC · <code>lex_id.l</code>, <code>yacc_id.y</code></a><ul>
+<li><a href="#1-why-this-exists_3">1. Why this exists</a></li>
+<li><a href="#2-input-target-output_3">2. Input → target output</a></li>
+<li><a href="#3-the-logic_3">3. The logic</a></li>
+<li><a href="#4-edge-cases_3">4. Edge cases</a></li>
+<li><a href="#5-built-ins-tool-constructs-used-and-why">5. Built-ins / tool constructs used (and why)</a></li>
+<li><a href="#6-algorithm-deep-pseudocode_3">6. Algorithm — deep pseudocode</a></li>
+<li><a href="#7-algorithm-record-version-mid-level_3">7. Algorithm — record version (mid-level)</a></li>
+<li><a href="#verified-output_3">▶ Verified output</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</nav>
+  </aside>
+  <main>
+    <div class="doc-head">
+      <div class="kicker">20CSL401 · Compiler Lab</div>
+      <div class="meta">Exp 1–4 · lex &amp; yacc · rendered from GROUP_A_lexical_analysis.md</div>
+    </div>
+    <h1 id="group-a-lexical-analysis-exp-14">GROUP A — Lexical Analysis (Exp 1–4)</h1>
+<p>Each experiment below is laid out the same way, and in the order knowledge actually arrived:</p>
+<ol>
+<li><strong>Why this exists</strong> — what problem forced this program to be written</li>
+<li><strong>Input → target output</strong> — what goes in, what must come out</li>
+<li><strong>The logic</strong> — how we get from the one to the other</li>
+<li><strong>Edge cases</strong> — what can go wrong, and how the code accounts for it</li>
+<li><strong>Built-ins used</strong> — what each function does <em>and why this one</em></li>
+<li><strong>Algorithm — deep pseudocode</strong> — with the code nuances baked in</li>
+<li><strong>Algorithm — record version</strong> — the mid-level one to actually write in your lab record</li>
+</ol>
+<hr />
+<h2 id="exp-1-lexical-analyser-hand-written-15-16">Exp 1 — Lexical Analyser, hand-written  ·  <code>input.c</code>, <code>lex_a.c</code><a class="anchor" href="#exp-1-lexical-analyser-hand-written-15-16">#</a></h2>
+<h3 id="1-why-this-exists">1. Why this exists<a class="anchor" href="#1-why-this-exists">#</a></h3>
+<p>A parser wants to reason about <code>int</code>, <code>a</code>, <code>+</code>, <code>10</code>, <code>;</code>. It does <strong>not</strong> want to reason about
+the 13 individual characters <code>i</code>,<code>n</code>,<code>t</code>,<code> </code>,<code>a</code>,<code> </code>,<code>+</code>,<code> </code>,<code>1</code>,<code>0</code>,<code>;</code> — that would be
+absurd. So something must sit in front of the parser and convert <em>characters</em> into <em>words</em>.
+That something is the <strong>lexical analyser (scanner)</strong>, and this is the first experiment because
+it is the first phase of a compiler.</p>
+<p>This version is hand-written <strong>on purpose</strong>: writing it by hand shows you exactly what LEX
+automates in Exp 2 (the pattern matching and the "longest match" rule you're about to see).</p>
+<h3 id="2-input-target-output">2. Input → target output<a class="anchor" href="#2-input-target-output">#</a></h3>
+<p><strong>Input:</strong> an actual C source file named <code>input.c</code>, read from disk (not typed). The program
+opens it by name, so it must be in the same folder.</p>
+<p><code>input.c</code> contains: a <code>//</code> comment, a <code>/* */</code> comment, declarations, <code>if</code>, operators, numbers.</p>
+<p><strong>Target output:</strong> a list of every token classified into one of five categories:
+<pre><code>Keyword    : int
+Identifier : a
+Operator   : =
+Number     : 10
+Symbol     : ;
+</code></pre>
+Exactly five labels: <code>Keyword</code>, <code>Identifier</code>, <code>Number</code>, <code>Operator</code>, <code>Symbol</code>.</p>
+<h3 id="3-the-logic">3. The logic<a class="anchor" href="#3-the-logic">#</a></h3>
+<p>The core loop reads <strong>one character at a time</strong> and asks "what did I just start?"</p>
+<ul>
+<li>whitespace → nothing, skip</li>
+<li><code>/</code> → <strong>ambiguous!</strong> It could be division, <code>//</code> comment, or <code>/*</code> comment. You cannot decide from one character — you must peek at the next.</li>
+<li>letter or <code>_</code> → you've started an identifier or keyword. You don't know where it ends, so keep reading while the characters are still letters/digits/<code>_</code>.</li>
+<li>digit → started a number, keep reading while digits.</li>
+<li>operator char → one-character token, done</li>
+<li>symbol char → one-character token, done</li>
+</ul>
+<p>Two ideas do all the work here, and both are what the examiner is probing for:</p>
+<p><strong>(a) The greedy read.</strong> For multi-character tokens you read <em>until the character no longer fits</em>, which means you have consumed <strong>one character too many</strong> — the character that told you the token ended.</p>
+<p><strong>(b) The push-back.</strong> That extra character is not yours to swallow; it belongs to the next token. So you give it back with <code>ungetc()</code>. This is called <strong>lookahead with one-character pushback</strong>, and every real scanner does it.</p>
+<p><strong>(c) Keyword vs identifier.</strong> They have the <em>same shape</em> — <code>int</code> and <code>a</code> both look like "letter then letters". The only difference is that <code>int</code> appears in a fixed list. So you classify by shape first, then check the list.
+<em>Why check the list rather than handle keywords as their own pattern?</em> Because if you wrote a rule for <code>int</code> specifically, <code>intx</code> would still match the identifier rule — but you'd need one rule per keyword. Shape-first is what LEX also does (see Exp 2's tie-break).</p>
+<h3 id="4-edge-cases">4. Edge cases<a class="anchor" href="#4-edge-cases">#</a></h3>
+<table>
+<thead>
+<tr>
+<th>Edge case</th>
+<th>What would break</th>
+<th>How the code handles it</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>//</code> comment</td>
+<td>the <code>/</code> would be reported as an operator, and the comment text would be tokenised as code</td>
+<td>read lookahead; if it's <code>/</code>, loop until <code>\n</code> — <strong>emits nothing</strong></td>
+</tr>
+<tr>
+<td><code>/* ... */</code> spanning lines</td>
+<td>same, plus you must find the <em>closing</em> pair</td>
+<td>track the previous character; stop when <code>prev==&#x27;*&#x27; &amp;&amp; ch==&#x27;/&#x27;</code></td>
+</tr>
+<tr>
+<td>plain division <code>a / b</code></td>
+<td>the lookahead character (<code>b</code> or space) got consumed and is now lost</td>
+<td><code>ungetc(next, fp)</code> pushes it back before reporting <code>/</code></td>
+</tr>
+<tr>
+<td>last token at end of file</td>
+<td>after reading <code>abc</code>, <code>fgetc</code> returns <code>EOF</code> — which is <code>-1</code>, not a character</td>
+<td>the read loops test <code>!= EOF</code> so they stop cleanly, and the <code>if (ch != EOF)</code> guard prevents pushing <code>EOF</code> back</td>
+</tr>
+<tr>
+<td>the lookahead at EOF</td>
+<td><code>ungetc(EOF, fp)</code> would be a bug</td>
+<td>guarded by <code>if (ch != EOF) ungetc(ch, fp);</code></td>
+</tr>
+<tr>
+<td><strong><code>input.c</code> missing</strong></td>
+<td><code>fopen</code> returns <code>NULL</code> → the very first <code>fgetc</code> <strong>segfaults</strong></td>
+<td><strong>NOT handled</strong> in <code>lex_a.c</code> — there is no <code>if (fp == NULL)</code> check. Know this: it is a real hole (the sibling program <code>token.c</code> <em>does</em> check). Worth mentioning as "the version in the record omits this check"</td>
+</tr>
+<tr>
+<td><code>char ch</code> holding <code>EOF</code></td>
+<td><code>fgetc</code> returns <code>int</code>; <code>EOF</code> is <code>-1</code>. Storing in a plain <code>char</code> can, on platforms where <code>char</code> is unsigned, make the <code>!= EOF</code> test <strong>never true → infinite loop</strong></td>
+<td><code>lex_a.c</code> declares <code>char ch</code>. It happens to work here, but the <em>correct</em> declaration is <code>int ch</code>. Excellent "why" answer if asked</td>
+</tr>
+<tr>
+<td>token longer than the buffer</td>
+<td><code>char buffer[100]</code> has no bounds check → overflow</td>
+<td>not guarded; note it</td>
+</tr>
+</tbody>
+</table>
+<h3 id="5-built-ins-used-and-why-this-one">5. Built-ins used (and why this one)<a class="anchor" href="#5-built-ins-used-and-why-this-one">#</a></h3>
+<table>
+<thead>
+<tr>
+<th>Function</th>
+<th>What it does</th>
+<th>Why it's used here</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>fopen(&quot;input.c&quot;,&quot;r&quot;)</code></td>
+<td>opens a file, returns a <code>FILE *</code></td>
+<td>we need to read a file, not stdin</td>
+</tr>
+<tr>
+<td><code>fgetc(fp)</code></td>
+<td>reads <strong>one</strong> character, returns <code>int</code>, or <code>EOF</code> at end</td>
+<td>the whole scanner is character-driven</td>
+</tr>
+<tr>
+<td><code>ungetc(c, fp)</code></td>
+<td><strong>pushes one character back</strong> into the stream</td>
+<td>undoes the lookahead read — without this the scanner cannot correct itself</td>
+</tr>
+<tr>
+<td><code>fclose(fp)</code></td>
+<td>closes the file, releases the handle</td>
+<td>clean shutdown</td>
+</tr>
+<tr>
+<td><code>isalpha(c)</code></td>
+<td>true if <code>c</code> is a letter</td>
+<td>decides "identifier might be starting"</td>
+</tr>
+<tr>
+<td><code>isdigit(c)</code></td>
+<td>true if <code>c</code> is <code>0</code>–<code>9</code></td>
+<td>decides "number is starting" / "number continues"</td>
+</tr>
+<tr>
+<td><code>isalnum(c)</code></td>
+<td>letter <strong>or</strong> digit</td>
+<td>decides "identifier continues" (<code>abc123</code> is one token)</td>
+</tr>
+<tr>
+<td><code>strchr(set, c)</code></td>
+<td>returns non-NULL if <code>c</code> is inside the string <code>set</code></td>
+<td>used as a <strong>membership test against a character set</strong> — <code>strchr(&quot;+-*=&lt;&gt;!%&quot;, ch)</code> reads as "is this an operator?" Much shorter than a <code>switch</code> with 8 cases</td>
+</tr>
+<tr>
+<td><code>strcmp(a, b)</code></td>
+<td>returns <code>0</code> when the two strings are equal</td>
+<td>comparing a token against each keyword</td>
+</tr>
+<tr>
+<td><code>sizeof(keywords)/sizeof(keywords[0])</code></td>
+<td>total bytes ÷ one element = array length</td>
+<td>so the keyword loop doesn't hardcode a count</td>
+</tr>
+<tr>
+<td><code>printf</code></td>
+<td>formatted output</td>
+<td>printing each token's class and text</td>
+</tr>
+</tbody>
+</table>
+<h3 id="6-algorithm-deep-pseudocode">6. Algorithm — deep pseudocode<a class="anchor" href="#6-algorithm-deep-pseudocode">#</a></h3>
+<p><pre><code>isKeyword(word):
+    for each k in keywords:            # keywords[] = {int, float, char, if, else, while,
+        if strcmp(word, k) == 0:       #                for, return, void, break, continue,
+            return 1                   #                double, main}
+    return 0
+
+main:
+    fp = fopen(&quot;input.c&quot;, &quot;r&quot;)
+    # (no NULL check here — a real gap; token.c has it)
+
+    while (ch = fgetc(fp)) != EOF:                    # ch is declared char, not int (nuance)
+
+        if ch is &#x27; &#x27; or &#x27;\t&#x27; or &#x27;\n&#x27;:  continue       # whitespace produces no token
+
+        if ch == &#x27;/&#x27;:
+            next = fgetc(fp)
+            if next == &#x27;/&#x27;:                           # single-line comment
+                while (ch = fgetc(fp)) != &#x27;\n&#x27; and ch != EOF: pass
+                continue                              # nothing emitted
+            elif next == &#x27;*&#x27;:                         # multi-line comment
+                prev = 0
+                while (ch = fgetc(fp)) != EOF:
+                    if prev == &#x27;*&#x27; and ch == &#x27;/&#x27;: break
+                    prev = ch
+                continue
+            else:                                     # it really was division
+                print &quot;Operator : /&quot;
+                ungetc(next, fp)                      # give back the lookahead
+                continue
+
+        if isalpha(ch) or ch == &#x27;_&#x27;:                  # start of identifier/keyword
+            i = 0
+            buffer[i++] = ch
+            while (ch = fgetc(fp)) != EOF and (isalnum(ch) or ch == &#x27;_&#x27;):
+                buffer[i++] = ch                      # greedy read — one char too far
+            buffer[i] = &#x27;\0&#x27;
+            if ch != EOF: ungetc(ch, fp)              # push the lookahead back
+            if isKeyword(buffer): print &quot;Keyword    : &quot; + buffer
+            else:                 print &quot;Identifier : &quot; + buffer
+
+        elif isdigit(ch):                             # start of number
+            i = 0
+            buffer[i++] = ch
+            while (ch = fgetc(fp)) != EOF and isdigit(ch):
+                buffer[i++] = ch
+            buffer[i] = &#x27;\0&#x27;
+            if ch != EOF: ungetc(ch, fp)
+            print &quot;Number     : &quot; + buffer
+
+        elif strchr(&quot;+-*=&lt;&gt;!%&quot;, ch):  print &quot;Operator   : &quot; + ch
+        elif strchr(&quot;(){}[];,.&quot; , ch): print &quot;Symbol     : &quot; + ch
+
+    fclose(fp)
+</code></pre>
+<strong>The three lines that carry the whole experiment:</strong> the greedy <code>while</code>, the <code>ungetc</code>, and the <code>isKeyword</code> test.</p>
+<h3 id="7-algorithm-record-version-mid-level">7. Algorithm — record version (mid-level)<a class="anchor" href="#7-algorithm-record-version-mid-level">#</a></h3>
+<p><pre><code>ALGORITHM: Lexical Analysis (hand-written)
+1. Start.
+2. Open the source file input.c in read mode.
+3. Read one character ch at a time until end of file:
+   a. If ch is a blank, tab or newline — ignore it.
+   b. If ch is &#x27;/&#x27;, read the next character:
+        - next is &#x27;/&#x27;, skip until end of line (single-line comment);
+        - next is &#x27;*&#x27;, skip until the pair &#x27;*&#x27; &#x27;/&#x27; (multi-line comment);
+        - otherwise push the lookahead back and report &#x27;/&#x27; as an operator.
+   c. If ch is a letter or &#x27;_&#x27;, collect it and every following letter/digit/&#x27;_&#x27; into a buffer.
+      Compare the buffer with the keyword list — print &quot;Keyword&quot; if found, else &quot;Identifier&quot;.
+   d. If ch is a digit, collect it and every following digit and print &quot;Number&quot;.
+   e. If ch is one of + - * = &lt; &gt; ! % — print &quot;Operator&quot;.
+   f. If ch is one of ( ) { } [ ] ; , . — print &quot;Symbol&quot;.
+4. Close the file.
+5. Stop.
+Helper: isKeyword(word) — compares word with each keyword using strcmp.
+</code></pre></p>
+<h3 id="verified-output">▶ Verified output<a class="anchor" href="#verified-output">#</a></h3>
+<p><code>gcc lex_a.c &amp;&amp; ./a.out</code> with <code>input.c</code> present — one token per line:
+<code>Keyword int</code> → <code>Keyword main</code> → <code>Symbol (</code> → <code>Symbol )</code> → <code>Symbol {</code> → <code>Keyword int</code> → <code>Identifier a</code>
+→ <code>Operator =</code> → <code>Number 10</code> → <code>Symbol ;</code> → <code>Keyword float</code> → <code>Identifier b</code> → <code>Operator =</code>
+→ <code>Number 20</code> → <code>Symbol ;</code> → <code>Keyword if</code> → <code>Symbol (</code> → <code>Identifier a</code> → <code>Operator &lt;</code>
+→ <code>Identifier b</code> → <code>Symbol )</code> → <code>Symbol {</code> → <code>Identifier a</code> → <code>Operator =</code> → <code>Identifier a</code>
+→ <code>Operator +</code> → <code>Number 1</code> → <code>Symbol ;</code> → <code>Symbol }</code> → <code>Keyword return</code> → <code>Number 0</code>
+→ <code>Symbol ;</code> → <code>Symbol }</code></p>
+<hr />
+<h2 id="exp-2-lexical-analyser-using-lex-155">Exp 2 — Lexical Analyser using LEX  ·  <code>lexer.l</code><a class="anchor" href="#exp-2-lexical-analyser-using-lex-155">#</a></h2>
+<h3 id="1-why-this-exists_1">1. Why this exists<a class="anchor" href="#1-why-this-exists_1">#</a></h3>
+<p>Exp 1 works, but look at the cost: you hand-wrote the greedy reads, every <code>ungetc</code>, the keyword
+comparison loop. Replace that file with a 30-rule grammar and the code becomes unmaintainable.</p>
+<p><strong>LEX</strong> is a <em>generator</em>: you declare the <em>patterns</em> (regular expressions) and the <em>actions</em>,
+and LEX <strong>builds a DFA from all the patterns at once</strong> and emits the C code (<code>lex.yy.c</code>) that
+runs it. This is the moment in the course where "regular expressions" stop being a topic and
+become the actual tool used by the scanner.</p>
+<h3 id="2-input-target-output_1">2. Input → target output<a class="anchor" href="#2-input-target-output_1">#</a></h3>
+<p><strong>Input:</strong> a C program typed at stdin (NOT a file this time — the generated scanner reads stdin).</p>
+<p><strong>Target output:</strong> the same classification job as Exp 1, but with these labels:
+<pre><code>Keyword : int
+Identifier : a
+Operator : =
+Number : 2
+Special Symbol : ;
+</code></pre>
+Note the labels differ from Exp 1 — <code>Special Symbol</code> (not <code>Symbol</code>) and no padding. In this
+version whitespace is <em>deliberately</em> ignored by a rule with an empty action.</p>
+<h3 id="3-the-logic_1">3. The logic<a class="anchor" href="#3-the-logic_1">#</a></h3>
+<p>A <code>.l</code> file has <strong>three sections</strong>, separated by <code>%%</code>:</p>
+<p><pre><code>%{ definitions (C headers, globals) %}      ← %option noyywrap also lives here
+%%
+rules:   pattern    { action }              ← one per line
+%%
+user code:  main() { ... yylex(); ... }
+</code></pre></p>
+<p>The logic is: <strong>for each pattern, say what to do when it matches.</strong> Compare with Exp 1:</p>
+<table>
+<thead>
+<tr>
+<th>Exp 1 (hand-written)</th>
+<th>Exp 2 (LEX)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>if (isalpha(ch) \|\| ch==&#x27;_&#x27;)</code> + greedy loop + <code>ungetc</code></td>
+<td><code>[a-zA-Z_][a-zA-Z0-9_]*</code></td>
+</tr>
+<tr>
+<td>keyword <code>strcmp</code> loop</td>
+<td>one rule listing the keywords, written <strong>first</strong></td>
+</tr>
+<tr>
+<td><code>while(...) fgetc</code></td>
+<td>handled by the generated DFA</td>
+</tr>
+</tbody>
+</table>
+<p>The regular expressions, in words:
+- <code>[a-zA-Z_][a-zA-Z0-9_]*</code> — a letter or <code>_</code>, then any number (<strong>including zero</strong>) of letters/digits/<code>_</code>. The <code>*</code> is what makes a single <code>a</code> valid.
+- <code>[0-9]+</code> — one <strong>or more</strong> digits. <code>+</code> means at least one, so <code>0</code> alone is a number.
+- <code>&quot;int&quot;</code> — the quotes mean <em>literal text</em>, not the pattern <code>i</code>,<code>n</code>,<code>t</code> as three separate class-memberships.</p>
+<p><strong>The keyword-vs-identifier collision — and how LEX resolves it.</strong> <code>int</code> matches <em>both</em> the
+keyword rule and the identifier rule. Lex applies two rules, in this order:
+1. <strong>Longest match wins.</strong> Whichever pattern consumes more characters wins.
+2. <strong>On a tie, the rule written first wins.</strong></p>
+<p>Since <code>int</code> matches both with the <em>same length</em>, rule 2 decides it — and the keyword rule is
+written above the identifier rule. <strong>That ordering is not cosmetic; it is the mechanism.</strong> Move
+the identifier rule up and <code>int</code> prints as <code>Identifier</code>.</p>
+<h3 id="4-edge-cases_1">4. Edge cases<a class="anchor" href="#4-edge-cases_1">#</a></h3>
+<table>
+<thead>
+<tr>
+<th>Edge case</th>
+<th>How it's handled</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>int</code> matching two rules</td>
+<td>longest-match, then <strong>first-rule</strong> tie-break; keyword rule sits above identifier rule</td>
+</tr>
+<tr>
+<td>whitespace producing tokens</td>
+<td><code>[ \t\n]+  ;</code> — a rule with an <strong>empty action</strong> (just <code>;</code>) is the idiom for "match and discard"</td>
+</tr>
+<tr>
+<td>a character matching <em>no</em> rule</td>
+<td>the final catch-all <code>.  ;</code> swallows it silently — without this, unmatched input is echoed to stdout by default</td>
+</tr>
+<tr>
+<td>end of input / wrap-up</td>
+<td><code>%option noyywrap</code> suppresses the need for a <code>yywrap()</code> function; otherwise LEX calls <code>yywrap()</code> at EOF</td>
+</tr>
+<tr>
+<td>guesses that LEX cannot express</td>
+<td>LEX patterns are <strong>regular expressions only</strong> — no nesting, no counting. <code>ab^n c^n</code> is impossible. This is <em>the</em> limitation that motivates parsing (Exp 8–10)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="5-built-ins-lex-constructs-used-and-why">5. Built-ins / LEX constructs used (and why)<a class="anchor" href="#5-built-ins-lex-constructs-used-and-why">#</a></h3>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>What it is</th>
+<th>Why</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>yylex()</code></td>
+<td>the generated scanner function</td>
+<td>you call it once; it loops internally, matching rule after rule, until EOF</td>
+</tr>
+<tr>
+<td><code>yytext</code></td>
+<td>the <strong>text that matched</strong></td>
+<td>that's the identifier/keyword/number you print</td>
+</tr>
+<tr>
+<td><code>yyleng</code></td>
+<td>length of <code>yytext</code> (<code>int</code>)</td>
+<td>used in Exp 3 to count characters</td>
+</tr>
+<tr>
+<td><code>%option noyywrap</code></td>
+<td>tells the generated scanner not to call <code>yywrap()</code></td>
+<td>saves you writing a dummy function</td>
+</tr>
+<tr>
+<td><code>%%</code></td>
+<td>section separator</td>
+<td>splits definitions / rules / user code</td>
+</tr>
+<tr>
+<td><code>%{ ... %}</code></td>
+<td>verbatim C to copy into the output</td>
+<td>where headers and global variables go</td>
+</tr>
+<tr>
+<td>the DFA inside <code>lex.yy.c</code></td>
+<td>generated automaton</td>
+<td>this is the "hidden" Exp 5/7 machinery — LEX literally builds an automaton for you</td>
+</tr>
+<tr>
+<td><code>lex lexer.l</code></td>
+<td>the generator</td>
+<td>translates patterns → <code>lex.yy.c</code></td>
+</tr>
+<tr>
+<td><code>gcc lex.yy.c</code></td>
+<td>compiles the generated scanner</td>
+<td><code>lex.yy.c</code> is ordinary C</td>
+</tr>
+</tbody>
+</table>
+<h3 id="6-algorithm-deep-pseudocode_1">6. Algorithm — deep pseudocode<a class="anchor" href="#6-algorithm-deep-pseudocode_1">#</a></h3>
+<p><pre><code>lexer.l structure:
+
+%option noyywrap
+%{
+#include &lt;stdio.h&gt;
+%}
+
+%%
+   &lt;keyword set&gt;        { printf(&quot;Keyword : %s\n&quot;, yytext); }
+   [a-zA-Z_][a-zA-Z0-9_]*  { printf(&quot;Identifier : %s\n&quot;, yytext); }
+   [0-9]+               { printf(&quot;Number : %s\n&quot;, yytext); }
+   &quot;+&quot;|&quot;-&quot;|&quot;*&quot;|&quot;/&quot;|&quot;=&quot;|&quot;&lt;&quot;|&quot;&gt;&quot;   { printf(&quot;Operator : %s\n&quot;, yytext); }
+   &quot;;&quot;|&quot;,&quot;|&quot;(&quot;|&quot;)&quot;|&quot;{&quot;|&quot;}&quot;       { printf(&quot;Special Symbol : %s\n&quot;, yytext); }
+   [ \t\n]+             ;        # empty action = discard
+   .                    ;        # catch-all = discard anything unmatched
+%%
+
+int main() {
+    printf(&quot;Enter a C program:\n&quot;);
+    yylex();                      # runs the whole scan
+    return 0;
+}
+
+# build:  lex lexer.l  →  gcc lex.yy.c  →  ./a.out
+</code></pre>
+Lex's internal algorithm, worth stating in words because it <em>is</em> Exp 7's algorithm:
+<em>the patterns are combined into one NFA, converted to a DFA (Exp 6 + Exp 7), and the DFA is
+simulated; the DFA simultaneously tracks the longest match found so far so that rule 1 is
+enforced.</em></p>
+<h3 id="7-algorithm-record-version-mid-level_1">7. Algorithm — record version (mid-level)<a class="anchor" href="#7-algorithm-record-version-mid-level_1">#</a></h3>
+<p><pre><code>ALGORITHM: Lexical Analysis using LEX
+1. Start.
+2. In the definitions section declare the required headers and global variables.
+3. In the rules section write a pattern–action pair for each token class:
+   a. keywords — print &quot;Keyword&quot;;
+   b. [a-zA-Z_][a-zA-Z0-9_]* (identifier) — print &quot;Identifier&quot;;
+   c. [0-9]+ (number) — print &quot;Number&quot;;
+   d. operators + - * / = &lt; &gt; — print &quot;Operator&quot;;
+   e. special symbols ; , ( ) { } — print &quot;Special Symbol&quot;;
+   f. blanks, tabs and newlines — no action.
+4. In the user-code section write main() which calls yylex().
+5. Generate the scanner with lex and compile the generated lex.yy.c with gcc.
+6. Run the program; yylex() applies the longest matching rule.
+7. Stop.
+</code></pre></p>
+<h3 id="verified-output_1">▶ Verified output<a class="anchor" href="#verified-output_1">#</a></h3>
+<p>Input <code>int a = a+b*2;</code> →
+<code>Keyword : int</code> / <code>Identifier : a</code> / <code>Operator : =</code> / <code>Identifier : a</code> / <code>Operator : +</code> /
+<code>Identifier : b</code> / <code>Operator : *</code> / <code>Number : 2</code> / <code>Special Symbol : ;</code></p>
+<hr />
+<h2 id="exp-3-count-lines-words-and-characters-using-lex-215">Exp 3 — Count lines, words and characters using LEX  ·  <code>lex_count.l</code><a class="anchor" href="#exp-3-count-lines-words-and-characters-using-lex-215">#</a></h2>
+<h3 id="1-why-this-exists_2">1. Why this exists<a class="anchor" href="#1-why-this-exists_2">#</a></h3>
+<p>Exp 2 used LEX to <em>label</em> tokens. This experiment proves the second half of the LEX claim: <strong>an
+action can be any C code, including updating counters.</strong> So you can also use a scanner to
+<em>measure</em> text. It also demonstrates that <code>yyleng</code> removes the need to count characters one at
+a time — you get the length of every match for free.</p>
+<h3 id="2-input-target-output_2">2. Input → target output<a class="anchor" href="#2-input-target-output_2">#</a></h3>
+<p><strong>Input:</strong> free text typed at stdin, ended with <strong>Ctrl+D</strong> (EOF).</p>
+<p><strong>Target output:</strong> three numbers.
+<pre><code>Number of lines      : 2
+Number of words      : 5
+Number of characters : 24
+</code></pre></p>
+<h3 id="3-the-logic_2">3. The logic<a class="anchor" href="#3-the-logic_2">#</a></h3>
+<p>Everything hinges on one rule: <strong>every rule must account for the characters it consumed.</strong>
+Since LEX hands each match to exactly one rule, if each rule adds <em>its own</em> <code>yyleng</code> (or <code>1</code>),
+the total is complete by construction — you never need to look at the input twice.</p>
+<p>Why 24 for <code>Hello world\nThis is Lex\n</code>? <code>Hello world</code> = 11, newline = 1, <code>This is Lex</code> = 11,
+newline = 1 → 24. The newline rule counts as <em>both</em> a line and a character; the whitespace rule
+counts only characters; the word rule counts a word <em>and</em> its characters.</p>
+<p>The word pattern <code>[a-zA-Z0-9]+</code> means a word is a run of alphanumerics. So <code>This</code> is one word,
+<code>is</code> another, <code>Lex</code> another, <code>Hello</code> and <code>world</code> two — total 5.</p>
+<h3 id="4-edge-cases_2">4. Edge cases<a class="anchor" href="#4-edge-cases_2">#</a></h3>
+<table>
+<thead>
+<tr>
+<th>Edge case</th>
+<th>How it's handled</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>end of input</td>
+<td><strong>Ctrl+D</strong> sends EOF; <code>yylex()</code> returns and <code>main</code> prints the totals. Typing Enter does <em>not</em> end it</td>
+</tr>
+<tr>
+<td>punctuation like <code>Hello,</code></td>
+<td><code>,</code> is not in the word class, so it matches the catch-all <code>.</code> rule → counted as a character, <strong>not</strong> as part of the word</td>
+</tr>
+<tr>
+<td>a lone number <code>2026</code></td>
+<td><code>[a-zA-Z0-9]+</code> — the word class includes digits, so it counts as <strong>one word</strong>. Know this if asked "how many words is <code>a1b2</code>?" → one</td>
+</tr>
+<tr>
+<td>leading/multiple spaces</td>
+<td><code>[ \t]+</code> — the <code>+</code> matches a <em>run</em> of spaces as one match, and <code>yyleng</code> credits all of them at once</td>
+</tr>
+<tr>
+<td>newlines inside words</td>
+<td>impossible — <code>\n</code> is excluded from the class, so words never span lines</td>
+</tr>
+<tr>
+<td>tabs</td>
+<td>the whitespace class <code>[ \t]+</code> covers tabs, so tab-width never matters for counting</td>
+</tr>
+</tbody>
+</table>
+<h3 id="5-built-ins-used-and-why">5. Built-ins used (and why)<a class="anchor" href="#5-built-ins-used-and-why">#</a></h3>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>What / Why</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>lines</code>, <code>words</code>, <code>characters</code></td>
+<td><strong>global</strong> counters declared in the <code>%{ %}</code> block, so every rule's action can reach them</td>
+</tr>
+<tr>
+<td><code>yyleng</code></td>
+<td>number of characters in the current match. <strong>Why:</strong> the rules never see raw characters, so the match's length is the only way to know how many characters were consumed</td>
+</tr>
+<tr>
+<td><code>yylex()</code></td>
+<td>runs the scan to EOF</td>
+</tr>
+<tr>
+<td><code>\n</code> inside a pattern</td>
+<td>a newline character in a regular expression — the line counter's trigger</td>
+</tr>
+<tr>
+<td><code>.</code> (dot)</td>
+<td>matches <strong>any single character</strong> — the catch-all for punctuation and anything not covered above</td>
+</tr>
+</tbody>
+</table>
+<h3 id="6-algorithm-deep-pseudocode_2">6. Algorithm — deep pseudocode<a class="anchor" href="#6-algorithm-deep-pseudocode_2">#</a></h3>
+<p><pre><code>%{
+#include &lt;stdio.h&gt;
+int lines = 0, words = 0, characters = 0;
+%}
+
+%%
+   \n             { lines++;  characters++; }                  # a line ends AND it is a char
+   [ \t]+         { characters += yyleng;   }                  # a run of blanks, all counted
+   [a-zA-Z0-9]+   { words++;  characters += yyleng; }           # a word; its letters count too
+   .              { characters++;           }                  # anything else is one char
+%%
+
+int yywrap() { return 1; }        # 1 = &quot;no more input, stop&quot; (this file did not use noyywrap)
+
+int main() {
+    printf(&quot;Enter the text:\n&quot;);
+    yylex();
+    printf(&quot;\nNumber of lines      : %d\n&quot;, lines);
+    printf(&quot;Number of words      : %d\n&quot;, words);
+    printf(&quot;Number of characters : %d\n&quot;, characters);
+    return 0;
+}
+</code></pre>
+The invariant to say out loud: <strong>every input character is credited to exactly one rule, so the
+character total is always right.</strong></p>
+<h3 id="7-algorithm-record-version-mid-level_2">7. Algorithm — record version (mid-level)<a class="anchor" href="#7-algorithm-record-version-mid-level_2">#</a></h3>
+<p><pre><code>ALGORITHM: Count lines, words and characters using LEX
+1. Start.
+2. Declare global counters lines = 0, words = 0, characters = 0.
+3. Write the rules:
+   a. newline — lines++ and characters++;
+   b. blanks and tabs — characters = characters + yyleng;
+   c. a word (one or more letters/digits) — words++ and characters = characters + yyleng;
+   d. any other single character — characters++.
+4. Write main(): print a prompt, call yylex(), then print the three counters.
+5. Compile using lex and gcc, run, type the text and press Ctrl+D to signal end of input.
+6. Stop.
+</code></pre></p>
+<h3 id="verified-output_2">▶ Verified output<a class="anchor" href="#verified-output_2">#</a></h3>
+<p>Input <code>Hello world</code> ⏎ <code>This is Lex</code> ⏎ Ctrl+D → <code>2</code> lines, <code>5</code> words, <code>24</code> characters.</p>
+<hr />
+<h2 id="exp-4-valid-identifier-check-using-lex-yacc-254-255">Exp 4 — Valid identifier check using LEX + YACC  ·  <code>lex_id.l</code>, <code>yacc_id.y</code><a class="anchor" href="#exp-4-valid-identifier-check-using-lex-yacc-254-255">#</a></h2>
+<h3 id="1-why-this-exists_3">1. Why this exists<a class="anchor" href="#1-why-this-exists_3">#</a></h3>
+<p>This is the pivotal step in the course. Exp 2 and 3 proved that LEX can recognise tokens —
+and also proved what LEX <strong>cannot</strong> do:</p>
+<blockquote>
+<p>LEX can tell you <code>a</code> is a letter and <code>1</code> is a digit. It <strong>cannot</strong> tell you that <code>abc123</code> is a
+valid name while <code>123abc</code> is not.</p>
+</blockquote>
+<p>Why not? Because "first character must be a letter" is a statement about the <strong>order and
+arrangement</strong> of tokens, and LEX patterns are regular expressions, which cannot count or
+remember position. <strong>Structure is a different kind of question.</strong> Answering it needs a
+<strong>grammar</strong>, and a <strong>parser</strong> (YACC) to apply it.</p>
+<p>So this experiment is the handover: <strong>LEX chops characters into tokens → YACC judges their
+sequence.</strong> Two programs, each with one job.</p>
+<h3 id="2-input-target-output_3">2. Input → target output<a class="anchor" href="#2-input-target-output_3">#</a></h3>
+<p><strong>Input:</strong> an identifier typed at stdin (<code>abc123</code>, <code>123abc</code>...).</p>
+<p><strong>Target output:</strong>
+<pre><code>Enter an identifier: abc123
+Valid Identifier
+123abc
+Invalid Identifier
+</code></pre></p>
+<h3 id="3-the-logic_3">3. The logic<a class="anchor" href="#3-the-logic_3">#</a></h3>
+<p>Split the problem in two:</p>
+<p><strong>Part 1 — <code>lex_id.l</code> (tokeniser).</strong> Don't return "letter" as a <em>value</em>; return it as a
+<strong>token code</strong>: <code>return LETTER;</code> and <code>return DIGIT;</code>. These are numbers that YACC understands.
+The lexer deliberately does <em>no</em> judgement — a letter is a letter whether it's first or fifth.</p>
+<p><strong>Part 2 — <code>yacc_id.y</code> (parser).</strong> State the rule as a grammar:</p>
+<p><pre><code>start      : identifier &#x27;\n&#x27;
+identifier : LETTER
+           | identifier LETTER
+           | identifier DIGIT
+</code></pre></p>
+<p>Read the third line as a recursive definition: <em>"an identifier followed by one more digit is
+still an identifier."</em> Tracing <code>abc123</code>:</p>
+<p><pre><code>LETTER(a)  → identifier            (2nd rule)
+           → identifier LETTER(b)  (3rd rule → &quot;ab&quot;)
+           → identifier LETTER(c)  (→ &quot;abc&quot;)
+           → identifier DIGIT(1)   (4th rule → &quot;abc1&quot;)
+           → identifier DIGIT(2)   (→ &quot;abc12&quot;)
+           → identifier DIGIT(3)   (→ &quot;abc123&quot;)
+then &#x27;\n&#x27; completes `start` → Valid
+</code></pre></p>
+<p>Now trace <code>123abc</code>: the <strong>first</strong> token is <code>DIGIT</code>. But every rule for <code>identifier</code> must
+<em>start</em> from <code>LETTER</code> — the only base case is <code>identifier : LETTER</code>. There is no way to even
+begin, so no derivation exists, <code>yyparse</code> fails, and YACC calls <strong><code>yyerror()</code></strong>.</p>
+<p><strong>Why <code>identifier</code> appears on both sides of the rule</strong> — this is <strong>left recursion</strong>. YACC
+prefers it (LALR parsers handle left recursion in constant stack space), and every real grammar
+for a list is written this way. It is also why the rule is <em>not</em> written
+<code>identifier : LETTER identifier</code>, which would be right recursion and would build the string
+backwards.</p>
+<h3 id="4-edge-cases_3">4. Edge cases<a class="anchor" href="#4-edge-cases_3">#</a></h3>
+<table>
+<thead>
+<tr>
+<th>Edge case</th>
+<th>How it's handled</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>abc123</code></td>
+<td>valid — letters then digits, both allowed <em>after</em> the first position</td>
+</tr>
+<tr>
+<td><code>123abc</code></td>
+<td>invalid — first token is <code>DIGIT</code>, and no rule starts with <code>DIGIT</code></td>
+</tr>
+<tr>
+<td>a single letter <code>a</code></td>
+<td>valid — the base rule <code>identifier : LETTER</code> covers the one-character case</td>
+</tr>
+<tr>
+<td>uppercase <code>ABC</code></td>
+<td>valid — <code>[a-zA-Z]</code> covers both cases</td>
+</tr>
+<tr>
+<td>empty input (just Enter)</td>
+<td>the lexer returns <code>&#x27;\n&#x27;</code> immediately; <code>identifier</code> cannot derive the empty string, so → Invalid</td>
+</tr>
+<tr>
+<td>underscore <code>_ab</code></td>
+<td><strong>invalid here</strong> — <code>[a-zA-Z]</code> does not include <code>_</code> (C allows it; this grammar doesn't). Know the difference if asked</td>
+</tr>
+<tr>
+<td><code>abc def</code> (a space)</td>
+<td>the lexer's catch-all returns the space as a character token, which no rule accepts → Invalid</td>
+</tr>
+<tr>
+<td>the newline in <code>start : identifier &#x27;\n&#x27;</code></td>
+<td><strong>why is it there?</strong> Without it, <code>yyparse</code> would not know when the identifier has ended; the <code>\n</code> is the signal "the name is complete"</td>
+</tr>
+<tr>
+<td>missing <code>y.tab.h</code></td>
+<td>the lexer includes <code>&quot;y.tab.h&quot;</code> for <code>LETTER</code>/<code>DIGIT</code>. That file only exists if yacc was run with <strong><code>-d</code></strong> — hence the flag</td>
+</tr>
+<tr>
+<td>linking failure</td>
+<td><code>-ll</code> links the lex library; on a <strong>flex</strong> system the library is <code>-lfl</code> (verified: this machine needed <code>-lfl</code>)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="5-built-ins-tool-constructs-used-and-why">5. Built-ins / tool constructs used (and why)<a class="anchor" href="#5-built-ins-tool-constructs-used-and-why">#</a></h3>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>What / Why</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>return LETTER;</code> (in lex)</td>
+<td>hands a <strong>token code</strong> to the parser instead of printing. This is the interface between the two tools</td>
+</tr>
+<tr>
+<td><code>return yytext[0];</code></td>
+<td>returns the <strong>actual character</strong> as its own token code — for single characters like <code>\n</code> this is the convention (they need no <code>%token</code> declaration)</td>
+</tr>
+<tr>
+<td><code>%token LETTER DIGIT</code> (in yacc)</td>
+<td>declares the names; yacc assigns them numbers and writes them into <code>y.tab.h</code></td>
+</tr>
+<tr>
+<td><code>yyparse()</code></td>
+<td>the generated parser — you call it and it drives the whole parse</td>
+</tr>
+<tr>
+<td><code>yylex()</code></td>
+<td>called <strong>by</strong> <code>yyparse()</code> to fetch the next token (that's the handover)</td>
+</tr>
+<tr>
+<td><code>yyerror()</code></td>
+<td>yacc calls this when the sequence breaks the grammar — our "Invalid Identifier"</td>
+</tr>
+<tr>
+<td><code>|</code> (in the grammar)</td>
+<td>"or" — alternatives for the same left-hand side</td>
+</tr>
+<tr>
+<td><code>yacc -d yacc_id.y</code></td>
+<td>generates <code>y.tab.c</code> <strong>and</strong> <code>y.tab.h</code> (the <code>-d</code> = definitions header)</td>
+</tr>
+<tr>
+<td><code>lex lex_id.l</code></td>
+<td>generates <code>lex.yy.c</code></td>
+</tr>
+<tr>
+<td><code>gcc y.tab.c lex.yy.c -ll</code></td>
+<td>links the two generated files plus the lex library</td>
+</tr>
+</tbody>
+</table>
+<h3 id="6-algorithm-deep-pseudocode_3">6. Algorithm — deep pseudocode<a class="anchor" href="#6-algorithm-deep-pseudocode_3">#</a></h3>
+<p><pre><code>=========== lex_id.l — PART 1: characters → tokens ===========
+%{
+#include &quot;y.tab.h&quot;          # LETTER and DIGIT come from here (needs yacc -d)
+%}
+%%
+   [a-zA-Z]   { return LETTER; }        # a letter → ITS CLASS, not its value
+   [0-9]      { return DIGIT;  }
+   \n         { return &#x27;\n&#x27;;   }        # end-of-name signal
+   .          { return yytext[0]; }     # anything else → itself
+%%
+   # no main() and no yywrap() here — yacc supplies main, and the tokens are enough
+
+=========== yacc_id.y — PART 2: tokens → judgement ===========
+%{
+#include &lt;stdio.h&gt;
+int yylex(void); int yyerror(char *s);
+%}
+%token LETTER DIGIT
+
+%%
+start      : identifier &#x27;\n&#x27;   { printf(&quot;Valid Identifier\n&quot;); }
+           ;
+identifier : LETTER                       # base case: must START with a letter
+           | identifier LETTER            # left recursion: keep letters coming
+           | identifier DIGIT             # ...and digits after the first position
+           ;
+%%
+
+int main() {
+    printf(&quot;Enter an identifier: &quot;);
+    yyparse();                            # drives lex + the grammar
+    return 0;
+}
+int yyerror(char *s) {
+    printf(&quot;Invalid Identifier\n&quot;);
+    return 0;
+}
+
+# build:  yacc -d yacc_id.y  →  lex lex_id.l  →  gcc y.tab.c lex.yy.c -ll  →  ./a.out
+</code></pre>
+State the division of labour in one sentence: <strong>LEX classifies each character into a token;
+YACC accepts or rejects the resulting token <em>sequence</em> against the grammar.</strong></p>
+<h3 id="7-algorithm-record-version-mid-level_3">7. Algorithm — record version (mid-level)<a class="anchor" href="#7-algorithm-record-version-mid-level_3">#</a></h3>
+<p><pre><code>ALGORITHM: Validate an identifier using LEX and YACC
+
+Part 1 — lex_id.l (tokeniser)
+1. Include y.tab.h so the token names LETTER and DIGIT are known.
+2. Rules: [a-zA-Z] → return LETTER;  [0-9] → return DIGIT;  &#x27;\n&#x27; → return &#x27;\n&#x27;;
+   any other character → return that character.
+   (no main() — yacc supplies it)
+
+Part 2 — yacc_id.y (parser)
+1. Declare the tokens with %token LETTER DIGIT.
+2. Write the grammar:
+     start      : identifier &#x27;\n&#x27;  { print &quot;Valid Identifier&quot; } ;
+     identifier : LETTER | identifier LETTER | identifier DIGIT ;
+3. main() prompts and calls yyparse().
+4. yyerror() prints &quot;Invalid Identifier&quot;.
+5. Build: yacc -d yacc_id.y  →  lex lex_id.l  →  gcc y.tab.c lex.yy.c -ll  →  ./a.out.
+6. Stop.
+</code></pre></p>
+<h3 id="verified-output_3">▶ Verified output<a class="anchor" href="#verified-output_3">#</a></h3>
+<p><code>abc123</code> → <code>Valid Identifier</code>  ·  <code>123abc</code> → <code>Invalid Identifier</code></p>
+<hr />
+<p><strong>Next group:</strong> Group B (Exp 5–7) — the automata chain, where each experiment's output is the
+next one's input.</p>
+  </main>
+</div>
+<button id="chat-btn" title="Ask about this page (select text first)">✳</button>
+<div id="sel-chip">Ask about this</div>
+<div id="chat-panel" role="dialog" aria-label="Ask about this page">
+  <div id="chat-head"><span>Ask this page</span><span class="sp"></span><button id="chat-close" title="Close">✕</button></div>
+  <div id="chat-quote"></div>
+  <div id="chat-log"></div>
+  <form id="chat-form" autocomplete="off">
+    <textarea id="chat-input" rows="1" placeholder="Ask about the selection or the section…"></textarea>
+    <button id="chat-send" title="Send">↑</button>
+  </form>
+  <div id="chat-foot">Select text → “Ask about this”. Enter sends, Shift+Enter newline.</div>
+</div>
+<div class="tools">
+  <button id="theme" title="Toggle light / dark">☾</button>
+  <button id="top" title="Back to top">↑</button>
+</div>
+<script>
+(function(){
+  var root=document.documentElement, key='minotes-theme';
+  var saved=localStorage.getItem(key);
+  var prefers=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';
+  root.setAttribute('data-theme', saved || prefers);
+
+  var btn=document.getElementById('theme');
+  function sync(){ if(btn) btn.textContent = root.getAttribute('data-theme')==='dark' ? '\u2600' : '\u263E'; }
+  sync();
+  if(btn) btn.addEventListener('click',function(){
+    var next = root.getAttribute('data-theme')==='dark' ? 'light' : 'dark';
+    root.setAttribute('data-theme', next); localStorage.setItem(key,next); sync();
+  });
+
+  var bar=document.getElementById('progress');
+  if(bar) addEventListener('scroll',function(){
+    var h=document.documentElement.scrollHeight-innerHeight;
+    bar.style.width=(h>0?(scrollY/h*100):0)+'%';
+  },{passive:true});
+
+  document.querySelectorAll('pre').forEach(function(pre){
+    var b=document.createElement('button');
+    b.className='copy'; b.textContent='copy';
+    b.addEventListener('click',function(){
+      var t=pre.querySelector('code'); var txt=t?t.innerText:pre.innerText;
+      navigator.clipboard.writeText(txt).then(function(){
+        b.textContent='copied'; setTimeout(function(){b.textContent='copy';},1200);
+      });
+    });
+    pre.appendChild(b);
+  });
+
+  document.querySelectorAll('main table').forEach(function(t){
+    if(t.parentElement.classList.contains('table-scroll')) return;
+    var w=document.createElement('div'); w.className='table-scroll';
+    t.parentNode.insertBefore(w,t); w.appendChild(t);
+  });
+
+  var links=[].slice.call(document.querySelectorAll('.sidebar a[href^="#"]'));
+  var map={}; links.forEach(function(a){ map[a.getAttribute('href').slice(1)]=a; });
+  var heads=[].slice.call(document.querySelectorAll('main h2[id], main h3[id]'));
+  if('IntersectionObserver' in window && heads.length){
+    var obs=new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if(!e.isIntersecting) return;
+        links.forEach(function(a){a.classList.remove('active');});
+        var a=map[e.target.id]; if(a){a.classList.add('active');}
+      });
+    },{rootMargin:'-10% 0px -75% 0px'});
+    heads.forEach(function(h){obs.observe(h);});
+  }
+
+  var top=document.getElementById('top');
+  if(top) top.addEventListener('click',function(){ scrollTo({top:0,behavior:'smooth'}); });
+})();
+
+(function(){
+  var API="/api/chat";
+  var panel=document.getElementById("chat-panel"),
+      btn=document.getElementById("chat-btn"),
+      chip=document.getElementById("sel-chip"),
+      quote=document.getElementById("chat-quote"),
+      log=document.getElementById("chat-log"),
+      input=document.getElementById("chat-input"),
+      send=document.getElementById("chat-send"),
+      form=document.getElementById("chat-form");
+
+  if(!panel) return;
+  var pendingSelection="", busy=false, lastSelection="";
+
+  function esc(s){return s.replace(/[&<>]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;"}[c];});}
+
+  // minimal markdown: fenced code, inline code, bold, bullets, numbered lists
+  function md(src){
+    var parts=src.split(/```/), out="";
+    for(var i=0;i<parts.length;i++){
+      if(i%2){ out+="<pre><code>"+esc(parts[i].replace(/^\w*\n/,""))+"</code></pre>"; continue; }
+      var t=esc(parts[i]);
+      t=t.replace(/`([^`\n]+)`/g,"<code>$1</code>").replace(/\*\*([^*]+)\*\*/g,"<b>$1</b>");
+      var lines=t.split(/\n/), html="", inUl=false, inOl=false;
+      for(var j=0;j<lines.length;j++){
+        var line=lines[j];
+        if(/^\s*[-*]\s+/.test(line)){
+          if(inOl){html+="</ol>";inOl=false;}
+          if(!inUl){html+="<ul>";inUl=true;}
+          html+="<li>"+line.replace(/^\s*[-*]\s+/,"")+"</li>"; continue;
+        }
+        if(/^\s*\d+[.)]\s+/.test(line)){
+          if(inUl){html+="</ul>";inUl=false;}
+          if(!inOl){html+="<ol>";inOl=true;}
+          html+="<li>"+line.replace(/^\s*\d+[.)]\s+/,"")+"</li>"; continue;
+        }
+        if(inUl){html+="</ul>";inUl=false;}
+        if(inOl){html+="</ol>";inOl=false;}
+        if(line.trim()==="") continue;
+        html+="<p>"+line+"</p>";
+      }
+      if(inUl)html+="</ul>";
+      if(inOl)html+="</ol>";
+      out+=html;
+    }
+    return out;
+  }
+
+  function outline(){
+    return [].slice.call(document.querySelectorAll("main h2, main h3")).slice(0,40)
+      .map(function(h){return (h.tagName==="H3"?"  - ":"- ")+h.textContent.replace(/#$/,"").trim();}).join("\n");
+  }
+
+  function sectionFor(node){
+    var el = node && (node.nodeType===1?node:node.parentElement);
+    if(!el || !el.closest) return "";
+    el = el.closest("main") ? el : null;
+    if(!el) return "";
+    var heads=[].slice.call(document.querySelectorAll("main h2, main h3"));
+    var cur=null, idx=-1;
+    for(var i=0;i<heads.length;i++){
+      if(heads[i].compareDocumentPosition(el) & Node.DOCUMENT_POSITION_FOLLOWING) { cur=heads[i]; idx=i; }
+    }
+    if(!cur) return "";
+    var stop = heads[idx+1] || null, txt=[], n=cur;
+    while((n=n.nextSibling) && n!==stop){ if(n.textContent) txt.push(n.textContent); }
+    return (cur.textContent+"\n"+txt.join("\n")).replace(/\s+\n/g,"\n").slice(0,3000);
+  }
+
+  function placeChip(x,y){
+    chip.style.left=x+"px"; chip.style.top=(y+window.scrollY-8)+"px"; chip.style.display="block";
+  }
+  function hideChip(){ chip.style.display="none"; }
+
+  document.addEventListener("mouseup",function(e){
+    setTimeout(function(){
+      var s=window.getSelection(), text=s?s.toString().trim():"";
+      if(!text || text.length<3 || !s.anchorNode || !(s.anchorNode.parentElement||s.anchorNode).closest("main")){hideChip();return;}
+      lastSelection=text;
+      var r=s.getRangeAt(0).getBoundingClientRect();
+      placeChip(r.left+r.width/2, Math.max(r.top,8));
+    },10);
+  });
+  document.addEventListener("mousedown",function(e){ if(e.target!==chip) hideChip(); });
+
+  chip.addEventListener("mousedown",function(e){ e.preventDefault(); });
+  chip.addEventListener("click",function(e){
+    e.stopPropagation();
+    pendingSelection=lastSelection; hideChip(); open(pendingSelection);
+  });
+
+  function open(sel){
+    panel.classList.add("open");
+    if(sel){ quote.style.display="block"; quote.textContent=sel; pendingSelection=sel; }
+    else { quote.style.display="none"; quote.textContent=""; pendingSelection=""; }
+    setTimeout(function(){input.focus();},60);
+  }
+  function close(){ panel.classList.remove("open"); }
+
+  btn.addEventListener("click",function(){ panel.classList.contains("open")?close():open(lastSelection||""); });
+  document.getElementById("chat-close").addEventListener("click",close);
+  document.addEventListener("keydown",function(e){ if(e.key==="Escape") close(); });
+
+  function addMsg(cls,html){
+    var d=document.createElement("div"); d.className="msg "+cls; d.innerHTML=html; log.appendChild(d);
+    log.scrollTop=log.scrollHeight; return d;
+  }
+
+  async function ask(q){
+    if(busy||!q.trim()) return;
+    busy=true; send.disabled=true;
+    addMsg("user",esc(q));
+    var bot=addMsg("bot",'<span class="cursor"></span>');
+    var acc="";
+    var sid=sessionStorage.getItem("mn-sid");
+    if(!sid){ sid=(crypto.randomUUID?crypto.randomUUID():String(Date.now())+Math.random().toString(16).slice(2)); sessionStorage.setItem("mn-sid",sid); }
+    var payload={q:q, sid:sid, sel:pendingSelection||"", page:document.querySelector("h1")?document.querySelector("h1").textContent.trim():document.title,
+                 section:sectionFor(window.getSelection()&&window.getSelection().anchorNode?"":document.querySelector("main h2"))||"",
+                 outline:outline()};
+    // section: prefer the one containing the selection, else the first heading on screen
+    try{
+      var sel=window.getSelection();
+      if(pendingSelection && sel && sel.anchorNode){ payload.section=sectionFor(sel.anchorNode); }
+      if(!payload.section){
+        var vis=[].slice.call(document.querySelectorAll("main h2, main h3")).filter(function(h){
+          var r=h.getBoundingClientRect(); return r.top>-80 && r.top<window.innerHeight*0.6; }).pop();
+        if(vis) payload.section=sectionFor(vis);
+      }
+    }catch(_){}
+
+    try{
+      var res=await fetch(API,{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify(payload)});
+      if(!res.ok){
+        var j=await res.json().catch(function(){return{};});
+        throw new Error(j.error||("HTTP "+res.status));
+      }
+      var reader=res.body.getReader(), dec=new TextDecoder(), buf="";
+      for(;;){
+        var r=await reader.read(); if(r.done) break;
+        buf+=dec.decode(r.value,{stream:true});
+        var lines=buf.split("\n"); buf=lines.pop()||"";
+        for(var i=0;i<lines.length;i++){
+          var l=lines[i].trim(); if(l.indexOf("data:")!==0) continue;
+          var d=l.slice(5).trim(); if(d==="[DONE]") continue;
+          try{ var o=JSON.parse(d); if(o.d){acc+=o.d; bot.innerHTML=md(acc)+'<span class="cursor"></span>'; log.scrollTop=log.scrollHeight;} if(o.error) throw new Error(o.error);}catch(_){}
+        }
+      }
+      bot.innerHTML=md(acc||"_no answer_");
+    }catch(err){
+      bot.className="msg err";
+      bot.textContent = String(err.message).indexOf("Failed to fetch")>-1 || String(err.message).indexOf("HTTP 5")>-1
+        ? "Assistant unavailable — it only works on the deployed site (needs the /api/chat function)."
+        : "Error: "+err.message;
+    }finally{
+      busy=false; send.disabled=false; input.value=""; input.focus();
+      pendingSelection=""; quote.style.display="none";
+    }
+  }
+
+  form.addEventListener("submit",function(e){ e.preventDefault(); ask(input.value); });
+  input.addEventListener("keydown",function(e){
+    if(e.key==="Enter"&&!e.shiftKey){ e.preventDefault(); ask(input.value); }
+  });
+  input.addEventListener("input",function(){ input.style.height="auto"; input.style.height=Math.min(input.scrollHeight,110)+"px"; });
+})();
+</script>
+
+</body>
+</html>
