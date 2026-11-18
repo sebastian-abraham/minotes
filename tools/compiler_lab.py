@@ -635,3 +635,175 @@ def build_pages(subject_title, base_css):
             .replace("{{TPL}}", tpl_data)
             .replace("{{JS}}", PLAY_JS))
     return lab, play
+
+
+# --------------------------------------------------------------------------- viva page
+VIVA_CSS = """
+body{padding-bottom:70px}
+.vv{max-width:1000px;margin:0 auto;padding:24px 22px 60px}
+.vv .head{border-bottom:1px solid var(--line);padding-bottom:14px;margin-bottom:16px;
+  display:flex;gap:14px;align-items:baseline;flex-wrap:wrap}
+.vv .head h1{font-size:1.45rem;margin:0}
+.vv .head .sub{color:var(--muted);font-size:12.5px;flex:1}
+.vv .head a{font-size:12.5px;color:var(--muted);text-decoration:none}
+.vv .head a:hover{color:var(--accent)}
+.pipe{display:flex;gap:6px;flex-wrap:wrap;align-items:stretch;margin:12px 0 6px}
+.ph{flex:1 1 130px;min-width:120px;border:1px solid var(--line);border-radius:9px;
+  background:var(--panel);padding:9px 10px}
+.ph b{display:block;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent)}
+.ph .io{font-family:var(--mono);font-size:10.5px;color:var(--muted);margin-top:3px;line-height:1.4}
+.ph .n{font-family:var(--mono);font-size:10px;color:var(--muted);opacity:.7}
+.side{margin-top:8px;font-size:12px;color:var(--muted)}
+.controls{position:sticky;top:0;z-index:5;background:var(--bg,#fff);padding:10px 0;margin:14px 0 6px;
+  display:flex;gap:8px;align-items:center;flex-wrap:wrap;border-bottom:1px solid var(--line)}
+.controls input{flex:1 1 220px;min-width:160px;font-family:var(--mono);font-size:12.5px;
+  background:var(--code-bg);color:var(--ink);border:1px solid var(--line);border-radius:7px;padding:8px 10px}
+.btn{font:600 12px/1 var(--sans);border:1px solid var(--line);background:var(--panel);color:var(--ink);
+  border-radius:7px;padding:7px 11px;cursor:pointer}
+.btn:hover{border-color:var(--accent);color:var(--accent)}
+.btn.p{background:var(--accent);color:#fff;border-color:var(--accent)}
+.cnt{font-family:var(--mono);font-size:11.5px;color:var(--muted)}
+h2.s{font-size:1.02rem;margin:26px 0 4px;padding-top:8px;border-top:1px solid var(--line)}
+h2.s:first-of-type{border-top:none}
+.bl{font-size:12.5px;color:var(--muted);margin:0 0 10px}
+.q{border:1px solid var(--line);border-radius:9px;margin:6px 0;background:var(--panel);cursor:pointer;
+  overflow:hidden}
+.q:hover{border-color:var(--accent)}
+.q .qq{font-size:13.2px;font-weight:600;padding:9px 12px;line-height:1.4;display:flex;gap:8px}
+.q .qq .m{color:var(--accent);flex:0 0 14px;font-family:var(--mono);font-size:11px}
+.q .aa{font-size:13px;line-height:1.55;padding:0 12px 10px 34px;color:var(--ink)}
+.quiz .aa{display:none}
+.quiz .q.open .aa{display:block}
+.q.open{background:var(--accent-soft)}
+.def{border-left:2px solid var(--accent);padding:7px 0 7px 12px;margin:8px 0;font-size:13px;line-height:1.55}
+.def b{display:block;color:var(--accent);font-size:12px;margin-bottom:2px}
+.hide{display:none!important}
+@media print{.controls{display:none}.quiz .aa{display:block!important}}
+"""
+
+VIVA_PAGE = """<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Viva &amp; MCQ — {{SUBJECT}}</title>
+<style>{{CSS}}</style>
+</head>
+<body>
+<div class="vv">
+  <div class="head">
+    <h1>Viva &amp; MCQ notes</h1>
+    <span class="sub">Whole course, one line per answer — not just the 11 experiments</span>
+    <a href="lab.html">Lab bench</a>
+    <a href="index.html">All documents</a>
+  </div>
+
+  <div class="pipe">{{PIPES}}</div>
+  <div class="side">Every phase reads and writes the <b>symbol table</b>; every phase reports to the
+    <b>error handler</b>. Front end = first four (machine-independent). Back end = last two.</div>
+
+  <div class="controls">
+    <input id="q" type="search" placeholder="filter — parse tree, yacc, epsilon, quadruple…">
+    <button class="btn" id="quiz">Quiz mode: off</button>
+    <button class="btn" id="all">Reveal all</button>
+    <span class="cnt" id="cnt"></span>
+  </div>
+
+  <div id="body">{{BODY}}</div>
+</div>
+<script>{{JS}}</script>
+</body>
+</html>
+"""
+
+VIVA_JS = r"""
+var quiz = false;
+var body = document.getElementById('body');
+var cards = [].slice.call(body.querySelectorAll('.q'));
+
+function counts(){
+  var shown = cards.filter(function(c){return c.offsetParent !== null;}).length;
+  var open = cards.filter(function(c){return c.classList.contains('open');}).length;
+  document.getElementById('cnt').textContent = shown + ' shown · ' + open + ' revealed';
+}
+
+cards.forEach(function(c){
+  c.addEventListener('click', function(){
+    c.classList.toggle('open');
+    counts();
+  });
+});
+
+document.getElementById('quiz').addEventListener('click', function(){
+  quiz = !quiz;
+  document.body.classList.toggle('quiz', quiz);
+  this.textContent = 'Quiz mode: ' + (quiz ? 'on — click a card to reveal' : 'off');
+  this.classList.toggle('p', quiz);
+  if(quiz){ cards.forEach(function(c){c.classList.remove('open');}); }
+  counts();
+});
+
+document.getElementById('all').addEventListener('click', function(){
+  var anyClosed = cards.some(function(c){return !c.classList.contains('open');});
+  cards.forEach(function(c){ c.classList.toggle('open', anyClosed); });
+  document.body.classList.remove('quiz'); quiz = false;
+  document.getElementById('quiz').textContent = 'Quiz mode: off';
+  document.getElementById('quiz').classList.remove('p');
+  counts();
+});
+
+document.getElementById('q').addEventListener('input', function(){
+  var term = this.value.trim().toLowerCase();
+  body.querySelectorAll('h2.s').forEach(function(h){
+    var sec = h.nextElementSibling;           //  .bl  (may be empty)
+    var list = [];
+    var node = h.nextElementSibling;
+    while(node && node.tagName !== 'H2'){ list.push(node); node = node.nextElementSibling; }
+    var hits = 0;
+    list.forEach(function(n){
+      if(n.classList.contains('q')){
+        var txt = n.textContent.toLowerCase();
+        var show = !term || txt.indexOf(term) >= 0;
+        n.classList.toggle('hide', !show);
+        if(show) hits++;
+      }
+    });
+    var hideSection = term && hits === 0;
+    h.classList.toggle('hide', hideSection);
+    list.forEach(function(n){ if(n.classList.contains('bl')) n.classList.toggle('hide', hideSection); });
+  });
+  counts();
+});
+
+counts();
+"""
+
+
+def build_viva(subject_title, base_css):
+    import compiler_viva_data as vd
+    pipes = []
+    for i, (name, (inp, outp)) in enumerate(zip(vd.PHASES, vd.PHASE_IO), 1):
+        pipes.append('<div class="ph"><span class="n">%d</span><b>%s</b>'
+                     '<div class="io">%s → %s</div></div>' %
+                     (i, html.escape(name), html.escape(inp), html.escape(outp)))
+
+    parts = []
+    for title, blurb, rows in vd.SECTIONS:
+        parts.append('<h2 class="s">%s</h2>' % html.escape(title))
+        parts.append('<p class="bl">%s</p>' % html.escape(blurb) if blurb else "")
+        for q, a in rows:
+            parts.append('<div class="q"><div class="qq"><span class="m">▸</span><span>%s</span></div>'
+                         '<div class="aa">%s</div></div>' % (html.escape(q), html.escape(a)))
+
+    parts.append('<h2 class="s">9. Say this if grilled</h2>')
+    parts.append('<p class="bl">Eight sentences that fit almost any question — memorise the shape, '
+                 'not the words.</p>')
+    for q, a in vd.DEFENCE:
+        parts.append('<div class="def"><b>%s</b>%s</div>' % (html.escape(q), html.escape(a)))
+
+    return (VIVA_PAGE
+            .replace("{{SUBJECT}}", html.escape(subject_title))
+            .replace("{{CSS}}", base_css + VIVA_CSS)
+            .replace("{{PIPES}}", "".join(pipes))
+            .replace("{{BODY}}", "\n".join(parts))
+            .replace("{{JS}}", VIVA_JS))

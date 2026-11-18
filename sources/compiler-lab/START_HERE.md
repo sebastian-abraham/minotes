@@ -27,6 +27,7 @@ a **Curveballs** section listing exactly that — the four likely modifications 
 
 | Page | What it's for |
 |---|---|
+| **Viva & MCQ** | the whole course in 85 one-line answers — phases, lex, yacc, parsing, IR — with quiz mode and a filter. Start here if the examiner asks theory |
 | **Lab bench** | the 11 experiments: steps ↔ code, plus a **trace player** that runs the algorithm on your own input and lights the live line at every step |
 | **Playground** | write a program in the browser and actually compile + run it (real gcc, remote sandbox); templates for all 11 |
 | **Group kits** (A–D) | the long-form derivation: why it exists, the deep pseudocode, the mid-level record version, worked runs, edge cases |

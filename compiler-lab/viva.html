@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Viva &amp; MCQ — Compiler Lab</title>
+<style>
+:root{
+  --bg:#fbfaf8; --panel:#ffffff; --ink:#232120; --muted:#5f5a53; --line:#e6e1da;
+  --accent:#7a4fd0; --accent-soft:#f1ecfb; --code-bg:#f5f2ee; --code-ink:#2b2a28;
+  --warn-bg:#fff8e6; --warn-line:#f0d9a0;
+  --sans:"Inter","Segoe UI",system-ui,-apple-system,"Noto Sans",sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,"SF Mono",Menlo,Consolas,"Fira Code",monospace;
+}
+html[data-theme="dark"]{
+  --bg:#141317; --panel:#1b1a20; --ink:#e8e4de; --muted:#a8a199; --line:#2f2c36;
+  --accent:#b79cf5; --accent-soft:#241f33; --code-bg:#22202a; --code-ink:#e8e4de;
+  --warn-bg:#2a2417; --warn-line:#4a3d22;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0; background:var(--bg); color:var(--ink); font-family:var(--sans);
+  font-size:16.5px; line-height:1.72; -webkit-font-smoothing:antialiased;
+}
+#progress{position:fixed;top:0;left:0;height:3px;width:0;background:var(--accent);z-index:50;transition:width .1s linear}
+
+.wrap{display:flex;align-items:flex-start;min-height:100vh}
+.sidebar{
+  position:sticky;top:0;height:100vh;width:300px;flex:0 0 300px;overflow-y:auto;
+  padding:26px 20px 60px;border-right:1px solid var(--line);background:var(--panel);
+}
+.sidebar h1{font-size:15px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);
+  margin:0 0 4px;font-weight:600}
+.sidebar .sub{font-size:12.5px;color:var(--muted);margin:0 0 18px}
+.sidebar nav{font-size:14px}
+.sidebar .toc>ul{padding-left:0}
+.sidebar ul{list-style:none;margin:0;padding-left:12px}
+.sidebar ul ul{border-left:1px solid var(--line);margin-left:4px;padding-left:10px}
+.sidebar li{margin:3px 0}
+.sidebar a{color:var(--ink);text-decoration:none;display:block;padding:3px 8px;border-radius:8px;
+  line-height:1.35;transition:background .12s,color .12s}
+.sidebar a:hover{background:var(--accent-soft);color:var(--accent)}
+.sidebar a.active{background:var(--accent-soft);color:var(--accent);font-weight:600}
+.sidebar .home{display:inline-flex;align-items:center;gap:6px;margin-bottom:16px;font-size:13.5px;
+  color:var(--muted);text-decoration:none;border:1px solid var(--line);padding:5px 10px;border-radius:999px}
+.sidebar .home:hover{color:var(--accent);border-color:var(--accent)}
+
+main{flex:1;min-width:0;padding:46px 56px 120px;max-width:980px;margin:0 auto}
+.doc-head{border-bottom:1px solid var(--line);padding-bottom:18px;margin-bottom:34px}
+.doc-head .kicker{font-size:12.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);
+  font-weight:700;margin-bottom:8px}
+.doc-head .meta{font-size:13.5px;color:var(--muted)}
+
+h1,h2,h3,h4{line-height:1.25;font-weight:700;letter-spacing:-.01em}
+h1{font-size:2.05rem;margin:.2em 0 .5em}
+h2{font-size:1.55rem;margin:2.4em 0 .7em;padding-bottom:.35em;border-bottom:1px solid var(--line)}
+h3{font-size:1.2rem;margin:1.9em 0 .55em}
+h4{font-size:1.03rem;margin:1.5em 0 .45em;color:var(--muted)}
+h2 .anchor,h3 .anchor{opacity:0;margin-left:.35em;font-size:.8em;color:var(--muted);text-decoration:none}
+h2:hover .anchor,h3:hover .anchor{opacity:1}
+p{margin:.75em 0}
+a{color:var(--accent);text-underline-offset:2px}
+strong{font-weight:650}
+hr{border:0;border-top:1px solid var(--line);margin:2.6em 0}
+ul,ol{margin:.7em 0;padding-left:1.4em}
+li{margin:.3em 0}
+li>ul,li>ol{margin:.25em 0}
+blockquote{
+  margin:1.3em 0;padding:12px 18px;background:var(--warn-bg);border-left:3px solid var(--warn-line);
+  border-radius:0 10px 10px 0;color:var(--ink)
+}
+blockquote p{margin:.3em 0}
+
+code{font-family:var(--mono);font-size:.87em;background:var(--code-bg);color:var(--code-ink);
+  padding:.15em .38em;border-radius:6px;border:1px solid var(--line);
+  box-decoration-break:clone;-webkit-box-decoration-break:clone;overflow-wrap:anywhere}
+pre{position:relative;background:var(--code-bg);border:1px solid var(--line);border-radius:12px;
+  padding:16px 18px;overflow-x:auto;margin:1.1em 0}
+pre code{background:none;border:0;padding:0;font-size:13.6px;line-height:1.62;white-space:pre}
+.copy{position:absolute;top:8px;right:8px;font:600 11px/1 var(--sans);color:var(--muted);
+  background:var(--panel);border:1px solid var(--line);border-radius:7px;padding:5px 8px;cursor:pointer;
+  opacity:0;transition:opacity .15s}
+pre:hover .copy{opacity:1}
+.copy:hover{color:var(--accent);border-color:var(--accent)}
+
+.table-scroll{overflow-x:auto;margin:1.3em 0;border:1px solid var(--line);border-radius:12px;background:var(--panel)}
+table{border-collapse:collapse;width:100%;font-size:14.6px}
+th,td{padding:9px 13px;text-align:left;vertical-align:top;border-bottom:1px solid var(--line)}
+th{background:var(--accent-soft);font-weight:650;font-size:13px;letter-spacing:.02em;
+  position:sticky;top:0;backdrop-filter:blur(4px)}
+tr:last-child td{border-bottom:0}
+tbody tr:nth-child(even){background:color-mix(in srgb,var(--panel) 60%,var(--bg))}
+tbody tr:hover{background:var(--accent-soft)}
+
+.tools{position:fixed;right:22px;bottom:22px;display:flex;flex-direction:column;gap:8px;z-index:40}
+.tools button{width:42px;height:42px;border-radius:12px;border:1px solid var(--line);background:var(--panel);
+  color:var(--ink);cursor:pointer;font-size:16px;box-shadow:0 4px 14px rgba(0,0,0,.10)}
+.tools button:hover{color:var(--accent);border-color:var(--accent)}
+@media (max-width:1000px){
+  .wrap{display:block}
+  .sidebar{position:static;width:auto;height:auto;border-right:0;border-bottom:1px solid var(--line)}
+  .sidebar nav{max-height:40vh;overflow:auto}
+  main{padding:28px 20px 100px}
+}
+@media print{
+  .sidebar,.tools,#progress,.copy{display:none!important}
+  body{background:#fff;color:#000;font-size:11pt}
+  main{padding:0;max-width:none}
+  h2{break-after:avoid} pre,table,blockquote{break-inside:avoid}
+  a{color:#000;text-decoration:none}
+}
+
+body{background:var(--bg)}
+.shell{max-width:1080px;margin:0 auto;padding:0 28px}
+.topbar{padding:26px 0 0;display:flex;justify-content:space-between;align-items:center;gap:16px}
+.topbar .brand{font-size:12.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:700}
+.topbar a{font-size:13px;color:var(--muted);text-decoration:none}
+.topbar a:hover{color:var(--accent)}
+.hero{padding:34px 0 6px}
+.hero .kicker{font-size:12.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);font-weight:700}
+.hero h1{font-size:2.4rem;margin:.2em 0 .25em;letter-spacing:-.02em}
+.hero p{color:var(--muted);max-width:64ch;margin:0}
+.searchbox{margin:24px 0 6px;display:flex;align-items:center;gap:12px}
+.searchbox label{font-size:12.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);
+  font-weight:700;white-space:nowrap}
+.searchbox input{flex:1;padding:13px 16px;border-radius:12px;border:1px solid var(--line);
+  background:var(--panel);color:var(--ink);font:inherit;font-size:15px}
+.searchbox input:focus{outline:2px solid var(--accent);outline-offset:1px}
+.count{font-size:13px;color:var(--muted);white-space:nowrap;min-width:150px;text-align:right}
+section.group{margin:38px 0 0}
+section.group>h2{font-size:12.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink);
+  opacity:.62;border:0;margin:0 0 14px;padding:0;font-weight:700}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:16px}
+.card{position:relative;display:flex;flex-direction:column;text-decoration:none;color:inherit;
+  background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:20px 20px 16px;
+  transition:transform .15s,border-color .15s,box-shadow .15s}
+.card:hover{transform:translateY(-3px);border-color:var(--accent);box-shadow:0 12px 30px rgba(0,0,0,.09)}
+.card .tag{font-size:11.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--accent);font-weight:700}
+.card h3{font-size:1.14rem;margin:.5em 0 .35em;border:0;padding:0;line-height:1.3}
+.card .blurb{margin:0;color:var(--muted);font-size:14px}
+.card .q{margin-top:auto;padding-top:14px;font-size:12.5px;color:var(--muted);font-family:var(--mono)}
+.card .go{position:absolute;top:18px;right:18px;color:var(--accent);opacity:0;transition:opacity .15s}
+.card:hover .go{opacity:1}
+.card.hero-card{grid-column:1/-1;background:linear-gradient(120deg,var(--accent-soft),var(--panel) 62%);
+  border-color:color-mix(in srgb,var(--accent) 30%,var(--line));padding:24px 26px}
+.card.hero-card h3{font-size:1.45rem;margin-top:.3em}
+.card.hero-card .go{opacity:.9}
+.hint{max-width:1080px;margin:44px auto 70px;padding:0 28px;font-size:13px;color:var(--muted)}
+.tools button{box-shadow:0 4px 14px rgba(0,0,0,.10)}
+
+body{padding-bottom:70px}
+.vv{max-width:1000px;margin:0 auto;padding:24px 22px 60px}
+.vv .head{border-bottom:1px solid var(--line);padding-bottom:14px;margin-bottom:16px;
+  display:flex;gap:14px;align-items:baseline;flex-wrap:wrap}
+.vv .head h1{font-size:1.45rem;margin:0}
+.vv .head .sub{color:var(--muted);font-size:12.5px;flex:1}
+.vv .head a{font-size:12.5px;color:var(--muted);text-decoration:none}
+.vv .head a:hover{color:var(--accent)}
+.pipe{display:flex;gap:6px;flex-wrap:wrap;align-items:stretch;margin:12px 0 6px}
+.ph{flex:1 1 130px;min-width:120px;border:1px solid var(--line);border-radius:9px;
+  background:var(--panel);padding:9px 10px}
+.ph b{display:block;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent)}
+.ph .io{font-family:var(--mono);font-size:10.5px;color:var(--muted);margin-top:3px;line-height:1.4}
+.ph .n{font-family:var(--mono);font-size:10px;color:var(--muted);opacity:.7}
+.side{margin-top:8px;font-size:12px;color:var(--muted)}
+.controls{position:sticky;top:0;z-index:5;background:var(--bg,#fff);padding:10px 0;margin:14px 0 6px;
+  display:flex;gap:8px;align-items:center;flex-wrap:wrap;border-bottom:1px solid var(--line)}
+.controls input{flex:1 1 220px;min-width:160px;font-family:var(--mono);font-size:12.5px;
+  background:var(--code-bg);color:var(--ink);border:1px solid var(--line);border-radius:7px;padding:8px 10px}
+.btn{font:600 12px/1 var(--sans);border:1px solid var(--line);background:var(--panel);color:var(--ink);
+  border-radius:7px;padding:7px 11px;cursor:pointer}
+.btn:hover{border-color:var(--accent);color:var(--accent)}
+.btn.p{background:var(--accent);color:#fff;border-color:var(--accent)}
+.cnt{font-family:var(--mono);font-size:11.5px;color:var(--muted)}
+h2.s{font-size:1.02rem;margin:26px 0 4px;padding-top:8px;border-top:1px solid var(--line)}
+h2.s:first-of-type{border-top:none}
+.bl{font-size:12.5px;color:var(--muted);margin:0 0 10px}
+.q{border:1px solid var(--line);border-radius:9px;margin:6px 0;background:var(--panel);cursor:pointer;
+  overflow:hidden}
+.q:hover{border-color:var(--accent)}
+.q .qq{font-size:13.2px;font-weight:600;padding:9px 12px;line-height:1.4;display:flex;gap:8px}
+.q .qq .m{color:var(--accent);flex:0 0 14px;font-family:var(--mono);font-size:11px}
+.q .aa{font-size:13px;line-height:1.55;padding:0 12px 10px 34px;color:var(--ink)}
+.quiz .aa{display:none}
+.quiz .q.open .aa{display:block}
+.q.open{background:var(--accent-soft)}
+.def{border-left:2px solid var(--accent);padding:7px 0 7px 12px;margin:8px 0;font-size:13px;line-height:1.55}
+.def b{display:block;color:var(--accent);font-size:12px;margin-bottom:2px}
+.hide{display:none!important}
+@media print{.controls{display:none}.quiz .aa{display:block!important}}
+</style>
+</head>
+<body>
+<div class="vv">
+  <div class="head">
+    <h1>Viva &amp; MCQ notes</h1>
+    <span class="sub">Whole course, one line per answer — not just the 11 experiments</span>
+    <a href="lab.html">Lab bench</a>
+    <a href="index.html">All documents</a>
+  </div>
+
+  <div class="pipe"><div class="ph"><span class="n">1</span><b>Lexical analysis</b><div class="io">characters → tokens</div></div><div class="ph"><span class="n">2</span><b>Syntax analysis</b><div class="io">tokens → parse tree</div></div><div class="ph"><span class="n">3</span><b>Semantic analysis</b><div class="io">parse tree → annotated tree</div></div><div class="ph"><span class="n">4</span><b>Intermediate code</b><div class="io">annotated tree → three-address code</div></div><div class="ph"><span class="n">5</span><b>Optimisation</b><div class="io">IR → better IR</div></div><div class="ph"><span class="n">6</span><b>Code generation</b><div class="io">IR → assembly</div></div></div>
+  <div class="side">Every phase reads and writes the <b>symbol table</b>; every phase reports to the
+    <b>error handler</b>. Front end = first four (machine-independent). Back end = last two.</div>
+
+  <div class="controls">
+    <input id="q" type="search" placeholder="filter — parse tree, yacc, epsilon, quadruple…">
+    <button class="btn" id="quiz">Quiz mode: off</button>
+    <button class="btn" id="all">Reveal all</button>
+    <span class="cnt" id="cnt"></span>
+  </div>
+
+  <div id="body"><h2 class="s">1. The compiler as a whole</h2>
+<p class="bl">Know the phase order cold — it is the most-asked MCQ block.</p>
+<div class="q"><div class="qq"><span class="m">▸</span><span>What is a compiler?</span></div><div class="aa">A program that translates source code in a high-level language into an equivalent target program (machine code or assembly), reporting errors it finds on the way.</div></div>
+<div class="q"><div class="qq"><span class="m">▸</span><span>Compiler vs interpreter?</span></div><div class="aa">A compiler translates the whole program first and produces an output file; an interpreter executes the source statement by statement and produces no output file.</div></div>
+<div class="q"><div class="qq"><span class="m">▸</span><span>What is a hybrid (Java-style) system?</span></div><div class="aa">Compile to an intermediate bytecode, then interpret/JIT that bytecode on a virtual machine.</div></div>
+<div class="q"><div class="qq"><span class="m">▸</span><span>Name the six phases, in order.</span></div><div class="aa">Lexical analysis → syntax analysis → semantic analysis → intermediate code generation → code optimisation → code generation.</div></div>
+<div class="q"><div class="qq"><span class="m">▸</span><span>Which two phases are not in the linear chain?</span></div><div class="aa">Symbol-table management and error handling — they are used by every phase.</div></div>
+<div class="q"><div class="qq"><span class="m">▸</span><span>Which phases form the front end, which the back end?</span></div><div class="aa">Front end: lexical, syntax, semantic, intermediate code (machine-independent). Back end: optimisation and code generation (machine-dependent).</div></div>
+<div class="q"><div class="qq"><span class="m">▸</span><span>What is a pass?</span></div><div class="aa">One complete traversal of the source (or intermediate form). A compiler can be one-pass or multi-pass.</div></div>
+<div class="q"><div class="qq"><span class="m">▸</span><span>What does each phase take in and put out?</span></div><div class="aa">Lexical: characters → tokens. Syntax: tokens → parse tree. Semantic: parse tree → annotated tree. Intermediate: tree → three-address code. Optimisation: code → better code. Codegen: IR → assembly.</div></div>
+<div class="q"><div class="qq"><span class="m">▸</span><span>Where does the symbol table fit?</span></div><div class="aa">Every phase stores or looks up identifiers in it. It records name, type, scope, size, and (later) address.</div></div>
+<div class="q"><div class="qq"><span class="m">▸</span><span>What are the four kinds of error a compiler reports?</span></div><div class="aa">Lexical (illegal character), syntactic (unbalanced brackets), semantic (type mismatch, undeclared), and logical (compiles fine, wrong answer — the compiler cannot catch these).</div></div>
+<div class="q"><div class="qq"><span class="m">▸</span><span>What is the usual error-recovery trick?</span></div><div class="aa">Panic mode: skip input until a synchronising token (a semicolon or brace) and resume.</div></div>
+<h2 class="s">2. Lexical analysis (scanner)</h2>
+
+<div class="q"><div class="qq"><span class="m">▸</span><span>Lexeme vs token vs pattern?</span></div><div class="aa">Lexeme = the actual characters. Token = the class it belongs to, written &lt;name, attribute&gt;. Pattern = the rule describing lexemes of that token.</div></div>
+<div class="q"><div class="qq"><span class="m">▸</span><span>For `count = count + 1`, name lexemes and tokens.</span></div><div class="aa">Lexemes: count, =, count, +, 1. Tokens: &lt;id,1&gt; &lt;assign&gt; &lt;id,1&gt; &lt;plus&gt; &lt;num,1&gt;.</div></div>
+<div class="q"><div class="qq"><span class="m">▸</span><span>Which formalism does a scanner use?</span></div><div class="aa">Regular expressions, converted to an NFA, then a DFA — because a DFA needs no backtracking.</div></div>
+<div class="q"><div class="qq"><span class="m">▸</span><span>Why can a regular expression not check matching brackets?</span></div><div class="aa">Balanced brackets are not a regular language — they need a stack, i.e. a context-free grammar.</div></div>
+<div class="q"><div class="qq"><span class="m">▸</span><span>What does LEX actually do?</span></div><div class="aa">It is a lexical-analyser generator: it reads a .l file of pattern/action rules and writes lex.yy.c, a C program containing the scanner function yylex().</div></div>
+<div class="q"><div class="qq"><span class="m">▸</span><span>What are yytext and yyleng?</span></div><div class="aa">yytext is the matched text, yyleng its length — so no copying is needed to measure a token.</div></div>
+<div class="q"><div class="qq"><span class="m">▸</span><span>Longest match or first rule?</span></div><div class="aa">Longest match wins; when two rules match the same length, the earlier rule wins.</div></div>
+<div class="q"><div class="qq"><span class="m">▸</span><span>What is yywrap() for?</span></div><div class="aa">Called at end of input; returning 1 means &#x27;no more files&#x27;, so yylex() stops.</div></div>
+<div class="q"><div class="qq"><span class="m">▸</span><span>Two scanner terms examiners like.</span></div><div class="aa">Lookahead (read one character past a token to find its end) and push-back (ungetc), so the lookahead character is not lost.</div></div>
+<h2 class="s">3. Syntax analysis (parser) + YACC</h2>
+
+<div class="q"><div class="qq"><span class="m">▸</span><span>Which formalism does a parser use?</span></div><div class="aa">Context-free grammars (BNF productions), because they can express nesting and recursion.</div></div>
+<div class="q"><div class="qq"><span class="m">▸</span><span>What does YACC actually do?</span></div><div class="aa">It is a parser generator: it reads a .y file of grammar rules and actions and writes y.tab.c, containing an LALR(1) shift-reduce parser, yyparse().</div></div>
+<div class="q"><div class="qq"><span class="m">▸</span><span>What does `yacc -d` add?</span></div><div class="aa">It also writes y.tab.h — the token numbers — so the .l file can include them and both halves agree.</div></div>
+<div class="q"><div class="qq"><span class="m">▸</span><span>How do LEX and YACC cooperate?</span></div><div class="aa">LEX returns one token at a time (return LETTER); YACC shifts it and decides, using the grammar, whether a rule&#x27;s right-hand side is complete enough to reduce.</div></div>
+<div class="q"><div class="qq"><span class="m">▸</span><span>GNU names for lex and yacc?</span></div><div class="aa">flex (fast lexical analyser) and bison.</div></div>
+<div class="q"><div class="qq"><span class="m">▸</span><span>Shift vs reduce?</span></div><div class="aa">Shift = push the next input token. Reduce = replace a right-hand side on top of the stack by its left-hand side.</div></div>
+<div class="q"><div class="qq"><span class="m">▸</span><span>When is a grammar ambiguous?</span></div><div class="aa">When one sentence has more than one parse tree (or more than one leftmost derivation). Classic case: the dangling else.</div></div>
+<div class="q"><div class="qq"><span class="m">▸</span><span>What are the two conflicts a generator reports?</span></div><div class="aa">Shift/reduce (could push or reduce) and reduce/reduce (two rules both match). Fix by precedence, associativity, or rewriting the grammar.</div></div>
+<div class="q"><div class="qq"><span class="m">▸</span><span>Why does YACC prefer left recursion?</span></div><div class="aa">It is LALR — bottom-up — so left recursion consumes input with a bounded stack; right recursion grows the stack for every symbol.</div></div>
+<div class="q"><div class="qq"><span class="m">▸</span><span>Name the four parsing strategies.</span></div><div class="aa">Top-down: recursive descent, predictive/LL(1). Bottom-up: shift-reduce with a table — LR(0), SLR(1), LALR(1), canonical LR(1). YACC is LALR(1).</div></div>
+<div class="q"><div class="qq"><span class="m">▸</span><span>LL vs LR in one line each?</span></div><div class="aa">LL reads left-to-right and builds a leftmost derivation top-down (predictive). LR reads left-to-right and builds a rightmost derivation in reverse bottom-up (shift-reduce with a table).</div></div>
+<div class="q"><div class="qq"><span class="m">▸</span><span>What does LL(1) mean?</span></div><div class="aa">Left-to-right scan, leftmost derivation, one token of lookahead.</div></div>
+<div class="q"><div class="qq"><span class="m">▸</span><span>Can recursive descent handle `E → E + T`?</span></div><div class="aa">No — the first call to E would call E again forever. Rewrite as `E → T E&#x27;` (remove left recursion) and left-factor common prefixes.</div></div>
+<div class="q"><div class="qq"><span class="m">▸</span><span>What are FIRST and FOLLOW used for?</span></div><div class="aa">Filling the LL(1) table: rule A → α goes in [A, t] for t in FIRST(α); if α is nullable, also for t in FOLLOW(A).</div></div>
+<div class="q"><div class="qq"><span class="m">▸</span><span>What is a handle?</span></div><div class="aa">The substring of a right-sentential form that matches a rule&#x27;s right-hand side — the thing LR parsers reduce next.</div></div>
+<div class="q"><div class="qq"><span class="m">▸</span><span>What is an LR item?</span></div><div class="aa">A production with a dot marking how much has been seen, e.g. E → E · + T. Items build the LR state machine.</div></div>
+<h2 class="s">4. Semantic analysis</h2>
+
+<div class="q"><div class="qq"><span class="m">▸</span><span>What does semantic analysis do?</span></div><div class="aa">Type checking, scope/declaration checking, and annotating the parse tree — it catches things the grammar allows but the language forbids.</div></div>
+<div class="q"><div class="qq"><span class="m">▸</span><span>Give one thing only the semantic phase catches.</span></div><div class="aa">`int x; x = &quot;hello&quot;;` — syntactically perfect, semantically a type error.</div></div>
+<div class="q"><div class="qq"><span class="m">▸</span><span>What is an attribute grammar?</span></div><div class="aa">A grammar with attributes (type, value, address) and rules for computing them — synthesised (bottom-up) or inherited (top-down).</div></div>
+<div class="q"><div class="qq"><span class="m">▸</span><span>What is type coercion?</span></div><div class="aa">An implicit conversion the compiler inserts, e.g. int → float in `x + 1.5`.</div></div>
+<h2 class="s">5. Intermediate code + optimisation</h2>
+
+<div class="q"><div class="qq"><span class="m">▸</span><span>Why generate intermediate code at all?</span></div><div class="aa">It separates the machine-independent front end from the machine-dependent back end, so n languages × m machines needs n + m translators instead of n × m.</div></div>
+<div class="q"><div class="qq"><span class="m">▸</span><span>What is three-address code?</span></div><div class="aa">Instructions of the form `x = y op z` — at most one operator each, with compiler-made temporaries t1, t2, ...</div></div>
+<div class="q"><div class="qq"><span class="m">▸</span><span>Quadruple vs triple vs indirect triple?</span></div><div class="aa">Quadruple stores op, arg1, arg2, result as four fields. A triple stores op, arg1, arg2 and refers to results by position number. Indirect triples keep an array of pointers so instructions can be reordered without renumbering.</div></div>
+<div class="q"><div class="qq"><span class="m">▸</span><span>What is a DAG used for?</span></div><div class="aa">Common-subexpression elimination: identical subexpressions become one node, so they are computed once.</div></div>
+<div class="q"><div class="qq"><span class="m">▸</span><span>Name four optimisations in one line.</span></div><div class="aa">Constant folding (2*3 → 6), constant propagation, dead-code elimination, and loop-invariant code motion.</div></div>
+<div class="q"><div class="qq"><span class="m">▸</span><span>What is strength reduction?</span></div><div class="aa">Replacing an expensive operation with a cheap one — `x*2` → `x+x`, or multiply → shift.</div></div>
+<div class="q"><div class="qq"><span class="m">▸</span><span>What is peephole optimisation?</span></div><div class="aa">A local pass over a small window of instructions, removing redundant loads/stores and jumps to jumps.</div></div>
+<div class="q"><div class="qq"><span class="m">▸</span><span>Which end does optimisation belong to?</span></div><div class="aa">The back end is machine-dependent, so target-specific optimisation lives there; most optimisation happens on the intermediate code.</div></div>
+<h2 class="s">6. Code generation and runtime</h2>
+
+<div class="q"><div class="qq"><span class="m">▸</span><span>What does the code generator decide?</span></div><div class="aa">Instruction selection, register allocation, and evaluation order — usually from the tree, left to right.</div></div>
+<div class="q"><div class="qq"><span class="m">▸</span><span>What is an activation record?</span></div><div class="aa">The stack frame for one call: return value, actual parameters, control link, access link, saved machine state, locals, temporaries.</div></div>
+<div class="q"><div class="qq"><span class="m">▸</span><span>Where do locals, globals and malloc&#x27;d data live?</span></div><div class="aa">Locals on the stack (in the activation record), globals in static storage, malloc/new on the heap.</div></div>
+<div class="q"><div class="qq"><span class="m">▸</span><span>Four things a symbol table can be built with?</span></div><div class="aa">Linear list, sorted list, binary search tree, hash table (hash is the usual answer for speed).</div></div>
+<div class="q"><div class="qq"><span class="m">▸</span><span>What is a compiler-compiler?</span></div><div class="aa">A tool that generates part of a compiler from a specification — lex and yacc are the classic pair.</div></div>
+<div class="q"><div class="qq"><span class="m">▸</span><span>What is the compiler&#x27;s cousin list?</span></div><div class="aa">Preprocessor, assembler, linker, loader — the stages around the compiler itself.</div></div>
+<h2 class="s">7. Automata, in the terms this lab uses</h2>
+
+<div class="q"><div class="qq"><span class="m">▸</span><span>NFA vs DFA?</span></div><div class="aa">An NFA may have several moves for one symbol and ε-moves; a DFA has exactly one move per (state, symbol) and no ε-moves.</div></div>
+<div class="q"><div class="qq"><span class="m">▸</span><span>What is an ε-closure?</span></div><div class="aa">The state itself plus every state reachable from it by ε-moves only — all the places you can be without consuming input.</div></div>
+<div class="q"><div class="qq"><span class="m">▸</span><span>Three standard conversions?</span></div><div class="aa">Regex → NFA (Thompson&#x27;s construction), NFA → DFA (subset construction), DFA → minimal DFA (state merging / Hopcroft).</div></div>
+<div class="q"><div class="qq"><span class="m">▸</span><span>What is the subset construction&#x27;s key idea?</span></div><div class="aa">Each DFA state is a SET of NFA states — the set of places the NFA could be.</div></div>
+<div class="q"><div class="qq"><span class="m">▸</span><span>Why do scanners prefer DFAs?</span></div><div class="aa">Deterministic: one move per symbol, so the scan is a single pass with no guessing or backtracking.</div></div>
+<div class="q"><div class="qq"><span class="m">▸</span><span>Which language class does a scanner recognise, and which does a parser recognise?</span></div><div class="aa">Scanner: regular languages (type-3, DFA). Parser: context-free languages (type-2, pushdown automaton).</div></div>
+<h2 class="s">8. Rapid-fire MCQ facts</h2>
+<p class="bl">One line each — these are the shapes MCQs come in.</p>
+<div class="q"><div class="qq"><span class="m">▸</span><span>Output of the lexical analyser</span></div><div class="aa">a stream of tokens</div></div>
+<div class="q"><div class="qq"><span class="m">▸</span><span>Phase that uses regular expressions</span></div><div class="aa">lexical analysis</div></div>
+<div class="q"><div class="qq"><span class="m">▸</span><span>Phase that uses context-free grammar</span></div><div class="aa">syntax analysis</div></div>
+<div class="q"><div class="qq"><span class="m">▸</span><span>Phase that builds/uses the symbol table most</span></div><div class="aa">all of them; semantic analysis most heavily</div></div>
+<div class="q"><div class="qq"><span class="m">▸</span><span>Phase that does type checking</span></div><div class="aa">semantic analysis</div></div>
+<div class="q"><div class="qq"><span class="m">▸</span><span>Phase that produces the parse tree</span></div><div class="aa">syntax analysis</div></div>
+<div class="q"><div class="qq"><span class="m">▸</span><span>Phase that is machine-dependent</span></div><div class="aa">code generation (and target-specific optimisation)</div></div>
+<div class="q"><div class="qq"><span class="m">▸</span><span>Parse tree vs syntax tree</span></div><div class="aa">parse tree keeps every grammar symbol; syntax tree drops punctuation and single-child chains</div></div>
+<div class="q"><div class="qq"><span class="m">▸</span><span>Tool for the scanner</span></div><div class="aa">lex / flex</div></div>
+<div class="q"><div class="qq"><span class="m">▸</span><span>Tool for the parser</span></div><div class="aa">yacc / bison</div></div>
+<div class="q"><div class="qq"><span class="m">▸</span><span>Parser YACC generates</span></div><div class="aa">LALR(1), bottom-up, shift-reduce</div></div>
+<div class="q"><div class="qq"><span class="m">▸</span><span>Files generated</span></div><div class="aa">lex.yy.c from lex; y.tab.c and y.tab.h from yacc -d</div></div>
+<div class="q"><div class="qq"><span class="m">▸</span><span>Function names</span></div><div class="aa">yylex() scans, yyparse() parses, yyerror() reports, yywrap() ends input</div></div>
+<div class="q"><div class="qq"><span class="m">▸</span><span>Conflict that the dangling else creates</span></div><div class="aa">shift/reduce</div></div>
+<div class="q"><div class="qq"><span class="m">▸</span><span>Grammar type a programming language needs</span></div><div class="aa">context-free (type 2)</div></div>
+<div class="q"><div class="qq"><span class="m">▸</span><span>Automaton for a compiler&#x27;s scanner</span></div><div class="aa">DFA (finite automaton)</div></div>
+<div class="q"><div class="qq"><span class="m">▸</span><span>Automaton for a compiler&#x27;s parser</span></div><div class="aa">pushdown automaton</div></div>
+<div class="q"><div class="qq"><span class="m">▸</span><span>Commonest IR</span></div><div class="aa">three-address code</div></div>
+<div class="q"><div class="qq"><span class="m">▸</span><span>Quadruple holds</span></div><div class="aa">operator, operand1, operand2, result</div></div>
+<div class="q"><div class="qq"><span class="m">▸</span><span>Optimisation that removes repeated subexpressions</span></div><div class="aa">common subexpression elimination (DAG)</div></div>
+<div class="q"><div class="qq"><span class="m">▸</span><span>Optimisation that computes 2*3 at compile time</span></div><div class="aa">constant folding</div></div>
+<div class="q"><div class="qq"><span class="m">▸</span><span>Symbol table best implementation</span></div><div class="aa">hash table</div></div>
+<div class="q"><div class="qq"><span class="m">▸</span><span>Number of passes in most real compilers</span></div><div class="aa">usually two or more (front end / back end)</div></div>
+<div class="q"><div class="qq"><span class="m">▸</span><span>Compilation unit order in the lab</span></div><div class="aa">yacc -d first, then lex, then gcc both .c files</div></div>
+<div class="q"><div class="qq"><span class="m">▸</span><span>Library to link a lex scanner</span></div><div class="aa">-lfl on flex, -ll on System V lex</div></div>
+<h2 class="s">9. Say this if grilled</h2>
+<p class="bl">Eight sentences that fit almost any question — memorise the shape, not the words.</p>
+<div class="def"><b>If asked to define a compiler</b>A program that translates a whole high-level program into an equivalent target program and reports the errors it finds during translation.</div>
+<div class="def"><b>If asked what lex does</b>It generates a scanner: regular-expression rules in, lex.yy.c with yylex() out, longest match first.</div>
+<div class="def"><b>If asked what yacc does</b>It generates an LALR(1) parser: grammar rules in, y.tab.c with yyparse() out, plus y.tab.h with -d.</div>
+<div class="def"><b>If asked why two tools</b>Lexical rules are regular (a DFA suffices); grammatical rules are context-free (a stack is needed). One tool cannot do both well.</div>
+<div class="def"><b>If asked why left recursion</b>Bottom-up parsers consume input with a bounded stack, so left recursion is efficient; top-down parsers cannot use it at all.</div>
+<div class="def"><b>If asked what optimisation is not</b>Not speed of the compiler — it is making the generated program faster or smaller, without changing what it computes.</div>
+<div class="def"><b>If asked about a bug in your own program</b>Name the mechanism, not the symptom: &#x27;precedence() returns 0 for an unknown operator, so the &gt;= test is always true and the stack is popped past its bottom&#x27;.</div>
+<div class="def"><b>If you do not know</b>Say what the phase does and where the answer would come from — examiners reward the structure over a guessed keyword.</div></div>
+</div>
+<script>
+var quiz = false;
+var body = document.getElementById('body');
+var cards = [].slice.call(body.querySelectorAll('.q'));
+
+function counts(){
+  var shown = cards.filter(function(c){return c.offsetParent !== null;}).length;
+  var open = cards.filter(function(c){return c.classList.contains('open');}).length;
+  document.getElementById('cnt').textContent = shown + ' shown · ' + open + ' revealed';
+}
+
+cards.forEach(function(c){
+  c.addEventListener('click', function(){
+    c.classList.toggle('open');
+    counts();
+  });
+});
+
+document.getElementById('quiz').addEventListener('click', function(){
+  quiz = !quiz;
+  document.body.classList.toggle('quiz', quiz);
+  this.textContent = 'Quiz mode: ' + (quiz ? 'on — click a card to reveal' : 'off');
+  this.classList.toggle('p', quiz);
+  if(quiz){ cards.forEach(function(c){c.classList.remove('open');}); }
+  counts();
+});
+
+document.getElementById('all').addEventListener('click', function(){
+  var anyClosed = cards.some(function(c){return !c.classList.contains('open');});
+  cards.forEach(function(c){ c.classList.toggle('open', anyClosed); });
+  document.body.classList.remove('quiz'); quiz = false;
+  document.getElementById('quiz').textContent = 'Quiz mode: off';
+  document.getElementById('quiz').classList.remove('p');
+  counts();
+});
+
+document.getElementById('q').addEventListener('input', function(){
+  var term = this.value.trim().toLowerCase();
+  body.querySelectorAll('h2.s').forEach(function(h){
+    var sec = h.nextElementSibling;           //  .bl  (may be empty)
+    var list = [];
+    var node = h.nextElementSibling;
+    while(node && node.tagName !== 'H2'){ list.push(node); node = node.nextElementSibling; }
+    var hits = 0;
+    list.forEach(function(n){
+      if(n.classList.contains('q')){
+        var txt = n.textContent.toLowerCase();
+        var show = !term || txt.indexOf(term) >= 0;
+        n.classList.toggle('hide', !show);
+        if(show) hits++;
+      }
+    });
+    var hideSection = term && hits === 0;
+    h.classList.toggle('hide', hideSection);
+    list.forEach(function(n){ if(n.classList.contains('bl')) n.classList.toggle('hide', hideSection); });
+  });
+  counts();
+});
+
+counts();
+</script>
+</body>
+</html>

@@ -149,6 +149,9 @@ SUBJECTS = [
             ("playground.html", "Playground", "write C · compile · run",
              "Type a program, run it on a real gcc sandbox, no install",
              "Playground — write it and run it", "practice", "playground"),
+            ("viva.html", "Viva & MCQ", "whole course · one line per answer",
+             "Phases, lex, yacc, parsing, IR — 90 one-line answers plus quiz mode",
+             "Viva & MCQ notes — the whole course", "practice", "viva"),
         ],
         "docs": [
             ("START_HERE.md", "Start here", "Exam shape · priority · traps",
@@ -910,7 +913,9 @@ def build_subject(subject):
     # generated interactive apps (compiler lab: step↔code bench + C playground)
     if subject.get("gen") == "compiler_lab":
         lab_html, play_html = compiler_lab_pages.build_pages(subject["title"], CSS + SHELL_CSS)
-        for name, content in (("lab.html", lab_html), ("playground.html", play_html)):
+        viva_html = compiler_lab_pages.build_viva(subject["title"], CSS + SHELL_CSS)
+        for name, content in (("lab.html", lab_html), ("playground.html", play_html),
+                              ("viva.html", viva_html)):
             path = os.path.join(ROOT, subject["slug"], name)
             write(path, content)
             print(f"  {subject['slug']}/{name}      {os.path.getsize(path) // 1024:5d} KB  (generated app)")
