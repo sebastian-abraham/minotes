@@ -173,6 +173,22 @@ summary::marker{color:var(--accent)}
 .cmd{position:relative;margin:10px 0 0}
 .cmd pre{margin:0;background:var(--code-bg);border:1px solid var(--line);border-radius:8px;
   padding:10px 12px;font-size:11.6px;overflow:auto}
+/* how to run */
+.run{margin-top:16px;border:1px solid var(--line);border-radius:11px;overflow:hidden;background:var(--panel)}
+.run-h{display:flex;gap:10px;align-items:baseline;flex-wrap:wrap;padding:9px 12px;
+  background:var(--code-bg);border-bottom:1px solid var(--line)}
+.run-h b{font:700 10.5px/1 var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--accent)}
+ol.cmds{margin:0;padding:10px 12px 4px 34px;font-family:var(--mono);font-size:12px;line-height:1.9}
+ol.cmds li{color:var(--ink)}
+ol.cmds code{background:var(--code-bg);border:1px solid var(--line);border-radius:5px;padding:1px 6px}
+.why{font-size:12.6px;line-height:1.6;color:var(--ink);padding:2px 14px 10px}
+.why code{font-size:11.5px;background:var(--code-bg);border:1px solid var(--line);
+  border-radius:4px;padding:0 4px}
+.inp{border-top:1px dashed var(--line);padding:9px 12px 11px}
+.inp .lbl{font:700 9.5px/1 var(--sans);letter-spacing:.1em;text-transform:uppercase;
+  color:var(--muted);display:block;margin-bottom:5px}
+.inp pre{margin:0;background:var(--code-bg);border:1px solid var(--line);border-radius:7px;
+  padding:9px 11px;font-size:11.6px;overflow:auto;white-space:pre-wrap}
 .toplink{font-size:12.5px;color:var(--muted);text-decoration:none}
 .toplink:hover{color:var(--accent)}
 """
@@ -289,7 +305,15 @@ function render(){
        '<div class="note" id="note">Press <b>Run trace</b> — every step lights the C lines that do it.</div>'+
        '<div class="state" id="state"></div></div></div>';
 
-  h += '<div class="cmd"><pre>'+"$ "+esc(e.build)+'</pre></div>';
+  h += '<div class="run"><div class="run-h"><b>How to run it</b><span class="counter">in a folder holding ' +
+       e.files.map(function(f){return esc(f.name);}).join(" + ")+'</span></div>'+
+       '<ol class="cmds">'+e.build.lines.map(function(l){
+         return '<li><code>'+esc(l)+'</code></li>';
+       }).join("")+'</ol>'+
+       '<div class="why">'+e.build.why+'</div>'+
+       (e.build.input ? '<div class="inp"><span class="lbl">input to paste</span>'+
+         '<pre>'+esc(e.build.input)+'</pre></div>' : "")+
+       '</div>';
 
   h += '<details><summary>Curveballs — what changes if the question is modified</summary><div class="curve">'+
        e.curve.map(function(c){return '<div class="cv"><b>'+c[0]+'</b>'+c[1]+'</div>';}).join("")+
@@ -626,7 +650,7 @@ def build_pages(subject_title, base_css):
         stdin = "" if e["id"] == "exp1" else e["simdefault"]
         tpl.append({"n": e["n"], "title": e["title"], "file": main_file,
                     "code": code[main_file], "stdin": stdin,
-                    "cmd": data.BUILD[e["id"]]})
+                    "cmd": " && ".join(data.BUILD[e["id"]]["lines"])})
     tpl_data = json.dumps(tpl, ensure_ascii=False).replace("</", "<\\/")
 
     play = (PLAY_PAGE

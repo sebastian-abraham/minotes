@@ -616,15 +616,76 @@ EXPS = [
 
 # Per-experiment build command, shown as a copyable block on the page.
 BUILD = {
-    "exp1": "gcc lex_a.c && ./a.out          # reads input.c from the same folder",
-    "exp2": "lex lexer.l && gcc lex.yy.c -lfl && ./a.out",
-    "exp3": "lex lex_count.l && gcc lex.yy.c -lfl && ./a.out     # Ctrl+D at the end",
-    "exp4": "yacc -d yacc_id.y && lex lex_id.l && gcc y.tab.c lex.yy.c -lfl && ./a.out",
-    "exp5": "gcc e_closure.c && ./a.out",
-    "exp6": "gcc e-nfa_nfa.c && ./a.out",
-    "exp7": "gcc nfa_dfa.c && ./a.out",
-    "exp8": "gcc fnf.c && ./a.out",
-    "exp9": "gcc rdp.c && ./a.out",
-    "exp10": "gcc srp.c && ./a.out",
-    "exp11": "gcc intermediate.c && ./a.out",
+    # lines: the exact shell sequence, in order. why: what the special ones are for.
+    # input: what to paste when the program prompts (blank = reads its own file).
+    "exp1": {
+        "lines": ["gcc lex_a.c -o lex_a", "./lex_a"],
+        "why": "No arguments, no pipe. It opens <code>input.c</code> itself — that file must sit in the "
+               "same folder, or edit the fopen() line.",
+        "input": "",
+    },
+    "exp2": {
+        "lines": ["lex lexer.l", "gcc lex.yy.c -lfl -o lexer", "./lexer"],
+        "why": "<b>lex</b> is a generator: it reads the .l rules and writes <code>lex.yy.c</code>, a full C "
+               "program. Your .l file is never compiled directly. <code>-lfl</code> links the lex runtime "
+               "(yywrap, input buffer); on a System V lex the same library is <code>-ll</code>. End input "
+               "with Ctrl+D.",
+        "input": "int a = a+b*2;",
+    },
+    "exp3": {
+        "lines": ["lex lex_count.l", "gcc lex.yy.c -lfl -o count", "./count"],
+        "why": "Same two-tool chain. The program counts nothing until you feed it text, and <b>Ctrl+D</b> "
+               "(end of file) is how yylex() stops and main() prints the totals — Enter alone will not do it.",
+        "input": "hello world\nthis is lex",
+    },
+    "exp4": {
+        "lines": ["yacc -d yacc_id.y", "lex lex_id.l", "gcc y.tab.c lex.yy.c -lfl -o idcheck", "./idcheck"],
+        "why": "<b>Order matters.</b> <code>yacc -d</code> writes <code>y.tab.c</code> (the parser) and "
+               "<code>y.tab.h</code> (the token numbers) — and the .l file <code>#include</code>s that header, "
+               "so lex must run after yacc. Both generated .c files are compiled together, and only the lex "
+               "side needs <code>-lfl</code>. If lex wrote its file into a different folder, add "
+               "<code>-I.</code> to gcc so <code>y.tab.h</code> is found.",
+        "input": "abc123",
+    },
+    "exp5": {
+        "lines": ["gcc e_closure.c -o eclosure", "./eclosure"],
+        "why": "Plain C, but <b>interactive</b>: first line = number of states n, then n lines of n 0/1 values "
+               "(the ε matrix), whitespace-separated.",
+        "input": "4\n0 1 0 0\n0 0 1 0\n0 0 0 1\n0 0 0 0",
+    },
+    "exp6": {
+        "lines": ["gcc e-nfa_nfa.c -o enfa", "./enfa"],
+        "why": "Interactive with a <b>strict input order</b>: n, m, the m symbols, then for each state the "
+               "ε-closure (count + states), then for each state×symbol the transitions (count + destinations). "
+               "Note the file name has a hyphen — quote it only if your shell complains.",
+        "input": "3 2\na b\n3\n0 1 2\n2\n1 2\n1\n2\n1 1\n1 0\n1 2\n0\n0\n1 2",
+    },
+    "exp7": {
+        "lines": ["gcc nfa_dfa.c -o nfadfa", "./nfadfa"],
+        "why": "Interactive: n, m, the m symbols, then per state×symbol a count followed by the destinations.",
+        "input": "3 2\na b\n1 0\n1 1\n1 0\n2 1 2\n1 2\n0",
+    },
+    "exp8": {
+        "lines": ["gcc fnf.c -o fnf", "./fnf"],
+        "why": "Interactive: number of productions, then the productions as <code>S=AB</code> (index 1 is '='), "
+               "using <code>#</code> for ε. One per line or space-separated both work.",
+        "input": "4\nS=AB\nA=a\nB=bC\nC=c",
+    },
+    "exp9": {
+        "lines": ["gcc rdp.c -o rdp", "./rdp"],
+        "why": "Interactive, one string per run. Grammar symbols: <code>i</code> for an operand, brackets allowed. "
+               "Error input exits immediately, so run it twice to see both verdicts.",
+        "input": "(i+i)*i",
+    },
+    "exp10": {
+        "lines": ["gcc srp.c -o srp", "./srp"],
+        "why": "Interactive, one string per run over the grammar E → E+E | E*E | i.",
+        "input": "i+i*i",
+    },
+    "exp11": {
+        "lines": ["gcc intermediate.c -o tac", "./tac"],
+        "why": "Interactive: one infix expression, single-character operands, operators + - * /.",
+        "input": "a+b*c",
+    },
 }
+
