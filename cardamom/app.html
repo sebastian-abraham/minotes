@@ -1,0 +1,1080 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#f6f4ec" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#11150f" media="(prefers-color-scheme: dark)">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Cardamom Khata">
+<meta name="description" content="Cardamom farm accounts — record sales, labour, fertiliser and see the profit per month. Demo, data stays on this device.">
+<title>Cardamom Khata — farm accounts</title>
+<style>
+  *,*::before,*::after{box-sizing:border-box}
+  [hidden]{display:none !important}
+  :root{
+    --bg:#f6f4ec; --card:#fffdf7; --ink:#1b2620; --muted:#69786d; --line:#e5e2d4;
+    --green:#1d7a4c; --green-bg:#e5f2e9; --red:#b0422b; --red-bg:#fbeae4;
+    --gold:#a3751f; --gold-bg:#f8f0d9; --ink-soft:#3c4a40;
+    --radius:16px;
+    --shadow:0 1px 2px rgba(27,38,32,.05),0 10px 26px -20px rgba(27,38,32,.5);
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,"Noto Sans",sans-serif;
+    --num:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    color-scheme:light dark;
+  }
+  @media (prefers-color-scheme:dark){
+    :root{
+      --bg:#11150f; --card:#1a211a; --ink:#e9efe6; --muted:#93a496; --line:#2b342c;
+      --green:#5cc98c; --green-bg:#16291e; --red:#e98a72; --red-bg:#2c1a15;
+      --gold:#dfb164; --gold-bg:#2a2214; --ink-soft:#c3cec6;
+      --shadow:0 1px 0 rgba(255,255,255,.03);
+    }
+  }
+  html{-webkit-text-size-adjust:100%}
+  body{
+    margin:0;background:var(--bg);color:var(--ink);
+    font-family:var(--sans);font-size:16px;line-height:1.45;
+    overflow-x:hidden;-webkit-tap-highlight-color:transparent;
+    overscroll-behavior-y:contain;
+  }
+  button,input,select,textarea{font:inherit;color:inherit}
+  button{touch-action:manipulation;cursor:pointer}
+  .wrap{max-width:520px;margin:0 auto;min-height:100dvh;display:flex;flex-direction:column}
+
+  /* ---- top bar ---- */
+  .topbar{
+    position:sticky;top:0;z-index:20;
+    display:flex;align-items:center;gap:10px;
+    padding:calc(9px + env(safe-area-inset-top)) 15px 9px;
+    background:color-mix(in srgb,var(--bg) 86%,transparent);
+    backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+    border-bottom:1px solid var(--line);
+  }
+  .logo{
+    width:34px;height:34px;border-radius:11px;flex:none;
+    background:var(--green-bg);color:var(--green);
+    display:grid;place-items:center;font-size:18px;
+  }
+  .brand h1{margin:0;font-size:15.5px;font-weight:650;letter-spacing:-.2px}
+  .brand p{margin:0;font-size:11.5px;color:var(--muted);letter-spacing:.3px;text-transform:uppercase}
+  .topbar .spacer{flex:1}
+  .ghost{
+    border:1px solid var(--line);background:var(--card);color:var(--muted);
+    border-radius:10px;padding:7px 10px;font-size:12.5px;min-height:34px;
+  }
+  .ghost:active{background:var(--bg)}
+
+  main{padding:13px 14px calc(92px + env(safe-area-inset-bottom));flex:1}
+
+  /* ---- generic ---- */
+  .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:15px;box-shadow:var(--shadow)}
+  .card + .card, .card + section, section + section, .stack > * + *{margin-top:12px}
+  .eyebrow{margin:0 0 2px;font-size:11.5px;letter-spacing:.9px;text-transform:uppercase;color:var(--muted);font-weight:600}
+  h2.sec{margin:20px 2px 9px;font-size:12px;letter-spacing:.9px;text-transform:uppercase;color:var(--muted);font-weight:650}
+  .num{font-family:var(--num);font-variant-numeric:tabular-nums;letter-spacing:-.4px}
+  .pos{color:var(--green)} .neg{color:var(--red)} .muted{color:var(--muted)}
+
+  /* ---- month switcher ---- */
+  .monthbar{display:flex;align-items:center;gap:6px;margin:0 0 12px}
+  .monthbar button{
+    width:40px;height:40px;flex:none;border:1px solid var(--line);background:var(--card);
+    border-radius:12px;color:var(--ink-soft);font-size:17px;line-height:1;display:grid;place-items:center;
+  }
+  .monthbar button:active{background:var(--green-bg)}
+  .monthbar .lbl{flex:1;text-align:center;line-height:1.2}
+  .monthbar .lbl strong{display:block;font-size:15px;font-weight:650}
+  .monthbar .lbl span{font-size:11px;color:var(--muted)}
+
+  /* ---- hero ---- */
+  .hero{position:relative;overflow:hidden}
+  .hero::after{
+    content:"";position:absolute;right:-40px;top:-40px;width:130px;height:130px;border-radius:50%;
+    background:var(--green-bg);opacity:.55;pointer-events:none;
+  }
+  .hero .big{margin:2px 0 12px;font-size:38px;line-height:1.05;font-weight:600}
+  .hero .big small{font-size:20px;opacity:.6;font-weight:500}
+  .split{display:grid;grid-template-columns:1fr 1fr;gap:10px;position:relative;border-top:1px solid var(--line);padding-top:12px}
+  .split div{display:flex;flex-direction:column;gap:1px}
+  .split span{font-size:11.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.6px}
+  .split strong{font-size:17px;font-weight:600}
+
+  /* ---- action row ---- */
+  .actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+  .btn{
+    border:1px solid var(--line);background:var(--card);border-radius:13px;
+    padding:12px 14px;font-size:14.5px;font-weight:600;min-height:46px;
+    display:flex;align-items:center;justify-content:center;gap:7px;
+  }
+  .btn:active{transform:translateY(1px)}
+  .btn.primary{background:var(--green);border-color:var(--green);color:#fff}
+  .btn.danger{color:var(--red);border-color:color-mix(in srgb,var(--red) 30%,var(--line));background:var(--red-bg)}
+  .btn.wide{width:100%}
+  .btn.ghostish{background:transparent}
+
+  /* ---- list rows ---- */
+  .rows{display:flex;flex-direction:column}
+  .row{
+    display:flex;align-items:center;gap:11px;width:100%;text-align:left;
+    background:none;border:0;border-bottom:1px solid var(--line);
+    padding:11px 0;min-height:56px;
+  }
+  .row:last-child{border-bottom:0}
+  .row:active{opacity:.6}
+  .ico{
+    width:36px;height:36px;flex:none;border-radius:11px;display:grid;place-items:center;font-size:16px;
+    background:var(--bg);border:1px solid var(--line);
+  }
+  .row .txt{flex:1;min-width:0}
+  .row .txt b{display:block;font-size:14.5px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .row .txt small{display:block;font-size:11.5px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .row .amt{text-align:right;font-size:15px;font-weight:600;flex:none}
+  .row .amt small{display:block;font-size:10.5px;color:var(--muted);font-weight:500;letter-spacing:.3px}
+  .dayhead{
+    display:flex;justify-content:space-between;align-items:baseline;
+    margin:16px 2px 2px;font-size:11.5px;letter-spacing:.7px;text-transform:uppercase;color:var(--muted);
+  }
+
+  /* ---- chips ---- */
+  .chips{display:flex;flex-wrap:wrap;gap:7px}
+  .chip{
+    border:1px solid var(--line);background:var(--card);border-radius:999px;
+    padding:9px 12px;font-size:13.5px;min-height:38px;display:inline-flex;align-items:center;gap:6px;color:var(--ink-soft);
+  }
+  .chip[aria-pressed="true"]{background:var(--green-bg);border-color:color-mix(in srgb,var(--green) 38%,var(--line));color:var(--green);font-weight:600}
+
+  /* ---- form ---- */
+  .seg{display:grid;grid-template-columns:1fr 1fr;gap:4px;background:var(--bg);border:1px solid var(--line);border-radius:13px;padding:4px;margin-bottom:14px}
+  .seg button{border:0;background:none;border-radius:10px;padding:10px;font-size:14.5px;font-weight:600;color:var(--muted);min-height:44px}
+  .seg button[aria-pressed="true"]{background:var(--card);color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.07)}
+  .seg button[data-type="in"][aria-pressed="true"]{color:var(--green)}
+  .seg button[data-type="out"][aria-pressed="true"]{color:var(--red)}
+  .fld{display:block;margin-bottom:13px}
+  .fld > span{display:block;font-size:11.5px;letter-spacing:.7px;text-transform:uppercase;color:var(--muted);margin-bottom:5px;font-weight:600}
+  .fld input,.fld select{
+    width:100%;background:var(--bg);border:1px solid var(--line);border-radius:11px;
+    padding:11px 12px;font-size:16px;min-height:46px;appearance:none;-webkit-appearance:none;
+  }
+  .fld input:focus,.fld select:focus{outline:2px solid color-mix(in srgb,var(--green) 45%,transparent);outline-offset:1px}
+  ::placeholder{color:var(--muted);opacity:.85}
+  .amount-in{font-family:var(--num);font-size:22px !important;font-weight:600;letter-spacing:-.5px}
+  .row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .hint{font-size:11.5px;color:var(--muted);margin:-7px 2px 12px}
+  .err{color:var(--red);font-size:12.5px;margin:-6px 2px 10px;font-weight:600}
+  .formfoot{position:sticky;bottom:calc(76px + env(safe-area-inset-bottom));padding-top:6px}
+
+  /* ---- banner / empty ---- */
+  .banner{
+    display:flex;gap:9px;align-items:center;font-size:12.5px;line-height:1.35;
+    background:var(--gold-bg);border:1px solid color-mix(in srgb,var(--gold) 32%,var(--line));
+    color:var(--gold);border-radius:12px;padding:10px 11px;margin-bottom:12px;
+  }
+  .banner button{margin-left:auto;flex:none;border:1px solid currentColor;background:none;color:inherit;border-radius:8px;padding:5px 9px;font-size:11.5px;font-weight:600}
+  .empty{text-align:center;padding:26px 14px;color:var(--muted);font-size:13.5px}
+  .empty b{display:block;color:var(--ink);font-size:15px;margin-bottom:4px}
+
+  /* ---- stats grid ---- */
+  .stats{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .stat{background:var(--card);border:1px solid var(--line);border-radius:13px;padding:11px 12px}
+  .stat span{display:block;font-size:11px;letter-spacing:.6px;text-transform:uppercase;color:var(--muted);font-weight:600}
+  .stat strong{font-size:17px;font-weight:600}
+
+  /* ---- bar chart ---- */
+  .chart{display:flex;align-items:flex-end;gap:8px;height:118px;margin-top:6px}
+  .chart .col{flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;height:100%}
+  .chart .bars{flex:1;display:flex;align-items:flex-end;gap:3px;width:100%;justify-content:center}
+  .chart .b{width:9px;border-radius:4px 4px 2px 2px;min-height:2px;display:block}
+  .chart .b.in{background:var(--green);opacity:.9}
+  .chart .b.out{background:var(--red);opacity:.55}
+  .chart .cl{font-size:10.5px;color:var(--muted)}
+  .legend{display:flex;gap:14px;font-size:11.5px;color:var(--muted);margin-top:10px}
+  .legend i{display:inline-block;width:8px;height:8px;border-radius:2px;margin-right:5px}
+  .legend .i-in{background:var(--green)} .legend .i-out{background:var(--red);opacity:.55}
+
+  /* ---- category bars ---- */
+  .catrow{display:grid;grid-template-columns:22px 1fr auto;gap:9px;align-items:center;padding:8px 0}
+  .catrow .nm{font-size:13.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .catrow .bar{grid-column:2;height:5px;border-radius:3px;background:var(--bg);overflow:hidden;margin-top:-4px}
+  .catrow .bar i{display:block;height:100%;border-radius:3px;background:var(--red);opacity:.6}
+  .catrow .v{font-size:13.5px;font-weight:600}
+
+  /* ---- tab bar ---- */
+  .tabbar{
+    position:fixed;left:0;right:0;bottom:0;z-index:30;
+    background:color-mix(in srgb,var(--card) 96%,transparent);
+    backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
+    border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom);
+  }
+  .tabs{max-width:520px;margin:0 auto;display:grid;grid-template-columns:repeat(5,1fr)}
+  .tab{
+    background:none;border:0;min-height:57px;padding:7px 0 6px;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;
+    font-size:10px;letter-spacing:.1px;color:var(--muted);
+  }
+  .tab svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.75;stroke-linecap:round;stroke-linejoin:round}
+  .tab[aria-selected="true"]{color:var(--green);font-weight:600}
+  .tab.add .bubble{
+    width:38px;height:38px;border-radius:14px;display:grid;place-items:center;margin-top:-16px;
+    background:var(--green);color:#fff;box-shadow:0 6px 16px -8px rgba(29,122,76,.9);
+  }
+  .tab.add[aria-selected="true"] .bubble{color:#fff}
+  .tab.add span.t{color:var(--green)}
+
+  /* ---- sheet ---- */
+  .sheet-wrap{position:fixed;inset:0;z-index:60;display:flex;align-items:flex-end;justify-content:center}
+  .backdrop{position:absolute;inset:0;background:rgba(12,18,14,.45);backdrop-filter:blur(2px);animation:fade .18s ease}
+  .sheet{
+    position:relative;width:100%;max-width:520px;max-height:88dvh;overflow-y:auto;-webkit-overflow-scrolling:touch;
+    background:var(--card);border-radius:20px 20px 0 0;border:1px solid var(--line);border-bottom:0;
+    padding:10px 16px calc(20px + env(safe-area-inset-bottom));
+    animation:up .22s cubic-bezier(.2,.8,.3,1);
+  }
+  .sheet h2{margin:4px 0 14px;font-size:16px;font-weight:650}
+  .grabber{width:38px;height:4px;border-radius:2px;background:var(--line);margin:2px auto 6px}
+  @keyframes up{from{transform:translateY(100%)}to{transform:translateY(0)}}
+  @keyframes fade{from{opacity:0}to{opacity:1}}
+
+  /* ---- toast ---- */
+  .toast{
+    position:fixed;left:50%;bottom:calc(76px + env(safe-area-inset-bottom));transform:translate(-50%,14px);
+    background:var(--ink);color:var(--bg);font-size:13px;font-weight:600;
+    padding:10px 16px;border-radius:999px;z-index:80;opacity:0;pointer-events:none;transition:.2s ease;
+    white-space:nowrap;max-width:calc(100vw - 32px);overflow:hidden;text-overflow:ellipsis;
+  }
+  .toast.show{opacity:1;transform:translate(-50%,0)}
+  @media (prefers-reduced-motion:reduce){*{animation:none !important;transition:none !important}}
+
+  /* ---- desktop: keep it phone-shaped ---- */
+  @media (min-width:560px){
+    body{background:var(--bg)}
+    .wrap{border-left:1px solid var(--line);border-right:1px solid var(--line);background:var(--bg);box-shadow:0 0 60px -40px rgba(0,0,0,.4)}
+  }
+  /* dark mode: the green is light, so ink on top of it, not white */
+  @media (prefers-color-scheme:dark){
+    .btn.primary,.tab.add .bubble{color:#0d1a12}
+    .toast{background:var(--ink);color:#11150f}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="topbar">
+    <div class="logo" aria-hidden="true">🌿</div>
+    <div class="brand">
+      <h1>Cardamom Khata</h1>
+      <p>farm accounts · demo</p>
+    </div>
+    <div class="spacer"></div>
+    <button class="ghost" id="btnToday" type="button">This month</button>
+  </header>
+
+  <main id="view"></main>
+
+  <nav class="tabbar" aria-label="Main">
+    <div class="tabs">
+      <button class="tab" data-go="home" aria-selected="true">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 10.5 12 3l9 7.5"/><path d="M5.5 9.5V20h13V9.5"/><path d="M10 20v-5h4v5"/></svg>
+        <span>Home</span>
+      </button>
+      <button class="tab" data-go="records" aria-selected="false">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="3.5" width="16" height="17" rx="2.5"/><path d="M8 8.5h8"/><path d="M8 12.5h8"/><path d="M8 16.5h5"/></svg>
+        <span>Entries</span>
+      </button>
+      <button class="tab add" data-go="add" aria-selected="false">
+        <span class="bubble"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14"/><path d="M5 12h14"/></svg></span>
+        <span class="t">Add</span>
+      </button>
+      <button class="tab" data-go="reports" aria-selected="false">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20V10"/><path d="M10 20V4"/><path d="M16 20v-7"/><path d="M22 20H2"/></svg>
+        <span>Reports</span>
+      </button>
+      <button class="tab" data-go="guide" aria-selected="false">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v5.5"/><path d="M12 7.8v.2"/></svg>
+        <span>Guide</span>
+      </button>
+    </div>
+  </nav>
+</div>
+
+<div class="sheet-wrap" id="sheet" hidden>
+  <div class="backdrop" data-close="1"></div>
+  <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetTitle">
+    <div class="grabber"></div>
+    <h2 id="sheetTitle">Edit entry</h2>
+    <div id="sheetBody"></div>
+  </div>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+(() => {
+  "use strict";
+
+  /* ------------------------------------------------------------------ data */
+  const KEY = "cardamom-khata-v1";
+  const MON = ["January","February","March","April","May","June",
+               "July","August","September","October","November","December"];
+
+  const CATS = {
+    in: [
+      { id:"sale",     label:"Cardamom sale", icon:"🌿", kg:true },
+      { id:"plants",   label:"Plant sale",    icon:"🪴" },
+      { id:"subsidy",  label:"Subsidy / other", icon:"🏛️" }
+    ],
+    out: [
+      { id:"labour",     label:"Labour",       icon:"👷" },
+      { id:"fertiliser", label:"Fertiliser",   icon:"🧪" },
+      { id:"pesticide",  label:"Pesticide",    icon:"🧴" },
+      { id:"drying",     label:"Drying / fuel",icon:"🔥" },
+      { id:"transport",  label:"Transport",    icon:"🚚" },
+      { id:"equipment",  label:"Equipment",    icon:"🛠️" },
+      { id:"land",       label:"Land / lease", icon:"🏞️" },
+      { id:"misc",       label:"Other expense",icon:"📎" }
+    ]
+  };
+  const ALL_CATS = [...CATS.in, ...CATS.out];
+  const catOf = id => ALL_CATS.find(c => c.id === id) || { id, label:id, icon:"•" };
+
+  /* --------------------------------------------------------------- helpers */
+  const $  = (s, r = document) => r.querySelector(s);
+  const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
+  const pad = n => String(n).padStart(2, "0");
+  const ymd = d => `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+  const todayStr = () => ymd(new Date());
+  const parseYmd = s => { const [y,m,d] = s.split("-").map(Number); return new Date(y, m-1, d); };
+  const monthKey = d => `${d.getFullYear()}-${pad(d.getMonth()+1)}`;
+  const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2,7);
+
+  const inr = n => {
+    const v = Math.round(Math.abs(n));
+    return (n < -0.5 ? "−" : "") + "₹" + v.toLocaleString("en-IN");
+  };
+  const num = n => Math.round(n).toLocaleString("en-IN");
+  const kgFmt = n => (Math.round(n*100)/100).toLocaleString("en-IN");
+
+  const money = e => (e.type === "in" ? "+" : "−") + "₹" + Math.round(e.amount).toLocaleString("en-IN");
+
+  function dateLabel(iso) {
+    const t = todayStr();
+    const d = parseYmd(iso);
+    const y = new Date(); y.setDate(y.getDate() - 1);
+    if (iso === t) return "Today";
+    if (iso === ymd(y)) return "Yesterday";
+    return `${d.getDate()} ${MON[d.getMonth()].slice(0,3)} ${d.getFullYear()}`;
+  }
+
+  /* --------------------------------------------------------------- storage */
+  let state = load();
+  function load() {
+    try {
+      const raw = localStorage.getItem(KEY);
+      if (raw) {
+        const s = JSON.parse(raw);
+        if (s && Array.isArray(s.entries)) return { v:1, entries:s.entries };
+      }
+    } catch (err) { /* corrupted or blocked storage — fall through to seed */ }
+    return { v:1, entries: seed() };
+  }
+  function save() {
+    try { localStorage.setItem(KEY, JSON.stringify(state)); }
+    catch (err) { toast("Could not save — storage is full or blocked"); }
+  }
+
+  function seed() {
+    const now = new Date(), Y = now.getFullYear(), M = now.getMonth(), T = todayStr();
+    const dateIn = (mo, day) => {
+      const y = Y + Math.floor(mo / 12), m = ((mo % 12) + 12) % 12;
+      const iso = ymd(new Date(y, m, Math.min(day, 28)));
+      return iso > T ? T : iso;
+    };
+    let n = 0;
+    const mk = (mo, day, type, cat, amount, extra) => ({
+      id: "demo" + (++n), created: Date.now() - (100 - n) * 6e5,
+      date: dateIn(mo, day), type, cat, amount, sample: 1, note: "",
+      ...(extra || {})
+    });
+    return [
+      mk(M, 2,  "in",  "sale",       42 * 1480, { kg:42, rate:1480, note:"Auction lot · Pampadumpara" }),
+      mk(M, 4,  "out", "labour",     18000,      { note:"Harvesting · 6 workers, 3 days" }),
+      mk(M, 5,  "out", "fertiliser", 9600,       { note:"NPK 19:19:19 · 2 bags" }),
+      mk(M, 6,  "out", "drying",     4200,       { note:"Firewood for the dryer" }),
+      mk(M, 8,  "out", "transport",  2400,       { note:"To the auction centre, Kumily" }),
+      mk(M, 9,  "in",  "sale",       38 * 1510,  { kg:38, rate:1510, note:"Second picking" }),
+      mk(M, 10, "out", "pesticide",  3150,       { note:"Neem oil spray" }),
+      mk(M-1, 3, "out", "labour",     22500,      { note:"Weeding + harvesting" }),
+      mk(M-1, 7, "in",  "sale",       55 * 1620,  { kg:55, rate:1620, note:"Best rate of the season" }),
+      mk(M-1, 12,"out", "pesticide",   6800,      { note:"Fungicide · 4 plots" }),
+      mk(M-1, 18,"out", "drying",      3900,      { note:"Diesel for the dryer" }),
+      mk(M-1, 24,"out", "misc",        1200,      { note:"Licence renewal" }),
+      mk(M-2, 6, "in",  "sale",       61 * 1545,  { kg:61, rate:1545, note:"Bulk lot" }),
+      mk(M-2, 9, "out", "fertiliser",  12400,     { note:"Organic mix + potash" }),
+      mk(M-2, 15,"out", "labour",      19000,     { note:"Planting gap filling" }),
+      mk(M-2, 22,"out", "equipment",    4750,     { note:"Sprayer repair" }),
+      mk(M-3, 11,"in",  "sale",       47 * 1390,  { kg:47, rate:1390 }),
+      mk(M-3, 16,"out", "labour",      16800),
+      mk(M-3, 20,"out", "drying",       3200)
+    ];
+  }
+
+  /* ------------------------------------------------------------ aggregates */
+  const entries = () => state.entries;
+  const inMonth = d => entries().filter(e => e.date.slice(0,7) === monthKey(d));
+  const sums = list => {
+    let income = 0, expense = 0;
+    for (const e of list) e.type === "in" ? income += e.amount : expense += e.amount;
+    return { income, expense, profit: income - expense };
+  };
+  const sortedDesc = list => list.slice().sort((a,b) =>
+    a.date === b.date ? (b.created || 0) - (a.created || 0) : a.date < b.date ? 1 : -1);
+
+  /* ---------------------------------------------------------------- routing */
+  let view = "home";
+  let month = (() => { const d = new Date(); return new Date(d.getFullYear(), d.getMonth(), 1); })();
+  let draft = { type:"out", cat:"labour" };
+  let recFilter = { kind:"all", q:"" };
+  let editingId = null;
+
+  const routes = ["home", "add", "records", "reports", "guide"];
+  function go(name, opts) {
+    if (!routes.includes(name)) name = "home";
+    if (name !== view && !(opts && opts.keepScroll)) window.scrollTo(0, 0);
+    view = name;
+    if (location.hash !== "#" + name) history.replaceState(null, "", "#" + name);
+    render();
+  }
+
+  function render() {
+    const host = $("#view");
+    if (view === "home") host.innerHTML = homeHTML();
+    else if (view === "add") host.innerHTML = addHTML();
+    else if (view === "records") host.innerHTML = recordsHTML();
+    else if (view === "reports") host.innerHTML = reportsHTML();
+    else host.innerHTML = guideHTML();
+
+    $$(".tab").forEach(t => t.setAttribute("aria-selected", String(t.dataset.go === view)));
+
+    if (view === "home") bindHome();
+    else if (view === "add") bindAdd();
+    else if (view === "records") { renderRecordList(); bindRecords(); }
+    else if (view === "reports") bindReports();
+    else bindGuide();
+  }
+
+  /* ------------------------------------------------------------------ home */
+  function homeHTML() {
+    const list = inMonth(month);
+    const s = sums(list);
+    const all = sums(entries());
+    const sold = list.filter(e => e.type === "in" && e.kg).reduce((a,e) => a + e.kg, 0);
+    const isNow = monthKey(month) === monthKey(new Date());
+    const ahead = month > new Date();
+    const cls = s.profit > 0 ? "pos" : s.profit < 0 ? "neg" : "";
+    const sampleBanner = entries().some(e => e.sample) ? `
+      <div class="banner">
+        <span>Showing sample numbers so the demo reads properly.</span>
+        <button type="button" data-act="clear-sample">Clear</button>
+      </div>` : "";
+
+    const topCats = (() => {
+      const map = {};
+      list.filter(e => e.type === "out").forEach(e => map[e.cat] = (map[e.cat] || 0) + e.amount);
+      const arr = Object.entries(map).sort((a,b) => b[1] - a[1]);
+      const max = arr.length ? arr[0][1] : 1;
+      const total = arr.reduce((a, x) => a + x[1], 0);
+      return arr.map(([id, v]) => {
+        const c = catOf(id);
+        return `<div class="catrow">
+          <span aria-hidden="true">${c.icon}</span>
+          <span class="nm">${esc(c.label)} <span class="muted">${Math.round(v/total*100)}%</span></span>
+          <span class="v num">${inr(v)}</span>
+          <span class="bar"><i style="width:${Math.max(4, Math.round(v/max*100))}%"></i></span>
+        </div>`;
+      }).join("");
+    })();
+
+    const recent = sortedDesc(list).slice(0, 6);
+
+    return `
+      ${sampleBanner}
+      <div class="monthbar">
+        <button type="button" data-month="-1" aria-label="Previous month">‹</button>
+        <div class="lbl"><strong>${MON[month.getMonth()]} ${month.getFullYear()}</strong>
+          <span>${isNow ? "this month" : ahead ? "ahead" : "past month"}</span></div>
+        <button type="button" data-month="1" aria-label="Next month">›</button>
+      </div>
+
+      <section class="card hero">
+        <p class="eyebrow">Net profit</p>
+        <p class="big num ${cls}">${inr(s.profit)}</p>
+        <div class="split">
+          <div><span>Income</span><strong class="num pos">${inr(s.income)}</strong></div>
+          <div><span>Expense</span><strong class="num neg">${inr(s.expense)}</strong></div>
+        </div>
+      </section>
+
+      <div class="actions">
+        <button class="btn primary" type="button" data-quick="in">＋ Income</button>
+        <button class="btn" type="button" data-quick="out">− Expense</button>
+      </div>
+
+      <h2 class="sec">Where it went</h2>
+      <section class="card">
+        ${topCats || `<div class="empty"><b>No spending yet</b>Nothing recorded for ${MON[month.getMonth()]}.</div>`}
+      </section>
+
+      <h2 class="sec">All time</h2>
+      <div class="stats">
+        <div class="stat"><span>Income</span><strong class="num pos">${inr(all.income)}</strong></div>
+        <div class="stat"><span>Expense</span><strong class="num neg">${inr(all.expense)}</strong></div>
+        <div class="stat"><span>Net</span><strong class="num">${inr(all.profit)}</strong></div>
+        <div class="stat"><span>Sold this month</span><strong class="num">${sold ? kgFmt(sold) + " kg" : "—"}</strong></div>
+      </div>
+
+      <h2 class="sec">Recent</h2>
+      <section class="card">
+        ${recent.length ? `<div class="rows">${recent.map(rowHTML).join("")}</div>`
+          : `<div class="empty"><b>Nothing here yet</b>Tap Add to record your first sale or expense.</div>`}
+      </section>
+      <p class="hint" style="text-align:center;margin-top:16px">Demo only · entries stay in this browser</p>
+    `;
+  }
+
+  function rowHTML(e) {
+    const c = catOf(e.cat);
+    const sub = e.type === "in" && e.kg && e.rate
+      ? `${kgFmt(e.kg)} kg · ₹${num(e.rate)}/kg`
+      : (e.note || dateLabel(e.date));
+    return `<button class="row" type="button" data-edit="${e.id}">
+      <span class="ico" aria-hidden="true">${c.icon}</span>
+      <span class="txt"><b>${esc(c.label)}</b><small>${esc(sub)}</small></span>
+      <span class="amt num ${e.type === "in" ? "pos" : ""}">${money(e)}
+        <small>${dateLabel(e.date)}</small></span>
+    </button>`;
+  }
+
+  function bindHome() {
+    $$("[data-month]").forEach(b => b.addEventListener("click", () => {
+      const dir = Number(b.dataset.month);
+      month = new Date(month.getFullYear(), month.getMonth() + dir, 1);
+      render();
+    }));
+    $$("[data-quick]").forEach(b => b.addEventListener("click", () => {
+      const t = b.dataset.quick;
+      draft = { type:t, cat: t === "in" ? "sale" : "labour" };
+      go("add");
+    }));
+    const clr = $('[data-act="clear-sample"]');
+    if (clr) clr.addEventListener("click", () => {
+      if (!confirm("Remove the sample entries? Your own entries stay.")) return;
+      state.entries = entries().filter(e => !e.sample);
+      save(); toast("Sample data cleared"); render();
+    });
+  }
+
+  /* ------------------------------------------------------------------- add */
+  function catChips(type, selected, prefix) {
+    return CATS[type].map(c => `<button type="button" class="chip" data-${prefix}-cat="${c.id}"
+      aria-pressed="${c.id === selected}"><span aria-hidden="true">${c.icon}</span>${esc(c.label)}</button>`).join("");
+  }
+
+  function addHTML() {
+    const t = draft.type;
+    const sale = t === "in" && draft.cat === "sale";
+    return `
+      <section class="card">
+        <p class="eyebrow">New entry</p>
+        <div class="seg" role="group" aria-label="Income or expense">
+          <button type="button" data-type="in"  aria-pressed="${t === "in"}">Income</button>
+          <button type="button" data-type="out" aria-pressed="${t === "out"}">Expense</button>
+        </div>
+
+        <div class="fld" id="fld-cats">
+          <span>What for</span>
+          <div class="chips">${catChips(t, draft.cat, "add")}</div>
+        </div>
+
+        <div class="row2" id="sale-extra" ${sale ? "" : "hidden"}>
+          <label class="fld"><span>Quantity (kg)</span>
+            <input id="f-kg" type="text" inputmode="decimal" placeholder="0" autocomplete="off"></label>
+          <label class="fld"><span>Rate ₹/kg</span>
+            <input id="f-rate" type="text" inputmode="decimal" placeholder="0" autocomplete="off"></label>
+        </div>
+        <p class="hint" id="sale-hint" ${sale ? "" : "hidden"}>Amount fills in as kg × rate — you can still type over it.</p>
+
+        <label class="fld"><span>Amount (₹)</span>
+          <input id="f-amount" class="amount-in" type="text" inputmode="decimal" placeholder="0" autocomplete="off"></label>
+        <p class="err" id="f-err" hidden></p>
+
+        <label class="fld"><span>Date</span>
+          <input id="f-date" type="date" value="${todayStr()}" max="2999-12-31"></label>
+
+        <label class="fld"><span>Note (optional)</span>
+          <input id="f-note" type="text" placeholder="lot, buyer, plot, worker" autocomplete="off"></label>
+
+        <div class="formfoot">
+          <button class="btn primary wide" type="button" id="f-save">Save entry</button>
+        </div>
+      </section>
+      <p class="hint" style="text-align:center">Saved on this phone only. Export from Reports.</p>
+    `;
+  }
+
+  function bindAdd() {
+    $$(".seg button", $("#view")).forEach(b => b.addEventListener("click", () => {
+      draft.type = b.dataset.type;
+      draft.cat = draft.type === "in" ? "sale" : "labour";
+      render();
+    }));
+
+    const cats = $("#fld-cats");
+    cats.addEventListener("click", ev => {
+      const chip = ev.target.closest("[data-add-cat]");
+      if (!chip) return;
+      draft.cat = chip.dataset.addCat;
+      $$(".chip", cats).forEach(c => c.setAttribute("aria-pressed", String(c.dataset.addCat === draft.cat)));
+      const sale = draft.type === "in" && draft.cat === "sale";
+      $("#sale-extra").hidden = !sale;
+      $("#sale-hint").hidden = !sale;
+      recalcSale();
+    });
+
+    const kg = $("#f-kg"), rate = $("#f-rate"), amount = $("#f-amount");
+    if (kg && rate) {
+      const onQty = () => {
+        const k = parseFloat(kg.value.replace(/[^0-9.]/g, ""));
+        const r = parseFloat(rate.value.replace(/[^0-9.]/g, ""));
+        if (k > 0 && r > 0) amount.value = String(Math.round(k * r));
+      };
+      kg.addEventListener("input", onQty);
+      rate.addEventListener("input", onQty);
+    }
+
+    amount.addEventListener("focus", () => amount.select());
+    amount.addEventListener("keydown", ev => { if (ev.key === "Enter") { ev.preventDefault(); saveNew(); } });
+
+    $("#f-save").addEventListener("click", saveNew);
+  }
+
+  function recalcSale() {
+    const kg = $("#f-kg"), rate = $("#f-rate"), amount = $("#f-amount");
+    if (!kg || !rate || kg.closest("[hidden]")) return;
+    const k = parseFloat(kg.value || "0"), r = parseFloat(rate.value || "0");
+    if (k > 0 && r > 0) amount.value = String(Math.round(k * r));
+  }
+
+  function saveNew() {
+    const err = $("#f-err");
+    const amountEl = $("#f-amount");
+    const amount = Math.round(parseFloat((amountEl.value || "").replace(/[^0-9.]/g, "")) || 0);
+    if (!(amount > 0)) {
+      err.textContent = "Enter an amount above zero.";
+      err.hidden = false;
+      amountEl.focus();
+      return;
+    }
+    err.hidden = true;
+    const date = $("#f-date").value || todayStr();
+    const entry = {
+      id: uid(), created: Date.now(), date, type: draft.type, cat: draft.cat,
+      amount, note: $("#f-note").value.trim()
+    };
+    const kg = $("#f-kg"), rate = $("#f-rate");
+    if (kg && kg.closest("#sale-extra") && !kg.closest("[hidden]")) {
+      const k = parseFloat(kg.value || "0"), r = parseFloat(rate.value || "0");
+      if (k > 0) entry.kg = Math.round(k * 100) / 100;
+      if (r > 0) entry.rate = Math.round(r * 100) / 100;
+    }
+    state.entries.push(entry);
+    save();
+    month = (() => { const d = parseYmd(date); return new Date(d.getFullYear(), d.getMonth(), 1); })();
+    toast(`${entry.type === "in" ? "Income" : "Expense"} saved · ${inr(amount)}`);
+    go("home");
+  }
+
+  /* --------------------------------------------------------------- records */
+  function recordsHTML() {
+    return `
+      <div class="monthbar">
+        <button type="button" data-month="-1" aria-label="Previous month">‹</button>
+        <div class="lbl"><strong id="recTitle">${MON[month.getMonth()]} ${month.getFullYear()}</strong>
+          <span>tap an entry to edit</span></div>
+        <button type="button" data-month="1" aria-label="Next month">›</button>
+      </div>
+      <label class="fld"><span>Search</span>
+        <input id="rec-q" type="search" placeholder="note, category, amount" autocomplete="off"></label>
+      <div class="chips" id="rec-chips" style="margin:-4px 0 4px">
+        <button class="chip" data-kind="all"  aria-pressed="true">All</button>
+        <button class="chip" data-kind="in"   aria-pressed="false">Income</button>
+        <button class="chip" data-kind="out"  aria-pressed="false">Expense</button>
+      </div>
+      <div id="rec-list"></div>
+    `;
+  }
+
+  function renderRecordList() {
+    const host = $("#rec-list");
+    if (!host) return;
+    const k = monthKey(month);
+    let list = entries().filter(e => e.date.slice(0,7) === k);
+    if (recFilter.kind !== "all") list = list.filter(e => e.type === recFilter.kind);
+    const q = recFilter.q.trim().toLowerCase();
+    if (q) {
+      list = list.filter(e =>
+        catOf(e.cat).label.toLowerCase().includes(q) ||
+        (e.note || "").toLowerCase().includes(q) ||
+        String(e.amount).includes(q));
+    }
+    list = sortedDesc(list);
+    const s = sums(list);
+    if (!list.length) {
+      host.innerHTML = `<div class="card"><div class="empty"><b>Nothing matches</b>
+        ${recFilter.q || recFilter.kind !== "all" ? "Try clearing the search or filter." : `No entries in ${MON[month.getMonth()]}.`}</div></div>`;
+      return;
+    }
+    const days = {};
+    list.forEach(e => (days[e.date] = days[e.date] || []).push(e));
+    const blocks = Object.keys(days).sort().reverse().map(day => {
+      const daySum = sums(days[day]);
+      return `<div class="dayhead"><span>${dateLabel(day)}</span>
+          <span class="num ${daySum.profit >= 0 ? "pos" : "neg"}">${inr(daySum.profit)}</span></div>
+        <section class="card"><div class="rows">${days[day].map(rowHTML).join("")}</div></section>`;
+    }).join("");
+
+    host.innerHTML = `
+      <div class="stats" style="margin-bottom:2px">
+        <div class="stat"><span>${list.length} entries</span><strong class="num ${s.profit >= 0 ? "pos" : "neg"}">${inr(s.profit)}</strong></div>
+        <div class="stat"><span>In − out</span><strong class="num muted" style="font-size:13px">${inr(s.income)} · ${inr(s.expense)}</strong></div>
+      </div>
+      ${blocks}`;
+  }
+
+  function bindRecords() {
+    $$("[data-month]", $("#view")).forEach(b => b.addEventListener("click", () => {
+      month = new Date(month.getFullYear(), month.getMonth() + Number(b.dataset.month), 1);
+      $("#recTitle").textContent = `${MON[month.getMonth()]} ${month.getFullYear()}`;
+      renderRecordList();
+    }));
+    const q = $("#rec-q");
+    q.addEventListener("input", () => { recFilter.q = q.value; renderRecordList(); });
+    $("#rec-chips").addEventListener("click", ev => {
+      const chip = ev.target.closest("[data-kind]");
+      if (!chip) return;
+      recFilter.kind = chip.dataset.kind;
+      $$("#rec-chips .chip").forEach(c => c.setAttribute("aria-pressed", String(c.dataset.kind === recFilter.kind)));
+      renderRecordList();
+    });
+  }
+
+  /* --------------------------------------------------------------- reports */
+  function reportsHTML() {
+    const months = [];
+    for (let i = 5; i >= 0; i--) months.push(new Date(month.getFullYear(), month.getMonth() - i, 1));
+    const data = months.map(d => ({ d, ...sums(entries().filter(e => e.date.slice(0,7) === monthKey(d))) }));
+    const max = Math.max(1, ...data.map(x => Math.max(x.income, x.expense)));
+
+    const yearEntries = entries().filter(e => e.date.slice(0,4) === String(month.getFullYear()));
+    const ys = sums(yearEntries);
+    const kgTotal = yearEntries.filter(e => e.type === "in" && e.kg).reduce((a,e) => a + e.kg, 0);
+    const revTotal = yearEntries.filter(e => e.type === "in" && e.kg).reduce((a,e) => a + e.amount, 0);
+    const avgRate = kgTotal ? revTotal / kgTotal : 0;
+
+    const catMap = {};
+    yearEntries.filter(e => e.type === "out").forEach(e => catMap[e.cat] = (catMap[e.cat] || 0) + e.amount);
+    const cats = Object.entries(catMap).sort((a,b) => b[1] - a[1]);
+    const catMax = cats.length ? cats[0][1] : 1;
+    const catTotal = cats.reduce((a,c) => a + c[1], 0);
+
+    return `
+      <div class="monthbar">
+        <button type="button" data-month="-1" aria-label="Previous month">‹</button>
+        <div class="lbl"><strong>${MON[month.getMonth()]} ${month.getFullYear()}</strong>
+          <span>six month view</span></div>
+        <button type="button" data-month="1" aria-label="Next month">›</button>
+      </div>
+
+      <section class="card">
+        <p class="eyebrow">Income vs expense</p>
+        <div class="chart">
+          ${data.map(x => `
+            <div class="col">
+              <div class="bars">
+                <i class="b in"  style="height:${x.income ? Math.max(3, Math.round(x.income/max*100)) : 0}%;${x.income ? "" : "visibility:hidden"}"></i>
+                <i class="b out" style="height:${x.expense ? Math.max(3, Math.round(x.expense/max*100)) : 0}%;${x.expense ? "" : "visibility:hidden"}"></i>
+              </div>
+              <span class="cl">${MON[x.d.getMonth()].slice(0,3)}</span>
+            </div>`).join("")}
+        </div>
+        <div class="legend"><span><i class="i-in"></i>Income</span><span><i class="i-out"></i>Expense</span></div>
+      </section>
+
+      <h2 class="sec">${month.getFullYear()} so far</h2>
+      <div class="stats">
+        <div class="stat"><span>Income</span><strong class="num pos">${inr(ys.income)}</strong></div>
+        <div class="stat"><span>Expense</span><strong class="num neg">${inr(ys.expense)}</strong></div>
+        <div class="stat"><span>Net</span><strong class="num">${inr(ys.profit)}</strong></div>
+        <div class="stat"><span>Avg rate</span><strong class="num">${avgRate ? "₹" + num(avgRate) : "—"}</strong></div>
+        <div class="stat"><span>Sold</span><strong class="num">${kgTotal ? kgFmt(kgTotal) + " kg" : "—"}</strong></div>
+        <div class="stat"><span>Entries</span><strong class="num">${yearEntries.length}</strong></div>
+      </div>
+
+      <h2 class="sec">Expense split · ${month.getFullYear()}</h2>
+      <section class="card">
+        ${cats.length ? cats.map(([id, v]) => {
+          const c = catOf(id);
+          return `<div class="catrow">
+            <span aria-hidden="true">${c.icon}</span>
+            <span class="nm">${esc(c.label)} <span class="muted">${Math.round(v/catTotal*100)}%</span></span>
+            <span class="v num">${inr(v)}</span>
+            <span class="bar"><i style="width:${Math.max(4, Math.round(v/catMax*100))}%"></i></span>
+          </div>`;
+        }).join("") : `<div class="empty"><b>No expenses yet</b>Add one and the split appears here.</div>`}
+      </section>
+
+      <h2 class="sec">Data</h2>
+      <section class="card">
+        <button class="btn wide" type="button" id="btn-csv">Download CSV</button>
+        <p class="hint" style="margin:10px 2px 0">Opens in Excel or Google Sheets. All ${entries().length} entries, every month.</p>
+      </section>
+      <p class="hint" style="text-align:center;margin-top:16px">Nothing leaves this phone. Clearing browser data clears the ledger.</p>
+    `;
+  }
+
+  function bindReports() {
+    $$("[data-month]", $("#view")).forEach(b => b.addEventListener("click", () => {
+      month = new Date(month.getFullYear(), month.getMonth() + Number(b.dataset.month), 1);
+      render();
+    }));
+    const csv = $("#btn-csv");
+    if (csv) csv.addEventListener("click", downloadCSV);
+  }
+
+  function downloadCSV() {
+    const rows = [["date","type","category","kg","rate_per_kg","amount_inr","note"]];
+    sortedDesc(entries()).forEach(e => rows.push([
+      e.date, e.type === "in" ? "income" : "expense", catOf(e.cat).label,
+      e.kg ?? "", e.rate ?? "", e.amount, e.note || ""
+    ]));
+    const csv = "\ufeff" + rows.map(r => r.map(v => `"${String(v).replace(/"/g, '""')}"`).join(",")).join("\r\n");
+    const blob = new Blob([csv], { type:"text/csv;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `cardamom-${todayStr()}.csv`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 4000);
+    toast("CSV downloaded");
+  }
+
+  /* ----------------------------------------------------------------- guide */
+  function guideHTML() {
+    const n = entries().length;
+    const sample = entries().filter(e => e.sample).length;
+    return `
+      <section class="card">
+        <p class="eyebrow">What this demo does</p>
+        <p style="margin:0 0 10px">One ledger for one cardamom farm: income and expense entries,
+        a profit number per month, and a split of where the money went. Everything is typed with
+        the thumb, in three taps — the amount field is the big one on purpose.</p>
+        <p class="muted" style="margin:0;font-size:13px">${
+          sample === n ? `${n} sample entries — nothing of yours yet`
+          : sample ? `${n} entries · ${sample} still sample` : `${n} entries of your own`}</p>
+      </section>
+
+      <h2 class="sec">Assumptions it makes</h2>
+      <section class="card">
+        <div class="rows">
+          ${[
+            ["One farm, one pot of money", "No separate plots, buyers or bank accounts yet."],
+            ["Sale = kg × rate", "Type kg and rate and the amount fills in — real cardamom selling."],
+            ["Cash basis", "Money counts the day you record it, not when the buyer settles."],
+            ["One category per entry", "Labour, fertiliser, drying, transport and so on — picked from a fixed list."],
+            ["Phone only", "Entries live in this browser. No login, no server, nothing shared."]
+          ].map(([t, s], i) => `<div class="row" style="align-items:flex-start">
+              <span class="ico" aria-hidden="true" style="font-size:13px;font-weight:700">${i+1}</span>
+              <span class="txt"><b style="white-space:normal">${t}</b><small style="white-space:normal">${s}</small></span>
+            </div>`).join("")}
+        </div>
+      </section>
+
+      <h2 class="sec">Say the word and I add</h2>
+      <section class="card">
+        <div class="rows">
+          ${[
+            ["Auction / weighbridge details", "Lot number, buyer, moisture, deductions — so the rate you see is the rate you got."],
+            ["Who owes you money", "Advance paid, balance pending, per buyer."],
+            ["Per-plot costing", "Divide the cost and the yield by plot or by acre."],
+            ["Labour register", "Worker, wage per day, days worked — instead of one lump sum."],
+            ["Loans and EMI", "Track what is still owed to the bank or the society."],
+            ["Malayalam labels", "Same screens, plain Malayalam — useful for whoever keeps the book."]
+          ].map(([t, s]) => `<div class="row" style="align-items:flex-start">
+              <span class="ico" aria-hidden="true" style="font-size:14px;font-weight:700;color:var(--green)">+</span>
+              <span class="txt"><b style="white-space:normal">${t}</b><small style="white-space:normal">${s}</small></span>
+            </div>`).join("")}
+        </div>
+      </section>
+
+      <h2 class="sec">Your data</h2>
+      <section class="card">
+        <button class="btn wide" type="button" id="btn-csv2">Download CSV</button>
+        <div class="actions">
+          <button class="btn danger" type="button" id="btn-wipe">Erase all</button>
+          <button class="btn" type="button" id="btn-demo">Reload sample</button>
+        </div>
+        <p class="hint" style="margin:12px 2px 0">Erase removes every entry on this device. Nothing is stored anywhere else.</p>
+      </section>
+    `;
+  }
+
+  function bindGuide() {
+    const csv = $("#btn-csv2");
+    if (csv) csv.addEventListener("click", downloadCSV);
+    $("#btn-wipe").addEventListener("click", () => {
+      if (!confirm("Erase every entry on this device?")) return;
+      state.entries = []; save(); month = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
+      toast("Ledger cleared"); go("home");
+    });
+    $("#btn-demo").addEventListener("click", () => {
+      if (!confirm("Replace everything with the sample numbers?")) return;
+      state.entries = seed(); save(); toast("Sample data loaded"); go("home");
+    });
+  }
+
+  /* ----------------------------------------------------------------- sheet */
+  function openSheet(id) {
+    const e = entries().find(x => x.id === id);
+    if (!e) return;
+    editingId = id;
+    const sale = e.type === "in" && e.cat === "sale";
+    $("#sheetBody").innerHTML = `
+      <div class="seg" role="group" aria-label="Type">
+        <button type="button" data-etype="in"  aria-pressed="${e.type === "in"}">Income</button>
+        <button type="button" data-etype="out" aria-pressed="${e.type === "out"}">Expense</button>
+      </div>
+      <div class="fld"><span>What for</span><div class="chips" id="s-cats">${catChips(e.type, e.cat, "s")}</div></div>
+      <div class="row2" id="s-sale" ${sale ? "" : "hidden"}>
+        <label class="fld"><span>Quantity (kg)</span>
+          <input id="s-kg" type="text" inputmode="decimal" value="${e.kg ?? ""}" placeholder="0"></label>
+        <label class="fld"><span>Rate ₹/kg</span>
+          <input id="s-rate" type="text" inputmode="decimal" value="${e.rate ?? ""}" placeholder="0"></label>
+      </div>
+      <label class="fld"><span>Amount (₹)</span>
+        <input id="s-amount" class="amount-in" type="text" inputmode="decimal" value="${Math.round(e.amount)}"></label>
+      <label class="fld"><span>Date</span><input id="s-date" type="date" value="${e.date}"></label>
+      <label class="fld"><span>Note</span>
+        <input id="s-note" type="text" value="${esc(e.note || "")}" placeholder="optional"></label>
+      <div class="actions" style="margin-top:4px">
+        <button class="btn danger" type="button" id="s-delete">Delete</button>
+        <button class="btn primary" type="button" id="s-save">Save</button>
+      </div>`;
+    $("#sheet").hidden = false;
+    document.body.style.overflow = "hidden";
+
+    let type = e.type, cat = e.cat;
+
+    $$("[data-etype]").forEach(b => b.addEventListener("click", () => {
+      type = b.dataset.etype;
+      cat = type === "in" ? "sale" : "labour";
+      $$("[data-etype]").forEach(x => x.setAttribute("aria-pressed", String(x.dataset.etype === type)));
+      $("#s-cats").innerHTML = catChips(type, cat, "s");
+      const isSale = type === "in" && cat === "sale";
+      $("#s-sale").hidden = !isSale;
+    }));
+
+    $("#s-cats").addEventListener("click", ev => {
+      const chip = ev.target.closest("[data-s-cat]");
+      if (!chip) return;
+      cat = chip.dataset.sCat;
+      $$("#s-cats .chip").forEach(c => c.setAttribute("aria-pressed", String(c.dataset.sCat === cat)));
+      $("#s-sale").hidden = !(type === "in" && cat === "sale");
+    });
+
+    const kg = $("#s-kg"), rate = $("#s-rate"), amount = $("#s-amount");
+    const onQty = () => {
+      const k = parseFloat(kg.value || "0"), r = parseFloat(rate.value || "0");
+      if (k > 0 && r > 0) amount.value = String(Math.round(k * r));
+    };
+    if (kg && rate) { kg.addEventListener("input", onQty); rate.addEventListener("input", onQty); }
+
+    $("#s-save").addEventListener("click", () => {
+      const amt = Math.round(parseFloat((amount.value || "").replace(/[^0-9.]/g, "")) || 0);
+      if (!(amt > 0)) { toast("Amount must be above zero"); amount.focus(); return; }
+      e.type = type; e.cat = cat; e.amount = amt;
+      e.date = $("#s-date").value || e.date;
+      e.note = $("#s-note").value.trim();
+      if (type === "in" && cat === "sale") {
+        const k = parseFloat(kg.value || "0"), r = parseFloat(rate.value || "0");
+        if (k > 0) e.kg = Math.round(k*100)/100; else delete e.kg;
+        if (r > 0) e.rate = Math.round(r*100)/100; else delete e.rate;
+      } else { delete e.kg; delete e.rate; }
+      save(); closeSheet(); toast("Entry updated"); render();
+    });
+
+    $("#s-delete").addEventListener("click", () => {
+      if (!confirm("Delete this entry?")) return;
+      state.entries = entries().filter(x => x.id !== editingId);
+      save(); closeSheet(); toast("Entry deleted"); render();
+    });
+  }
+
+  function closeSheet() {
+    $("#sheet").hidden = true;
+    document.body.style.overflow = "";
+    editingId = null;
+  }
+
+  /* ------------------------------------------------------------------ misc */
+  function esc(s) {
+    return String(s).replace(/[&<>"']/g, c => ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;" }[c]));
+  }
+
+  let toastTimer;
+  function toast(msg) {
+    const t = $("#toast");
+    t.textContent = msg;
+    t.classList.add("show");
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => t.classList.remove("show"), 2200);
+  }
+
+  /* --------------------------------------------------------------- wiring */
+  $$(".tab").forEach(b => b.addEventListener("click", () => go(b.dataset.go)));
+
+  document.addEventListener("click", ev => {
+    const edit = ev.target.closest("[data-edit]");
+    if (edit) { openSheet(edit.dataset.edit); return; }
+    if (ev.target.closest("[data-close]")) closeSheet();
+  });
+
+  document.addEventListener("keydown", ev => {
+    if (ev.key === "Escape" && !$("#sheet").hidden) closeSheet();
+  });
+
+  $("#btnToday").addEventListener("click", () => {
+    const d = new Date();
+    month = new Date(d.getFullYear(), d.getMonth(), 1);
+    recFilter = { kind:"all", q:"" };
+    go(view);
+  });
+
+  window.addEventListener("hashchange", () => {
+    const name = location.hash.replace("#", "");
+    if (routes.includes(name) && name !== view) { view = name; render(); }
+  });
+
+  // start on the hash if one is present
+  const initial = location.hash.replace("#", "");
+  if (routes.includes(initial)) view = initial;
+  month = (() => {
+    if (view === "home") {
+      const latest = sortedDesc(entries())[0];
+      if (latest) { const d = parseYmd(latest.date); return new Date(d.getFullYear(), d.getMonth(), 1); }
+    }
+    const d = new Date(); return new Date(d.getFullYear(), d.getMonth(), 1);
+  })();
+  render();
+})();
+</script>
+</body>
+</html>

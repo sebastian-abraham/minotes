@@ -180,6 +180,23 @@ SUBJECTS = [
              "Condensed algorithms (11)", "source", "algorithms"),
         ],
     },
+    {
+        "slug": "cardamom",
+        "title": "Cardamom Khata",
+        "code": "DEMO",
+        "tagline": "Farm accounts · phone-sized demo",
+        "hint": "add · rate · profit",
+        "blurb": "A ledger for one cardamom farm: record a sale by kg × rate, log labour, fertiliser "
+                 "and drying, then read the profit for the month. Sample numbers are loaded so it "
+                 "reads properly — they are there to be argued with, not believed.",
+        "gen": "cardamom",
+        "pages": [
+            ("app.html", "Open the app", "5 tabs · works offline · phone first",
+             "Income, expense and profit per month, with kg × rate on sales",
+             "Cardamom Khata — the demo", "start", "app"),
+        ],
+        "docs": [],
+    },
 ]
 
 GROUPS = [
@@ -968,12 +985,14 @@ def build_subject(subject):
 def build_hub():
     cards = []
     for subject in SUBJECTS:
+        hub_count = len(subject["docs"]) + len(subject.get("pages", []))
         cards.append(SUBJECT_CARD
                      .replace("{{FILE}}", f"{subject['slug']}/index.html")
                      .replace("{{CODE}}", html_mod.escape(subject["code"]))
                      .replace("{{TITLE}}", html_mod.escape(subject["title"]))
                      .replace("{{BLURB}}", html_mod.escape(subject["blurb"]))
-                     .replace("{{META}}", f"{subject['tagline']} · {len(subject['docs'])} documents")
+                     .replace("{{META}}", f"{subject['tagline']} · {hub_count} page"
+                              + ("" if hub_count == 1 else "s"))
                      .replace("{{TAGS}}", html_mod.escape(subject["title"] + " " + subject["code"])))
     if len(cards) == 1:
         blocks = '<section class="group"><div class="grid">' + cards[0] + "</div></section>"
